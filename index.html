@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>星屿 · 个人AI工作平台</title>
+<meta name="description" content="你的个人AI学习与工作平台：课程作业、知识库、专注统计、成长档案、AI助手">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- 背景装饰 -->
+<div class="bg-orb bg-orb-1"></div>
+<div class="bg-orb bg-orb-2"></div>
+<div class="bg-grid"></div>
+
+<div class="app">
+  <!-- ================= 侧边栏 ================= -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">🌟</div>
+      <div class="logo-text">
+        <span class="logo-name">星屿</span>
+        <span class="logo-sub">个人AI工作平台</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-view="dashboard">
+        <span class="nav-ico">📊</span><span class="nav-label">仪表盘</span>
+      </button>
+      <button class="nav-item" data-view="courses">
+        <span class="nav-ico">📚</span><span class="nav-label">课程作业</span>
+      </button>
+      <button class="nav-item" data-view="notes">
+        <span class="nav-ico">📝</span><span class="nav-label">学习笔记库</span>
+      </button>
+      <button class="nav-item" data-view="focus">
+        <span class="nav-ico">⏱</span><span class="nav-label">专注学习</span>
+      </button>
+      <button class="nav-item" data-view="growth">
+        <span class="nav-ico">👤</span><span class="nav-label">成长档案</span>
+      </button>
+      <button class="nav-item" data-view="news">
+        <span class="nav-ico">📰</span><span class="nav-label">热点新闻</span>
+      </button>
+      <button class="nav-item" data-view="ai">
+        <span class="nav-ico">✨</span><span class="nav-label">AI 助手</span>
+        <span class="nav-badge" id="aiBadge">AI</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <div class="user-avatar" id="userAvatar">星</div>
+        <div class="user-meta">
+          <span class="user-name" id="userName">同学</span>
+          <span class="user-role">个人工作台</span>
+        </div>
+      </div>
+      <button class="side-btn" id="btnSettings">⚙ 设置</button>
+    </div>
+  </aside>
+
+  <!-- ================= 主区域 ================= -->
+  <main class="main">
+    <!-- 顶部栏 -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="icon-btn menu-btn" id="btnMenu">☰</button>
+        <h1 class="page-title" id="pageTitle">仪表盘</h1>
+      </div>
+      <div class="topbar-right">
+        <div class="search-box">
+          <span class="search-ico">⌕</span>
+          <input type="text" id="globalSearch" placeholder="搜索笔记 / 任务 / 课程...">
+        </div>
+        <button class="icon-btn" id="btnQrcode" title="扫码访问">⌘</button>
+        <div class="clock-box" id="clockBox">
+          <span class="clock-time" id="clockTime">--:--</span>
+          <span class="clock-date" id="clockDate">----</span>
+          <span class="clock-fest" id="clockFest"></span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============ 视图容器 ============ -->
+    <div class="view-container">
+
+      <!-- 仪表盘 -->
+      <section class="view active" id="view-dashboard">
+        <div class="hero-card">
+          <div class="hero-text">
+            <h2 id="heroGreeting">你好，同学 👋</h2>
+            <p id="heroQuote">今天也要保持专注，稳步向前。</p>
+          </div>
+          <div class="hero-stats" id="heroStats"></div>
+        </div>
+        <div class="dash-grid">
+          <div class="card" id="dashCountdown">
+            <div class="card-head">
+              <h3>⏳ 倒计时日历</h3>
+              <button class="text-btn" data-goto="courses">去管理 →</button>
+            </div>
+            <div class="countdown-list" id="countdownList"></div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <h3>✅ 任务完成统计</h3>
+              <button class="text-btn" data-goto="courses">查看全部 →</button>
+            </div>
+            <div id="taskStatsChart"></div>
+            <div class="stat-legend" id="taskStatsLegend"></div>
+          </div>
+          <div class="card card-wide">
+            <div class="card-head">
+              <h3>📈 近7日专注趋势</h3>
+              <button class="text-btn" data-goto="focus">去专注 →</button>
+            </div>
+            <div id="focusTrendChart"></div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <h3>🎯 今日待办</h3>
+              <button class="text-btn" data-goto="courses">更多 →</button>
+            </div>
+            <div id="todayTasks"></div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <h3>📚 最近笔记</h3>
+              <button class="text-btn" data-goto="notes">笔记库 →</button>
+            </div>
+            <div id="recentNotes"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 课程作业 -->
+      <section class="view" id="view-courses">
+        <div class="view-toolbar">
+          <div class="toolbar-tabs">
+            <button class="tab-btn active" data-tab="courses-week">课程表</button>
+            <button class="tab-btn" data-tab="courses-list">课程管理</button>
+            <button class="tab-btn" data-tab="courses-tasks">作业任务</button>
+          </div>
+          <div class="toolbar-actions">
+            <button class="btn btn-ghost" id="btnImportSchedule">📥 导入课表</button>
+            <button class="btn btn-primary" id="btnAddCourse">+ 添加课程</button>
+            <button class="btn btn-primary" id="btnAddTask">+ 添加任务</button>
+          </div>
+        </div>
+
+        <div class="tab-panel active" id="tab-courses-week">
+          <div class="week-toolbar">
+            <span id="weekLabel">本周</span>
+          </div>
+          <div class="week-grid" id="weekGrid"></div>
+        </div>
+
+        <div class="tab-panel" id="tab-courses-list">
+          <div class="card">
+            <div class="card-head"><h3>📚 我的课程</h3></div>
+            <div id="courseList"></div>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-courses-tasks">
+          <div class="card">
+            <div class="card-head">
+              <h3>📋 作业与任务</h3>
+              <button class="btn btn-ghost" id="btnSmartSort">✨ AI 智能排序</button>
+            </div>
+            <div class="filter-row">
+              <select id="taskFilterStatus" class="select">
+                <option value="all">全部状态</option>
+                <option value="todo">待完成</option>
+                <option value="doing">进行中</option>
+                <option value="done">已完成</option>
+              </select>
+              <select id="taskFilterPriority" class="select">
+                <option value="all">全部优先级</option>
+                <option value="high">高</option>
+                <option value="mid">中</option>
+                <option value="low">低</option>
+              </select>
+            </div>
+            <div id="taskList"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 学习笔记库 -->
+      <section class="view" id="view-notes">
+        <div class="view-toolbar">
+          <div class="toolbar-tabs">
+            <button class="tab-btn active" data-tab="notes-list">我的笔记</button>
+            <button class="tab-btn" data-tab="notes-cards">知识卡片</button>
+          </div>
+          <div class="toolbar-actions">
+            <button class="btn btn-ghost" id="btnImportNotes">📥 导入笔记</button>
+            <button class="btn btn-ghost" id="btnAiOrganize">✨ AI 笔记整理</button>
+            <button class="btn btn-primary" id="btnAddNote">+ 新建笔记</button>
+          </div>
+        </div>
+
+        <div class="tab-panel active" id="tab-notes-list">
+          <div class="note-grid" id="noteGrid"></div>
+        </div>
+
+        <div class="tab-panel" id="tab-notes-cards">
+          <div class="card-head" style="display:flex;justify-content:space-between;align-items:center;">
+            <h3>🧠 知识卡片</h3>
+            <button class="btn btn-ghost" id="btnGenCards">✨ AI 生成卡片</button>
+          </div>
+          <div class="card-grid" id="cardGrid"></div>
+        </div>
+      </section>
+
+      <!-- 专注学习 -->
+      <section class="view" id="view-focus">
+        <div class="focus-layout">
+          <div class="card pomodoro-card">
+            <div class="card-head">
+              <h3>🍅 番茄钟</h3>
+              <div class="pomo-settings">
+                <label>专注 <input type="number" id="pomoWork" value="25" min="1" max="120"> 分</label>
+                <label>休息 <input type="number" id="pomoBreak" value="5" min="1" max="60"> 分</label>
+              </div>
+            </div>
+            <div class="pomo-ring" id="pomoRing">
+              <div class="pomo-time" id="pomoTime">25:00</div>
+              <div class="pomo-mode" id="pomoMode">准备开始</div>
+            </div>
+            <div class="pomo-controls">
+              <button class="btn btn-primary btn-lg" id="btnPomoStart">开始专注</button>
+              <button class="btn btn-ghost" id="btnPomoReset">重置</button>
+            </div>
+            <div class="pomo-today">
+              今日已完成 <b id="pomoTodayCount">0</b> 个番茄 · 累计 <b id="pomoTodayMin">0</b> 分钟
+            </div>
+          </div>
+
+          <div class="focus-side">
+            <div class="card">
+              <div class="card-head"><h3>📊 专注统计</h3></div>
+              <div class="focus-stats-row" id="focusStatsRow"></div>
+              <div id="focusWeekChart" style="margin-top:16px"></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><h3>🕘 专注记录</h3></div>
+              <div id="focusHistory"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 成长档案 -->
+      <section class="view" id="view-growth">
+        <div class="growth-layout">
+          <div class="card">
+            <div class="card-head">
+              <h3>👤 个人资料</h3>
+              <button class="btn btn-ghost" id="btnEditProfile">编辑</button>
+            </div>
+            <div class="profile-box" id="profileBox"></div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <h3>🏆 成绩追踪（GPA）</h3>
+              <div style="display:flex;gap:8px">
+                <button class="btn btn-ghost" id="btnImportGrades">📥 导入成绩</button>
+                <button class="btn btn-ghost" id="btnAddGrade">+ 添加成绩</button>
+              </div>
+            </div>
+            <div id="gpaSummary"></div>
+            <div id="gradeList"></div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <h3>🛠 技能</h3>
+              <button class="btn btn-ghost" id="btnAddSkill">+ 添加技能</button>
+            </div>
+            <div id="skillList"></div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <h3>🚀 项目经历</h3>
+              <button class="btn btn-ghost" id="btnAddProject">+ 添加项目</button>
+            </div>
+            <div id="projectList"></div>
+          </div>
+          <div class="card card-wide">
+            <div class="card-head">
+              <h3>📄 简历预览</h3>
+              <button class="btn btn-primary" id="btnExportResume">导出 / 打印</button>
+            </div>
+            <div class="resume-preview" id="resumePreview"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- AI 助手 -->
+      <section class="view" id="view-ai">
+        <div class="ai-layout">
+          <div class="card ai-chat-card">
+            <div class="card-head">
+              <h3>✨ AI 学习助手</h3>
+              <span class="ai-status" id="aiStatus">● 未配置模型</span>
+            </div>
+            <div class="chat-box" id="chatBox">
+              <div class="chat-msg ai">
+                <div class="chat-bubble">你好呀！我是你的 AI 学习助手 🤖 我可以帮你：
+                  <br>📝 制定学习计划 · 🚦 智能优先级排序 · 🧠 生成知识卡片 · 📖 整理笔记
+                  <br>在右上角「设置」中配置 AI 模型后，我就能为你工作啦～（未配置时我也能用本地规则帮你）</div>
+              </div>
+            </div>
+            <div class="chat-input-row">
+              <input type="text" id="chatInput" placeholder="输入问题，或输入 /plan /priority /cards /organize 使用快捷技能...">
+              <button class="btn btn-primary" id="btnChatSend">发送</button>
+            </div>
+            <div class="chat-quick">
+              <button class="chip" data-cmd="/plan">📝 学习规划</button>
+              <button class="chip" data-cmd="/priority">🚦 优先级</button>
+              <button class="chip" data-cmd="/cards">🧠 知识卡片</button>
+              <button class="chip" data-cmd="/organize">📖 笔记整理</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 热点新闻 -->
+      <section class="view" id="view-news">
+        <div class="view-toolbar">
+          <div class="news-date-box">
+            <span class="news-date" id="newsDate">📅 今日热点</span>
+            <span class="news-updated" id="newsUpdated"></span>
+          </div>
+          <div class="toolbar-actions">
+            <button class="btn btn-ghost" id="btnRefreshNews">🔄 刷新</button>
+          </div>
+        </div>
+
+        <div class="toolbar-tabs" style="margin-bottom:18px">
+          <button class="newstab-btn active" data-newstab="all">全部</button>
+          <button class="newstab-btn" data-newstab="国内">🇨🇳 国内</button>
+          <button class="newstab-btn" data-newstab="国际">🌍 国际</button>
+        </div>
+
+        <div id="newsList"></div>
+        <div class="news-tip">
+          💡 数据来自央视网、中新网、联合早报等主流媒体的官网公开首页，每日定时更新。点击标题可跳转原文。
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<!-- ================= 弹窗：二维码 ================= -->
+<div class="modal-mask" id="qrcodeModal">
+  <div class="modal qr-modal">
+    <div class="modal-head">
+      <h3>📱 扫码访问</h3>
+      <button class="modal-close" data-close="qrcodeModal">✕</button>
+    </div>
+    <div class="modal-body center">
+      <p class="hint">将平台部署到 GitHub Pages 后，手机扫码即可永久访问。</p>
+      <div id="qrCodeBox" class="qr-box"><span class="hint">二维码区域</span></div>
+      <div class="qr-actions">
+        <button class="btn btn-primary" id="btnCopyLink">复制部署链接</button>
+        <button class="btn btn-ghost" id="btnGenQR">生成二维码</button>
+      </div>
+      <p class="hint" id="qrHint">当前运行于本地，链接留空时将生成一个占位二维码。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 弹窗：设置 ================= -->
+<div class="modal-mask" id="settingsModal">
+  <div class="modal settings-modal">
+    <div class="modal-head">
+      <h3>⚙ 设置</h3>
+      <button class="modal-close" data-close="settingsModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="setting-group">
+        <h4>🤖 AI 模型配置（OpenAI 兼容接口）</h4>
+        <label class="field">
+          <span>接口地址 Base URL</span>
+          <input type="text" id="setBaseUrl" placeholder="https://api.deepseek.com/v1">
+        </label>
+        <label class="field">
+          <span>API Key</span>
+          <input type="password" id="setApiKey" placeholder="sk-...">
+        </label>
+        <label class="field">
+          <span>模型名称</span>
+          <input type="text" id="setModel" placeholder="deepseek-chat">
+        </label>
+        <div class="preset-row">
+          <span class="preset-label">预设：</span>
+          <button class="chip" data-preset="deepseek">DeepSeek</button>
+          <button class="chip" data-preset="kimi">Kimi</button>
+          <button class="chip" data-preset="openai">OpenAI</button>
+        </div>
+        <p class="hint">密钥仅保存在你的浏览器本地（localStorage），不会上传到任何服务器。</p>
+      </div>
+      <div class="setting-group">
+        <h4>👤 个人昵称</h4>
+        <label class="field">
+          <span>昵称（显示于侧边栏与问候语）</span>
+          <input type="text" id="setNickname" placeholder="同学">
+        </label>
+      </div>
+      <div class="setting-group">
+        <h4>📊 数据管理</h4>
+        <div class="setting-actions">
+          <button class="btn btn-ghost" id="btnExportData">导出数据(JSON)</button>
+          <button class="btn btn-ghost" id="btnImportData">导入数据</button>
+          <input type="file" id="importFile" accept="application/json" style="display:none">
+          <button class="btn btn-danger" id="btnClearData">清空全部数据</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-primary" id="btnSaveSettings">保存设置</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 弹窗：导入课表 ================= -->
+<div class="modal-mask" id="importModal">
+  <div class="modal import-modal">
+    <div class="modal-head">
+      <h3>📥 导入课表</h3>
+      <button class="modal-close" data-close="importModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="import-tabs">
+        <button class="import-tab active" data-itab="img">📷 上传截图</button>
+        <button class="import-tab" data-itab="text">📋 粘贴文本</button>
+      </div>
+
+      <div class="import-panel active" id="itab-img">
+        <p class="hint">上传课表截图（教务系统 / 课表 App 截图均可），AI 会自动识别课程名称、时间、地点。</p>
+        <div class="drop-zone" id="dropZone">
+          <div class="drop-inner">
+            <span class="drop-ico">🖼</span>
+            <p>点击选择或拖拽课表图片到此处</p>
+            <p class="hint">支持 JPG / PNG，建议图片清晰、文字可读</p>
+          </div>
+          <input type="file" id="scheduleImgFile" accept="image/*" style="display:none">
+        </div>
+        <div id="imgPreview" class="img-preview"></div>
+        <div class="import-actions">
+          <button class="btn btn-primary" id="btnRecognizeImg" disabled>✨ AI 识别课表</button>
+          <span class="hint" id="imgRecognizeHint">识别需要配置支持视觉的模型（如 gpt-4o-mini / glm-4v）</span>
+        </div>
+      </div>
+
+      <div class="import-panel" id="itab-text">
+        <p class="hint">从教务系统复制课表文字粘贴到这里，AI 或本地规则会自动解析。支持格式示例：</p>
+        <div class="code-sample">周一 8:00-9:40 高等数学 教学楼A-301<br>周三 14:00-15:40 操作系统 实验楼B-105</div>
+        <textarea id="scheduleText" rows="7" placeholder="粘贴课表文本..."></textarea>
+        <div class="import-actions">
+          <button class="btn btn-primary" id="btnParseText">✨ 解析课表</button>
+        </div>
+      </div>
+
+      <div id="importResult" class="import-result" style="display:none">
+        <div class="card-head"><h3>✅ 识别结果预览</h3><span class="hint" id="importResultCount"></span></div>
+        <div id="importResultList"></div>
+        <div class="import-actions">
+          <button class="btn btn-ghost" id="btnCancelImport">取消</button>
+          <button class="btn btn-primary" id="btnConfirmImport">✓ 确认导入全部</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 弹窗：导入成绩 ================= -->
+<div class="modal-mask" id="importGradesModal">
+  <div class="modal import-modal">
+    <div class="modal-head">
+      <h3>📥 导入成绩</h3>
+      <button class="modal-close" data-close="importGradesModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="import-tabs">
+        <button class="import-tab active" data-itab="gtext">📋 粘贴文本</button>
+        <button class="import-tab" data-itab="gimg">📷 上传截图</button>
+      </div>
+
+      <div class="import-panel active" id="itab-gtext">
+        <p class="hint">从教务系统/成绩单复制文字粘贴到这里，AI 或本地规则会自动解析。支持格式示例：</p>
+        <div class="code-sample">高等数学 期中考试 88分 5学分<br>大学英语 92<br>数据结构 期末考试 85 4学分 2026春</div>
+        <textarea id="gradesText" rows="7" placeholder="粘贴成绩文本，每行一条..."></textarea>
+        <div class="import-actions">
+          <button class="btn btn-primary" id="btnParseGrades">✨ 解析成绩</button>
+        </div>
+      </div>
+
+      <div class="import-panel" id="itab-gimg">
+        <p class="hint">上传成绩单截图，AI 自动识别（需配置支持视觉的模型）。</p>
+        <div class="drop-zone" id="dropZoneG">
+          <div class="drop-inner">
+            <span class="drop-ico">🖼</span>
+            <p>点击选择或拖拽成绩单图片到此处</p>
+            <p class="hint">支持 JPG / PNG，建议图片清晰、文字可读</p>
+          </div>
+          <input type="file" id="gradesImgFile" accept="image/*" style="display:none">
+        </div>
+        <div id="gradesImgPreview" class="img-preview"></div>
+        <div class="import-actions">
+          <button class="btn btn-primary" id="btnRecognizeGrades" disabled>✨ AI 识别成绩</button>
+        </div>
+      </div>
+
+      <div id="gradesImportResult" class="import-result" style="display:none">
+        <div class="card-head"><h3>✅ 识别结果预览</h3><span class="hint" id="gradesResultCount"></span></div>
+        <div id="gradesResultList"></div>
+        <div class="import-actions">
+          <button class="btn btn-ghost" id="btnCancelGradesImport">取消</button>
+          <button class="btn btn-primary" id="btnConfirmGradesImport">✓ 确认导入全部</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 弹窗：导入笔记 ================= -->
+<div class="modal-mask" id="importNotesModal">
+  <div class="modal import-modal">
+    <div class="modal-head">
+      <h3>📥 导入笔记</h3>
+      <button class="modal-close" data-close="importNotesModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="import-tabs">
+        <button class="import-tab active" data-itab="ntext">📋 粘贴文本</button>
+        <button class="import-tab" data-itab="nimg">📷 上传截图</button>
+      </div>
+
+      <div class="import-panel active" id="itab-ntext">
+        <p class="hint">粘贴你的笔记文字，AI 或本地规则会自动识别标题、科目与标签。支持格式：</p>
+        <div class="code-sample">高等数学第三章 极限与连续<br>#高数 #极限<br>极限的定义：ε-δ语言...<br>（第1行为标题，#开头为标签，其余为内容）</div>
+        <textarea id="notesText" rows="8" placeholder="粘贴笔记内容，第1行是标题，可以用 #标签 标记主题..."></textarea>
+        <div class="import-actions">
+          <button class="btn btn-primary" id="btnParseNotes">✨ 识别并整理</button>
+        </div>
+      </div>
+
+      <div class="import-panel" id="itab-nimg">
+        <p class="hint">上传纸质笔记 / 手写笔记 / 书本截图，AI 自动识别文字并整理成笔记（需配置支持视觉的模型）。</p>
+        <div class="drop-zone" id="dropZoneN">
+          <div class="drop-inner">
+            <span class="drop-ico">🖼</span>
+            <p>点击选择或拖拽笔记图片到此处</p>
+            <p class="hint">支持 JPG / PNG，建议文字清晰可读</p>
+          </div>
+          <input type="file" id="notesImgFile" accept="image/*" style="display:none">
+        </div>
+        <div id="notesImgPreview" class="img-preview"></div>
+        <div class="import-actions">
+          <button class="btn btn-primary" id="btnRecognizeNotes" disabled>✨ AI 识别笔记</button>
+        </div>
+      </div>
+
+      <div id="notesImportResult" class="import-result" style="display:none">
+        <div class="card-head"><h3>✅ 识别结果预览</h3><span class="hint" id="notesResultCount"></span></div>
+        <div id="notesResultList"></div>
+        <div class="import-actions">
+          <button class="btn btn-ghost" id="btnCancelNotesImport">取消</button>
+          <button class="btn btn-primary" id="btnConfirmNotesImport">✓ 确认导入全部</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 弹窗：通用表单 ================= -->
+<div class="modal-mask" id="formModal">
+  <div class="modal form-modal">
+    <div class="modal-head">
+      <h3 id="formTitle">表单</h3>
+      <button class="modal-close" data-close="formModal">✕</button>
+    </div>
+    <div class="modal-body" id="formBody"></div>
+    <div class="modal-foot">
+      <button class="btn btn-primary" id="btnFormSave">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 轻量二维码库 -->
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script src="js/local-config.js"></script>
+<script src="js/lunar.js"></script>
+<script src="js/store.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/ai.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

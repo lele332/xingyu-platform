@@ -1,0 +1,7 @@
+# 敏感配置：包含个人 API Key，禁止提交到 GitHub！
+js/local-config.js
+
+# 其他
+*.log
+.DS_Store
+node_modules/
