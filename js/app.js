@@ -1048,7 +1048,9 @@ const App = (() => {
   }
 
   function generateQR() {
-    const link = localStorage.getItem("xingyu_site_url") || "";
+    // 默认使用已部署的 GitHub Pages 永久链接（未手动设置时）
+    const DEFAULT_SITE = "https://lele332.github.io/xingyu-platform/";
+    const link = localStorage.getItem("xingyu_site_url") || DEFAULT_SITE;
     const box = $("#qrCodeBox");
     const hint = $("#qrHint");
     if (link) {
