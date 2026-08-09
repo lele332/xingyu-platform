@@ -74,11 +74,8 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ---------- 背景装饰（克制：仅微弱光斑） ---------- */
-.bg-orb { position: fixed; border-radius: 50%; filter: blur(160px); opacity: 0.07; pointer-events: none; z-index: 0; }
-.bg-orb-1 { width: 500px; height: 500px; background: #0a84ff; top: -200px; right: -160px; }
-.bg-orb-2 { width: 420px; height: 420px; background: #bf5af2; bottom: -200px; left: -140px; }
-.bg-grid { display: none; }
+/* ---------- 背景：纯黑零装饰 ---------- */
+.bg-orb, .bg-grid { display: none; }
 
 /* ---------- 移动端侧边栏遮罩 ---------- */
 .sidebar-mask {
@@ -106,10 +103,10 @@ body {
 .sidebar-logo { display: flex; align-items: center; gap: 12px; padding: 26px 20px 20px; }
 .logo-icon {
   width: 42px; height: 42px; border-radius: 13px;
-  background: linear-gradient(135deg, #0a84ff 0%, #5e5ce6 100%);
+  background: var(--blue);
   display: flex; align-items: center; justify-content: center;
   font-size: 20px; color: #fff;
-  box-shadow: 0 4px 14px rgba(10, 132, 255, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+  box-shadow: none;
 }
 .logo-text { display: flex; flex-direction: column; }
 .logo-name { font-size: 19px; font-weight: 700; letter-spacing: 0.3px; }
@@ -145,17 +142,17 @@ body {
 .nav-ico { width: 22px; text-align: center; font-size: 16px; transition: color 0.18s; }
 .nav-badge {
   margin-left: auto; font-size: 9px; padding: 3px 7px; border-radius: 999px;
-  background: linear-gradient(135deg, #0a84ff, #5e5ce6); color: #fff; font-weight: 700;
-  box-shadow: 0 2px 6px rgba(10, 132, 255, 0.4);
+  background: var(--blue); color: #fff; font-weight: 700;
+  box-shadow: none;
 }
 
 .sidebar-footer { padding: 14px 12px 18px; border-top: 1px solid var(--separator); display: flex; flex-direction: column; gap: 10px; }
 .user-chip { display: flex; align-items: center; gap: 10px; padding: 5px 4px; }
 .user-avatar {
   width: 38px; height: 38px; border-radius: 50%;
-  background: linear-gradient(135deg, #5e5ce6, #0a84ff); display: flex; align-items: center; justify-content: center;
+  background: var(--indigo); display: flex; align-items: center; justify-content: center;
   font-weight: 700; color: #fff; font-size: 14px;
-  box-shadow: 0 3px 10px rgba(94, 92, 230, 0.35);
+  box-shadow: none;
 }
 .user-avatar[data-emoji="1"] { font-size: 18px; }
 .user-meta { display: flex; flex-direction: column; }
@@ -195,8 +192,8 @@ body {
 .menu-btn { display: none; }
 
 .search-box { display: flex; align-items: center; gap: 8px; padding: 0 14px; height: 36px;
-  border-radius: 11px; border: none; background: var(--fill); transition: background 0.18s, box-shadow 0.18s; }
-.search-box:focus-within { background: var(--fill-2); box-shadow: 0 0 0 3px rgba(10,132,255,0.15); }
+  border-radius: 11px; border: none; background: var(--fill); transition: background 0.18s; }
+.search-box:focus-within { background: var(--fill-2); }
 .search-ico { color: var(--text-3); font-size: 14px; }
 .search-box input { background: transparent; border: none; outline: none; color: var(--text); font-size: 13.5px; width: 180px; font-family: var(--font); }
 .search-box input::placeholder { color: var(--text-3); }
@@ -221,17 +218,10 @@ body {
 
 /* ---------- 卡片（健康 App 风格：深色卡块，圆角适中） ---------- */
 .card {
-  position: relative;
   background: var(--card); border: none; border-radius: var(--radius);
-  padding: 20px; box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.05);
+  padding: 20px; box-shadow: var(--shadow);
   transition: transform 0.24s var(--ease-spring-card), background 0.22s;
   will-change: transform;
-  overflow: hidden;
-}
-/* 卡片顶部渐变细线（材料高光） */
-.card::before {
-  content: ""; position: absolute; top: 0; left: 18%; right: 18%; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
 }
 .card:hover { background: var(--card-hover); transform: translateY(-2px); }
 .card:active { transform: scale(0.992); transition: transform var(--dur-instant) ease-out; }
@@ -243,32 +233,17 @@ body {
 
 /* ---------- 仪表盘 ---------- */
 .hero-card {
-  position: relative; overflow: hidden;
-  background: var(--card); border: none; border-radius: 22px;
-  padding: 30px 32px; margin-bottom: 22px;
+  background: var(--card); border: none; border-radius: 18px;
+  padding: 28px 30px; margin-bottom: 20px;
   display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;
-  box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.06);
-}
-/* hero 背景微光（精致高级） */
-.hero-glow {
-  position: absolute; inset: 0; pointer-events: none;
-  background:
-    radial-gradient(600px 200px at 15% 0%, rgba(10,132,255,0.12), transparent 60%),
-    radial-gradient(500px 220px at 85% 100%, rgba(191,90,242,0.10), transparent 60%);
-}
-.hero-card > * { position: relative; z-index: 1; }
-.hero-eyebrow {
-  display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 2px;
-  color: var(--text-3); text-transform: uppercase; margin-bottom: 10px;
+  box-shadow: var(--shadow);
 }
 .hero-text h2 { font-size: 30px; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 6px; }
 .hero-text p { color: var(--text-2); font-size: 14px; }
 .hero-stats { display: flex; gap: 12px; flex-wrap: wrap; }
 .hstat {
-  background: rgba(28,28,30,0.6); border: 1px solid var(--border);
-  padding: 13px 20px; border-radius: 16px; text-align: center; min-width: 92px;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: var(--fill);
+  padding: 12px 18px; border-radius: 12px; text-align: center; min-width: 90px;
 }
 .hstat b { display: block; font-size: 23px; font-weight: 700; color: var(--blue); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
 .hstat span { font-size: 11px; color: var(--text-2); }
@@ -283,6 +258,7 @@ body {
   width: 44px; height: 44px; border-radius: 11px; flex-shrink: 0;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   background: var(--blue); color: #fff; line-height: 1.1;
+  box-shadow: none;
 }
 .cd-num b { font-size: 15px; font-weight: 700; }
 .cd-num span { font-size: 9px; opacity: 0.85; }
@@ -449,8 +425,8 @@ body {
 .pomo-controls { display: flex; gap: 11px; justify-content: center; margin-bottom: 16px; }
 .pomo-today { font-size: 13px; color: var(--text-2); }
 .pomo-today b { color: var(--teal); font-weight: 700; }
-.pomodoro-card.working .pomo-ring { animation: glow 2s ease-in-out infinite; }
-@keyframes glow { 0%,100% { box-shadow: 0 0 18px rgba(10,132,255,0.25); } 50% { box-shadow: 0 0 40px rgba(10,132,255,0.5); } }
+.pomodoro-card.working .pomo-ring { animation: glow 2.4s ease-in-out infinite; }
+@keyframes glow { 0%,100% { box-shadow: 0 0 10px rgba(10,132,255,0.12); } 50% { box-shadow: 0 0 24px rgba(10,132,255,0.28); } }
 
 .focus-stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .fstat { background: var(--fill); border: none; border-radius: 12px; padding: 13px; text-align: center; }
