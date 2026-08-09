@@ -857,19 +857,35 @@ const App = (() => {
     const upd = data.updatedAt ? new Date(data.updatedAt) : null;
     $("#newsUpdated").textContent = upd ? `更新于 ${String(upd.getHours()).padStart(2,"0")}:${String(upd.getMinutes()).padStart(2,"0")}` : "";
 
-    const filtered = newsFilter === "all" ? data.news : data.news.filter(n => n.category === newsFilter);
+    // 过滤逻辑：全部 / 科技AI / 国内 / 国际
+    let filtered;
+    if (newsFilter === "all") {
+      filtered = data.news;
+    } else if (newsFilter === "科技AI") {
+      filtered = data.news.filter(n => n.topic === "科技AI" || n.tech);
+    } else {
+      filtered = data.news.filter(n => n.category === newsFilter);
+    }
     if (!filtered.length) {
       box.innerHTML = `<div class="empty-state"><div class="big">📭</div><p>该分类暂无新闻</p></div>`;
       return;
     }
-    // 分组：国内 / 国际
-    const groups = newsFilter === "all" ? ["国内", "国际"] : [newsFilter];
+    // 分组：全部/国内/国际 按地区分；科技AI 按来源分（科技媒体综合展示）
+    let groups;
+    if (newsFilter === "科技AI") {
+      // 科技AI：不分地区，直接列表（来源标签已能区分国内外）
+      groups = [{ name: "科技AI", emoji: "🤖", items: filtered }];
+    } else if (newsFilter === "all") {
+      groups = [{ name: "国内", emoji: "🇨🇳", items: filtered.filter(n => n.category === "国内") },
+                { name: "国际", emoji: "🌍", items: filtered.filter(n => n.category === "国际") }];
+    } else {
+      groups = [{ name: newsFilter, emoji: newsFilter === "国际" ? "🌍" : "🇨🇳", items: filtered }];
+    }
     let html = "";
-    groups.forEach(cat => {
-      const items = filtered.filter(n => n.category === cat);
+    groups.forEach(g => {
+      const items = g.items;
       if (!items.length) return;
-      const emoji = cat === "国际" ? "🌍" : "🇨🇳";
-      html += `<div class="news-group"><div class="news-group-title">${emoji} ${cat}热点 <span class="news-count">${items.length}</span></div>`;
+      html += `<div class="news-group"><div class="news-group-title">${g.emoji} ${g.name}热点 <span class="news-count">${items.length}</span></div>`;
       html += items.map((n, i) => `
         <div class="news-item" data-link="${esc(n.link)}">
           <span class="news-rank ${i < 3 ? "top" : ""}">${i + 1}</span>

@@ -4,8 +4,10 @@ fetch_news.py — 抓取国内外热点新闻（官网首页解析），输出 n
 仅使用 Python 标准库，无需安装依赖。
 
 新闻源（国内网络可达）：
-  国内：央视网、中新网
-  国际：联合早报（新加坡主流媒体，中文报道国际与中国新闻）
+  国内综合：央视网、中新网
+  国内科技：少数派、爱范儿、品玩、雷锋网
+  国际综合：联合早报（新加坡主流媒体）
+  国际科技：TechCrunch（美国科技媒体，英文）
 
 用法：python fetch_news.py
 输出：../data/news-data.json
@@ -35,9 +37,43 @@ BLACKLIST = (
 )
 # 标题必须包含中文才视为新闻（排除纯英文导航等）
 RE_CHINESE = re.compile(r"[一-鿿]")
-# 新闻详情页链接特征：URL 中带日期路径（/2026/ 、/2026-08/ 、/2026/08-09/ 等）
-# 专题页/导航页通常不含日期路径，以此过滤栏目名
+# 新闻详情页链接特征：URL 中带日期路径
 RE_DATE_URL = re.compile(r"/(20\d{2})[/-](0[1-9]|1[0-2])|/(20\d{2})[/-](0[1-9]|1[0-2])[/-](0[1-9]|[12]\d|3[01])|/story(20\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])")
+# 科技媒体链接特征（不带日期路径，用文章ID路径）
+RE_TECH_URL = re.compile(r"/(a|article|post|p|news)/\d+|/\d{6,}|/banner/\w+/id/\d+|/create/|/bullet/\d+")
+
+# ---------- 科技/AI 关键词（用于分类过滤） ----------
+TECH_KEYWORDS = [
+    # 中文
+    "AI", "人工智能", "大模型", "大语言模型", "AIGC", "芯片", "半导体", "机器人", "自动驾驶",
+    "无人驾驶", "科技", "互联网", "算法", "编程", "开源", "算力", "云计算", "大数据",
+    "量子", "区块链", "元宇宙", "VR", "AR", "5G", "6G", "新能源", "电池", "无人机",
+    "软件", "硬件", "智能", "数字化", "网络", "计算机", "GPU", "CPU", "操作系统",
+    "数据库", "网络安全", "黑客", "隐私", "加密", "脑机", "空间计算", "电动车",
+    "固态电池", "锂电", "光伏", "储能", "芯片厂", "晶圆", "制程", "光刻", "流媒体",
+    "游戏", "手游", "电竞", "数码", "手机", "笔记本", "平板", "穿戴", "开发者",
+    "苹果", "华为", "小米", "特斯拉", "比亚迪", "谷歌", "微软", "英伟达", "AMD",
+    "Intel", "英特尔", "高通", "字节", "腾讯", "阿里", "百度", "京东", "美团",
+    "滴滴", "拼多多", "网易", "OpenAI", "GPT", "Claude", "Gemini", "Sora",
+    # 英文（国外科技媒体标题用）
+    "OpenAI", "GPT", "Claude", "Gemini", "LLM", "machine learning", "deep learning",
+    "neural", "chip", "semiconductor", "robot", "tech", "computer", "algorithm", "quantum",
+    "data center", "model", "autonomous", "self-driving", "electric vehicle", "battery",
+    "software", "cloud", "cybersecurity", "startup", "app", "digital", "Internet", "coding",
+    "programming", "open source", "crypto", "blockchain", "VR", "AR", "streaming", "gaming",
+    "Apple", "Google", "Microsoft", "NVIDIA", "AMD", "Intel", "Tesla", "Amazon", "Meta",
+    "iPhone", "Android", "MacBook", "laptop", "tablet", "smartphone", "AI ", " AI", "artificial intelligence",
+]
+
+
+def is_tech_related(text):
+    """判断标题/摘要是否与科技或AI相关"""
+    if not text:
+        return False
+    for kw in TECH_KEYWORDS:
+        if kw in text:
+            return True
+    return False
 
 
 def fetch_html(url):
@@ -46,7 +82,6 @@ def fetch_html(url):
         raw = resp.read()
     if raw[:2] == b"\x1f\x8b":
         raw = gzip.decompress(raw)
-    # 尝试常见编码
     for enc in ("utf-8", "gbk", "gb18030"):
         try:
             return raw.decode(enc)
@@ -59,28 +94,34 @@ def clean_title(t):
     t = re.sub(r"<[^>]+>", "", t)
     t = re.sub(r"&[a-zA-Z#0-9]+;", " ", t)
     t = re.sub(r"\s+", " ", t).strip()
-    # 去掉常见的来源前缀【】或栏目名
     t = re.sub(r"^【[^】]{1,12}】", "", t).strip()
+    # 清理爱范儿等站的"产品 | 作者 日期"前缀
+    t = re.sub(r"^(产品|视频|资讯|快讯|深度|专栏)\s*[｜|]\s*[^|]{1,12}\s*[｜|]?\s*", "", t).strip()
+    t = re.sub(r"^(产品|视频|资讯)\s*[｜|]\s*\S+\s+\d{2}-\d{2}\s+\d{2}:\d{2}\s*", "", t).strip()
+    # 清理少数派"xxx 174 位派友参与 去看看"后缀
+    t = re.sub(r"\s*\d+\s*位派友参与\s*去看看\s*$", "", t).strip()
+    t = re.sub(r"^(派早报|本周看什么)[：:]\s*", "", t).strip()
+    # 清理末尾多余符号
+    t = re.sub(r"[。\.。]+$", "", t).strip()
     return t
 
 
-def is_news_title(t):
+def is_news_title(t, lang="cn"):
     if not (10 <= len(t) <= 50):
         return False
-    if not RE_CHINESE.search(t):
+    if lang == "cn" and not RE_CHINESE.search(t):
         return False
     for kw in BLACKLIST:
         if kw in t:
             return False
-    # 排除带过多符号的（多为功能链接）
     if t.count("|") > 1 or t.count("/") > 1:
         return False
     return True
 
 
-def extract_links(html, base_url):
-    """通用提取：<a href>标题</a>，返回去重后的 [(title, url)]"""
-    # 去掉 script/style 干扰
+def extract_links(html, base_url, lang="cn", use_date_filter=True):
+    """通用提取：<a href>标题</a>，返回去重后的 [(title, url)]
+    use_date_filter: True=要求链接带日期路径（综合新闻站）；False=科技站（用文章ID路径）"""
     html = re.sub(r"<script[\s\S]*?</script>", " ", html, flags=re.I)
     html = re.sub(r"<style[\s\S]*?</style>", " ", html, flags=re.I)
     out = []
@@ -88,12 +129,16 @@ def extract_links(html, base_url):
     for m in re.finditer(r'<a[^>]+href="([^"]+)"[^>]*>([\s\S]*?)</a>', html, flags=re.I):
         href, inner = m.group(1), m.group(2)
         title = clean_title(inner)
-        if not is_news_title(title):
+        if not is_news_title(title, lang):
             continue
         url = urljoin(base_url, href)
-        # 链接必须带日期路径（新闻详情页特征），过滤栏目/专题/导航链接
-        if not RE_DATE_URL.search(url):
-            continue
+        if use_date_filter:
+            if not RE_DATE_URL.search(url):
+                continue
+        else:
+            # 科技站：链接需匹配文章ID路径特征
+            if not RE_TECH_URL.search(url):
+                continue
         if title in seen:
             continue
         seen.add(title)
@@ -103,26 +148,28 @@ def extract_links(html, base_url):
 
 # ---------- 各源专用配置 ----------
 SOURCES = [
-    {
-        "name": "央视网", "region": "🇨🇳", "category": "国内",
-        "url": "https://news.cctv.com/",
-        "max": 12,
-    },
-    {
-        "name": "中新网", "region": "🇨🇳", "category": "国内",
-        "url": "https://www.chinanews.com/",
-        "max": 12,
-    },
-    {
-        "name": "联合早报", "region": "🌍", "category": "国际",
-        "url": "https://www.zaobao.com/news/world",
-        "max": 14,
-    },
-    {
-        "name": "联合早报·中国", "region": "🇸🇬", "category": "国内",
-        "url": "https://www.zaobao.com/news/china",
-        "max": 10,
-    },
+    # 国内综合
+    {"name": "央视网", "region": "🇨🇳", "category": "国内", "topic": "综合",
+     "url": "https://news.cctv.com/", "max": 10, "lang": "cn"},
+    {"name": "中新网", "region": "🇨🇳", "category": "国内", "topic": "综合",
+     "url": "https://www.chinanews.com/", "max": 10, "lang": "cn"},
+    # 国内科技
+    {"name": "少数派", "region": "🇨🇳", "category": "国内", "topic": "科技AI",
+     "url": "https://sspai.com/", "max": 8, "lang": "cn", "date_filter": False},
+    {"name": "爱范儿", "region": "🇨🇳", "category": "国内", "topic": "科技AI",
+     "url": "https://www.ifanr.com/", "max": 8, "lang": "cn", "date_filter": False},
+    {"name": "品玩", "region": "🇨🇳", "category": "国内", "topic": "科技AI",
+     "url": "https://www.pingwest.com/", "max": 8, "lang": "cn", "date_filter": False},
+    {"name": "雷锋网", "region": "🇨🇳", "category": "国内", "topic": "科技AI",
+     "url": "https://www.leiphone.com/", "max": 8, "lang": "cn", "date_filter": False},
+    # 国际综合
+    {"name": "联合早报", "region": "🌍", "category": "国际", "topic": "综合",
+     "url": "https://www.zaobao.com/news/world", "max": 12, "lang": "cn"},
+    {"name": "联合早报·中国", "region": "🇸🇬", "category": "国内", "topic": "综合",
+     "url": "https://www.zaobao.com/news/china", "max": 8, "lang": "cn"},
+    # 国际科技
+    {"name": "TechCrunch", "region": "🌍", "category": "国际", "topic": "科技AI",
+     "url": "https://techcrunch.com/", "max": 10, "lang": "en"},
 ]
 
 
@@ -138,12 +185,14 @@ def main():
     for src in SOURCES:
         try:
             html = fetch_html(src["url"])
-            items = extract_links(html, src["url"])
+            items = extract_links(html, src["url"], src.get("lang", "cn"), src.get("date_filter", True))
             count = 0
             for it in items:
                 if it["title"] in seen_global:
                     continue
                 seen_global.add(it["title"])
+                # 科技/AI 相关判断（用于前端分类）
+                tech = is_tech_related(it["title"])
                 all_items.append({
                     "title": it["title"],
                     "link": it["link"],
@@ -151,6 +200,8 @@ def main():
                     "source": src["name"],
                     "region": src["region"],
                     "category": src["category"],
+                    "topic": src["topic"],          # 综合 / 科技AI
+                    "tech": tech,                    # 是否科技AI相关
                     "time": now.isoformat(),
                 })
                 count += 1
@@ -166,10 +217,11 @@ def main():
                  .replace("Wednesday", "周三").replace("Thursday", "周四").replace("Friday", "周五")
                  .replace("Saturday", "周六").replace("Sunday", "周日"),
         "count": len(all_items),
+        "techCount": sum(1 for n in all_items if n.get("tech") or n.get("topic") == "科技AI"),
         "news": all_items,
     }
     out_file.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"已写入 {out_file}，共 {len(all_items)} 条", flush=True)
+    print(f"已写入 {out_file}，共 {len(all_items)} 条（科技AI {data['techCount']} 条）", flush=True)
 
 
 if __name__ == "__main__":
