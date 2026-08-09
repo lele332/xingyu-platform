@@ -31,31 +31,40 @@
     </div>
 
     <nav class="sidebar-nav">
-      <button class="nav-item active" data-view="dashboard">
-        <span class="nav-ico">📊</span><span class="nav-label">仪表盘</span>
-      </button>
-      <button class="nav-item" data-view="courses">
-        <span class="nav-ico">📚</span><span class="nav-label">课程作业</span>
-      </button>
-      <button class="nav-item" data-view="notes">
-        <span class="nav-ico">📝</span><span class="nav-label">学习笔记库</span>
-      </button>
-      <button class="nav-item" data-view="focus">
-        <span class="nav-ico">⏱</span><span class="nav-label">专注学习</span>
-      </button>
-      <button class="nav-item" data-view="growth">
-        <span class="nav-ico">👤</span><span class="nav-label">成长档案</span>
-      </button>
-      <button class="nav-item" data-view="lit">
-        <span class="nav-ico">📖</span><span class="nav-label">文献资料</span>
-      </button>
-      <button class="nav-item" data-view="news">
-        <span class="nav-ico">📰</span><span class="nav-label">热点新闻</span>
-      </button>
-      <button class="nav-item" data-view="ai">
-        <span class="nav-ico">✨</span><span class="nav-label">AI 助手</span>
-        <span class="nav-badge" id="aiBadge">AI</span>
-      </button>
+      <div class="nav-group">
+        <div class="nav-group-label">工作台</div>
+        <button class="nav-item active" data-view="dashboard">
+          <span class="nav-ico">📊</span><span class="nav-label">仪表盘</span>
+        </button>
+        <button class="nav-item" data-view="courses">
+          <span class="nav-ico">📚</span><span class="nav-label">课程作业</span>
+        </button>
+        <button class="nav-item" data-view="focus">
+          <span class="nav-ico">⏱</span><span class="nav-label">专注学习</span>
+        </button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">学习资料</div>
+        <button class="nav-item" data-view="notes">
+          <span class="nav-ico">📝</span><span class="nav-label">学习笔记库</span>
+        </button>
+        <button class="nav-item" data-view="lit">
+          <span class="nav-ico">📖</span><span class="nav-label">文献资料</span>
+        </button>
+        <button class="nav-item" data-view="news">
+          <span class="nav-ico">📰</span><span class="nav-label">热点新闻</span>
+        </button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">自我成长</div>
+        <button class="nav-item" data-view="growth">
+          <span class="nav-ico">👤</span><span class="nav-label">成长档案</span>
+        </button>
+        <button class="nav-item" data-view="ai">
+          <span class="nav-ico">✨</span><span class="nav-label">AI 助手</span>
+          <span class="nav-badge" id="aiBadge">AI</span>
+        </button>
+      </div>
     </nav>
 
     <div class="sidebar-footer">
@@ -72,11 +81,14 @@
 
   <!-- ================= 主区域 ================= -->
   <main class="main">
-    <!-- 顶部栏 -->
+    <!-- 顶部栏（毛玻璃悬浮层） -->
     <header class="topbar">
       <div class="topbar-left">
         <button class="icon-btn menu-btn" id="btnMenu">☰</button>
-        <h1 class="page-title" id="pageTitle">仪表盘</h1>
+        <div class="page-title-box">
+          <h1 class="page-title" id="pageTitle">仪表盘</h1>
+          <span class="page-sub" id="pageSub">你的个人学习工作中心</span>
+        </div>
       </div>
       <div class="topbar-right">
         <div class="search-box">
@@ -98,7 +110,9 @@
       <!-- 仪表盘 -->
       <section class="view active" id="view-dashboard">
         <div class="hero-card">
+          <div class="hero-glow"></div>
           <div class="hero-text">
+            <span class="hero-eyebrow">XINGYU · 星屿</span>
             <h2 id="heroGreeting">你好，同学 👋</h2>
             <p id="heroQuote">今天也要保持专注，稳步向前。</p>
           </div>

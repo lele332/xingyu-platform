@@ -60,7 +60,10 @@ const App = (() => {
       v.classList.add("active");
     }
     const titles = { dashboard: "仪表盘", courses: "课程作业", notes: "学习笔记库", focus: "专注学习", growth: "成长档案", lit: "文献资料", news: "热点新闻", ai: "AI 助手" };
+    const subs = { dashboard: "学习进度一览，今天也要保持专注", courses: "课程、课表与作业任务管理", notes: "沉淀知识，构建你的笔记库", focus: "番茄钟与专注统计", growth: "成绩、技能与成长轨迹", lit: "专业文献库与期刊导航", news: "每日国内外热点速递", ai: "你的智能学习伙伴" };
     $("#pageTitle").textContent = titles[view] || "";
+    const sub = $("#pageSub");
+    if (sub) sub.textContent = subs[view] || "";
     $("#view-container") && $("#view-container").scrollTo(0, 0);
     document.querySelector(".view-container").scrollTop = 0;
     renderCurrent();
