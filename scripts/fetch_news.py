@@ -38,7 +38,10 @@ BLACKLIST = (
 # 标题必须包含中文才视为新闻（排除纯英文导航等）
 RE_CHINESE = re.compile(r"[一-鿿]")
 # 新闻详情页链接特征：URL 中带日期路径
-RE_DATE_URL = re.compile(r"/(20\d{2})[/-](0[1-9]|1[0-2])|/(20\d{2})[/-](0[1-9]|1[0-2])[/-](0[1-9]|[12]\d|3[01])|/story(20\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])")
+# 支持 /2026/08/、/2026-08/、/202608/（年月无分隔符）、/t20260807_ 等格式
+RE_DATE_URL = re.compile(r"/(20\d{2})[/-](0[1-9]|1[0-2])|/(20\d{2})[/-](0[1-9]|1[0-2])[/-](0[1-9]|[12]\d|3[01])|/story(20\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])|/(20\d{2})(0[1-9]|1[0-2])|/t(20\d{6})")
+# 科技/行业站文章ID路径（无日期，用 ID 或特定目录）
+RE_TECH_URL = re.compile(r"/(article|a|video|p|post|news|xinwen|content|bullet|create|banner)/|/\d{6,}|/\d{6,}\.html|/t(20\d{6})")
 # 科技媒体链接特征（不带日期路径，用文章ID路径）
 RE_TECH_URL = re.compile(r"/(a|article|post|p|news)/\d+|/\d{6,}|/banner/\w+/id/\d+|/create/|/bullet/\d+")
 
@@ -146,6 +149,33 @@ def extract_links(html, base_url, lang="cn", use_date_filter=True):
     return out
 
 
+# ---------- 土木/道桥行业关键词（用于过滤行业新闻） ----------
+TUMU_KEYWORDS = [
+    "公路", "道路", "桥梁", "大桥", "隧道", "高速", "高速公", "铁路", "交通", "运输",
+    "工程", "施工", "建设", "基建", "基建设", "混凝土", "沥青", "路基", "路面", "桥墩",
+    "桥隧", "墩台", "涵洞", "立交", "匝道", "桥面", "桥台", "钢箱梁", "箱梁", "预制",
+    "装配式", "盾构", "隧道掘进", "BIM", "装配式", "监理", "造价", "招投标", "工程局",
+    "中铁", "中建", "中交", "路桥", "建工", "交建", "水运", "港口", "航道", "码头",
+    "枢纽", "客货", "物流", "货运", "航运", "海事", "民航", "机场", "地铁", "城轨",
+    "智慧交通", "绿色交通", "交通强国", "公路局", "交通厅", "交通部", "运输部",
+    "养护", "改扩建", "扩建", "改造", "加固", "检测", "监测", "预警", "防灾", "防汛",
+    "抢险", "应急", "保通", "贯通", "通车", "开工", "竣工", "完工", "合龙", "封顶",
+]
+
+def is_tumu_related(text):
+    if not text:
+        return False
+    # 排除明显的政治/健康类非行业新闻
+    exclude = ("习近平", "总书记", "求是", "人民情怀", "健康中国", "主席", "元首", "领路", "会客厅", "征订", "研讨会")
+    for kw in exclude:
+        if kw in text:
+            return False
+    for kw in TUMU_KEYWORDS:
+        if kw in text:
+            return True
+    return False
+
+
 # ---------- 各源专用配置 ----------
 SOURCES = [
     # 国内综合
@@ -170,6 +200,11 @@ SOURCES = [
     # 国际科技
     {"name": "TechCrunch", "region": "🌍", "category": "国际", "topic": "科技AI",
      "url": "https://techcrunch.com/", "max": 10, "lang": "en"},
+    # 土木/道桥行业（专业）
+    {"name": "中国公路网", "region": "🇨🇳", "category": "国内", "topic": "土木行业",
+     "url": "https://www.chinahighway.com/", "max": 10, "lang": "cn", "date_filter": False},
+    {"name": "交通运输部", "region": "🇨🇳", "category": "国内", "topic": "土木行业",
+     "url": "https://www.mot.gov.cn/", "max": 10, "lang": "cn", "date_filter": True, "tumu_filter": True},
 ]
 
 
@@ -189,6 +224,9 @@ def main():
             count = 0
             for it in items:
                 if it["title"] in seen_global:
+                    continue
+                # 交通部等综合政府源：只保留土木/交通行业相关
+                if src.get("tumu_filter") and not is_tumu_related(it["title"]):
                     continue
                 seen_global.add(it["title"])
                 # 科技/AI 相关判断（用于前端分类）

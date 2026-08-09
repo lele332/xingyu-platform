@@ -857,12 +857,14 @@ const App = (() => {
     const upd = data.updatedAt ? new Date(data.updatedAt) : null;
     $("#newsUpdated").textContent = upd ? `更新于 ${String(upd.getHours()).padStart(2,"0")}:${String(upd.getMinutes()).padStart(2,"0")}` : "";
 
-    // 过滤逻辑：全部 / 科技AI / 国内 / 国际
+    // 过滤逻辑：全部 / 科技AI / 土木行业 / 国内 / 国际
     let filtered;
     if (newsFilter === "all") {
       filtered = data.news;
     } else if (newsFilter === "科技AI") {
       filtered = data.news.filter(n => n.topic === "科技AI" || n.tech);
+    } else if (newsFilter === "土木行业") {
+      filtered = data.news.filter(n => n.topic === "土木行业");
     } else {
       filtered = data.news.filter(n => n.category === newsFilter);
     }
@@ -870,11 +872,12 @@ const App = (() => {
       box.innerHTML = `<div class="empty-state"><div class="big">📭</div><p>该分类暂无新闻</p></div>`;
       return;
     }
-    // 分组：全部/国内/国际 按地区分；科技AI 按来源分（科技媒体综合展示）
+    // 分组：全部/国内/国际 按地区分；科技AI/土木行业 不分地区直接列表
     let groups;
     if (newsFilter === "科技AI") {
-      // 科技AI：不分地区，直接列表（来源标签已能区分国内外）
       groups = [{ name: "科技AI", emoji: "🤖", items: filtered }];
+    } else if (newsFilter === "土木行业") {
+      groups = [{ name: "土木·行业", emoji: "📐", items: filtered }];
     } else if (newsFilter === "all") {
       groups = [{ name: "国内", emoji: "🇨🇳", items: filtered.filter(n => n.category === "国内") },
                 { name: "国际", emoji: "🌍", items: filtered.filter(n => n.category === "国际") }];
