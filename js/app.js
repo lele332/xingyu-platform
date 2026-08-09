@@ -43,14 +43,22 @@ const App = (() => {
     setTimeout(() => { el.style.opacity = "0"; el.style.transition = "opacity 0.3s"; setTimeout(() => el.remove(), 350); }, 2600);
   }
 
-  /* ---------- 视图切换 ---------- */
+  /* ---------- 视图切换（iOS 风格：进入动画可重复触发） ---------- */
   let currentView = "dashboard";
   function switchView(view) {
+    if (view === currentView) { renderCurrent(); return; }
+    const prev = $("#view-" + currentView);
     currentView = view;
     $$(".view").forEach(v => v.classList.remove("active"));
     $$(".nav-item").forEach(n => n.classList.toggle("active", n.dataset.view === view));
     const v = $("#view-" + view);
-    if (v) v.classList.add("active");
+    if (v) {
+      // 重新触发进入动画（连续切换时从当前状态开始，可打断）
+      v.classList.remove("view-in");
+      void v.offsetWidth;
+      v.classList.add("view-in");
+      v.classList.add("active");
+    }
     const titles = { dashboard: "仪表盘", courses: "课程作业", notes: "学习笔记库", focus: "专注学习", growth: "成长档案", lit: "文献资料", news: "热点新闻", ai: "AI 助手" };
     $("#pageTitle").textContent = titles[view] || "";
     $("#view-container") && $("#view-container").scrollTo(0, 0);
@@ -1147,10 +1155,30 @@ const App = (() => {
   }
 
   /* ============================================================
-     弹窗管理
+     弹窗管理（iOS Sheet 风格：进入/退出同路径，可打断）
      ============================================================ */
-  function showModal(id) { $("#" + id).classList.add("show"); }
-  function closeModal(id) { $("#" + id).classList.remove("show"); }
+  function showModal(id) {
+    const m = $("#" + id);
+    m.classList.remove("closing");
+    m.classList.add("show");
+    // 重新触发进入动画（连续开关时不丢失）
+    const sheet = m.querySelector(".modal");
+    if (sheet) {
+      sheet.classList.remove("sheet-in");
+      void sheet.offsetWidth;
+      sheet.classList.add("sheet-in");
+    }
+  }
+  function closeModal(id) {
+    const m = $("#" + id);
+    if (!m.classList.contains("show")) return;
+    m.classList.add("closing");
+    setTimeout(() => {
+      m.classList.remove("show", "closing");
+      const sheet = m.querySelector(".modal");
+      if (sheet) sheet.classList.remove("sheet-in");
+    }, 220);
+  }
 
   /* ============================================================
      设置
