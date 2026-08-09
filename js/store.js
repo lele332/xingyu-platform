@@ -15,7 +15,8 @@ const Store = (() => {
       pomodoros: [],     // {id, startAt, minutes, type(focus/break)}
       grades: [],        // {id, subject, name, score, credit, semester}
       skills: [],        // {id, name, level(1-100)}
-      projects: []       // {id, name, role, desc, link, start, end}
+      projects: [],      // {id, name, role, desc, link, start, end}
+      literature: []     // {id, title, authors, journal, year, doi, tags[], notes, favorite, createdAt}
     };
     // 本地配置（local-config.js，含用户 API Key，不随仓库发布）
     if (window.LOCAL_CONFIG) {

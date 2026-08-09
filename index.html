@@ -46,6 +46,9 @@
       <button class="nav-item" data-view="growth">
         <span class="nav-ico">👤</span><span class="nav-label">成长档案</span>
       </button>
+      <button class="nav-item" data-view="lit">
+        <span class="nav-ico">📖</span><span class="nav-label">文献资料</span>
+      </button>
       <button class="nav-item" data-view="news">
         <span class="nav-ico">📰</span><span class="nav-label">热点新闻</span>
       </button>
@@ -357,6 +360,36 @@
         <div id="newsList"></div>
         <div class="news-tip">
           💡 数据来源：国内（央视网/中新网）、科技（少数派/爱范儿/品玩/雷锋网）、行业（中国公路网/交通运输部）、国际（联合早报/TechCrunch）等主流媒体官网，每日定时更新。点击标题跳转原文。
+        </div>
+      </section>
+
+      <!-- 文献资料 -->
+      <section class="view" id="view-lit">
+        <div class="view-toolbar">
+          <div class="toolbar-tabs">
+            <button class="tab-btn active" data-tab="lit-lib">📚 我的文献库</button>
+            <button class="tab-btn" data-tab="lit-journal">🏛️ 期刊导航</button>
+          </div>
+          <div class="toolbar-actions">
+            <button class="btn btn-ghost" id="btnImportLit">📥 导入文献</button>
+            <button class="btn btn-primary" id="btnAddLit">+ 添加文献</button>
+          </div>
+        </div>
+
+        <!-- 我的文献库 -->
+        <div class="tab-panel active" id="tab-lit-lib">
+          <div class="filter-row">
+            <input type="text" id="litSearch" placeholder="🔍 搜索文献标题/作者/期刊..." style="flex:1;max-width:400px;background:var(--fill);border:none;border-radius:10px;padding:9px 14px;color:var(--text);font-size:13px;outline:none;font-family:var(--font)">
+            <select class="select" id="litFilterTag"><option value="">全部标签</option></select>
+            <select class="select" id="litFilterFav"><option value="">全部</option><option value="fav">⭐ 收藏</option></select>
+          </div>
+          <div id="litList"></div>
+        </div>
+
+        <!-- 期刊导航 -->
+        <div class="tab-panel" id="tab-lit-journal">
+          <p class="hint" style="margin-bottom:16px">以下是你所在领域的主流期刊，点击直接跳转官网查看最新目录与文献：</p>
+          <div class="journal-grid" id="journalGrid"></div>
         </div>
       </section>
 

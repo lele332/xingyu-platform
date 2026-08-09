@@ -51,7 +51,7 @@ const App = (() => {
     $$(".nav-item").forEach(n => n.classList.toggle("active", n.dataset.view === view));
     const v = $("#view-" + view);
     if (v) v.classList.add("active");
-    const titles = { dashboard: "仪表盘", courses: "课程作业", notes: "学习笔记库", focus: "专注学习", growth: "成长档案", news: "热点新闻", ai: "AI 助手" };
+    const titles = { dashboard: "仪表盘", courses: "课程作业", notes: "学习笔记库", focus: "专注学习", growth: "成长档案", lit: "文献资料", news: "热点新闻", ai: "AI 助手" };
     $("#pageTitle").textContent = titles[view] || "";
     $("#view-container") && $("#view-container").scrollTo(0, 0);
     document.querySelector(".view-container").scrollTop = 0;
@@ -64,6 +64,7 @@ const App = (() => {
     else if (currentView === "notes") renderNotes();
     else if (currentView === "focus") renderFocus();
     else if (currentView === "growth") renderGrowth();
+    else if (currentView === "lit") renderLit();
     else if (currentView === "news") renderNews();
     else if (currentView === "ai") renderAIStatus();
   }
@@ -921,6 +922,184 @@ const App = (() => {
   }
 
   /* ============================================================
+     文献资料
+     ============================================================ */
+  const JOURNALS = [
+    { name: "中国公路学报", org: "中国公路学会", url: "http://zgglxb.chd.edu.cn/", level: "EI / 北大核心", desc: "公路交通领域权威期刊" },
+    { name: "公路交通科技", org: "交通部公路科学研究院", url: "https://www.gljtkj.com/", level: "北大核心", desc: "公路与桥梁技术研究" },
+    { name: "桥梁建设", org: "中铁大桥局", url: "http://qljs.chd.edu.cn/", level: "EI / 北大核心", desc: "桥梁工程专业期刊" },
+    { name: "土木工程学报", org: "中国土木工程学会", url: "http://www.civiljournal.com/", level: "EI / 北大核心", desc: "土木工程综合权威" },
+    { name: "工程力学", org: "中国力学学会", url: "http://www.engineeringmechanics.cn/", level: "EI / 北大核心", desc: "力学与结构工程" },
+    { name: "交通运输工程学报", org: "长安大学", url: "http://jtysjtxb.chd.edu.cn/", level: "EI / 北大核心", desc: "交通运输综合研究" },
+    { name: "振动与冲击", org: "中国振动工程学会", url: "http://www.jvsj.net/", level: "EI / 北大核心", desc: "结构振动与抗震" },
+    { name: "建筑材料学报", org: "同济大学", url: "http://jcb.clarivate.com/", level: "EI", desc: "建筑材料与结构" },
+    { name: "公路", org: "交通部公路科学研究院", url: "https://www.gljtkj.com/", level: "北大核心", desc: "公路工程技术应用" },
+    { name: "中外公路", org: "长沙理工大学", url: "http://www.zwgl.com.cn/", level: "北大核心", desc: "国内外公路技术" },
+    { name: "知网 CNKI", org: "中国知网", url: "https://www.cnki.net/", level: "数据库", desc: "最全文献检索平台" },
+    { name: "万方数据", org: "万方", url: "https://www.wanfangdata.com.cn/", level: "数据库", desc: "学术文献数据库" },
+    { name: "维普网", org: "维普", url: "https://www.cqvip.com/", level: "数据库", desc: "中文期刊服务平台" },
+  ];
+
+  let litEditId = null;
+
+  function renderLit() {
+    renderJournalGrid();
+    renderLitList();
+  }
+
+  function renderJournalGrid() {
+    const box = $("#journalGrid");
+    if (!box) return;
+    box.innerHTML = JOURNALS.map(j => `
+      <a class="journal-card" href="${j.url}" target="_blank" rel="noopener">
+        <div class="journal-head">
+          <span class="journal-name">${esc(j.name)}</span>
+          <span class="journal-level">${esc(j.level)}</span>
+        </div>
+        <div class="journal-org">${esc(j.org)}</div>
+        <div class="journal-desc">${esc(j.desc)}</div>
+      </a>`).join("");
+  }
+
+  function getLitTags() {
+    const tags = new Set();
+    Store.getAll("literature").forEach(l => (l.tags || []).forEach(t => tags.add(t)));
+    return Array.from(tags);
+  }
+
+  function renderLitList() {
+    const box = $("#litList");
+    const search = ($("#litSearch").value || "").trim().toLowerCase();
+    const tagFilter = $("#litFilterTag").value;
+    const favFilter = $("#litFilterFav").value;
+
+    let items = Store.getAll("literature");
+    if (search) {
+      items = items.filter(l =>
+        (l.title || "").toLowerCase().includes(search) ||
+        (l.authors || "").toLowerCase().includes(search) ||
+        (l.journal || "").toLowerCase().includes(search) ||
+        (l.tags || []).some(t => t.toLowerCase().includes(search))
+      );
+    }
+    if (tagFilter) items = items.filter(l => (l.tags || []).includes(tagFilter));
+    if (favFilter === "fav") items = items.filter(l => l.favorite);
+
+    if (!items.length) {
+      box.innerHTML = `<div class="empty-state"><div class="big">📖</div><p>暂无文献。点击「+ 添加文献」或「📥 导入文献」开始积累。</p></div>`;
+      return;
+    }
+    // 收藏排前面，再按时间倒序
+    items = items.slice().sort((a, b) => (b.favorite ? 1 : 0) - (a.favorite ? 1 : 0) || (b.createdAt || "").localeCompare(a.createdAt || ""));
+    box.innerHTML = items.map(l => `
+      <div class="lit-item ${l.favorite ? "fav" : ""}" data-id="${l.id}">
+        <div class="lit-main">
+          <div class="lit-title">${l.favorite ? "⭐ " : ""}${esc(l.title)}</div>
+          <div class="lit-meta">${esc(l.authors || "未知作者")} · ${esc(l.journal || "未知期刊")}${l.year ? " · " + l.year : ""}${l.doi ? ` · <span class="lit-doi" data-doi="${esc(l.doi)}" title="点击复制DOI">DOI</span>` : ""}</div>
+          ${l.notes ? `<div class="lit-notes">${esc(l.notes)}</div>` : ""}
+          ${l.tags && l.tags.length ? `<div class="lit-tags">${l.tags.map(t => `<span class="lit-tag">${esc(t)}</span>`).join("")}</div>` : ""}
+        </div>
+        <div class="row-actions">
+          <button class="mini-btn lit-fav" title="${l.favorite ? "取消收藏" : "收藏"}">${l.favorite ? "★" : "☆"}</button>
+          <button class="mini-btn lit-edit" title="编辑">✎</button>
+          <button class="mini-btn del lit-del" title="删除">✕</button>
+        </div>
+      </div>`).join("");
+
+    // 绑定操作
+    box.querySelectorAll(".lit-fav").forEach(b => b.onclick = () => {
+      const id = b.closest(".lit-item").dataset.id;
+      const item = Store.getAll("literature").find(x => x.id === id);
+      if (item) { Store.update("literature", id, { favorite: !item.favorite }); renderLitList(); }
+    });
+    box.querySelectorAll(".lit-edit").forEach(b => b.onclick = () => openLitForm(b.closest(".lit-item").dataset.id));
+    box.querySelectorAll(".lit-del").forEach(b => b.onclick = () => {
+      const id = b.closest(".lit-item").dataset.id;
+      if (confirm("确定删除这篇文献吗？")) { Store.remove("literature", id); toast("已删除", "ok"); renderLitList(); }
+    });
+    box.querySelectorAll(".lit-doi").forEach(s => s.onclick = () => {
+      navigator.clipboard.writeText(s.dataset.doi).then(() => toast("DOI 已复制", "ok"));
+    });
+  }
+
+  function openLitForm(editId) {
+    litEditId = editId || null;
+    const l = editId ? Store.getAll("literature").find(x => x.id === editId) : null;
+    $("#formTitle").textContent = editId ? "编辑文献" : "添加文献";
+    $("#formBody").innerHTML = `
+      <label class="field"><span>标题 *</span><input id="f-lit-title" value="${esc(l?.title || "")}" placeholder="文献标题"></label>
+      <div class="form-grid">
+        <label class="field"><span>作者</span><input id="f-lit-authors" value="${esc(l?.authors || "")}" placeholder="张三, 李四"></label>
+        <label class="field"><span>期刊/来源</span><input id="f-lit-journal" value="${esc(l?.journal || "")}" placeholder="中国公路学报"></label>
+        <label class="field"><span>年份</span><input id="f-lit-year" value="${esc(l?.year || "")}" placeholder="2025"></label>
+        <label class="field"><span>DOI</span><input id="f-lit-doi" value="${esc(l?.doi || "")}" placeholder="10.xxxx/xxxxx"></label>
+      </div>
+      <label class="field"><span>标签（逗号分隔）</span><input id="f-lit-tags" value="${esc((l?.tags || []).join(","))}" placeholder="桥梁工程, 抗震"></label>
+      <label class="field"><span>备注/摘要</span><textarea id="f-lit-notes" rows="4" placeholder="你的阅读笔记或文献摘要...">${esc(l?.notes || "")}</textarea></label>
+      <label class="field" style="flex-direction:row;align-items:center;gap:10px">
+        <input type="checkbox" id="f-lit-fav" ${l?.favorite ? "checked" : ""} style="width:18px;height:18px;accent-color:var(--blue)">
+        <span style="font-size:13.5px">⭐ 收藏此文献</span>
+      </label>`;
+    $("#btnFormSave").onclick = () => {
+      const title = $("#f-lit-title").value.trim();
+      if (!title) { toast("请填写文献标题", "err"); return; }
+      const data = {
+        title,
+        authors: $("#f-lit-authors").value.trim(),
+        journal: $("#f-lit-journal").value.trim(),
+        year: $("#f-lit-year").value.trim(),
+        doi: $("#f-lit-doi").value.trim(),
+        tags: $("#f-lit-tags").value.split(/[,，]/).map(t => t.trim()).filter(Boolean),
+        notes: $("#f-lit-notes").value.trim(),
+        favorite: $("#f-lit-fav").checked,
+      };
+      if (litEditId) {
+        Store.update("literature", litEditId, data);
+        toast("文献已更新", "ok");
+      } else {
+        Store.add("literature", { ...data, createdAt: new Date().toISOString() });
+        toast("文献已添加", "ok");
+      }
+      closeModal("formModal");
+      renderLitList();
+    };
+    showModal("formModal");
+  }
+
+  function openLitImportModal() {
+    // 简化版导入：粘贴多条文献，每行一条，格式：标题 | 作者 | 期刊 | 年份 | DOI
+    $("#formTitle").textContent = "导入文献";
+    $("#formBody").innerHTML = `
+      <p class="hint">粘贴文献列表，每行一条，格式：<code>标题 | 作者 | 期刊 | 年份 | DOI</code>（DOI 可省略）</p>
+      <textarea id="f-lit-import" rows="10" placeholder="例如：\n桥梁抗震设计方法研究 | 张三, 李四 | 中国公路学报 | 2025 | 10.19721/j.cnki.1001-7372.2025.01.001\n装配式桥梁施工技术 | 王五 | 桥梁建设 | 2024"></textarea>
+      <p class="hint">💡 也可以直接粘贴从知网/万方导出的题录文本，AI 会尝试解析。</p>`;
+    $("#btnFormSave").onclick = async () => {
+      const text = $("#f-lit-import").value.trim();
+      if (!text) { toast("请先粘贴文献内容", "err"); return; }
+      const lines = text.split(/\r?\n/).filter(l => l.trim());
+      let added = 0;
+      lines.forEach(line => {
+        const parts = line.split("|").map(p => p.trim());
+        if (parts.length < 1 || !parts[0]) return;
+        Store.add("literature", {
+          title: parts[0],
+          authors: parts[1] || "",
+          journal: parts[2] || "",
+          year: parts[3] || "",
+          doi: parts[4] || "",
+          tags: [], notes: "", favorite: false,
+          createdAt: new Date().toISOString()
+        });
+        added++;
+      });
+      closeModal("formModal");
+      toast(`已导入 ${added} 条文献`, "ok");
+      renderLitList();
+    };
+    showModal("formModal");
+  }
+
+  /* ============================================================
      AI 助手
      ============================================================ */
   function renderAIStatus() {
@@ -1664,6 +1843,13 @@ const App = (() => {
         renderNews();
       };
     });
+
+    // 文献资料
+    $("#btnAddLit").onclick = () => openLitForm();
+    $("#btnImportLit").onclick = openLitImportModal;
+    $("#litSearch").addEventListener("input", renderLitList);
+    $("#litFilterTag").onchange = renderLitList;
+    $("#litFilterFav").onchange = renderLitList;
 
     // 全局搜索
     setupSearch();
