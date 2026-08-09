@@ -72,6 +72,16 @@ body {
 .bg-orb-2 { width: 420px; height: 420px; background: #bf5af2; bottom: -200px; left: -140px; }
 .bg-grid { display: none; }
 
+/* ---------- 移动端侧边栏遮罩 ---------- */
+.sidebar-mask {
+  display: none; position: fixed; inset: 0; z-index: 85;
+  background: rgba(0, 0, 0, 0.55); backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+@media (max-width: 900px) {
+  .sidebar-mask.show { display: block; animation: fadeIn 0.25s ease; }
+}
+
 /* ---------- 布局 ---------- */
 .app { position: relative; z-index: 1; display: flex; height: 100vh; }
 

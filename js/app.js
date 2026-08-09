@@ -1446,7 +1446,24 @@ const App = (() => {
     $("#btnConfirmImport").onclick = confirmImport;
 
     // 菜单（移动端）
-    $("#btnMenu").onclick = () => $("#sidebar").classList.toggle("open");
+    $("#btnMenu").onclick = () => {
+      $("#sidebar").classList.add("open");
+      $("#sidebarMask").classList.add("show");
+    };
+    // 点遮罩关闭侧边栏
+    $("#sidebarMask").onclick = () => {
+      $("#sidebar").classList.remove("open");
+      $("#sidebarMask").classList.remove("show");
+    };
+    // 点菜单项后自动收起侧边栏（移动端）
+    $$(".nav-item").forEach(n => {
+      n.addEventListener("click", () => {
+        if (window.innerWidth <= 900) {
+          $("#sidebar").classList.remove("open");
+          $("#sidebarMask").classList.remove("show");
+        }
+      });
+    });
 
     // 课程页
     $("#btnAddCourse").onclick = () => openCourseForm();
