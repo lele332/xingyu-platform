@@ -8,7 +8,18 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>零 · 个人学习工作台</title>
 <meta name="description" content="把学业收拢到一张白纸：课程作业、笔记库、专注统计、成长档案、AI 助手。本地优先，黑白灰三色极简，无任何装饰。">
-<script>document.documentElement.dataset.theme = localStorage.getItem("zero_theme") || "dark";</script>
+<script>(function(){
+  var d = document.documentElement;
+  var t = localStorage.getItem("zero_theme") || "dark";
+  d.dataset.theme = t;
+  if (t === "custom") {
+    try {
+      var c = JSON.parse(localStorage.getItem("zero_custom_colors") || "{}");
+      var m = {paper:"--paper", card:"--paper-card", drawer:"--drawer", ink:"--ink", accent:"--accent", rule:"--rule"};
+      Object.keys(m).forEach(function(k){ if (c[k]) d.style.setProperty(m[k], c[k]); });
+    } catch(e) {}
+  }
+})();</script>
 <link rel="stylesheet" href="css/style.css?v=20260810">
 </head>
 <body>
@@ -452,8 +463,17 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <div class="theme-picker">
           <button class="theme-opt" data-theme-pick="dark"><span class="theme-swatch sw-dark"></span>纯黑</button>
           <button class="theme-opt" data-theme-pick="light"><span class="theme-swatch sw-light"></span>纯白</button>
+          <button class="theme-opt" data-theme-pick="custom"><span class="theme-swatch sw-custom" id="swCustom"></span>自定义</button>
         </div>
-        <p class="hint">选择你喜欢的界面配色，随时可切换。</p>
+        <div class="theme-custom" id="themeCustom" style="display:none">
+          <div class="theme-cfield"><span>背景色</span><input type="color" data-cvar="paper" value="#000000"></div>
+          <div class="theme-cfield"><span>卡片色</span><input type="color" data-cvar="card" value="#141414"></div>
+          <div class="theme-cfield"><span>侧栏色</span><input type="color" data-cvar="drawer" value="#0d0d0d"></div>
+          <div class="theme-cfield"><span>文字色</span><input type="color" data-cvar="ink" value="#ffffff"></div>
+          <div class="theme-cfield"><span>强调色</span><input type="color" data-cvar="accent" value="#ffffff"></div>
+          <div class="theme-cfield"><span>边框色</span><input type="color" data-cvar="rule" value="#2a2a2a"></div>
+        </div>
+        <p class="hint">纯黑 / 纯白一键切换；选「自定义」可自由调整每种颜色，实时生效。</p>
       </div>
       <div class="setting-group">
         <h4>AI 模型配置（OpenAI 兼容接口）</h4>

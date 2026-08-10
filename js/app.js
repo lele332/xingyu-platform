@@ -1192,21 +1192,97 @@ const App = (() => {
     $("#setApiKey").value = s.apiKey || "";
     $("#setModel").value = s.model || "";
     $("#setNickname").value = s.nickname || "";
-    // 同步当前主题高亮
-    const curTheme = document.documentElement.dataset.theme || "dark";
-    $$(".theme-opt").forEach(b => b.classList.toggle("active", b.dataset.themePick === curTheme));
+    syncThemeUI();
     showModal("settingsModal");
   }
 
   /* ============================================================
-     主题切换（纯黑 / 纯白）
+     主题（纯黑 / 纯白 / 自定义颜色）
      ============================================================ */
+  const CUSTOM_DEFAULTS = { paper: "#000000", card: "#101010", drawer: "#080808", ink: "#ffffff", accent: "#ffffff", rule: "#232323" };
+  const CUSTOM_MAP = { paper: "--paper", card: "--paper-card", drawer: "--drawer", ink: "--ink", accent: "--accent", rule: "--rule" };
+  const CUSTOM_VARS = ["--paper","--paper-2","--paper-3","--paper-card","--paper-hover","--paper-sunk",
+    "--ink","--ink-2","--ink-3","--ink-faint","--accent","--rule","--rule-2","--rule-thin",
+    "--drawer","--drawer-2","--drawer-3","--drawer-text","--drawer-deep","--fill","--fill-2","--fill-3"];
+
+  function hexToRgb(hex) {
+    const h = hex.replace("#", "");
+    const v = h.length === 3 ? h.split("").map(c => c + c).join("") : h;
+    const n = parseInt(v, 16);
+    return [n >> 16 & 255, n >> 8 & 255, n & 255];
+  }
+  function shade(hex, amt) {
+    const [r, g, b] = hexToRgb(hex);
+    const t = amt < 0 ? 0 : 255;
+    const p = Math.abs(amt);
+    const mix = (c) => Math.round(c + (t - c) * p);
+    return "#" + [mix(r), mix(g), mix(b)].map(c => c.toString(16).padStart(2, "0")).join("");
+  }
+  function rgbaOf(hex, a) {
+    const [r, g, b] = hexToRgb(hex);
+    return `rgba(${r},${g},${b},${a})`;
+  }
+  function getCustomColors() {
+    try { return Object.assign({}, CUSTOM_DEFAULTS, JSON.parse(localStorage.getItem("zero_custom_colors") || "{}")); }
+    catch (e) { return { ...CUSTOM_DEFAULTS }; }
+  }
+  function applyCustomColors(colors) {
+    const s = document.documentElement.style;
+    const { paper, card, drawer, ink, accent, rule } = colors;
+    s.setProperty("--paper", paper);
+    s.setProperty("--paper-card", card);
+    s.setProperty("--drawer", drawer);
+    s.setProperty("--ink", ink);
+    s.setProperty("--accent", accent);
+    s.setProperty("--rule", rule);
+    // 派生灰阶（让自定义配色整体协调）
+    s.setProperty("--paper-2", shade(paper, 0.04));
+    s.setProperty("--paper-3", shade(paper, 0.08));
+    s.setProperty("--paper-hover", shade(paper, 0.06));
+    s.setProperty("--paper-sunk", shade(paper, 0.1));
+    s.setProperty("--ink-2", shade(ink, -0.35));
+    s.setProperty("--ink-3", shade(ink, -0.55));
+    s.setProperty("--ink-faint", shade(ink, -0.7));
+    s.setProperty("--rule-2", shade(paper, 0.03));
+    s.setProperty("--rule-thin", rgbaOf(ink, 0.12));
+    s.setProperty("--drawer-2", shade(drawer, 0.04));
+    s.setProperty("--drawer-3", shade(drawer, 0.09));
+    s.setProperty("--drawer-text", shade(ink, -0.15));
+    s.setProperty("--drawer-deep", shade(ink, -0.55));
+    s.setProperty("--fill", rgbaOf(ink, 0.06));
+    s.setProperty("--fill-2", rgbaOf(ink, 0.1));
+    s.setProperty("--fill-3", rgbaOf(ink, 0.16));
+  }
+  function clearCustomColors() {
+    CUSTOM_VARS.forEach(v => document.documentElement.style.removeProperty(v));
+  }
+  function syncThemeUI() {
+    const curTheme = document.documentElement.dataset.theme || "dark";
+    $$(".theme-opt").forEach(b => b.classList.toggle("active", b.dataset.themePick === curTheme));
+    const panel = $("#themeCustom");
+    if (panel) panel.style.display = curTheme === "custom" ? "grid" : "none";
+    const colors = getCustomColors();
+    Object.keys(CUSTOM_MAP).forEach(k => {
+      const inp = document.querySelector(`#themeCustom input[data-cvar="${k}"]`);
+      if (inp) inp.value = colors[k];
+    });
+    const sw = $("#swCustom");
+    if (sw) sw.style.background = colors.accent;
+  }
   function applyTheme(theme) {
+    if (theme === "custom") {
+      applyCustomColors(getCustomColors());
+    } else {
+      clearCustomColors();
+    }
     document.documentElement.dataset.theme = theme;
     localStorage.setItem("zero_theme", theme);
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute("content", theme === "light" ? "#fafafa" : "#000000");
-    $$(".theme-opt").forEach(b => b.classList.toggle("active", b.dataset.themePick === theme));
+    if (meta) {
+      const c = theme === "light" ? "#fafafa" : theme === "custom" ? getCustomColors().paper : "#000000";
+      meta.setAttribute("content", c);
+    }
+    syncThemeUI();
   }
 
   function saveSettings() {
@@ -1819,6 +1895,18 @@ const App = (() => {
     $("#btnSettings").onclick = openSettings;
     $("#btnSaveSettings").onclick = saveSettings;
     $$("[data-theme-pick]").forEach(b => b.onclick = () => applyTheme(b.dataset.themePick));
+    $$("#themeCustom input[type=color]").forEach(inp => {
+      inp.oninput = () => {
+        const colors = getCustomColors();
+        colors[inp.dataset.cvar] = inp.value;
+        localStorage.setItem("zero_custom_colors", JSON.stringify(colors));
+        applyCustomColors(colors);
+        if (inp.dataset.cvar === "accent") {
+          const sw = $("#swCustom");
+          if (sw) sw.style.background = inp.value;
+        }
+      };
+    });
     $$("[data-preset]").forEach(p => p.onclick = () => {
       const preset = AI.PRESETS[p.dataset.preset];
       if (preset) { $("#setBaseUrl").value = preset.baseUrl; $("#setModel").value = preset.model; toast(`已填入 ${p.dataset.preset} 预设`, "ok"); }
