@@ -1310,6 +1310,8 @@ const App = (() => {
     $$("[data-font-pick]").forEach(b => b.classList.toggle("active", b.dataset.fontPick === curFont));
     const curLang = document.documentElement.dataset.lang || "zh";
     $$("[data-lang-pick]").forEach(b => b.classList.toggle("active", b.dataset.langPick === curLang));
+    const curBg = document.documentElement.dataset.bg || "none";
+    $$("[data-bg-pick]").forEach(b => b.classList.toggle("active", b.dataset.bgPick === curBg));
   }
   function applyTheme(theme) {
     if (theme === "custom") {
@@ -1360,10 +1362,10 @@ const App = (() => {
       "sub.ai": "你的智能学习伙伴",
       "hero.todo": "待办任务", "hero.due": "今日到期", "hero.notes": "笔记", "hero.focusMin": "今日专注(分)",
       "settings.title": "设置",
-      "settings.theme": "界面主题", "settings.font": "界面字体", "settings.lang": "界面语言",
+      "settings.theme": "界面主题", "settings.font": "界面字体", "settings.lang": "界面语言", "settings.bg": "界面背景", "bg.none": "无", "bg.guilinMist": "桂林·雾山", "bg.guilinAerial": "桂林·航拍", "bg.hint": "以中国山河摄影作背景，文字始终清晰可读。",
       "settings.ai": "AI 模型配置（OpenAI 兼容接口）",
       "settings.nick": "个人昵称", "settings.data": "数据管理",
-      "theme.dark": "纯黑", "theme.light": "纯白", "theme.ocean": "墨蓝", "theme.forest": "青竹", "theme.sepia": "纸墨", "theme.custom": "自定义", "theme.purple": "暮紫", "theme.wine": "酒红", "theme.dusk": "晚霞", "theme.mist": "云灰", "theme.mint": "薄荷", "theme.honey": "蜜糖",
+      "theme.dark": "纯黑", "theme.light": "纯白", "theme.ocean": "墨蓝", "theme.forest": "青竹", "theme.sepia": "纸墨", "theme.custom": "自定义", "theme.purple": "暮紫", "theme.wine": "酒红", "theme.dusk": "晚霞", "theme.mist": "云灰", "theme.mint": "薄荷", "theme.honey": "蜜糖", "theme.guishan": "桂山", "theme.danxia": "丹霞", "theme.qingzang": "青藏", "theme.caoyuan": "草原", "theme.damo": "大漠",
       "font.default": "默认", "font.kai": "楷书", "font.song": "宋体", "font.fangsong": "仿宋", "font.hei": "黑体",
       "lang.zh": "简体", "lang.zhHant": "繁体", "lang.en": "English",
       "btn.addCourse": "+ 添加课程", "btn.addTask": "+ 添加任务", "btn.import": "导入课表", "btn.aiSort": "AI 智能排序",
@@ -1400,10 +1402,10 @@ const App = (() => {
       "sub.ai": "你的智能學習夥伴",
       "hero.todo": "待辦任務", "hero.due": "今日到期", "hero.notes": "筆記", "hero.focusMin": "今日專注(分)",
       "settings.title": "設定",
-      "settings.theme": "界面主題", "settings.font": "界面字體", "settings.lang": "界面語言",
+      "settings.theme": "界面主題", "settings.font": "界面字體", "settings.lang": "界面語言", "settings.bg": "界面背景", "bg.none": "無", "bg.guilinMist": "桂林·霧山", "bg.guilinAerial": "桂林·航拍", "bg.hint": "以中國山河攝影作背景，文字始終清晰可讀。",
       "settings.ai": "AI 模型配置（OpenAI 兼容接口）",
       "settings.nick": "個人暱稱", "settings.data": "數據管理",
-      "theme.dark": "純黑", "theme.light": "純白", "theme.ocean": "墨藍", "theme.forest": "青竹", "theme.sepia": "紙墨", "theme.custom": "自定義", "theme.purple": "暮紫", "theme.wine": "酒紅", "theme.dusk": "晚霞", "theme.mist": "雲灰", "theme.mint": "薄荷", "theme.honey": "蜜糖",
+      "theme.dark": "純黑", "theme.light": "純白", "theme.ocean": "墨藍", "theme.forest": "青竹", "theme.sepia": "紙墨", "theme.custom": "自定義", "theme.purple": "暮紫", "theme.wine": "酒紅", "theme.dusk": "晚霞", "theme.mist": "雲灰", "theme.mint": "薄荷", "theme.honey": "蜜糖", "theme.guishan": "桂山", "theme.danxia": "丹霞", "theme.qingzang": "青藏", "theme.caoyuan": "草原", "theme.damo": "大漠",
       "font.default": "默認", "font.kai": "楷書", "font.song": "宋體", "font.fangsong": "仿宋", "font.hei": "黑體",
       "lang.zh": "簡體", "lang.zhHant": "繁體", "lang.en": "English",
       "btn.addCourse": "+ 添加課程", "btn.addTask": "+ 添加任務", "btn.import": "導入課表", "btn.aiSort": "AI 智能排序",
@@ -1440,10 +1442,10 @@ const App = (() => {
       "sub.ai": "Your smart study partner",
       "hero.todo": "Open tasks", "hero.due": "Due today", "hero.notes": "Notes", "hero.focusMin": "Focus (min)",
       "settings.title": "Settings",
-      "settings.theme": "Theme", "settings.font": "Font", "settings.lang": "Language",
+      "settings.theme": "Theme", "settings.font": "Font", "settings.lang": "Language", "settings.bg": "Background", "bg.none": "None", "bg.guilinMist": "Guilin Mist", "bg.guilinAerial": "Guilin Aerial", "bg.hint": "China landscape photography as backdrop; text stays readable.",
       "settings.ai": "AI Model (OpenAI-compatible)",
       "settings.nick": "Nickname", "settings.data": "Data",
-      "theme.dark": "Black", "theme.light": "White", "theme.ocean": "Ocean", "theme.forest": "Forest", "theme.sepia": "Sepia", "theme.custom": "Custom", "theme.purple": "Purple", "theme.wine": "Wine", "theme.dusk": "Dusk", "theme.mist": "Mist", "theme.mint": "Mint", "theme.honey": "Honey",
+      "theme.dark": "Black", "theme.light": "White", "theme.ocean": "Ocean", "theme.forest": "Forest", "theme.sepia": "Sepia", "theme.custom": "Custom", "theme.purple": "Purple", "theme.wine": "Wine", "theme.dusk": "Dusk", "theme.mist": "Mist", "theme.mint": "Mint", "theme.honey": "Honey", "theme.guishan": "Guishan", "theme.danxia": "Danxia", "theme.qingzang": "Qingzang", "theme.caoyuan": "Grassland", "theme.damo": "Desert",
       "font.default": "Default", "font.kai": "Kai", "font.song": "Song", "font.fangsong": "FangSong", "font.hei": "Hei",
       "lang.zh": "Simplified", "lang.zhHant": "Traditional", "lang.en": "English",
       "btn.addCourse": "+ Add Course", "btn.addTask": "+ Add Task", "btn.import": "Import", "btn.aiSort": "AI Sort",
@@ -1473,6 +1475,11 @@ const App = (() => {
     document.documentElement.dataset.font = font;
     localStorage.setItem("zero_font", font);
     $$("[data-font-pick]").forEach(b => b.classList.toggle("active", b.dataset.fontPick === font));
+  }
+  function applyBg(bg) {
+    document.documentElement.dataset.bg = bg;
+    localStorage.setItem("zero_bg", bg);
+    $$("[data-bg-pick]").forEach(b => b.classList.toggle("active", b.dataset.bgPick === bg));
   }
   function applyLang(lang) {
     document.documentElement.dataset.lang = lang;
@@ -2095,6 +2102,7 @@ const App = (() => {
     $$("[data-theme-pick]").forEach(b => b.onclick = () => applyTheme(b.dataset.themePick));
     $$("[data-font-pick]").forEach(b => b.onclick = () => applyFont(b.dataset.fontPick));
     $$("[data-lang-pick]").forEach(b => b.onclick = () => applyLang(b.dataset.langPick));
+    $$("[data-bg-pick]").forEach(b => b.onclick = () => applyBg(b.dataset.bgPick));
     $$("#themeCustom input[type=color]").forEach(inp => {
       inp.oninput = () => {
         const colors = getCustomColors();

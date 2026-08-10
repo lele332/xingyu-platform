@@ -21,6 +21,7 @@
   }
   d.dataset.font = localStorage.getItem("zero_font") || "default";
   d.dataset.lang = localStorage.getItem("zero_lang") || "zh";
+  d.dataset.bg = localStorage.getItem("zero_bg") || "none";
 })();</script>
 <link rel="stylesheet" href="css/style.css?v=20260810">
 </head>
@@ -38,6 +39,8 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 
 <!-- 背景（纯色白纸） -->
 <div class="bg-paper"></div>
+<!-- 山河摄影背景层（可选） -->
+<div class="bg-photo"></div>
 
 <div class="app">
   <!-- 移动端侧边栏遮罩（必须在 .app 内部，层级在 sidebar 之下） -->
@@ -487,6 +490,11 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <button class="theme-opt" data-theme-pick="mist"><span class="theme-swatch sw-mist"></span><span data-i18n="theme.mist">云灰</span></button>
           <button class="theme-opt" data-theme-pick="mint"><span class="theme-swatch sw-mint"></span><span data-i18n="theme.mint">薄荷</span></button>
           <button class="theme-opt" data-theme-pick="honey"><span class="theme-swatch sw-honey"></span><span data-i18n="theme.honey">蜜糖</span></button>
+          <button class="theme-opt" data-theme-pick="guishan"><span class="theme-swatch sw-guishan"></span><span data-i18n="theme.guishan">桂山</span></button>
+          <button class="theme-opt" data-theme-pick="danxia"><span class="theme-swatch sw-danxia"></span><span data-i18n="theme.danxia">丹霞</span></button>
+          <button class="theme-opt" data-theme-pick="qingzang"><span class="theme-swatch sw-qingzang"></span><span data-i18n="theme.qingzang">青藏</span></button>
+          <button class="theme-opt" data-theme-pick="caoyuan"><span class="theme-swatch sw-caoyuan"></span><span data-i18n="theme.caoyuan">草原</span></button>
+          <button class="theme-opt" data-theme-pick="damo"><span class="theme-swatch sw-damo"></span><span data-i18n="theme.damo">大漠</span></button>
           <button class="theme-opt" data-theme-pick="custom"><span class="theme-swatch sw-custom" id="swCustom"></span><span data-i18n="theme.custom">自定义</span></button>
         </div>
         <div class="theme-custom" id="themeCustom" style="display:none">
@@ -498,6 +506,15 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <div class="theme-cfield"><span>边框色</span><input type="color" data-cvar="rule" value="#2a2a2a"></div>
         </div>
         <p class="hint">选一套预设配色，或点「自定义」逐项调色，实时生效。</p>
+      </div>
+      <div class="setting-group">
+        <h4 data-i18n="settings.bg">界面背景</h4>
+        <div class="font-picker">
+          <button class="theme-opt" data-bg-pick="none" data-i18n="bg.none">无</button>
+          <button class="theme-opt" data-bg-pick="guilin-mist" data-i18n="bg.guilinMist">桂林·雾山</button>
+          <button class="theme-opt" data-bg-pick="guilin-aerial" data-i18n="bg.guilinAerial">桂林·航拍</button>
+        </div>
+        <p class="hint" data-i18n="bg.hint">以中国山河摄影作背景，文字始终清晰可读。</p>
       </div>
       <div class="setting-group">
         <h4 data-i18n="settings.font">界面字体</h4>

@@ -451,6 +451,86 @@
   --course-5: #9a6416; --course-6: #a59373; --course-7: #7d6b49; --course-8: #c4b59c;
 }
 
+[data-theme="guishan"] {
+  --paper: #eef0ec; --paper-2: #e6e9e4; --paper-3: #dde2dc; --paper-card: #f6f7f4; --paper-hover: #eef2ed; --paper-sunk: #dce2db;
+  --ink: #2a3033; --ink-2: #5c6a70; --ink-3: #8a9a9f; --ink-faint: #b0bcc0;
+  --drawer: #e8ebe6; --drawer-2: #dde3dd; --drawer-3: #cfd7d0; --drawer-deep: #7d8d92; --drawer-text: #3c4a4f;
+  --stamp-red: #2a3033; --stamp-red-deep: #15191b; --stamp-red-bg: rgba(42,48,51,0.08);
+  --stamp-blue: #4a6a75; --stamp-blue-deep: #3b5963; --stamp-blue-bg: rgba(74,106,117,0.14);
+  --typewriter: #6b7f86;
+  --rule: #d3dbd4; --rule-2: #e0e6e0; --rule-thin: rgba(42,48,51,0.12);
+  --accent: #4a6a75; --accent-hover: #3b5963;
+  --success: #557a63; --success-bg: rgba(74,106,117,0.12);
+  --warning: #9a7b3f; --warning-bg: rgba(154,123,63,0.14); --danger: #8a5640;
+  --shadow-paper: 0 1px 3px rgba(50,70,75,0.12); --shadow-hover: 0 6px 18px rgba(50,70,75,0.16); --shadow-inset: inset 0 1px 2px rgba(50,70,75,0.08);
+  --fill: rgba(42,48,51,0.05); --fill-2: rgba(42,48,51,0.09); --fill-3: rgba(42,48,51,0.15);
+  --course-1: #7fa0ad; --course-2: #5f8694; --course-3: #4a6a75; --course-4: #3b5963; --course-5: #7d8d92; --course-6: #9fb4b8; --course-7: #6b7f86; --course-8: #b6c4c7;
+}
+
+[data-theme="danxia"] {
+  --paper: #1c0f0a; --paper-2: #241310; --paper-3: #2b1814; --paper-card: #221310; --paper-hover: #2a1815; --paper-sunk: #2f1c18;
+  --ink: #f0e4dc; --ink-2: #c9a593; --ink-3: #9d7460; --ink-faint: #73503f;
+  --drawer: #1e100b; --drawer-2: #261712; --drawer-3: #352219; --drawer-deep: #90654e; --drawer-text: #dcc5b4;
+  --stamp-red: #f0e4dc; --stamp-red-deep: #dcc5b4; --stamp-red-bg: rgba(240,228,220,0.08);
+  --stamp-blue: #d9563a; --stamp-blue-deep: #c94a30; --stamp-blue-bg: rgba(217,86,58,0.16);
+  --typewriter: #c08a6a;
+  --rule: #3d2518; --rule-2: #2f1b12; --rule-thin: rgba(240,228,220,0.12);
+  --accent: #d9563a; --accent-hover: #c94a30;
+  --success: #c99a70; --success-bg: rgba(217,86,58,0.12);
+  --warning: #d9a03a; --warning-bg: rgba(217,160,58,0.14); --danger: #e86040;
+  --shadow-paper: 0 1px 2px rgba(0,0,0,0.6); --shadow-hover: 0 4px 14px rgba(0,0,0,0.5); --shadow-inset: inset 0 1px 2px rgba(0,0,0,0.8);
+  --fill: rgba(240,228,220,0.06); --fill-2: rgba(240,228,220,0.10); --fill-3: rgba(240,228,220,0.16);
+  --course-1: #e88668; --course-2: #d9563a; --course-3: #c94a30; --course-4: #b84028; --course-5: #a83822; --course-6: #c99a70; --course-7: #9d7460; --course-8: #b87a5a;
+}
+
+[data-theme="qingzang"] {
+  --paper: #0d1526; --paper-2: #111a30; --paper-3: #162039; --paper-card: #101a2e; --paper-hover: #15203a; --paper-sunk: #18243f;
+  --ink: #e8edf5; --ink-2: #a6b6cc; --ink-3: #7488a3; --ink-faint: #52647e;
+  --drawer: #0e1728; --drawer-2: #131e34; --drawer-3: #1f2d48; --drawer-deep: #5f7590; --drawer-text: #c6d2e2;
+  --stamp-red: #e8edf5; --stamp-red-deep: #c6d2e2; --stamp-red-bg: rgba(232,237,245,0.08);
+  --stamp-blue: #4a7bd0; --stamp-blue-deep: #3c6cc0; --stamp-blue-bg: rgba(74,123,208,0.16);
+  --typewriter: #8a9cc0;
+  --rule: #223350; --rule-2: #192742; --rule-thin: rgba(232,237,245,0.12);
+  --accent: #4a7bd0; --accent-hover: #3c6cc0;
+  --success: #7aa0c8; --success-bg: rgba(74,123,208,0.12);
+  --warning: #d0a84a; --warning-bg: rgba(208,168,74,0.14); --danger: #d0604a;
+  --shadow-paper: 0 1px 2px rgba(0,0,0,0.6); --shadow-hover: 0 4px 14px rgba(0,0,0,0.5); --shadow-inset: inset 0 1px 2px rgba(0,0,0,0.8);
+  --fill: rgba(232,237,245,0.06); --fill-2: rgba(232,237,245,0.10); --fill-3: rgba(232,237,245,0.16);
+  --course-1: #88a6dc; --course-2: #4a7bd0; --course-3: #3c6cc0; --course-4: #345ca8; --course-5: #2c4c90; --course-6: #6f8cc0; --course-7: #94acd0; --course-8: #b0c2e0;
+}
+
+[data-theme="caoyuan"] {
+  --paper: #0d1a12; --paper-2: #112216; --paper-3: #152a1b; --paper-card: #101f15; --paper-hover: #152718; --paper-sunk: #182d1d;
+  --ink: #e9f0ea; --ink-2: #a9c0b0; --ink-3: #7d9a88; --ink-faint: #5b7566;
+  --drawer: #0e1c13; --drawer-2: #132520; --drawer-3: #1e3625; --drawer-deep: #61806c; --drawer-text: #c8d8cc;
+  --stamp-red: #e9f0ea; --stamp-red-deep: #c8d8cc; --stamp-red-bg: rgba(233,240,234,0.08);
+  --stamp-blue: #5aa86a; --stamp-blue-deep: #4a985a; --stamp-blue-bg: rgba(90,168,106,0.16);
+  --typewriter: #96b48c;
+  --rule: #223a2a; --rule-2: #1a2f21; --rule-thin: rgba(233,240,234,0.12);
+  --accent: #5aa86a; --accent-hover: #4a985a;
+  --success: #86b88a; --success-bg: rgba(90,168,106,0.12);
+  --warning: #d0b04a; --warning-bg: rgba(208,176,74,0.14); --danger: #d0804a;
+  --shadow-paper: 0 1px 2px rgba(0,0,0,0.6); --shadow-hover: 0 4px 14px rgba(0,0,0,0.5); --shadow-inset: inset 0 1px 2px rgba(0,0,0,0.8);
+  --fill: rgba(233,240,234,0.06); --fill-2: rgba(233,240,234,0.10); --fill-3: rgba(233,240,234,0.16);
+  --course-1: #8ec49a; --course-2: #5aa86a; --course-3: #4a985a; --course-4: #40884e; --course-5: #367844; --course-6: #7d9a88; --course-7: #9cbca4; --course-8: #b8d0bc;
+}
+
+[data-theme="damo"] {
+  --paper: #f4ead8; --paper-2: #ece0c8; --paper-3: #e4d5b6; --paper-card: #faf3e4; --paper-hover: #f0e6d0; --paper-sunk: #e0d0ae;
+  --ink: #3d3123; --ink-2: #7d6a4c; --ink-3: #a59270; --ink-faint: #c4b293;
+  --drawer: #ece0c8; --drawer-2: #e2d4b6; --drawer-3: #d6c49e; --drawer-deep: #97815c; --drawer-text: #5c4c30;
+  --stamp-red: #3d3123; --stamp-red-deep: #241c10; --stamp-red-bg: rgba(61,49,35,0.08);
+  --stamp-blue: #c08a3e; --stamp-blue-deep: #a87830; --stamp-blue-bg: rgba(192,138,62,0.16);
+  --typewriter: #a07a40;
+  --rule: #e0d0ae; --rule-2: #eadfc4; --rule-thin: rgba(61,49,35,0.12);
+  --accent: #c08a3e; --accent-hover: #a87830;
+  --success: #7d6a4c; --success-bg: rgba(192,138,62,0.12);
+  --warning: #d09a3a; --warning-bg: rgba(208,154,58,0.14); --danger: #a8603a;
+  --shadow-paper: 0 1px 3px rgba(120,90,40,0.12); --shadow-hover: 0 6px 18px rgba(120,90,40,0.16); --shadow-inset: inset 0 1px 2px rgba(120,90,40,0.08);
+  --fill: rgba(61,49,35,0.05); --fill-2: rgba(61,49,35,0.09); --fill-3: rgba(61,49,35,0.15);
+  --course-1: #d8ac6a; --course-2: #c08a3e; --course-3: #a87830; --course-4: #906624; --course-5: #a59270; --course-6: #7d6a4c; --course-7: #c4b293; --course-8: #d6c8ae;
+}
+
 /* ============================================================
    界面字体（data-font，默认 = :root 无衬线）
    ============================================================ */
@@ -486,6 +566,25 @@ body {
 }
 
 /* ---------- 背景（纯色） ---------- */
+
+/* ---------- 山河摄影背景（data-bg 切换，图片淡化 + 主题色底，保证可读性） ---------- */
+.bg-photo {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-size: cover; background-position: center 30%;
+  opacity: 0.22;
+}
+[data-bg="guilin-mist"] .bg-photo {
+  background-image: url("../assets/bg-guilin-mist.jpg");
+  opacity: 0.3;
+}
+[data-bg="guilin-aerial"] .bg-photo {
+  background-image: url("../assets/bg-guilin-aerial.jpg");
+  opacity: 0.26;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .bg-photo { transition: opacity 0.6s var(--ease-out); }
+}
+
 .bg-paper {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
   background: var(--paper);
@@ -1181,6 +1280,11 @@ textarea { min-height: 90px; }
 .theme-swatch.sw-mist { background: linear-gradient(135deg, #f1f1f1 50%, #6b6b6b 50%); }
 .theme-swatch.sw-mint { background: linear-gradient(135deg, #eef6f0 50%, #3f9e63 50%); }
 .theme-swatch.sw-honey { background: linear-gradient(135deg, #fcf7ea 50%, #d99a2b 50%); }
+.theme-swatch.sw-guishan { background: linear-gradient(135deg, #eef0ec 50%, #4a6a75 50%); }
+.theme-swatch.sw-danxia { background: linear-gradient(135deg, #1c0f0a 50%, #d9563a 50%); }
+.theme-swatch.sw-qingzang { background: linear-gradient(135deg, #0d1526 50%, #4a7bd0 50%); }
+.theme-swatch.sw-caoyuan { background: linear-gradient(135deg, #0d1a12 50%, #5aa86a 50%); }
+.theme-swatch.sw-damo { background: linear-gradient(135deg, #f4ead8 50%, #c08a3e 50%); }
 .theme-swatch.sw-custom { background: conic-gradient(#e6194b, #3cb44b, #ffe119, #4363d8, #f58231, #911eb4, #46f0f0, #e6194b); }
 .theme-custom { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--rule); }
 .theme-cfield { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--ink-2); }

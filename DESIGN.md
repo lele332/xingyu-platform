@@ -60,9 +60,21 @@ Twelve theme options, switchable in Settings (`设置 → 界面主题`), persis
 - **mist**: light gray ground `#f1f1f1`, charcoal accent `#404040`.
 - **mint**: pale green ground `#eef6f0`, green accent `#3f9e63`.
 - **honey**: warm pale-yellow ground `#fcf7ea`, gold accent `#d99a2b`.
+- **guishan**: misty karst palette — pale sage ground `#eef0ec`, ink-blue-gray accent `#4a6a75` (Guilin mist).
+- **danxia**: red-rock palette — deep terracotta ground `#1c0f0a`, cinnabar accent `#d9563a` (Danxia landforms).
+- **qingzang**: highland-blue palette — deep indigo ground `#0d1526`, plateau blue accent `#4a7bd0` (Qinghai-Tibet).
+- **caoyuan**: grassland palette — deep green ground `#0d1a12`, prairie green accent `#5aa86a`.
+- **damo**: desert palette — warm sand ground `#f4ead8`, gold accent `#c08a3e`.
 - **custom**: user-defined colors, picked in the settings panel (`背景色 / 卡片色 / 侧栏色 / 文字色 / 强调色 / 边框色`), persisted in localStorage `zero_custom_colors`, applied as inline CSS variables on `<html>` (highest precedence). Derived gray steps are auto-computed from the six base colors via a lightness `shade()` helper.
 
 Each preset defines its full token set (paper/ink/drawer/rule/accent + course swatches) so every theme stays coherent. All chrome, charts, and inline colors reference CSS variables (`var(--ink)`, `var(--course-N)`), so switching themes recolors the entire surface instantly with no re-render. Charts.js consumes `var()` tokens for grid, axis, and point colors.
+
+## Photography Background
+
+Optional China-landscape photography backdrop (`设置 → 界面背景`, localStorage `zero_bg`, `<html data-bg>`):
+- `none` (default) · `guilin-mist` (misty karst peaks) · `guilin-aerial` (aerial of Guilin river).
+
+Two photos are bundled locally in `assets/` (Pexels license, free to use). The photo layer sits under all chrome at low opacity (`0.22–0.3`), tinted by the active theme's ground color, so text stays readable in every theme. Switching fades over 0.6s.
 
 ## Fonts & Language
 
