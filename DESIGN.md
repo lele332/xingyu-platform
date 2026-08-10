@@ -60,8 +60,8 @@ All chrome, charts, and inline colors reference CSS variables (`var(--ink)`, `va
 
 ## Fonts & Language
 
-- **Font** (`<html data-font>`, localStorage `zero_font`): `sans` (default), `serif` (Georgia / Songti), `mono` (Consolas / monospace). Switches `--font` / `--font-mono`.
-- **Language** (`<html data-lang>`, localStorage `zero_lang`): `zh` (default) and `en`. UI chrome text goes through a lightweight i18n dictionary (`I18N` + `t(key)`); static markup is tagged `data-i18n` and re-applied on switch; user data (notes, course names, news titles) is never translated.
+- **Font** (`<html data-font>`, localStorage `zero_font`): `default` (system sans), `kai` (Kaiti / 楷书), `song` (Songti / 宋体), `fangsong` (仿宋), `hei` (Heiti / 黑体). Switches `--font` / `--font-mono`.
+- **Language** (`<html data-lang>`, localStorage `zero_lang`): `zh` (简体), `zh-Hant` (繁體), `en`. UI chrome text goes through a lightweight i18n dictionary (`I18N` + `t(key)`, three dictionaries); static markup is tagged `data-i18n` and re-applied on switch; user data (notes, course names, news titles) is never translated.
 
 ## Typography
 

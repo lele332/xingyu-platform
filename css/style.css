@@ -352,12 +352,20 @@
 /* ============================================================
    界面字体（data-font，默认 = :root 无衬线）
    ============================================================ */
-[data-font="serif"] {
-  --font: Georgia, "Source Han Serif SC", "Songti SC", "STSong", "SimSun", serif;
+[data-font="kai"] {
+  --font: "Kaiti SC", "KaiTi", "STKaiti", "楷体", "Kai", serif;
   --font-mono: "SF Mono", Consolas, monospace;
 }
-[data-font="mono"] {
-  --font: "SF Mono", Consolas, "Courier New", "PingFang SC", monospace;
+[data-font="song"] {
+  --font: "Songti SC", "SimSun", "STSong", "宋体", "NSimSun", serif;
+  --font-mono: "SF Mono", Consolas, monospace;
+}
+[data-font="fangsong"] {
+  --font: "FangSong", "STFangsong", "仿宋", serif;
+  --font-mono: "SF Mono", Consolas, monospace;
+}
+[data-font="hei"] {
+  --font: "Heiti SC", "SimHei", "黑体", "Microsoft YaHei", sans-serif;
   --font-mono: "SF Mono", Consolas, monospace;
 }
 

@@ -19,7 +19,7 @@
       Object.keys(m).forEach(function(k){ if (c[k]) d.style.setProperty(m[k], c[k]); });
     } catch(e) {}
   }
-  d.dataset.font = localStorage.getItem("zero_font") || "sans";
+  d.dataset.font = localStorage.getItem("zero_font") || "default";
   d.dataset.lang = localStorage.getItem("zero_lang") || "zh";
 })();</script>
 <link rel="stylesheet" href="css/style.css?v=20260810">
@@ -483,7 +483,11 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <div class="setting-group">
         <h4 data-i18n="settings.font">界面字体</h4>
         <div class="font-picker">
-          <button class="theme-opt" data-font-pick="sans" data-i18n="font.sans">默认</button>
+          <button class="theme-opt" data-font-pick="default" data-i18n="font.default">默认</button>
+          <button class="theme-opt" data-font-pick="kai" data-i18n="font.kai">楷书</button>
+          <button class="theme-opt" data-font-pick="song" data-i18n="font.song">宋体</button>
+          <button class="theme-opt" data-font-pick="fangsong" data-i18n="font.fangsong">仿宋</button>
+          <button class="theme-opt" data-font-pick="hei" data-i18n="font.hei">黑体</button>
           <button class="theme-opt" data-font-pick="serif" data-i18n="font.serif">衬线</button>
           <button class="theme-opt" data-font-pick="mono" data-i18n="font.mono">等宽</button>
         </div>
@@ -492,7 +496,8 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <div class="setting-group">
         <h4 data-i18n="settings.lang">界面语言</h4>
         <div class="font-picker">
-          <button class="theme-opt" data-lang-pick="zh" data-i18n="lang.zh">中文</button>
+          <button class="theme-opt" data-lang-pick="zh" data-i18n="lang.zh">简体</button>
+          <button class="theme-opt" data-lang-pick="zh-Hant" data-i18n="lang.zhHant">繁体</button>
           <button class="theme-opt" data-lang-pick="en" data-i18n="lang.en">English</button>
         </div>
         <p class="hint">切换界面显示语言（笔记 / 课程等数据内容保持原样）。</p>

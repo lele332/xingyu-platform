@@ -1283,7 +1283,9 @@ const App = (() => {
     const sw = $("#swCustom");
     if (sw) sw.style.background = colors.accent;
     // 字体 / 语言高亮
-    const curFont = document.documentElement.dataset.font || "sans";
+    const FONT_MIGRATE = { sans: "default", serif: "song", mono: "hei" };
+    let curFont = document.documentElement.dataset.font || "default";
+    curFont = FONT_MIGRATE[curFont] || curFont;
     $$("[data-font-pick]").forEach(b => b.classList.toggle("active", b.dataset.fontPick === curFont));
     const curLang = document.documentElement.dataset.lang || "zh";
     $$("[data-lang-pick]").forEach(b => b.classList.toggle("active", b.dataset.langPick === curLang));
@@ -1341,11 +1343,50 @@ const App = (() => {
       "settings.ai": "AI 模型配置（OpenAI 兼容接口）",
       "settings.nick": "个人昵称", "settings.data": "数据管理",
       "theme.dark": "纯黑", "theme.light": "纯白", "theme.ocean": "墨蓝", "theme.forest": "青竹", "theme.sepia": "纸墨", "theme.custom": "自定义",
-      "font.sans": "默认", "font.serif": "衬线", "font.mono": "等宽",
-      "lang.zh": "中文", "lang.en": "English",
+      "font.default": "默认", "font.kai": "楷书", "font.song": "宋体", "font.fangsong": "仿宋", "font.hei": "黑体",
+      "lang.zh": "简体", "lang.zhHant": "繁体", "lang.en": "English",
       "btn.addCourse": "+ 添加课程", "btn.addTask": "+ 添加任务", "btn.import": "导入课表", "btn.aiSort": "AI 智能排序",
       "btn.save": "保存", "btn.cancel": "取消", "btn.export": "导出数据(JSON)", "btn.importData": "导入数据", "btn.clear": "清空全部数据",
       "qr.title": "扫码访问", "qr.copy": "复制永久链接", "qr.hint": "手机扫码即可永久访问你的个人工作台。"
+    },
+    "zh-Hant": {
+      "logo.sub": "個人學習工作台 · ZERO",
+      "nav.group.work": "工作台",
+      "nav.group.study": "學習資料",
+      "nav.group.growth": "自我成長",
+      "nav.dashboard": "儀表盤",
+      "nav.courses": "課程作業",
+      "nav.focus": "專注學習",
+      "nav.notes": "學習筆記庫",
+      "nav.lit": "文獻資料",
+      "nav.news": "熱點新聞",
+      "nav.growth": "成長檔案",
+      "nav.ai": "AI 助手",
+      "role": "個人工作台",
+      "settings": "設定",
+      "search.ph": "搜尋筆記 / 任務 / 課程...",
+      "title.dashboard": "儀表盤", "title.courses": "課程作業", "title.notes": "學習筆記庫",
+      "title.focus": "專注學習", "title.growth": "成長檔案", "title.lit": "文獻資料",
+      "title.news": "熱點新聞", "title.ai": "AI 助手",
+      "sub.dashboard": "學習進度一覽，今天也要保持專注",
+      "sub.courses": "課程、課表與作業任務管理",
+      "sub.notes": "沉澱知識，構建你的筆記庫",
+      "sub.focus": "番茄鐘與專注統計",
+      "sub.growth": "成績、技能與成長軌跡",
+      "sub.lit": "專業文獻庫與期刊導航",
+      "sub.news": "每日國內外熱點速遞",
+      "sub.ai": "你的智能學習夥伴",
+      "hero.todo": "待辦任務", "hero.due": "今日到期", "hero.notes": "筆記", "hero.focusMin": "今日專注(分)",
+      "settings.title": "設定",
+      "settings.theme": "界面主題", "settings.font": "界面字體", "settings.lang": "界面語言",
+      "settings.ai": "AI 模型配置（OpenAI 兼容接口）",
+      "settings.nick": "個人暱稱", "settings.data": "數據管理",
+      "theme.dark": "純黑", "theme.light": "純白", "theme.ocean": "墨藍", "theme.forest": "青竹", "theme.sepia": "紙墨", "theme.custom": "自定義",
+      "font.default": "默認", "font.kai": "楷書", "font.song": "宋體", "font.fangsong": "仿宋", "font.hei": "黑體",
+      "lang.zh": "簡體", "lang.zhHant": "繁體", "lang.en": "English",
+      "btn.addCourse": "+ 添加課程", "btn.addTask": "+ 添加任務", "btn.import": "導入課表", "btn.aiSort": "AI 智能排序",
+      "btn.save": "保存", "btn.cancel": "取消", "btn.export": "導出數據(JSON)", "btn.importData": "導入數據", "btn.clear": "清空全部數據",
+      "qr.title": "掃碼訪問", "qr.copy": "複製永久連結", "qr.hint": "手機掃碼即可永久訪問你的個人工作台。"
     },
     en: {
       "logo.sub": "Personal Study Desk · ZERO",
@@ -1380,8 +1421,8 @@ const App = (() => {
       "settings.ai": "AI Model (OpenAI-compatible)",
       "settings.nick": "Nickname", "settings.data": "Data",
       "theme.dark": "Black", "theme.light": "White", "theme.ocean": "Ocean", "theme.forest": "Forest", "theme.sepia": "Sepia", "theme.custom": "Custom",
-      "font.sans": "Sans", "font.serif": "Serif", "font.mono": "Mono",
-      "lang.zh": "中文", "lang.en": "English",
+      "font.default": "Default", "font.kai": "Kai", "font.song": "Song", "font.fangsong": "FangSong", "font.hei": "Hei",
+      "lang.zh": "Simplified", "lang.zhHant": "Traditional", "lang.en": "English",
       "btn.addCourse": "+ Add Course", "btn.addTask": "+ Add Task", "btn.import": "Import", "btn.aiSort": "AI Sort",
       "btn.save": "Save", "btn.cancel": "Cancel", "btn.export": "Export (JSON)", "btn.importData": "Import", "btn.clear": "Clear All",
       "qr.title": "Scan to Visit", "qr.copy": "Copy Link", "qr.hint": "Scan to open your workspace on your phone."
@@ -1403,6 +1444,8 @@ const App = (() => {
     });
   }
   function applyFont(font) {
+    const FONT_MIGRATE = { sans: "default", serif: "song", mono: "hei" };
+    font = FONT_MIGRATE[font] || font;
     document.documentElement.dataset.font = font;
     localStorage.setItem("zero_font", font);
     $$("[data-font-pick]").forEach(b => b.classList.toggle("active", b.dataset.fontPick === font));
