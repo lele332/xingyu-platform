@@ -571,6 +571,22 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </label>
       </div>
       <div class="setting-group">
+        <h4 data-i18n="settings.lock">访问密码</h4>
+        <label class="field">
+          <span data-i18n="lock.pinNew">新密码</span>
+          <input type="password" id="setPin" placeholder="留空则不修改" autocomplete="new-password">
+        </label>
+        <label class="field">
+          <span data-i18n="lock.pinConfirm">确认密码</span>
+          <input type="password" id="setPin2" placeholder="再次输入" autocomplete="new-password">
+        </label>
+        <label class="lock-toggle">
+          <input type="checkbox" id="lockOnLeave">
+          <span data-i18n="lock.onLeave">离开页面时自动锁定</span>
+        </label>
+        <p class="hint" data-i18n="lock.hint">设置密码后，打开平台需输入密码才能进入；密码仅保存在本机浏览器。</p>
+      </div>
+      <div class="setting-group">
         <h4 data-i18n="settings.data">数据管理</h4>
         <div class="setting-actions">
           <button class="btn btn-ghost" id="btnExportData" data-i18n="btn.export">导出数据(JSON)</button>
@@ -748,6 +764,17 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
     <div class="modal-foot">
       <button class="btn btn-primary" id="btnFormSave">保存</button>
     </div>
+  </div>
+</div>
+
+<!-- ================= 锁屏（访问密码） ================= -->
+<div class="lock-mask" id="lockMask" style="display:none">
+  <div class="lock-box">
+    <div class="lock-logo">○ 零</div>
+    <p class="lock-title" data-i18n="lock.title">平台已锁定</p>
+    <input type="password" id="lockPin" placeholder="输入访问密码" autocomplete="off">
+    <button class="btn btn-primary" id="btnUnlock" data-i18n="lock.unlock">解锁</button>
+    <p class="lock-hint" id="lockHint"></p>
   </div>
 </div>
 

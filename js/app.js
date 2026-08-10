@@ -111,7 +111,10 @@ const App = (() => {
     box.innerHTML = `
       <div class="hero-news-head">
         <span class="hero-news-label">${t("hero.news")}</span>
-        <button class="text-btn" data-goto="news">${t("hero.newsAll")} →</button>
+        <span class="hero-news-actions">
+          <button class="text-btn" id="btnHeroNewsRefresh">↻ ${t("hero.refresh")}</button>
+          <button class="text-btn" data-goto="news">${t("hero.newsAll")} →</button>
+        </span>
       </div>
       <div class="hero-news-list">
         ${items.map((n, i) => `
@@ -123,6 +126,18 @@ const App = (() => {
       </div>`;
     const go = box.querySelector("[data-goto='news']");
     if (go) go.onclick = () => switchView("news");
+    // 刷新：重新拉取新闻数据并更新热点与新闻页
+    const refreshBtn = box.querySelector("#btnHeroNewsRefresh");
+    if (refreshBtn) refreshBtn.onclick = async () => {
+      refreshBtn.disabled = true;
+      refreshBtn.textContent = "…";
+      await loadNews(true);
+      await renderHeroNews();
+      if (currentView === "news") renderNews();
+      refreshBtn.disabled = false;
+      refreshBtn.textContent = "↻ " + t("hero.refresh");
+      toast(t("hero.refreshed"), "ok");
+    };
   }
 
   function renderDashboard() {
@@ -1255,8 +1270,49 @@ const App = (() => {
     $("#setApiKey").value = s.apiKey || "";
     $("#setModel").value = s.model || "";
     $("#setNickname").value = s.nickname || "";
+    $("#setPin").value = "";
+    $("#setPin2").value = "";
+    $("#lockOnLeave").checked = localStorage.getItem("zero_lock_leave") === "1";
     syncThemeUI();
     showModal("settingsModal");
+  }
+
+  /* ============================================================
+     访问密码锁
+     ============================================================ */
+  function getPin() {
+    try { const v = localStorage.getItem("zero_pin"); return v ? atob(v) : ""; }
+    catch (e) { return ""; }
+  }
+  function setPin(pin) {
+    if (pin) localStorage.setItem("zero_pin", btoa(pin));
+    else localStorage.removeItem("zero_pin");
+  }
+  function lockNow() {
+    const mask = $("#lockMask");
+    if (mask) { mask.classList.add("show"); mask.style.display = "flex"; }
+    const pinInput = $("#lockPin");
+    if (pinInput) { pinInput.value = ""; pinInput.focus(); }
+    const hint = $("#lockHint");
+    if (hint) hint.textContent = "";
+  }
+  function unlock() {
+    const pin = getPin();
+    const val = $("#lockPin").value;
+    const hint = $("#lockHint");
+    if (pin && val === pin) {
+      const mask = $("#lockMask");
+      mask.classList.remove("show");
+      mask.style.display = "none";
+    } else if (hint) {
+      hint.textContent = t("lock.wrong");
+    }
+    const pinInput = $("#lockPin");
+    if (pinInput) { pinInput.value = ""; pinInput.focus(); }
+  }
+  function applyLockPrefs() {
+    // 启动锁：设置了密码则锁定
+    if (getPin()) lockNow();
   }
 
   /* ============================================================
@@ -1386,11 +1442,12 @@ const App = (() => {
       "sub.lit": "专业文献库与期刊导航",
       "sub.news": "每日国内外热点速递",
       "sub.ai": "你的智能学习伙伴",
-      "hero.todo": "待办任务", "hero.due": "今日到期", "hero.notes": "笔记", "hero.focusMin": "今日专注(分)", "hero.news": "今日热点", "hero.newsAll": "查看全部",
+      "hero.todo": "待办任务", "hero.due": "今日到期", "hero.notes": "笔记", "hero.focusMin": "今日专注(分)", "hero.news": "今日热点", "hero.newsAll": "查看全部", "hero.refresh": "刷新", "hero.refreshed": "已刷新",
       "settings.title": "设置",
       "settings.theme": "界面主题", "settings.font": "界面字体", "settings.lang": "界面语言", "settings.bg": "界面背景", "bg.none": "无", "bg.guilinMist": "桂林·雾山", "bg.guilinAerial": "桂林·航拍", "bg.jiuzhaigou": "九寨沟", "bg.zhangjiajie": "张家界", "bg.hint": "以中国山河摄影作背景，文字始终清晰可读。",
       "settings.ai": "AI 模型配置（OpenAI 兼容接口）",
-      "settings.nick": "个人昵称", "settings.data": "数据管理",
+      "settings.nick": "个人昵称", "settings.data": "数据管理", "settings.lock": "访问密码",
+      "lock.title": "平台已锁定", "lock.unlock": "解锁", "lock.pinNew": "新密码", "lock.pinConfirm": "确认密码", "lock.onLeave": "离开页面时自动锁定", "lock.hint": "设置密码后，打开平台需输入密码才能进入；密码仅保存在本机浏览器。", "lock.wrong": "密码错误", "lock.mismatch": "两次输入的密码不一致", "lock.saved": "访问密码已设置", "lock.cleared": "访问密码已清除", "settings.saved": "设置已保存",
       "theme.dark": "纯黑", "theme.light": "纯白", "theme.ocean": "墨蓝", "theme.forest": "青竹", "theme.sepia": "纸墨", "theme.custom": "自定义", "theme.purple": "暮紫", "theme.wine": "酒红", "theme.dusk": "晚霞", "theme.mist": "云灰", "theme.mint": "薄荷", "theme.honey": "蜜糖", "theme.guishan": "桂山", "theme.danxia": "丹霞", "theme.qingzang": "青藏", "theme.caoyuan": "草原", "theme.damo": "大漠",
       "font.default": "默认", "font.kai": "楷书", "font.song": "宋体", "font.fangsong": "仿宋", "font.hei": "黑体",
       "lang.zh": "简体", "lang.zhHant": "繁体", "lang.en": "English",
@@ -1426,11 +1483,12 @@ const App = (() => {
       "sub.lit": "專業文獻庫與期刊導航",
       "sub.news": "每日國內外熱點速遞",
       "sub.ai": "你的智能學習夥伴",
-      "hero.todo": "待辦任務", "hero.due": "今日到期", "hero.notes": "筆記", "hero.focusMin": "今日專注(分)", "hero.news": "今日熱點", "hero.newsAll": "查看全部",
+      "hero.todo": "待辦任務", "hero.due": "今日到期", "hero.notes": "筆記", "hero.focusMin": "今日專注(分)", "hero.news": "今日熱點", "hero.newsAll": "查看全部", "hero.refresh": "刷新", "hero.refreshed": "已刷新",
       "settings.title": "設定",
       "settings.theme": "界面主題", "settings.font": "界面字體", "settings.lang": "界面語言", "settings.bg": "界面背景", "bg.none": "無", "bg.guilinMist": "桂林·霧山", "bg.guilinAerial": "桂林·航拍", "bg.jiuzhaigou": "九寨溝", "bg.zhangjiajie": "張家界", "bg.hint": "以中國山河攝影作背景，文字始終清晰可讀。",
       "settings.ai": "AI 模型配置（OpenAI 兼容接口）",
-      "settings.nick": "個人暱稱", "settings.data": "數據管理",
+      "settings.nick": "個人暱稱", "settings.data": "數據管理", "settings.lock": "訪問密碼",
+      "lock.title": "平台已鎖定", "lock.unlock": "解鎖", "lock.pinNew": "新密碼", "lock.pinConfirm": "確認密碼", "lock.onLeave": "離開頁面時自動鎖定", "lock.hint": "設置密碼後，打開平台需輸入密碼才能進入；密碼僅保存在本機瀏覽器。", "lock.wrong": "密碼錯誤", "lock.mismatch": "兩次輸入的密碼不一致", "lock.saved": "訪問密碼已設置", "lock.cleared": "訪問密碼已清除", "settings.saved": "設置已保存",
       "theme.dark": "純黑", "theme.light": "純白", "theme.ocean": "墨藍", "theme.forest": "青竹", "theme.sepia": "紙墨", "theme.custom": "自定義", "theme.purple": "暮紫", "theme.wine": "酒紅", "theme.dusk": "晚霞", "theme.mist": "雲灰", "theme.mint": "薄荷", "theme.honey": "蜜糖", "theme.guishan": "桂山", "theme.danxia": "丹霞", "theme.qingzang": "青藏", "theme.caoyuan": "草原", "theme.damo": "大漠",
       "font.default": "默認", "font.kai": "楷書", "font.song": "宋體", "font.fangsong": "仿宋", "font.hei": "黑體",
       "lang.zh": "簡體", "lang.zhHant": "繁體", "lang.en": "English",
@@ -1466,11 +1524,12 @@ const App = (() => {
       "sub.lit": "References & journal navigation",
       "sub.news": "Daily headline digest",
       "sub.ai": "Your smart study partner",
-      "hero.todo": "Open tasks", "hero.due": "Due today", "hero.notes": "Notes", "hero.focusMin": "Focus (min)", "hero.news": "Top News", "hero.newsAll": "View All",
+      "hero.todo": "Open tasks", "hero.due": "Due today", "hero.notes": "Notes", "hero.focusMin": "Focus (min)", "hero.news": "Top News", "hero.newsAll": "View All", "hero.refresh": "Refresh", "hero.refreshed": "Updated",
       "settings.title": "Settings",
       "settings.theme": "Theme", "settings.font": "Font", "settings.lang": "Language", "settings.bg": "Background", "bg.none": "None", "bg.guilinMist": "Guilin Mist", "bg.guilinAerial": "Guilin Aerial", "bg.jiuzhaigou": "Jiuzhaigou", "bg.zhangjiajie": "Zhangjiajie", "bg.hint": "China landscape photography as backdrop; text stays readable.",
       "settings.ai": "AI Model (OpenAI-compatible)",
-      "settings.nick": "Nickname", "settings.data": "Data",
+      "settings.nick": "Nickname", "settings.data": "Data", "settings.lock": "Access PIN",
+      "lock.title": "Locked", "lock.unlock": "Unlock", "lock.pinNew": "New PIN", "lock.pinConfirm": "Confirm PIN", "lock.onLeave": "Lock when leaving the page", "lock.hint": "Once set, the platform asks for the PIN on open. The PIN stays only in this browser.", "lock.wrong": "Wrong PIN", "lock.mismatch": "PINs do not match", "lock.saved": "Access PIN saved", "lock.cleared": "Access PIN cleared", "settings.saved": "Settings saved",
       "theme.dark": "Black", "theme.light": "White", "theme.ocean": "Ocean", "theme.forest": "Forest", "theme.sepia": "Sepia", "theme.custom": "Custom", "theme.purple": "Purple", "theme.wine": "Wine", "theme.dusk": "Dusk", "theme.mist": "Mist", "theme.mint": "Mint", "theme.honey": "Honey", "theme.guishan": "Guishan", "theme.danxia": "Danxia", "theme.qingzang": "Qingzang", "theme.caoyuan": "Grassland", "theme.damo": "Desert",
       "font.default": "Default", "font.kai": "Kai", "font.song": "Song", "font.fangsong": "FangSong", "font.hei": "Hei",
       "lang.zh": "Simplified", "lang.zhHant": "Traditional", "lang.en": "English",
@@ -1517,6 +1576,16 @@ const App = (() => {
   }
 
   function saveSettings() {
+    // 访问密码：先校验
+    const pin = $("#setPin").value;
+    const pin2 = $("#setPin2").value;
+    if (pin || pin2) {
+      if (pin !== pin2) { toast(t("lock.mismatch"), "err"); return; }
+      setPin(pin);
+      toast(pin ? t("lock.saved") : t("lock.cleared"), "ok");
+    }
+    // 离开自动锁
+    localStorage.setItem("zero_lock_leave", $("#lockOnLeave").checked ? "1" : "0");
     Store.setSettings({
       baseUrl: $("#setBaseUrl").value.trim(),
       apiKey: $("#setApiKey").value.trim(),
@@ -1526,7 +1595,7 @@ const App = (() => {
     const nick = $("#setNickname").value.trim();
     if (nick) Store.setProfile({ name: nick });
     closeModal("settingsModal");
-    toast("设置已保存", "ok");
+    toast(t("settings.saved"), "ok");
     renderAIStatus();
     renderProfile();
     if (currentView === "dashboard") renderDashboard();
@@ -2180,6 +2249,15 @@ const App = (() => {
     // 每日一言
     $("#btnNextQuote").onclick = () => { if (window.nextQuote) { nextQuote(); renderQuote(); } };
 
+    // 访问密码
+    $("#btnUnlock").onclick = unlock;
+    $("#lockPin").addEventListener("keydown", e => { if (e.key === "Enter") unlock(); });
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden && getPin() && localStorage.getItem("zero_lock_leave") === "1") {
+        lockNow();
+      }
+    });
+
     // 热点新闻
     $("#btnRefreshNews").onclick = async () => {
       toast("正在刷新新闻...", "ok");
@@ -2260,6 +2338,8 @@ const App = (() => {
   function init() {
     bindEvents();
     applyI18n();
+    // 启动锁（设置了访问密码则锁定）
+    applyLockPrefs();
     // 应用保存的昵称（仅当尚未设置个人昵称时）
     const nick = Store.getSettings().nickname;
     const p = Store.getProfile();
