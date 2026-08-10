@@ -71,8 +71,6 @@ const App = (() => {
     window.Anim && Anim.refreshScroll();
     // 侧边栏滑块跟随到目标项
     window.Anim && Anim.navPillTo(view, true);
-    // 卡片 3D 倾斜（仪表盘由 dashboardIntro 内部处理）
-    if (view !== "dashboard" && window.Anim) Anim.initTilt(v);
   }
 
   function renderCurrent() {
@@ -86,14 +84,11 @@ const App = (() => {
     else if (currentView === "ai") renderAIStatus();
   }
 
-  /* ---------- 长列表滚动分批浮入（ScrollTrigger）+ 卡片倾斜 ---------- */
+  /* ---------- 长列表滚动分批浮入（ScrollTrigger） ---------- */
   let _revealCleanup = null;
   function revealCards(container, selector) {
     if (_revealCleanup) { _revealCleanup(); _revealCleanup = null; }
-    if (window.Anim) {
-      _revealCleanup = Anim.scrollReveal(container, selector);
-      Anim.initTilt(container);
-    }
+    if (window.Anim) _revealCleanup = Anim.scrollReveal(container, selector);
   }
 
   /* ============================================================

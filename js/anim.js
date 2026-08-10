@@ -16,24 +16,6 @@
 
   function dur(full) { return reduceMotion ? 0 : (full || 0.55); }
 
-  /* ---------- 卡片 3D 倾斜：WeakMap 存 tween，listener 只绑一次 ---------- */
-  var _tiltTweens = [];
-  var tiltStore = new WeakMap();
-  function tiltTick(card, e) {
-    var t = tiltStore.get(card);
-    if (!t) return;
-    var r = card.getBoundingClientRect();
-    var px = (e.clientX - r.left) / r.width;
-    var py = (e.clientY - r.top) / r.height;
-    t.xT((px - 0.5) * 2);
-    t.yT(-(py - 0.5) * 2);
-  }
-  function killTilt() {
-    _tiltTweens.forEach(function (t) { t.kill(); });
-    _tiltTweens = [];
-    tiltStore = new WeakMap();
-  }
-
   var Anim = {
     hasGSAP: hasGSAP,
     reducedMotion: reduceMotion,
@@ -47,7 +29,6 @@
         // 直接显示 + 数字到位
         var st = scope.querySelectorAll("#heroStats [data-count]");
         for (var i = 0; i < st.length; i++) st[i].textContent = st[i].dataset.count;
-        Anim.initTilt(scope);
         return;
       }
       var hero = scope.querySelector(".hero-card");
@@ -80,7 +61,6 @@
           ">-0.15"
         );
       }
-      Anim.initTilt(scope);
       return tl;
     },
 
@@ -260,32 +240,6 @@
         { autoAlpha: 1, y: 0, duration: dur(0.42), ease: "power3.out", clearProps: "transform,opacity,visibility" }
       );
     },
-
-    /* ---------- 卡片 3D 倾斜（桌面 hover，GSAP quickTo） ---------- */
-    initTilt: function (scope) {
-      killTilt();
-      if (!hasGSAP || reduceMotion || !finePointer) return;
-      var cards = gsap.utils.toArray(".card, .hero-card, .quote-card", scope);
-      if (!cards.length) return;
-      document.documentElement.classList.add("tilt-on");
-      cards.forEach(function (card) {
-        var t = {
-          xT: gsap.quickTo(card, "rotationY", { duration: 0.35, ease: "power2.out", transformPerspective: 900 }),
-          yT: gsap.quickTo(card, "rotationX", { duration: 0.35, ease: "power2.out" }),
-          sT: gsap.quickTo(card, "scale", { duration: 0.2, ease: "power2.out" })
-        };
-        tiltStore.set(card, t);
-        _tiltTweens.push(t.xT, t.yT, t.sT);
-        // listener 只绑定一次（DOM 重建后 dataset 重置自动重绑）
-        if (!card.dataset.tiltBound) {
-          card.dataset.tiltBound = "1";
-          card.addEventListener("mousemove", function (e) { tiltTick(card, e); });
-          card.addEventListener("mouseenter", function () { var s = tiltStore.get(card); if (s) s.sT(1.015); });
-          card.addEventListener("mouseleave", function () { var s = tiltStore.get(card); if (s) { s.xT(0); s.yT(0); s.sT(1); } });
-        }
-      });
-    },
-    killTilt: killTilt,
 
     /* ---------- 按钮涟漪（事件委托，动态按钮也生效） ---------- */
     initRipple: function () {

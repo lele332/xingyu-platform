@@ -1656,20 +1656,6 @@ body { transition: background-color 0.4s var(--ease-out), color 0.4s var(--ease-
 }
 .lock-toggle input { accent-color: var(--ink); width: 15px; height: 15px; }
 
-/* ---------- GSAP 卡片 3D 倾斜（html.tilt-on，桌面 hover） ---------- */
-.tilt-on .card,
-.tilt-on .hero-card,
-.tilt-on .quote-card {
-  transform-style: preserve-3d;
-  will-change: transform;
-}
-.tilt-on .card:hover,
-.tilt-on .hero-card:hover,
-.tilt-on .quote-card:hover {
-  /* 3D 倾斜由 GSAP 控制，CSS 只保留背景/阴影反馈 */
-  transform: none;
-}
-
 /* ---------- 按钮涟漪（GSAP 生成 .ripple span） ---------- */
 .btn { overflow: hidden; }
 .btn .ripple {
