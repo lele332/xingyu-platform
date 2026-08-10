@@ -25,8 +25,8 @@
     var r = card.getBoundingClientRect();
     var px = (e.clientX - r.left) / r.width;
     var py = (e.clientY - r.top) / r.height;
-    t.xT((px - 0.5) * 5);
-    t.yT(-(py - 0.5) * 5);
+    t.xT((px - 0.5) * 2);
+    t.yT(-(py - 0.5) * 2);
   }
   function killTilt() {
     _tiltTweens.forEach(function (t) { t.kill(); });
