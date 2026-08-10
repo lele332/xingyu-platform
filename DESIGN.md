@@ -47,16 +47,22 @@ Palette policy: **zero chroma**. Gray scale only. Priority / status differentiat
 
 ## Themes
 
-Six theme options, switchable in Settings (`设置 → 界面主题`), persisted in localStorage `zero_theme`, applied via `<html data-theme>` (default **dark / 纯黑**):
+Twelve theme options, switchable in Settings (`设置 → 界面主题`), persisted in localStorage `zero_theme`, applied via `<html data-theme>` (default **dark / 纯黑**):
 
-- **dark (default)**: pure-black ground `#000`, white ink `#fff`, dark gray steps; course swatches are light grays.
-- **light**: near-white ground `#fafafa`, black ink `#111`, light gray steps; course swatches are dark grays.
-- **ocean**: deep navy-blue ground, cool white ink, blue accent `#7fb2e8`.
-- **forest**: deep green ground, pale green ink, green accent `#8fce9e`.
-- **sepia**: warm cream ground `#f6f1e6`, dark brown ink, brown accent `#8a6d3b`.
+- **dark (default)**: pure-black ground `#000`, white ink `#fff`, dark gray steps.
+- **light**: near-white ground `#fafafa`, black ink `#111`, light gray steps.
+- **ocean**: deep navy-blue ground, blue accent `#7fb2e8`.
+- **forest**: deep green ground, green accent `#8fce9e`.
+- **sepia**: warm cream ground, brown accent `#8a6d3b`.
+- **purple**: deep violet ground `#150f22`, violet accent `#b48ce8`.
+- **wine**: deep wine-red ground `#1a0f13`, rose accent `#e89ab0`.
+- **dusk**: deep warm-orange ground `#1a1208`, amber accent `#e8a05a`.
+- **mist**: light gray ground `#f1f1f1`, charcoal accent `#404040`.
+- **mint**: pale green ground `#eef6f0`, green accent `#3f9e63`.
+- **honey**: warm pale-yellow ground `#fcf7ea`, gold accent `#d99a2b`.
 - **custom**: user-defined colors, picked in the settings panel (`背景色 / 卡片色 / 侧栏色 / 文字色 / 强调色 / 边框色`), persisted in localStorage `zero_custom_colors`, applied as inline CSS variables on `<html>` (highest precedence). Derived gray steps are auto-computed from the six base colors via a lightness `shade()` helper.
 
-All chrome, charts, and inline colors reference CSS variables (`var(--ink)`, `var(--course-N)`), so switching themes recolors the entire surface instantly with no re-render. Charts.js consumes `var()` tokens for grid, axis, and point colors.
+Each preset defines its full token set (paper/ink/drawer/rule/accent + course swatches) so every theme stays coherent. All chrome, charts, and inline colors reference CSS variables (`var(--ink)`, `var(--course-N)`), so switching themes recolors the entire surface instantly with no re-render. Charts.js consumes `var()` tokens for grid, axis, and point colors.
 
 ## Fonts & Language
 
