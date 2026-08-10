@@ -59,8 +59,8 @@ const App = (() => {
       v.classList.add("view-in");
       v.classList.add("active");
     }
-    const titles = { dashboard: "仪表盘", courses: "课程作业", notes: "学习笔记库", focus: "专注学习", growth: "成长档案", lit: "文献资料", news: "热点新闻", ai: "AI 助手" };
-    const subs = { dashboard: "学习进度一览，今天也要保持专注", courses: "课程、课表与作业任务管理", notes: "沉淀知识，构建你的笔记库", focus: "番茄钟与专注统计", growth: "成绩、技能与成长轨迹", lit: "专业文献库与期刊导航", news: "每日国内外热点速递", ai: "你的智能学习伙伴" };
+    const titles = { dashboard: t("title.dashboard"), courses: t("title.courses"), notes: t("title.notes"), focus: t("title.focus"), growth: t("title.growth"), lit: t("title.lit"), news: t("title.news"), ai: t("title.ai") };
+    const subs = { dashboard: t("sub.dashboard"), courses: t("sub.courses"), notes: t("sub.notes"), focus: t("sub.focus"), growth: t("sub.growth"), lit: t("sub.lit"), news: t("sub.news"), ai: t("sub.ai") };
     $("#pageTitle").textContent = titles[view] || "";
     const sub = $("#pageSub");
     if (sub) sub.textContent = subs[view] || "";
@@ -105,10 +105,10 @@ const App = (() => {
     const pomos = Store.getAll("pomodoros").filter(p => p.startAt && p.startAt.slice(0, 10) === todayISO());
     const pomoMin = pomos.reduce((s, p) => s + (p.minutes || 0), 0);
     $("#heroStats").innerHTML = `
-      <div class="hstat"><b data-count="${todos.length}">0</b><span>待办任务</span></div>
-      <div class="hstat"><b data-count="${dueToday.length}">0</b><span>今日到期</span></div>
-      <div class="hstat"><b data-count="${notes.length}">0</b><span>笔记</span></div>
-      <div class="hstat"><b data-count="${pomoMin}">0</b><span>今日专注(分)</span></div>`;
+      <div class="hstat"><b data-count="${todos.length}">0</b><span>${t("hero.todo")}</span></div>
+      <div class="hstat"><b data-count="${dueToday.length}">0</b><span>${t("hero.due")}</span></div>
+      <div class="hstat"><b data-count="${notes.length}">0</b><span>${t("hero.notes")}</span></div>
+      <div class="hstat"><b data-count="${pomoMin}">0</b><span>${t("hero.focusMin")}</span></div>`;
     // 数字滚动动画（easeOutCubic）
     $$("#heroStats [data-count]").forEach(el => {
       const target = +el.dataset.count;
@@ -1282,6 +1282,11 @@ const App = (() => {
     });
     const sw = $("#swCustom");
     if (sw) sw.style.background = colors.accent;
+    // 字体 / 语言高亮
+    const curFont = document.documentElement.dataset.font || "sans";
+    $$("[data-font-pick]").forEach(b => b.classList.toggle("active", b.dataset.fontPick === curFont));
+    const curLang = document.documentElement.dataset.lang || "zh";
+    $$("[data-lang-pick]").forEach(b => b.classList.toggle("active", b.dataset.langPick === curLang));
   }
   function applyTheme(theme) {
     if (theme === "custom") {
@@ -1297,6 +1302,118 @@ const App = (() => {
       meta.setAttribute("content", c);
     }
     syncThemeUI();
+  }
+
+  /* ============================================================
+     i18n（中 / 英）与字体
+     ============================================================ */
+  const I18N = {
+    zh: {
+      "logo.sub": "个人学习工作台 · ZERO",
+      "nav.group.work": "工作台",
+      "nav.group.study": "学习资料",
+      "nav.group.growth": "自我成长",
+      "nav.dashboard": "仪表盘",
+      "nav.courses": "课程作业",
+      "nav.focus": "专注学习",
+      "nav.notes": "学习笔记库",
+      "nav.lit": "文献资料",
+      "nav.news": "热点新闻",
+      "nav.growth": "成长档案",
+      "nav.ai": "AI 助手",
+      "role": "个人工作台",
+      "settings": "设置",
+      "search.ph": "搜索笔记 / 任务 / 课程...",
+      "title.dashboard": "仪表盘", "title.courses": "课程作业", "title.notes": "学习笔记库",
+      "title.focus": "专注学习", "title.growth": "成长档案", "title.lit": "文献资料",
+      "title.news": "热点新闻", "title.ai": "AI 助手",
+      "sub.dashboard": "学习进度一览，今天也要保持专注",
+      "sub.courses": "课程、课表与作业任务管理",
+      "sub.notes": "沉淀知识，构建你的笔记库",
+      "sub.focus": "番茄钟与专注统计",
+      "sub.growth": "成绩、技能与成长轨迹",
+      "sub.lit": "专业文献库与期刊导航",
+      "sub.news": "每日国内外热点速递",
+      "sub.ai": "你的智能学习伙伴",
+      "hero.todo": "待办任务", "hero.due": "今日到期", "hero.notes": "笔记", "hero.focusMin": "今日专注(分)",
+      "settings.title": "设置",
+      "settings.theme": "界面主题", "settings.font": "界面字体", "settings.lang": "界面语言",
+      "settings.ai": "AI 模型配置（OpenAI 兼容接口）",
+      "settings.nick": "个人昵称", "settings.data": "数据管理",
+      "theme.dark": "纯黑", "theme.light": "纯白", "theme.ocean": "墨蓝", "theme.forest": "青竹", "theme.sepia": "纸墨", "theme.custom": "自定义",
+      "font.sans": "默认", "font.serif": "衬线", "font.mono": "等宽",
+      "lang.zh": "中文", "lang.en": "English",
+      "btn.addCourse": "+ 添加课程", "btn.addTask": "+ 添加任务", "btn.import": "导入课表", "btn.aiSort": "AI 智能排序",
+      "btn.save": "保存", "btn.cancel": "取消", "btn.export": "导出数据(JSON)", "btn.importData": "导入数据", "btn.clear": "清空全部数据",
+      "qr.title": "扫码访问", "qr.copy": "复制永久链接", "qr.hint": "手机扫码即可永久访问你的个人工作台。"
+    },
+    en: {
+      "logo.sub": "Personal Study Desk · ZERO",
+      "nav.group.work": "Work",
+      "nav.group.study": "Study",
+      "nav.group.growth": "Growth",
+      "nav.dashboard": "Dashboard",
+      "nav.courses": "Courses",
+      "nav.focus": "Focus",
+      "nav.notes": "Notes",
+      "nav.lit": "Library",
+      "nav.news": "News",
+      "nav.growth": "Profile",
+      "nav.ai": "AI Assistant",
+      "role": "Personal workspace",
+      "settings": "Settings",
+      "search.ph": "Search notes / tasks / courses...",
+      "title.dashboard": "Dashboard", "title.courses": "Courses", "title.notes": "Notes",
+      "title.focus": "Focus", "title.growth": "Profile", "title.lit": "Library",
+      "title.news": "News", "title.ai": "AI Assistant",
+      "sub.dashboard": "Your study at a glance — stay focused today",
+      "sub.courses": "Courses, timetable & assignments",
+      "sub.notes": "Build your knowledge base",
+      "sub.focus": "Pomodoro & focus stats",
+      "sub.growth": "Grades, skills & growth",
+      "sub.lit": "References & journal navigation",
+      "sub.news": "Daily headline digest",
+      "sub.ai": "Your smart study partner",
+      "hero.todo": "Open tasks", "hero.due": "Due today", "hero.notes": "Notes", "hero.focusMin": "Focus (min)",
+      "settings.title": "Settings",
+      "settings.theme": "Theme", "settings.font": "Font", "settings.lang": "Language",
+      "settings.ai": "AI Model (OpenAI-compatible)",
+      "settings.nick": "Nickname", "settings.data": "Data",
+      "theme.dark": "Black", "theme.light": "White", "theme.ocean": "Ocean", "theme.forest": "Forest", "theme.sepia": "Sepia", "theme.custom": "Custom",
+      "font.sans": "Sans", "font.serif": "Serif", "font.mono": "Mono",
+      "lang.zh": "中文", "lang.en": "English",
+      "btn.addCourse": "+ Add Course", "btn.addTask": "+ Add Task", "btn.import": "Import", "btn.aiSort": "AI Sort",
+      "btn.save": "Save", "btn.cancel": "Cancel", "btn.export": "Export (JSON)", "btn.importData": "Import", "btn.clear": "Clear All",
+      "qr.title": "Scan to Visit", "qr.copy": "Copy Link", "qr.hint": "Scan to open your workspace on your phone."
+    }
+  };
+  function t(key) {
+    const lang = document.documentElement.dataset.lang || "zh";
+    const d = I18N[lang] || I18N.zh;
+    return d[key] != null ? d[key] : (I18N.zh[key] != null ? I18N.zh[key] : key);
+  }
+  function applyI18n() {
+    $$("[data-i18n]").forEach(el => {
+      const k = el.dataset.i18n;
+      if (k) el.textContent = t(k);
+    });
+    $$("[data-i18n-ph]").forEach(el => {
+      const k = el.dataset.i18nPh;
+      if (k) el.placeholder = t(k);
+    });
+  }
+  function applyFont(font) {
+    document.documentElement.dataset.font = font;
+    localStorage.setItem("zero_font", font);
+    $$("[data-font-pick]").forEach(b => b.classList.toggle("active", b.dataset.fontPick === font));
+  }
+  function applyLang(lang) {
+    document.documentElement.dataset.lang = lang;
+    localStorage.setItem("zero_lang", lang);
+    $$("[data-lang-pick]").forEach(b => b.classList.toggle("active", b.dataset.langPick === lang));
+    applyI18n();
+    // 重渲染依赖文案的界面
+    if (typeof switchView === "function") { switchView(currentView); } else { renderCurrent(); }
   }
 
   function saveSettings() {
@@ -1909,6 +2026,8 @@ const App = (() => {
     $("#btnSettings").onclick = openSettings;
     $("#btnSaveSettings").onclick = saveSettings;
     $$("[data-theme-pick]").forEach(b => b.onclick = () => applyTheme(b.dataset.themePick));
+    $$("[data-font-pick]").forEach(b => b.onclick = () => applyFont(b.dataset.fontPick));
+    $$("[data-lang-pick]").forEach(b => b.onclick = () => applyLang(b.dataset.langPick));
     $$("#themeCustom input[type=color]").forEach(inp => {
       inp.oninput = () => {
         const colors = getCustomColors();
@@ -2036,6 +2155,7 @@ const App = (() => {
   /* ---------- 启动 ---------- */
   function init() {
     bindEvents();
+    applyI18n();
     // 应用保存的昵称（仅当尚未设置个人昵称时）
     const nick = Store.getSettings().nickname;
     const p = Store.getProfile();

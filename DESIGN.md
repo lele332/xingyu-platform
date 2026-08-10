@@ -47,13 +47,21 @@ Palette policy: **zero chroma**. Gray scale only. Priority / status differentiat
 
 ## Themes
 
-Three theme modes, switchable in Settings (`设置 → 界面主题`), persisted in localStorage `zero_theme`, applied via `<html data-theme>` (default **dark / 纯黑**):
+Six theme options, switchable in Settings (`设置 → 界面主题`), persisted in localStorage `zero_theme`, applied via `<html data-theme>` (default **dark / 纯黑**):
 
-- **dark (default)**: pure-black ground `#000`, white ink `#fff`, dark gray steps; course swatches are light grays (`--course-1..8: #ffffff…#808080`).
-- **light**: near-white ground `#fafafa`, black ink `#111`, light gray steps; course swatches are dark grays (`--course-1..8: #111111…#9a9a9a`).
-- **custom**: user-defined colors, picked in the settings panel (`背景色 / 卡片色 / 侧栏色 / 文字色 / 强调色 / 边框色`), persisted in localStorage `zero_custom_colors`, applied as inline CSS variables on `<html>` (highest precedence). Derived gray steps (`--paper-2/3`, `--ink-2/3`, `--fill*`, etc.) are auto-computed from the six base colors via a lightness `shade()` helper so the custom scheme stays coherent.
+- **dark (default)**: pure-black ground `#000`, white ink `#fff`, dark gray steps; course swatches are light grays.
+- **light**: near-white ground `#fafafa`, black ink `#111`, light gray steps; course swatches are dark grays.
+- **ocean**: deep navy-blue ground, cool white ink, blue accent `#7fb2e8`.
+- **forest**: deep green ground, pale green ink, green accent `#8fce9e`.
+- **sepia**: warm cream ground `#f6f1e6`, dark brown ink, brown accent `#8a6d3b`.
+- **custom**: user-defined colors, picked in the settings panel (`背景色 / 卡片色 / 侧栏色 / 文字色 / 强调色 / 边框色`), persisted in localStorage `zero_custom_colors`, applied as inline CSS variables on `<html>` (highest precedence). Derived gray steps are auto-computed from the six base colors via a lightness `shade()` helper.
 
 All chrome, charts, and inline colors reference CSS variables (`var(--ink)`, `var(--course-N)`), so switching themes recolors the entire surface instantly with no re-render. Charts.js consumes `var()` tokens for grid, axis, and point colors.
+
+## Fonts & Language
+
+- **Font** (`<html data-font>`, localStorage `zero_font`): `sans` (default), `serif` (Georgia / Songti), `mono` (Consolas / monospace). Switches `--font` / `--font-mono`.
+- **Language** (`<html data-lang>`, localStorage `zero_lang`): `zh` (default) and `en`. UI chrome text goes through a lightweight i18n dictionary (`I18N` + `t(key)`); static markup is tagged `data-i18n` and re-applied on switch; user data (notes, course names, news titles) is never translated.
 
 ## Typography
 

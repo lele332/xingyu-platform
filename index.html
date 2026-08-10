@@ -19,6 +19,8 @@
       Object.keys(m).forEach(function(k){ if (c[k]) d.style.setProperty(m[k], c[k]); });
     } catch(e) {}
   }
+  d.dataset.font = localStorage.getItem("zero_font") || "sans";
+  d.dataset.lang = localStorage.getItem("zero_lang") || "zh";
 })();</script>
 <link rel="stylesheet" href="css/style.css?v=20260810">
 </head>
@@ -46,42 +48,42 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <div class="logo-icon" aria-label="零">○</div>
       <div class="logo-text">
         <span class="logo-name">零</span>
-        <span class="logo-sub">个人学习工作台 · ZERO</span>
+        <span class="logo-sub" data-i18n="logo.sub">个人学习工作台 · ZERO</span>
       </div>
     </div>
 
     <nav class="sidebar-nav">
       <div class="nav-group">
-        <div class="nav-group-label">工作台</div>
+        <div class="nav-group-label" data-i18n="nav.group.work">工作台</div>
         <button class="nav-item active" data-view="dashboard">
-          <span class="nav-label">仪表盘</span>
+          <span class="nav-label" data-i18n="nav.dashboard">仪表盘</span>
         </button>
         <button class="nav-item" data-view="courses">
-          <span class="nav-label">课程作业</span>
+          <span class="nav-label" data-i18n="nav.courses">课程作业</span>
         </button>
         <button class="nav-item" data-view="focus">
-          <span class="nav-label">专注学习</span>
+          <span class="nav-label" data-i18n="nav.focus">专注学习</span>
         </button>
       </div>
       <div class="nav-group">
-        <div class="nav-group-label">学习资料</div>
+        <div class="nav-group-label" data-i18n="nav.group.study">学习资料</div>
         <button class="nav-item" data-view="notes">
-          <span class="nav-label">学习笔记库</span>
+          <span class="nav-label" data-i18n="nav.notes">学习笔记库</span>
         </button>
         <button class="nav-item" data-view="lit">
-          <span class="nav-label">文献资料</span>
+          <span class="nav-label" data-i18n="nav.lit">文献资料</span>
         </button>
         <button class="nav-item" data-view="news">
-          <span class="nav-label">热点新闻</span>
+          <span class="nav-label" data-i18n="nav.news">热点新闻</span>
         </button>
       </div>
       <div class="nav-group">
-        <div class="nav-group-label">自我成长</div>
+        <div class="nav-group-label" data-i18n="nav.group.growth">自我成长</div>
         <button class="nav-item" data-view="growth">
-          <span class="nav-label">成长档案</span>
+          <span class="nav-label" data-i18n="nav.growth">成长档案</span>
         </button>
         <button class="nav-item" data-view="ai">
-          <span class="nav-label">AI 助手</span>
+          <span class="nav-label" data-i18n="nav.ai">AI 助手</span>
           <span class="nav-badge" id="aiBadge">AI</span>
         </button>
       </div>
@@ -92,10 +94,10 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <div class="user-avatar" id="userAvatar">零</div>
         <div class="user-meta">
           <span class="user-name" id="userName">同学</span>
-          <span class="user-role">个人工作台</span>
+          <span class="user-role" data-i18n="role">个人工作台</span>
         </div>
       </div>
-      <button class="side-btn" id="btnSettings">设置</button>
+      <button class="side-btn" id="btnSettings" data-i18n="settings">设置</button>
     </div>
   </aside>
 
@@ -113,7 +115,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <div class="topbar-right">
         <div class="search-box">
           <span class="search-ico">⌕</span>
-          <input type="text" id="globalSearch" placeholder="搜索笔记 / 任务 / 课程...">
+          <input type="text" id="globalSearch" placeholder="搜索笔记 / 任务 / 课程..." data-i18n-ph="search.ph">
         </div>
         <button class="icon-btn" id="btnQrcode" title="扫码访问">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2.5 2.5h5v5h-5zM8.5 2.5h5v5h-5zM2.5 8.5h5v5h-5z"/><path d="M8.5 8.5h2v2h-2zM11 8.5h2.5v2.5H11zM8.5 11.5H11V14H8.5zM11.5 11.5h2.5V14h-2.5z"/></svg>
@@ -187,9 +189,9 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
             <button class="tab-btn" data-tab="courses-tasks">作业任务</button>
           </div>
           <div class="toolbar-actions">
-            <button class="btn btn-ghost" id="btnImportSchedule">导入课表</button>
-            <button class="btn btn-primary" id="btnAddCourse">+ 添加课程</button>
-            <button class="btn btn-primary" id="btnAddTask">+ 添加任务</button>
+            <button class="btn btn-ghost" id="btnImportSchedule" data-i18n="btn.import">导入课表</button>
+            <button class="btn btn-primary" id="btnAddCourse" data-i18n="btn.addCourse">+ 添加课程</button>
+            <button class="btn btn-primary" id="btnAddTask" data-i18n="btn.addTask">+ 添加任务</button>
           </div>
         </div>
 
@@ -211,7 +213,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <div class="card">
             <div class="card-head">
               <h3>作业与任务</h3>
-              <button class="btn btn-ghost" id="btnSmartSort">AI 智能排序</button>
+              <button class="btn btn-ghost" id="btnSmartSort" data-i18n="btn.aiSort">AI 智能排序</button>
             </div>
             <div class="filter-row">
               <select id="taskFilterStatus" class="select">
@@ -435,16 +437,16 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 <div class="modal-mask" id="qrcodeModal">
   <div class="modal qr-modal">
     <div class="modal-head">
-      <h3>扫码访问</h3>
+      <h3 data-i18n="qr.title">扫码访问</h3>
       <button class="modal-close" data-close="qrcodeModal">✕</button>
     </div>
     <div class="modal-body center">
-      <p class="hint">手机扫码即可永久访问你的个人工作台。</p>
+      <p class="hint" data-i18n="qr.hint">手机扫码即可永久访问你的个人工作台。</p>
       <div id="qrCodeBox" class="qr-box">
         <img src="xingyu-qrcode.png" alt="零 · 永久二维码" class="qr-static">
       </div>
       <div class="qr-actions">
-        <button class="btn btn-primary" id="btnCopyLink">复制永久链接</button>
+        <button class="btn btn-primary" id="btnCopyLink" data-i18n="qr.copy">复制永久链接</button>
       </div>
     </div>
   </div>
@@ -454,16 +456,19 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 <div class="modal-mask" id="settingsModal">
   <div class="modal settings-modal">
     <div class="modal-head">
-      <h3>设置</h3>
+      <h3 data-i18n="settings.title">设置</h3>
       <button class="modal-close" data-close="settingsModal">✕</button>
     </div>
     <div class="modal-body">
       <div class="setting-group">
-        <h4>界面主题</h4>
+        <h4 data-i18n="settings.theme">界面主题</h4>
         <div class="theme-picker">
-          <button class="theme-opt" data-theme-pick="dark"><span class="theme-swatch sw-dark"></span>纯黑</button>
-          <button class="theme-opt" data-theme-pick="light"><span class="theme-swatch sw-light"></span>纯白</button>
-          <button class="theme-opt" data-theme-pick="custom"><span class="theme-swatch sw-custom" id="swCustom"></span>自定义</button>
+          <button class="theme-opt" data-theme-pick="dark"><span class="theme-swatch sw-dark"></span><span data-i18n="theme.dark">纯黑</span></button>
+          <button class="theme-opt" data-theme-pick="light"><span class="theme-swatch sw-light"></span><span data-i18n="theme.light">纯白</span></button>
+          <button class="theme-opt" data-theme-pick="ocean"><span class="theme-swatch sw-ocean"></span><span data-i18n="theme.ocean">墨蓝</span></button>
+          <button class="theme-opt" data-theme-pick="forest"><span class="theme-swatch sw-forest"></span><span data-i18n="theme.forest">青竹</span></button>
+          <button class="theme-opt" data-theme-pick="sepia"><span class="theme-swatch sw-sepia"></span><span data-i18n="theme.sepia">纸墨</span></button>
+          <button class="theme-opt" data-theme-pick="custom"><span class="theme-swatch sw-custom" id="swCustom"></span><span data-i18n="theme.custom">自定义</span></button>
         </div>
         <div class="theme-custom" id="themeCustom" style="display:none">
           <div class="theme-cfield"><span>背景色</span><input type="color" data-cvar="paper" value="#000000"></div>
@@ -473,10 +478,27 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <div class="theme-cfield"><span>强调色</span><input type="color" data-cvar="accent" value="#ffffff"></div>
           <div class="theme-cfield"><span>边框色</span><input type="color" data-cvar="rule" value="#2a2a2a"></div>
         </div>
-        <p class="hint">纯黑 / 纯白一键切换；选「自定义」可自由调整每种颜色，实时生效。</p>
+        <p class="hint">选一套预设配色，或点「自定义」逐项调色，实时生效。</p>
       </div>
       <div class="setting-group">
-        <h4>AI 模型配置（OpenAI 兼容接口）</h4>
+        <h4 data-i18n="settings.font">界面字体</h4>
+        <div class="font-picker">
+          <button class="theme-opt" data-font-pick="sans" data-i18n="font.sans">默认</button>
+          <button class="theme-opt" data-font-pick="serif" data-i18n="font.serif">衬线</button>
+          <button class="theme-opt" data-font-pick="mono" data-i18n="font.mono">等宽</button>
+        </div>
+        <p class="hint">切换界面正文字体风格。</p>
+      </div>
+      <div class="setting-group">
+        <h4 data-i18n="settings.lang">界面语言</h4>
+        <div class="font-picker">
+          <button class="theme-opt" data-lang-pick="zh" data-i18n="lang.zh">中文</button>
+          <button class="theme-opt" data-lang-pick="en" data-i18n="lang.en">English</button>
+        </div>
+        <p class="hint">切换界面显示语言（笔记 / 课程等数据内容保持原样）。</p>
+      </div>
+      <div class="setting-group">
+        <h4 data-i18n="settings.ai">AI 模型配置（OpenAI 兼容接口）</h4>
         <label class="field">
           <span>接口地址 Base URL</span>
           <input type="text" id="setBaseUrl" placeholder="https://api.deepseek.com/v1">
@@ -498,19 +520,19 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <p class="hint">密钥仅保存在你的浏览器本地（localStorage），不会上传到任何服务器。</p>
       </div>
       <div class="setting-group">
-        <h4>个人昵称</h4>
+        <h4 data-i18n="settings.nick">个人昵称</h4>
         <label class="field">
           <span>昵称（显示于侧边栏与问候语）</span>
           <input type="text" id="setNickname" placeholder="同学">
         </label>
       </div>
       <div class="setting-group">
-        <h4>数据管理</h4>
+        <h4 data-i18n="settings.data">数据管理</h4>
         <div class="setting-actions">
-          <button class="btn btn-ghost" id="btnExportData">导出数据(JSON)</button>
-          <button class="btn btn-ghost" id="btnImportData">导入数据</button>
+          <button class="btn btn-ghost" id="btnExportData" data-i18n="btn.export">导出数据(JSON)</button>
+          <button class="btn btn-ghost" id="btnImportData" data-i18n="btn.importData">导入数据</button>
           <input type="file" id="importFile" accept="application/json" style="display:none">
-          <button class="btn btn-danger" id="btnClearData">清空全部数据</button>
+          <button class="btn btn-danger" id="btnClearData" data-i18n="btn.clear">清空全部数据</button>
         </div>
       </div>
     </div>
