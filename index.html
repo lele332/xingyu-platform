@@ -140,6 +140,18 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           </div>
           <div class="hero-stats" id="heroStats"></div>
         </div>
+        <!-- 每日一言 -->
+        <div class="card quote-card" id="dailyQuote">
+          <div class="quote-head">
+            <h3 data-i18n="quote.title">每日一言</h3>
+            <button class="text-btn" id="btnNextQuote" data-i18n="quote.next">换一句</button>
+          </div>
+          <div class="quote-body">
+            <span class="quote-mark">“</span>
+            <p class="quote-text" id="quoteText"></p>
+          </div>
+          <span class="quote-cat" id="quoteCat"></span>
+        </div>
         <div class="dash-grid">
           <div class="card" id="dashCountdown">
             <div class="card-head">
@@ -719,6 +731,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 </div>
 
 <script src="js/local-config.js?v=20260810"></script>
+<script src="js/quotes.js?v=20260810"></script>
 <script src="js/lunar.js?v=20260810"></script>
 <script src="js/store.js?v=20260810"></script>
 <script src="js/charts.js?v=20260810"></script>

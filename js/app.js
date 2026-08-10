@@ -83,7 +83,23 @@ const App = (() => {
   /* ============================================================
      仪表盘
      ============================================================ */
+  /* ============================================================
+     每日一言（励志 / 热梗 / 毒鸡汤）
+     ============================================================ */
+  function renderQuote() {
+    const box = $("#dailyQuote");
+    const textEl = $("#quoteText");
+    const catEl = $("#quoteCat");
+    if (!box || !textEl) return;
+    const q = window.getDailyQuote ? getDailyQuote() : null;
+    if (!q) { box.style.display = "none"; return; }
+    box.style.display = "";
+    textEl.textContent = q.text;
+    if (catEl) catEl.textContent = t("quote.cat." + q.cat);
+  }
+
   function renderDashboard() {
+    renderQuote();
     // 问候语
     const name = Store.getProfile().name || "同学";
     const h = new Date().getHours();
@@ -1347,7 +1363,8 @@ const App = (() => {
       "lang.zh": "简体", "lang.zhHant": "繁体", "lang.en": "English",
       "btn.addCourse": "+ 添加课程", "btn.addTask": "+ 添加任务", "btn.import": "导入课表", "btn.aiSort": "AI 智能排序",
       "btn.save": "保存", "btn.cancel": "取消", "btn.export": "导出数据(JSON)", "btn.importData": "导入数据", "btn.clear": "清空全部数据",
-      "qr.title": "扫码访问", "qr.copy": "复制永久链接", "qr.hint": "手机扫码即可永久访问你的个人工作台。"
+      "qr.title": "扫码访问", "qr.copy": "复制永久链接", "qr.hint": "手机扫码即可永久访问你的个人工作台。",
+      "quote.title": "每日一言", "quote.next": "换一句", "quote.cat.motivation": "励志", "quote.cat.memes": "热梗", "quote.cat.poison": "毒鸡汤"
     },
     "zh-Hant": {
       "logo.sub": "個人學習工作台 · ZERO",
@@ -1386,7 +1403,8 @@ const App = (() => {
       "lang.zh": "簡體", "lang.zhHant": "繁體", "lang.en": "English",
       "btn.addCourse": "+ 添加課程", "btn.addTask": "+ 添加任務", "btn.import": "導入課表", "btn.aiSort": "AI 智能排序",
       "btn.save": "保存", "btn.cancel": "取消", "btn.export": "導出數據(JSON)", "btn.importData": "導入數據", "btn.clear": "清空全部數據",
-      "qr.title": "掃碼訪問", "qr.copy": "複製永久連結", "qr.hint": "手機掃碼即可永久訪問你的個人工作台。"
+      "qr.title": "掃碼訪問", "qr.copy": "複製永久連結", "qr.hint": "手機掃碼即可永久訪問你的個人工作台。",
+      "quote.title": "每日一言", "quote.next": "換一句", "quote.cat.motivation": "勵志", "quote.cat.memes": "熱梗", "quote.cat.poison": "毒雞湯"
     },
     en: {
       "logo.sub": "Personal Study Desk · ZERO",
@@ -1425,7 +1443,8 @@ const App = (() => {
       "lang.zh": "Simplified", "lang.zhHant": "Traditional", "lang.en": "English",
       "btn.addCourse": "+ Add Course", "btn.addTask": "+ Add Task", "btn.import": "Import", "btn.aiSort": "AI Sort",
       "btn.save": "Save", "btn.cancel": "Cancel", "btn.export": "Export (JSON)", "btn.importData": "Import", "btn.clear": "Clear All",
-      "qr.title": "Scan to Visit", "qr.copy": "Copy Link", "qr.hint": "Scan to open your workspace on your phone."
+      "qr.title": "Scan to Visit", "qr.copy": "Copy Link", "qr.hint": "Scan to open your workspace on your phone.",
+      "quote.title": "Daily Quote", "quote.next": "Next", "quote.cat.motivation": "Inspire", "quote.cat.memes": "Meme", "quote.cat.poison": "Savage"
     }
   };
   function t(key) {
@@ -2118,6 +2137,9 @@ const App = (() => {
     // 二维码
     $("#btnQrcode").onclick = openQR;
     $("#btnCopyLink").onclick = copyLink;
+
+    // 每日一言
+    $("#btnNextQuote").onclick = () => { if (window.nextQuote) { nextQuote(); renderQuote(); } };
 
     // 热点新闻
     $("#btnRefreshNews").onclick = async () => {
