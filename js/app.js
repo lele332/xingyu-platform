@@ -69,6 +69,8 @@ const App = (() => {
     renderCurrent();
     // 视图从 display:none 变为 block 后重算 ScrollTrigger 位置
     window.Anim && Anim.refreshScroll();
+    // 侧边栏滑块跟随到目标项
+    window.Anim && Anim.navPillTo(view, true);
     // 卡片 3D 倾斜（仪表盘由 dashboardIntro 内部处理）
     if (view !== "dashboard" && window.Anim) Anim.initTilt(v);
   }
@@ -2379,9 +2381,10 @@ const App = (() => {
     applyI18n();
     // 按钮涟漪（事件委托，全局一次）
     window.Anim && Anim.initRipple();
-    // 侧边栏入场序列 + hover 高光（静态 DOM，一次绑定）
+    // 侧边栏入场序列 + hover 文字位移 + 滑块初始定位（静态 DOM，一次绑定）
     window.Anim && Anim.sidebarIntro();
     window.Anim && Anim.initNav();
+    window.Anim && Anim.initNavPill();
     // 启动锁（设置了访问密码则锁定）
     applyLockPrefs();
     // 应用保存的昵称（仅当尚未设置个人昵称时）

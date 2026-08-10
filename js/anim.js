@@ -30,8 +30,9 @@
     t.yT(-(py - 0.5) * 5);
     var glow = tiltGlows.get(card);
     if (glow) {
-      t.gx(e.clientX - r.left - glow.offsetWidth / 2);
-      t.gy(e.clientY - r.top - glow.offsetHeight / 2);
+      // glow 用负 margin 让圆心落在 left/top，translateX/Y 直接移到鼠标位置即可（勿再减半宽，否则双重偏移）
+      t.gx(e.clientX - r.left);
+      t.gy(e.clientY - r.top);
     }
   }
   function killTilt() {
@@ -198,49 +199,64 @@
       var tl = gsap.timeline({ defaults: { ease: "power3.out" } });
       if (brand) tl.fromTo(brand, { autoAlpha: 0, y: -10 }, { autoAlpha: 1, y: 0, duration: 0.4, clearProps: "all" }, 0);
       if (labels.length) {
-        tl.fromTo(labels, { autoAlpha: 0, x: -10 }, { autoAlpha: 1, x: 0, duration: 0.3, stagger: 0.06, clearProps: "all" }, 0.1);
+        tl.fromTo(labels, { autoAlpha: 0, x: -8 }, { autoAlpha: 1, x: 0, duration: 0.28, stagger: 0.05, clearProps: "all" }, 0.1);
       }
       tl.fromTo(items,
-        { autoAlpha: 0, x: -14 },
-        { autoAlpha: 1, x: 0, duration: 0.34, stagger: 0.045, clearProps: "all" },
-        0.18
+        { autoAlpha: 0, y: 10 },
+        { autoAlpha: 1, y: 0, duration: 0.32, stagger: 0.04, clearProps: "all" },
+        0.16
       );
+      // 入场完成后初始化滑块定位（此时布局稳定）
+      tl.add(function () { Anim.initNavPill(); }, "+=0.15");
       return tl;
     },
 
-    /* ---------- 侧边栏 hover：高光扫过 + 图标微动 ---------- */
-    initNav: function () {
-      if (!hasGSAP || reduceMotion || !finePointer) return;
-      gsap.utils.toArray(".nav-item").forEach(function (item) {
-        var shine = item.querySelector(".nav-shine");
-        if (!shine) {
-          shine = document.createElement("span");
-          shine.className = "nav-shine";
-          item.appendChild(shine);
+    /* ---------- 移动滑块 pill：active 高亮块平滑滑动（成熟模式） ---------- */
+    _pillCtx: null,
+    initNavPill: function () {
+      var nav = document.querySelector(".sidebar-nav");
+      if (!nav) return;
+      if (!Anim._pillCtx) {
+        var pill = nav.querySelector(".nav-pill");
+        if (!pill) {
+          pill = document.createElement("span");
+          pill.className = "nav-pill";
+          nav.insertBefore(pill, nav.firstChild);
         }
-        var ico = item.querySelector(".nav-ico");
-        var sweep = gsap.fromTo(shine,
-          { xPercent: -130 },
-          { xPercent: 130, duration: 0.75, ease: "power2.inOut", paused: true, clearProps: "transform" }
-        );
-        item.addEventListener("mouseenter", function () {
-          sweep.restart();
-          if (ico) gsap.fromTo(ico, { scale: 0.85 }, { scale: 1, duration: 0.3, ease: "back.out(2.2)", clearProps: "transform" });
-        });
-        item.addEventListener("mouseleave", function () {
-          sweep.pause();
-          gsap.set(shine, { xPercent: -130 });
-        });
+        Anim._pillCtx = { nav: nav, pill: pill };
+      }
+      var active = nav.querySelector(".nav-item.active");
+      if (active) Anim.navPillTo(active.dataset.view, false);
+    },
+    navPillTo: function (view, animate) {
+      if (!Anim._pillCtx) return;
+      var p = Anim._pillCtx;
+      var item = p.nav.querySelector('[data-view="' + view + '"]');
+      if (!item) return;
+      // offsetTop/Left 是布局位置，不受入场 transform 影响，与 pill 同坐标系（sidebar-nav 为 relative）
+      var vars = { top: item.offsetTop, left: item.offsetLeft, width: item.offsetWidth, height: item.offsetHeight };
+      if (animate === false || !hasGSAP || reduceMotion) {
+        gsap.set(p.pill, vars);
+      } else {
+        gsap.to(p.pill, Object.assign({}, vars, { duration: 0.45, ease: "power3.inOut", overwrite: "auto" }));
+      }
+    },
+
+    /* ---------- 侧边栏 hover：文字右移 + 微反馈 ---------- */
+    initNav: function () {
+      if (!hasGSAP || reduceMotion) return;
+      gsap.utils.toArray(".nav-item").forEach(function (item) {
+        var label = item.querySelector(".nav-label");
+        if (!label) return;
+        var t = gsap.fromTo(label, { x: 0 }, { x: 4, duration: 0.25, ease: "power2.out", paused: true, clearProps: "transform" });
+        item.addEventListener("mouseenter", function () { t.play(); });
+        item.addEventListener("mouseleave", function () { t.reverse(); });
       });
     },
 
-    /* ---------- 侧边栏点击：图标弹跳 + 弹性反馈 ---------- */
+    /* ---------- 侧边栏点击：弹性反馈（滑块滑动由 navPillTo 处理） ---------- */
     navPulse: function (item) {
       if (!item || !hasGSAP || reduceMotion) return;
-      var ico = item.querySelector(".nav-ico");
-      if (ico) {
-        gsap.fromTo(ico, { scale: 0.6, rotation: -5 }, { scale: 1, rotation: 0, duration: 0.45, ease: "back.out(2.6)", clearProps: "transform" });
-      }
       gsap.fromTo(item, { scale: 0.97 }, { scale: 1, duration: 0.4, ease: "back.out(2)", clearProps: "transform" });
     },
 

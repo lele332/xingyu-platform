@@ -642,7 +642,7 @@ input, textarea, select { caret-color: var(--stamp-blue); }
 .logo-name { font-family: var(--font); font-size: 18px; font-weight: 700; color: var(--ink); letter-spacing: 0.04em; }
 .logo-sub { font-family: var(--font-mono); font-size: 9px; color: var(--ink-3); letter-spacing: 1.4px; margin-top: 2px; text-transform: uppercase; }
 
-.sidebar-nav { flex: 1; padding: 10px 10px 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+.sidebar-nav { flex: 1; padding: 10px 10px 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; position: relative; }
 .nav-group { display: flex; flex-direction: column; gap: 1px; margin-top: 14px; padding: 2px 4px; }
 .nav-group:first-child { margin-top: 4px; }
 .nav-group-label {
@@ -654,7 +654,7 @@ input, textarea, select { caret-color: var(--stamp-blue); }
   content: "[" attr(data-count) "]"; font-size: 9px; color: var(--ink-3); opacity: 0.6;
 }
 .nav-item {
-  position: relative;
+  position: relative; z-index: 1;
   display: flex; align-items: center; gap: 10px;
   padding: 9px 10px; border: none; border-radius: 6px;
   background: transparent; color: var(--drawer-text);
@@ -664,10 +664,9 @@ input, textarea, select { caret-color: var(--stamp-blue); }
 .nav-item:hover { background: var(--paper-2); color: var(--ink); }
 .nav-item:active { transform: scale(0.985); transition: transform 80ms var(--ease-out); }
 .nav-item.active {
-  background: var(--paper-card);
+  /* 高亮背景由 .nav-pill 滑块承载，这里只保留文字状态 */
   color: var(--ink);
   font-weight: 600;
-  box-shadow: var(--shadow-paper);
 }
 .nav-item.active .nav-ico { color: var(--ink); }
 .nav-item.active::after {
@@ -679,6 +678,14 @@ input, textarea, select { caret-color: var(--stamp-blue); }
   0% { opacity: 0; transform: translateY(-50%) scale(0.2); }
   60% { opacity: 1; transform: translateY(-50%) scale(1.35); }
   100% { opacity: 1; transform: translateY(-50%) scale(1); }
+}
+/* 移动滑块 pill：active 高亮块随导航平滑滑动 */
+.nav-pill {
+  position: absolute; left: 0; top: 0; z-index: 0;
+  border-radius: 8px; pointer-events: none;
+  background: color-mix(in srgb, var(--paper-card) 72%, transparent);
+  border: 1px solid var(--rule);
+  box-shadow: var(--shadow-paper);
 }
 .nav-ico { width: 22px; text-align: center; font-size: 14px; transition: color var(--dur-fast); font-family: var(--font); }
 .nav-badge {
@@ -1655,6 +1662,7 @@ body { transition: background-color 0.4s var(--ease-out), color 0.4s var(--ease-
 .tilt-on .quote-card {
   transform-style: preserve-3d;
   will-change: transform;
+  overflow: hidden; /* 光斑裁剪在卡片内，不溢出 */
 }
 .tilt-on .card:hover,
 .tilt-on .hero-card:hover,
@@ -1662,26 +1670,18 @@ body { transition: background-color 0.4s var(--ease-out), color 0.4s var(--ease-
   /* 3D 倾斜由 GSAP 控制，CSS 只保留背景/阴影反馈 */
   transform: none;
 }
-/* 光晕元素：GSAP quickTo 驱动 x/y 跟随鼠标（圆心对准光标） */
+/* 光斑元素：圆心平滑跟随鼠标（quickTo x/y；负 margin 使圆心落在 left/top） */
 .card-glow {
   position: absolute; left: 0; top: 0;
-  width: 240px; height: 240px; margin: -120px 0 0 -120px;
+  width: 320px; height: 320px; margin: -160px 0 0 -160px;
   border-radius: 50%; pointer-events: none; z-index: 1;
-  background: radial-gradient(circle, var(--fill-3), transparent 68%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--ink) 16%, transparent), transparent 72%);
   opacity: 0; transition: opacity 0.3s var(--ease-out);
   transform: translateZ(0);
 }
 .tilt-on .card:hover .card-glow,
 .tilt-on .hero-card:hover .card-glow,
 .tilt-on .quote-card:hover .card-glow { opacity: 1; }
-
-/* ---------- 侧边栏 hover 高光（GSAP 生成 .nav-shine span） ---------- */
-.nav-shine {
-  position: absolute; top: 0; bottom: 0; left: 0; width: 50%;
-  background: linear-gradient(100deg, transparent, var(--fill-3), transparent);
-  pointer-events: none;
-  transform: translateX(-130%);
-}
 
 /* ---------- 按钮涟漪（GSAP 生成 .ripple span） ---------- */
 .btn { overflow: hidden; }
