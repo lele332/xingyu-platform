@@ -100,18 +100,23 @@ const App = (() => {
 
   function renderDashboard() {
     renderQuote();
-    // 问候语
+    // 问候语（按时段细化，附一句温暖副语）
     const name = Store.getProfile().name || "同学";
     const h = new Date().getHours();
-    let greet = "晚上好";
-    if (h < 6) greet = "夜深了";
-    else if (h < 12) greet = "早上好";
-    else if (h < 18) greet = "下午好";
-    $("#heroGreeting").textContent = `${greet}，${name} `;
-    const quotes = ["今天也要保持专注，稳步向前。", "自律给我自由，坚持就有回响。", "把大目标拆成小任务，每天前进一点点。", "读书是最好的自我投资。", "不积跬步，无以至千里。"];
-    // 用户设置了个性签名就优先显示，否则用轮换语录
+    let greet = "晚上好", sub = "今天也要保持专注，稳步向前。";
+    if (h < 6) { greet = "夜深了"; sub = "早点休息，身体是革命的本钱。"; }
+    else if (h < 9) { greet = "早上好"; sub = "新的一天，从一个计划开始。"; }
+    else if (h < 12) { greet = "上午好"; sub = "上午的专注时间最宝贵，冲！"; }
+    else if (h < 14) { greet = "中午好"; sub = "吃饱了才有力气学习，午休片刻。"; }
+    else if (h < 18) { greet = "下午好"; sub = "犯困就走两步，回来继续。"; }
+    $("#heroGreeting").textContent = `${greet}，${name}`;
     const profileSlogan = Store.getProfile().slogan;
-    $("#heroQuote").textContent = profileSlogan ? `"${profileSlogan}"` : quotes[new Date().getDate() % quotes.length];
+    $("#heroQuote").textContent = profileSlogan ? `"${profileSlogan}"` : sub;
+    // 日期 + 星期（跟随界面语言）
+    const lang = document.documentElement.dataset.lang || "zh";
+    const locale = lang === "en" ? "en-US" : lang === "zh-Hant" ? "zh-TW" : "zh-CN";
+    const heroDate = $("#heroDate");
+    if (heroDate) heroDate.textContent = new Date().toLocaleDateString(locale, { month: "long", day: "numeric", weekday: "long" });
 
     // 统计卡
     const tasks = Store.getAll("tasks");

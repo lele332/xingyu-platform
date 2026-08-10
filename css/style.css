@@ -684,25 +684,30 @@ input, textarea, select { caret-color: var(--stamp-blue); }
   background: var(--paper-card);
   border: 1px solid var(--rule);
   border-radius: var(--radius-card);
-  padding: 28px 32px;
+  padding: 30px 36px;
   margin-bottom: 22px;
-  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 22px;
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px;
   box-shadow: var(--shadow-paper);
 }
-.hero-text h2 {
-  font-family: var(--font); font-size: 26px; font-weight: 700; color: var(--ink);
-  letter-spacing: 0.005em; margin-bottom: 8px;
+.hero-date {
+  display: block;
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 1.6px;
+  color: var(--ink-3); text-transform: uppercase; margin-bottom: 10px;
 }
-.hero-text p { color: var(--ink-2); font-size: 13.5px; }
+.hero-text h2 {
+  font-family: var(--font); font-size: 32px; font-weight: 700; color: var(--ink);
+  letter-spacing: 0.005em; margin-bottom: 10px; line-height: 1.2;
+}
+.hero-text p { color: var(--ink-2); font-size: 14px; line-height: 1.6; }
 .hero-stats { display: flex; gap: 12px; flex-wrap: wrap; }
 .hstat {
   background: var(--paper);
-  padding: 14px 20px; border-radius: 6px; text-align: center; min-width: 96px;
+  padding: 14px 22px; border-radius: 8px; text-align: center; min-width: 100px;
   border: 1px solid var(--rule); transition: all var(--dur-fast) var(--ease-out);
 }
-.hstat:hover { border-color: var(--ink-3); }
+.hstat:hover { border-color: var(--ink-3); transform: translateY(-2px); box-shadow: var(--shadow-paper); }
 .hstat b {
-  display: block; font-family: var(--font); font-size: 24px; font-weight: 700;
+  display: block; font-family: var(--font); font-size: 26px; font-weight: 700;
   color: var(--ink); font-variant-numeric: tabular-nums; letter-spacing: -0.01em;
 }
 .hstat span {
@@ -1375,7 +1380,8 @@ h3 { letter-spacing: 0; }
   .view-container { padding: 20px 18px 40px; }
   .page-title { font-size: 19px; }
   .topbar { padding: 10px 18px; }
-  .hero-text h2 { font-size: 22px; }
+  .hero-text h2 { font-size: 26px; }
+  .hero-card { padding: 24px 22px; }
   .dash-grid { gap: 12px; }
 }
 @media (max-width: 560px) {
