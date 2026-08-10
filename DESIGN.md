@@ -137,6 +137,18 @@ Animations are orchestrated by **GSAP 3.12** (bundled locally at `assets/js/gsap
 - **Scroll reveal (ScrollTrigger)**: long lists (news items, note cards, literature rows, focus history) fade + rise as they enter the viewport (`start: top 94%`, `once: true`); triggers are killed on view switch.
 - All tweens use transforms + `autoAlpha`, `clearProps` on complete; `overwrite: "auto"` for interruption; `prefers-reduced-motion` collapses to instant.
 
+## Live Weather (实时天气)
+
+A dedicated **天气** view in the sidebar (工作台 group) showing real-time weather and a 7-day forecast for any Chinese city.
+
+- **Data source**: [Open-Meteo](https://open-meteo.com/) — free, no API key, CORS-friendly. Geocoding uses `geocoding-api.open-meteo.com/v1/search` (returns Chinese names); forecast uses `api.open-meteo.com/v1/forecast` (current + daily fields, timezone `Asia/Shanghai`).
+- **Features**: city search by name (Chinese or English), 12 built-in city chips (Beijing/Shanghai/Guangzhou/Shenzhen/Hangzhou/Chengdu/Wuhan/Xi'an/Nanjing/Chongqing/Changsha/Qingdao), refresh button, current temperature/feels/humidity/wind/pressure, sunrise/sunset, 7-day forecast with emoji + hi/lo.
+- **WMO weather codes** mapped to emoji + 三语 description (`zh`/`zh-Hant`/`en`) inside `js/weather.js`.
+- **Caching**: 10-minute local cache per city (`localStorage.zero_wx_<city>`) to avoid repeated requests; `Weather.refresh()` forces a refetch; `Weather.reRender()` re-paints with cached data after language switch.
+- **Persistence**: last selected city saved to `localStorage.zero_wx_city`; reopened to the same city next visit.
+- **Animations**: rendered with the same GSAP fade-up entrance via `Anim.quoteIn`; pill slider glides to the new sidebar item on view switch.
+- **Failure modes**: shows "天气数据获取失败" (i18n) on network error; "未找到该城市" on geocoding miss.
+
 ## Iconography
 
 Emoji remain only where the user types them (avatar picker, note content). The chrome is emoji-free: navigation is pure text; the only purpose-built icons are the QR line icon and the brand mark `○`. Functional glyphs kept: `☰` menu, `✕` close, `→` link, `✓` confirm, `✎` edit. The default user avatar is **no emoji** — it falls back to the nickname's first character; an emoji avatar only appears if the user picks one from the avatar picker.

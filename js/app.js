@@ -57,8 +57,8 @@ const App = (() => {
       if (view === "dashboard" && window.Anim) Anim.dashboardIntro(v);
       else window.Anim && Anim.viewEnter(v);
     }
-    const titles = { dashboard: t("title.dashboard"), courses: t("title.courses"), notes: t("title.notes"), focus: t("title.focus"), growth: t("title.growth"), lit: t("title.lit"), news: t("title.news"), ai: t("title.ai") };
-    const subs = { dashboard: t("sub.dashboard"), courses: t("sub.courses"), notes: t("sub.notes"), focus: t("sub.focus"), growth: t("sub.growth"), lit: t("sub.lit"), news: t("sub.news"), ai: t("sub.ai") };
+    const titles = { dashboard: t("title.dashboard"), courses: t("title.courses"), notes: t("title.notes"), focus: t("title.focus"), growth: t("title.growth"), lit: t("title.lit"), news: t("title.news"), ai: t("title.ai"), weather: t("title.weather") };
+    const subs = { dashboard: t("sub.dashboard"), courses: t("sub.courses"), notes: t("sub.notes"), focus: t("sub.focus"), growth: t("sub.growth"), lit: t("sub.lit"), news: t("sub.news"), ai: t("sub.ai"), weather: t("sub.weather") };
     $("#pageTitle").textContent = titles[view] || "";
     const sub = $("#pageSub");
     if (sub) sub.textContent = subs[view] || "";
@@ -81,6 +81,7 @@ const App = (() => {
     else if (currentView === "growth") renderGrowth();
     else if (currentView === "lit") renderLit();
     else if (currentView === "news") renderNews();
+    else if (currentView === "weather") { if (window.Weather) Weather.renderCities(); }
     else if (currentView === "ai") renderAIStatus();
   }
 
@@ -1461,12 +1462,13 @@ const App = (() => {
       "nav.news": "热点新闻",
       "nav.growth": "成长档案",
       "nav.ai": "AI 助手",
+      "nav.weather": "天气",
       "role": "个人工作台",
       "settings": "设置",
       "search.ph": "搜索笔记 / 任务 / 课程...",
       "title.dashboard": "仪表盘", "title.courses": "课程作业", "title.notes": "学习笔记库",
       "title.focus": "专注学习", "title.growth": "成长档案", "title.lit": "文献资料",
-      "title.news": "热点新闻", "title.ai": "AI 助手",
+      "title.news": "热点新闻", "title.ai": "AI 助手", "title.weather": "天气",
       "sub.dashboard": "学习进度一览，今天也要保持专注",
       "sub.courses": "课程、课表与作业任务管理",
       "sub.notes": "沉淀知识，构建你的笔记库",
@@ -1475,6 +1477,7 @@ const App = (() => {
       "sub.lit": "专业文献库与期刊导航",
       "sub.news": "每日国内外热点速递",
       "sub.ai": "你的智能学习伙伴",
+      "sub.weather": "全国城市实时天气与未来一周预报",
       "hero.todo": "待办任务", "hero.due": "今日到期", "hero.notes": "笔记", "hero.focusMin": "今日专注(分)", "hero.news": "今日热点", "hero.newsAll": "查看全部", "hero.refresh": "刷新", "hero.refreshed": "已刷新",
       "settings.title": "设置",
       "settings.theme": "界面主题", "settings.font": "界面字体", "settings.lang": "界面语言", "settings.bg": "界面背景", "bg.none": "无", "bg.guilinMist": "桂林·雾山", "bg.guilinAerial": "桂林·航拍", "bg.jiuzhaigou": "九寨沟", "bg.zhangjiajie": "张家界", "bg.hint": "以中国山河摄影作背景，文字始终清晰可读。",
@@ -1502,12 +1505,13 @@ const App = (() => {
       "nav.news": "熱點新聞",
       "nav.growth": "成長檔案",
       "nav.ai": "AI 助手",
+      "nav.weather": "天氣",
       "role": "個人工作台",
       "settings": "設定",
       "search.ph": "搜尋筆記 / 任務 / 課程...",
       "title.dashboard": "儀表盤", "title.courses": "課程作業", "title.notes": "學習筆記庫",
       "title.focus": "專注學習", "title.growth": "成長檔案", "title.lit": "文獻資料",
-      "title.news": "熱點新聞", "title.ai": "AI 助手",
+      "title.news": "熱點新聞", "title.ai": "AI 助手", "title.weather": "天氣",
       "sub.dashboard": "學習進度一覽，今天也要保持專注",
       "sub.courses": "課程、課表與作業任務管理",
       "sub.notes": "沉澱知識，構建你的筆記庫",
@@ -1516,6 +1520,7 @@ const App = (() => {
       "sub.lit": "專業文獻庫與期刊導航",
       "sub.news": "每日國內外熱點速遞",
       "sub.ai": "你的智能學習夥伴",
+      "sub.weather": "全國城市即時天氣與未來一週預報",
       "hero.todo": "待辦任務", "hero.due": "今日到期", "hero.notes": "筆記", "hero.focusMin": "今日專注(分)", "hero.news": "今日熱點", "hero.newsAll": "查看全部", "hero.refresh": "刷新", "hero.refreshed": "已刷新",
       "settings.title": "設定",
       "settings.theme": "界面主題", "settings.font": "界面字體", "settings.lang": "界面語言", "settings.bg": "界面背景", "bg.none": "無", "bg.guilinMist": "桂林·霧山", "bg.guilinAerial": "桂林·航拍", "bg.jiuzhaigou": "九寨溝", "bg.zhangjiajie": "張家界", "bg.hint": "以中國山河攝影作背景，文字始終清晰可讀。",
@@ -1543,12 +1548,13 @@ const App = (() => {
       "nav.news": "News",
       "nav.growth": "Profile",
       "nav.ai": "AI Assistant",
+      "nav.weather": "Weather",
       "role": "Personal workspace",
       "settings": "Settings",
       "search.ph": "Search notes / tasks / courses...",
       "title.dashboard": "Dashboard", "title.courses": "Courses", "title.notes": "Notes",
       "title.focus": "Focus", "title.growth": "Profile", "title.lit": "Library",
-      "title.news": "News", "title.ai": "AI Assistant",
+      "title.news": "News", "title.ai": "AI Assistant", "title.weather": "Weather",
       "sub.dashboard": "Your study at a glance — stay focused today",
       "sub.courses": "Courses, timetable & assignments",
       "sub.notes": "Build your knowledge base",
@@ -1557,6 +1563,7 @@ const App = (() => {
       "sub.lit": "References & journal navigation",
       "sub.news": "Daily headline digest",
       "sub.ai": "Your smart study partner",
+      "sub.weather": "Live weather for Chinese cities with a 7-day forecast",
       "hero.todo": "Open tasks", "hero.due": "Due today", "hero.notes": "Notes", "hero.focusMin": "Focus (min)", "hero.news": "Top News", "hero.newsAll": "View All", "hero.refresh": "Refresh", "hero.refreshed": "Updated",
       "settings.title": "Settings",
       "settings.theme": "Theme", "settings.font": "Font", "settings.lang": "Language", "settings.bg": "Background", "bg.none": "None", "bg.guilinMist": "Guilin Mist", "bg.guilinAerial": "Guilin Aerial", "bg.jiuzhaigou": "Jiuzhaigou", "bg.zhangjiajie": "Zhangjiajie", "bg.hint": "China landscape photography as backdrop; text stays readable.",
@@ -1604,6 +1611,8 @@ const App = (() => {
     localStorage.setItem("zero_lang", lang);
     $$("[data-lang-pick]").forEach(b => b.classList.toggle("active", b.dataset.langPick === lang));
     applyI18n();
+    // 天气视图按新语言重渲染（用缓存数据，不重新请求）
+    if (currentView === "weather" && window.Weather) Weather.reRender();
     // 重渲染依赖文案的界面
     if (typeof switchView === "function") { switchView(currentView); } else { renderCurrent(); }
   }
@@ -2380,6 +2389,8 @@ const App = (() => {
     window.Anim && Anim.sidebarIntro();
     window.Anim && Anim.initNav();
     window.Anim && Anim.initNavPill();
+    // 天气模块（实时天气，懒加载数据）
+    window.Weather && Weather.init();
     // 启动锁（设置了访问密码则锁定）
     applyLockPrefs();
     // 应用保存的昵称（仅当尚未设置个人昵称时）

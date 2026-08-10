@@ -67,6 +67,9 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <button class="nav-item" data-view="focus">
           <span class="nav-label" data-i18n="nav.focus">专注学习</span>
         </button>
+        <button class="nav-item" data-view="weather">
+          <span class="nav-label" data-i18n="nav.weather">天气</span>
+        </button>
       </div>
       <div class="nav-group">
         <div class="nav-group-label" data-i18n="nav.group.study">学习资料</div>
@@ -388,6 +391,20 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
             </div>
           </div>
         </div>
+      </section>
+
+      <!-- 天气 -->
+      <section class="view" id="view-weather">
+        <div class="view-toolbar">
+          <div class="weather-search">
+            <input type="text" id="weatherCityInput" placeholder="" data-i18n-ph="weather.searchPh">
+            <button class="btn btn-primary" id="btnWeatherSearch" data-i18n="weather.search">搜索</button>
+            <button class="btn btn-ghost" id="btnWeatherRefresh" data-i18n="weather.refresh">刷新</button>
+          </div>
+          <div class="weather-cities" id="weatherCities"></div>
+        </div>
+        <div class="weather-loading" id="weatherLoading" data-i18n="weather.loading">正在获取实时天气…</div>
+        <div class="weather-content" id="weatherContent"></div>
       </section>
 
       <!-- 热点新闻 -->
@@ -787,7 +804,20 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 <script src="js/store.js?v=20260810"></script>
 <script src="js/charts.js?v=20260810"></script>
 <script src="js/ai.js?v=20260810"></script>
+<script src="js/weather.js?v=20260810"></script>
 <script src="js/app.js?v=20260810"></script>
+
+
+
+
+
+
+
+
+
+
+
+
 
 </body>
 </html>
