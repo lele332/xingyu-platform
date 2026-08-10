@@ -6,7 +6,7 @@ const Store = (() => {
 
   const defaults = () => {
     const d = {
-      profile: { name: "同学", avatar: "🚀", school: "", major: "", grade: "", slogan: "", goal: "", email: "" },
+      profile: { name: "同学", avatar: "", school: "", major: "", grade: "", slogan: "", goal: "", email: "" },
       settings: { baseUrl: "https://api.deepseek.com/v1", apiKey: "", model: "deepseek-chat", nickname: "" },
       courses: [],       // {id, name, teacher, day(1-7), start, end, location, color}
       tasks: [],         // {id, title, courseId, due(ISO), priority(high/mid/low), status(todo/doing/done), estimate}

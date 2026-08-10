@@ -105,10 +105,23 @@ const App = (() => {
     const pomos = Store.getAll("pomodoros").filter(p => p.startAt && p.startAt.slice(0, 10) === todayISO());
     const pomoMin = pomos.reduce((s, p) => s + (p.minutes || 0), 0);
     $("#heroStats").innerHTML = `
-      <div class="hstat"><b>${todos.length}</b><span>待办任务</span></div>
-      <div class="hstat"><b>${dueToday.length}</b><span>今日到期</span></div>
-      <div class="hstat"><b>${notes.length}</b><span>笔记</span></div>
-      <div class="hstat"><b>${pomoMin}</b><span>今日专注(分)</span></div>`;
+      <div class="hstat"><b data-count="${todos.length}">0</b><span>待办任务</span></div>
+      <div class="hstat"><b data-count="${dueToday.length}">0</b><span>今日到期</span></div>
+      <div class="hstat"><b data-count="${notes.length}">0</b><span>笔记</span></div>
+      <div class="hstat"><b data-count="${pomoMin}">0</b><span>今日专注(分)</span></div>`;
+    // 数字滚动动画（easeOutCubic）
+    $$("#heroStats [data-count]").forEach(el => {
+      const target = +el.dataset.count;
+      const start = performance.now();
+      const dur = 650;
+      const tick = (now) => {
+        const t = Math.min((now - start) / dur, 1);
+        const eased = 1 - Math.pow(1 - t, 3);
+        el.textContent = Math.round(target * eased);
+        if (t < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    });
 
     // 倒计时
     const todoWithDue = todos.filter(t => t.due).sort((a, b) => new Date(a.due) - new Date(b.due)).slice(0, 5);
@@ -619,8 +632,9 @@ const App = (() => {
     const p = Store.getProfile();
     $("#userName").textContent = p.name || "同学";
     const av = p.avatar || "";
-    $("#userAvatar").textContent = av;
-    $("#userAvatar").setAttribute("data-emoji", "1");
+    $("#userAvatar").textContent = av || (p.name || "同学").charAt(0);
+    if (av) $("#userAvatar").setAttribute("data-emoji", "1");
+    else $("#userAvatar").removeAttribute("data-emoji");
     // 个人主页卡片
     const infoItems = [
       p.school && { k: "学校", v: p.school },
@@ -630,7 +644,7 @@ const App = (() => {
     const hasEmail = p.email;
     $("#profileBox").innerHTML = `
       <div class="profile-hero">
-        <div class="profile-avatar-big">${esc(p.avatar || "")}</div>
+        <div class="profile-avatar-big">${esc(p.avatar || (p.name || "同学").charAt(0))}</div>
         <div class="profile-hero-info">
           <div class="profile-name">${esc(p.name || "同学")}</div>
           <div class="profile-slogan">${esc(p.slogan || "还没有个性签名～点击编辑写一句吧 ")}</div>
@@ -1992,7 +2006,7 @@ const App = (() => {
         <label class="field"><span>邮箱（自己用的，选填）</span><input id="f-pf-email" value="${esc(p.email || "")}" placeholder="选填"></label>
       </div>`;
     // 头像选择
-    let pickedAvatar = p.avatar || "🚀";
+    let pickedAvatar = p.avatar || "";
     $$("#f-pf-avatar .avatar-opt").forEach(a => a.onclick = () => {
       $$("#f-pf-avatar .avatar-opt").forEach(x => x.classList.remove("picked"));
       a.classList.add("picked");
@@ -2026,6 +2040,8 @@ const App = (() => {
     const nick = Store.getSettings().nickname;
     const p = Store.getProfile();
     if (nick && (!p.name || p.name === "同学")) Store.setProfile({ name: nick });
+    // 迁移：清除旧默认火箭头像（新版默认无 emoji 头像，用昵称首字）
+    if (p.avatar === "🚀") { Store.setProfile({ ...p, avatar: "" }); }
     renderProfile();
     renderDashboard();
     // 让 AI 页面初始化状态

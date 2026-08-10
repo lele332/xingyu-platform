@@ -85,18 +85,23 @@ All chrome, charts, and inline colors reference CSS variables (`var(--ink)`, `va
 - **Reveal**: `viewIn` opacity + 8px translateY over 320ms; modal sheet-in 340ms.
 - **Press**: scale 0.97–0.99, 80ms snap.
 - **No orchestrated page-load sequence. No decorative loops.**
+- **Reveal**: `viewIn` opacity + 16px translateY + scale(0.985) + 3px blur over 480ms; modal sheet-in 340ms.
+- **Press**: scale 0.97–0.99, 80ms snap.
+- **Nav active dot**: the trailing `·` indicator pops in (scale 0.2 → 1.35 → 1, 420ms ease-out).
+- **Count-up**: hero stat numbers roll from 0 (easeOutCubic, 650ms).
+- **Theme transition**: major surfaces blend background / border / color over 400ms when switching themes.
 - **prefers-reduced-motion**: every animation collapses to 1ms.
 
 ## Iconography
 
-Emoji remain only where the user types them (avatar picker, note content). The chrome is emoji-free: navigation is pure text; the only purpose-built icons are the QR line icon and the brand mark `○`. Functional glyphs kept: `☰` menu, `✕` close, `→` link, `✓` confirm, `✎` edit.
+Emoji remain only where the user types them (avatar picker, note content). The chrome is emoji-free: navigation is pure text; the only purpose-built icons are the QR line icon and the brand mark `○`. Functional glyphs kept: `☰` menu, `✕` close, `→` link, `✓` confirm, `✎` edit. The default user avatar is **no emoji** — it falls back to the nickname's first character; an emoji avatar only appears if the user picks one from the avatar picker.
 
 ## Composition
 
 - **Top bar**: brand (left) · search (center-left) · clock (right).
-- **Sidebar**: 248px, three text groups (工作台 / 学习资料 / 自我成长), active item lifts to white card with black rail.
+- **Sidebar**: 248px, three text groups (工作台 / 学习资料 / 自我成长), active item lifts to a white card with a trailing dot indicator (no left rail).
 - **Main area**: 28–32px gutters; cards in 3-column dash-grid (2-col ≤1200px, 1-col ≤900px); generous white space.
-- **Hero**: greeting + three gray stat tiles on a white card, no decorations.
+- **Hero**: greeting + four gray stat tiles (numbers count up on render), no decorations.
 
 ## Responsive
 
