@@ -1554,3 +1554,29 @@ body { transition: background-color 0.4s var(--ease-out), color 0.4s var(--ease-
   .sidebar { background-color: var(--drawer); }
   .topbar, .modal { background-color: var(--paper-card); }
 }
+
+/* ---------- 顶部栏固定深黑（不随主题变色） ---------- */
+.topbar {
+  background-color: rgba(10, 10, 10, 0.72);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+.topbar .page-title { color: #f2f2f2; }
+.topbar .page-sub { color: #9a9a9a; }
+.topbar .clock-time { color: #f2f2f2; }
+.topbar .clock-date { color: #9a9a9a; }
+.topbar .clock-fest { color: #b5b5b5; }
+.topbar .fest-today { color: #ffffff; background: rgba(255, 255, 255, 0.14); }
+.topbar .fest-lunar { color: #9a9a9a; }
+.topbar .fest-next { color: #c9c9c9; }
+.topbar .search-box {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+.topbar .search-box input { color: #eee; }
+.topbar .search-box input::placeholder { color: #7c7c7c; font-style: italic; }
+.topbar .search-ico { color: #9a9a9a; }
+.topbar .icon-btn { color: #c0c0c0; }
+.topbar .icon-btn:hover { color: #ffffff; background: rgba(255, 255, 255, 0.08); }
+@media (prefers-reduced-transparency: reduce) {
+  .topbar { background-color: #0a0a0a; }
+}
