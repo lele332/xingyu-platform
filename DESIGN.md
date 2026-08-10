@@ -120,6 +120,18 @@ Four photos are bundled locally in `assets/` (Pexels license, free to use). The 
 - **Theme transition**: major surfaces blend background / border / color over 400ms when switching themes.
 - **prefers-reduced-motion**: every animation collapses to 1ms.
 
+### GSAP animation layer
+
+Animations are orchestrated by **GSAP 3.12** (bundled locally at `assets/js/gsap.min.js` + `ScrollTrigger.min.js`) through a thin wrapper `js/anim.js` (`window.Anim`). If GSAP fails to load, every call falls back to the original CSS animation.
+
+- **View enter**: fade + 24px rise + scale(0.985), `power3.out` 550ms; the dashboard grid cards then stagger in (+18px, 70ms apart).
+- **Count-up**: hero stats roll via `gsap.to` on a state object with `snap`, `power2.out` 900ms.
+- **Modals / lock screen**: mask fades while the sheet scales up with `back.out`; close reverses, removes `.show` on complete.
+- **Nav press**: elastic `back.out(2.2)` 400ms feedback on the active item.
+- **Quote swap**: text + category fade/rise 400ms.
+- **Scroll reveal (ScrollTrigger)**: long lists (news items, note cards, literature rows, focus history) fade + rise as they enter the viewport (`start: top 94%`, `once: true`); triggers are killed on view switch.
+- All tweens use transforms + `autoAlpha`, `clearProps` on complete; `overwrite: "auto"` for interruption; `prefers-reduced-motion` collapses to instant.
+
 ## Iconography
 
 Emoji remain only where the user types them (avatar picker, note content). The chrome is emoji-free: navigation is pure text; the only purpose-built icons are the QR line icon and the brand mark `○`. Functional glyphs kept: `☰` menu, `✕` close, `→` link, `✓` confirm, `✎` edit. The default user avatar is **no emoji** — it falls back to the nickname's first character; an emoji avatar only appears if the user picks one from the avatar picker.

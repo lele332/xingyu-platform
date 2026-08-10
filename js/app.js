@@ -53,11 +53,9 @@ const App = (() => {
     $$(".nav-item").forEach(n => n.classList.toggle("active", n.dataset.view === view));
     const v = $("#view-" + view);
     if (v) {
-      // 重新触发进入动画（连续切换时从当前状态开始，可打断）
-      v.classList.remove("view-in");
-      void v.offsetWidth;
-      v.classList.add("view-in");
       v.classList.add("active");
+      // GSAP 视图入场动画（淡入 + 上移 + 缩放；无 GSAP 时回退 CSS）
+      window.Anim && Anim.viewEnter(v);
     }
     const titles = { dashboard: t("title.dashboard"), courses: t("title.courses"), notes: t("title.notes"), focus: t("title.focus"), growth: t("title.growth"), lit: t("title.lit"), news: t("title.news"), ai: t("title.ai") };
     const subs = { dashboard: t("sub.dashboard"), courses: t("sub.courses"), notes: t("sub.notes"), focus: t("sub.focus"), growth: t("sub.growth"), lit: t("sub.lit"), news: t("sub.news"), ai: t("sub.ai") };
@@ -66,7 +64,11 @@ const App = (() => {
     if (sub) sub.textContent = subs[view] || "";
     $("#view-container") && $("#view-container").scrollTo(0, 0);
     document.querySelector(".view-container").scrollTop = 0;
+    // 清理旧视图的滚动 reveal（切走后不再保留 trigger）
+    if (_revealCleanup) { _revealCleanup(); _revealCleanup = null; }
     renderCurrent();
+    // 视图从 display:none 变为 block 后重算 ScrollTrigger 位置
+    window.Anim && Anim.refreshScroll();
   }
 
   function renderCurrent() {
@@ -78,6 +80,13 @@ const App = (() => {
     else if (currentView === "lit") renderLit();
     else if (currentView === "news") renderNews();
     else if (currentView === "ai") renderAIStatus();
+  }
+
+  /* ---------- 长列表滚动分批浮入（ScrollTrigger） ---------- */
+  let _revealCleanup = null;
+  function revealCards(container, selector) {
+    if (_revealCleanup) { _revealCleanup(); _revealCleanup = null; }
+    if (window.Anim) _revealCleanup = Anim.scrollReveal(container, selector);
   }
 
   /* ============================================================
@@ -96,6 +105,8 @@ const App = (() => {
     box.style.display = "";
     textEl.textContent = q.text;
     if (catEl) catEl.textContent = t("quote.cat." + q.cat);
+    // 换句淡入
+    if (window.Anim) { Anim.quoteIn(textEl); if (catEl) Anim.quoteIn(catEl); }
   }
 
   /* ============================================================
@@ -173,18 +184,9 @@ const App = (() => {
       <div class="hstat"><b data-count="${dueToday.length}">0</b><span>${t("hero.due")}</span></div>
       <div class="hstat"><b data-count="${notes.length}">0</b><span>${t("hero.notes")}</span></div>
       <div class="hstat"><b data-count="${pomoMin}">0</b><span>${t("hero.focusMin")}</span></div>`;
-    // 数字滚动动画（easeOutCubic）
+    // 数字滚动动画（GSAP 缓动；无 GSAP 时直接显示目标值）
     $$("#heroStats [data-count]").forEach(el => {
-      const target = +el.dataset.count;
-      const start = performance.now();
-      const dur = 650;
-      const tick = (now) => {
-        const t = Math.min((now - start) / dur, 1);
-        const eased = 1 - Math.pow(1 - t, 3);
-        el.textContent = Math.round(target * eased);
-        if (t < 1) requestAnimationFrame(tick);
-      };
-      requestAnimationFrame(tick);
+      window.Anim && Anim.countUp(el, +el.dataset.count);
     });
 
     // 倒计时
@@ -495,6 +497,8 @@ const App = (() => {
     $$(".note-card").forEach(card => {
       card.onclick = () => openNote(card.dataset.noteId);
     });
+    // 滚动分批浮入
+    revealCards($("#view-notes"), ".note-card");
   }
 
   function renderCardGrid() {
@@ -612,6 +616,8 @@ const App = (() => {
         <span class="history-meta">${fmtDate(p.startAt)} ${time}</span>
       </div>`;
     }).join("");
+    // 滚动分批浮入
+    revealCards($("#view-focus"), ".history-item");
   }
 
   function startPomo() {
@@ -1008,6 +1014,8 @@ const App = (() => {
         navigator.clipboard.writeText(link).then(() => toast("链接已复制", "ok")).catch(() => toast("复制失败", "err"));
       };
     });
+    // 滚动分批浮入
+    revealCards($("#view-news"), "#newsList .news-item");
   }
 
   /* ============================================================
@@ -1109,6 +1117,8 @@ const App = (() => {
     box.querySelectorAll(".lit-doi").forEach(s => s.onclick = () => {
       navigator.clipboard.writeText(s.dataset.doi).then(() => toast("DOI 已复制", "ok"));
     });
+    // 滚动分批浮入
+    revealCards($("#view-lit"), ".lit-item");
   }
 
   function openLitForm(editId) {
@@ -1242,9 +1252,10 @@ const App = (() => {
     const m = $("#" + id);
     m.classList.remove("closing");
     m.classList.add("show");
-    // 重新触发进入动画（连续开关时不丢失）
     const sheet = m.querySelector(".modal");
-    if (sheet) {
+    // GSAP 弹窗动画；无 GSAP 时回退 CSS
+    if (window.Anim) Anim.sheetIn(m, sheet);
+    else if (sheet) {
       sheet.classList.remove("sheet-in");
       void sheet.offsetWidth;
       sheet.classList.add("sheet-in");
@@ -1254,11 +1265,20 @@ const App = (() => {
     const m = $("#" + id);
     if (!m.classList.contains("show")) return;
     m.classList.add("closing");
-    setTimeout(() => {
-      m.classList.remove("show", "closing");
-      const sheet = m.querySelector(".modal");
-      if (sheet) sheet.classList.remove("sheet-in");
-    }, 220);
+    const sheet = m.querySelector(".modal");
+    if (window.Anim) {
+      Anim.sheetOut(m, sheet, () => {
+        if (m.classList.contains("closing")) {
+          m.classList.remove("show", "closing");
+          if (sheet) sheet.classList.remove("sheet-in");
+        }
+      });
+    } else {
+      setTimeout(() => {
+        m.classList.remove("show", "closing");
+        if (sheet) sheet.classList.remove("sheet-in");
+      }, 220);
+    }
   }
 
   /* ============================================================
@@ -1290,7 +1310,11 @@ const App = (() => {
   }
   function lockNow() {
     const mask = $("#lockMask");
-    if (mask) { mask.classList.add("show"); mask.style.display = "flex"; }
+    if (mask) {
+      mask.classList.add("show");
+      mask.style.display = "flex";
+      if (window.Anim) Anim.lockIn(mask);
+    }
     const pinInput = $("#lockPin");
     if (pinInput) { pinInput.value = ""; pinInput.focus(); }
     const hint = $("#lockHint");
@@ -1302,8 +1326,15 @@ const App = (() => {
     const hint = $("#lockHint");
     if (pin && val === pin) {
       const mask = $("#lockMask");
-      mask.classList.remove("show");
-      mask.style.display = "none";
+      if (window.Anim) {
+        Anim.lockOut(mask, () => {
+          mask.classList.remove("show");
+          mask.style.display = "none";
+        });
+      } else {
+        mask.classList.remove("show");
+        mask.style.display = "none";
+      }
     } else if (hint) {
       hint.textContent = t("lock.wrong");
     }
@@ -2004,7 +2035,10 @@ const App = (() => {
      ============================================================ */
   function bindEvents() {
     // 导航
-    $$(".nav-item").forEach(n => n.onclick = () => switchView(n.dataset.view));
+    $$(".nav-item").forEach(n => n.onclick = () => {
+      if (window.Anim) Anim.navPulse(n);
+      switchView(n.dataset.view);
+    });
     $$("[data-goto]").forEach(b => b.onclick = () => switchView(b.dataset.goto));
     $$("[data-close]").forEach(b => b.onclick = () => closeModal(b.dataset.close));
     $(".modal-mask") && $$(".modal-mask").forEach(m => m.onclick = (e) => { if (e.target === m) m.classList.remove("show"); });
