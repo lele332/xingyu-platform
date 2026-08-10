@@ -11,7 +11,7 @@ const Charts = (() => {
     const total = segments.reduce((s, x) => s + x.value, 0) || 1;
     let angle = -90;
     let svg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">`;
-    svg += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(26,24,20,0.10)" stroke-width="${thickness}"/>`;
+    svg += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(17,17,17,0.10)" stroke-width="${thickness}"/>`;
     segments.forEach(seg => {
       if (seg.value <= 0) return;
       const frac = seg.value / total;
@@ -24,7 +24,7 @@ const Charts = (() => {
       svg += `<path d="M ${x1} ${y1} A ${r} ${r} 0 ${large} 1 ${x2} ${y2}" fill="none" stroke="${seg.color}" stroke-width="${thickness}" stroke-linecap="butt"/>`;
       angle = a2;
     });
-    svg += `<text x="${cx}" y="${cy - 4}" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1814" font-family="Georgia, serif">${centerLabel}</text>`;
+    svg += `<text x="${cx}" y="${cy - 4}" text-anchor="middle" font-size="20" font-weight="700" fill="#111111" font-family="Georgia, serif">${centerLabel}</text>`;
     if (centerSub) svg += `<text x="${cx}" y="${cy + 18}" text-anchor="middle" font-size="11" fill="rgba(87,79,68,0.78)" font-family="-apple-system, sans-serif">${centerSub}</text>`;
     svg += `</svg>`;
     container.innerHTML = `<div style="display:flex;justify-content:center;align-items:center;">${svg}</div>`;
@@ -32,7 +32,7 @@ const Charts = (() => {
 
   /* ---------- 柱状图 ---------- */
   function bars(container, opts) {
-    const { labels, values, height = 180, color = "#2c4870", unit = "" } = opts;
+    const { labels, values, height = 180, color = "#111111", unit = "" } = opts;
     const max = Math.max(...values, 1);
     const pad = { t: 20, r: 8, b: 26, l: 34 };
     const w = 560, h = height;
@@ -68,7 +68,7 @@ const Charts = (() => {
 
   /* ---------- 折线图 ---------- */
   function line(container, opts) {
-    const { labels, values, height = 200, color = "#2c4870" } = opts;
+    const { labels, values, height = 200, color = "#111111" } = opts;
     const max = Math.max(...values, 1);
     const min = Math.min(...values, 0);
     const range = max - min || 1;
@@ -103,7 +103,7 @@ const Charts = (() => {
     svg += `<path d="${path}" fill="none" stroke="${color}" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>`;
     values.forEach((v, i) => {
       const [x, y] = pt(i, v);
-      svg += `<circle cx="${x}" cy="${y}" r="3.5" fill="${color}" stroke="#f4f1ea" stroke-width="2"/>`;
+      svg += `<circle cx="${x}" cy="${y}" r="3.5" fill="${color}" stroke="#fafafa" stroke-width="2"/>`;
       svg += `<text x="${x}" y="${y - 10}" text-anchor="middle" font-size="10" fill="rgba(87,79,68,0.78)">${v}</text>`;
       svg += `<text x="${x}" y="${h - 8}" text-anchor="middle" font-size="10" fill="rgba(140,126,106,0.78)">${labels[i]}</text>`;
     });

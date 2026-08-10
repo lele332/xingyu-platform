@@ -112,7 +112,7 @@ ${notesText}`;
 
   function localPlan() {
     const sorted = localPriority();
-    const lines = ["📋 本地规则生成的今日学习计划（未配置 AI 模型，逻辑较简单）：", ""];
+    const lines = ["本地规则生成的今日学习计划（未配置 AI 模型，逻辑较简单）：", ""];
     let time = 9 * 60; // 从 9:00 开始，单位分钟
     sorted.slice(0, 4).forEach((t, i) => {
       const mins = Math.min(t.estimate || 60, 90);
@@ -127,32 +127,32 @@ ${notesText}`;
       lines.push(`${fmt(time)} - ${fmt(end)}  ${t.title}`);
       time = end + 30; // 间隔30分钟
     });
-    lines.push("", "💡 提示：在「设置」中配置 AI 模型后，可获得更智能的学习规划。");
+    lines.push("", "提示：在「设置」中配置 AI 模型后，可获得更智能的学习规划。");
     return lines.join("\n");
   }
 
   function localCards() {
     const notes = Store.getAll("notes").slice(0, 3);
     if (!notes.length) return "知识库中还没有笔记，先去「学习笔记库」添加一些笔记吧～";
-    const out = ["🧠 基于最近笔记自动提取的复习要点：", ""];
+    const out = ["基于最近笔记自动提取的复习要点：", ""];
     notes.forEach((n, i) => {
       const firstLine = n.content.split("\n").find(l => l.trim() && !l.startsWith("#")) || n.content;
       out.push(`${i + 1}. 《${n.title}》：${firstLine.trim().slice(0, 60)}`);
     });
-    out.push("", "💡 提示：配置 AI 模型后，可基于笔记生成规范的知识卡片（问题/答案）。");
+    out.push("", "提示：配置 AI 模型后，可基于笔记生成规范的知识卡片（问题/答案）。");
     return out.join("\n");
   }
 
   function localOrganize(text) {
     if (!text || !text.trim()) return "请先输入需要整理的笔记内容（可直接粘贴在聊天框）。";
     const lines = text.split("\n").filter(l => l.trim());
-    const out = ["📖 整理后的笔记结构：", ""];
+    const out = ["整理后的笔记结构：", ""];
     let idx = 0;
     lines.forEach(l => {
       l = l.trim().replace(/^[-•*]\s*/, "");
       if (l.length > 0) out.push(`  ${l}`);
     });
-    out.push("", "💡 提示：配置 AI 模型后，AI 会进行语义级整理与归纳。");
+    out.push("", "提示：配置 AI 模型后，AI 会进行语义级整理与归纳。");
     return out.join("\n");
   }
 
@@ -167,12 +167,12 @@ ${notesText}`;
         else if (skill === "organize") prompt = buildOrganizePrompt(rawText || "请把下面这段整理成笔记，如果我没有提供内容请提示我。");
 
         const result = await chat([
-          { role: "system", content: "你是「索引·个人学习索引」平台内置的 AI 助手，回答简洁、实用、结构化。使用中文。" },
+          { role: "system", content: "你是「零 · 个人学习工作台」平台内置的 AI 助手，回答简洁、实用、结构化。使用中文。" },
           { role: "user", content: prompt }
         ]);
         return { source: "ai", text: result };
       } catch (e) {
-        return { source: "local", text: `⚠️ AI 调用失败（${e.message}），已切换为本地规则：\n\n` + fallback(skill, rawText) };
+        return { source: "local", text: `AI 调用失败（${e.message}），已切换为本地规则：\n\n` + fallback(skill, rawText) };
       }
     }
     return { source: "local", text: fallback(skill, rawText) };
@@ -183,7 +183,7 @@ ${notesText}`;
     if (skill === "priority") {
       const sorted = localPriority();
       if (!sorted.length) return "当前没有待办任务，先去「课程作业」添加一些吧～";
-      const lines = ["🚦 智能排序结果（本地规则：DDL 越近 + 优先级越高越靠前）：", ""];
+      const lines = ["智能排序结果（本地规则：DDL 越近 + 优先级越高越靠前）：", ""];
       sorted.forEach((t, i) => {
         const days = t.due ? Math.max(0, Math.ceil((new Date(t.due) - Date.now()) / 86400000)) : "-";
         lines.push(`${i + 1}. [${t.priority}] ${t.title}（${t.status === "doing" ? "进行中" : "待完成"}，剩 ${days} 天）`);
@@ -202,7 +202,7 @@ ${notesText}`;
       const ctx = `当前待办：${tasks.length ? tasks.slice(0, 5).map(t => t.title).join("、") : "无"}。`;
       try {
         return await chat([
-          { role: "system", content: "你是「索引·个人学习索引」的助手，帮助大学生管理学业与生活。回答简洁、实用、用中文。" },
+          { role: "system", content: "你是「零 · 个人学习工作台」的助手，帮助大学生管理学业与生活。回答简洁、实用、用中文。" },
           { role: "user", content: ctx + "\n\n" + freeText }
         ]);
       } catch (e) {
@@ -215,7 +215,7 @@ ${notesText}`;
     if (t.includes("优先")) return fallback("priority");
     if (t.includes("卡片")) return localCards();
     if (t.includes("笔记")) return localOrganize(freeText.replace(/整理|笔记/g, ""));
-    return "🤖 我还没有配置 AI 模型，只能提供基础服务。\n请在「设置」中填写 OpenAI 兼容接口的 API Key（支持 DeepSeek / Kimi / OpenAI 等），之后我就能全面回答你的问题啦！\n\n或者试试快捷技能：/plan（学习规划）、/priority（优先级）、/cards（知识卡片）、/organize（笔记整理）。";
+    return "我还没有配置 AI 模型，只能提供基础服务。\n请在「设置」中填写 OpenAI 兼容接口的 API Key（支持 DeepSeek / Kimi / OpenAI 等），之后我就能全面回答你的问题啦！\n\n或者试试快捷技能：/plan（学习规划）、/priority（优先级）、/cards（知识卡片）、/organize（笔记整理）。";
   }
 
   /* ============================================================

@@ -91,7 +91,7 @@ const App = (() => {
     if (h < 6) greet = "夜深了";
     else if (h < 12) greet = "早上好";
     else if (h < 18) greet = "下午好";
-    $("#heroGreeting").textContent = `${greet}，${name} 👋`;
+    $("#heroGreeting").textContent = `${greet}，${name} `;
     const quotes = ["今天也要保持专注，稳步向前。", "自律给我自由，坚持就有回响。", "把大目标拆成小任务，每天前进一点点。", "读书是最好的自我投资。", "不积跬步，无以至千里。"];
     // 用户设置了个性签名就优先显示，否则用轮换语录
     const profileSlogan = Store.getProfile().slogan;
@@ -114,7 +114,7 @@ const App = (() => {
     const todoWithDue = todos.filter(t => t.due).sort((a, b) => new Date(a.due) - new Date(b.due)).slice(0, 5);
     const cdBox = $("#countdownList");
     if (!todoWithDue.length) {
-      cdBox.innerHTML = `<div class="empty-state"><div class="big">🎉</div><p>暂无进行中的倒计时，去添加任务吧</p></div>`;
+      cdBox.innerHTML = `<div class="empty-state"><p>暂无进行中的倒计时，去添加任务吧</p></div>`;
     } else {
       cdBox.innerHTML = todoWithDue.map(t => {
         const days = daysUntil(t.due);
@@ -132,15 +132,15 @@ const App = (() => {
     const total = tasks.length;
     Charts.donut($("#taskStatsChart"), {
       segments: [
-        { value: done, color: "#3b7a4f" },
-        { value: total - done, color: "rgba(26,24,20,0.10)" }
+        { value: done, color: "#333333" },
+        { value: total - done, color: "rgba(17,17,17,0.10)" }
       ],
       size: 170, thickness: 22,
       centerLabel: total ? Math.round(done / total * 100) + "%" : "0%",
       centerSub: "完成率"
     });
     $("#taskStatsLegend").innerHTML = `
-      <span><span class="legend-dot" style="background:#3b7a4f"></span>已完成 ${done}</span>
+      <span><span class="legend-dot" style="background:#333333"></span>已完成 ${done}</span>
       <span><span class="legend-dot" style="background:rgba(26,24,20,0.18)"></span>未完成 ${total - done}</span>`;
 
     // 专注趋势
@@ -150,11 +150,11 @@ const App = (() => {
     const todayTasks = todos.filter(t => daysUntil(t.due) === 0).slice(0, 6);
     const ttBox = $("#todayTasks");
     if (!todayTasks.length) {
-      ttBox.innerHTML = `<div class="empty-state"><div class="big">🌤</div><p>今天没有到期任务，轻松的一天</p></div>`;
+      ttBox.innerHTML = `<div class="empty-state"><p>今天没有到期任务，轻松的一天</p></div>`;
     } else {
       ttBox.innerHTML = todayTasks.map(t => `
         <div class="todo-item">
-          <span class="todo-dot" style="background:${t.priority === "high" ? "#b8341e" : t.priority === "mid" ? "#6e5a3a" : "#8c7e6a"}"></span>
+          <span class="todo-dot" style="background:${t.priority === "high" ? "#111111" : t.priority === "mid" ? "#555555" : "#8a8a8a"}"></span>
           <span class="todo-pri-${t.priority}">${esc(t.title)}</span>
           <span class="todo-date">${fmtDate(t.due)}</span>
         </div>`).join("");
@@ -164,7 +164,7 @@ const App = (() => {
     const recentNotes = notes.slice().sort((a, b) => (b.updatedAt || "").localeCompare(a.updatedAt || "")).slice(0, 5);
     const rnBox = $("#recentNotes");
     if (!recentNotes.length) {
-      rnBox.innerHTML = `<div class="empty-state"><div class="big">📝</div><p>还没有笔记，去记录第一条吧</p></div>`;
+      rnBox.innerHTML = `<div class="empty-state"><p>还没有笔记，去记录第一条吧</p></div>`;
     } else {
       rnBox.innerHTML = recentNotes.map(n => `
         <div class="note-mini" data-note-id="${n.id}" style="cursor:pointer">
@@ -191,7 +191,7 @@ const App = (() => {
     if (values.every(v => v === 0)) {
       container.innerHTML = `<div class="empty-state"><div class="big">⏱</div><p>最近没有专注记录，去「专注学习」开启第一个番茄钟吧</p></div>`;
     } else {
-      Charts.bars(container, { labels, values, height: 200, unit: "分", color: "#2c4870" });
+      Charts.bars(container, { labels, values, height: 200, unit: "分", color: "#111111" });
     }
   }
 
@@ -230,7 +230,7 @@ const App = (() => {
     const courses = Store.getAll("courses");
     const box = $("#courseList");
     if (!courses.length) {
-      box.innerHTML = `<div class="empty-state"><div class="big">📚</div><p>还没有课程，点击右上角「+ 添加课程」</p></div>`;
+      box.innerHTML = `<div class="empty-state"><p>还没有课程，点击右上角「+ 添加课程」</p></div>`;
       return;
     }
     box.innerHTML = courses.map(c => `
@@ -260,7 +260,7 @@ const App = (() => {
     });
     const box = $("#taskList");
     if (!sorted.length) {
-      box.innerHTML = `<div class="empty-state"><div class="big">📋</div><p>没有符合条件的任务</p></div>`;
+      box.innerHTML = `<div class="empty-state"><p>没有符合条件的任务</p></div>`;
       return;
     }
     box.innerHTML = sorted.map(t => {
@@ -304,7 +304,7 @@ const App = (() => {
   /* ---------- 课程表单 ---------- */
   function openCourseForm(id) {
     const c = id ? Store.getAll("courses").find(x => x.id === id) : null;
-    const colors = ["#2c4870", "#1f3656", "#6b4f6b", "#6e5a3a", "#3b7a4f", "#b8341e", "#8c6d3f", "#5b574f"];
+    const colors = ["#111111", "#000000", "#444444", "#555555", "#333333", "#111111", "#666666", "#888888"];
     const colorOptions = colors.map(cl => `<span class="color-dot" data-c="${cl}" style="background:${cl}"></span>`).join("");
     $("#formTitle").textContent = id ? "编辑课程" : "添加课程";
     $("#formBody").innerHTML = `
@@ -322,7 +322,7 @@ const App = (() => {
         <label class="field"><span>地点</span><input id="f-c-loc" value="${esc(c?.location || "")}" placeholder="如：教学楼A-301"></label>
         <label class="field"><span>颜色</span><div class="color-picker" id="f-c-colors">${colorOptions}</div></label>
       </div>`;
-    let picked = c?.color || "#2c4870";
+    let picked = c?.color || "#111111";
     $$("#f-c-colors .color-dot").forEach(d => {
       if (d.dataset.c === picked) d.classList.add("picked");
       d.onclick = () => {
@@ -402,7 +402,7 @@ const App = (() => {
     const notes = Store.getAll("notes").slice().sort((a, b) => (b.updatedAt || "").localeCompare(a.updatedAt || ""));
     const grid = $("#noteGrid");
     if (!notes.length) {
-      grid.innerHTML = `<div class="empty-state"><div class="big">📝</div><p>还没有笔记，点击「+ 新建笔记」开始记录</p></div>`;
+      grid.innerHTML = `<div class="empty-state"><p>还没有笔记，点击「+ 新建笔记」开始记录</p></div>`;
       return;
     }
     grid.innerHTML = notes.map(n => `
@@ -424,13 +424,13 @@ const App = (() => {
     const cards = Store.getAll("cards");
     const grid = $("#cardGrid");
     if (!cards.length) {
-      grid.innerHTML = `<div class="empty-state"><div class="big">🧠</div><p>还没有知识卡片，点「✨ AI 生成卡片」或手动添加</p></div>`;
+      grid.innerHTML = `<div class="empty-state"><p>还没有知识卡片，点「AI 生成卡片」或手动添加</p></div>`;
       return;
     }
     grid.innerHTML = cards.map(c => `
       <div class="flash-card" data-card-id="${c.id}">
-        <div class="q">❓ ${esc(c.question)}</div>
-        <div class="a">💡 ${esc(c.answer).replace(/\n/g, "<br>")}</div>
+        <div class="q">${esc(c.question)}</div>
+        <div class="a">${esc(c.answer).replace(/\n/g, "<br>")}</div>
         <div class="hint-flip">点击翻转查看答案 · ${esc(c.subject || "")}</div>
         <button class="mini-btn del" data-act="del-card" data-id="${c.id}" style="position:absolute;top:10px;right:10px" title="删除">✕</button>
       </div>`).join("");
@@ -515,14 +515,14 @@ const App = (() => {
       labels.push(d.getDate() + "日");
       values.push(mins);
     }
-    Charts.line($("#focusWeekChart"), { labels, values, height: 190, color: "#2c4870" });
+    Charts.line($("#focusWeekChart"), { labels, values, height: 190, color: "#111111" });
   }
 
   function renderFocusHistory() {
     const pomos = Store.getAll("pomodoros").slice().sort((a, b) => (b.startAt || "").localeCompare(a.startAt || "")).slice(0, 10);
     const box = $("#focusHistory");
     if (!pomos.length) {
-      box.innerHTML = `<div class="empty-state"><div class="big">🍅</div><p>还没有专注记录，点击「开始专注」</p></div>`;
+      box.innerHTML = `<div class="empty-state"><p>还没有专注记录，点击「开始专注」</p></div>`;
       return;
     }
     box.innerHTML = pomos.map(p => {
@@ -530,7 +530,7 @@ const App = (() => {
       const time = `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
       return `<div class="history-item">
         <span class="history-dot"></span>
-        <span>🍅 番茄钟 ${p.type === "break" ? "（休息）" : ""}</span>
+        <span>番茄钟 ${p.type === "break" ? "（休息）" : ""}</span>
         <b style="color:var(--accent)">${p.minutes} 分钟</b>
         <span class="history-meta">${fmtDate(p.startAt)} ${time}</span>
       </div>`;
@@ -547,7 +547,7 @@ const App = (() => {
     $("#btnPomoStart").textContent = "暂停";
     $("#btnPomoStart").classList.add("btn-danger");
     $(".pomodoro-card").classList.add("working");
-    $("#pomoMode").textContent = "专注中 💪";
+    $("#pomoMode").textContent = "专注中 ";
     pomoTimer = setInterval(tickPomo, 1000);
   }
 
@@ -575,12 +575,12 @@ const App = (() => {
     const minutes = Math.round(pomoState.total / 60);
     Store.add("pomodoros", { startAt: new Date().toISOString(), minutes, type: pomoState.mode });
     if (pomoState.mode === "work") {
-      toast("🎉 专注完成！休息一下吧", "ok");
+      toast("专注完成！休息一下吧", "ok");
       // 自动切换到休息
       pomoState.mode = "break";
       pomoState.total = (+$("#pomoBreak").value || 5) * 60;
       pomoState.remain = pomoState.total;
-      $("#pomoMode").textContent = "休息中 ☕";
+      $("#pomoMode").textContent = "休息中 ";
       $("#btnPomoStart").textContent = "跳过休息";
       $("#btnPomoStart").classList.remove("btn-danger");
       pomoState.running = true;
@@ -618,29 +618,29 @@ const App = (() => {
   function renderProfile() {
     const p = Store.getProfile();
     $("#userName").textContent = p.name || "同学";
-    const av = p.avatar || "🚀";
+    const av = p.avatar || "";
     $("#userAvatar").textContent = av;
     $("#userAvatar").setAttribute("data-emoji", "1");
     // 个人主页卡片
     const infoItems = [
-      p.school && { k: "🏫 学校", v: p.school },
-      p.major && { k: "📖 专业", v: p.major },
-      p.grade && { k: "🎓 年级", v: p.grade }
+      p.school && { k: "学校", v: p.school },
+      p.major && { k: "专业", v: p.major },
+      p.grade && { k: "年级", v: p.grade }
     ].filter(Boolean);
     const hasEmail = p.email;
     $("#profileBox").innerHTML = `
       <div class="profile-hero">
-        <div class="profile-avatar-big">${esc(p.avatar || "🚀")}</div>
+        <div class="profile-avatar-big">${esc(p.avatar || "")}</div>
         <div class="profile-hero-info">
           <div class="profile-name">${esc(p.name || "同学")}</div>
-          <div class="profile-slogan">${esc(p.slogan || "还没有个性签名～点击编辑写一句吧 ✨")}</div>
+          <div class="profile-slogan">${esc(p.slogan || "还没有个性签名～点击编辑写一句吧 ")}</div>
         </div>
       </div>
-      ${p.goal ? `<div class="profile-goal">🎯 <b>近期目标：</b>${esc(p.goal)}</div>` : `<div class="profile-goal dim">🎯 还没有设置近期目标，写下一个想完成的小目标吧</div>`}
+      ${p.goal ? `<div class="profile-goal"><b>近期目标：</b>${esc(p.goal)}</div>` : `<div class="profile-goal dim">还没有设置近期目标，写下一个想完成的小目标吧</div>`}
       <div class="profile-grid">
         ${infoItems.length ? infoItems.map(i => `<div class="profile-item"><span>${i.k}</span><b>${esc(i.v)}</b></div>`).join("") : `<div class="profile-item" style="grid-column:span 2"><span>学校信息</span><b>未填写</b></div>`}
       </div>
-      ${hasEmail ? `<div class="profile-email">✉️ ${esc(hasEmail)}</div>` : ""}`;
+      ${hasEmail ? `<div class="profile-email">${esc(hasEmail)}</div>` : ""}`;
   }
 
   function renderGrades() {
@@ -671,7 +671,7 @@ const App = (() => {
       <div class="gpa-box"><b>${credits}</b><span>总学分</span></div>`;
     const box = $("#gradeList");
     if (!grades.length) {
-      box.innerHTML = `<div class="empty-state"><div class="big">🏆</div><p>还没有成绩记录</p></div>`;
+      box.innerHTML = `<div class="empty-state"><p>还没有成绩记录</p></div>`;
     } else {
       box.innerHTML = grades.map(g => `
         <div class="grade-row">
@@ -721,7 +721,7 @@ const App = (() => {
     const skills = Store.getAll("skills");
     const box = $("#skillList");
     if (!skills.length) {
-      box.innerHTML = `<div class="empty-state"><div class="big">🛠</div><p>还没有技能记录</p></div>`;
+      box.innerHTML = `<div class="empty-state"><p>还没有技能记录</p></div>`;
       return;
     }
     box.innerHTML = skills.map(s => `
@@ -765,7 +765,7 @@ const App = (() => {
     const projects = Store.getAll("projects");
     const box = $("#projectList");
     if (!projects.length) {
-      box.innerHTML = `<div class="empty-state"><div class="big">🚀</div><p>还没有项目经历</p></div>`;
+      box.innerHTML = `<div class="empty-state"><p>还没有项目经历</p></div>`;
       return;
     }
     box.innerHTML = projects.map(p => `
@@ -830,7 +830,7 @@ const App = (() => {
       const avg = grades.reduce((s, g) => s + (+g.score || 0), 0) / grades.length;
       html += `<h4>学业</h4><ul><li>平均分：${avg.toFixed(1)}，共 ${grades.length} 门成绩记录</li></ul>`;
     }
-    box.innerHTML = html || `<div class="empty-state"><div class="big">📄</div><p>完善资料后这里会生成简历预览</p></div>`;
+    box.innerHTML = html || `<div class="empty-state"><p>完善资料后这里会生成简历预览</p></div>`;
   }
 
   /* ============================================================
@@ -857,15 +857,15 @@ const App = (() => {
     const data = await loadNews(false);
     if (!data || !data.news || !data.news.length) {
       box.innerHTML = `<div class="empty-state">
-        <div class="big">📰</div>
+        
         <p>暂无新闻数据。请先在本地运行抓取脚本生成数据：<br><code style="color:var(--teal)">python scripts/fetch_news.py</code></p>
         <p style="margin-top:10px"><button class="btn btn-ghost" onclick="location.reload()">刷新重试</button></p>
       </div>`;
-      $("#newsDate").textContent = "📅 今日热点";
+      $("#newsDate").textContent = "今日热点";
       $("#newsUpdated").textContent = "";
       return;
     }
-    $("#newsDate").textContent = "📅 " + (data.date || "今日热点");
+    $("#newsDate").textContent = "" + (data.date || "今日热点");
     const upd = data.updatedAt ? new Date(data.updatedAt) : null;
     $("#newsUpdated").textContent = upd ? `更新于 ${String(upd.getHours()).padStart(2,"0")}:${String(upd.getMinutes()).padStart(2,"0")}` : "";
 
@@ -881,32 +881,32 @@ const App = (() => {
       filtered = data.news.filter(n => n.category === newsFilter);
     }
     if (!filtered.length) {
-      box.innerHTML = `<div class="empty-state"><div class="big">📭</div><p>该分类暂无新闻</p></div>`;
+      box.innerHTML = `<div class="empty-state"><p>该分类暂无新闻</p></div>`;
       return;
     }
     // 分组：全部/国内/国际 按地区分；科技AI/土木行业 不分地区直接列表
     let groups;
     if (newsFilter === "科技AI") {
-      groups = [{ name: "科技AI", emoji: "🤖", items: filtered }];
+      groups = [{ name: "科技AI", items: filtered }];
     } else if (newsFilter === "土木行业") {
-      groups = [{ name: "土木·行业", emoji: "📐", items: filtered }];
+      groups = [{ name: "土木·行业", items: filtered }];
     } else if (newsFilter === "all") {
-      groups = [{ name: "国内", emoji: "🇨🇳", items: filtered.filter(n => n.category === "国内") },
-                { name: "国际", emoji: "🌍", items: filtered.filter(n => n.category === "国际") }];
+      groups = [{ name: "国内", items: filtered.filter(n => n.category === "国内") },
+                { name: "国际", items: filtered.filter(n => n.category === "国际") }];
     } else {
-      groups = [{ name: newsFilter, emoji: newsFilter === "国际" ? "🌍" : "🇨🇳", items: filtered }];
+      groups = [{ name: newsFilter, items: filtered }];
     }
     let html = "";
     groups.forEach(g => {
       const items = g.items;
       if (!items.length) return;
-      html += `<div class="news-group"><div class="news-group-title">${g.emoji} ${g.name}热点 <span class="news-count">${items.length}</span></div>`;
+      html += `<div class="news-group"><div class="news-group-title">${g.name}热点 <span class="news-count">${items.length}</span></div>`;
       html += items.map((n, i) => `
         <div class="news-item" data-link="${esc(n.link)}">
           <span class="news-rank ${i < 3 ? "top" : ""}">${i + 1}</span>
           <span class="news-title">${esc(n.title)}</span>
           <span class="news-source">${n.region} ${esc(n.source)}</span>
-          <button class="mini-btn news-copy" title="复制链接">🔗</button>
+          <button class="mini-btn news-copy" title="复制链接"></button>
         </div>`).join("");
       html += `</div>`;
     });
@@ -997,7 +997,7 @@ const App = (() => {
     if (favFilter === "fav") items = items.filter(l => l.favorite);
 
     if (!items.length) {
-      box.innerHTML = `<div class="empty-state"><div class="big">📖</div><p>暂无文献。点击「+ 添加文献」或「📥 导入文献」开始积累。</p></div>`;
+      box.innerHTML = `<div class="empty-state"><p>暂无文献。点击「+ 添加文献」或「导入文献」开始积累。</p></div>`;
       return;
     }
     // 收藏排前面，再按时间倒序
@@ -1005,13 +1005,13 @@ const App = (() => {
     box.innerHTML = items.map(l => `
       <div class="lit-item ${l.favorite ? "fav" : ""}" data-id="${l.id}">
         <div class="lit-main">
-          <div class="lit-title">${l.favorite ? "⭐ " : ""}${esc(l.title)}</div>
+          <div class="lit-title">${l.favorite ? "" : ""}${esc(l.title)}</div>
           <div class="lit-meta">${esc(l.authors || "未知作者")} · ${esc(l.journal || "未知期刊")}${l.year ? " · " + l.year : ""}${l.doi ? ` · <span class="lit-doi" data-doi="${esc(l.doi)}" title="点击复制DOI">DOI</span>` : ""}</div>
           ${l.notes ? `<div class="lit-notes">${esc(l.notes)}</div>` : ""}
           ${l.tags && l.tags.length ? `<div class="lit-tags">${l.tags.map(t => `<span class="lit-tag">${esc(t)}</span>`).join("")}</div>` : ""}
         </div>
         <div class="row-actions">
-          <button class="mini-btn lit-fav" title="${l.favorite ? "取消收藏" : "收藏"}">${l.favorite ? "★" : "☆"}</button>
+          <button class="mini-btn lit-fav" title="${l.favorite ? "取消收藏" : "收藏"}">${l.favorite ? "" : ""}</button>
           <button class="mini-btn lit-edit" title="编辑">✎</button>
           <button class="mini-btn del lit-del" title="删除">✕</button>
         </div>
@@ -1049,7 +1049,7 @@ const App = (() => {
       <label class="field"><span>备注/摘要</span><textarea id="f-lit-notes" rows="4" placeholder="你的阅读笔记或文献摘要...">${esc(l?.notes || "")}</textarea></label>
       <label class="field" style="flex-direction:row;align-items:center;gap:10px">
         <input type="checkbox" id="f-lit-fav" ${l?.favorite ? "checked" : ""} style="width:18px;height:18px;accent-color:var(--blue)">
-        <span style="font-size:13.5px">⭐ 收藏此文献</span>
+        <span style="font-size:13.5px">收藏此文献</span>
       </label>`;
     $("#btnFormSave").onclick = () => {
       const title = $("#f-lit-title").value.trim();
@@ -1083,7 +1083,7 @@ const App = (() => {
     $("#formBody").innerHTML = `
       <p class="hint">粘贴文献列表，每行一条，格式：<code>标题 | 作者 | 期刊 | 年份 | DOI</code>（DOI 可省略）</p>
       <textarea id="f-lit-import" rows="10" placeholder="例如：\n桥梁抗震设计方法研究 | 张三, 李四 | 中国公路学报 | 2025 | 10.19721/j.cnki.1001-7372.2025.01.001\n装配式桥梁施工技术 | 王五 | 桥梁建设 | 2024"></textarea>
-      <p class="hint">💡 也可以直接粘贴从知网/万方导出的题录文本，AI 会尝试解析。</p>`;
+      <p class="hint">也可以直接粘贴从知网/万方导出的题录文本，AI 会尝试解析。</p>`;
     $("#btnFormSave").onclick = async () => {
       const text = $("#f-lit-import").value.trim();
       if (!text) { toast("请先粘贴文献内容", "err"); return; }
@@ -1124,7 +1124,7 @@ const App = (() => {
     const box = $("#chatBox");
     const div = document.createElement("div");
     div.className = "chat-msg " + who;
-    div.innerHTML = `<div class="chat-avatar">${who === "ai" ? "✨" : "你"}</div>
+    div.innerHTML = `<div class="chat-avatar">${who === "ai" ? "AI" : "你"}</div>
       <div class="chat-bubble">${esc(text).replace(/\n/g, "<br>")}</div>`;
     box.appendChild(div);
     box.scrollTop = box.scrollHeight;
@@ -1153,7 +1153,7 @@ const App = (() => {
       }
       loading.querySelector(".chat-bubble").innerHTML = esc(reply).replace(/\n/g, "<br>");
     } catch (e) {
-      loading.querySelector(".chat-bubble").innerHTML = `<span style="color:var(--danger)">⚠️ ${esc(e.message)}</span>`;
+      loading.querySelector(".chat-bubble").innerHTML = `<span style="color:var(--danger)">${esc(e.message)}</span>`;
     }
   }
 
@@ -1226,7 +1226,7 @@ const App = (() => {
       if (results.length) {
         const first = results[0];
         switchView(first.view);
-        toast(`🔍 找到 ${results.length} 条结果，跳转到「${first.type}」`, "ok");
+        toast(`找到 ${results.length} 条结果，跳转到「${first.type}」`, "ok");
         input.value = "";
         if (first.act === "note") setTimeout(() => openNote(first.id), 100);
         else if (first.act === "task") setTimeout(() => openTaskForm(first.id), 100);
@@ -1278,7 +1278,7 @@ const App = (() => {
     box.innerHTML = "";
     const img = document.createElement("img");
     img.src = "xingyu-qrcode.png";
-    img.alt = "星屿永久二维码";
+    img.alt = "零 · 永久二维码";
     img.className = "qr-static";
     img.onerror = () => { box.innerHTML = `<span class="hint">二维码图片加载失败，请检查 xingyu-qrcode.png 是否存在。</span>`; };
     box.appendChild(img);
@@ -1298,7 +1298,7 @@ const App = (() => {
   /* ============================================================
      导入课表
      ============================================================ */
-  const COURSE_COLORS = ["#2c4870", "#1f3656", "#6b4f6b", "#6e5a3a", "#3b7a4f", "#b8341e", "#8c6d3f", "#5b574f"];
+  const COURSE_COLORS = ["#111111", "#000000", "#444444", "#555555", "#333333", "#111111", "#666666", "#888888"];
   let pendingImportCourses = [];
 
   function openImportModal() {
@@ -1321,7 +1321,7 @@ const App = (() => {
     const resultBox = $("#importResult");
     if (!courses.length) {
       resultBox.style.display = "block";
-      box.innerHTML = `<div class="empty-state"><div class="big">🤔</div><p>未能识别出课程，请检查图片清晰度 / 文本格式后重试，或手动添加课程。</p></div>`;
+      box.innerHTML = `<div class="empty-state"><p>未能识别出课程，请检查图片清晰度 / 文本格式后重试，或手动添加课程。</p></div>`;
       $("#importResultCount").textContent = "0 门";
       return;
     }
@@ -1350,7 +1350,7 @@ const App = (() => {
       toast(e.message || "识别失败", "err");
     } finally {
       btn.disabled = false;
-      btn.textContent = "✨ AI 识别课表";
+      btn.textContent = "AI 识别课表";
     }
   }
 
@@ -1419,7 +1419,7 @@ const App = (() => {
     const resultBox = $("#gradesImportResult");
     if (!grades.length) {
       resultBox.style.display = "block";
-      box.innerHTML = `<div class="empty-state"><div class="big">🤔</div><p>未能解析出成绩，请检查文本格式后重试，或手动添加成绩。</p></div>`;
+      box.innerHTML = `<div class="empty-state"><p>未能解析出成绩，请检查文本格式后重试，或手动添加成绩。</p></div>`;
       $("#gradesResultCount").textContent = "0 条";
       return;
     }
@@ -1427,7 +1427,7 @@ const App = (() => {
     $("#gradesResultCount").textContent = `${grades.length} 条成绩`;
     box.innerHTML = grades.map(g => `
       <div class="import-course">
-        <span class="import-cd" style="background:${g.score >= 90 ? "#3b7a4f" : g.score >= 60 ? "#6e5a3a" : "#b8341e"}">${g.score}</span>
+        <span class="import-cd" style="background:${g.score >= 90 ? "#333333" : g.score >= 60 ? "#555555" : "#111111"}">${g.score}</span>
         <div class="import-ci">
           <b>${esc(g.subject)}</b>
           <span>${esc(g.name)} · ${g.credit}学分${g.semester ? " · " + esc(g.semester) : ""}</span>
@@ -1465,7 +1465,7 @@ const App = (() => {
       toast(e.message || "解析失败", "err");
     } finally {
       btn.disabled = false;
-      btn.textContent = "✨ 解析成绩";
+      btn.textContent = "解析成绩";
     }
   }
 
@@ -1497,7 +1497,7 @@ const App = (() => {
       toast(e.message || "识别失败", "err");
     } finally {
       btn.disabled = false;
-      btn.textContent = "✨ AI 识别成绩";
+      btn.textContent = "AI 识别成绩";
     }
   }
 
@@ -1524,7 +1524,7 @@ const App = (() => {
     const resultBox = $("#notesImportResult");
     if (!notes.length) {
       resultBox.style.display = "block";
-      box.innerHTML = `<div class="empty-state"><div class="big">🤔</div><p>未能识别出笔记，请检查文本/图片后重试，或手动新建笔记。</p></div>`;
+      box.innerHTML = `<div class="empty-state"><p>未能识别出笔记，请检查文本/图片后重试，或手动新建笔记。</p></div>`;
       $("#notesResultCount").textContent = "0 条";
       return;
     }
@@ -1532,7 +1532,7 @@ const App = (() => {
     $("#notesResultCount").textContent = `${notes.length} 条笔记`;
     box.innerHTML = notes.map((n, i) => `
       <div class="import-course">
-        <span class="import-cd" style="background:${COURSE_COLORS[i % COURSE_COLORS.length]}">📝</span>
+        <span class="import-cd" style="background:${COURSE_COLORS[i % COURSE_COLORS.length]}"></span>
         <div class="import-ci">
           <b>${esc(n.title)}</b>
           <span>${esc(n.subject || "未分类")}${n.tags.length ? " · " + n.tags.map(t => "#" + esc(t)).join(" ") : ""}</span>
@@ -1573,7 +1573,7 @@ const App = (() => {
       toast(e.message || "识别失败", "err");
     } finally {
       btn.disabled = false;
-      btn.textContent = "✨ 识别并整理";
+      btn.textContent = "识别并整理";
     }
   }
 
@@ -1605,7 +1605,7 @@ const App = (() => {
       toast(e.message || "识别失败", "err");
     } finally {
       btn.disabled = false;
-      btn.textContent = "✨ AI 识别笔记";
+      btn.textContent = "AI 识别笔记";
     }
   }
 
@@ -1650,7 +1650,7 @@ const App = (() => {
         toast(e.message || "解析失败", "err");
       } finally {
         btn.disabled = false;
-        btn.textContent = "✨ 解析课表";
+        btn.textContent = "解析课表";
       }
     };
     $("#btnCancelImport").onclick = () => { pendingImportCourses = []; closeModal("importModal"); };
@@ -1929,7 +1929,7 @@ const App = (() => {
     renderAIStatus();
     // 默认展示仪表盘
     switchView("dashboard");
-    console.log("⌖ 索引 · 个人学习索引已启动");
+    console.log("○ 零 · 个人学习工作台已启动");
   }
 
   return { init };

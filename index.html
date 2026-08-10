@@ -3,26 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#f4f1ea">
+<meta name="theme-color" content="#fafafa">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<title>索引 · 个人学习索引</title>
-<meta name="description" content="把你的学业装进一张索引卡：课程作业、笔记库、专注统计、成长档案、AI 助手，本地优先，米白纸张与印章蓝的检索卡世界。">
+<title>零 · 个人学习工作台</title>
+<meta name="description" content="把学业收拢到一张白纸：课程作业、笔记库、专注统计、成长档案、AI 助手。本地优先，黑白灰三色极简，无任何装饰。">
 <link rel="stylesheet" href="css/style.css?v=20260810">
 </head>
 <body>
 
 <!--
-DIRECTION CONTRACT (impeccable:direction-contract 1 · seed 59bd40b6)
-THESIS: 学习是检索与归档——把整个平台做成一张打开的索引卡目录，让「笔记/课程/文献/成绩」都化为你桌上能翻动的索引卡。
-OWN-WORLD: 调色板为手写米白纸张 (#f4f1ea) + 墨黑文字 + 蓝灰抽屉 (#cfd6df) + 印章红/蓝；索书号编号 + 发丝线表格 + 打字机标签；衬线 hero 标题 + 无衬线 UI + 等宽 ID 编号。
-STORY: 访客打开 = 翻到自己的学习索引；每个模块是一卷档案；今日待办像「催还卡」高亮在前；完成任务有盖章动效；AI 助手逐行打印回应，像深夜替你写下建议。
-FIRST VIEWPORT: 顶部品牌「索引 Index」+ 检索全库 + 日期戳；左侧蓝灰抽屉式导航；主区域左列「今日待办」红印章卡 + 倒计时，右列工作台 hero（你好同学 + 3 个 stat） + 卡片网格（任务统计/专注趋势/最近笔记）。
-FORM: 方向 = 检索卡目录世界（图书馆索引卡 + 抽屉 + 索书号 + 印章）；位置 = 我的首选（共鸣排序第 1）；seed key = 59bd40b6。
+DIRECTION CONTRACT (impeccable:direction-contract 1 · seed d32a5c18)
+THESIS: 学习从零开始——把个人学习工作台收敛为一张白纸上的黑字灰阶，去除一切装饰，让「今天该做什么」一眼可见。
+OWN-WORLD: 纯黑白灰三色（白纸 #fafafa / 黑墨 #111 / 灰阶分层），全界面无彩色；一套无衬线 + 等宽数字标签；直角卡片、发丝线分隔、大留白；无渐变、无装饰阴影、无 emoji、无印章。
+STORY: 访客打开 = 一页安静的白纸工作台；左侧淡灰侧栏纯文字导航，主区白卡网格，关键数字以黑墨呈现；紧急/完成等状态仅以灰阶深浅与字重区分。
+FIRST VIEWPORT: 顶部品牌「零 ZERO」+ 全局搜索 + 时钟；左侧淡灰侧栏；主区 hero（你好同学 + 3 个灰阶 stat）+ 白卡网格（倒计时/任务统计/专注趋势/今日待办/最近笔记）。
+FORM: 方向 = 单色文档工作台（黑白灰极简）；位置 = 用户指定（简约 + 减少颜色 + 换新名字）；seed key = d32a5c18。
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md.
 -->
 
-<!-- 背景装饰：纸张底纹（克制） -->
+<!-- 背景（纯色白纸） -->
 <div class="bg-paper"></div>
 
 <div class="app">
@@ -31,10 +31,10 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
   <!-- ================= 侧边栏 ================= -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">
-      <div class="logo-icon" aria-label="索引">⌖</div>
+      <div class="logo-icon" aria-label="零">○</div>
       <div class="logo-text">
-        <span class="logo-name">索引</span>
-        <span class="logo-sub">个人学习索引 · INDEX</span>
+        <span class="logo-name">零</span>
+        <span class="logo-sub">个人学习工作台 · ZERO</span>
       </div>
     </div>
 
@@ -42,34 +42,34 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <div class="nav-group">
         <div class="nav-group-label">工作台</div>
         <button class="nav-item active" data-view="dashboard">
-          <span class="nav-ico">📊</span><span class="nav-label">仪表盘</span>
+          <span class="nav-label">仪表盘</span>
         </button>
         <button class="nav-item" data-view="courses">
-          <span class="nav-ico">📚</span><span class="nav-label">课程作业</span>
+          <span class="nav-label">课程作业</span>
         </button>
         <button class="nav-item" data-view="focus">
-          <span class="nav-ico">⏱</span><span class="nav-label">专注学习</span>
+          <span class="nav-label">专注学习</span>
         </button>
       </div>
       <div class="nav-group">
         <div class="nav-group-label">学习资料</div>
         <button class="nav-item" data-view="notes">
-          <span class="nav-ico">📝</span><span class="nav-label">学习笔记库</span>
+          <span class="nav-label">学习笔记库</span>
         </button>
         <button class="nav-item" data-view="lit">
-          <span class="nav-ico">📖</span><span class="nav-label">文献资料</span>
+          <span class="nav-label">文献资料</span>
         </button>
         <button class="nav-item" data-view="news">
-          <span class="nav-ico">📰</span><span class="nav-label">热点新闻</span>
+          <span class="nav-label">热点新闻</span>
         </button>
       </div>
       <div class="nav-group">
         <div class="nav-group-label">自我成长</div>
         <button class="nav-item" data-view="growth">
-          <span class="nav-ico">👤</span><span class="nav-label">成长档案</span>
+          <span class="nav-label">成长档案</span>
         </button>
         <button class="nav-item" data-view="ai">
-          <span class="nav-ico">✨</span><span class="nav-label">AI 助手</span>
+          <span class="nav-label">AI 助手</span>
           <span class="nav-badge" id="aiBadge">AI</span>
         </button>
       </div>
@@ -77,13 +77,13 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 
     <div class="sidebar-footer">
       <div class="user-chip">
-        <div class="user-avatar" id="userAvatar">星</div>
+        <div class="user-avatar" id="userAvatar">零</div>
         <div class="user-meta">
           <span class="user-name" id="userName">同学</span>
           <span class="user-role">个人工作台</span>
         </div>
       </div>
-      <button class="side-btn" id="btnSettings">⚙ 设置</button>
+      <button class="side-btn" id="btnSettings">设置</button>
     </div>
   </aside>
 
@@ -103,7 +103,9 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <span class="search-ico">⌕</span>
           <input type="text" id="globalSearch" placeholder="搜索笔记 / 任务 / 课程...">
         </div>
-        <button class="icon-btn" id="btnQrcode" title="扫码访问">⌘</button>
+        <button class="icon-btn" id="btnQrcode" title="扫码访问">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2.5 2.5h5v5h-5zM8.5 2.5h5v5h-5zM2.5 8.5h5v5h-5z"/><path d="M8.5 8.5h2v2h-2zM11 8.5h2.5v2.5H11zM8.5 11.5H11V14H8.5zM11.5 11.5h2.5V14h-2.5z"/></svg>
+        </button>
         <div class="clock-box" id="clockBox">
           <span class="clock-time" id="clockTime">--:--</span>
           <span class="clock-date" id="clockDate">----</span>
@@ -119,7 +121,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <section class="view active" id="view-dashboard">
         <div class="hero-card">
           <div class="hero-text">
-            <h2 id="heroGreeting">你好，同学 👋</h2>
+            <h2 id="heroGreeting">你好，同学 </h2>
             <p id="heroQuote">今天也要保持专注，稳步向前。</p>
           </div>
           <div class="hero-stats" id="heroStats"></div>
@@ -134,7 +136,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           </div>
           <div class="card">
             <div class="card-head">
-              <h3>✅ 任务完成统计</h3>
+              <h3>任务完成统计</h3>
               <button class="text-btn" data-goto="courses">查看全部 →</button>
             </div>
             <div id="taskStatsChart"></div>
@@ -142,21 +144,21 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           </div>
           <div class="card card-wide">
             <div class="card-head">
-              <h3>📈 近7日专注趋势</h3>
+              <h3>近7日专注趋势</h3>
               <button class="text-btn" data-goto="focus">去专注 →</button>
             </div>
             <div id="focusTrendChart"></div>
           </div>
           <div class="card">
             <div class="card-head">
-              <h3>🎯 今日待办</h3>
+              <h3>今日待办</h3>
               <button class="text-btn" data-goto="courses">更多 →</button>
             </div>
             <div id="todayTasks"></div>
           </div>
           <div class="card">
             <div class="card-head">
-              <h3>📚 最近笔记</h3>
+              <h3>最近笔记</h3>
               <button class="text-btn" data-goto="notes">笔记库 →</button>
             </div>
             <div id="recentNotes"></div>
@@ -173,7 +175,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
             <button class="tab-btn" data-tab="courses-tasks">作业任务</button>
           </div>
           <div class="toolbar-actions">
-            <button class="btn btn-ghost" id="btnImportSchedule">📥 导入课表</button>
+            <button class="btn btn-ghost" id="btnImportSchedule">导入课表</button>
             <button class="btn btn-primary" id="btnAddCourse">+ 添加课程</button>
             <button class="btn btn-primary" id="btnAddTask">+ 添加任务</button>
           </div>
@@ -188,7 +190,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 
         <div class="tab-panel" id="tab-courses-list">
           <div class="card">
-            <div class="card-head"><h3>📚 我的课程</h3></div>
+            <div class="card-head"><h3>我的课程</h3></div>
             <div id="courseList"></div>
           </div>
         </div>
@@ -196,8 +198,8 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <div class="tab-panel" id="tab-courses-tasks">
           <div class="card">
             <div class="card-head">
-              <h3>📋 作业与任务</h3>
-              <button class="btn btn-ghost" id="btnSmartSort">✨ AI 智能排序</button>
+              <h3>作业与任务</h3>
+              <button class="btn btn-ghost" id="btnSmartSort">AI 智能排序</button>
             </div>
             <div class="filter-row">
               <select id="taskFilterStatus" class="select">
@@ -226,8 +228,8 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
             <button class="tab-btn" data-tab="notes-cards">知识卡片</button>
           </div>
           <div class="toolbar-actions">
-            <button class="btn btn-ghost" id="btnImportNotes">📥 导入笔记</button>
-            <button class="btn btn-ghost" id="btnAiOrganize">✨ AI 笔记整理</button>
+            <button class="btn btn-ghost" id="btnImportNotes">导入笔记</button>
+            <button class="btn btn-ghost" id="btnAiOrganize">AI 笔记整理</button>
             <button class="btn btn-primary" id="btnAddNote">+ 新建笔记</button>
           </div>
         </div>
@@ -238,8 +240,8 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 
         <div class="tab-panel" id="tab-notes-cards">
           <div class="card-head" style="display:flex;justify-content:space-between;align-items:center;">
-            <h3>🧠 知识卡片</h3>
-            <button class="btn btn-ghost" id="btnGenCards">✨ AI 生成卡片</button>
+            <h3>知识卡片</h3>
+            <button class="btn btn-ghost" id="btnGenCards">AI 生成卡片</button>
           </div>
           <div class="card-grid" id="cardGrid"></div>
         </div>
@@ -250,7 +252,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <div class="focus-layout">
           <div class="card pomodoro-card">
             <div class="card-head">
-              <h3>🍅 番茄钟</h3>
+              <h3>番茄钟</h3>
               <div class="pomo-settings">
                 <label>专注 <input type="number" id="pomoWork" value="25" min="1" max="120"> 分</label>
                 <label>休息 <input type="number" id="pomoBreak" value="5" min="1" max="60"> 分</label>
@@ -271,12 +273,12 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 
           <div class="focus-side">
             <div class="card">
-              <div class="card-head"><h3>📊 专注统计</h3></div>
+              <div class="card-head"><h3>专注统计</h3></div>
               <div class="focus-stats-row" id="focusStatsRow"></div>
               <div id="focusWeekChart" style="margin-top:16px"></div>
             </div>
             <div class="card">
-              <div class="card-head"><h3>🕘 专注记录</h3></div>
+              <div class="card-head"><h3>专注记录</h3></div>
               <div id="focusHistory"></div>
             </div>
           </div>
@@ -288,16 +290,16 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <div class="growth-layout">
           <div class="card">
             <div class="card-head">
-              <h3>👤 个人资料</h3>
+              <h3>个人资料</h3>
               <button class="btn btn-ghost" id="btnEditProfile">编辑</button>
             </div>
             <div class="profile-box" id="profileBox"></div>
           </div>
           <div class="card">
             <div class="card-head">
-              <h3>🏆 成绩追踪（GPA）</h3>
+              <h3>成绩追踪（GPA）</h3>
               <div style="display:flex;gap:8px">
-                <button class="btn btn-ghost" id="btnImportGrades">📥 导入成绩</button>
+                <button class="btn btn-ghost" id="btnImportGrades">导入成绩</button>
                 <button class="btn btn-ghost" id="btnAddGrade">+ 添加成绩</button>
               </div>
             </div>
@@ -306,21 +308,21 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           </div>
           <div class="card">
             <div class="card-head">
-              <h3>🛠 技能</h3>
+              <h3>技能</h3>
               <button class="btn btn-ghost" id="btnAddSkill">+ 添加技能</button>
             </div>
             <div id="skillList"></div>
           </div>
           <div class="card">
             <div class="card-head">
-              <h3>🚀 项目经历</h3>
+              <h3>项目经历</h3>
               <button class="btn btn-ghost" id="btnAddProject">+ 添加项目</button>
             </div>
             <div id="projectList"></div>
           </div>
           <div class="card card-wide">
             <div class="card-head">
-              <h3>📄 简历预览</h3>
+              <h3>简历预览</h3>
               <button class="btn btn-primary" id="btnExportResume">导出 / 打印</button>
             </div>
             <div class="resume-preview" id="resumePreview"></div>
@@ -333,13 +335,13 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <div class="ai-layout">
           <div class="card ai-chat-card">
             <div class="card-head">
-              <h3>✨ AI 学习助手</h3>
+              <h3>AI 学习助手</h3>
               <span class="ai-status" id="aiStatus">● 未配置模型</span>
             </div>
             <div class="chat-box" id="chatBox">
               <div class="chat-msg ai">
-                <div class="chat-bubble">你好呀！我是你的 AI 学习助手 🤖 我可以帮你：
-                  <br>📝 制定学习计划 · 🚦 智能优先级排序 · 🧠 生成知识卡片 · 📖 整理笔记
+                <div class="chat-bubble">你好呀！我是你的 AI 学习助手 我可以帮你：
+                  <br>制定学习计划 · 智能优先级排序 · 生成知识卡片 · 整理笔记
                   <br>在右上角「设置」中配置 AI 模型后，我就能为你工作啦～（未配置时我也能用本地规则帮你）</div>
               </div>
             </div>
@@ -348,10 +350,10 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
               <button class="btn btn-primary" id="btnChatSend">发送</button>
             </div>
             <div class="chat-quick">
-              <button class="chip" data-cmd="/plan">📝 学习规划</button>
-              <button class="chip" data-cmd="/priority">🚦 优先级</button>
-              <button class="chip" data-cmd="/cards">🧠 知识卡片</button>
-              <button class="chip" data-cmd="/organize">📖 笔记整理</button>
+              <button class="chip" data-cmd="/plan">学习规划</button>
+              <button class="chip" data-cmd="/priority">优先级</button>
+              <button class="chip" data-cmd="/cards">知识卡片</button>
+              <button class="chip" data-cmd="/organize">笔记整理</button>
             </div>
           </div>
         </div>
@@ -361,25 +363,25 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <section class="view" id="view-news">
         <div class="view-toolbar">
           <div class="news-date-box">
-            <span class="news-date" id="newsDate">📅 今日热点</span>
+            <span class="news-date" id="newsDate">今日热点</span>
             <span class="news-updated" id="newsUpdated"></span>
           </div>
           <div class="toolbar-actions">
-            <button class="btn btn-ghost" id="btnRefreshNews">🔄 刷新</button>
+            <button class="btn btn-ghost" id="btnRefreshNews">刷新</button>
           </div>
         </div>
 
         <div class="toolbar-tabs" style="margin-bottom:18px">
           <button class="newstab-btn active" data-newstab="all">全部</button>
-          <button class="newstab-btn" data-newstab="科技AI">🤖 科技·AI</button>
-          <button class="newstab-btn" data-newstab="土木行业">📐 土木·行业</button>
-          <button class="newstab-btn" data-newstab="国内">🇨🇳 国内</button>
-          <button class="newstab-btn" data-newstab="国际">🌍 国际</button>
+          <button class="newstab-btn" data-newstab="科技AI">科技·AI</button>
+          <button class="newstab-btn" data-newstab="土木行业">土木·行业</button>
+          <button class="newstab-btn" data-newstab="国内">国内</button>
+          <button class="newstab-btn" data-newstab="国际">国际</button>
         </div>
 
         <div id="newsList"></div>
         <div class="news-tip">
-          💡 数据来源：国内（央视网/中新网）、科技（少数派/爱范儿/品玩/雷锋网）、行业（中国公路网/交通运输部）、国际（联合早报/TechCrunch）等主流媒体官网，每日定时更新。点击标题跳转原文。
+          数据来源：国内（央视网/中新网）、科技（少数派/爱范儿/品玩/雷锋网）、行业（中国公路网/交通运输部）、国际（联合早报/TechCrunch）等主流媒体官网，每日定时更新。点击标题跳转原文。
         </div>
       </section>
 
@@ -387,11 +389,11 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <section class="view" id="view-lit">
         <div class="view-toolbar">
           <div class="toolbar-tabs">
-            <button class="tab-btn active" data-tab="lit-lib">📚 我的文献库</button>
-            <button class="tab-btn" data-tab="lit-journal">🏛️ 期刊导航</button>
+            <button class="tab-btn active" data-tab="lit-lib">我的文献库</button>
+            <button class="tab-btn" data-tab="lit-journal">期刊导航</button>
           </div>
           <div class="toolbar-actions">
-            <button class="btn btn-ghost" id="btnImportLit">📥 导入文献</button>
+            <button class="btn btn-ghost" id="btnImportLit">导入文献</button>
             <button class="btn btn-primary" id="btnAddLit">+ 添加文献</button>
           </div>
         </div>
@@ -399,9 +401,9 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <!-- 我的文献库 -->
         <div class="tab-panel active" id="tab-lit-lib">
           <div class="filter-row">
-            <input type="text" id="litSearch" placeholder="🔍 搜索文献标题/作者/期刊..." style="flex:1;max-width:400px;background:var(--fill);border:none;border-radius:10px;padding:9px 14px;color:var(--text);font-size:13px;outline:none;font-family:var(--font)">
+            <input type="text" id="litSearch" placeholder="搜索文献标题/作者/期刊..." style="flex:1;max-width:400px;background:var(--fill);border:none;border-radius:10px;padding:9px 14px;color:var(--text);font-size:13px;outline:none;font-family:var(--font)">
             <select class="select" id="litFilterTag"><option value="">全部标签</option></select>
-            <select class="select" id="litFilterFav"><option value="">全部</option><option value="fav">⭐ 收藏</option></select>
+            <select class="select" id="litFilterFav"><option value="">全部</option><option value="fav">收藏</option></select>
           </div>
           <div id="litList"></div>
         </div>
@@ -421,13 +423,13 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 <div class="modal-mask" id="qrcodeModal">
   <div class="modal qr-modal">
     <div class="modal-head">
-      <h3>📱 扫码访问</h3>
+      <h3>扫码访问</h3>
       <button class="modal-close" data-close="qrcodeModal">✕</button>
     </div>
     <div class="modal-body center">
       <p class="hint">手机扫码即可永久访问你的个人工作台。</p>
       <div id="qrCodeBox" class="qr-box">
-        <img src="xingyu-qrcode.png" alt="星屿永久二维码" class="qr-static">
+        <img src="xingyu-qrcode.png" alt="零 · 永久二维码" class="qr-static">
       </div>
       <div class="qr-actions">
         <button class="btn btn-primary" id="btnCopyLink">复制永久链接</button>
@@ -440,12 +442,12 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 <div class="modal-mask" id="settingsModal">
   <div class="modal settings-modal">
     <div class="modal-head">
-      <h3>⚙ 设置</h3>
+      <h3>设置</h3>
       <button class="modal-close" data-close="settingsModal">✕</button>
     </div>
     <div class="modal-body">
       <div class="setting-group">
-        <h4>🤖 AI 模型配置（OpenAI 兼容接口）</h4>
+        <h4>AI 模型配置（OpenAI 兼容接口）</h4>
         <label class="field">
           <span>接口地址 Base URL</span>
           <input type="text" id="setBaseUrl" placeholder="https://api.deepseek.com/v1">
@@ -467,14 +469,14 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <p class="hint">密钥仅保存在你的浏览器本地（localStorage），不会上传到任何服务器。</p>
       </div>
       <div class="setting-group">
-        <h4>👤 个人昵称</h4>
+        <h4>个人昵称</h4>
         <label class="field">
           <span>昵称（显示于侧边栏与问候语）</span>
           <input type="text" id="setNickname" placeholder="同学">
         </label>
       </div>
       <div class="setting-group">
-        <h4>📊 数据管理</h4>
+        <h4>数据管理</h4>
         <div class="setting-actions">
           <button class="btn btn-ghost" id="btnExportData">导出数据(JSON)</button>
           <button class="btn btn-ghost" id="btnImportData">导入数据</button>
@@ -493,20 +495,20 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 <div class="modal-mask" id="importModal">
   <div class="modal import-modal">
     <div class="modal-head">
-      <h3>📥 导入课表</h3>
+      <h3>导入课表</h3>
       <button class="modal-close" data-close="importModal">✕</button>
     </div>
     <div class="modal-body">
       <div class="import-tabs">
-        <button class="import-tab active" data-itab="img">📷 上传截图</button>
-        <button class="import-tab" data-itab="text">📋 粘贴文本</button>
+        <button class="import-tab active" data-itab="img">上传截图</button>
+        <button class="import-tab" data-itab="text">粘贴文本</button>
       </div>
 
       <div class="import-panel active" id="itab-img">
         <p class="hint">上传课表截图（教务系统 / 课表 App 截图均可），AI 会自动识别课程名称、时间、地点。</p>
         <div class="drop-zone" id="dropZone">
           <div class="drop-inner">
-            <span class="drop-ico">🖼</span>
+            <span class="drop-ico"></span>
             <p>点击选择或拖拽课表图片到此处</p>
             <p class="hint">支持 JPG / PNG，建议图片清晰、文字可读</p>
           </div>
@@ -514,7 +516,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </div>
         <div id="imgPreview" class="img-preview"></div>
         <div class="import-actions">
-          <button class="btn btn-primary" id="btnRecognizeImg" disabled>✨ AI 识别课表</button>
+          <button class="btn btn-primary" id="btnRecognizeImg" disabled>AI 识别课表</button>
           <span class="hint" id="imgRecognizeHint">识别需要配置支持视觉的模型（如 gpt-4o-mini / glm-4v）</span>
         </div>
       </div>
@@ -524,12 +526,12 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <div class="code-sample">周一 8:00-9:40 高等数学 教学楼A-301<br>周三 14:00-15:40 操作系统 实验楼B-105</div>
         <textarea id="scheduleText" rows="7" placeholder="粘贴课表文本..."></textarea>
         <div class="import-actions">
-          <button class="btn btn-primary" id="btnParseText">✨ 解析课表</button>
+          <button class="btn btn-primary" id="btnParseText">解析课表</button>
         </div>
       </div>
 
       <div id="importResult" class="import-result" style="display:none">
-        <div class="card-head"><h3>✅ 识别结果预览</h3><span class="hint" id="importResultCount"></span></div>
+        <div class="card-head"><h3>识别结果预览</h3><span class="hint" id="importResultCount"></span></div>
         <div id="importResultList"></div>
         <div class="import-actions">
           <button class="btn btn-ghost" id="btnCancelImport">取消</button>
@@ -544,13 +546,13 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 <div class="modal-mask" id="importGradesModal">
   <div class="modal import-modal">
     <div class="modal-head">
-      <h3>📥 导入成绩</h3>
+      <h3>导入成绩</h3>
       <button class="modal-close" data-close="importGradesModal">✕</button>
     </div>
     <div class="modal-body">
       <div class="import-tabs">
-        <button class="import-tab active" data-itab="gtext">📋 粘贴文本</button>
-        <button class="import-tab" data-itab="gimg">📷 上传截图</button>
+        <button class="import-tab active" data-itab="gtext">粘贴文本</button>
+        <button class="import-tab" data-itab="gimg">上传截图</button>
       </div>
 
       <div class="import-panel active" id="itab-gtext">
@@ -558,7 +560,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <div class="code-sample">高等数学 期中考试 88分 5学分<br>大学英语 92<br>数据结构 期末考试 85 4学分 2026春</div>
         <textarea id="gradesText" rows="7" placeholder="粘贴成绩文本，每行一条..."></textarea>
         <div class="import-actions">
-          <button class="btn btn-primary" id="btnParseGrades">✨ 解析成绩</button>
+          <button class="btn btn-primary" id="btnParseGrades">解析成绩</button>
         </div>
       </div>
 
@@ -566,7 +568,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <p class="hint">上传成绩单截图，AI 自动识别（需配置支持视觉的模型）。</p>
         <div class="drop-zone" id="dropZoneG">
           <div class="drop-inner">
-            <span class="drop-ico">🖼</span>
+            <span class="drop-ico"></span>
             <p>点击选择或拖拽成绩单图片到此处</p>
             <p class="hint">支持 JPG / PNG，建议图片清晰、文字可读</p>
           </div>
@@ -574,12 +576,12 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </div>
         <div id="gradesImgPreview" class="img-preview"></div>
         <div class="import-actions">
-          <button class="btn btn-primary" id="btnRecognizeGrades" disabled>✨ AI 识别成绩</button>
+          <button class="btn btn-primary" id="btnRecognizeGrades" disabled>AI 识别成绩</button>
         </div>
       </div>
 
       <div id="gradesImportResult" class="import-result" style="display:none">
-        <div class="card-head"><h3>✅ 识别结果预览</h3><span class="hint" id="gradesResultCount"></span></div>
+        <div class="card-head"><h3>识别结果预览</h3><span class="hint" id="gradesResultCount"></span></div>
         <div id="gradesResultList"></div>
         <div class="import-actions">
           <button class="btn btn-ghost" id="btnCancelGradesImport">取消</button>
@@ -594,13 +596,13 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 <div class="modal-mask" id="importNotesModal">
   <div class="modal import-modal">
     <div class="modal-head">
-      <h3>📥 导入笔记</h3>
+      <h3>导入笔记</h3>
       <button class="modal-close" data-close="importNotesModal">✕</button>
     </div>
     <div class="modal-body">
       <div class="import-tabs">
-        <button class="import-tab active" data-itab="ntext">📋 粘贴文本</button>
-        <button class="import-tab" data-itab="nimg">📷 上传截图</button>
+        <button class="import-tab active" data-itab="ntext">粘贴文本</button>
+        <button class="import-tab" data-itab="nimg">上传截图</button>
       </div>
 
       <div class="import-panel active" id="itab-ntext">
@@ -608,7 +610,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <div class="code-sample">高等数学第三章 极限与连续<br>#高数 #极限<br>极限的定义：ε-δ语言...<br>（第1行为标题，#开头为标签，其余为内容）</div>
         <textarea id="notesText" rows="8" placeholder="粘贴笔记内容，第1行是标题，可以用 #标签 标记主题..."></textarea>
         <div class="import-actions">
-          <button class="btn btn-primary" id="btnParseNotes">✨ 识别并整理</button>
+          <button class="btn btn-primary" id="btnParseNotes">识别并整理</button>
         </div>
       </div>
 
@@ -616,7 +618,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <p class="hint">上传纸质笔记 / 手写笔记 / 书本截图，AI 自动识别文字并整理成笔记（需配置支持视觉的模型）。</p>
         <div class="drop-zone" id="dropZoneN">
           <div class="drop-inner">
-            <span class="drop-ico">🖼</span>
+            <span class="drop-ico"></span>
             <p>点击选择或拖拽笔记图片到此处</p>
             <p class="hint">支持 JPG / PNG，建议文字清晰可读</p>
           </div>
@@ -624,12 +626,12 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </div>
         <div id="notesImgPreview" class="img-preview"></div>
         <div class="import-actions">
-          <button class="btn btn-primary" id="btnRecognizeNotes" disabled>✨ AI 识别笔记</button>
+          <button class="btn btn-primary" id="btnRecognizeNotes" disabled>AI 识别笔记</button>
         </div>
       </div>
 
       <div id="notesImportResult" class="import-result" style="display:none">
-        <div class="card-head"><h3>✅ 识别结果预览</h3><span class="hint" id="notesResultCount"></span></div>
+        <div class="card-head"><h3>识别结果预览</h3><span class="hint" id="notesResultCount"></span></div>
         <div id="notesResultList"></div>
         <div class="import-actions">
           <button class="btn btn-ghost" id="btnCancelNotesImport">取消</button>
