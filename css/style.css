@@ -1656,13 +1656,12 @@ body { transition: background-color 0.4s var(--ease-out), color 0.4s var(--ease-
 }
 .lock-toggle input { accent-color: var(--ink); width: 15px; height: 15px; }
 
-/* ---------- GSAP 卡片 3D 倾斜 + 光晕（html.tilt-on，桌面 hover） ---------- */
+/* ---------- GSAP 卡片 3D 倾斜（html.tilt-on，桌面 hover） ---------- */
 .tilt-on .card,
 .tilt-on .hero-card,
 .tilt-on .quote-card {
   transform-style: preserve-3d;
   will-change: transform;
-  overflow: hidden; /* 光斑裁剪在卡片内，不溢出 */
 }
 .tilt-on .card:hover,
 .tilt-on .hero-card:hover,
@@ -1670,18 +1669,6 @@ body { transition: background-color 0.4s var(--ease-out), color 0.4s var(--ease-
   /* 3D 倾斜由 GSAP 控制，CSS 只保留背景/阴影反馈 */
   transform: none;
 }
-/* 光斑元素：圆心平滑跟随鼠标（quickTo x/y；负 margin 使圆心落在 left/top） */
-.card-glow {
-  position: absolute; left: 0; top: 0;
-  width: 320px; height: 320px; margin: -160px 0 0 -160px;
-  border-radius: 50%; pointer-events: none; z-index: 1;
-  background: radial-gradient(circle, color-mix(in srgb, var(--ink) 16%, transparent), transparent 72%);
-  opacity: 0; transition: opacity 0.3s var(--ease-out);
-  transform: translateZ(0);
-}
-.tilt-on .card:hover .card-glow,
-.tilt-on .hero-card:hover .card-glow,
-.tilt-on .quote-card:hover .card-glow { opacity: 1; }
 
 /* ---------- 按钮涟漪（GSAP 生成 .ripple span） ---------- */
 .btn { overflow: hidden; }

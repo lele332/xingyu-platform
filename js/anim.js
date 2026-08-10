@@ -19,7 +19,6 @@
   /* ---------- 卡片 3D 倾斜：WeakMap 存 tween，listener 只绑一次 ---------- */
   var _tiltTweens = [];
   var tiltStore = new WeakMap();
-  var tiltGlows = new WeakMap();
   function tiltTick(card, e) {
     var t = tiltStore.get(card);
     if (!t) return;
@@ -28,18 +27,11 @@
     var py = (e.clientY - r.top) / r.height;
     t.xT((px - 0.5) * 5);
     t.yT(-(py - 0.5) * 5);
-    var glow = tiltGlows.get(card);
-    if (glow) {
-      // glow 用负 margin 让圆心落在 left/top，translateX/Y 直接移到鼠标位置即可（勿再减半宽，否则双重偏移）
-      t.gx(e.clientX - r.left);
-      t.gy(e.clientY - r.top);
-    }
   }
   function killTilt() {
     _tiltTweens.forEach(function (t) { t.kill(); });
     _tiltTweens = [];
     tiltStore = new WeakMap();
-    tiltGlows = new WeakMap();
   }
 
   var Anim = {
@@ -269,7 +261,7 @@
       );
     },
 
-    /* ---------- 卡片 3D 倾斜 + 光晕跟随鼠标（桌面 hover，GSAP quickTo） ---------- */
+    /* ---------- 卡片 3D 倾斜（桌面 hover，GSAP quickTo） ---------- */
     initTilt: function (scope) {
       killTilt();
       if (!hasGSAP || reduceMotion || !finePointer) return;
@@ -277,22 +269,13 @@
       if (!cards.length) return;
       document.documentElement.classList.add("tilt-on");
       cards.forEach(function (card) {
-        var glow = card.querySelector(".card-glow");
-        if (!glow) {
-          glow = document.createElement("span");
-          glow.className = "card-glow";
-          card.appendChild(glow);
-        }
-        tiltGlows.set(card, glow);
         var t = {
           xT: gsap.quickTo(card, "rotationY", { duration: 0.35, ease: "power2.out", transformPerspective: 900 }),
           yT: gsap.quickTo(card, "rotationX", { duration: 0.35, ease: "power2.out" }),
-          sT: gsap.quickTo(card, "scale", { duration: 0.2, ease: "power2.out" }),
-          gx: gsap.quickTo(glow, "x", { duration: 0.32, ease: "power2.out" }),
-          gy: gsap.quickTo(glow, "y", { duration: 0.32, ease: "power2.out" })
+          sT: gsap.quickTo(card, "scale", { duration: 0.2, ease: "power2.out" })
         };
         tiltStore.set(card, t);
-        _tiltTweens.push(t.xT, t.yT, t.sT, t.gx, t.gy);
+        _tiltTweens.push(t.xT, t.yT, t.sT);
         // listener 只绑定一次（DOM 重建后 dataset 重置自动重绑）
         if (!card.dataset.tiltBound) {
           card.dataset.tiltBound = "1";
