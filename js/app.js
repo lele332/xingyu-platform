@@ -1321,11 +1321,9 @@ const App = (() => {
     }
     document.documentElement.dataset.theme = theme;
     localStorage.setItem("zero_theme", theme);
+    // 窗口标题栏固定黑色（不随主题变色）
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) {
-      const c = theme === "light" ? "#fafafa" : theme === "custom" ? getCustomColors().paper : "#000000";
-      meta.setAttribute("content", c);
-    }
+    if (meta) meta.setAttribute("content", "#000000");
     syncThemeUI();
   }
 
