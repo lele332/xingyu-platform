@@ -167,7 +167,7 @@ ${notesText}`;
         else if (skill === "organize") prompt = buildOrganizePrompt(rawText || "请把下面这段整理成笔记，如果我没有提供内容请提示我。");
 
         const result = await chat([
-          { role: "system", content: "你是星屿平台内置的 AI 助手，回答简洁、实用、结构化。使用中文。" },
+          { role: "system", content: "你是「索引·个人学习索引」平台内置的 AI 助手，回答简洁、实用、结构化。使用中文。" },
           { role: "user", content: prompt }
         ]);
         return { source: "ai", text: result };
@@ -202,7 +202,7 @@ ${notesText}`;
       const ctx = `当前待办：${tasks.length ? tasks.slice(0, 5).map(t => t.title).join("、") : "无"}。`;
       try {
         return await chat([
-          { role: "system", content: "你是星屿个人AI工作平台的助手，帮助大学生管理学业与生活。回答简洁、实用、用中文。" },
+          { role: "system", content: "你是「索引·个人学习索引」的助手，帮助大学生管理学业与生活。回答简洁、实用、用中文。" },
           { role: "user", content: ctx + "\n\n" + freeText }
         ]);
       } catch (e) {

@@ -64,12 +64,12 @@ const Store = (() => {
     };
 
     data.courses = [
-      { id: uid(), name: "高等数学", teacher: "李老师", day: 1, start: "08:00", end: "09:40", location: "教学楼A-301", color: "#0a84ff" },
-      { id: uid(), name: "数据结构", teacher: "王老师", day: 1, start: "10:00", end: "11:40", location: "实验楼B-201", color: "#5e5ce6" },
-      { id: uid(), name: "大学英语", teacher: "陈老师", day: 2, start: "08:00", end: "09:40", location: "教学楼C-105", color: "#64d2ff" },
-      { id: uid(), name: "操作系统", teacher: "赵老师", day: 3, start: "14:00", end: "15:40", location: "实验楼B-105", color: "#bf5af2" },
-      { id: uid(), name: "线性代数", teacher: "李老师", day: 4, start: "10:00", end: "11:40", location: "教学楼A-502", color: "#30d158" },
-      { id: uid(), name: "计算机网络", teacher: "孙老师", day: 5, start: "08:00", end: "09:40", location: "实验楼B-301", color: "#ffd60a" },
+      { id: uid(), name: "高等数学", teacher: "李老师", day: 1, start: "08:00", end: "09:40", location: "教学楼A-301", color: "#2c4870" },
+      { id: uid(), name: "数据结构", teacher: "王老师", day: 1, start: "10:00", end: "11:40", location: "实验楼B-201", color: "#1f3656" },
+      { id: uid(), name: "大学英语", teacher: "陈老师", day: 2, start: "08:00", end: "09:40", location: "教学楼C-105", color: "#6b4f6b" },
+      { id: uid(), name: "操作系统", teacher: "赵老师", day: 3, start: "14:00", end: "15:40", location: "实验楼B-105", color: "#6e5a3a" },
+      { id: uid(), name: "线性代数", teacher: "李老师", day: 4, start: "10:00", end: "11:40", location: "教学楼A-502", color: "#3b7a4f" },
+      { id: uid(), name: "计算机网络", teacher: "孙老师", day: 5, start: "08:00", end: "09:40", location: "实验楼B-301", color: "#b8341e" },
     ];
 
     data.tasks = [

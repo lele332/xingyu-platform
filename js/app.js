@@ -132,16 +132,16 @@ const App = (() => {
     const total = tasks.length;
     Charts.donut($("#taskStatsChart"), {
       segments: [
-        { value: done, color: "#30d158" },
-        { value: total - done, color: "rgba(120,120,128,0.22)" }
+        { value: done, color: "#3b7a4f" },
+        { value: total - done, color: "rgba(26,24,20,0.10)" }
       ],
       size: 170, thickness: 22,
       centerLabel: total ? Math.round(done / total * 100) + "%" : "0%",
       centerSub: "完成率"
     });
     $("#taskStatsLegend").innerHTML = `
-      <span><span class="legend-dot" style="background:#30d158"></span>已完成 ${done}</span>
-      <span><span class="legend-dot" style="background:rgba(120,120,128,0.3)"></span>未完成 ${total - done}</span>`;
+      <span><span class="legend-dot" style="background:#3b7a4f"></span>已完成 ${done}</span>
+      <span><span class="legend-dot" style="background:rgba(26,24,20,0.18)"></span>未完成 ${total - done}</span>`;
 
     // 专注趋势
     renderFocusTrend($("#focusTrendChart"), 7);
@@ -154,7 +154,7 @@ const App = (() => {
     } else {
       ttBox.innerHTML = todayTasks.map(t => `
         <div class="todo-item">
-          <span class="todo-dot" style="background:${t.priority === "high" ? "#ff453a" : t.priority === "mid" ? "#ff9f0a" : "#64d2ff"}"></span>
+          <span class="todo-dot" style="background:${t.priority === "high" ? "#b8341e" : t.priority === "mid" ? "#6e5a3a" : "#8c7e6a"}"></span>
           <span class="todo-pri-${t.priority}">${esc(t.title)}</span>
           <span class="todo-date">${fmtDate(t.due)}</span>
         </div>`).join("");
@@ -191,7 +191,7 @@ const App = (() => {
     if (values.every(v => v === 0)) {
       container.innerHTML = `<div class="empty-state"><div class="big">⏱</div><p>最近没有专注记录，去「专注学习」开启第一个番茄钟吧</p></div>`;
     } else {
-      Charts.bars(container, { labels, values, height: 200, unit: "分", color: "#bf5af2" });
+      Charts.bars(container, { labels, values, height: 200, unit: "分", color: "#2c4870" });
     }
   }
 
@@ -304,7 +304,7 @@ const App = (() => {
   /* ---------- 课程表单 ---------- */
   function openCourseForm(id) {
     const c = id ? Store.getAll("courses").find(x => x.id === id) : null;
-    const colors = ["#0a84ff", "#5e5ce6", "#bf5af2", "#64d2ff", "#30d158", "#ffd60a", "#ff453a", "#ff375f"];
+    const colors = ["#2c4870", "#1f3656", "#6b4f6b", "#6e5a3a", "#3b7a4f", "#b8341e", "#8c6d3f", "#5b574f"];
     const colorOptions = colors.map(cl => `<span class="color-dot" data-c="${cl}" style="background:${cl}"></span>`).join("");
     $("#formTitle").textContent = id ? "编辑课程" : "添加课程";
     $("#formBody").innerHTML = `
@@ -322,7 +322,7 @@ const App = (() => {
         <label class="field"><span>地点</span><input id="f-c-loc" value="${esc(c?.location || "")}" placeholder="如：教学楼A-301"></label>
         <label class="field"><span>颜色</span><div class="color-picker" id="f-c-colors">${colorOptions}</div></label>
       </div>`;
-    let picked = c?.color || "#0a84ff";
+    let picked = c?.color || "#2c4870";
     $$("#f-c-colors .color-dot").forEach(d => {
       if (d.dataset.c === picked) d.classList.add("picked");
       d.onclick = () => {
@@ -515,7 +515,7 @@ const App = (() => {
       labels.push(d.getDate() + "日");
       values.push(mins);
     }
-    Charts.line($("#focusWeekChart"), { labels, values, height: 190, color: "#64d2ff" });
+    Charts.line($("#focusWeekChart"), { labels, values, height: 190, color: "#2c4870" });
   }
 
   function renderFocusHistory() {
@@ -853,7 +853,7 @@ const App = (() => {
 
   async function renderNews() {
     const box = $("#newsList");
-    box.innerHTML = `<div class="empty-state"><div class="big"><span class="spinner" style="border-color:rgba(10,132,255,.3);border-top-color:var(--blue)"></span></div><p>正在加载今日热点...</p></div>`;
+    box.innerHTML = `<div class="empty-state"><div class="big"><span class="spinner" style="border-color:rgba(77,214,255,.3);border-top-color:var(--blue)"></span></div><p>正在加载今日热点...</p></div>`;
     const data = await loadNews(false);
     if (!data || !data.news || !data.news.length) {
       box.innerHTML = `<div class="empty-state">
@@ -1270,53 +1270,37 @@ const App = (() => {
   /* ============================================================
      二维码
      ============================================================ */
-  function openQR() {
-    showModal("qrcodeModal");
-    const box = $("#qrCodeBox");
-    box.innerHTML = `<span class="hint">点击下方按钮生成</span>`;
-  }
+  const DEFAULT_SITE = "https://lele332.github.io/xingyu-platform/";
 
-  function generateQR() {
-    // 默认使用已部署的 GitHub Pages 永久链接（未手动设置时）
-    const DEFAULT_SITE = "https://lele332.github.io/xingyu-platform/";
-    const link = localStorage.getItem("xingyu_site_url") || DEFAULT_SITE;
+  // 使用固定的永久二维码（指向 GitHub Pages 永久链接），不再动态生成
+  function renderQR() {
     const box = $("#qrCodeBox");
     const hint = $("#qrHint");
-    if (link) {
-      hint.textContent = "扫描二维码，在手机上打开你的个人工作台。";
-    } else {
-      hint.textContent = "尚未设置部署链接。请先部署到 GitHub Pages 后，点击「复制部署链接」填入地址再生成。";
-    }
     box.innerHTML = "";
-    try {
-      if (window.QRCode) {
-        new QRCode(box, { text: link || "https://your-github-pages-url.github.io/", width: 190, height: 190, correctLevel: QRCode.CorrectLevel.H });
-      } else {
-        box.innerHTML = `<span class="hint">二维码库加载失败，请检查网络（需联网加载 qrcodejs CDN）。</span>`;
-      }
-    } catch (e) {
-      box.innerHTML = `<span class="hint">生成失败：${esc(e.message)}</span>`;
-    }
+    hint.textContent = "永久链接：" + DEFAULT_SITE.replace(/^https?:\/\//, "");
+    const img = document.createElement("img");
+    img.src = "xingyu-qrcode.png";
+    img.alt = "星屿永久二维码";
+    img.className = "qr-static";
+    img.onerror = () => { box.innerHTML = `<span class="hint">二维码图片加载失败，请检查 xingyu-qrcode.png 是否存在。</span>`; };
+    box.appendChild(img);
+  }
+
+  function openQR() {
+    showModal("qrcodeModal");
+    renderQR();
   }
 
   function copyLink() {
-    const link = localStorage.getItem("xingyu_site_url") || "";
-    if (!link) {
-      toast("请先在设置里粘贴你的 GitHub Pages 部署链接", "err");
-      const val = prompt("请输入你的 GitHub Pages 链接（部署后获得）：");
-      if (val) {
-        localStorage.setItem("xingyu_site_url", val.trim());
-        toast("链接已保存，可生成二维码", "ok");
-      }
-      return;
-    }
-    navigator.clipboard.writeText(link).then(() => toast("链接已复制", "ok")).catch(() => toast("复制失败，请手动复制：" + link, "err"));
+    navigator.clipboard.writeText(DEFAULT_SITE)
+      .then(() => toast("永久链接已复制", "ok"))
+      .catch(() => toast("复制失败，请手动复制：" + DEFAULT_SITE, "err"));
   }
 
   /* ============================================================
      导入课表
      ============================================================ */
-  const COURSE_COLORS = ["#0a84ff", "#5e5ce6", "#bf5af2", "#64d2ff", "#30d158", "#ffd60a", "#ff453a", "#ff375f"];
+  const COURSE_COLORS = ["#2c4870", "#1f3656", "#6b4f6b", "#6e5a3a", "#3b7a4f", "#b8341e", "#8c6d3f", "#5b574f"];
   let pendingImportCourses = [];
 
   function openImportModal() {
@@ -1445,7 +1429,7 @@ const App = (() => {
     $("#gradesResultCount").textContent = `${grades.length} 条成绩`;
     box.innerHTML = grades.map(g => `
       <div class="import-course">
-        <span class="import-cd" style="background:${g.score >= 90 ? "#30d158" : g.score >= 60 ? "#ffd60a" : "#ff453a"}">${g.score}</span>
+        <span class="import-cd" style="background:${g.score >= 90 ? "#3b7a4f" : g.score >= 60 ? "#6e5a3a" : "#b8341e"}">${g.score}</span>
         <div class="import-ci">
           <b>${esc(g.subject)}</b>
           <span>${esc(g.name)} · ${g.credit}学分${g.semester ? " · " + esc(g.semester) : ""}</span>
@@ -1856,7 +1840,6 @@ const App = (() => {
 
     // 二维码
     $("#btnQrcode").onclick = openQR;
-    $("#btnGenQR").onclick = generateQR;
     $("#btnCopyLink").onclick = copyLink;
 
     // 热点新闻
@@ -1948,7 +1931,7 @@ const App = (() => {
     renderAIStatus();
     // 默认展示仪表盘
     switchView("dashboard");
-    console.log("✦ 星屿 · 个人AI工作平台已启动");
+    console.log("⌖ 索引 · 个人学习索引已启动");
   }
 
   return { init };

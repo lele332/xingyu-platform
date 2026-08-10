@@ -3,19 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#000000">
+<meta name="theme-color" content="#f4f1ea">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>星屿 · 个人AI工作平台</title>
-<meta name="description" content="你的个人AI学习与工作平台：课程作业、知识库、专注统计、成长档案、AI助手">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>索引 · 个人学习索引</title>
+<meta name="description" content="把你的学业装进一张索引卡：课程作业、笔记库、专注统计、成长档案、AI 助手，本地优先，米白纸张与印章蓝的检索卡世界。">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<!-- 背景装饰 -->
-<div class="bg-orb bg-orb-1"></div>
-<div class="bg-orb bg-orb-2"></div>
-<div class="bg-grid"></div>
+<!--
+DIRECTION CONTRACT (impeccable:direction-contract 1 · seed 59bd40b6)
+THESIS: 学习是检索与归档——把整个平台做成一张打开的索引卡目录，让「笔记/课程/文献/成绩」都化为你桌上能翻动的索引卡。
+OWN-WORLD: 调色板为手写米白纸张 (#f4f1ea) + 墨黑文字 + 蓝灰抽屉 (#cfd6df) + 印章红/蓝；索书号编号 + 发丝线表格 + 打字机标签；衬线 hero 标题 + 无衬线 UI + 等宽 ID 编号。
+STORY: 访客打开 = 翻到自己的学习索引；每个模块是一卷档案；今日待办像「催还卡」高亮在前；完成任务有盖章动效；AI 助手逐行打印回应，像深夜替你写下建议。
+FIRST VIEWPORT: 顶部品牌「索引 Index」+ 检索全库 + 日期戳；左侧蓝灰抽屉式导航；主区域左列「今日待办」红印章卡 + 倒计时，右列工作台 hero（你好同学 + 3 个 stat） + 卡片网格（任务统计/专注趋势/最近笔记）。
+FORM: 方向 = 检索卡目录世界（图书馆索引卡 + 抽屉 + 索书号 + 印章）；位置 = 我的首选（共鸣排序第 1）；seed key = 59bd40b6。
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md.
+-->
+
+<!-- 背景装饰：纸张底纹（克制） -->
+<div class="bg-paper"></div>
 
 <div class="app">
   <!-- 移动端侧边栏遮罩（必须在 .app 内部，层级在 sidebar 之下） -->
@@ -23,10 +31,10 @@
   <!-- ================= 侧边栏 ================= -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">
-      <div class="logo-icon">🌟</div>
+      <div class="logo-icon" aria-label="索引">⌖</div>
       <div class="logo-text">
-        <span class="logo-name">星屿</span>
-        <span class="logo-sub">个人AI工作平台</span>
+        <span class="logo-name">索引</span>
+        <span class="logo-sub">个人学习索引 · INDEX</span>
       </div>
     </div>
 
@@ -417,13 +425,14 @@
       <button class="modal-close" data-close="qrcodeModal">✕</button>
     </div>
     <div class="modal-body center">
-      <p class="hint">将平台部署到 GitHub Pages 后，手机扫码即可永久访问。</p>
-      <div id="qrCodeBox" class="qr-box"><span class="hint">二维码区域</span></div>
-      <div class="qr-actions">
-        <button class="btn btn-primary" id="btnCopyLink">复制部署链接</button>
-        <button class="btn btn-ghost" id="btnGenQR">生成二维码</button>
+      <p class="hint">手机扫码即可永久访问你的个人工作台。</p>
+      <div id="qrCodeBox" class="qr-box">
+        <img src="xingyu-qrcode.png" alt="星屿永久二维码" class="qr-static">
       </div>
-      <p class="hint" id="qrHint">当前运行于本地，链接留空时将生成一个占位二维码。</p>
+      <div class="qr-actions">
+        <button class="btn btn-primary" id="btnCopyLink">复制永久链接</button>
+      </div>
+      <p class="hint" id="qrHint">永久链接：lele332.github.io/xingyu-platform/</p>
     </div>
   </div>
 </div>
@@ -646,8 +655,6 @@
   </div>
 </div>
 
-<!-- 轻量二维码库 -->
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script src="js/local-config.js"></script>
 <script src="js/lunar.js"></script>
 <script src="js/store.js"></script>

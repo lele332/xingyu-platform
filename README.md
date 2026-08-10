@@ -125,4 +125,4 @@ AI 助手支持任意 **OpenAI 兼容接口**，在右上角「⚙ 设置」中�
 - 纯原生 HTML / CSS / JavaScript，零框架、零构建步骤
 - SVG 手写图表（环形图 / 柱状图 / 折线图）
 - OpenAI 兼容 API 调用
-- qrcodejs 生成二维码（CDN）
+- 固定永久二维码（指向 GitHub Pages 永久链接，无需 CDN）
