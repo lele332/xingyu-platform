@@ -45,6 +45,15 @@ A quiet monochrome document desk. The user opens the app to a blank white surfac
 
 Palette policy: **zero chroma**. Gray scale only. Priority / status differentiation uses weight (700) and gray depth, never color. One accent — black.
 
+## Themes
+
+Two built-in themes, switchable in Settings (`设置 → 界面主题`), persisted in localStorage `zero_theme`, applied via `<html data-theme>` (default **dark / 纯黑**):
+
+- **dark (default)**: pure-black ground `#000`, white ink `#fff`, dark gray steps; course swatches are light grays (`--course-1..8: #ffffff…#808080`).
+- **light**: near-white ground `#fafafa`, black ink `#111`, light gray steps; course swatches are dark grays (`--course-1..8: #111111…#9a9a9a`).
+
+All chrome, charts, and inline colors reference CSS variables (`var(--ink)`, `var(--course-N)`), so switching themes recolors the entire surface instantly with no re-render. Charts.js consumes `var()` tokens for grid, axis, and point colors.
+
 ## Typography
 
 | Token | Stack | Role |

@@ -132,16 +132,16 @@ const App = (() => {
     const total = tasks.length;
     Charts.donut($("#taskStatsChart"), {
       segments: [
-        { value: done, color: "#333333" },
-        { value: total - done, color: "rgba(17,17,17,0.10)" }
+        { value: done, color: "var(--ink-2)" },
+        { value: total - done, color: "var(--fill-2)" }
       ],
       size: 170, thickness: 22,
       centerLabel: total ? Math.round(done / total * 100) + "%" : "0%",
       centerSub: "完成率"
     });
     $("#taskStatsLegend").innerHTML = `
-      <span><span class="legend-dot" style="background:#333333"></span>已完成 ${done}</span>
-      <span><span class="legend-dot" style="background:rgba(26,24,20,0.18)"></span>未完成 ${total - done}</span>`;
+      <span><span class="legend-dot" style="background:var(--ink-2)"></span>已完成 ${done}</span>
+      <span><span class="legend-dot" style="background:var(--fill-3)"></span>未完成 ${total - done}</span>`;
 
     // 专注趋势
     renderFocusTrend($("#focusTrendChart"), 7);
@@ -154,7 +154,7 @@ const App = (() => {
     } else {
       ttBox.innerHTML = todayTasks.map(t => `
         <div class="todo-item">
-          <span class="todo-dot" style="background:${t.priority === "high" ? "#111111" : t.priority === "mid" ? "#555555" : "#8a8a8a"}"></span>
+          <span class="todo-dot" style="background:${t.priority === "high" ? "var(--ink)" : t.priority === "mid" ? "var(--ink-2)" : "var(--ink-3)"}"></span>
           <span class="todo-pri-${t.priority}">${esc(t.title)}</span>
           <span class="todo-date">${fmtDate(t.due)}</span>
         </div>`).join("");
@@ -191,7 +191,7 @@ const App = (() => {
     if (values.every(v => v === 0)) {
       container.innerHTML = `<div class="empty-state"><div class="big">⏱</div><p>最近没有专注记录，去「专注学习」开启第一个番茄钟吧</p></div>`;
     } else {
-      Charts.bars(container, { labels, values, height: 200, unit: "分", color: "#111111" });
+      Charts.bars(container, { labels, values, height: 200, unit: "分", color: "var(--ink)" });
     }
   }
 
@@ -515,7 +515,7 @@ const App = (() => {
       labels.push(d.getDate() + "日");
       values.push(mins);
     }
-    Charts.line($("#focusWeekChart"), { labels, values, height: 190, color: "#111111" });
+    Charts.line($("#focusWeekChart"), { labels, values, height: 190, color: "var(--ink)" });
   }
 
   function renderFocusHistory() {
@@ -1192,7 +1192,21 @@ const App = (() => {
     $("#setApiKey").value = s.apiKey || "";
     $("#setModel").value = s.model || "";
     $("#setNickname").value = s.nickname || "";
+    // 同步当前主题高亮
+    const curTheme = document.documentElement.dataset.theme || "dark";
+    $$(".theme-opt").forEach(b => b.classList.toggle("active", b.dataset.themePick === curTheme));
     showModal("settingsModal");
+  }
+
+  /* ============================================================
+     主题切换（纯黑 / 纯白）
+     ============================================================ */
+  function applyTheme(theme) {
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem("zero_theme", theme);
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute("content", theme === "light" ? "#fafafa" : "#000000");
+    $$(".theme-opt").forEach(b => b.classList.toggle("active", b.dataset.themePick === theme));
   }
 
   function saveSettings() {
@@ -1298,7 +1312,7 @@ const App = (() => {
   /* ============================================================
      导入课表
      ============================================================ */
-  const COURSE_COLORS = ["#111111", "#000000", "#444444", "#555555", "#333333", "#111111", "#666666", "#888888"];
+  const COURSE_COLORS = ["var(--course-1)", "var(--course-2)", "var(--course-3)", "var(--course-4)", "var(--course-5)", "var(--course-6)", "var(--course-7)", "var(--course-8)"];
   let pendingImportCourses = [];
 
   function openImportModal() {
@@ -1427,7 +1441,7 @@ const App = (() => {
     $("#gradesResultCount").textContent = `${grades.length} 条成绩`;
     box.innerHTML = grades.map(g => `
       <div class="import-course">
-        <span class="import-cd" style="background:${g.score >= 90 ? "#333333" : g.score >= 60 ? "#555555" : "#111111"}">${g.score}</span>
+        <span class="import-cd" style="background:${g.score >= 90 ? "var(--course-2)" : g.score >= 60 ? "var(--course-5)" : "var(--course-1)"}">${g.score}</span>
         <div class="import-ci">
           <b>${esc(g.subject)}</b>
           <span>${esc(g.name)} · ${g.credit}学分${g.semester ? " · " + esc(g.semester) : ""}</span>
@@ -1804,6 +1818,7 @@ const App = (() => {
     // 设置
     $("#btnSettings").onclick = openSettings;
     $("#btnSaveSettings").onclick = saveSettings;
+    $$("[data-theme-pick]").forEach(b => b.onclick = () => applyTheme(b.dataset.themePick));
     $$("[data-preset]").forEach(p => p.onclick = () => {
       const preset = AI.PRESETS[p.dataset.preset];
       if (preset) { $("#setBaseUrl").value = preset.baseUrl; $("#setModel").value = preset.model; toast(`已填入 ${p.dataset.preset} 预设`, "ok"); }
