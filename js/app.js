@@ -98,8 +98,36 @@ const App = (() => {
     if (catEl) catEl.textContent = t("quote.cat." + q.cat);
   }
 
+  /* ============================================================
+     今日热点（hero 卡片内入口，取自每日新闻数据）
+     ============================================================ */
+  async function renderHeroNews() {
+    const box = $("#heroNews");
+    if (!box) return;
+    const data = await loadNews(false);
+    if (!data || !data.news || !data.news.length) { box.style.display = "none"; return; }
+    const items = data.news.slice(0, 3);
+    box.style.display = "";
+    box.innerHTML = `
+      <div class="hero-news-head">
+        <span class="hero-news-label">${t("hero.news")}</span>
+        <button class="text-btn" data-goto="news">${t("hero.newsAll")} →</button>
+      </div>
+      <div class="hero-news-list">
+        ${items.map((n, i) => `
+          <a class="hero-news-item" href="${esc(n.link)}" target="_blank" rel="noopener" title="${esc(n.title)}">
+            <span class="hero-news-rank">${i + 1}</span>
+            <span class="hero-news-text">${esc(n.title)}</span>
+            <span class="hero-news-src">${esc(n.source || "")}</span>
+          </a>`).join("")}
+      </div>`;
+    const go = box.querySelector("[data-goto='news']");
+    if (go) go.onclick = () => switchView("news");
+  }
+
   function renderDashboard() {
     renderQuote();
+    renderHeroNews();
     // 问候语（按时段细化，附一句温暖副语）
     const name = Store.getProfile().name || "同学";
     const h = new Date().getHours();
@@ -1358,7 +1386,7 @@ const App = (() => {
       "sub.lit": "专业文献库与期刊导航",
       "sub.news": "每日国内外热点速递",
       "sub.ai": "你的智能学习伙伴",
-      "hero.todo": "待办任务", "hero.due": "今日到期", "hero.notes": "笔记", "hero.focusMin": "今日专注(分)",
+      "hero.todo": "待办任务", "hero.due": "今日到期", "hero.notes": "笔记", "hero.focusMin": "今日专注(分)", "hero.news": "今日热点", "hero.newsAll": "查看全部",
       "settings.title": "设置",
       "settings.theme": "界面主题", "settings.font": "界面字体", "settings.lang": "界面语言", "settings.bg": "界面背景", "bg.none": "无", "bg.guilinMist": "桂林·雾山", "bg.guilinAerial": "桂林·航拍", "bg.jiuzhaigou": "九寨沟", "bg.zhangjiajie": "张家界", "bg.hint": "以中国山河摄影作背景，文字始终清晰可读。",
       "settings.ai": "AI 模型配置（OpenAI 兼容接口）",
@@ -1398,7 +1426,7 @@ const App = (() => {
       "sub.lit": "專業文獻庫與期刊導航",
       "sub.news": "每日國內外熱點速遞",
       "sub.ai": "你的智能學習夥伴",
-      "hero.todo": "待辦任務", "hero.due": "今日到期", "hero.notes": "筆記", "hero.focusMin": "今日專注(分)",
+      "hero.todo": "待辦任務", "hero.due": "今日到期", "hero.notes": "筆記", "hero.focusMin": "今日專注(分)", "hero.news": "今日熱點", "hero.newsAll": "查看全部",
       "settings.title": "設定",
       "settings.theme": "界面主題", "settings.font": "界面字體", "settings.lang": "界面語言", "settings.bg": "界面背景", "bg.none": "無", "bg.guilinMist": "桂林·霧山", "bg.guilinAerial": "桂林·航拍", "bg.jiuzhaigou": "九寨溝", "bg.zhangjiajie": "張家界", "bg.hint": "以中國山河攝影作背景，文字始終清晰可讀。",
       "settings.ai": "AI 模型配置（OpenAI 兼容接口）",
@@ -1438,7 +1466,7 @@ const App = (() => {
       "sub.lit": "References & journal navigation",
       "sub.news": "Daily headline digest",
       "sub.ai": "Your smart study partner",
-      "hero.todo": "Open tasks", "hero.due": "Due today", "hero.notes": "Notes", "hero.focusMin": "Focus (min)",
+      "hero.todo": "Open tasks", "hero.due": "Due today", "hero.notes": "Notes", "hero.focusMin": "Focus (min)", "hero.news": "Top News", "hero.newsAll": "View All",
       "settings.title": "Settings",
       "settings.theme": "Theme", "settings.font": "Font", "settings.lang": "Language", "settings.bg": "Background", "bg.none": "None", "bg.guilinMist": "Guilin Mist", "bg.guilinAerial": "Guilin Aerial", "bg.jiuzhaigou": "Jiuzhaigou", "bg.zhangjiajie": "Zhangjiajie", "bg.hint": "China landscape photography as backdrop; text stays readable.",
       "settings.ai": "AI Model (OpenAI-compatible)",

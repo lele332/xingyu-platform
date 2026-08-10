@@ -822,6 +822,33 @@ input, textarea, select { caret-color: var(--stamp-blue); }
   text-transform: uppercase; margin-top: 4px; display: block;
 }
 
+/* ---------- Hero 今日热点 ---------- */
+.hero-news { flex-basis: 100%; margin-top: 6px; }
+.hero-news-head { display: flex; align-items: center; justify-content: space-between; margin: 8px 0 10px; }
+.hero-news-label {
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 1.5px;
+  color: var(--ink-3); text-transform: uppercase;
+}
+.hero-news-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.hero-news-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 12px; border-radius: 6px;
+  background: var(--fill); border: 1px solid var(--rule-thin);
+  text-decoration: none; color: var(--ink-2); font-size: 12.5px; line-height: 1.5;
+  transition: all var(--dur-fast) var(--ease-out); min-width: 0;
+}
+.hero-news-item:hover { color: var(--ink); background: var(--fill-2); border-color: var(--ink-3); }
+.hero-news-rank {
+  width: 20px; height: 20px; border-radius: 4px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 10px; font-weight: 700; color: var(--ink-3); background: var(--paper-sunk);
+}
+.hero-news-text { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hero-news-src { flex-shrink: 0; font-family: var(--font-mono); font-size: 9px; color: var(--ink-faint); }
+@media (max-width: 900px) {
+  .hero-news-list { grid-template-columns: 1fr; }
+}
+
 /* ---------- 每日一言 ---------- */
 .quote-card { margin-bottom: 16px; }
 .quote-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
