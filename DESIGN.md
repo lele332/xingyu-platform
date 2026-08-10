@@ -124,11 +124,14 @@ Four photos are bundled locally in `assets/` (Pexels license, free to use). The 
 
 Animations are orchestrated by **GSAP 3.12** (bundled locally at `assets/js/gsap.min.js` + `ScrollTrigger.min.js`) through a thin wrapper `js/anim.js` (`window.Anim`). If GSAP fails to load, every call falls back to the original CSS animation.
 
-- **View enter**: fade + 24px rise + scale(0.985), `power3.out` 550ms; the dashboard grid cards then stagger in (+18px, 70ms apart).
+- **View enter**: fade + 24px rise + scale(0.985), `power3.out` 550ms.
+- **Dashboard intro** (`dashboardIntro`, timeline): hero card rises & un-blurs → stat numbers roll in (`countUp`) → daily quote fades in → grid cards stagger up (80ms apart). The dashboard has its own choreographed opening instead of the generic view enter.
 - **Count-up**: hero stats roll via `gsap.to` on a state object with `snap`, `power2.out` 900ms.
 - **Modals / lock screen**: mask fades while the sheet scales up with `back.out`; close reverses, removes `.show` on complete.
 - **Nav press**: elastic `back.out(2.2)` 400ms feedback on the active item.
-- **Quote swap**: text + category fade/rise 400ms.
+- **Quote swap**: text + category fade/rise 420ms.
+- **Card tilt + glow** (`initTilt`, desktop hover only): cards rotate toward the cursor via `gsap.quickTo` (`rotationX/Y`, ±5°, `transformPerspective: 900`) with a radial light glow that follows the pointer (`--mx/--my` CSS vars). Only enabled when `(hover: hover) and (pointer: fine)`; disabled on touch.
+- **Button ripple** (`initRipple`): every `.btn` click spawns a `currentColor` ripple span that scales+fades (event delegation, works on dynamically created buttons).
 - **Scroll reveal (ScrollTrigger)**: long lists (news items, note cards, literature rows, focus history) fade + rise as they enter the viewport (`start: top 94%`, `once: true`); triggers are killed on view switch.
 - All tweens use transforms + `autoAlpha`, `clearProps` on complete; `overwrite: "auto"` for interruption; `prefers-reduced-motion` collapses to instant.
 

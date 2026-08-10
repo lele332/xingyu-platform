@@ -1648,3 +1648,36 @@ body { transition: background-color 0.4s var(--ease-out), color 0.4s var(--ease-
   font-size: 12.5px; color: var(--ink-2); margin: 4px 0 10px; cursor: pointer;
 }
 .lock-toggle input { accent-color: var(--ink); width: 15px; height: 15px; }
+
+/* ---------- GSAP 卡片 3D 倾斜 + 光晕（html.tilt-on，桌面 hover） ---------- */
+.tilt-on .card,
+.tilt-on .hero-card,
+.tilt-on .quote-card {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.tilt-on .card:hover,
+.tilt-on .hero-card:hover,
+.tilt-on .quote-card:hover {
+  /* 3D 倾斜由 GSAP 控制，CSS 只保留背景/阴影反馈 */
+  transform: none;
+}
+.tilt-on .card::after,
+.tilt-on .hero-card::after,
+.tilt-on .quote-card::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  pointer-events: none; z-index: 1;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), var(--fill-3), transparent 65%);
+  opacity: 0; transition: opacity 0.3s var(--ease-out);
+}
+.tilt-on .card:hover::after,
+.tilt-on .hero-card:hover::after,
+.tilt-on .quote-card:hover::after { opacity: 1; }
+
+/* ---------- 按钮涟漪（GSAP 生成 .ripple span） ---------- */
+.btn { overflow: hidden; }
+.btn .ripple {
+  position: absolute; border-radius: 50%;
+  background: currentColor; opacity: 0;
+  pointer-events: none; transform: translateZ(0);
+}

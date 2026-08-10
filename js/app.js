@@ -54,8 +54,8 @@ const App = (() => {
     const v = $("#view-" + view);
     if (v) {
       v.classList.add("active");
-      // GSAP 视图入场动画（淡入 + 上移 + 缩放；无 GSAP 时回退 CSS）
-      window.Anim && Anim.viewEnter(v);
+      if (view === "dashboard" && window.Anim) Anim.dashboardIntro(v);
+      else window.Anim && Anim.viewEnter(v);
     }
     const titles = { dashboard: t("title.dashboard"), courses: t("title.courses"), notes: t("title.notes"), focus: t("title.focus"), growth: t("title.growth"), lit: t("title.lit"), news: t("title.news"), ai: t("title.ai") };
     const subs = { dashboard: t("sub.dashboard"), courses: t("sub.courses"), notes: t("sub.notes"), focus: t("sub.focus"), growth: t("sub.growth"), lit: t("sub.lit"), news: t("sub.news"), ai: t("sub.ai") };
@@ -69,6 +69,8 @@ const App = (() => {
     renderCurrent();
     // 视图从 display:none 变为 block 后重算 ScrollTrigger 位置
     window.Anim && Anim.refreshScroll();
+    // 卡片 3D 倾斜（仪表盘由 dashboardIntro 内部处理）
+    if (view !== "dashboard" && window.Anim) Anim.initTilt(v);
   }
 
   function renderCurrent() {
@@ -82,11 +84,14 @@ const App = (() => {
     else if (currentView === "ai") renderAIStatus();
   }
 
-  /* ---------- 长列表滚动分批浮入（ScrollTrigger） ---------- */
+  /* ---------- 长列表滚动分批浮入（ScrollTrigger）+ 卡片倾斜 ---------- */
   let _revealCleanup = null;
   function revealCards(container, selector) {
     if (_revealCleanup) { _revealCleanup(); _revealCleanup = null; }
-    if (window.Anim) _revealCleanup = Anim.scrollReveal(container, selector);
+    if (window.Anim) {
+      _revealCleanup = Anim.scrollReveal(container, selector);
+      Anim.initTilt(container);
+    }
   }
 
   /* ============================================================
@@ -2372,6 +2377,8 @@ const App = (() => {
   function init() {
     bindEvents();
     applyI18n();
+    // 按钮涟漪（事件委托，全局一次）
+    window.Anim && Anim.initRipple();
     // 启动锁（设置了访问密码则锁定）
     applyLockPrefs();
     // 应用保存的昵称（仅当尚未设置个人昵称时）

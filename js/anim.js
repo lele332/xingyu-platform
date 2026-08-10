@@ -7,6 +7,7 @@
 
   var hasGSAP = typeof window.gsap !== "undefined";
   var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var finePointer = window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
   if (hasGSAP) {
     if (window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
@@ -15,9 +16,73 @@
 
   function dur(full) { return reduceMotion ? 0 : (full || 0.55); }
 
+  /* ---------- 卡片 3D 倾斜：先清理旧的再绑定（DOM 重建后重绑） ---------- */
+  var _tiltTweens = [];
+  function killTilt() {
+    _tiltTweens.forEach(function (t) { t.kill(); });
+    _tiltTweens = [];
+  }
+  function tiltHandler(card, xT, yT) {
+    return function (e) {
+      var r = card.getBoundingClientRect();
+      var px = (e.clientX - r.left) / r.width;
+      var py = (e.clientY - r.top) / r.height;
+      xT((px - 0.5) * 5);
+      yT(-(py - 0.5) * 5);
+      card.style.setProperty("--mx", (e.clientX - r.left) + "px");
+      card.style.setProperty("--my", (e.clientY - r.top) + "px");
+    };
+  }
+
   var Anim = {
     hasGSAP: hasGSAP,
     reducedMotion: reduceMotion,
+
+    /* ============================================================
+       仪表盘开场序列（hero → 数字滚动 → 每日一言 → 卡片错落）
+       ============================================================ */
+    dashboardIntro: function (scope) {
+      if (!scope) return;
+      if (!hasGSAP || reduceMotion) {
+        // 直接显示 + 数字到位
+        var st = scope.querySelectorAll("#heroStats [data-count]");
+        for (var i = 0; i < st.length; i++) st[i].textContent = st[i].dataset.count;
+        Anim.initTilt(scope);
+        return;
+      }
+      var hero = scope.querySelector(".hero-card");
+      var quote = scope.querySelector(".quote-card");
+      var grid = gsap.utils.toArray(".dash-grid > .card", scope);
+      var tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      if (hero) {
+        tl.fromTo(hero,
+          { autoAlpha: 0, y: 32, scale: 0.97 },
+          { autoAlpha: 1, y: 0, scale: 1, duration: 0.6, clearProps: "all" },
+          0.05
+        );
+        tl.add(function () {
+          gsap.utils.toArray("#heroStats [data-count]", scope).forEach(function (el) {
+            Anim.countUp(el, +el.dataset.count);
+          });
+        }, ">-0.12");
+      }
+      if (quote) {
+        tl.fromTo(quote,
+          { autoAlpha: 0, y: 22 },
+          { autoAlpha: 1, y: 0, duration: 0.45, clearProps: "all" },
+          ">-0.18"
+        );
+      }
+      if (grid.length) {
+        tl.fromTo(grid,
+          { autoAlpha: 0, y: 26 },
+          { autoAlpha: 1, y: 0, duration: 0.5, stagger: 0.08, clearProps: "all" },
+          ">-0.15"
+        );
+      }
+      Anim.initTilt(scope);
+      return tl;
+    },
 
     /* ---------- 视图入场：淡入 + 上移 + 轻微缩放 ---------- */
     viewEnter: function (el) {
@@ -37,18 +102,6 @@
           clearProps: "transform,opacity,visibility"
         }
       );
-      // 仪表盘：网格卡片错落浮入（增强层次感）
-      var cards = el.querySelectorAll(".dash-grid > .card");
-      if (cards.length && !reduceMotion) {
-        gsap.fromTo(cards,
-          { autoAlpha: 0, y: 18 },
-          {
-            autoAlpha: 1, y: 0,
-            duration: dur(0.5), stagger: 0.07, delay: 0.12,
-            clearProps: "transform,opacity,visibility"
-          }
-        );
-      }
     },
 
     /* ---------- 统计数字滚动 ---------- */
@@ -141,9 +194,50 @@
     quoteIn: function (el) {
       if (!el || !hasGSAP || reduceMotion) return;
       gsap.fromTo(el,
-        { autoAlpha: 0, y: 8 },
-        { autoAlpha: 1, y: 0, duration: dur(0.4), clearProps: "transform,opacity,visibility" }
+        { autoAlpha: 0, y: 10 },
+        { autoAlpha: 1, y: 0, duration: dur(0.42), ease: "power3.out", clearProps: "transform,opacity,visibility" }
       );
+    },
+
+    /* ---------- 卡片 3D 倾斜 + 光晕（桌面 hover，GSAP quickTo） ---------- */
+    initTilt: function (scope) {
+      killTilt();
+      if (!hasGSAP || reduceMotion || !finePointer) return;
+      var cards = gsap.utils.toArray(".card, .hero-card, .quote-card", scope);
+      if (!cards.length) return;
+      document.documentElement.classList.add("tilt-on");
+      cards.forEach(function (card) {
+        var xT = gsap.quickTo(card, "rotationY", { duration: 0.35, ease: "power2.out", transformPerspective: 900 });
+        var yT = gsap.quickTo(card, "rotationX", { duration: 0.35, ease: "power2.out" });
+        var sT = gsap.quickTo(card, "scale", { duration: 0.2, ease: "power2.out" });
+        _tiltTweens.push(xT, yT, sT);
+        card.addEventListener("mousemove", tiltHandler(card, xT, yT));
+        card.addEventListener("mouseenter", function () { sT(1.015); });
+        card.addEventListener("mouseleave", function () { xT(0); yT(0); sT(1); });
+      });
+    },
+    killTilt: killTilt,
+
+    /* ---------- 按钮涟漪（事件委托，动态按钮也生效） ---------- */
+    initRipple: function () {
+      if (!hasGSAP || reduceMotion) return;
+      document.addEventListener("click", function (e) {
+        var btn = e.target.closest(".btn");
+        if (!btn) return;
+        var r = btn.getBoundingClientRect();
+        var span = document.createElement("span");
+        span.className = "ripple";
+        var size = Math.max(r.width, r.height) * 1.2;
+        span.style.width = span.style.height = size + "px";
+        span.style.left = (e.clientX - r.left - size / 2) + "px";
+        span.style.top = (e.clientY - r.top - size / 2) + "px";
+        btn.appendChild(span);
+        gsap.fromTo(span, { scale: 0, opacity: 0.4 }, {
+          scale: 1, opacity: 0,
+          duration: 0.55, ease: "power2.out",
+          onComplete: function () { span.remove(); }
+        });
+      });
     },
 
     /* ---------- 滚动分批浮入（ScrollTrigger），返回清理函数 ---------- */
