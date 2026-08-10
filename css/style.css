@@ -581,6 +581,14 @@ body {
   background-image: url("../assets/bg-guilin-aerial.jpg");
   opacity: 0.26;
 }
+[data-bg="jiuzhaigou"] .bg-photo {
+  background-image: url("../assets/bg-jiuzhaigou.jpg");
+  opacity: 0.3;
+}
+[data-bg="zhangjiajie"] .bg-photo {
+  background-image: url("../assets/bg-zhangjiajie.jpg");
+  opacity: 0.28;
+}
 @media (prefers-reduced-motion: no-preference) {
   .bg-photo { transition: opacity 0.6s var(--ease-out); }
 }
@@ -1503,3 +1511,46 @@ body { transition: background-color 0.4s var(--ease-out), color 0.4s var(--ease-
 .card { transition: transform var(--dur-normal) var(--ease-out), box-shadow var(--dur-normal) var(--ease-out), background-color 0.4s var(--ease-out), border-color 0.4s var(--ease-out); }
 .modal { transition: background-color 0.4s var(--ease-out), border-color 0.4s var(--ease-out); }
 .hstat, .fstat, .gpa-box { transition: all var(--dur-fast) var(--ease-out); }
+
+/* ---------- 玻璃卡片：半透明让山河背景透出 ---------- */
+.card, .hero-card, .quote-card {
+  background-color: color-mix(in srgb, var(--paper-card) 70%, transparent);
+  -webkit-backdrop-filter: blur(16px) saturate(1.05);
+  backdrop-filter: blur(16px) saturate(1.05);
+}
+.hstat {
+  background-color: color-mix(in srgb, var(--paper) 76%, transparent);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+.sidebar {
+  background-color: color-mix(in srgb, var(--drawer) 80%, transparent);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+.topbar {
+  background-color: color-mix(in srgb, var(--paper-card) 76%, transparent);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+.nav-item.active, .tab-btn.active, .side-btn, .toolbar-tabs {
+  background-color: color-mix(in srgb, var(--paper-card) 72%, transparent);
+}
+.modal {
+  background-color: color-mix(in srgb, var(--paper-card) 90%, transparent);
+  -webkit-backdrop-filter: blur(24px) saturate(1.05);
+  backdrop-filter: blur(24px) saturate(1.05);
+}
+.week-day, .note-card, .flash-card, .journal-card, .lit-item, .news-item, .import-course, .course-row, .task-row, .cd-item {
+  background-color: color-mix(in srgb, var(--paper-card) 78%, transparent);
+}
+/* 用户偏好"降低透明"：恢复不透明实底，保证可读性 */
+@media (prefers-reduced-transparency: reduce) {
+  .card, .hero-card, .quote-card, .nav-item.active, .tab-btn.active, .side-btn, .toolbar-tabs,
+  .week-day, .note-card, .flash-card, .journal-card, .lit-item, .news-item, .import-course, .course-row, .task-row, .cd-item {
+    background-color: var(--paper-card);
+  }
+  .hstat { background-color: var(--paper); }
+  .sidebar { background-color: var(--drawer); }
+  .topbar, .modal { background-color: var(--paper-card); }
+}

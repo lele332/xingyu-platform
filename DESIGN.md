@@ -72,9 +72,11 @@ Each preset defines its full token set (paper/ink/drawer/rule/accent + course sw
 ## Photography Background
 
 Optional China-landscape photography backdrop (`设置 → 界面背景`, localStorage `zero_bg`, `<html data-bg>`):
-- `none` (default) · `guilin-mist` (misty karst peaks) · `guilin-aerial` (aerial of Guilin river).
+- `none` (default) · `guilin-mist` (misty karst peaks) · `guilin-aerial` (aerial of Guilin river) · `jiuzhaigou` (turquoise alpine lakes) · `zhangjiajie` (sandstone pillars).
 
-Two photos are bundled locally in `assets/` (Pexels license, free to use). The photo layer sits under all chrome at low opacity (`0.22–0.3`), tinted by the active theme's ground color, so text stays readable in every theme. Switching fades over 0.6s.
+Four photos are bundled locally in `assets/` (Pexels license, free to use). The photo layer sits under all chrome at low opacity (`0.22–0.3`), tinted by the active theme's ground color.
+
+**Glass cards**: surfaces (`card`, `hero`, `quote`, `sidebar`, `topbar`, `modal`, list rows) use `color-mix(in srgb, var(--paper-card) 70–90%, transparent)` + `backdrop-filter: blur()` so the photography shows through softly while text stays readable. `prefers-reduced-transparency` restores solid grounds.
 
 ## Fonts & Language
 
