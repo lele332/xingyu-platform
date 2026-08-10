@@ -16,22 +16,29 @@
 
   function dur(full) { return reduceMotion ? 0 : (full || 0.55); }
 
-  /* ---------- 卡片 3D 倾斜：先清理旧的再绑定（DOM 重建后重绑） ---------- */
+  /* ---------- 卡片 3D 倾斜：WeakMap 存 tween，listener 只绑一次 ---------- */
   var _tiltTweens = [];
+  var tiltStore = new WeakMap();
+  var tiltGlows = new WeakMap();
+  function tiltTick(card, e) {
+    var t = tiltStore.get(card);
+    if (!t) return;
+    var r = card.getBoundingClientRect();
+    var px = (e.clientX - r.left) / r.width;
+    var py = (e.clientY - r.top) / r.height;
+    t.xT((px - 0.5) * 5);
+    t.yT(-(py - 0.5) * 5);
+    var glow = tiltGlows.get(card);
+    if (glow) {
+      t.gx(e.clientX - r.left - glow.offsetWidth / 2);
+      t.gy(e.clientY - r.top - glow.offsetHeight / 2);
+    }
+  }
   function killTilt() {
     _tiltTweens.forEach(function (t) { t.kill(); });
     _tiltTweens = [];
-  }
-  function tiltHandler(card, xT, yT) {
-    return function (e) {
-      var r = card.getBoundingClientRect();
-      var px = (e.clientX - r.left) / r.width;
-      var py = (e.clientY - r.top) / r.height;
-      xT((px - 0.5) * 5);
-      yT(-(py - 0.5) * 5);
-      card.style.setProperty("--mx", (e.clientX - r.left) + "px");
-      card.style.setProperty("--my", (e.clientY - r.top) + "px");
-    };
+    tiltStore = new WeakMap();
+    tiltGlows = new WeakMap();
   }
 
   var Anim = {
@@ -181,13 +188,60 @@
       });
     },
 
-    /* ---------- 侧边栏点击：弹性反馈 ---------- */
+    /* ---------- 侧边栏入场序列（一次） ---------- */
+    sidebarIntro: function () {
+      if (!hasGSAP || reduceMotion) return;
+      var items = gsap.utils.toArray(".nav-item");
+      if (!items.length) return;
+      var brand = document.querySelector(".brand");
+      var labels = gsap.utils.toArray(".nav-group-label");
+      var tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      if (brand) tl.fromTo(brand, { autoAlpha: 0, y: -10 }, { autoAlpha: 1, y: 0, duration: 0.4, clearProps: "all" }, 0);
+      if (labels.length) {
+        tl.fromTo(labels, { autoAlpha: 0, x: -10 }, { autoAlpha: 1, x: 0, duration: 0.3, stagger: 0.06, clearProps: "all" }, 0.1);
+      }
+      tl.fromTo(items,
+        { autoAlpha: 0, x: -14 },
+        { autoAlpha: 1, x: 0, duration: 0.34, stagger: 0.045, clearProps: "all" },
+        0.18
+      );
+      return tl;
+    },
+
+    /* ---------- 侧边栏 hover：高光扫过 + 图标微动 ---------- */
+    initNav: function () {
+      if (!hasGSAP || reduceMotion || !finePointer) return;
+      gsap.utils.toArray(".nav-item").forEach(function (item) {
+        var shine = item.querySelector(".nav-shine");
+        if (!shine) {
+          shine = document.createElement("span");
+          shine.className = "nav-shine";
+          item.appendChild(shine);
+        }
+        var ico = item.querySelector(".nav-ico");
+        var sweep = gsap.fromTo(shine,
+          { xPercent: -130 },
+          { xPercent: 130, duration: 0.75, ease: "power2.inOut", paused: true, clearProps: "transform" }
+        );
+        item.addEventListener("mouseenter", function () {
+          sweep.restart();
+          if (ico) gsap.fromTo(ico, { scale: 0.85 }, { scale: 1, duration: 0.3, ease: "back.out(2.2)", clearProps: "transform" });
+        });
+        item.addEventListener("mouseleave", function () {
+          sweep.pause();
+          gsap.set(shine, { xPercent: -130 });
+        });
+      });
+    },
+
+    /* ---------- 侧边栏点击：图标弹跳 + 弹性反馈 ---------- */
     navPulse: function (item) {
       if (!item || !hasGSAP || reduceMotion) return;
-      gsap.fromTo(item,
-        { scale: 0.95 },
-        { scale: 1, duration: 0.4, ease: "back.out(2.2)", clearProps: "transform" }
-      );
+      var ico = item.querySelector(".nav-ico");
+      if (ico) {
+        gsap.fromTo(ico, { scale: 0.6, rotation: -5 }, { scale: 1, rotation: 0, duration: 0.45, ease: "back.out(2.6)", clearProps: "transform" });
+      }
+      gsap.fromTo(item, { scale: 0.97 }, { scale: 1, duration: 0.4, ease: "back.out(2)", clearProps: "transform" });
     },
 
     /* ---------- 文本淡入（每日一言等） ---------- */
@@ -199,7 +253,7 @@
       );
     },
 
-    /* ---------- 卡片 3D 倾斜 + 光晕（桌面 hover，GSAP quickTo） ---------- */
+    /* ---------- 卡片 3D 倾斜 + 光晕跟随鼠标（桌面 hover，GSAP quickTo） ---------- */
     initTilt: function (scope) {
       killTilt();
       if (!hasGSAP || reduceMotion || !finePointer) return;
@@ -207,13 +261,29 @@
       if (!cards.length) return;
       document.documentElement.classList.add("tilt-on");
       cards.forEach(function (card) {
-        var xT = gsap.quickTo(card, "rotationY", { duration: 0.35, ease: "power2.out", transformPerspective: 900 });
-        var yT = gsap.quickTo(card, "rotationX", { duration: 0.35, ease: "power2.out" });
-        var sT = gsap.quickTo(card, "scale", { duration: 0.2, ease: "power2.out" });
-        _tiltTweens.push(xT, yT, sT);
-        card.addEventListener("mousemove", tiltHandler(card, xT, yT));
-        card.addEventListener("mouseenter", function () { sT(1.015); });
-        card.addEventListener("mouseleave", function () { xT(0); yT(0); sT(1); });
+        var glow = card.querySelector(".card-glow");
+        if (!glow) {
+          glow = document.createElement("span");
+          glow.className = "card-glow";
+          card.appendChild(glow);
+        }
+        tiltGlows.set(card, glow);
+        var t = {
+          xT: gsap.quickTo(card, "rotationY", { duration: 0.35, ease: "power2.out", transformPerspective: 900 }),
+          yT: gsap.quickTo(card, "rotationX", { duration: 0.35, ease: "power2.out" }),
+          sT: gsap.quickTo(card, "scale", { duration: 0.2, ease: "power2.out" }),
+          gx: gsap.quickTo(glow, "x", { duration: 0.32, ease: "power2.out" }),
+          gy: gsap.quickTo(glow, "y", { duration: 0.32, ease: "power2.out" })
+        };
+        tiltStore.set(card, t);
+        _tiltTweens.push(t.xT, t.yT, t.sT, t.gx, t.gy);
+        // listener 只绑定一次（DOM 重建后 dataset 重置自动重绑）
+        if (!card.dataset.tiltBound) {
+          card.dataset.tiltBound = "1";
+          card.addEventListener("mousemove", function (e) { tiltTick(card, e); });
+          card.addEventListener("mouseenter", function () { var s = tiltStore.get(card); if (s) s.sT(1.015); });
+          card.addEventListener("mouseleave", function () { var s = tiltStore.get(card); if (s) { s.xT(0); s.yT(0); s.sT(1); } });
+        }
       });
     },
     killTilt: killTilt,

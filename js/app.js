@@ -2379,6 +2379,9 @@ const App = (() => {
     applyI18n();
     // 按钮涟漪（事件委托，全局一次）
     window.Anim && Anim.initRipple();
+    // 侧边栏入场序列 + hover 高光（静态 DOM，一次绑定）
+    window.Anim && Anim.sidebarIntro();
+    window.Anim && Anim.initNav();
     // 启动锁（设置了访问密码则锁定）
     applyLockPrefs();
     // 应用保存的昵称（仅当尚未设置个人昵称时）
@@ -2393,6 +2396,8 @@ const App = (() => {
     renderAIStatus();
     // 默认展示仪表盘
     switchView("dashboard");
+    // 首次进入 dashboard 补开场序列（同视图 switchView 会 early return，动画不自动触发）
+    if (window.Anim) Anim.dashboardIntro($("#view-dashboard"));
     console.log("○ 零 · 个人学习工作台已启动");
   }
 

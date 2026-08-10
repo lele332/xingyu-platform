@@ -128,9 +128,11 @@ Animations are orchestrated by **GSAP 3.12** (bundled locally at `assets/js/gsap
 - **Dashboard intro** (`dashboardIntro`, timeline): hero card rises & un-blurs → stat numbers roll in (`countUp`) → daily quote fades in → grid cards stagger up (80ms apart). The dashboard has its own choreographed opening instead of the generic view enter.
 - **Count-up**: hero stats roll via `gsap.to` on a state object with `snap`, `power2.out` 900ms.
 - **Modals / lock screen**: mask fades while the sheet scales up with `back.out`; close reverses, removes `.show` on complete.
-- **Nav press**: elastic `back.out(2.2)` 400ms feedback on the active item.
+- **Nav press**: elastic `back.out(2.6)` 450ms on click — the item scales while its icon pops with a slight rotation.
 - **Quote swap**: text + category fade/rise 420ms.
-- **Card tilt + glow** (`initTilt`, desktop hover only): cards rotate toward the cursor via `gsap.quickTo` (`rotationX/Y`, ±5°, `transformPerspective: 900`) with a radial light glow that follows the pointer (`--mx/--my` CSS vars). Only enabled when `(hover: hover) and (pointer: fine)`; disabled on touch.
+- **Sidebar intro** (`sidebarIntro`): on load the brand fades in, then group labels and the 8 nav items slide in from the left (14px) in a staggered cascade (45ms apart).
+- **Sidebar hover** (`initNav`): a light band sweeps across the item (`xPercent -130→130`, `power2.inOut` 750ms) and the icon pops on hover; desktop pointers only.
+- **Card tilt + glow** (`initTilt`, desktop hover only): cards rotate toward the cursor via `gsap.quickTo` (`rotationX/Y`, ±5°, `transformPerspective: 900`). A `.card-glow` element (240px radial light) **tracks the cursor** — its center is eased to the pointer position via `quickTo` x/y, so the light follows wherever the mouse moves. Tweens are stored in a `WeakMap` and listeners bind once per card; only enabled when `(hover: hover) and (pointer: fine)`.
 - **Button ripple** (`initRipple`): every `.btn` click spawns a `currentColor` ripple span that scales+fades (event delegation, works on dynamically created buttons).
 - **Scroll reveal (ScrollTrigger)**: long lists (news items, note cards, literature rows, focus history) fade + rise as they enter the viewport (`start: top 94%`, `once: true`); triggers are killed on view switch.
 - All tweens use transforms + `autoAlpha`, `clearProps` on complete; `overwrite: "auto"` for interruption; `prefers-reduced-motion` collapses to instant.

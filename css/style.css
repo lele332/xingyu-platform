@@ -1662,17 +1662,26 @@ body { transition: background-color 0.4s var(--ease-out), color 0.4s var(--ease-
   /* 3D 倾斜由 GSAP 控制，CSS 只保留背景/阴影反馈 */
   transform: none;
 }
-.tilt-on .card::after,
-.tilt-on .hero-card::after,
-.tilt-on .quote-card::after {
-  content: ""; position: absolute; inset: 0; border-radius: inherit;
-  pointer-events: none; z-index: 1;
-  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), var(--fill-3), transparent 65%);
+/* 光晕元素：GSAP quickTo 驱动 x/y 跟随鼠标（圆心对准光标） */
+.card-glow {
+  position: absolute; left: 0; top: 0;
+  width: 240px; height: 240px; margin: -120px 0 0 -120px;
+  border-radius: 50%; pointer-events: none; z-index: 1;
+  background: radial-gradient(circle, var(--fill-3), transparent 68%);
   opacity: 0; transition: opacity 0.3s var(--ease-out);
+  transform: translateZ(0);
 }
-.tilt-on .card:hover::after,
-.tilt-on .hero-card:hover::after,
-.tilt-on .quote-card:hover::after { opacity: 1; }
+.tilt-on .card:hover .card-glow,
+.tilt-on .hero-card:hover .card-glow,
+.tilt-on .quote-card:hover .card-glow { opacity: 1; }
+
+/* ---------- 侧边栏 hover 高光（GSAP 生成 .nav-shine span） ---------- */
+.nav-shine {
+  position: absolute; top: 0; bottom: 0; left: 0; width: 50%;
+  background: linear-gradient(100deg, transparent, var(--fill-3), transparent);
+  pointer-events: none;
+  transform: translateX(-130%);
+}
 
 /* ---------- 按钮涟漪（GSAP 生成 .ripple span） ---------- */
 .btn { overflow: hidden; }
