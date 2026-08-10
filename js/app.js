@@ -1275,9 +1275,7 @@ const App = (() => {
   // 使用固定的永久二维码（指向 GitHub Pages 永久链接），不再动态生成
   function renderQR() {
     const box = $("#qrCodeBox");
-    const hint = $("#qrHint");
     box.innerHTML = "";
-    hint.textContent = "永久链接：" + DEFAULT_SITE.replace(/^https?:\/\//, "");
     const img = document.createElement("img");
     img.src = "xingyu-qrcode.png";
     img.alt = "星屿永久二维码";
