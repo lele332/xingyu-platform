@@ -2472,8 +2472,7 @@ const App = (() => {
     applyI18n();
     // 按钮涟漪（事件委托，全局一次）
     window.Anim && Anim.initRipple();
-    // 侧边栏入场序列 + hover 文字位移 + 滑块初始定位（静态 DOM，一次绑定）
-    window.Anim && Anim.sidebarIntro();
+    // nav 事件绑定与滑块初始化（轻量、立即执行）
     window.Anim && Anim.initNav();
     window.Anim && Anim.initNavPill();
     // 天气模块（实时天气，懒加载数据）
@@ -2492,8 +2491,17 @@ const App = (() => {
     renderAIStatus();
     // 默认展示仪表盘
     switchView("dashboard");
-    // 首次进入 dashboard 补开场序列（同视图 switchView 会 early return，动画不自动触发）
-    if (window.Anim) Anim.dashboardIntro($("#view-dashboard"));
+    // 开屏（intro）结束后再播放入场动画，避免与视频并行导致卡顿
+    var runEntrance = function () {
+      window.Anim && Anim.sidebarIntro();
+      if (window.Anim) Anim.dashboardIntro($("#view-dashboard"));
+    };
+    if (window.__splashActive) {
+      window.addEventListener("splash-done", runEntrance, { once: true });
+      setTimeout(runEntrance, 12500);
+    } else {
+      runEntrance();
+    }
     console.log("○ 零 · 个人学习工作台已启动");
   }
 

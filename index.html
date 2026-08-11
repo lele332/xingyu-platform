@@ -28,7 +28,7 @@
   d.dataset.lang = localStorage.getItem("zero_lang") || "zh";
   d.dataset.bg = localStorage.getItem("zero_bg") || "none";
 })();</script>
-<link rel="stylesheet" href="css/style.css?v=20260812">
+<link rel="stylesheet" href="css/style.css?v=20260813">
 </head>
 <body>
 
@@ -56,8 +56,9 @@
 </style>
 <script>
 (function(){
+  window.__splashActive = true;
   var splash=document.getElementById('splash'),video=document.getElementById('splashVideo'),inner=document.getElementById('splashInner'),sk=document.getElementById('splashSkip'),gone=false,playing=false;
-  function dismiss(){if(gone)return;gone=true;splash.classList.add('fade-out');setTimeout(function(){splash.remove()},650);}
+  function dismiss(){if(gone)return;gone=true;window.__splashActive=false;try{window.dispatchEvent(new Event('splash-done'));}catch(e){}splash.classList.add('fade-out');setTimeout(function(){splash.remove()},650);}
   if(!video || !video.canPlayType || video.error){ setTimeout(dismiss,1400); return; }
   video.muted=true; video.defaultMuted=true;
   video.addEventListener('playing',function(){ playing=true; if(inner) inner.style.display='none'; });
@@ -863,18 +864,18 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
   </div>
 </div>
 
-<script src="assets/js/gsap.min.js?v=20260812"></script>
-<script src="assets/js/ScrollTrigger.min.js?v=20260812"></script>
-<script src="js/anim.js?v=20260812"></script>
-<script src="js/local-config.js?v=20260812"></script>
-<script src="js/quotes.js?v=20260812"></script>
-<script src="js/lunar.js?v=20260812"></script>
-<script src="js/store.js?v=20260812"></script>
-<script src="js/sync.js?v=20260812"></script>
-<script src="js/charts.js?v=20260812"></script>
-<script src="js/ai.js?v=20260812"></script>
-<script src="js/weather.js?v=20260812"></script>
-<script src="js/app.js?v=20260812"></script>
+<script src="assets/js/gsap.min.js?v=20260813"></script>
+<script src="assets/js/ScrollTrigger.min.js?v=20260813"></script>
+<script src="js/anim.js?v=20260813"></script>
+<script src="js/local-config.js?v=20260813"></script>
+<script src="js/quotes.js?v=20260813"></script>
+<script src="js/lunar.js?v=20260813"></script>
+<script src="js/store.js?v=20260813"></script>
+<script src="js/sync.js?v=20260813"></script>
+<script src="js/charts.js?v=20260813"></script>
+<script src="js/ai.js?v=20260813"></script>
+<script src="js/weather.js?v=20260813"></script>
+<script src="js/app.js?v=20260813"></script>
 
 
 
