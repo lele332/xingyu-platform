@@ -384,7 +384,12 @@ const App = (() => {
   }
 
   /* ---------- 课程表单 ---------- */
+  function hideFormDelete() {
+    const b = $("#btnFormDelete");
+    if (b) b.style.display = "none";
+  }
   function openCourseForm(id) {
+    hideFormDelete();
     const c = id ? Store.getAll("courses").find(x => x.id === id) : null;
     const colors = ["#111111", "#000000", "#444444", "#555555", "#333333", "#111111", "#666666", "#888888"];
     const colorOptions = colors.map(cl => `<span class="color-dot" data-c="${cl}" style="background:${cl}"></span>`).join("");
@@ -428,6 +433,7 @@ const App = (() => {
 
   /* ---------- 任务表单 ---------- */
   function openTaskForm(id) {
+    hideFormDelete();
     const t = id ? Store.getAll("tasks").find(x => x.id === id) : null;
     const courses = Store.getAll("courses");
     $("#formTitle").textContent = id ? "编辑任务" : "添加任务";
@@ -531,6 +537,19 @@ const App = (() => {
 
   function openNote(id) {
     const n = id ? Store.getAll("notes").find(x => x.id === id) : null;
+    const delBtn = $("#btnFormDelete");
+    if (delBtn) delBtn.style.display = "none";
+    if (n && delBtn) {
+      delBtn.style.display = "inline-block";
+      delBtn.onclick = () => {
+        if (confirm("确定删除这篇笔记吗？")) {
+          Store.remove("notes", n.id);
+          closeModal("formModal");
+          toast("笔记已删除", "ok");
+          renderNotes();
+        }
+      };
+    }
     $("#formTitle").textContent = n ? "编辑笔记" : "新建笔记";
     $("#formBody").innerHTML = `
       <label class="field"><span>标题 *</span><input id="f-n-title" value="${esc(n?.title || "")}" placeholder="如：高数第三章笔记"></label>
@@ -779,6 +798,7 @@ const App = (() => {
   }
 
   function openGradeForm(id) {
+    hideFormDelete();
     const g = id ? Store.getAll("grades").find(x => x.id === id) : null;
     $("#formTitle").textContent = id ? "编辑成绩" : "添加成绩";
     $("#formBody").innerHTML = `
@@ -828,6 +848,7 @@ const App = (() => {
   }
 
   function openSkillForm(id) {
+    hideFormDelete();
     const s = id ? Store.getAll("skills").find(x => x.id === id) : null;
     $("#formTitle").textContent = id ? "编辑技能" : "添加技能";
     $("#formBody").innerHTML = `
@@ -871,6 +892,7 @@ const App = (() => {
   }
 
   function openProjectForm(id) {
+    hideFormDelete();
     const p = id ? Store.getAll("projects").find(x => x.id === id) : null;
     $("#formTitle").textContent = id ? "编辑项目" : "添加项目";
     $("#formBody").innerHTML = `
@@ -1125,6 +1147,7 @@ const App = (() => {
   }
 
   function openLitForm(editId) {
+    hideFormDelete();
     litEditId = editId || null;
     const l = editId ? Store.getAll("literature").find(x => x.id === editId) : null;
     $("#formTitle").textContent = editId ? "编辑文献" : "添加文献";
@@ -1222,6 +1245,12 @@ const App = (() => {
     return div;
   }
 
+  const CMD_MAP = {
+    "/plan": "plan", "/学习规划": "plan", "/规划": "plan",
+    "/priority": "priority", "/智能排序": "priority", "/排序": "priority",
+    "/cards": "cards", "/知识卡片": "cards", "/卡片": "cards", "/复习": "cards",
+    "/organize": "organize", "/笔记整理": "organize", "/整理": "organize"
+  };
   async function sendChat(text) {
     const trimmed = text.trim();
     if (!trimmed) return;
@@ -1234,11 +1263,12 @@ const App = (() => {
       if (isCmd) {
         const [cmd, ...rest] = trimmed.split(/\s+/);
         const restText = rest.join(" ");
-        if (cmd === "/plan") reply = (await AI.runSkill("plan")).text;
-        else if (cmd === "/priority") reply = (await AI.runSkill("priority")).text;
-        else if (cmd === "/cards") reply = (await AI.runSkill("cards")).text;
-        else if (cmd === "/organize") reply = (await AI.runSkill("organize", restText)).text;
-        else reply = "未知命令。可用命令：/plan /priority /cards /organize";
+        const skill = CMD_MAP[cmd.toLowerCase()];
+        if (skill === "plan") reply = (await AI.runSkill("plan")).text;
+        else if (skill === "priority") reply = (await AI.runSkill("priority")).text;
+        else if (skill === "cards") reply = (await AI.runSkill("cards")).text;
+        else if (skill === "organize") reply = (await AI.runSkill("organize", restText)).text;
+        else reply = "未知命令。可用命令：/学习规划 /智能排序 /知识卡片 /笔记整理";
       } else {
         reply = await AI.ask(trimmed);
       }
@@ -1287,17 +1317,42 @@ const App = (() => {
   /* ============================================================
      设置
      ============================================================ */
+  function updateSyncStatus() {
+    const el = $("#syncStatus");
+    if (!el) return;
+    if (!Sync.isEnabled()) { el.textContent = "未启用云同步。"; return; }
+    if (!Sync.getToken()) { el.textContent = "已启用，但尚未填写 GitHub Token。"; return; }
+    el.textContent = "同步已启用：数据改动后自动同步，也可点「立即同步」手动触发。";
+  }
   function openSettings() {
     const s = Store.getSettings();
     $("#setBaseUrl").value = s.baseUrl || "";
     $("#setApiKey").value = s.apiKey || "";
     $("#setModel").value = s.model || "";
     $("#setNickname").value = s.nickname || "";
+    const syncEn = $("#syncEnabled");
+    if (syncEn) syncEn.checked = Sync.isEnabled();
+    $("#setSyncToken").value = Sync.getToken();
+    updateSyncStatus();
     $("#setPin").value = "";
     $("#setPin2").value = "";
+    const lockEnabled = localStorage.getItem("zero_lock_enabled") === "1";
+    const le = $("#lockEnabled");
+    if (le) {
+      le.checked = lockEnabled;
+      toggleLockFields(lockEnabled);
+    }
     $("#lockOnLeave").checked = localStorage.getItem("zero_lock_leave") === "1";
     syncThemeUI();
     showModal("settingsModal");
+  }
+
+  // 访问密码总开关：切换密码字段显隐
+  function toggleLockFields(on) {
+    const fields = $("#lockFields");
+    const hint = $("#lockEnabledHint");
+    if (fields) fields.style.display = on ? "" : "none";
+    if (hint) hint.style.display = on ? "" : "none";
   }
 
   /* ============================================================
@@ -1345,8 +1400,8 @@ const App = (() => {
     if (pinInput) { pinInput.value = ""; pinInput.focus(); }
   }
   function applyLockPrefs() {
-    // 启动锁：设置了密码则锁定
-    if (getPin()) lockNow();
+    // 启动锁：总开关开启且设置了密码才锁定
+    if (localStorage.getItem("zero_lock_enabled") === "1" && getPin()) lockNow();
   }
 
   /* ============================================================
@@ -1483,7 +1538,7 @@ const App = (() => {
       "settings.theme": "界面主题", "settings.font": "界面字体", "settings.lang": "界面语言", "settings.bg": "界面背景", "bg.none": "无", "bg.guilinMist": "桂林·雾山", "bg.guilinAerial": "桂林·航拍", "bg.jiuzhaigou": "九寨沟", "bg.zhangjiajie": "张家界", "bg.hint": "以中国山河摄影作背景，文字始终清晰可读。",
       "settings.ai": "AI 模型配置（OpenAI 兼容接口）",
       "settings.nick": "个人昵称", "settings.data": "数据管理", "settings.lock": "访问密码",
-      "lock.title": "平台已锁定", "lock.unlock": "解锁", "lock.pinNew": "新密码", "lock.pinConfirm": "确认密码", "lock.onLeave": "离开页面时自动锁定", "lock.hint": "设置密码后，打开平台需输入密码才能进入；密码仅保存在本机浏览器。", "lock.wrong": "密码错误", "lock.mismatch": "两次输入的密码不一致", "lock.saved": "访问密码已设置", "lock.cleared": "访问密码已清除", "settings.saved": "设置已保存",
+      "lock.title": "平台已锁定", "lock.unlock": "解锁", "lock.enabled": "启用访问密码", "lock.enabledHint": "已开启：打开平台需输入密码。关闭此开关将清除已保存的密码。", "lock.needPin": "请先设置访问密码", "lock.pinNew": "新密码", "lock.pinConfirm": "确认密码", "lock.onLeave": "离开页面时自动锁定", "lock.hint": "设置密码后，打开平台需输入密码才能进入；密码仅保存在本机浏览器。", "lock.wrong": "密码错误", "lock.mismatch": "两次输入的密码不一致", "lock.saved": "访问密码已设置", "lock.cleared": "访问密码已清除", "settings.saved": "设置已保存",
       "theme.dark": "纯黑", "theme.light": "纯白", "theme.ocean": "墨蓝", "theme.forest": "青竹", "theme.sepia": "纸墨", "theme.custom": "自定义", "theme.purple": "暮紫", "theme.wine": "酒红", "theme.dusk": "晚霞", "theme.mist": "云灰", "theme.mint": "薄荷", "theme.honey": "蜜糖", "theme.guishan": "桂山", "theme.danxia": "丹霞", "theme.qingzang": "青藏", "theme.caoyuan": "草原", "theme.damo": "大漠",
       "font.default": "默认", "font.kai": "楷书", "font.song": "宋体", "font.fangsong": "仿宋", "font.hei": "黑体",
       "lang.zh": "简体", "lang.zhHant": "繁体", "lang.en": "English",
@@ -1526,7 +1581,7 @@ const App = (() => {
       "settings.theme": "界面主題", "settings.font": "界面字體", "settings.lang": "界面語言", "settings.bg": "界面背景", "bg.none": "無", "bg.guilinMist": "桂林·霧山", "bg.guilinAerial": "桂林·航拍", "bg.jiuzhaigou": "九寨溝", "bg.zhangjiajie": "張家界", "bg.hint": "以中國山河攝影作背景，文字始終清晰可讀。",
       "settings.ai": "AI 模型配置（OpenAI 兼容接口）",
       "settings.nick": "個人暱稱", "settings.data": "數據管理", "settings.lock": "訪問密碼",
-      "lock.title": "平台已鎖定", "lock.unlock": "解鎖", "lock.pinNew": "新密碼", "lock.pinConfirm": "確認密碼", "lock.onLeave": "離開頁面時自動鎖定", "lock.hint": "設置密碼後，打開平台需輸入密碼才能進入；密碼僅保存在本機瀏覽器。", "lock.wrong": "密碼錯誤", "lock.mismatch": "兩次輸入的密碼不一致", "lock.saved": "訪問密碼已設置", "lock.cleared": "訪問密碼已清除", "settings.saved": "設置已保存",
+      "lock.title": "平台已鎖定", "lock.unlock": "解鎖", "lock.enabled": "啟用訪問密碼", "lock.enabledHint": "已開啟：打開平台需輸入密碼。關閉此開關將清除已保存的密碼。", "lock.needPin": "請先設置訪問密碼", "lock.pinNew": "新密碼", "lock.pinConfirm": "確認密碼", "lock.onLeave": "離開頁面時自動鎖定", "lock.hint": "設置密碼後，打開平台需輸入密碼才能進入；密碼僅保存在本機瀏覽器。", "lock.wrong": "密碼錯誤", "lock.mismatch": "兩次輸入的密碼不一致", "lock.saved": "訪問密碼已設置", "lock.cleared": "訪問密碼已清除", "settings.saved": "設置已保存",
       "theme.dark": "純黑", "theme.light": "純白", "theme.ocean": "墨藍", "theme.forest": "青竹", "theme.sepia": "紙墨", "theme.custom": "自定義", "theme.purple": "暮紫", "theme.wine": "酒紅", "theme.dusk": "晚霞", "theme.mist": "雲灰", "theme.mint": "薄荷", "theme.honey": "蜜糖", "theme.guishan": "桂山", "theme.danxia": "丹霞", "theme.qingzang": "青藏", "theme.caoyuan": "草原", "theme.damo": "大漠",
       "font.default": "默認", "font.kai": "楷書", "font.song": "宋體", "font.fangsong": "仿宋", "font.hei": "黑體",
       "lang.zh": "簡體", "lang.zhHant": "繁體", "lang.en": "English",
@@ -1569,7 +1624,7 @@ const App = (() => {
       "settings.theme": "Theme", "settings.font": "Font", "settings.lang": "Language", "settings.bg": "Background", "bg.none": "None", "bg.guilinMist": "Guilin Mist", "bg.guilinAerial": "Guilin Aerial", "bg.jiuzhaigou": "Jiuzhaigou", "bg.zhangjiajie": "Zhangjiajie", "bg.hint": "China landscape photography as backdrop; text stays readable.",
       "settings.ai": "AI Model (OpenAI-compatible)",
       "settings.nick": "Nickname", "settings.data": "Data", "settings.lock": "Access PIN",
-      "lock.title": "Locked", "lock.unlock": "Unlock", "lock.pinNew": "New PIN", "lock.pinConfirm": "Confirm PIN", "lock.onLeave": "Lock when leaving the page", "lock.hint": "Once set, the platform asks for the PIN on open. The PIN stays only in this browser.", "lock.wrong": "Wrong PIN", "lock.mismatch": "PINs do not match", "lock.saved": "Access PIN saved", "lock.cleared": "Access PIN cleared", "settings.saved": "Settings saved",
+      "lock.title": "Locked", "lock.unlock": "Unlock", "lock.enabled": "Enable access PIN", "lock.enabledHint": "On: the platform asks for the PIN on open. Turning this off clears the saved PIN.", "lock.needPin": "Please set an access PIN first", "lock.pinNew": "New PIN", "lock.pinConfirm": "Confirm PIN", "lock.onLeave": "Lock when leaving the page", "lock.hint": "Once set, the platform asks for the PIN on open. The PIN stays only in this browser.", "lock.wrong": "Wrong PIN", "lock.mismatch": "PINs do not match", "lock.saved": "Access PIN saved", "lock.cleared": "Access PIN cleared", "settings.saved": "Settings saved",
       "theme.dark": "Black", "theme.light": "White", "theme.ocean": "Ocean", "theme.forest": "Forest", "theme.sepia": "Sepia", "theme.custom": "Custom", "theme.purple": "Purple", "theme.wine": "Wine", "theme.dusk": "Dusk", "theme.mist": "Mist", "theme.mint": "Mint", "theme.honey": "Honey", "theme.guishan": "Guishan", "theme.danxia": "Danxia", "theme.qingzang": "Qingzang", "theme.caoyuan": "Grassland", "theme.damo": "Desert",
       "font.default": "Default", "font.kai": "Kai", "font.song": "Song", "font.fangsong": "FangSong", "font.hei": "Hei",
       "lang.zh": "Simplified", "lang.zhHant": "Traditional", "lang.en": "English",
@@ -1618,16 +1673,26 @@ const App = (() => {
   }
 
   function saveSettings() {
-    // 访问密码：先校验
-    const pin = $("#setPin").value;
-    const pin2 = $("#setPin2").value;
-    if (pin || pin2) {
-      if (pin !== pin2) { toast(t("lock.mismatch"), "err"); return; }
-      setPin(pin);
-      toast(pin ? t("lock.saved") : t("lock.cleared"), "ok");
+    // 访问密码：总开关关闭 → 清除密码；开启 → 校验并保存
+    const lockEnabled = $("#lockEnabled") ? $("#lockEnabled").checked : false;
+    if (lockEnabled) {
+      const pin = $("#setPin").value;
+      const pin2 = $("#setPin2").value;
+      if (pin || pin2) {
+        if (pin !== pin2) { toast(t("lock.mismatch"), "err"); return; }
+        setPin(pin);
+        toast(pin ? t("lock.saved") : t("lock.cleared"), "ok");
+      }
+      // 开启但从未设过密码：要求设置
+      if (!getPin()) { toast(t("lock.needPin"), "err"); return; }
+      localStorage.setItem("zero_lock_enabled", "1");
+      localStorage.setItem("zero_lock_leave", $("#lockOnLeave").checked ? "1" : "0");
+    } else {
+      // 关闭：清除密码与所有锁定偏好
+      setPin("");
+      localStorage.removeItem("zero_lock_enabled");
+      localStorage.removeItem("zero_lock_leave");
     }
-    // 离开自动锁
-    localStorage.setItem("zero_lock_leave", $("#lockOnLeave").checked ? "1" : "0");
     Store.setSettings({
       baseUrl: $("#setBaseUrl").value.trim(),
       apiKey: $("#setApiKey").value.trim(),
@@ -2120,7 +2185,7 @@ const App = (() => {
         // 已配置 AI：跳转聊天区执行智能排序
         toast("已跳转 AI 助手执行智能排序", "ok");
         switchView("ai");
-        setTimeout(() => { $("#chatInput").value = "/priority"; sendChat("/priority"); }, 300);
+        setTimeout(() => { $("#chatInput").value = "/智能排序"; sendChat("/智能排序"); }, 300);
       } else {
         // 本地规则：直接重排视图
         const tasks = Store.getAll("tasks");
@@ -2174,14 +2239,14 @@ const App = (() => {
     $("#btnAiOrganize").onclick = () => {
       switchView("ai");
       setTimeout(() => {
-        $("#chatInput").value = "/organize";
+        $("#chatInput").value = "/笔记整理";
         sendChat("/organize");
       }, 300);
     };
     $("#btnGenCards").onclick = () => {
       switchView("ai");
       setTimeout(() => {
-        $("#chatInput").value = "/cards";
+        $("#chatInput").value = "/知识卡片";
         sendChat("/cards");
       }, 300);
     };
@@ -2287,6 +2352,24 @@ const App = (() => {
       }
     };
 
+    // 云同步
+    if ($("#syncEnabled")) {
+      $("#syncEnabled").onchange = () => {
+        const on = $("#syncEnabled").checked;
+        Sync.setEnabled(on);
+        updateSyncStatus();
+        if (on) Sync.sync().then(updateSyncStatus);
+      };
+    }
+    $("#btnSyncNow").onclick = () => {
+      const token = $("#setSyncToken").value.trim();
+      Sync.setToken(token);
+      Sync.setEnabled(true);
+      $("#syncEnabled").checked = true;
+      updateSyncStatus();
+      Sync.sync().then(updateSyncStatus);
+    };
+    Sync.listeners.push(() => updateSyncStatus());
     // 二维码
     $("#btnQrcode").onclick = openQR;
     $("#btnCopyLink").onclick = copyLink;
@@ -2297,8 +2380,11 @@ const App = (() => {
     // 访问密码
     $("#btnUnlock").onclick = unlock;
     $("#lockPin").addEventListener("keydown", e => { if (e.key === "Enter") unlock(); });
+    // 总开关：切换密码字段显隐
+    const lockEn = $("#lockEnabled");
+    if (lockEn) lockEn.addEventListener("change", () => toggleLockFields(lockEn.checked));
     document.addEventListener("visibilitychange", () => {
-      if (document.hidden && getPin() && localStorage.getItem("zero_lock_leave") === "1") {
+      if (document.hidden && localStorage.getItem("zero_lock_enabled") === "1" && getPin() && localStorage.getItem("zero_lock_leave") === "1") {
         lockNow();
       }
     });
@@ -2382,6 +2468,7 @@ const App = (() => {
   /* ---------- 启动 ---------- */
   function init() {
     bindEvents();
+    window.Sync && Sync.init();
     applyI18n();
     // 按钮涟漪（事件委托，全局一次）
     window.Anim && Anim.initRipple();

@@ -6,6 +6,11 @@
 <meta name="theme-color" content="#000000">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="icon" href="xingyu.ico">
+<!-- 禁用文档缓存：更新后普通刷新即可生效，无需强制刷新 -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>零 · 个人学习工作台</title>
 <meta name="description" content="把学业收拢到一张白纸：课程作业、笔记库、专注统计、成长档案、AI 助手。本地优先，黑白灰三色极简，无任何装饰。">
 <script>(function(){
@@ -23,9 +28,37 @@
   d.dataset.lang = localStorage.getItem("zero_lang") || "zh";
   d.dataset.bg = localStorage.getItem("zero_bg") || "none";
 })();</script>
-<link rel="stylesheet" href="css/style.css?v=20260810">
+<link rel="stylesheet" href="css/style.css?v=20260811">
 </head>
 <body>
+
+<!-- 开屏欢迎动画（星屿品牌 intro · 10s） -->
+<div id="splash" class="splash">
+  <video id="splashVideo" src="assets/intro.mp4" muted playsinline autoplay></video>
+  <div class="splash-skip" id="splashSkip">跳过</div>
+</div>
+<style>
+.splash{position:fixed;inset:0;z-index:99999;background:#000;display:flex;align-items:center;justify-content:center;transition:opacity .6s ease}
+.splash video{width:100%;height:100%;object-fit:cover}
+.splash.fade-out{opacity:0;pointer-events:none}
+.splash-skip{position:absolute;right:18px;bottom:16px;padding:6px 16px;border:1px solid rgba(255,255,255,.35);border-radius:99px;color:rgba(255,255,255,.75);font-size:13px;letter-spacing:.08em;cursor:pointer;user-select:none;transition:opacity .3s}
+.splash-skip:hover{opacity:.7}
+@media (prefers-reduced-motion:reduce){.splash{display:none}}
+</style>
+<script>
+(function(){
+  var splash=document.getElementById('splash'),video=document.getElementById('splashVideo'),sk=document.getElementById('splashSkip'),gone=false;
+  function dismiss(){if(gone)return;gone=true;splash.classList.add('fade-out');setTimeout(function(){splash.remove()},650);}
+  if(!video.canPlayType||video.error){dismiss();}
+  else{
+    video.addEventListener('ended',dismiss);
+    sk.addEventListener('click',dismiss);
+    video.addEventListener('error',dismiss);
+    // 5 秒兜底：万一视频卡住不触发 ended，也放行进主界面
+    setTimeout(dismiss,5200);
+  }
+})();
+</script>
 
 <!--
 DIRECTION CONTRACT (impeccable:direction-contract 1 · seed d32a5c18)
@@ -380,14 +413,14 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
               </div>
             </div>
             <div class="chat-input-row">
-              <input type="text" id="chatInput" placeholder="输入问题，或输入 /plan /priority /cards /organize 使用快捷技能...">
+              <input type="text" id="chatInput" placeholder="输入问题，或用 /学习规划 /智能排序 /知识卡片 /笔记整理 使用快捷技能...">
               <button class="btn btn-primary" id="btnChatSend">发送</button>
             </div>
             <div class="chat-quick">
-              <button class="chip" data-cmd="/plan">学习规划</button>
-              <button class="chip" data-cmd="/priority">优先级</button>
-              <button class="chip" data-cmd="/cards">知识卡片</button>
-              <button class="chip" data-cmd="/organize">笔记整理</button>
+              <button class="chip" data-cmd="/学习规划">学习规划</button>
+              <button class="chip" data-cmd="/智能排序">智能排序</button>
+              <button class="chip" data-cmd="/知识卡片">知识卡片</button>
+              <button class="chip" data-cmd="/笔记整理">笔记整理</button>
             </div>
           </div>
         </div>
@@ -589,19 +622,42 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       </div>
       <div class="setting-group">
         <h4 data-i18n="settings.lock">访问密码</h4>
-        <label class="field">
-          <span data-i18n="lock.pinNew">新密码</span>
-          <input type="password" id="setPin" placeholder="留空则不修改" autocomplete="new-password">
-        </label>
-        <label class="field">
-          <span data-i18n="lock.pinConfirm">确认密码</span>
-          <input type="password" id="setPin2" placeholder="再次输入" autocomplete="new-password">
-        </label>
         <label class="lock-toggle">
-          <input type="checkbox" id="lockOnLeave">
-          <span data-i18n="lock.onLeave">离开页面时自动锁定</span>
+          <input type="checkbox" id="lockEnabled">
+          <span data-i18n="lock.enabled">启用访问密码</span>
         </label>
-        <p class="hint" data-i18n="lock.hint">设置密码后，打开平台需输入密码才能进入；密码仅保存在本机浏览器。</p>
+        <div id="lockFields" style="display:none;margin-top:10px">
+          <label class="field">
+            <span data-i18n="lock.pinNew">新密码</span>
+            <input type="password" id="setPin" placeholder="留空则不修改" autocomplete="new-password">
+          </label>
+          <label class="field">
+            <span data-i18n="lock.pinConfirm">确认密码</span>
+            <input type="password" id="setPin2" placeholder="再次输入" autocomplete="new-password">
+          </label>
+          <label class="lock-toggle">
+            <input type="checkbox" id="lockOnLeave">
+            <span data-i18n="lock.onLeave">离开页面时自动锁定</span>
+          </label>
+          <p class="hint" data-i18n="lock.hint">设置密码后，打开平台需输入密码才能进入；密码仅保存在本机浏览器。</p>
+        </div>
+        <p class="hint" id="lockEnabledHint" style="display:none" data-i18n="lock.enabledHint">已开启：打开平台需输入密码。关闭此开关将清除已保存的密码。</p>
+      </div>
+      <div class="setting-group">
+        <h4>云同步（GitHub Gist）</h4>
+        <label class="lock-toggle">
+          <input type="checkbox" id="syncEnabled">
+          <span>启用云同步</span>
+        </label>
+        <label class="field">
+          <span>GitHub Token（需 gist 权限，仅保存在本机浏览器）</span>
+          <input type="password" id="setSyncToken" placeholder="ghp_... 或 gho_..." autocomplete="off">
+        </label>
+        <div class="setting-actions">
+          <button class="btn btn-ghost" id="btnSyncNow">立即同步</button>
+        </div>
+        <p class="hint" id="syncStatus">未启用云同步。</p>
+        <p class="hint">在 GitHub 生成带 <b>gist</b> 权限的 Token 粘贴到上方，桌面和手机共用同一份数据。冲突时以较新一端的修改为准。</p>
       </div>
       <div class="setting-group">
         <h4 data-i18n="settings.data">数据管理</h4>
@@ -779,6 +835,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
     </div>
     <div class="modal-body" id="formBody"></div>
     <div class="modal-foot">
+      <button class="btn btn-danger" id="btnFormDelete" style="display:none">删除</button>
       <button class="btn btn-primary" id="btnFormSave">保存</button>
     </div>
   </div>
@@ -795,17 +852,18 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
   </div>
 </div>
 
-<script src="assets/js/gsap.min.js?v=20260810"></script>
-<script src="assets/js/ScrollTrigger.min.js?v=20260810"></script>
-<script src="js/anim.js?v=20260810"></script>
-<script src="js/local-config.js?v=20260810"></script>
-<script src="js/quotes.js?v=20260810"></script>
-<script src="js/lunar.js?v=20260810"></script>
-<script src="js/store.js?v=20260810"></script>
-<script src="js/charts.js?v=20260810"></script>
-<script src="js/ai.js?v=20260810"></script>
-<script src="js/weather.js?v=20260810"></script>
-<script src="js/app.js?v=20260810"></script>
+<script src="assets/js/gsap.min.js?v=20260811"></script>
+<script src="assets/js/ScrollTrigger.min.js?v=20260811"></script>
+<script src="js/anim.js?v=20260811"></script>
+<script src="js/local-config.js?v=20260811"></script>
+<script src="js/quotes.js?v=20260811"></script>
+<script src="js/lunar.js?v=20260811"></script>
+<script src="js/store.js?v=20260811"></script>
+<script src="js/sync.js?v=20260811"></script>
+<script src="js/charts.js?v=20260811"></script>
+<script src="js/ai.js?v=20260811"></script>
+<script src="js/weather.js?v=20260811"></script>
+<script src="js/app.js?v=20260811"></script>
 
 
 

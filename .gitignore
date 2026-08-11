@@ -5,3 +5,12 @@ js/local-config.js
 *.log
 .DS_Store
 node_modules/
+
+# 隐私 / 运行 / 开发产物（不随仓库发布）
+.workbuddy/
+.impeccable/
+news/
+scripts/
+server.py
+xingyu-app.pyw
+xingyu.ico

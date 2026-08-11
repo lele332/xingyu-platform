@@ -29,6 +29,8 @@ const Store = (() => {
 
   let data = null;
 
+  const saveHooks = [];
+
   function load() {
     try {
       const raw = localStorage.getItem(KEY);
@@ -53,7 +55,10 @@ const Store = (() => {
   function save() {
     try { localStorage.setItem(KEY, JSON.stringify(data)); }
     catch (e) { console.error("保存失败", e); }
+    saveHooks.forEach(fn => { try { fn(); } catch (e) { console.warn("save hook 错误", e); } });
   }
+
+  function onSave(fn) { saveHooks.push(fn); }
 
   function seedDemo() {
     const today = new Date();
@@ -164,7 +169,7 @@ const Store = (() => {
     save();
   }
 
-  return { load, save, uid, getAll, add, update, remove, replaceAll,
+  return { load, save, onSave, uid, getAll, add, update, remove, replaceAll,
            getProfile, setProfile, getSettings, setSettings, getCourseName,
            exportAll, importAll, clearAll };
 })();

@@ -215,7 +215,7 @@ ${notesText}`;
     if (t.includes("优先")) return fallback("priority");
     if (t.includes("卡片")) return localCards();
     if (t.includes("笔记")) return localOrganize(freeText.replace(/整理|笔记/g, ""));
-    return "我还没有配置 AI 模型，只能提供基础服务。\n请在「设置」中填写 OpenAI 兼容接口的 API Key（支持 DeepSeek / Kimi / OpenAI 等），之后我就能全面回答你的问题啦！\n\n或者试试快捷技能：/plan（学习规划）、/priority（优先级）、/cards（知识卡片）、/organize（笔记整理）。";
+    return "我还没有配置 AI 模型，只能提供基础服务。\n请在「设置」中填写 OpenAI 兼容接口的 API Key（支持 DeepSeek / Kimi / OpenAI 等），之后我就能全面回答你的问题啦！\n\n或者试试快捷技能：/学习规划、/智能排序、/知识卡片、/笔记整理。";
   }
 
   /* ============================================================
