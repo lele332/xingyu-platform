@@ -11,18 +11,56 @@ const AI = (() => {
     openai:   { baseUrl: "https://api.openai.com/v1", model: "gpt-4o-mini" },
   };
 
+  const REQUEST_TIMEOUT_MS = 30000;
+  let activeController = null;
+  let manuallyCancelled = false;
+
+  function chatEndpoint(baseUrl) {
+    let url;
+    try { url = new URL(String(baseUrl || "").trim()); }
+    catch (e) { throw new Error("AI 接口地址格式不正确"); }
+    if (!["http:", "https:"].includes(url.protocol)) throw new Error("AI 接口仅支持 HTTP/HTTPS 地址");
+    const cleanPath = url.pathname.replace(/\/+$/, "").replace(/\/chat\/completions$/i, "");
+    url.pathname = cleanPath + "/chat/completions";
+    url.search = "";
+    url.hash = "";
+    return url.toString();
+  }
+
+  async function fetchWithTimeout(url, options = {}) {
+    const controller = new AbortController();
+    activeController = controller;
+    manuallyCancelled = false;
+    const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+    try {
+      return await fetch(url, Object.assign({}, options, { signal: controller.signal }));
+    } catch (e) {
+      if (e.name === "AbortError") throw new Error(manuallyCancelled ? "已停止生成" : "AI 请求超时，请检查网络或稍后重试");
+      throw new Error("AI 网络请求失败，请检查网络连接");
+    } finally {
+      clearTimeout(timer);
+      if (activeController === controller) activeController = null;
+    }
+  }
+
+  function cancelCurrent() {
+    if (!activeController) return false;
+    manuallyCancelled = true;
+    activeController.abort();
+    return true;
+  }
+
   function isConfigured() {
     const s = Store.getSettings();
     return !!(s.apiKey && s.baseUrl);
   }
-
   /* ---------- 调用 LLM ---------- */
   async function chat(messages, { temperature = 0.7 } = {}) {
     const s = Store.getSettings();
     if (!s.apiKey || !s.baseUrl) {
       throw new Error("AI 模型未配置，请在「设置」中填写 API Key");
     }
-    const resp = await fetch(s.baseUrl.replace(/\/+$/, "") + "/chat/completions", {
+    const resp = await fetchWithTimeout(chatEndpoint(s.baseUrl), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -38,8 +76,10 @@ const AI = (() => {
       const err = await resp.text().catch(() => "");
       throw new Error(`AI 请求失败 (${resp.status}): ${err.slice(0, 200)}`);
     }
-    const json = await resp.json();
-    return json.choices[0].message.content;
+    const json = await resp.json().catch(() => null);
+    const content = json && json.choices && json.choices[0] && json.choices[0].message && json.choices[0].message.content;
+    if (typeof content !== "string") throw new Error("AI 返回格式异常，请稍后重试");
+    return content;
   }
 
   /* ============================================================
@@ -167,11 +207,12 @@ ${notesText}`;
         else if (skill === "organize") prompt = buildOrganizePrompt(rawText || "请把下面这段整理成笔记，如果我没有提供内容请提示我。");
 
         const result = await chat([
-          { role: "system", content: "你是「零 · 个人学习工作台」平台内置的 AI 助手，回答简洁、实用、结构化。使用中文。" },
+          { role: "system", content: "你是「星屿 · 个人学习工作台」平台内置的 AI 助手，回答简洁、实用、结构化。使用中文。" },
           { role: "user", content: prompt }
         ]);
         return { source: "ai", text: result };
       } catch (e) {
+        if (e.message === "已停止生成") throw e;
         return { source: "local", text: `AI 调用失败（${e.message}），已切换为本地规则：\n\n` + fallback(skill, rawText) };
       }
     }
@@ -199,10 +240,14 @@ ${notesText}`;
   async function ask(freeText) {
     if (isConfigured()) {
       const tasks = Store.getAll("tasks").filter(t => t.status !== "done");
-      const ctx = `当前待办：${tasks.length ? tasks.slice(0, 5).map(t => t.title).join("、") : "无"}。`;
+      const notes = Store.getAll("notes").slice().sort((a, b) => (b.updatedAt || "").localeCompare(a.updatedAt || "")).slice(0, 3);
+      const ctx = [
+        `当前待办：${tasks.length ? tasks.slice(0, 5).map(t => t.title).join("、") : "无"}。`,
+        `最近笔记：${notes.length ? notes.map(n => `${n.title}（${String(n.content || "").slice(0, 100)}）`).join("；") : "无"}。`
+      ].join("\n");
       try {
         return await chat([
-          { role: "system", content: "你是「零 · 个人学习工作台」的助手，帮助大学生管理学业与生活。回答简洁、实用、用中文。" },
+          { role: "system", content: "你是「星屿 · 个人学习工作台」的助手，帮助大学生管理学业与生活。回答简洁、实用、用中文。" },
           { role: "user", content: ctx + "\n\n" + freeText }
         ]);
       } catch (e) {
@@ -258,7 +303,7 @@ ${notesText}`;
 1. 严格输出 JSON 数组，不要任何额外文字或 markdown 代码块标记
 2. 如果图片无法识别出课程，输出空数组 []
 3. 时间统一为 24 小时制 HH:MM 格式`;
-    const resp = await fetch(s.baseUrl.replace(/\/+$/, "") + "/chat/completions", {
+    const resp = await fetchWithTimeout(chatEndpoint(s.baseUrl), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -462,7 +507,7 @@ ${text}`;
 1. 严格输出 JSON 数组，不要任何额外文字或 markdown 代码块标记
 2. 如果图片无法识别，输出空数组 []
 3. score 必须为 0-100 的数字`;
-    const resp = await fetch(s.baseUrl.replace(/\/+$/, "") + "/chat/completions", {
+    const resp = await fetchWithTimeout(chatEndpoint(s.baseUrl), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -580,7 +625,7 @@ ${text}`;
 1. 严格输出 JSON 数组，不要额外文字或 markdown 标记
 2. 尽量完整转录正文内容，不要省略
 3. 如果图片不是笔记/无法识别文字，输出空数组 []`;
-    const resp = await fetch(s.baseUrl.replace(/\/+$/, "") + "/chat/completions", {
+    const resp = await fetchWithTimeout(chatEndpoint(s.baseUrl), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -613,5 +658,5 @@ ${text}`;
     })).filter(n => n.title);
   }
 
-  return { isConfigured, chat, runSkill, ask, PRESETS, recognizeScheduleImage, parseScheduleText, parseGradesText, recognizeGradesImage, parseNotesText, recognizeNotesImage };
+  return { isConfigured, chat, runSkill, ask, cancelCurrent, PRESETS, recognizeScheduleImage, parseScheduleText, parseGradesText, recognizeGradesImage, parseNotesText, recognizeNotesImage };
 })();

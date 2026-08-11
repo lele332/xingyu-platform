@@ -11,10 +11,10 @@
 
   if (hasGSAP) {
     if (window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
-    gsap.defaults({ duration: 0.55, ease: "power3.out", overwrite: "auto" });
+    gsap.defaults({ duration: 0.42, ease: "power4.out", overwrite: "auto" });
   }
 
-  function dur(full) { return reduceMotion ? 0 : (full || 0.55); }
+  function dur(full) { return reduceMotion ? 0 : (full || 0.42); }
 
   var Anim = {
     hasGSAP: hasGSAP,
@@ -34,11 +34,11 @@
       var hero = scope.querySelector(".hero-card");
       var quote = scope.querySelector(".quote-card");
       var grid = gsap.utils.toArray(".dash-grid > .card", scope);
-      var tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      var tl = gsap.timeline({ defaults: { ease: "power4.out" } });
       if (hero) {
         tl.fromTo(hero,
-          { autoAlpha: 0, y: 32, scale: 0.97 },
-          { autoAlpha: 1, y: 0, scale: 1, duration: 0.6, clearProps: "all" },
+          { autoAlpha: 0, y: 20, scale: 0.985 },
+          { autoAlpha: 1, y: 0, scale: 1, duration: 0.48, clearProps: "all" },
           0.05
         );
         tl.add(function () {
@@ -49,15 +49,15 @@
       }
       if (quote) {
         tl.fromTo(quote,
-          { autoAlpha: 0, y: 22 },
-          { autoAlpha: 1, y: 0, duration: 0.45, clearProps: "all" },
+          { autoAlpha: 0, y: 14 },
+          { autoAlpha: 1, y: 0, duration: 0.38, clearProps: "all" },
           ">-0.18"
         );
       }
       if (grid.length) {
         tl.fromTo(grid,
-          { autoAlpha: 0, y: 26 },
-          { autoAlpha: 1, y: 0, duration: 0.5, stagger: 0.08, clearProps: "all" },
+          { autoAlpha: 0, y: 16 },
+          { autoAlpha: 1, y: 0, duration: 0.42, stagger: 0.055, clearProps: "all" },
           ">-0.15"
         );
       }
@@ -74,11 +74,11 @@
         return;
       }
       gsap.fromTo(el,
-        { autoAlpha: 0, y: 24, scale: 0.985 },
+        { autoAlpha: 0, y: 16, scale: 0.99 },
         {
           autoAlpha: 1, y: 0, scale: 1,
           duration: dur(),
-          ease: "power3.out",
+          ease: "power4.out",
           clearProps: "transform,opacity,visibility"
         }
       );
@@ -107,13 +107,13 @@
       }
       gsap.fromTo(mask,
         { autoAlpha: 0 },
-        { autoAlpha: 1, duration: dur(0.22), clearProps: "opacity,visibility" }
+        { autoAlpha: 1, duration: dur(0.2), clearProps: "opacity,visibility" }
       );
       if (sheet) gsap.fromTo(sheet,
-        { y: 36, scale: 0.97, autoAlpha: 0 },
+        { y: 24, scale: 0.985, autoAlpha: 0 },
         {
           y: 0, scale: 1, autoAlpha: 1,
-          duration: dur(0.38), ease: "power3.out",
+          duration: dur(0.42), ease: "power4.out",
           clearProps: "transform,opacity,visibility"
         }
       );
@@ -127,8 +127,8 @@
         clearProps: "opacity,visibility"
       });
       if (sheet) gsap.to(sheet, {
-        y: 20, scale: 0.98, autoAlpha: 0,
-        duration: dur(0.18), ease: "power2.in",
+        y: 24, scale: 0.985, autoAlpha: 0,
+        duration: dur(0.24), ease: "power3.in",
         clearProps: "transform,opacity,visibility"
       });
     },
@@ -146,7 +146,7 @@
         { scale: 0.92, autoAlpha: 0 },
         {
           scale: 1, autoAlpha: 1,
-          duration: dur(0.42), ease: "back.out(1.6)",
+          duration: dur(0.4), ease: "power4.out",
           clearProps: "transform,opacity,visibility"
         }
       );
@@ -210,7 +210,7 @@
       if (animate === false || !hasGSAP || reduceMotion) {
         gsap.set(p.pill, vars);
       } else {
-        gsap.to(p.pill, Object.assign({}, vars, { duration: 0.45, ease: "power3.inOut", overwrite: "auto" }));
+        gsap.to(p.pill, Object.assign({}, vars, { duration: 0.34, ease: "power4.out", overwrite: "auto" }));
       }
     },
 
@@ -229,38 +229,21 @@
     /* ---------- 侧边栏点击：弹性反馈（滑块滑动由 navPillTo 处理） ---------- */
     navPulse: function (item) {
       if (!item || !hasGSAP || reduceMotion) return;
-      gsap.fromTo(item, { scale: 0.97 }, { scale: 1, duration: 0.4, ease: "back.out(2)", clearProps: "transform" });
+      gsap.fromTo(item, { scale: 0.965 }, { scale: 1, duration: 0.26, ease: "power4.out", clearProps: "transform" });
     },
 
     /* ---------- 文本淡入（每日一言等） ---------- */
     quoteIn: function (el) {
       if (!el || !hasGSAP || reduceMotion) return;
       gsap.fromTo(el,
-        { autoAlpha: 0, y: 10 },
-        { autoAlpha: 1, y: 0, duration: dur(0.42), ease: "power3.out", clearProps: "transform,opacity,visibility" }
+        { autoAlpha: 0, y: 8 },
+        { autoAlpha: 1, y: 0, duration: dur(0.36), ease: "power4.out", clearProps: "transform,opacity,visibility" }
       );
     },
 
-    /* ---------- 按钮涟漪（事件委托，动态按钮也生效） ---------- */
+    /* ---------- Apple 风格使用即时压感，不使用 Material 涟漪 ---------- */
     initRipple: function () {
-      if (!hasGSAP || reduceMotion) return;
-      document.addEventListener("click", function (e) {
-        var btn = e.target.closest(".btn");
-        if (!btn) return;
-        var r = btn.getBoundingClientRect();
-        var span = document.createElement("span");
-        span.className = "ripple";
-        var size = Math.max(r.width, r.height) * 1.2;
-        span.style.width = span.style.height = size + "px";
-        span.style.left = (e.clientX - r.left - size / 2) + "px";
-        span.style.top = (e.clientY - r.top - size / 2) + "px";
-        btn.appendChild(span);
-        gsap.fromTo(span, { scale: 0, opacity: 0.4 }, {
-          scale: 1, opacity: 0,
-          duration: 0.55, ease: "power2.out",
-          onComplete: function () { span.remove(); }
-        });
-      });
+      return;
     },
 
     /* ---------- 滚动分批浮入（ScrollTrigger），返回清理函数 ---------- */
@@ -269,7 +252,7 @@
       var items = gsap.utils.toArray(selector, container);
       if (!items.length || reduceMotion) return function () {};
       var triggers = [];
-      gsap.set(items, { autoAlpha: 0, y: 22 });
+      gsap.set(items, { autoAlpha: 0, y: 16 });
       items.forEach(function (el) {
         var st = ScrollTrigger.create({
           trigger: el,
@@ -278,7 +261,7 @@
           onEnter: function () {
             gsap.to(el, {
               autoAlpha: 1, y: 0,
-              duration: 0.5, ease: "power3.out",
+              duration: 0.42, ease: "power4.out",
               clearProps: "transform,opacity,visibility"
             });
           }
@@ -289,6 +272,87 @@
         triggers.forEach(function (s) { s.kill(); });
         triggers = [];
       };
+    },
+
+    /* ---------- 移动端侧栏：1:1 跟手关闭 + 速度投影 ---------- */
+    initSidebarGesture: function (sidebar, mask) {
+      if (!sidebar || !mask || !window.PointerEvent) return;
+      var active = false;
+      var committed = false;
+      var startX = 0;
+      var startY = 0;
+      var lastX = 0;
+      var lastT = 0;
+      var velocity = 0;
+
+      function reset(close) {
+        sidebar.style.removeProperty("transition");
+        sidebar.style.removeProperty("transform");
+        sidebar.style.removeProperty("will-change");
+        mask.style.removeProperty("opacity");
+        mask.style.removeProperty("transition");
+        if (close) {
+          sidebar.classList.remove("open");
+          mask.classList.remove("show");
+        }
+        active = false;
+        committed = false;
+      }
+
+      sidebar.addEventListener("pointerdown", function (e) {
+        if (window.innerWidth > 900 || !sidebar.classList.contains("open")) return;
+        active = true;
+        committed = false;
+        startX = lastX = e.clientX;
+        startY = e.clientY;
+        lastT = performance.now();
+        velocity = 0;
+      });
+
+      sidebar.addEventListener("pointermove", function (e) {
+        if (!active) return;
+        var dx = e.clientX - startX;
+        var dy = e.clientY - startY;
+        if (!committed) {
+          if (Math.abs(dx) < 9 && Math.abs(dy) < 9) return;
+          if (Math.abs(dy) >= Math.abs(dx)) { reset(false); return; }
+          committed = true;
+          sidebar.setPointerCapture(e.pointerId);
+          sidebar.style.transition = "none";
+          sidebar.style.willChange = "transform";
+        }
+        e.preventDefault();
+        var width = sidebar.getBoundingClientRect().width || 320;
+        var x = Math.min(0, dx);
+        var now = performance.now();
+        var dt = Math.max(1, now - lastT);
+        velocity = ((e.clientX - lastX) / dt) * 1000;
+        lastX = e.clientX;
+        lastT = now;
+        sidebar.style.transform = "translateX(" + x + "px)";
+        mask.style.opacity = String(Math.max(0, 1 + x / width));
+      });
+
+      function finish(e) {
+        if (!active) return;
+        try { sidebar.releasePointerCapture(e.pointerId); } catch (ignore) {}
+        if (!committed) { reset(false); return; }
+        var matrix = new DOMMatrixReadOnly(getComputedStyle(sidebar).transform);
+        var current = matrix.m41;
+        var projected = current + (velocity / 1000) * 0.998 / (1 - 0.998);
+        var width = sidebar.getBoundingClientRect().width || 320;
+        var close = projected < -width * 0.42 || velocity < -520;
+        active = false;
+        committed = false;
+        sidebar.style.transition = "transform 340ms cubic-bezier(.22,1,.36,1)";
+        mask.style.transition = "opacity 260ms ease-out";
+        sidebar.style.transform = "translateX(" + (close ? -(width + 20) : 0) + "px)";
+        mask.style.opacity = close ? "0" : "1";
+        setTimeout(function () { reset(close); }, close ? 280 : 350);
+      }
+
+      sidebar.addEventListener("pointerup", finish);
+      sidebar.addEventListener("pointercancel", finish);
     },
 
     refreshScroll: function () {

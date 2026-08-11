@@ -74,23 +74,33 @@
   }
 
   var currentCity = null;
+  var REQUEST_TIMEOUT_MS = 12000;
 
   /* ---------- 数据获取 ---------- */
+  async function fetchJson(url) {
+    var controller = new AbortController();
+    var timer = setTimeout(function () { controller.abort(); }, REQUEST_TIMEOUT_MS);
+    try {
+      var resp = await fetch(url, { signal: controller.signal });
+      if (!resp.ok) throw new Error("HTTP " + resp.status);
+      return await resp.json();
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
   async function fetchWeather(lat, lon) {
     var url = "https://api.open-meteo.com/v1/forecast?latitude=" + lat + "&longitude=" + lon +
       "&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m,pressure_msl" +
       "&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset" +
       "&timezone=Asia%2FShanghai&forecast_days=7";
-    var resp = await fetch(url);
-    if (!resp.ok) throw new Error("HTTP " + resp.status);
-    return await resp.json();
+    return await fetchJson(url);
   }
 
   async function searchCity(name) {
     var url = "https://geocoding-api.open-meteo.com/v1/search?name=" + encodeURIComponent(name) +
       "&count=1&language=" + (lang() === "en" ? "en" : "zh") + "&format=json";
-    var resp = await fetch(url);
-    var d = await resp.json();
+    var d = await fetchJson(url);
     var r = d && d.results && d.results[0];
     if (!r) return null;
     return { name: r.name, lat: r.latitude, lon: r.longitude };
@@ -196,6 +206,15 @@
       if (loading) loading.style.display = "none";
       if (content) {
         content.style.display = "";
+        try {
+          var stale = JSON.parse(localStorage.getItem(cacheKey) || "null");
+          if (stale && stale.data) {
+            render(stale.data, city);
+            renderCities(city.name);
+            content.insertAdjacentHTML("afterbegin", '<div class="weather-stale">' + txt("loadFail") + ' · 已显示缓存数据</div>');
+            return;
+          }
+        } catch (ignore) {}
         content.innerHTML = '<div class="empty-state"><p>' + txt("loadFail") + '</p></div>';
       }
     }

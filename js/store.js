@@ -3,9 +3,12 @@
    ============================================================ */
 const Store = (() => {
   const KEY = "xingyu_platform_v1";
+  const CORRUPT_KEY_PREFIX = KEY + "_corrupt_";
+  const SCHEMA_VERSION = 3;
 
   const defaults = () => {
     const d = {
+      schemaVersion: SCHEMA_VERSION,
       profile: { name: "同学", avatar: "", school: "", major: "", grade: "", slogan: "", goal: "", email: "" },
       settings: { baseUrl: "https://api.deepseek.com/v1", apiKey: "", model: "deepseek-chat", nickname: "" },
       courses: [],       // {id, name, teacher, day(1-7), start, end, location, color}
@@ -16,7 +19,8 @@ const Store = (() => {
       grades: [],        // {id, subject, name, score, credit, semester}
       skills: [],        // {id, name, level(1-100)}
       projects: [],      // {id, name, role, desc, link, start, end}
-      literature: []     // {id, title, authors, journal, year, doi, tags[], notes, favorite, createdAt}
+      literature: [],    // {id, title, authors, journal, year, doi, tags[], notes, favorite, createdAt}
+      trash: []          // {id, entityKey, item, deletedAt}
     };
     // 本地配置（local-config.js，含用户 API Key，不随仓库发布）
     if (window.LOCAL_CONFIG) {
@@ -28,15 +32,72 @@ const Store = (() => {
   };
 
   let data = null;
+  const ARRAY_KEYS = ["courses", "tasks", "notes", "cards", "pomodoros", "grades", "skills", "projects", "literature", "trash"];
+  let lastError = "";
+  let firstRun = false;
+
+  function storageGet(key) {
+    try { return localStorage.getItem(key); }
+    catch (e) { lastError = "浏览器存储不可用"; return null; }
+  }
+
+  function storageSet(key, value) {
+    try {
+      localStorage.setItem(key, value);
+      return true;
+    } catch (e) {
+      lastError = e && e.name === "QuotaExceededError" ? "本地空间不足，请先导出数据或清理旧缓存" : "本地数据保存失败";
+      console.error("[星屿]", lastError, e);
+      return false;
+    }
+  }
+
+  function storageRemove(key) {
+    try { localStorage.removeItem(key); } catch (e) {}
+  }
+
+  function isRecord(value) {
+    return value && typeof value === "object" && !Array.isArray(value);
+  }
+
+  function normalizeData(parsed) {
+    if (!isRecord(parsed)) throw new Error("数据格式不正确");
+    const base = defaults();
+    const normalized = base;
+    normalized.schemaVersion = SCHEMA_VERSION;
+    normalized.profile = Object.assign({}, base.profile, isRecord(parsed.profile) ? parsed.profile : {});
+    normalized.settings = Object.assign({}, base.settings, isRecord(parsed.settings) ? parsed.settings : {});
+    ARRAY_KEYS.forEach(key => {
+      normalized[key] = Array.isArray(parsed[key]) ? parsed[key] : [];
+    });
+    normalized.courses = normalized.courses.filter(isRecord);
+    normalized.tasks = normalized.tasks.filter(isRecord);
+    normalized.notes = normalized.notes.filter(isRecord);
+    normalized.cards = normalized.cards.filter(isRecord);
+    normalized.pomodoros = normalized.pomodoros.filter(isRecord);
+    normalized.grades = normalized.grades.filter(isRecord);
+    normalized.skills = normalized.skills.filter(isRecord);
+    normalized.projects = normalized.projects.filter(isRecord);
+    normalized.literature = normalized.literature.filter(isRecord);
+    normalized.trash = normalized.trash.filter(isRecord).filter(entry => {
+      const ts = new Date(entry.deletedAt || 0).getTime();
+      return ts && Date.now() - ts < 30 * 86400000;
+    });
+    return normalized;
+  }
 
   const saveHooks = [];
+  const deleteHooks = [];
 
   function load() {
+    lastError = "";
+    let hadStoredData = false;
     try {
-      const raw = localStorage.getItem(KEY);
+      const raw = storageGet(KEY);
       if (raw) {
+        hadStoredData = true;
         const parsed = JSON.parse(raw);
-        data = Object.assign(defaults(), parsed);
+        data = normalizeData(parsed);
         // 若本地存储未配置 AI Key，但存在本地配置文件，则自动填充（方便使用且不上传密钥）
         if (window.LOCAL_CONFIG && (!data.settings.apiKey || data.settings.apiKey === "LOCAL")) {
           data.settings.apiKey = window.LOCAL_CONFIG.apiKey || data.settings.apiKey;
@@ -46,19 +107,29 @@ const Store = (() => {
         }
         return;
       }
-    } catch (e) { console.warn("数据加载失败，使用默认", e); }
+    } catch (e) {
+      lastError = "本地数据损坏，已创建新的数据空间";
+      const raw = storageGet(KEY);
+      if (raw) storageSet(CORRUPT_KEY_PREFIX + Date.now(), raw);
+      storageRemove(KEY);
+      console.warn("[星屿] 数据加载失败，已隔离损坏数据", e);
+    }
+    firstRun = !hadStoredData;
     data = defaults();
     // 首次使用，写入示例数据
     seedDemo();
   }
 
   function save() {
-    try { localStorage.setItem(KEY, JSON.stringify(data)); }
-    catch (e) { console.error("保存失败", e); }
+    if (!data) data = defaults();
+    data.schemaVersion = SCHEMA_VERSION;
+    const ok = storageSet(KEY, JSON.stringify(data));
     saveHooks.forEach(fn => { try { fn(); } catch (e) { console.warn("save hook 错误", e); } });
+    return ok;
   }
 
   function onSave(fn) { saveHooks.push(fn); }
+  function onDelete(fn) { deleteHooks.push(fn); }
 
   function seedDemo() {
     const today = new Date();
@@ -122,14 +193,17 @@ const Store = (() => {
   }
 
   /* ---------- 通用 CRUD ---------- */
-  function getAll(key) { return data[key]; }
+  function getAll(key) { return Array.isArray(data[key]) ? data[key] : []; }
   function add(key, item) {
+    if (!ARRAY_KEYS.includes(key) || !isRecord(item)) return null;
+    if (!Array.isArray(data[key])) data[key] = [];
     if (!item.id) item.id = uid();
     data[key].push(item);
     save();
     return item;
   }
   function update(key, id, patch) {
+    if (!ARRAY_KEYS.includes(key) || !isRecord(patch)) return null;
     const idx = data[key].findIndex(x => x.id === id);
     if (idx > -1) {
       data[key][idx] = Object.assign({}, data[key][idx], patch);
@@ -138,11 +212,31 @@ const Store = (() => {
     }
     return null;
   }
-  function remove(key, id) {
+  function remove(key, id, options = {}) {
+    if (!ARRAY_KEYS.includes(key) || key === "trash") return null;
+    const item = data[key].find(x => x.id === id);
+    if (!item) return null;
+    let trashEntry = null;
+    if (!options.permanent) {
+      trashEntry = {
+        id: uid(),
+        entityKey: key,
+        item: JSON.parse(JSON.stringify(item)),
+        deletedAt: new Date().toISOString()
+      };
+      data.trash.unshift(trashEntry);
+      data.trash = data.trash.slice(0, 200);
+    }
     data[key] = data[key].filter(x => x.id !== id);
     save();
+    if (trashEntry) deleteHooks.forEach(fn => { try { fn(trashEntry); } catch (e) {} });
+    return trashEntry;
   }
-  function replaceAll(key, items) { data[key] = items; save(); }
+  function replaceAll(key, items) {
+    if (!ARRAY_KEYS.includes(key)) return;
+    data[key] = Array.isArray(items) ? items.filter(isRecord) : [];
+    save();
+  }
 
   /* ---------- 便捷方法 ---------- */
   function getProfile() { return data.profile; }
@@ -155,23 +249,71 @@ const Store = (() => {
     return c ? c.name : "";
   }
 
-  function exportAll() { return JSON.stringify(data, null, 2); }
+  function exportAll(options = {}) {
+    const snapshot = JSON.parse(JSON.stringify(data));
+    snapshot.schemaVersion = SCHEMA_VERSION;
+    if (!options.includeSecrets && snapshot.settings) snapshot.settings.apiKey = "";
+    return JSON.stringify(snapshot, null, 2);
+  }
   function importAll(json) {
     try {
       const parsed = JSON.parse(json);
-      data = Object.assign(defaults(), parsed);
+      const currentSettings = data && isRecord(data.settings) ? data.settings : defaults().settings;
+      data = normalizeData(parsed);
+      if (!parsed.settings || !parsed.settings.apiKey) data.settings.apiKey = currentSettings.apiKey || "";
       save();
       return true;
-    } catch (e) { return false; }
+    } catch (e) {
+      lastError = "导入失败：JSON 数据格式不正确";
+      return false;
+    }
   }
   function clearAll() {
+    const backup = JSON.parse(JSON.stringify(data));
+    if (backup.settings) backup.settings.apiKey = "";
+    const backupKey = KEY + "_backup_" + Date.now();
+    storageSet(backupKey, JSON.stringify(backup));
+    try {
+      const backups = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith(KEY + "_backup_")) backups.push(key);
+      }
+      backups.sort().slice(0, -3).forEach(storageRemove);
+    } catch (e) {}
     data = defaults();
     save();
   }
 
-  return { load, save, onSave, uid, getAll, add, update, remove, replaceAll,
+  function getTrash() {
+    return data.trash.slice();
+  }
+
+  function restoreTrash(trashId) {
+    const index = data.trash.findIndex(entry => entry.id === trashId);
+    if (index < 0) return null;
+    const entry = data.trash[index];
+    if (!ARRAY_KEYS.includes(entry.entityKey) || entry.entityKey === "trash" || !isRecord(entry.item)) return null;
+    const item = Object.assign({}, entry.item);
+    if (data[entry.entityKey].some(existing => existing.id === item.id)) item.id = uid();
+    data[entry.entityKey].push(item);
+    data.trash.splice(index, 1);
+    save();
+    return { key: entry.entityKey, item };
+  }
+
+  function emptyTrash() {
+    data.trash = [];
+    save();
+  }
+
+  function getStorageInfo() {
+    return { key: KEY, schemaVersion: SCHEMA_VERSION, lastError, healthy: !lastError, firstRun };
+  }
+
+  return { load, save, onSave, onDelete, uid, getAll, add, update, remove, replaceAll,
            getProfile, setProfile, getSettings, setSettings, getCourseName,
-           exportAll, importAll, clearAll };
+           exportAll, importAll, clearAll, getStorageInfo, getTrash, restoreTrash, emptyTrash };
 })();
 
 Store.load();

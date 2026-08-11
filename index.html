@@ -1,21 +1,26 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-design="apple">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#000000">
+<meta name="color-scheme" content="dark light">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="icon" href="xingyu.ico">
+<link rel="apple-touch-icon" href="assets/xingyu-app-icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
 <!-- 禁用文档缓存：更新后普通刷新即可生效，无需强制刷新 -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>零 · 个人学习工作台</title>
+<title>星屿 · 个人学习工作台</title>
 <meta name="description" content="把学业收拢到一张白纸：课程作业、笔记库、专注统计、成长档案、AI 助手。本地优先，黑白灰三色极简，无任何装饰。">
 <script>(function(){
   var d = document.documentElement;
-  var t = localStorage.getItem("zero_theme") || "dark";
+  var mode = localStorage.getItem("zero_theme") || "system";
+  var t = mode === "system" ? (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark") : mode;
+  d.dataset.themeMode = mode;
   d.dataset.theme = t;
   if (t === "custom") {
     try {
@@ -28,7 +33,8 @@
   d.dataset.lang = localStorage.getItem("zero_lang") || "zh";
   d.dataset.bg = localStorage.getItem("zero_bg") || "none";
 })();</script>
-<link rel="stylesheet" href="css/style.css?v=20260814">
+<link rel="stylesheet" href="css/style.css?v=20260811.3">
+<link rel="stylesheet" href="css/apple.css?v=20260811.3">
 </head>
 <body>
 
@@ -38,8 +44,8 @@
     <div class="splash-ring">○</div>
     <div class="splash-word">零</div>
   </div>
-  <video id="splashVideo" src="assets/intro.mp4" muted playsinline preload="auto"></video>
-  <div class="splash-skip" id="splashSkip">跳过</div>
+  <video id="splashVideo" src="assets/intro-720.mp4" muted playsinline preload="metadata"></video>
+  <button class="splash-skip" id="splashSkip" type="button">跳过</button>
 </div>
 <style>
 .splash{position:fixed;inset:0;z-index:99999;background:#000;display:flex;align-items:center;justify-content:center;transition:opacity .6s ease}
@@ -48,7 +54,7 @@
 .splash-ring{font-size:74px;line-height:1;animation:splashPulse 1.4s var(--ease-out) infinite;pointer-events:none}
 .splash-word{font-size:20px;letter-spacing:.4em;text-indent:.4em;opacity:0;animation:splashWord 1s var(--ease-out) .2s forwards}
 .splash.fade-out{opacity:0;pointer-events:none}
-.splash-skip{position:absolute;z-index:3;right:18px;bottom:16px;padding:6px 16px;border:1px solid rgba(255,255,255,.35);border-radius:99px;color:rgba(255,255,255,.75);font-size:13px;letter-spacing:.08em;cursor:pointer;user-select:none;transition:opacity .3s}
+.splash-skip{position:absolute;z-index:3;right:18px;bottom:16px;padding:6px 16px;border:1px solid rgba(255,255,255,.35);border-radius:99px;background:rgba(0,0,0,.25);color:rgba(255,255,255,.75);font:inherit;font-size:13px;letter-spacing:.08em;cursor:pointer;user-select:none;transition:opacity .3s}
 .splash-skip:hover{opacity:.7}
 @keyframes splashPulse{0%{transform:scale(.6);opacity:.25}50%{opacity:1}100%{transform:scale(1.2);opacity:.25}}
 @keyframes splashWord{from{opacity:0;transform:translateY(8px)}to{opacity:.85;transform:none}}
@@ -96,10 +102,10 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
   <!-- ================= 侧边栏 ================= -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">
-      <div class="logo-icon" aria-label="零">○</div>
+      <div class="logo-icon" aria-label="星屿">○</div>
       <div class="logo-text">
-        <span class="logo-name">零</span>
-        <span class="logo-sub" data-i18n="logo.sub">个人学习工作台 · ZERO</span>
+        <span class="logo-name">星屿</span>
+        <span class="logo-sub" data-i18n="logo.sub">个人学习工作台</span>
       </div>
     </div>
 
@@ -107,7 +113,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <div class="nav-group">
         <div class="nav-group-label" data-i18n="nav.group.work">工作台</div>
         <button class="nav-item active" data-view="dashboard">
-          <span class="nav-label" data-i18n="nav.dashboard">仪表盘</span>
+          <span class="nav-label" data-i18n="nav.dashboard">今日</span>
         </button>
         <button class="nav-item" data-view="courses">
           <span class="nav-label" data-i18n="nav.courses">课程作业</span>
@@ -160,20 +166,23 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
     <!-- 顶部栏（毛玻璃悬浮层） -->
     <header class="topbar">
       <div class="topbar-left">
-        <button class="icon-btn menu-btn" id="btnMenu">☰</button>
+        <button class="icon-btn menu-btn" id="btnMenu" aria-label="打开导航" title="打开导航">☰</button>
         <div class="page-title-box">
-          <h1 class="page-title" id="pageTitle">仪表盘</h1>
+          <h1 class="page-title" id="pageTitle">今日</h1>
           <span class="page-sub" id="pageSub">你的个人学习工作中心</span>
         </div>
       </div>
       <div class="topbar-right">
         <div class="search-box">
           <span class="search-ico">⌕</span>
-          <input type="text" id="globalSearch" placeholder="搜索笔记 / 任务 / 课程..." data-i18n-ph="search.ph">
-        </div>
-        <button class="icon-btn" id="btnQrcode" title="扫码访问">
+        <input type="search" id="globalSearch" placeholder="搜索笔记 / 任务 / 课程..." data-i18n-ph="search.ph"
+          autocomplete="off" aria-label="全局搜索" aria-controls="searchResults" aria-autocomplete="list">
+        <div class="search-results" id="searchResults" role="listbox" aria-label="搜索结果" hidden></div>
+      </div>
+        <button class="icon-btn" id="btnQrcode" title="扫码访问" aria-label="扫码访问">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2.5 2.5h5v5h-5zM8.5 2.5h5v5h-5zM2.5 8.5h5v5h-5z"/><path d="M8.5 8.5h2v2h-2zM11 8.5h2.5v2.5H11zM8.5 11.5H11V14H8.5zM11.5 11.5h2.5V14h-2.5z"/></svg>
         </button>
+        <span class="network-status" id="networkStatus" role="status" aria-live="polite" hidden>离线</span>
         <div class="clock-box" id="clockBox">
           <span class="clock-time" id="clockTime">--:--</span>
           <span class="clock-date" id="clockDate">----</span>
@@ -183,7 +192,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
     </header>
 
     <!-- ============ 视图容器 ============ -->
-    <div class="view-container">
+    <div class="view-container" id="view-container">
 
       <!-- 仪表盘 -->
       <section class="view active" id="view-dashboard">
@@ -194,7 +203,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
             <p id="heroQuote">今天也要保持专注，稳步向前。</p>
           </div>
           <div class="hero-stats" id="heroStats"></div>
-          <div class="hero-news" id="heroNews"></div>
+          <div class="hero-priority" id="heroPriority"></div>
         </div>
         <!-- 每日一言 -->
         <div class="card quote-card" id="dailyQuote">
@@ -207,6 +216,9 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
             <p class="quote-text" id="quoteText"></p>
           </div>
           <span class="quote-cat" id="quoteCat"></span>
+        </div>
+        <div class="card dashboard-news-card">
+          <div class="hero-news" id="heroNews"></div>
         </div>
         <div class="dash-grid">
           <div class="card" id="dashCountdown">
@@ -418,7 +430,10 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <div class="card ai-chat-card">
             <div class="card-head">
               <h3>AI 学习助手</h3>
-              <span class="ai-status" id="aiStatus">● 未配置模型</span>
+              <div class="ai-head-meta">
+                <span class="ai-context" id="aiContext"></span>
+                <span class="ai-status" id="aiStatus">● 未配置模型</span>
+              </div>
             </div>
             <div class="chat-box" id="chatBox">
               <div class="chat-msg ai">
@@ -430,6 +445,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
             <div class="chat-input-row">
               <input type="text" id="chatInput" placeholder="输入问题，或用 /学习规划 /智能排序 /知识卡片 /笔记整理 使用快捷技能...">
               <button class="btn btn-primary" id="btnChatSend">发送</button>
+              <button class="btn btn-danger" id="btnChatStop" style="display:none">停止</button>
             </div>
             <div class="chat-quick">
               <button class="chip" data-cmd="/学习规划">学习规划</button>
@@ -513,6 +529,13 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 
     </div>
   </main>
+  <nav class="mobile-tabbar" id="mobileTabbar" aria-label="主要导航">
+    <button class="mobile-tab active" data-mobile-view="dashboard"><span data-i18n="mobile.today">今日</span></button>
+    <button class="mobile-tab" data-mobile-view="courses"><span data-i18n="mobile.courses">课程</span></button>
+    <button class="mobile-tab" data-mobile-view="notes"><span data-i18n="mobile.notes">笔记</span></button>
+    <button class="mobile-tab" data-mobile-view="focus"><span data-i18n="mobile.focus">专注</span></button>
+    <button class="mobile-tab" data-mobile-view="more"><span data-i18n="mobile.more">更多</span></button>
+  </nav>
 </div>
 
 <!-- ================= 弹窗：二维码 ================= -->
@@ -525,7 +548,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
     <div class="modal-body center">
       <p class="hint" data-i18n="qr.hint">手机扫码即可永久访问你的个人工作台。</p>
       <div id="qrCodeBox" class="qr-box">
-        <img src="xingyu-qrcode.png" alt="零 · 永久二维码" class="qr-static">
+        <img src="xingyu-qrcode.png" alt="星屿 · 永久二维码" class="qr-static">
       </div>
       <div class="qr-actions">
         <button class="btn btn-primary" id="btnCopyLink" data-i18n="qr.copy">复制永久链接</button>
@@ -545,6 +568,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <div class="setting-group">
         <h4 data-i18n="settings.theme">界面主题</h4>
         <div class="theme-picker">
+          <button class="theme-opt" data-theme-pick="system"><span class="theme-swatch sw-system"></span><span>跟随系统</span></button>
           <button class="theme-opt" data-theme-pick="dark"><span class="theme-swatch sw-dark"></span><span data-i18n="theme.dark">纯黑</span></button>
           <button class="theme-opt" data-theme-pick="light"><span class="theme-swatch sw-light"></span><span data-i18n="theme.light">纯白</span></button>
           <button class="theme-opt" data-theme-pick="ocean"><span class="theme-swatch sw-ocean"></span><span data-i18n="theme.ocean">墨蓝</span></button>
@@ -563,6 +587,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <button class="theme-opt" data-theme-pick="damo"><span class="theme-swatch sw-damo"></span><span data-i18n="theme.damo">大漠</span></button>
           <button class="theme-opt" data-theme-pick="custom"><span class="theme-swatch sw-custom" id="swCustom"></span><span data-i18n="theme.custom">自定义</span></button>
         </div>
+        <button class="appearance-more" id="btnToggleAdvancedThemes" type="button">显示更多主题</button>
         <div class="theme-custom" id="themeCustom" style="display:none">
           <div class="theme-cfield"><span>背景色</span><input type="color" data-cvar="paper" value="#000000"></div>
           <div class="theme-cfield"><span>卡片色</span><input type="color" data-cvar="card" value="#141414"></div>
@@ -680,6 +705,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <button class="btn btn-ghost" id="btnExportData" data-i18n="btn.export">导出数据(JSON)</button>
           <button class="btn btn-ghost" id="btnImportData" data-i18n="btn.importData">导入数据</button>
           <input type="file" id="importFile" accept="application/json" style="display:none">
+          <button class="btn btn-ghost" id="btnOpenTrash">回收站 <span id="trashCount">0</span></button>
           <button class="btn btn-danger" id="btnClearData" data-i18n="btn.clear">清空全部数据</button>
         </div>
       </div>
@@ -856,10 +882,46 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
   </div>
 </div>
 
+<!-- ================= 弹窗：回收站 ================= -->
+<div class="modal-mask" id="trashModal">
+  <div class="modal trash-modal">
+    <div class="modal-head">
+      <h3>最近删除</h3>
+      <button class="modal-close" data-close="trashModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="hint">删除的内容保留 30 天，可随时恢复。</p>
+      <div class="trash-list" id="trashList"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-danger" id="btnEmptyTrash">清空回收站</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 弹窗：首次引导 ================= -->
+<div class="modal-mask" id="onboardingModal">
+  <div class="modal onboarding-modal">
+    <div class="modal-body onboarding-body">
+      <img src="assets/xingyu-app-icon-256.png" class="onboarding-icon" alt="">
+      <span class="onboarding-eyebrow">欢迎来到星屿</span>
+      <h2>把今天真正重要的事放在眼前。</h2>
+      <p>先告诉星屿怎么称呼你，再决定是否保留演示数据。</p>
+      <label class="field"><span>昵称</span><input id="onboardName" placeholder="同学"></label>
+      <label class="field"><span>近期目标</span><input id="onboardGoal" placeholder="例如：完成本周课程并保持每天专注 60 分钟"></label>
+      <label class="lock-toggle"><input type="checkbox" id="onboardKeepDemo"><span>保留演示课程与任务</span></label>
+      <div class="onboarding-actions">
+        <button class="btn btn-primary btn-lg" id="btnFinishOnboarding">开始使用星屿</button>
+        <button class="btn btn-ghost" id="btnSkipOnboarding">稍后设置</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ================= 锁屏（访问密码） ================= -->
 <div class="lock-mask" id="lockMask" style="display:none">
   <div class="lock-box">
-    <div class="lock-logo">○ 零</div>
+    <div class="lock-logo">星屿</div>
     <p class="lock-title" data-i18n="lock.title">平台已锁定</p>
     <input type="password" id="lockPin" placeholder="输入访问密码" autocomplete="off">
     <button class="btn btn-primary" id="btnUnlock" data-i18n="lock.unlock">解锁</button>
@@ -867,18 +929,28 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
   </div>
 </div>
 
-<script src="assets/js/gsap.min.js?v=20260814"></script>
-<script src="assets/js/ScrollTrigger.min.js?v=20260814"></script>
-<script src="js/anim.js?v=20260814"></script>
-<script src="js/local-config.js?v=20260814"></script>
-<script src="js/quotes.js?v=20260814"></script>
-<script src="js/lunar.js?v=20260814"></script>
-<script src="js/store.js?v=20260814"></script>
-<script src="js/sync.js?v=20260814"></script>
-<script src="js/charts.js?v=20260814"></script>
-<script src="js/ai.js?v=20260814"></script>
-<script src="js/weather.js?v=20260814"></script>
-<script src="js/app.js?v=20260814"></script>
+<script src="assets/js/gsap.min.js?v=20260811.3"></script>
+<script src="assets/js/ScrollTrigger.min.js?v=20260811.3"></script>
+<script src="js/anim.js?v=20260811.3"></script>
+<script src="js/local-config.js?v=20260811.3"></script>
+<script src="js/quotes.js?v=20260811.3"></script>
+<script src="js/lunar.js?v=20260811.3"></script>
+<script src="js/store.js?v=20260811.3"></script>
+<script src="js/sync.js?v=20260811.3"></script>
+<script src="js/charts.js?v=20260811.3"></script>
+<script src="js/ai.js?v=20260811.3"></script>
+<script src="js/weather.js?v=20260811.3"></script>
+<script src="js/icons.js?v=20260811.3"></script>
+<script src="js/app.js?v=20260811.3"></script>
+<script>
+  if ("serviceWorker" in navigator && location.protocol !== "file:") {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("./sw.js", { scope: "./" }).catch(function (error) {
+        console.debug("星屿离线缓存未启用", error);
+      });
+    });
+  }
+</script>
 
 
 

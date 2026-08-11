@@ -5,6 +5,9 @@ js/local-config.js
 *.log
 .DS_Store
 node_modules/
+tests/artifacts/
+__pycache__/
+*.pyc
 
 # 隐私 / 运行 / 开发产物（不随仓库发布）
 .workbuddy/

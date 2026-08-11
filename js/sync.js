@@ -11,6 +11,7 @@ const Sync = (() => {
   const GIST_FILE = "xingyu-data.json";
   const API = "https://api.github.com";
   const SNAPSHOT_V = 2;
+  const REQUEST_TIMEOUT_MS = 20000;
 
   let lastPushed = null;   // 最近一次成功推送后，本地内容对应的 updatedAt(ms)
   let pushTimer = null;
@@ -20,12 +21,22 @@ const Sync = (() => {
   const listeners = [];
   function emit(status) { listeners.forEach(fn => { try { fn(status); } catch (e) {} }); }
 
-  function getToken() { return localStorage.getItem(TOKEN_KEY) || ""; }
-  function setToken(t) { if (t) localStorage.setItem(TOKEN_KEY, t); else localStorage.removeItem(TOKEN_KEY); }
-  function isEnabled() { return localStorage.getItem(ENABLED_KEY) === "1"; }
-  function setEnabled(v) { if (v) localStorage.setItem(ENABLED_KEY, "1"); else localStorage.removeItem(ENABLED_KEY); }
-  function getGistId() { return localStorage.getItem(GIST_KEY) || ""; }
-  function getLocalStamp() { return parseInt(localStorage.getItem(LOCAL_KEY) || "0", 10) || 0; }
+  function getToken() { try { return localStorage.getItem(TOKEN_KEY) || ""; } catch (e) { return ""; } }
+  function setToken(t) {
+    try {
+      if (t) localStorage.setItem(TOKEN_KEY, String(t).trim());
+      else localStorage.removeItem(TOKEN_KEY);
+    } catch (e) { emit({ phase: "sync", err: "无法保存 GitHub Token，请检查浏览器存储权限" }); }
+  }
+  function isEnabled() { try { return localStorage.getItem(ENABLED_KEY) === "1"; } catch (e) { return false; } }
+  function setEnabled(v) {
+    try {
+      if (v) localStorage.setItem(ENABLED_KEY, "1");
+      else localStorage.removeItem(ENABLED_KEY);
+    } catch (e) {}
+  }
+  function getGistId() { try { return localStorage.getItem(GIST_KEY) || ""; } catch (e) { return ""; } }
+  function getLocalStamp() { try { return parseInt(localStorage.getItem(LOCAL_KEY) || "0", 10) || 0; } catch (e) { return 0; } }
 
   function authHeaders() {
     return {
@@ -36,16 +47,26 @@ const Sync = (() => {
   }
 
   async function request(path, options) {
-    const res = await fetch(API + path, options);
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+    let res;
+    try {
+      res = await fetch(API + path, Object.assign({}, options, { signal: controller.signal }));
+    } catch (e) {
+      if (e.name === "AbortError") throw new Error("云同步请求超时");
+      throw new Error("云同步网络请求失败，请检查网络连接");
+    } finally {
+      clearTimeout(timer);
+    }
     if (!res.ok) {
       let msg = "HTTP " + res.status;
       try {
         const j = await res.json();
-        if (j.message) { msg = j.message; if (j.documentation_url) msg += " (" + j.documentation_url + ")"; }
+        if (j.message) msg = j.message;
       } catch (e) {}
       throw new Error(msg);
     }
-    return res.json();
+    return res.json().catch(() => { throw new Error("云同步返回数据格式异常"); });
   }
 
   function snapshot() {
@@ -57,7 +78,7 @@ const Sync = (() => {
   // 本地有真实改动（用户操作）-> 更新时间戳并排程自动推送
   function onLocalChange() {
     if (suppressing) return;
-    localStorage.setItem(LOCAL_KEY, String(Date.now()));
+    try { localStorage.setItem(LOCAL_KEY, String(Date.now())); } catch (e) {}
     if (!isEnabled()) return;
     if (pushTimer) clearTimeout(pushTimer);
     pushTimer = setTimeout(() => { pushTimer = null; sync().catch(() => {}); }, 2000);
@@ -82,11 +103,11 @@ const Sync = (() => {
           files: { [GIST_FILE]: { content } }
         })
       });
-      localStorage.setItem(GIST_KEY, g.id);
+      try { localStorage.setItem(GIST_KEY, g.id); } catch (e) {}
     }
     const now = Date.now();
     lastPushed = now;
-    localStorage.setItem(LOCAL_KEY, String(now));
+    try { localStorage.setItem(LOCAL_KEY, String(now)); } catch (e) {}
     return { dir: "pushed", at: now };
   }
 
@@ -105,7 +126,7 @@ const Sync = (() => {
     let ok = false;
     try { if (remote.data) ok = Store.importAll(JSON.stringify(remote.data)); } finally { suppressing = false; }
     if (!ok) throw new Error("云端数据导入失败");
-    localStorage.setItem(LOCAL_KEY, String(remoteTs));
+    try { localStorage.setItem(LOCAL_KEY, String(remoteTs)); } catch (e) {}
     lastPushed = remoteTs;
     return { dir: "pulled", remoteTs };
   }

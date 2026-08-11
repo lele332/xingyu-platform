@@ -30,17 +30,42 @@ const App = (() => {
     const d = new Date(iso); d.setHours(0, 0, 0, 0);
     return Math.ceil((d - now) / 86400000);
   }
-  function todayISO() {
-    return fmtDateFull(new Date().toISOString());
+  function localDateKey(value = new Date()) {
+    const d = value instanceof Date ? new Date(value) : new Date(value);
+    if (Number.isNaN(d.getTime())) return "";
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
   }
-  function toast(msg, type = "") {
+  function todayISO() {
+    return localDateKey();
+  }
+  function toast(msg, type = "", options = {}) {
     let wrap = $("#toastWrap");
-    if (!wrap) { wrap = document.createElement("div"); wrap.id = "toastWrap"; document.body.appendChild(wrap); }
+    if (!wrap) {
+      wrap = document.createElement("div");
+      wrap.id = "toastWrap";
+      wrap.setAttribute("aria-live", "polite");
+      wrap.setAttribute("aria-atomic", "false");
+      document.body.appendChild(wrap);
+    }
     const el = document.createElement("div");
     el.className = "toast " + type;
-    el.textContent = msg;
+    el.setAttribute("role", type === "err" ? "alert" : "status");
+    const text = document.createElement("span");
+    text.textContent = msg;
+    el.appendChild(text);
+    if (options.actionLabel && typeof options.onAction === "function") {
+      const action = document.createElement("button");
+      action.className = "toast-action";
+      action.textContent = options.actionLabel;
+      action.onclick = () => {
+        options.onAction();
+        el.remove();
+      };
+      el.appendChild(action);
+    }
     wrap.appendChild(el);
-    setTimeout(() => { el.style.opacity = "0"; el.style.transition = "opacity 0.3s"; setTimeout(() => el.remove(), 350); }, 2600);
+    setTimeout(() => { el.style.opacity = "0"; el.style.transition = "opacity 0.3s"; setTimeout(() => el.remove(), 350); }, options.duration || 4200);
+    return el;
   }
 
   /* ---------- 视图切换（iOS 风格：进入动画可重复触发） ---------- */
@@ -50,7 +75,19 @@ const App = (() => {
     const prev = $("#view-" + currentView);
     currentView = view;
     $$(".view").forEach(v => v.classList.remove("active"));
-    $$(".nav-item").forEach(n => n.classList.toggle("active", n.dataset.view === view));
+    $$(".nav-item").forEach(n => {
+      const active = n.dataset.view === view;
+      n.classList.toggle("active", active);
+      if (active) n.setAttribute("aria-current", "page");
+      else n.removeAttribute("aria-current");
+    });
+    $$(".mobile-tab").forEach(tab => {
+      const target = tab.dataset.mobileView;
+      const active = target === view || (target === "more" && !["dashboard", "courses", "notes", "focus"].includes(view));
+      tab.classList.toggle("active", active);
+      if (active) tab.setAttribute("aria-current", "page");
+      else tab.removeAttribute("aria-current");
+    });
     const v = $("#view-" + view);
     if (v) {
       v.classList.add("active");
@@ -154,9 +191,60 @@ const App = (() => {
     };
   }
 
+  function getNextCourse(courses) {
+    const now = new Date();
+    const today = now.getDay() || 7;
+    const currentMin = now.getHours() * 60 + now.getMinutes();
+    return courses.map(course => {
+      const start = String(course.start || "00:00").split(":").map(Number);
+      const end = String(course.end || course.start || "00:00").split(":").map(Number);
+      const startMin = (start[0] || 0) * 60 + (start[1] || 0);
+      const endMin = (end[0] || 0) * 60 + (end[1] || 0);
+      let daysAhead = ((Number(course.day) || 1) - today + 7) % 7;
+      let ongoing = false;
+      if (daysAhead === 0 && currentMin > startMin) {
+        if (currentMin <= endMin) ongoing = true;
+        else daysAhead = 7;
+      }
+      return { course, ongoing, distance: daysAhead * 1440 + Math.max(0, startMin - currentMin) };
+    }).sort((a, b) => (a.ongoing ? -1 : b.ongoing ? 1 : a.distance - b.distance))[0] || null;
+  }
+
+  function renderHeroPriority() {
+    const box = $("#heroPriority");
+    if (!box) return;
+    const tasks = Store.getAll("tasks").filter(task => task.status !== "done").slice().sort((a, b) => {
+      const dueA = a.due ? new Date(a.due).getTime() : Infinity;
+      const dueB = b.due ? new Date(b.due).getTime() : Infinity;
+      const weight = { high: 0, mid: 1, low: 2 };
+      return dueA - dueB || (weight[a.priority] ?? 3) - (weight[b.priority] ?? 3);
+    });
+    const task = tasks[0];
+    const next = getNextCourse(Store.getAll("courses"));
+    const icon = name => window.XingyuIcons ? XingyuIcons.svg(name) : "";
+    const taskMeta = task ? (task.due ? `${Math.max(0, daysUntil(task.due))} 天后到期` : "无截止日期") : "当前没有待办";
+    const courseMeta = next ? (next.ongoing ? "正在进行" : next.distance < 1440 ? "今天" : `${Math.floor(next.distance / 1440)} 天后`) : "暂无课程";
+    box.innerHTML = `
+      <button class="priority-item" type="button" data-priority-act="task" ${task ? "" : "disabled"}>
+        ${icon("courses")}<span class="priority-copy"><small>首要任务 · ${esc(taskMeta)}</small><b>${esc(task ? task.title : "添加第一项任务")}</b></span>
+      </button>
+      <button class="priority-item" type="button" data-priority-act="course" ${next ? "" : "disabled"}>
+        ${icon("dashboard")}<span class="priority-copy"><small>下一课程 · ${esc(courseMeta)}</small><b>${esc(next ? `${next.course.name} ${next.course.start || ""}` : "导入课程表")}</b></span>
+      </button>
+      <button class="priority-item" type="button" data-priority-act="focus">
+        ${icon("focus")}<span class="priority-copy"><small>现在开始</small><b>${esc(Store.getProfile().goal || "专注 25 分钟")}</b></span>
+      </button>`;
+    const taskBtn = box.querySelector('[data-priority-act="task"]');
+    if (taskBtn && task) taskBtn.onclick = () => openTaskForm(task.id);
+    const courseBtn = box.querySelector('[data-priority-act="course"]');
+    if (courseBtn && next) courseBtn.onclick = () => switchView("courses");
+    box.querySelector('[data-priority-act="focus"]').onclick = () => switchView("focus");
+  }
+
   function renderDashboard() {
     renderQuote();
     renderHeroNews();
+    renderHeroPriority();
     // 问候语（按时段细化，附一句温暖副语）
     const name = Store.getProfile().name || "同学";
     const h = new Date().getHours();
@@ -180,7 +268,7 @@ const App = (() => {
     const todos = tasks.filter(t => t.status !== "done");
     const dueToday = todos.filter(t => daysUntil(t.due) === 0);
     const notes = Store.getAll("notes");
-    const pomos = Store.getAll("pomodoros").filter(p => p.startAt && p.startAt.slice(0, 10) === todayISO());
+    const pomos = Store.getAll("pomodoros").filter(p => p.startAt && localDateKey(p.startAt) === todayISO());
     const pomoMin = pomos.reduce((s, p) => s + (p.minutes || 0), 0);
     $("#heroStats").innerHTML = `
       <div class="hstat"><b data-count="${todos.length}">0</b><span>${t("hero.todo")}</span></div>
@@ -266,7 +354,7 @@ const App = (() => {
     for (let i = days - 1; i >= 0; i--) {
       const d = new Date(); d.setDate(d.getDate() - i);
       const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-      const mins = pomos.filter(p => p.startAt && p.startAt.slice(0, 10) === key).reduce((s, p) => s + (p.minutes || 0), 0);
+      const mins = pomos.filter(p => p.startAt && localDateKey(p.startAt) === key).reduce((s, p) => s + (p.minutes || 0), 0);
       labels.push(d.getDate() + "日");
       values.push(mins);
     }
@@ -371,8 +459,8 @@ const App = (() => {
       btn.onclick = (e) => {
         e.stopPropagation();
         const act = btn.dataset.act, id = btn.dataset.id;
-        if (act === "del-course") { Store.remove("courses", id); toast("课程已删除", "ok"); renderCourses(); renderDashboard(); }
-        else if (act === "del-task") { Store.remove("tasks", id); toast("任务已删除", "ok"); renderCourses(); }
+        if (act === "del-course") { Store.remove("courses", id); renderCourses(); renderDashboard(); }
+        else if (act === "del-task") { Store.remove("tasks", id); renderCourses(); }
         else if (act === "edit-course") { openCourseForm(id); }
         else if (act === "edit-task") { openTaskForm(id); }
         else if (act === "toggle-task") {
@@ -531,7 +619,7 @@ const App = (() => {
       };
     });
     $$("[data-act='del-card']").forEach(btn => {
-      btn.onclick = (e) => { e.stopPropagation(); Store.remove("cards", btn.dataset.id); toast("卡片已删除", "ok"); renderCardGrid(); };
+      btn.onclick = (e) => { e.stopPropagation(); Store.remove("cards", btn.dataset.id); renderCardGrid(); };
     });
   }
 
@@ -545,7 +633,6 @@ const App = (() => {
         if (confirm("确定删除这篇笔记吗？")) {
           Store.remove("notes", n.id);
           closeModal("formModal");
-          toast("笔记已删除", "ok");
           renderNotes();
         }
       };
@@ -588,13 +675,15 @@ const App = (() => {
 
   function renderFocusStats() {
     const pomos = Store.getAll("pomodoros");
-    const today = pomos.filter(p => p.startAt && p.startAt.slice(0, 10) === todayISO());
+    const today = pomos.filter(p => p.startAt && localDateKey(p.startAt) === todayISO());
     const todayCount = today.length;
     const todayMin = today.reduce((s, p) => s + (p.minutes || 0), 0);
     const weekMin = pomos.filter(p => {
       if (!p.startAt) return false;
-      const d = new Date(p.startAt.slice(0, 10));
+      const d = new Date(p.startAt);
+      d.setHours(0, 0, 0, 0);
       const now = new Date();
+      now.setHours(0, 0, 0, 0);
       const diff = (now - d) / 86400000;
       return diff >= 0 && diff < 7;
     }).reduce((s, p) => s + (p.minutes || 0), 0);
@@ -614,7 +703,7 @@ const App = (() => {
     for (let i = 6; i >= 0; i--) {
       const d = new Date(); d.setDate(d.getDate() - i);
       const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-      const mins = pomos.filter(p => p.startAt && p.startAt.slice(0, 10) === key).reduce((s, p) => s + (p.minutes || 0), 0);
+      const mins = pomos.filter(p => p.startAt && localDateKey(p.startAt) === key).reduce((s, p) => s + (p.minutes || 0), 0);
       labels.push(d.getDate() + "日");
       values.push(mins);
     }
@@ -1137,7 +1226,7 @@ const App = (() => {
     box.querySelectorAll(".lit-edit").forEach(b => b.onclick = () => openLitForm(b.closest(".lit-item").dataset.id));
     box.querySelectorAll(".lit-del").forEach(b => b.onclick = () => {
       const id = b.closest(".lit-item").dataset.id;
-      if (confirm("确定删除这篇文献吗？")) { Store.remove("literature", id); toast("已删除", "ok"); renderLitList(); }
+      if (confirm("确定删除这篇文献吗？")) { Store.remove("literature", id); renderLitList(); }
     });
     box.querySelectorAll(".lit-doi").forEach(s => s.onclick = () => {
       navigator.clipboard.writeText(s.dataset.doi).then(() => toast("DOI 已复制", "ok"));
@@ -1232,6 +1321,12 @@ const App = (() => {
     const el = $("#aiStatus");
     el.textContent = ok ? "● 模型已配置" : "● 未配置模型（本地模式）";
     el.className = "ai-status " + (ok ? "ok" : "");
+    const context = $("#aiContext");
+    if (context) {
+      const taskCount = Store.getAll("tasks").filter(item => item.status !== "done").length;
+      const noteCount = Store.getAll("notes").length;
+      context.textContent = `参考 ${taskCount} 项任务 · ${noteCount} 篇笔记`;
+    }
   }
 
   function addChatMsg(text, who = "ai") {
@@ -1245,18 +1340,52 @@ const App = (() => {
     return div;
   }
 
+  function addChatActions(message, text) {
+    const bubble = message && message.querySelector(".chat-bubble");
+    if (!bubble || !text) return;
+    const actions = document.createElement("div");
+    actions.className = "chat-actions";
+    const icon = name => window.XingyuIcons ? XingyuIcons.svg(name) : "";
+    actions.innerHTML = `
+      <button class="chat-action" type="button" data-chat-action="copy">${icon("copy")}复制</button>
+      <button class="chat-action" type="button" data-chat-action="save">${icon("save")}保存为笔记</button>`;
+    actions.querySelector('[data-chat-action="copy"]').onclick = () => {
+      navigator.clipboard.writeText(text).then(() => toast("已复制 AI 回复", "ok")).catch(() => toast("复制失败", "err"));
+    };
+    actions.querySelector('[data-chat-action="save"]').onclick = () => {
+      const now = new Date().toISOString();
+      const title = text.split(/\n/).map(line => line.replace(/^[#*\-\d.\s]+/, "").trim()).find(Boolean) || "AI 学习笔记";
+      Store.add("notes", {
+        title: title.slice(0, 40),
+        subject: "AI 助手",
+        tags: ["AI"],
+        content: text,
+        createdAt: now,
+        updatedAt: now
+      });
+      toast("已保存到学习笔记库", "ok");
+      renderAIStatus();
+    };
+    bubble.appendChild(actions);
+  }
+
   const CMD_MAP = {
     "/plan": "plan", "/学习规划": "plan", "/规划": "plan",
     "/priority": "priority", "/智能排序": "priority", "/排序": "priority",
     "/cards": "cards", "/知识卡片": "cards", "/卡片": "cards", "/复习": "cards",
     "/organize": "organize", "/笔记整理": "organize", "/整理": "organize"
   };
+  let chatBusy = false;
   async function sendChat(text) {
     const trimmed = text.trim();
-    if (!trimmed) return;
+    if (!trimmed || chatBusy) return;
+    chatBusy = true;
+    $("#btnChatSend").disabled = true;
+    $("#btnChatStop").style.display = "";
     addChatMsg(trimmed, "user");
     $("#chatInput").value = "";
-    const loading = addChatMsg("思考中<span class='spinner' style='border-color:rgba(139,92,246,.4);border-top-color:#fff'></span>", "ai");
+    const loading = addChatMsg("思考中…", "ai");
+    loading.classList.add("chat-loading");
     const isCmd = trimmed.startsWith("/");
     try {
       let reply;
@@ -1273,18 +1402,48 @@ const App = (() => {
         reply = await AI.ask(trimmed);
       }
       loading.querySelector(".chat-bubble").innerHTML = esc(reply).replace(/\n/g, "<br>");
+      addChatActions(loading, reply);
     } catch (e) {
-      loading.querySelector(".chat-bubble").innerHTML = `<span style="color:var(--danger)">${esc(e.message)}</span>`;
+      loading.querySelector(".chat-bubble").innerHTML = e.message === "已停止生成"
+        ? `<span style="color:var(--ink-3)">已停止生成</span>`
+        : `<span style="color:var(--danger)">${esc(e.message)}</span>`;
+    } finally {
+      chatBusy = false;
+      loading.classList.remove("chat-loading");
+      $("#btnChatSend").disabled = false;
+      $("#btnChatStop").style.display = "none";
     }
   }
 
   /* ============================================================
      弹窗管理（iOS Sheet 风格：进入/退出同路径，可打断）
      ============================================================ */
+  let modalRestoreTarget = null;
+
+  function openModals() {
+    return Array.from(document.querySelectorAll(".modal-mask.show:not(.closing)"));
+  }
+
+  function syncModalState() {
+    const hasOpen = openModals().length > 0;
+    document.body.classList.toggle("modal-open", hasOpen);
+  }
+
+  function focusableIn(root) {
+    if (!root) return [];
+    return Array.from(root.querySelectorAll(
+      'button:not([disabled]), [href], input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )).filter(el => !el.hidden && el.getClientRects().length > 0);
+  }
+
   function showModal(id) {
     const m = $("#" + id);
+    if (!m) return;
+    if (!openModals().length) modalRestoreTarget = document.activeElement;
     m.classList.remove("closing");
     m.classList.add("show");
+    m.setAttribute("aria-hidden", "false");
+    syncModalState();
     const sheet = m.querySelector(".modal");
     // GSAP 弹窗动画；无 GSAP 时回退 CSS
     if (window.Anim) Anim.sheetIn(m, sheet);
@@ -1293,25 +1452,149 @@ const App = (() => {
       void sheet.offsetWidth;
       sheet.classList.add("sheet-in");
     }
+    requestAnimationFrame(() => {
+      const focusables = focusableIn(sheet);
+      const preferred = sheet && sheet.querySelector("input:not([type='hidden']), textarea, select, button");
+      (preferred || focusables[0] || sheet || m).focus({ preventScroll: true });
+    });
   }
+
   function closeModal(id) {
     const m = $("#" + id);
-    if (!m.classList.contains("show")) return;
+    if (!m || !m.classList.contains("show")) return;
     m.classList.add("closing");
     const sheet = m.querySelector(".modal");
+    const finish = () => {
+      if (!m.classList.contains("closing")) return;
+      m.classList.remove("show", "closing");
+      m.setAttribute("aria-hidden", "true");
+      if (sheet) sheet.classList.remove("sheet-in");
+      syncModalState();
+      if (!openModals().length && modalRestoreTarget && typeof modalRestoreTarget.focus === "function") {
+        modalRestoreTarget.focus({ preventScroll: true });
+        modalRestoreTarget = null;
+      }
+    };
     if (window.Anim) {
-      Anim.sheetOut(m, sheet, () => {
-        if (m.classList.contains("closing")) {
-          m.classList.remove("show", "closing");
-          if (sheet) sheet.classList.remove("sheet-in");
-        }
-      });
+      Anim.sheetOut(m, sheet, finish);
     } else {
-      setTimeout(() => {
-        m.classList.remove("show", "closing");
-        if (sheet) sheet.classList.remove("sheet-in");
-      }, 220);
+      setTimeout(finish, 220);
     }
+  }
+
+  function setupModalAccessibility() {
+    $$(".modal-mask").forEach((mask, index) => {
+      mask.setAttribute("aria-hidden", mask.classList.contains("show") ? "false" : "true");
+      const dialog = mask.querySelector(".modal");
+      if (!dialog) return;
+      dialog.setAttribute("role", "dialog");
+      dialog.setAttribute("aria-modal", "true");
+      dialog.setAttribute("tabindex", "-1");
+      const title = dialog.querySelector(".modal-head h3");
+      if (title) {
+        if (!title.id) title.id = `dialog-title-${index + 1}`;
+        dialog.setAttribute("aria-labelledby", title.id);
+      }
+      const close = dialog.querySelector(".modal-close");
+      if (close && !close.getAttribute("aria-label")) close.setAttribute("aria-label", "关闭弹窗");
+    });
+    const lock = $("#lockMask");
+    const lockBox = lock && lock.querySelector(".lock-box");
+    if (lock && lockBox) {
+      lock.setAttribute("role", "dialog");
+      lock.setAttribute("aria-modal", "true");
+      lock.setAttribute("aria-labelledby", "lockTitle");
+      const title = lock.querySelector(".lock-title");
+      if (title) title.id = "lockTitle";
+    }
+  }
+
+  const TRASH_LABELS = {
+    courses: "课程", tasks: "任务", notes: "笔记", cards: "知识卡片",
+    grades: "成绩", skills: "技能", projects: "项目", literature: "文献",
+    pomodoros: "专注记录"
+  };
+
+  function trashItemTitle(entry) {
+    const item = entry && entry.item || {};
+    return item.title || item.name || item.subject || item.question || "未命名内容";
+  }
+
+  function refreshAfterDataChange() {
+    renderCurrent();
+    renderProfile();
+    renderDashboard();
+    renderAIStatus();
+    updateTrashCount();
+  }
+
+  function updateTrashCount() {
+    const count = Store.getTrash ? Store.getTrash().length : 0;
+    const el = $("#trashCount");
+    if (el) el.textContent = String(count);
+  }
+
+  function undoTrashEntry(entry) {
+    if (!entry || !Store.restoreTrash(entry.id)) return;
+    refreshAfterDataChange();
+    toast("内容已恢复", "ok");
+  }
+
+  function renderTrash() {
+    const box = $("#trashList");
+    if (!box) return;
+    const items = Store.getTrash ? Store.getTrash() : [];
+    updateTrashCount();
+    if (!items.length) {
+      box.innerHTML = `<div class="empty-state"><p>回收站是空的</p></div>`;
+      return;
+    }
+    const icon = window.XingyuIcons ? XingyuIcons.svg("trash") : "";
+    box.innerHTML = items.map(entry => `
+      <div class="trash-item">
+        ${icon}
+        <div class="trash-item-main">
+          <b>${esc(trashItemTitle(entry))}</b>
+          <span>${esc(TRASH_LABELS[entry.entityKey] || entry.entityKey)} · ${fmtDate(entry.deletedAt)}</span>
+        </div>
+        <button class="btn btn-ghost" type="button" data-trash-restore="${esc(entry.id)}">恢复</button>
+      </div>`).join("");
+    box.querySelectorAll("[data-trash-restore]").forEach(button => {
+      button.onclick = () => {
+        const restored = Store.restoreTrash(button.dataset.trashRestore);
+        if (restored) {
+          renderTrash();
+          refreshAfterDataChange();
+          toast("内容已恢复", "ok");
+        }
+      };
+    });
+  }
+
+  function openTrash() {
+    renderTrash();
+    showModal("trashModal");
+  }
+
+  function maybeShowOnboarding() {
+    if (localStorage.getItem("zero_onboarded_v3") === "1") return;
+    const info = Store.getStorageInfo && Store.getStorageInfo();
+    if (!info || !info.firstRun) return;
+    const profile = Store.getProfile();
+    $("#onboardName").value = profile.name && profile.name !== "同学" ? profile.name : "";
+    $("#onboardGoal").value = profile.goal || "";
+    setTimeout(() => showModal("onboardingModal"), 500);
+  }
+
+  function finishOnboarding() {
+    const name = $("#onboardName").value.trim() || "同学";
+    const goal = $("#onboardGoal").value.trim();
+    if (!$("#onboardKeepDemo").checked) Store.clearAll();
+    Store.setProfile({ name, goal });
+    localStorage.setItem("zero_onboarded_v3", "1");
+    closeModal("onboardingModal");
+    refreshAfterDataChange();
+    toast(`欢迎你，${name}`, "ok");
   }
 
   /* ============================================================
@@ -1358,19 +1641,56 @@ const App = (() => {
   /* ============================================================
      访问密码锁
      ============================================================ */
-  function getPin() {
-    try { const v = localStorage.getItem("zero_pin"); return v ? atob(v) : ""; }
-    catch (e) { return ""; }
+  const PIN_HASH_KEY = "zero_pin_hash_v2";
+  const LEGACY_PIN_KEY = "zero_pin";
+
+  function hasPin() {
+    try { return !!(localStorage.getItem(PIN_HASH_KEY) || localStorage.getItem(LEGACY_PIN_KEY)); }
+    catch (e) { return false; }
   }
-  function setPin(pin) {
-    if (pin) localStorage.setItem("zero_pin", btoa(pin));
-    else localStorage.removeItem("zero_pin");
+
+  async function hashPin(pin) {
+    if (window.crypto && crypto.subtle && window.TextEncoder) {
+      const bytes = new TextEncoder().encode(pin);
+      const digest = await crypto.subtle.digest("SHA-256", bytes);
+      return "sha256:" + Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, "0")).join("");
+    }
+    return "fallback:" + btoa(unescape(encodeURIComponent(pin)));
   }
+
+  async function setPin(pin) {
+    try {
+      if (pin) localStorage.setItem(PIN_HASH_KEY, await hashPin(pin));
+      else localStorage.removeItem(PIN_HASH_KEY);
+      localStorage.removeItem(LEGACY_PIN_KEY);
+      return true;
+    } catch (e) {
+      toast("访问密码保存失败，请检查浏览器存储权限", "err");
+      return false;
+    }
+  }
+
+  async function verifyPin(pin) {
+    try {
+      const stored = localStorage.getItem(PIN_HASH_KEY);
+      if (stored) return stored === await hashPin(pin);
+      const legacy = localStorage.getItem(LEGACY_PIN_KEY);
+      if (!legacy) return false;
+      const plain = atob(legacy);
+      if (plain !== pin) return false;
+      await setPin(pin);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   function lockNow() {
     const mask = $("#lockMask");
     if (mask) {
       mask.classList.add("show");
       mask.style.display = "flex";
+      mask.setAttribute("aria-hidden", "false");
       if (window.Anim) Anim.lockIn(mask);
     }
     const pinInput = $("#lockPin");
@@ -1378,30 +1698,34 @@ const App = (() => {
     const hint = $("#lockHint");
     if (hint) hint.textContent = "";
   }
-  function unlock() {
-    const pin = getPin();
+  async function unlock() {
     const val = $("#lockPin").value;
     const hint = $("#lockHint");
-    if (pin && val === pin) {
+    const btn = $("#btnUnlock");
+    if (btn) btn.disabled = true;
+    if (val && await verifyPin(val)) {
       const mask = $("#lockMask");
       if (window.Anim) {
         Anim.lockOut(mask, () => {
           mask.classList.remove("show");
           mask.style.display = "none";
+          mask.setAttribute("aria-hidden", "true");
         });
       } else {
         mask.classList.remove("show");
         mask.style.display = "none";
+        mask.setAttribute("aria-hidden", "true");
       }
     } else if (hint) {
       hint.textContent = t("lock.wrong");
     }
+    if (btn) btn.disabled = false;
     const pinInput = $("#lockPin");
     if (pinInput) { pinInput.value = ""; pinInput.focus(); }
   }
   function applyLockPrefs() {
     // 启动锁：总开关开启且设置了密码才锁定
-    if (localStorage.getItem("zero_lock_enabled") === "1" && getPin()) lockNow();
+    if (localStorage.getItem("zero_lock_enabled") === "1" && hasPin()) lockNow();
   }
 
   /* ============================================================
@@ -1464,9 +1788,17 @@ const App = (() => {
   function clearCustomColors() {
     CUSTOM_VARS.forEach(v => document.documentElement.style.removeProperty(v));
   }
+  function systemTheme() {
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+  }
   function syncThemeUI() {
-    const curTheme = document.documentElement.dataset.theme || "dark";
-    $$(".theme-opt").forEach(b => b.classList.toggle("active", b.dataset.themePick === curTheme));
+    const curMode = document.documentElement.dataset.themeMode || localStorage.getItem("zero_theme") || "system";
+    const curTheme = document.documentElement.dataset.theme || systemTheme();
+    const advanced = !["system", "dark", "light", "ocean", "custom"].includes(curMode);
+    if (advanced) document.body.classList.add("show-advanced-themes");
+    const moreBtn = $("#btnToggleAdvancedThemes");
+    if (moreBtn) moreBtn.textContent = document.body.classList.contains("show-advanced-themes") ? "收起更多主题" : "显示更多主题";
+    $$(".theme-opt").forEach(b => b.classList.toggle("active", b.dataset.themePick === curMode));
     const panel = $("#themeCustom");
     if (panel) panel.style.display = curTheme === "custom" ? "grid" : "none";
     const colors = getCustomColors();
@@ -1486,17 +1818,18 @@ const App = (() => {
     const curBg = document.documentElement.dataset.bg || "none";
     $$("[data-bg-pick]").forEach(b => b.classList.toggle("active", b.dataset.bgPick === curBg));
   }
-  function applyTheme(theme) {
-    if (theme === "custom") {
+  function applyTheme(mode) {
+    const theme = mode === "system" ? systemTheme() : mode;
+    if (mode === "custom") {
       applyCustomColors(getCustomColors());
     } else {
       clearCustomColors();
     }
+    document.documentElement.dataset.themeMode = mode;
     document.documentElement.dataset.theme = theme;
-    localStorage.setItem("zero_theme", theme);
-    // 窗口标题栏固定黑色（不随主题变色）
+    localStorage.setItem("zero_theme", mode);
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute("content", "#000000");
+    if (meta) meta.setAttribute("content", theme === "light" ? "#f5f5f7" : "#000000");
     syncThemeUI();
   }
 
@@ -1505,11 +1838,11 @@ const App = (() => {
      ============================================================ */
   const I18N = {
     zh: {
-      "logo.sub": "个人学习工作台 · ZERO",
+      "logo.sub": "个人学习工作台",
       "nav.group.work": "工作台",
       "nav.group.study": "学习资料",
       "nav.group.growth": "自我成长",
-      "nav.dashboard": "仪表盘",
+      "nav.dashboard": "今日",
       "nav.courses": "课程作业",
       "nav.focus": "专注学习",
       "nav.notes": "学习笔记库",
@@ -1519,9 +1852,10 @@ const App = (() => {
       "nav.ai": "AI 助手",
       "nav.weather": "天气",
       "role": "个人工作台",
+      "mobile.today": "今日", "mobile.courses": "课程", "mobile.notes": "笔记", "mobile.focus": "专注", "mobile.more": "更多",
       "settings": "设置",
       "search.ph": "搜索笔记 / 任务 / 课程...",
-      "title.dashboard": "仪表盘", "title.courses": "课程作业", "title.notes": "学习笔记库",
+      "title.dashboard": "今日", "title.courses": "课程作业", "title.notes": "学习笔记库",
       "title.focus": "专注学习", "title.growth": "成长档案", "title.lit": "文献资料",
       "title.news": "热点新闻", "title.ai": "AI 助手", "title.weather": "天气",
       "sub.dashboard": "学习进度一览，今天也要保持专注",
@@ -1548,11 +1882,11 @@ const App = (() => {
       "quote.title": "每日一言", "quote.next": "换一句", "quote.cat.motivation": "励志", "quote.cat.memes": "热梗", "quote.cat.poison": "毒鸡汤"
     },
     "zh-Hant": {
-      "logo.sub": "個人學習工作台 · ZERO",
+      "logo.sub": "個人學習工作台",
       "nav.group.work": "工作台",
       "nav.group.study": "學習資料",
       "nav.group.growth": "自我成長",
-      "nav.dashboard": "儀表盤",
+      "nav.dashboard": "今日",
       "nav.courses": "課程作業",
       "nav.focus": "專注學習",
       "nav.notes": "學習筆記庫",
@@ -1562,9 +1896,10 @@ const App = (() => {
       "nav.ai": "AI 助手",
       "nav.weather": "天氣",
       "role": "個人工作台",
+      "mobile.today": "今日", "mobile.courses": "課程", "mobile.notes": "筆記", "mobile.focus": "專注", "mobile.more": "更多",
       "settings": "設定",
       "search.ph": "搜尋筆記 / 任務 / 課程...",
-      "title.dashboard": "儀表盤", "title.courses": "課程作業", "title.notes": "學習筆記庫",
+      "title.dashboard": "今日", "title.courses": "課程作業", "title.notes": "學習筆記庫",
       "title.focus": "專注學習", "title.growth": "成長檔案", "title.lit": "文獻資料",
       "title.news": "熱點新聞", "title.ai": "AI 助手", "title.weather": "天氣",
       "sub.dashboard": "學習進度一覽，今天也要保持專注",
@@ -1591,11 +1926,11 @@ const App = (() => {
       "quote.title": "每日一言", "quote.next": "換一句", "quote.cat.motivation": "勵志", "quote.cat.memes": "熱梗", "quote.cat.poison": "毒雞湯"
     },
     en: {
-      "logo.sub": "Personal Study Desk · ZERO",
+      "logo.sub": "Personal Study Desk",
       "nav.group.work": "Work",
       "nav.group.study": "Study",
       "nav.group.growth": "Growth",
-      "nav.dashboard": "Dashboard",
+      "nav.dashboard": "Today",
       "nav.courses": "Courses",
       "nav.focus": "Focus",
       "nav.notes": "Notes",
@@ -1605,9 +1940,10 @@ const App = (() => {
       "nav.ai": "AI Assistant",
       "nav.weather": "Weather",
       "role": "Personal workspace",
+      "mobile.today": "Today", "mobile.courses": "Courses", "mobile.notes": "Notes", "mobile.focus": "Focus", "mobile.more": "More",
       "settings": "Settings",
       "search.ph": "Search notes / tasks / courses...",
-      "title.dashboard": "Dashboard", "title.courses": "Courses", "title.notes": "Notes",
+      "title.dashboard": "Today", "title.courses": "Courses", "title.notes": "Notes",
       "title.focus": "Focus", "title.growth": "Profile", "title.lit": "Library",
       "title.news": "News", "title.ai": "AI Assistant", "title.weather": "Weather",
       "sub.dashboard": "Your study at a glance — stay focused today",
@@ -1672,7 +2008,7 @@ const App = (() => {
     if (typeof switchView === "function") { switchView(currentView); } else { renderCurrent(); }
   }
 
-  function saveSettings() {
+  async function saveSettings() {
     // 访问密码：总开关关闭 → 清除密码；开启 → 校验并保存
     const lockEnabled = $("#lockEnabled") ? $("#lockEnabled").checked : false;
     if (lockEnabled) {
@@ -1680,16 +2016,16 @@ const App = (() => {
       const pin2 = $("#setPin2").value;
       if (pin || pin2) {
         if (pin !== pin2) { toast(t("lock.mismatch"), "err"); return; }
-        setPin(pin);
+        if (!(await setPin(pin))) return;
         toast(pin ? t("lock.saved") : t("lock.cleared"), "ok");
       }
       // 开启但从未设过密码：要求设置
-      if (!getPin()) { toast(t("lock.needPin"), "err"); return; }
+      if (!hasPin()) { toast(t("lock.needPin"), "err"); return; }
       localStorage.setItem("zero_lock_enabled", "1");
       localStorage.setItem("zero_lock_leave", $("#lockOnLeave").checked ? "1" : "0");
     } else {
       // 关闭：清除密码与所有锁定偏好
-      setPin("");
+      await setPin("");
       localStorage.removeItem("zero_lock_enabled");
       localStorage.removeItem("zero_lock_leave");
     }
@@ -1713,25 +2049,80 @@ const App = (() => {
      ============================================================ */
   function setupSearch() {
     const input = $("#globalSearch");
-    input.addEventListener("input", () => {
-      const q = input.value.trim().toLowerCase();
-      if (!q) return;
-      const results = [];
-      Store.getAll("notes").forEach(n => { if ((n.title + n.content).toLowerCase().includes(q)) results.push({ type: "笔记", title: n.title, id: n.id, view: "notes", act: "note" }); });
-      Store.getAll("tasks").forEach(t => { if (t.title.toLowerCase().includes(q)) results.push({ type: "任务", title: t.title, id: t.id, view: "courses", act: "task" }); });
-      Store.getAll("courses").forEach(c => { if (c.name.toLowerCase().includes(q)) results.push({ type: "课程", title: c.name, id: c.id, view: "courses", act: "course" }); });
-      if (results.length) {
-        const first = results[0];
-        switchView(first.view);
-        toast(`找到 ${results.length} 条结果，跳转到「${first.type}」`, "ok");
-        input.value = "";
-        if (first.act === "note") setTimeout(() => openNote(first.id), 100);
-        else if (first.act === "task") setTimeout(() => openTaskForm(first.id), 100);
-        else if (first.act === "course") setTimeout(() => openCourseForm(first.id), 100);
-      } else if (q.length > 1) {
-        toast("未找到匹配内容", "err");
-        input.value = "";
+    const box = $("#searchResults");
+    if (!input || !box) return;
+    let results = [];
+    let activeIndex = -1;
+
+    const collect = q => {
+      const out = [];
+      const add = (items, type, view, act, text) => items.forEach(item => {
+        const haystack = text(item).toLowerCase();
+        if (haystack.includes(q)) out.push({ type, view, act, id: item.id, title: item.title || item.name || item.subject || "未命名" });
+      });
+      add(Store.getAll("notes"), "笔记", "notes", "note", n => `${n.title || ""} ${n.subject || ""} ${n.content || ""} ${(n.tags || []).join(" ")}`);
+      add(Store.getAll("tasks"), "任务", "courses", "task", t => `${t.title || ""} ${Store.getCourseName(t.courseId)}`);
+      add(Store.getAll("courses"), "课程", "courses", "course", c => `${c.name || ""} ${c.teacher || ""} ${c.location || ""}`);
+      add(Store.getAll("literature"), "文献", "lit", "lit", l => `${l.title || ""} ${l.authors || ""} ${(l.tags || []).join(" ")}`);
+      add(Store.getAll("projects"), "项目", "growth", "project", p => `${p.name || ""} ${p.role || ""} ${p.desc || ""}`);
+      return out.slice(0, 8);
+    };
+
+    const hide = () => {
+      box.hidden = true;
+      box.innerHTML = "";
+      results = [];
+      activeIndex = -1;
+      input.removeAttribute("aria-activedescendant");
+    };
+
+    const select = item => {
+      if (!item) return;
+      hide();
+      input.value = "";
+      switchView(item.view);
+      if (item.act === "note") setTimeout(() => openNote(item.id), 100);
+      else if (item.act === "task") setTimeout(() => openTaskForm(item.id), 100);
+      else if (item.act === "course") setTimeout(() => openCourseForm(item.id), 100);
+      else if (item.act === "lit") setTimeout(() => openLitForm(item.id), 100);
+      else toast(`已跳转到「${item.type}」`, "ok");
+    };
+
+    const setActive = index => {
+      if (!results.length) return;
+      activeIndex = (index + results.length) % results.length;
+      box.querySelectorAll(".search-result").forEach((el, i) => el.classList.toggle("active", i === activeIndex));
+      const active = box.querySelector(`#search-result-${activeIndex}`);
+      if (active) {
+        input.setAttribute("aria-activedescendant", active.id);
+        active.scrollIntoView({ block: "nearest" });
       }
+    };
+
+    const render = () => {
+      const q = input.value.trim().toLowerCase();
+      if (!q) { hide(); return; }
+      results = collect(q);
+      box.hidden = false;
+      box.innerHTML = results.length
+        ? results.map((r, i) => `<button type="button" class="search-result" id="search-result-${i}" role="option" data-index="${i}"><span>${esc(r.title)}</span><small>${r.type}</small></button>`).join("")
+        : `<div class="search-empty">未找到匹配内容</div>`;
+      activeIndex = results.length ? 0 : -1;
+      if (results.length) setActive(0);
+      box.querySelectorAll(".search-result").forEach(el => {
+        el.onmousedown = e => e.preventDefault();
+        el.onclick = () => select(results[Number(el.dataset.index)]);
+      });
+    };
+
+    input.addEventListener("input", render);
+    input.addEventListener("focus", () => { if (input.value.trim()) render(); });
+    input.addEventListener("blur", () => setTimeout(hide, 120));
+    input.addEventListener("keydown", e => {
+      if (e.key === "ArrowDown") { e.preventDefault(); setActive(activeIndex + 1); }
+      else if (e.key === "ArrowUp") { e.preventDefault(); setActive(activeIndex - 1); }
+      else if (e.key === "Enter" && activeIndex >= 0) { e.preventDefault(); select(results[activeIndex]); }
+      else if (e.key === "Escape") { hide(); input.blur(); }
     });
   }
 
@@ -1767,7 +2158,7 @@ const App = (() => {
   /* ============================================================
      二维码
      ============================================================ */
-  const DEFAULT_SITE = "https://lele332.github.io/xingyu-platform/";
+  const DEFAULT_SITE = window.XINGYU_SITE_URL || "https://lele332.github.io/xingyu-platform/";
 
   // 使用固定的永久二维码（指向 GitHub Pages 永久链接），不再动态生成
   function renderQR() {
@@ -1775,7 +2166,7 @@ const App = (() => {
     box.innerHTML = "";
     const img = document.createElement("img");
     img.src = "xingyu-qrcode.png";
-    img.alt = "零 · 永久二维码";
+    img.alt = "星屿 · 永久二维码";
     img.className = "qr-static";
     img.onerror = () => { box.innerHTML = `<span class="hint">二维码图片加载失败，请检查 xingyu-qrcode.png 是否存在。</span>`; };
     box.appendChild(img);
@@ -1869,6 +2260,8 @@ const App = (() => {
   function readImageFile(file) {
     return new Promise((resolve, reject) => {
       if (!file) return reject(new Error("请先选择图片"));
+      if (!/^image\//i.test(file.type || "")) return reject(new Error("请选择 JPG、PNG 等图片文件"));
+      if (file.size > 10 * 1024 * 1024) return reject(new Error("图片不能超过 10MB，请压缩后重试"));
       const reader = new FileReader();
       reader.onload = () => resolve(reader.result);
       reader.onerror = () => reject(new Error("图片读取失败"));
@@ -2110,14 +2503,57 @@ const App = (() => {
      事件绑定
      ============================================================ */
   function bindEvents() {
+    document.addEventListener("keydown", e => {
+      const modals = openModals();
+      const modal = modals[modals.length - 1];
+      if (e.key === "Escape" && modal) {
+        e.preventDefault();
+        closeModal(modal.id);
+        return;
+      }
+      if (e.key === "Tab" && modal) {
+        const focusables = focusableIn(modal.querySelector(".modal"));
+        if (!focusables.length) {
+          e.preventDefault();
+          modal.querySelector(".modal")?.focus();
+          return;
+        }
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        const search = $("#globalSearch");
+        if (search && getComputedStyle(search).display !== "none") {
+          search.focus();
+          search.select();
+        }
+      }
+    });
     // 导航
     $$(".nav-item").forEach(n => n.onclick = () => {
       if (window.Anim) Anim.navPulse(n);
       switchView(n.dataset.view);
     });
+    $$(".mobile-tab").forEach(tab => tab.onclick = () => {
+      const view = tab.dataset.mobileView;
+      if (view === "more") {
+        $("#sidebar").classList.add("open");
+        $("#sidebarMask").classList.add("show");
+        return;
+      }
+      switchView(view);
+    });
     $$("[data-goto]").forEach(b => b.onclick = () => switchView(b.dataset.goto));
     $$("[data-close]").forEach(b => b.onclick = () => closeModal(b.dataset.close));
-    $(".modal-mask") && $$(".modal-mask").forEach(m => m.onclick = (e) => { if (e.target === m) m.classList.remove("show"); });
+    $(".modal-mask") && $$(".modal-mask").forEach(m => m.onclick = (e) => { if (e.target === m) closeModal(m.id); });
 
     // 导入课表
     $$(".import-tab").forEach(t => t.onclick = () => {
@@ -2298,12 +2734,17 @@ const App = (() => {
 
     // AI
     $("#btnChatSend").onclick = () => sendChat($("#chatInput").value);
+    $("#btnChatStop").onclick = () => AI.cancelCurrent && AI.cancelCurrent();
     $("#chatInput").addEventListener("keydown", e => { if (e.key === "Enter") sendChat($("#chatInput").value); });
     $$(".chip[data-cmd]").forEach(c => c.onclick = () => { $("#chatInput").value = c.dataset.cmd + " "; $("#chatInput").focus(); });
 
     // 设置
     $("#btnSettings").onclick = openSettings;
     $("#btnSaveSettings").onclick = saveSettings;
+    $("#btnToggleAdvancedThemes").onclick = () => {
+      const shown = document.body.classList.toggle("show-advanced-themes");
+      $("#btnToggleAdvancedThemes").textContent = shown ? "收起更多主题" : "显示更多主题";
+    };
     $$("[data-theme-pick]").forEach(b => b.onclick = () => applyTheme(b.dataset.themePick));
     $$("[data-font-pick]").forEach(b => b.onclick = () => applyFont(b.dataset.fontPick));
     $$("[data-lang-pick]").forEach(b => b.onclick = () => applyLang(b.dataset.langPick));
@@ -2336,6 +2777,11 @@ const App = (() => {
     $("#importFile").onchange = (e) => {
       const file = e.target.files[0];
       if (!file) return;
+      if (file.size > 10 * 1024 * 1024) {
+        toast("导入文件不能超过 10MB", "err");
+        e.target.value = "";
+        return;
+      }
       const reader = new FileReader();
       reader.onload = () => {
         if (Store.importAll(reader.result)) { toast("数据导入成功", "ok"); renderCurrent(); renderProfile(); }
@@ -2350,6 +2796,21 @@ const App = (() => {
         toast("已清空全部数据", "ok");
         renderCurrent(); renderProfile();
       }
+    };
+    $("#btnOpenTrash").onclick = openTrash;
+    $("#btnEmptyTrash").onclick = () => {
+      if (!Store.getTrash().length) return;
+      if (confirm("确定永久清空回收站吗？此操作无法撤销。")) {
+        Store.emptyTrash();
+        renderTrash();
+        updateTrashCount();
+        toast("回收站已清空", "ok");
+      }
+    };
+    $("#btnFinishOnboarding").onclick = finishOnboarding;
+    $("#btnSkipOnboarding").onclick = () => {
+      localStorage.setItem("zero_onboarded_v3", "1");
+      closeModal("onboardingModal");
     };
 
     // 云同步
@@ -2384,7 +2845,7 @@ const App = (() => {
     const lockEn = $("#lockEnabled");
     if (lockEn) lockEn.addEventListener("change", () => toggleLockFields(lockEn.checked));
     document.addEventListener("visibilitychange", () => {
-      if (document.hidden && localStorage.getItem("zero_lock_enabled") === "1" && getPin() && localStorage.getItem("zero_lock_leave") === "1") {
+      if (document.hidden && localStorage.getItem("zero_lock_enabled") === "1" && hasPin() && localStorage.getItem("zero_lock_leave") === "1") {
         lockNow();
       }
     });
@@ -2465,18 +2926,48 @@ const App = (() => {
     showModal("formModal");
   }
 
+  function updateNetworkStatus() {
+    const el = $("#networkStatus");
+    if (!el) return;
+    const offline = navigator.onLine === false;
+    el.hidden = !offline;
+    el.textContent = offline ? "离线模式" : "";
+    document.documentElement.dataset.online = offline ? "false" : "true";
+  }
+
   /* ---------- 启动 ---------- */
   function init() {
+    window.XingyuIcons && XingyuIcons.decorateNavigation();
+    setupModalAccessibility();
+    Store.onDelete && Store.onDelete(entry => {
+      updateTrashCount();
+      toast(`${TRASH_LABELS[entry.entityKey] || "内容"}已移至回收站`, "ok", {
+        actionLabel: "撤销",
+        onAction: () => undoTrashEntry(entry),
+        duration: 5600
+      });
+    });
     bindEvents();
     window.Sync && Sync.init();
     applyI18n();
-    // 按钮涟漪（事件委托，全局一次）
+    // Apple 风格即时按压反馈（不使用 Material 涟漪）
     window.Anim && Anim.initRipple();
     // nav 事件绑定与滑块初始化（轻量、立即执行）
     window.Anim && Anim.initNav();
     window.Anim && Anim.initNavPill();
+    window.Anim && Anim.initSidebarGesture($("#sidebar"), $("#sidebarMask"));
     // 天气模块（实时天气，懒加载数据）
     window.Weather && Weather.init();
+    updateNetworkStatus();
+    window.addEventListener("online", () => { updateNetworkStatus(); toast("网络已恢复", "ok"); });
+    window.addEventListener("offline", () => { updateNetworkStatus(); toast("当前离线，将继续使用本地数据", "err"); });
+    const storageInfo = Store.getStorageInfo && Store.getStorageInfo();
+    if (storageInfo && storageInfo.lastError) toast(storageInfo.lastError, "err");
+    updateTrashCount();
+    const systemMedia = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)");
+    if (systemMedia) systemMedia.addEventListener("change", () => {
+      if ((localStorage.getItem("zero_theme") || "system") === "system") applyTheme("system");
+    });
     // 启动锁（设置了访问密码则锁定）
     applyLockPrefs();
     // 应用保存的昵称（仅当尚未设置个人昵称时）
@@ -2491,6 +2982,7 @@ const App = (() => {
     renderAIStatus();
     // 默认展示仪表盘
     switchView("dashboard");
+    maybeShowOnboarding();
     // 开屏（intro）结束后再播放入场动画，避免与视频并行导致卡顿
     var runEntrance = function () {
       window.Anim && Anim.sidebarIntro();
@@ -2502,7 +2994,7 @@ const App = (() => {
     } else {
       runEntrance();
     }
-    console.log("○ 零 · 个人学习工作台已启动");
+    console.log("星屿 · 个人学习工作台已启动");
   }
 
   return { init };
