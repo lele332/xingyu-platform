@@ -183,8 +183,9 @@
       return tl;
     },
 
-    /* ---------- 移动滑块 pill：active 高亮块平滑滑动（成熟模式） ---------- */
+    /* ---------- 移动滑块 pill：active 高亮块平滑滑动（transform 合成层动画） ---------- */
     _pillCtx: null,
+    _pillBase: null,
     initNavPill: function () {
       var nav = document.querySelector(".sidebar-nav");
       if (!nav) return;
@@ -195,6 +196,8 @@
           pill.className = "nav-pill";
           nav.insertBefore(pill, nav.firstChild);
         }
+        // scale 从左上角缩放，与 left/top + width/height 语义一致
+        pill.style.transformOrigin = "0 0";
         Anim._pillCtx = { nav: nav, pill: pill };
       }
       var active = nav.querySelector(".nav-item.active");
@@ -205,8 +208,20 @@
       var p = Anim._pillCtx;
       var item = p.nav.querySelector('[data-view="' + view + '"]');
       if (!item) return;
-      // offsetTop/Left 是布局位置，不受入场 transform 影响，与 pill 同坐标系（sidebar-nav 为 relative）
-      var vars = { top: item.offsetTop, left: item.offsetLeft, width: item.offsetWidth, height: item.offsetHeight };
+      var it = { top: item.offsetTop, left: item.offsetLeft, width: item.offsetWidth, height: item.offsetHeight };
+      // 首次定位：一次性设置静态布局（无动画），此后仅用 transform 动画，避免每帧重排
+      if (!Anim._pillBase) {
+        Anim._pillBase = { top: it.top, left: it.left, width: it.width, height: it.height };
+        gsap.set(p.pill, { top: it.top, left: it.left, width: it.width, height: it.height, x: 0, y: 0, scaleX: 1, scaleY: 1 });
+        return;
+      }
+      var b = Anim._pillBase;
+      var vars = {
+        x: it.left - b.left,
+        y: it.top - b.top,
+        scaleX: b.width ? it.width / b.width : 1,
+        scaleY: b.height ? it.height / b.height : 1
+      };
       if (animate === false || !hasGSAP || reduceMotion) {
         gsap.set(p.pill, vars);
       } else {
@@ -271,6 +286,8 @@
       return function () {
         triggers.forEach(function (s) { s.kill(); });
         triggers = [];
+        // 恢复所有元素可见（含未触发 onEnter 的），避免切走后残留隐藏状态
+        gsap.set(items, { clearProps: "opacity,visibility,transform" });
       };
     },
 

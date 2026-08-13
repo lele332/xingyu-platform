@@ -1,4 +1,4 @@
-const CACHE = "xingyu-static-20260813-3";
+const CACHE = "xingyu-static-20260813-4";
 const CORE = [
   "./",
   "./index.html",

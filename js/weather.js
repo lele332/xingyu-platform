@@ -190,6 +190,7 @@
           if (loading) loading.style.display = "none";
           if (content) content.style.display = "";
           if (window.Anim) Anim.quoteIn(content);
+          if (window.AnimeFX) AnimeFX.weatherReveal(content);
           return;
         }
       }
@@ -202,6 +203,7 @@
       if (loading) loading.style.display = "none";
       if (content) content.style.display = "";
       if (window.Anim) Anim.quoteIn(content);
+      if (window.AnimeFX) AnimeFX.weatherReveal(content);
     } catch (e) {
       if (loading) loading.style.display = "none";
       if (content) {
