@@ -58,6 +58,53 @@ class PlatformSmokeTests(unittest.TestCase):
                 self.assertEqual(payload["service"], "xingyu")
                 self.assertEqual(response.headers["X-Content-Type-Options"], "nosniff")
                 self.assertEqual(response.headers["X-Frame-Options"], "SAMEORIGIN")
+                self.assertIn("Content-Security-Policy", response.headers)
+                self.assertIn("script-src", response.headers["Content-Security-Policy"])
+        finally:
+            httpd.shutdown()
+            httpd.server_close()
+            thread.join(timeout=2)
+
+    def test_backup_endpoint_writes_and_lists(self):
+        import tempfile
+
+        httpd = server.create_server(0, str(ROOT))
+        thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+        thread.start()
+        try:
+            port = httpd.server_address[1]
+
+            # 1) 非法 payload → 400
+            req = urllib.request.Request(
+                f"http://127.0.0.1:{port}{server.BACKUP_PATH}",
+                data=b"not-json",
+                headers={"Content-Type": "application/json"},
+                method="POST",
+            )
+            with self.assertRaises(urllib.error.HTTPError) as ctx:
+                urllib.request.urlopen(req, timeout=2)
+            self.assertEqual(ctx.exception.code, 400)
+
+            # 2) 合法 payload → 200 且落盘
+            payload = json.dumps({"data": json.dumps({"schemaVersion": 3, "tasks": []}), "at": "2026-08-12T00:00:00Z"}).encode("utf-8")
+            req = urllib.request.Request(
+                f"http://127.0.0.1:{port}{server.BACKUP_PATH}",
+                data=payload,
+                headers={"Content-Type": "application/json"},
+                method="POST",
+            )
+            with urllib.request.urlopen(req, timeout=2) as response:
+                result = json.loads(response.read().decode("utf-8"))
+                self.assertTrue(result["ok"])
+                self.assertGreaterEqual(result["count"], 1)
+
+            # 3) 信息端点能看到刚才的备份
+            with urllib.request.urlopen(f"http://127.0.0.1:{port}{server.BACKUP_INFO_PATH}", timeout=2) as response:
+                info = json.loads(response.read().decode("utf-8"))
+                self.assertTrue(info["ok"])
+                self.assertGreaterEqual(info["count"], 1)
+                self.assertIsNotNone(info["lastFile"])
+                self.assertTrue(info["lastFile"].startswith("backup-"))
         finally:
             httpd.shutdown()
             httpd.server_close()

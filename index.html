@@ -8,6 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="icon" href="xingyu.ico">
+<link rel="preconnect" href="https://d8j0ntlcm91z4.cloudfront.net">
 <link rel="apple-touch-icon" href="assets/xingyu-app-icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
 <!-- 禁用文档缓存：更新后普通刷新即可生效，无需强制刷新 -->
@@ -33,51 +34,66 @@
   d.dataset.lang = localStorage.getItem("zero_lang") || "zh";
   d.dataset.bg = localStorage.getItem("zero_bg") || "none";
 })();</script>
-<link rel="stylesheet" href="css/style.css?v=20260811.3">
-<link rel="stylesheet" href="css/apple.css?v=20260811.3">
+<link rel="stylesheet" href="css/style.css?v=20260812.3">
+<link rel="stylesheet" href="css/apple.css?v=20260812.3">
 </head>
 <body>
 
-<!-- 开屏欢迎动画（视频优先；视频不可用/被拦截时以 ○ 徽记动画兜底，保证手机端也有动画） -->
-<div id="splash" class="splash">
-  <div class="splash-inner" id="splashInner">
-    <div class="splash-ring">○</div>
-    <div class="splash-word">零</div>
-  </div>
-  <video id="splashVideo" src="assets/intro-720.mp4" muted playsinline preload="metadata"></video>
-  <button class="splash-skip" id="splashSkip" type="button">跳过</button>
+<!-- 开屏欢迎动画（黑白灰品牌视频；减动效/视频不可用时直接跳过，保证任何环境可用） -->
+<div id="splash" class="splash" aria-label="&#26143;&#23679;&#27491;&#22312;&#21551;&#21160;">
+  <canvas id="splashCanvas" aria-hidden="true"></canvas>
+  <video id="splashVideo" src="assets/intro-720.mp4" muted playsinline preload="auto" aria-hidden="true"></video>
+  <div class="splash-progress" aria-hidden="true"><span></span></div>
+  <button class="splash-skip" id="splashSkip" type="button" aria-label="&#36339;&#36807;&#24320;&#23631;&#21160;&#30011;">&#36339;&#36807;</button>
 </div>
 <style>
-.splash{position:fixed;inset:0;z-index:99999;background:#000;display:flex;align-items:center;justify-content:center;transition:opacity .6s ease}
-.splash video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.splash-inner{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:16px;color:#fff;text-align:center}
-.splash-ring{font-size:74px;line-height:1;animation:splashPulse 1.4s var(--ease-out) infinite;pointer-events:none}
-.splash-word{font-size:20px;letter-spacing:.4em;text-indent:.4em;opacity:0;animation:splashWord 1s var(--ease-out) .2s forwards}
-.splash.fade-out{opacity:0;pointer-events:none}
-.splash-skip{position:absolute;z-index:3;right:18px;bottom:16px;padding:6px 16px;border:1px solid rgba(255,255,255,.35);border-radius:99px;background:rgba(0,0,0,.25);color:rgba(255,255,255,.75);font:inherit;font-size:13px;letter-spacing:.08em;cursor:pointer;user-select:none;transition:opacity .3s}
-.splash-skip:hover{opacity:.7}
-@keyframes splashPulse{0%{transform:scale(.6);opacity:.25}50%{opacity:1}100%{transform:scale(1.2);opacity:.25}}
-@keyframes splashWord{from{opacity:0;transform:translateY(8px)}to{opacity:.85;transform:none}}
-@media (max-width:600px){.splash-ring{font-size:58px}.splash-word{font-size:17px;letter-spacing:.3em}}
-@media (prefers-reduced-motion:reduce){.splash{display:none}}
+.splash{position:fixed;inset:0;z-index:99999;overflow:hidden;display:grid;place-items:center;background:#030407;color:#fff;isolation:isolate;transition:opacity .52s cubic-bezier(.32,.72,0,1),filter .52s ease}
+.splash canvas,.splash video{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;transition:opacity .42s ease-out}.splash video{opacity:0}.splash.video-playing canvas{opacity:0}.splash.video-playing video{opacity:1}
+.splash-progress{position:absolute;z-index:3;left:50%;bottom:max(38px,env(safe-area-inset-bottom));width:min(180px,42vw);height:3px;border-radius:99px;overflow:hidden;background:rgba(255,255,255,.14);transform:translateX(-50%)}
+.splash-progress span{display:block;width:100%;height:100%;border-radius:inherit;background:linear-gradient(90deg,rgba(170,170,170,.7),rgba(245,245,245,.92));box-shadow:0 0 12px rgba(150,150,150,.22);transform:scaleX(0);transform-origin:left;animation:splashProgress 6.2s cubic-bezier(.22,1,.36,1) forwards}
+.splash.fade-out{opacity:0;filter:blur(10px) brightness(1.28);pointer-events:none}
+.splash-skip{position:absolute;z-index:4;right:max(22px,env(safe-area-inset-right));top:max(22px,env(safe-area-inset-top));min-width:66px;min-height:34px;padding:6px 15px;border:1px solid rgba(255,255,255,.2);border-radius:999px;background:rgba(18,20,27,.38);-webkit-backdrop-filter:blur(18px) saturate(150%);backdrop-filter:blur(18px) saturate(150%);color:rgba(255,255,255,.78);font:500 12px/1 -apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC",sans-serif;cursor:pointer;user-select:none;transition:transform .18s ease,background .18s ease,color .18s ease}
+.splash-skip:hover{background:rgba(36,39,49,.58);color:#fff}.splash-skip:active{transform:scale(.94)}
+@keyframes splashProgress{to{transform:scaleX(1)}}
+@media (max-width:900px){.splash-progress{bottom:max(30px,env(safe-area-inset-bottom))}}
+@media (prefers-reduced-motion:reduce){.splash{transition:opacity .2s linear}.splash-progress span{animation:none;transform:scaleX(1)}}
 </style>
 <script>
 (function(){
-  window.__splashActive = true;
-  var splash=document.getElementById('splash'),video=document.getElementById('splashVideo'),inner=document.getElementById('splashInner'),sk=document.getElementById('splashSkip'),gone=false,playing=false;
-  // 屏幕自适应：手机/小屏不播视频，用轻量徽记动画，避免解码卡顿
-  var isMobile = window.matchMedia && window.matchMedia("(max-width: 900px)").matches;
-  function dismiss(){if(gone)return;gone=true;window.__splashActive=false;try{window.dispatchEvent(new Event('splash-done'));}catch(e){}splash.classList.add('fade-out');setTimeout(function(){splash.remove()},650);}
-  sk.addEventListener('click',dismiss);
-  if(isMobile || !video || !video.canPlayType || video.error){ if(video) video.remove(); setTimeout(dismiss,1800); return; }
-  video.muted=true; video.defaultMuted=true;
-  video.addEventListener('playing',function(){ playing=true; if(inner) inner.style.display='none'; });
-  video.addEventListener('ended',dismiss);
-  video.addEventListener('error',function(){ setTimeout(dismiss, playing?0:1400); });
-  var p=video.play();
-  if(p && p.catch) p.catch(function(){ setTimeout(dismiss,2200); });
-  // 兜底：真在播最多 12s 放行；播不出则徽记动画后放行
-  setTimeout(dismiss,12000);
+  window.__splashActive=true;
+  var splash=document.getElementById("splash"),canvas=document.getElementById("splashCanvas"),video=document.getElementById("splashVideo"),skip=document.getElementById("splashSkip");
+  var ctx=canvas&&canvas.getContext("2d"),start=performance.now(),gone=false;
+  var reduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+  var particles=Array.from({length:180},function(){return{x:Math.random()*2-1,y:Math.random()*1.5-.75,z:.15+Math.random()*.85,p:Math.random()*Math.PI*2};});
+  function resize(){if(!ctx)return;var ratio=Math.min(window.devicePixelRatio||1,2);canvas.width=innerWidth*ratio;canvas.height=innerHeight*ratio;ctx.setTransform(ratio,0,0,ratio,0,0);}
+  function draw(now){
+    if(!ctx||gone)return;
+    var t=(now-start)/1000,w=innerWidth,h=innerHeight,cx=w/2,cy=h/2-34;
+    var fade=Math.max(0,1-Math.max(0,t-5.72)/.48),arrival=Math.min(1,t/1.25),assemble=Math.min(1,Math.max(0,(t-.72)/2.43));
+    var brand=Math.min(1,Math.max(0,(t-2.58)/1.14)),exit=Math.min(1,Math.max(0,(t-5.15)/1.05));
+    ctx.clearRect(0,0,w,h);ctx.fillStyle="#030407";ctx.fillRect(0,0,w,h);
+    var glow=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.min(w,h)*.42);glow.addColorStop(0,"rgba(88,88,92,.2)");glow.addColorStop(1,"rgba(3,4,7,0)");ctx.fillStyle=glow;ctx.fillRect(0,0,w,h);
+    particles.forEach(function(p,index){var drift=(1-arrival)*(.5+p.z*1.3),zoom=1+exit*2.1;var x=cx+p.x*w*.62*(1+drift)*zoom,y=cy+p.y*h*.62*(1+drift)*zoom;var radius=Math.max(.7,p.z*1.55)*(1+exit*1.8),alpha=arrival*fade*(.08+p.z*.42)*(.72+.28*Math.sin(t*(1.5+p.z*2)+p.p));ctx.fillStyle=index%8===0?"rgba(150,150,150,"+alpha+")":"rgba(238,238,238,"+alpha+")";ctx.beginPath();ctx.arc(x,y,radius,0,Math.PI*2);ctx.fill();});
+    var orbit=Math.min(w,h)*.142*(1+exit*1.8);
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(-.08);ctx.strokeStyle="rgba(150,150,150,"+(assemble*fade*.7)+")";ctx.lineWidth=1.5;ctx.beginPath();ctx.ellipse(0,0,orbit,orbit*.42,0,0,Math.PI*2);ctx.stroke();ctx.restore();
+    ctx.strokeStyle="rgba(238,238,238,"+(assemble*fade*.88)+")";ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(cx,cy,orbit,-Math.PI/2,-Math.PI/2+Math.PI*2*assemble);ctx.stroke();
+    ctx.shadowColor="rgba(180,180,180,.5)";ctx.shadowBlur=24;ctx.fillStyle="rgba(240,240,240,"+(assemble*fade)+")";ctx.beginPath();ctx.arc(cx,cy,(4+18*assemble)*(1+exit*1.8),0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+    ctx.textAlign="center";ctx.fillStyle="rgba(240,240,240,"+(brand*fade)+")";ctx.font="700 58px 'Microsoft YaHei',sans-serif";ctx.fillText("星屿",cx,cy+150+(1-brand)*16);
+    var tag=Math.min(1,Math.max(0,(t-3.32)/.98));ctx.fillStyle="rgba(150,150,150,"+(tag*fade)+")";ctx.font="17px 'Microsoft YaHei',sans-serif";ctx.fillText("让每一次专注，都成为抵达未来的坐标",cx,cy+232);
+    if(!reduced)requestAnimationFrame(draw);
+  }
+  function dismiss(){if(gone)return;gone=true;window.__splashActive=false;try{window.dispatchEvent(new Event("splash-done"));}catch(error){}splash.classList.add("fade-out");setTimeout(function(){splash.remove();},560);}
+  resize();addEventListener("resize",resize,{passive:true});skip.addEventListener("click",dismiss);window.addEventListener("keydown",function(event){if(event.key==="Escape")dismiss();},{once:true});
+  if(reduced){if(video)video.remove();draw(start+4300);setTimeout(dismiss,420);return;}
+  requestAnimationFrame(draw);
+  if(video&&video.canPlayType){
+    video.muted=true;video.defaultMuted=true;
+    video.addEventListener("playing",function(){splash.classList.add("video-playing");},{once:true});
+    video.addEventListener("ended",dismiss,{once:true});
+    video.addEventListener("error",function(){video.remove();},{once:true});
+    var playback=video.play();if(playback&&playback.catch)playback.catch(function(){video.remove();});
+  }
+  setTimeout(dismiss,6800);
 })();
 </script>
 
@@ -96,6 +112,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 <!-- 山河摄影背景层（可选） -->
 <div class="bg-photo"></div>
 
+<!-- 开屏品牌首映（首次启动） -->
 <div class="app">
   <!-- 移动端侧边栏遮罩（必须在 .app 内部，层级在 sidebar 之下） -->
   <div class="sidebar-mask" id="sidebarMask"></div>
@@ -146,6 +163,25 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <span class="nav-label" data-i18n="nav.ai">AI 助手</span>
           <span class="nav-badge" id="aiBadge">AI</span>
         </button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">灵感画廊</div>
+        <button class="nav-item" data-view="prisma">
+          <span class="nav-label" data-i18n="nav.prisma">棱镜艺境</span>
+        </button>
+        <button class="nav-item" data-view="nexus">
+          <span class="nav-label" data-i18n="nav.nexus">云门智界</span>
+        </button>
+        <button class="nav-item" data-view="foldcraft">
+          <span class="nav-label" data-i18n="nav.foldcraft">折艺工坊</span>
+        </button>
+        <button class="nav-item" data-view="securify">
+          <span class="nav-label" data-i18n="nav.securify">守御界</span>
+        </button>
+        <button class="nav-item" data-view="hero">
+          <span class="nav-label" data-i18n="nav.hero">星屿序章</span>
+        </button>
+
       </div>
     </nav>
 
@@ -228,6 +264,13 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
             </div>
             <div class="countdown-list" id="countdownList"></div>
           </div>
+          <div class="card" id="dashExam">
+            <div class="card-head">
+              <h3>📅 考试倒计时</h3>
+              <button class="text-btn" data-goto="courses">管理考试 →</button>
+            </div>
+            <div class="countdown-list" id="examCountdownList"></div>
+          </div>
           <div class="card">
             <div class="card-head">
               <h3>任务完成统计</h3>
@@ -267,6 +310,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
             <button class="tab-btn active" data-tab="courses-week">课程表</button>
             <button class="tab-btn" data-tab="courses-list">课程管理</button>
             <button class="tab-btn" data-tab="courses-tasks">作业任务</button>
+            <button class="tab-btn" data-tab="courses-exams">考试</button>
           </div>
           <div class="toolbar-actions">
             <button class="btn btn-ghost" id="btnImportSchedule" data-i18n="btn.import">导入课表</button>
@@ -296,13 +340,13 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
               <button class="btn btn-ghost" id="btnSmartSort" data-i18n="btn.aiSort">AI 智能排序</button>
             </div>
             <div class="filter-row">
-              <select id="taskFilterStatus" class="select">
+              <select id="taskFilterStatus" class="select" aria-label="任务状态筛选">
                 <option value="all">全部状态</option>
                 <option value="todo">待完成</option>
                 <option value="doing">进行中</option>
                 <option value="done">已完成</option>
               </select>
-              <select id="taskFilterPriority" class="select">
+              <select id="taskFilterPriority" class="select" aria-label="任务优先级筛选">
                 <option value="all">全部优先级</option>
                 <option value="high">高</option>
                 <option value="mid">中</option>
@@ -310,6 +354,16 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
               </select>
             </div>
             <div id="taskList"></div>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-courses-exams">
+          <div class="card">
+            <div class="card-head">
+              <h3>考试安排</h3>
+              <button class="btn btn-primary" id="btnAddExam">+ 添加考试</button>
+            </div>
+            <div id="examList"></div>
           </div>
         </div>
       </section>
@@ -347,19 +401,39 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <div class="card pomodoro-card">
             <div class="card-head">
               <h3>番茄钟</h3>
-              <div class="pomo-settings">
-                <label>专注 <input type="number" id="pomoWork" value="25" min="1" max="120"> 分</label>
-                <label>休息 <input type="number" id="pomoBreak" value="5" min="1" max="60"> 分</label>
+              <div class="pomo-settings" aria-label="番茄钟时长设置">
+                <label>专注 <input type="number" id="pomoWork" value="25" min="1" max="120" inputmode="numeric"> 分</label>
+                <label>休息 <input type="number" id="pomoBreak" value="5" min="1" max="60" inputmode="numeric"> 分</label>
               </div>
             </div>
-            <div class="pomo-ring" id="pomoRing">
-              <div class="pomo-time" id="pomoTime">25:00</div>
+            <div class="pomo-presets" aria-label="常用时长">
+              <button type="button" class="chip" data-pomo-preset="25-5">25 / 5</button>
+              <button type="button" class="chip" data-pomo-preset="50-10">50 / 10</button>
+              <button type="button" class="chip" data-pomo-preset="90-15">90 / 15</button>
+            </div>
+            <div class="pomo-task-row">
+              <label for="pomoTask">关联任务</label>
+              <select id="pomoTask">
+                <option value="">不关联任务</option>
+              </select>
+            </div>
+            <div class="pomo-ring" id="pomoRing" role="progressbar" aria-live="off" aria-label="番茄钟倒计时" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <span class="pomo-orb" aria-hidden="true"></span>
+              <span class="pomo-sheen" aria-hidden="true"></span>
+              <div class="pomo-time" id="pomoTime" aria-label="剩余时间">25:00</div>
               <div class="pomo-mode" id="pomoMode">准备开始</div>
+              <div class="pomo-progress-label" id="pomoProgress">0%</div>
             </div>
             <div class="pomo-controls">
               <button class="btn btn-primary btn-lg" id="btnPomoStart">开始专注</button>
+              <button class="btn btn-ghost" id="btnPomoSkip" style="display:none">跳过阶段</button>
               <button class="btn btn-ghost" id="btnPomoReset">重置</button>
             </div>
+            <div class="pomo-options">
+              <label><input type="checkbox" id="pomoSound" checked> 完成提示音</label>
+              <label><input type="checkbox" id="pomoNotify" checked> 系统通知</label>
+            </div>
+            <div class="pomo-session-meta" id="pomoSessionMeta">每次完整专注结束后自动记录。</div>
             <div class="pomo-today">
               今日已完成 <b id="pomoTodayCount">0</b> 个番茄 · 累计 <b id="pomoTodayMin">0</b> 分钟
             </div>
@@ -443,7 +517,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
               </div>
             </div>
             <div class="chat-input-row">
-              <input type="text" id="chatInput" placeholder="输入问题，或用 /学习规划 /智能排序 /知识卡片 /笔记整理 使用快捷技能...">
+              <input type="text" id="chatInput" aria-label="AI 对话输入" placeholder="输入问题，或用 /学习规划 /智能排序 /知识卡片 /笔记整理 使用快捷技能...">
               <button class="btn btn-primary" id="btnChatSend">发送</button>
               <button class="btn btn-danger" id="btnChatStop" style="display:none">停止</button>
             </div>
@@ -461,7 +535,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <section class="view" id="view-weather">
         <div class="view-toolbar">
           <div class="weather-search">
-            <input type="text" id="weatherCityInput" placeholder="" data-i18n-ph="weather.searchPh">
+            <input type="text" id="weatherCityInput" aria-label="搜索城市" placeholder="" data-i18n-ph="weather.searchPh">
             <button class="btn btn-primary" id="btnWeatherSearch" data-i18n="weather.search">搜索</button>
             <button class="btn btn-ghost" id="btnWeatherRefresh" data-i18n="weather.refresh">刷新</button>
           </div>
@@ -513,9 +587,9 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <!-- 我的文献库 -->
         <div class="tab-panel active" id="tab-lit-lib">
           <div class="filter-row">
-            <input type="text" id="litSearch" placeholder="搜索文献标题/作者/期刊..." style="flex:1;max-width:400px;background:var(--fill);border:none;border-radius:10px;padding:9px 14px;color:var(--text);font-size:13px;outline:none;font-family:var(--font)">
-            <select class="select" id="litFilterTag"><option value="">全部标签</option></select>
-            <select class="select" id="litFilterFav"><option value="">全部</option><option value="fav">收藏</option></select>
+            <input type="text" id="litSearch" aria-label="搜索文献" placeholder="搜索文献标题/作者/期刊..." style="flex:1;max-width:400px;background:var(--fill);border:none;border-radius:10px;padding:9px 14px;color:var(--text);font-size:13px;outline:none;font-family:var(--font)">
+            <select class="select" id="litFilterTag" aria-label="按标签筛选文献"><option value="">全部标签</option></select>
+            <select class="select" id="litFilterFav" aria-label="按收藏筛选文献"><option value="">全部</option><option value="fav">收藏</option></select>
           </div>
           <div id="litList"></div>
         </div>
@@ -527,6 +601,56 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </div>
       </section>
 
+      <!-- Prisma 创意工作室（iframe 嵌入） -->
+      <section class="view" id="view-prisma">
+        <iframe
+          src="prisma/index.html"
+          title="棱镜艺境 — Prisma Creative Studio"
+          loading="lazy"
+          allow="autoplay; fullscreen"
+        ></iframe>
+      </section>
+
+      <!-- 云门智界（The Next Layer of Intelligence，iframe 嵌入） -->
+      <section class="view" id="view-nexus">
+        <iframe
+          src="nexus/index.html"
+          title="云门智界 — The Next Layer of Intelligence"
+          loading="lazy"
+          allow="autoplay; fullscreen"
+        ></iframe>
+      </section>
+
+      <!-- 折艺工坊（Foldcraft，iframe 嵌入） -->
+      <section class="view" id="view-foldcraft">
+        <iframe
+          src="foldcraft/index.html"
+          title="折艺工坊 — Foldcraft"
+          loading="lazy"
+          allow="autoplay; fullscreen"
+        ></iframe>
+      </section>
+
+      <!-- 守御界（securify，iframe 嵌入） -->
+      <section class="view" id="view-securify">
+        <iframe
+          src="securify/index.html"
+          title="守御界 — securify"
+          loading="lazy"
+          allow="autoplay; fullscreen"
+        ></iframe>
+      </section>
+      <!-- 星屿 · Velorah 电影感单页英雄展示 -->
+      <section class="view" id="view-hero">
+        <iframe
+          src="hero/index.html"
+          title="Velorah — Single-page hero"
+          loading="lazy"
+          allow="autoplay; fullscreen"
+        ></iframe>
+      </section>
+
+
     </div>
   </main>
   <nav class="mobile-tabbar" id="mobileTabbar" aria-label="主要导航">
@@ -537,6 +661,51 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
     <button class="mobile-tab" data-mobile-view="more"><span data-i18n="mobile.more">更多</span></button>
   </nav>
 </div>
+
+<!-- ================= 沉浸式专注模式 ================= -->
+<section class="focus-mode" id="focusMode" aria-hidden="true" aria-labelledby="focusModeTitle">
+  <video class="focus-mode-video" muted loop playsinline preload="none" aria-hidden="true"></video>
+  <div class="focus-mode-ambient focus-mode-ambient-a" aria-hidden="true"></div>
+  <div class="focus-mode-ambient focus-mode-ambient-b" aria-hidden="true"></div>
+  <header class="focus-mode-header">
+    <div class="focus-mode-brand" aria-label="星屿">
+      <span class="focus-mode-brand-mark" aria-hidden="true"></span>
+      <span>星屿</span>
+    </div>
+    <button class="focus-mode-exit" id="btnFocusModeExit" type="button" aria-label="暂停并退出专注模式">暂离</button>
+  </header>
+  <main class="focus-mode-main">
+    <div class="focus-mode-context">
+      <span class="focus-mode-kicker" id="focusModeTitle">专注模式</span>
+      <strong class="focus-mode-task" id="focusModeTask">不关联任务</strong>
+    </div>
+    <div class="focus-mode-dial" id="focusModeDial" data-mode="work" data-running="false">
+      <svg class="focus-mode-svg" viewBox="0 0 360 360" aria-hidden="true">
+        <circle class="focus-mode-track" cx="180" cy="180" r="154" pathLength="100"></circle>
+        <circle class="focus-mode-progress" cx="180" cy="180" r="154" pathLength="100"></circle>
+        <g class="focus-mode-orb">
+          <circle cx="180" cy="26" r="6"></circle>
+        </g>
+      </svg>
+      <div class="focus-mode-readout">
+        <span class="focus-mode-time" id="focusModeTime">25:00</span>
+        <span class="focus-mode-status" id="focusModeStatus">准备开始</span>
+      </div>
+    </div>
+    <div class="focus-mode-actions">
+      <button class="focus-mode-primary" id="btnFocusModeToggle" type="button">暂停</button>
+      <button class="focus-mode-secondary" id="btnFocusModeEnd" type="button">结束本次</button>
+    </div>
+    <!-- 沉浸场景切换 -->
+    <div class="focus-mode-scenes" id="focusScenes" role="tablist" aria-label="沉浸场景切换">
+      <button class="focus-scene" data-scene="nexus" role="tab" aria-selected="true"><span class="focus-scene-dot"></span><span>云门智界</span></button>
+      <button class="focus-scene" data-scene="prisma" role="tab" aria-selected="false"><span class="focus-scene-dot"></span><span>棱镜艺境</span></button>
+      <button class="focus-scene" data-scene="foldcraft" role="tab" aria-selected="false"><span class="focus-scene-dot"></span><span>折艺工坊</span></button>
+      <button class="focus-scene" data-scene="securify" role="tab" aria-selected="false"><span class="focus-scene-dot"></span><span>守御界</span></button>
+    </div>
+    <p class="focus-mode-hint">空格暂停或继续 · Esc 暂离</p>
+  </main>
+</section>
 
 <!-- ================= 弹窗：二维码 ================= -->
 <div class="modal-mask" id="qrcodeModal">
@@ -652,6 +821,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <button class="chip" data-preset="openai">OpenAI</button>
         </div>
         <p class="hint">密钥仅保存在你的浏览器本地（localStorage），不会上传到任何服务器。</p>
+        <p class="hint" data-i18n="ai.keyTip">🔒 安全建议：请为星屿单独创建一个 API Key（如 DeepSeek 平台可创建多个 Key），不要把同时用于其他服务的高权限 Key 粘贴到这里；一旦泄露请立即到平台撤销并重新生成。</p>
       </div>
       <div class="setting-group">
         <h4 data-i18n="settings.nick">个人昵称</h4>
@@ -704,10 +874,26 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <div class="setting-actions">
           <button class="btn btn-ghost" id="btnExportData" data-i18n="btn.export">导出数据(JSON)</button>
           <button class="btn btn-ghost" id="btnImportData" data-i18n="btn.importData">导入数据</button>
-          <input type="file" id="importFile" accept="application/json" style="display:none">
+          <input type="file" id="importFile" aria-label="导入数据文件" accept="application/json" style="display:none">
           <button class="btn btn-ghost" id="btnOpenTrash">回收站 <span id="trashCount">0</span></button>
           <button class="btn btn-danger" id="btnClearData" data-i18n="btn.clear">清空全部数据</button>
         </div>
+      </div>
+      <div class="setting-group">
+        <h4 data-i18n="backup.title">自动备份</h4>
+        <div class="setting-actions">
+          <button class="btn btn-ghost" id="btnBackupNow" data-i18n="backup.now">立即备份</button>
+        </div>
+        <p class="hint" id="backupStatus">正在检测备份状态...</p>
+        <p class="hint" data-i18n="backup.desc">数据会自动备份到本机磁盘（data/backups/ 目录，保留最近 30 份），即使清空浏览器缓存也不丢失。若 7 天未备份，打开平台时会自动静默备份一次。</p>
+      </div>
+      <div class="setting-group">
+        <h4>学习提醒（桌面通知）</h4>
+        <label class="lock-toggle">
+          <input type="checkbox" id="remindEnabled">
+          <span>启用考试 / 任务 / 复习提醒</span>
+        </label>
+        <p class="hint" id="remindStatus">开启后将在此浏览器收到桌面通知：考试临近（提前 7/3/1 天）、任务到期、知识卡片待复习。</p>
       </div>
     </div>
     <div class="modal-foot">
@@ -929,19 +1115,29 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
   </div>
 </div>
 
-<script src="assets/js/gsap.min.js?v=20260811.3"></script>
-<script src="assets/js/ScrollTrigger.min.js?v=20260811.3"></script>
-<script src="js/anim.js?v=20260811.3"></script>
-<script src="js/local-config.js?v=20260811.3"></script>
-<script src="js/quotes.js?v=20260811.3"></script>
-<script src="js/lunar.js?v=20260811.3"></script>
-<script src="js/store.js?v=20260811.3"></script>
-<script src="js/sync.js?v=20260811.3"></script>
-<script src="js/charts.js?v=20260811.3"></script>
-<script src="js/ai.js?v=20260811.3"></script>
-<script src="js/weather.js?v=20260811.3"></script>
-<script src="js/icons.js?v=20260811.3"></script>
-<script src="js/app.js?v=20260811.3"></script>
+<script defer src="assets/js/gsap.min.js?v=20260812.3"></script>
+<script defer src="assets/js/ScrollTrigger.min.js?v=20260812.3"></script>
+<script defer src="js/anim.js?v=20260812.3"></script>
+<script defer src="js/local-config.js?v=20260812.3"></script>
+<script defer src="js/quotes.js?v=20260812.3"></script>
+<script defer src="js/lunar.js?v=20260812.3"></script>
+<script defer src="js/idb.js?v=20260812.3"></script>
+<script defer src="js/store.js?v=20260812.3"></script>
+<script defer src="js/sync.js?v=20260812.3"></script>
+<script defer src="js/backup.js?v=20260812.3"></script>
+<script defer src="js/charts.js?v=20260812.3"></script>
+<script defer src="js/ai.js?v=20260812.3"></script>
+<script defer src="js/weather.js?v=20260812.3"></script>
+<script defer src="js/icons.js?v=20260812.3"></script>
+<script defer src="js/app-core.js?v=20260812.3"></script>
+<script defer src="js/views-dashboard.js?v=20260812.3"></script>
+<script defer src="js/views-courses.js?v=20260812.3"></script>
+<script defer src="js/views-notes.js?v=20260812.3"></script>
+<script defer src="js/views-focus.js?v=20260812.3"></script>
+<script defer src="js/views-growth.js?v=20260812.3"></script>
+<script defer src="js/views-content.js?v=20260812.3"></script>
+<script defer src="js/views-settings.js?v=20260812.3"></script>
+<script defer src="js/reminders.js?v=20260813.1"></script>
 <script>
   if ("serviceWorker" in navigator && location.protocol !== "file:") {
     window.addEventListener("load", function () {
@@ -950,6 +1146,25 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       });
     });
   }
+  // 开屏品牌首映（首次启动显示一次）
+  // ?focus=1 直达沉浸专注模式（调试 / 分享直达用，不影响正常访问）
+  (function () {
+    try {
+      if (new URLSearchParams(location.search).get("focus") === "1") {
+        localStorage.setItem("zero_onboarded_v3", "1");
+        window.addEventListener("load", function () {
+          setTimeout(function () {
+            var nav = document.querySelector('.nav-item[data-view="focus"]');
+            if (nav) nav.click();
+            setTimeout(function () {
+              var btn = document.getElementById("btnPomoStart");
+              if (btn) btn.click();
+            }, 900);
+          }, 700);
+        });
+      }
+    } catch (e) {}
+  })();
 </script>
 
 

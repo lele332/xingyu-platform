@@ -98,7 +98,7 @@ const Sync = (() => {
       const g = await request("/gists", {
         method: "POST", headers: authHeaders(),
         body: JSON.stringify({
-          description: "零 Zero 学习工作台数据同步（自动创建）",
+          description: "星屿（Zero）学习工作台数据同步（自动创建）",
           public: false,
           files: { [GIST_FILE]: { content } }
         })

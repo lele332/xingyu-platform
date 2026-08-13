@@ -4,7 +4,8 @@
   "version": "2026.8.11-3",
   "scripts": {
     "test": "python -m unittest tests.test_platform -v",
-    "test:ui": "node tests/ui-smoke.js"
+    "test:ui": "node tests/ui-smoke.js",
+    "test:pomo": "node tests/pomo-smoke.js"
   },
   "devDependencies": {
     "playwright-core": "^1.62.1"

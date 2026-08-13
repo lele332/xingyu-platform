@@ -38,7 +38,20 @@ const App = (() => {
   function todayISO() {
     return localDateKey();
   }
+  // 记录正在显示的 toast（按 key 去重，避免重复点击时堆叠）
+  const _toastActive = new Map();
+
+  function dismissToast(key) {
+    const t = _toastActive.get(key);
+    if (!t) return;
+    _toastActive.delete(key);
+    const el = t.el;
+    el.classList.add("hide");
+    t.timer2 = setTimeout(() => el.remove(), 280);
+  }
+
   function toast(msg, type = "", options = {}) {
+    options = options || {};
     let wrap = $("#toastWrap");
     if (!wrap) {
       wrap = document.createElement("div");
@@ -47,12 +60,50 @@ const App = (() => {
       wrap.setAttribute("aria-atomic", "false");
       document.body.appendChild(wrap);
     }
+
+    const duration = options.duration || 3200;
+    const key = options.key || (type + "|" + msg);
+
+    // 同 key 已存在：复用该元素，仅刷新内容与倒计时（不会堆出多个）
+    if (_toastActive.has(key)) {
+      const t = _toastActive.get(key);
+      t.el.querySelector(".toast-msg").textContent = msg;
+      t.el.className = "toast " + type + " show";
+      const bar = t.el.querySelector(".toast-bar");
+      bar.style.transition = "none";
+      bar.style.transform = "scaleX(1)";
+      void t.el.offsetWidth;                       // 强制回流，让进度条从头开始
+      bar.style.transition = "transform " + duration + "ms linear";
+      bar.style.transform = "scaleX(0)";
+      clearTimeout(t.timer1);
+      clearTimeout(t.timer2);
+      t.timer1 = setTimeout(() => dismissToast(key), duration);
+      t.el.classList.remove("pop"); void t.el.offsetWidth; t.el.classList.add("pop"); // 轻微弹动反馈
+      return t.el;
+    }
+
+    // 限制同时显示的条数，超出则移除最旧的一条，防止无限堆叠
+    while (wrap.children.length >= 4) {
+      const oldest = wrap.firstElementChild;
+      if (oldest && oldest.dataset && oldest.dataset.key) _toastActive.delete(oldest.dataset.key);
+      if (oldest) oldest.remove();
+    }
+
     const el = document.createElement("div");
     el.className = "toast " + type;
+    el.dataset.key = key;
     el.setAttribute("role", type === "err" ? "alert" : "status");
+
+    const icon = document.createElement("span");
+    icon.className = "toast-icon";
+    icon.textContent = type === "err" ? "✕" : (type === "ok" ? "✓" : "ℹ");
+    el.appendChild(icon);
+
     const text = document.createElement("span");
+    text.className = "toast-msg";
     text.textContent = msg;
     el.appendChild(text);
+
     if (options.actionLabel && typeof options.onAction === "function") {
       const action = document.createElement("button");
       action.className = "toast-action";
@@ -60,11 +111,28 @@ const App = (() => {
       action.onclick = () => {
         options.onAction();
         el.remove();
+        const cur = _toastActive.get(key);
+        if (cur && cur.el === el) _toastActive.delete(key);
       };
       el.appendChild(action);
     }
+
+    const bar = document.createElement("span");
+    bar.className = "toast-bar";
+    el.appendChild(bar);
+
     wrap.appendChild(el);
-    setTimeout(() => { el.style.opacity = "0"; el.style.transition = "opacity 0.3s"; setTimeout(() => el.remove(), 350); }, options.duration || 4200);
+    requestAnimationFrame(() => {
+      el.classList.add("show");
+      bar.style.transform = "scaleX(1)";
+      void bar.offsetWidth;                        // 回流后开始倒计时动画
+      bar.style.transition = "transform " + duration + "ms linear";
+      bar.style.transform = "scaleX(0)";
+    });
+
+    const rec = { el, timer1: null, timer2: null };
+    rec.timer1 = setTimeout(() => dismissToast(key), duration);
+    _toastActive.set(key, rec);
     return el;
   }
 
@@ -94,8 +162,8 @@ const App = (() => {
       if (view === "dashboard" && window.Anim) Anim.dashboardIntro(v);
       else window.Anim && Anim.viewEnter(v);
     }
-    const titles = { dashboard: t("title.dashboard"), courses: t("title.courses"), notes: t("title.notes"), focus: t("title.focus"), growth: t("title.growth"), lit: t("title.lit"), news: t("title.news"), ai: t("title.ai"), weather: t("title.weather") };
-    const subs = { dashboard: t("sub.dashboard"), courses: t("sub.courses"), notes: t("sub.notes"), focus: t("sub.focus"), growth: t("sub.growth"), lit: t("sub.lit"), news: t("sub.news"), ai: t("sub.ai"), weather: t("sub.weather") };
+    const titles = { dashboard: t("title.dashboard"), courses: t("title.courses"), notes: t("title.notes"), focus: t("title.focus"), growth: t("title.growth"), lit: t("title.lit"), news: t("title.news"), ai: t("title.ai"), weather: t("title.weather"), prisma: t("title.prisma"), nexus: t("title.nexus"), foldcraft: t("title.foldcraft"), securify: t("title.securify") };
+    const subs = { dashboard: t("sub.dashboard"), courses: t("sub.courses"), notes: t("sub.notes"), focus: t("sub.focus"), growth: t("sub.growth"), lit: t("sub.lit"), news: t("sub.news"), ai: t("sub.ai"), weather: t("sub.weather"), prisma: t("sub.prisma"), nexus: t("sub.nexus"), foldcraft: t("sub.foldcraft"), securify: t("sub.securify") };
     $("#pageTitle").textContent = titles[view] || "";
     const sub = $("#pageSub");
     if (sub) sub.textContent = subs[view] || "";
@@ -187,7 +255,7 @@ const App = (() => {
       if (currentView === "news") renderNews();
       refreshBtn.disabled = false;
       refreshBtn.textContent = "↻ " + t("hero.refresh");
-      toast(t("hero.refreshed"), "ok");
+      toast(t("hero.refreshed"), "ok", { key: "hero-news-refreshed", duration: 2000 });
     };
   }
 
@@ -349,7 +417,7 @@ const App = (() => {
   }
 
   function renderFocusTrend(container, days = 7) {
-    const pomos = Store.getAll("pomodoros");
+    const pomos = Store.getAll("pomodoros").filter(p => p.type !== "break");
     const labels = [], values = [];
     for (let i = days - 1; i >= 0; i--) {
       const d = new Date(); d.setDate(d.getDate() - i);
@@ -665,16 +733,141 @@ const App = (() => {
   /* ============================================================
      专注学习
      ============================================================ */
+  const POMO_STORAGE_KEY = "xingyu_pomo_session_v2";
+  const POMO_PREFS_KEY = "xingyu_pomo_prefs_v1";
   let pomoTimer = null;
-  let pomoState = { running: false, mode: "work", remain: 25 * 60, total: 25 * 60 };
+  let pomoAudio = null;
+  let pomoState = {
+    running: false, mode: "work", remain: 25 * 60, total: 25 * 60,
+    endAt: 0, startedAt: 0, pausedAt: 0, completed: false, taskId: ""
+  };
+
+  function pomoDuration(mode) {
+    const input = mode === "break" ? $("#pomoBreak") : $("#pomoWork");
+    const max = mode === "break" ? 60 : 120;
+    const fallback = mode === "break" ? 5 : 25;
+    const value = Math.min(max, Math.max(1, Number(input && input.value) || fallback));
+    if (input) input.value = value;
+    return value * 60;
+  }
+
+  function loadPomoPrefs() {
+    try {
+      const prefs = JSON.parse(localStorage.getItem(POMO_PREFS_KEY) || "{}");
+      if (prefs.work) $("#pomoWork").value = Math.min(120, Math.max(1, Number(prefs.work)));
+      if (prefs.break) $("#pomoBreak").value = Math.min(60, Math.max(1, Number(prefs.break)));
+      if (typeof prefs.sound === "boolean") $("#pomoSound").checked = prefs.sound;
+      if (typeof prefs.notify === "boolean") $("#pomoNotify").checked = prefs.notify;
+    } catch (e) {}
+  }
+
+  function savePomoPrefs() {
+    try {
+      localStorage.setItem(POMO_PREFS_KEY, JSON.stringify({
+        work: Number($("#pomoWork").value) || 25,
+        break: Number($("#pomoBreak").value) || 5,
+        sound: $("#pomoSound").checked,
+        notify: $("#pomoNotify").checked
+      }));
+    } catch (e) {}
+  }
+
+  function savePomoSession() {
+    try {
+      if (!pomoState.running && !pomoState.startedAt && pomoState.mode === "work") {
+        localStorage.removeItem(POMO_STORAGE_KEY);
+      } else {
+        localStorage.setItem(POMO_STORAGE_KEY, JSON.stringify(pomoState));
+      }
+    } catch (e) {}
+  }
+
+  function loadPomoSession() {
+    try {
+      const raw = localStorage.getItem(POMO_STORAGE_KEY);
+      if (!raw) return;
+      const saved = JSON.parse(raw);
+      if (!saved || !Number.isFinite(saved.total) || !Number.isFinite(saved.remain)) return;
+      pomoState = Object.assign(pomoState, saved);
+      if (pomoState.running && pomoState.endAt) {
+        if (pomoState.endAt <= Date.now()) {
+          completePomo(true);
+        } else {
+          tickPomo();
+          clearInterval(pomoTimer);
+          pomoTimer = setInterval(tickPomo, 250);
+        }
+      }
+    } catch (e) {
+      try { localStorage.removeItem(POMO_STORAGE_KEY); } catch (ignore) {}
+    }
+  }
+
+  function syncPomoPresetUI() {
+    const active = `${$("#pomoWork")?.value || 25}-${$("#pomoBreak")?.value || 5}`;
+    $$(".pomo-presets [data-pomo-preset]").forEach(button => {
+      button.classList.toggle("active", button.dataset.pomoPreset === active);
+    });
+  }
+
+  function ensureNotificationPermission() {
+    if (!$("#pomoNotify")?.checked || !("Notification" in window)) return;
+    if (Notification.permission === "default") Notification.requestPermission().catch(() => {});
+  }
+
+  function announcePomo(title, body) {
+    if ($("#pomoSound")?.checked) {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) {
+          pomoAudio = pomoAudio || new AudioContext();
+          const oscillator = pomoAudio.createOscillator();
+          const gain = pomoAudio.createGain();
+          oscillator.type = "sine";
+          oscillator.frequency.setValueAtTime(660, pomoAudio.currentTime);
+          oscillator.frequency.exponentialRampToValueAtTime(880, pomoAudio.currentTime + 0.18);
+          gain.gain.setValueAtTime(0.0001, pomoAudio.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.12, pomoAudio.currentTime + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.0001, pomoAudio.currentTime + 0.5);
+          oscillator.connect(gain).connect(pomoAudio.destination);
+          oscillator.start();
+          oscillator.stop(pomoAudio.currentTime + 0.52);
+        }
+      } catch (e) {}
+    }
+    if ($("#pomoNotify")?.checked && "Notification" in window && Notification.permission === "granted") {
+      try { new Notification(title, { body, icon: "assets/xingyu-app-icon-192.png", tag: "xingyu-pomo" }); } catch (e) {}
+    }
+  }
+
+  function populatePomoTasks() {
+    const select = $("#pomoTask");
+    if (!select) return;
+    const tasks = Store.getAll("tasks").filter(task => task.status !== "done");
+    select.innerHTML = `<option value="">不关联任务</option>` + tasks.map(task =>
+      `<option value="${esc(task.id)}">${esc(task.title)}</option>`
+    ).join("");
+    select.value = pomoState.taskId || "";
+  }
 
   function renderFocus() {
+    loadPomoPrefs();
+    populatePomoTasks();
+    loadPomoSession();
+    const workInput = $("#pomoWork");
+    const breakInput = $("#pomoBreak");
+    if (pomoState.startedAt) {
+      if (workInput && pomoState.mode === "work" && pomoState.total > 0) workInput.value = Math.round(pomoState.total / 60);
+      if (breakInput && pomoState.mode === "break" && pomoState.total > 0) breakInput.value = Math.round(pomoState.total / 60);
+    }
+    syncPomoPresetUI();
+    updatePomoUI();
     renderFocusStats();
     renderFocusHistory();
   }
 
   function renderFocusStats() {
-    const pomos = Store.getAll("pomodoros");
+    const pomos = Store.getAll("pomodoros").filter(p => p.type !== "break");
     const today = pomos.filter(p => p.startAt && localDateKey(p.startAt) === todayISO());
     const todayCount = today.length;
     const todayMin = today.reduce((s, p) => s + (p.minutes || 0), 0);
@@ -698,7 +891,7 @@ const App = (() => {
   }
 
   function renderFocusWeekChart() {
-    const pomos = Store.getAll("pomodoros");
+    const pomos = Store.getAll("pomodoros").filter(p => p.type !== "break");
     const labels = [], values = [];
     for (let i = 6; i >= 0; i--) {
       const d = new Date(); d.setDate(d.getDate() - i);
@@ -711,7 +904,7 @@ const App = (() => {
   }
 
   function renderFocusHistory() {
-    const pomos = Store.getAll("pomodoros").slice().sort((a, b) => (b.startAt || "").localeCompare(a.startAt || "")).slice(0, 10);
+    const pomos = Store.getAll("pomodoros").filter(p => p.type !== "break").slice().sort((a, b) => (b.startAt || "").localeCompare(a.startAt || "")).slice(0, 10);
     const box = $("#focusHistory");
     if (!pomos.length) {
       box.innerHTML = `<div class="empty-state"><p>还没有专注记录，点击「开始专注」</p></div>`;
@@ -733,29 +926,42 @@ const App = (() => {
 
   function startPomo() {
     if (pomoState.running) { pausePomo(); return; }
+    const isFreshWork = pomoState.mode === "work" && (!pomoState.startedAt || pomoState.remain <= 0 || pomoState.completed);
+    if (isFreshWork) {
+      pomoState.mode = "work";
+      pomoState.total = pomoDuration("work");
+      pomoState.remain = pomoState.total;
+      pomoState.completed = false;
+      pomoState.startedAt = Date.now();
+    }
     pomoState.running = true;
-    pomoState.mode = "work";
-    pomoState.total = (+$("#pomoWork").value || 25) * 60;
-    pomoState.remain = pomoState.total;
+    pomoState.pausedAt = 0;
+    pomoState.endAt = Date.now() + pomoState.remain * 1000;
+    ensureNotificationPermission();
+    clearInterval(pomoTimer);
+    pomoTimer = setInterval(tickPomo, 250);
     updatePomoUI();
-    $("#btnPomoStart").textContent = "暂停";
-    $("#btnPomoStart").classList.add("btn-danger");
-    $(".pomodoro-card").classList.add("working");
-    $("#pomoMode").textContent = "专注中 ";
-    pomoTimer = setInterval(tickPomo, 1000);
+    savePomoSession();
   }
 
   function pausePomo() {
     pomoState.running = false;
+    pomoState.remain = remainingFromClock();
+    pomoState.pausedAt = Date.now();
+    pomoState.endAt = 0;
     clearInterval(pomoTimer);
-    $("#btnPomoStart").textContent = "继续";
-    $("#btnPomoStart").classList.remove("btn-danger");
-    $(".pomodoro-card").classList.remove("working");
-    $("#pomoMode").textContent = "已暂停";
+    updatePomoUI();
+    savePomoSession();
+  }
+
+  function remainingFromClock() {
+    if (!pomoState.running || !pomoState.endAt) return Math.max(0, pomoState.remain);
+    return Math.max(0, (pomoState.endAt - Date.now()) / 1000);
   }
 
   function tickPomo() {
-    pomoState.remain--;
+    if (!pomoState.running) return;
+    pomoState.remain = remainingFromClock();
     if (pomoState.remain <= 0) {
       completePomo();
       return;
@@ -763,39 +969,83 @@ const App = (() => {
     updatePomoUI();
   }
 
-  function completePomo() {
+  function completePomo(restored = false) {
     clearInterval(pomoTimer);
     pomoState.running = false;
+    pomoState.remain = 0;
+    pomoState.endAt = 0;
+    pomoState.completed = true;
     const minutes = Math.round(pomoState.total / 60);
-    Store.add("pomodoros", { startAt: new Date().toISOString(), minutes, type: pomoState.mode });
+    if (pomoState.mode === "work") {
+      const alreadyRecorded = Store.getAll("pomodoros").some(item => item.sessionId === pomoState.startedAt);
+      if (!alreadyRecorded) {
+        Store.add("pomodoros", {
+          sessionId: pomoState.startedAt,
+          startAt: new Date(pomoState.startedAt || Date.now()).toISOString(),
+          minutes,
+          type: pomoState.mode,
+          taskId: pomoState.taskId || ""
+        });
+      }
+    }
+    announcePomo(
+      pomoState.mode === "work" ? "专注完成" : "休息结束",
+      pomoState.mode === "work" ? "休息一下，再开始下一个阶段。" : "准备好继续专注了吗？"
+    );
     if (pomoState.mode === "work") {
       toast("专注完成！休息一下吧", "ok");
       // 自动切换到休息
       pomoState.mode = "break";
-      pomoState.total = (+$("#pomoBreak").value || 5) * 60;
+      pomoState.total = pomoDuration("break");
       pomoState.remain = pomoState.total;
-      $("#pomoMode").textContent = "休息中 ";
-      $("#btnPomoStart").textContent = "跳过休息";
-      $("#btnPomoStart").classList.remove("btn-danger");
-      pomoState.running = true;
-      pomoTimer = setInterval(tickPomo, 1000);
+      pomoState.startedAt = 0;
+      pomoState.completed = false;
+      pomoState.running = false;
     } else {
-      $("#pomoMode").textContent = "休息结束，继续加油！";
-      $("#btnPomoStart").textContent = "开始专注";
-      $("#btnPomoStart").classList.remove("btn-danger");
+      toast("休息结束，继续加油！", "ok");
+      pomoState.mode = "work";
+      pomoState.total = pomoDuration("work");
+      pomoState.remain = pomoState.total;
+      pomoState.startedAt = 0;
+      pomoState.completed = false;
     }
     updatePomoUI();
+    savePomoSession();
     renderFocusStats();
     renderFocusHistory();
     if (currentView === "dashboard") renderDashboard();
   }
 
   function updatePomoUI() {
-    const m = Math.floor(pomoState.remain / 60);
-    const s = pomoState.remain % 60;
+    const remain = Math.max(0, pomoState.running ? remainingFromClock() : pomoState.remain);
+    const m = Math.floor(remain / 60);
+    const s = Math.floor(remain % 60);
     $("#pomoTime").textContent = `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
-    const progress = pomoState.total ? 1 - pomoState.remain / pomoState.total : 0;
-    document.querySelector(".pomo-ring").style.setProperty("--progress", (progress * 100).toFixed(1));
+    const progress = pomoState.total ? Math.min(1, Math.max(0, 1 - remain / pomoState.total)) : 0;
+    const ring = document.querySelector(".pomo-ring");
+    if (ring) {
+      ring.style.setProperty("--progress", (progress * 100).toFixed(2));
+      ring.dataset.mode = pomoState.mode;
+      ring.dataset.running = pomoState.running ? "true" : "false";
+      ring.setAttribute("aria-valuenow", String(Math.round(progress * 100)));
+      ring.setAttribute("aria-valuetext", `${Math.floor(remain / 60)} 分 ${Math.floor(remain % 60)} 秒剩余`);
+    }
+    $(".pomodoro-card")?.classList.toggle("working", pomoState.running);
+    const progressLabel = $("#pomoProgress");
+    if (progressLabel) progressLabel.textContent = `${Math.round(progress * 100)}%`;
+    const modeText = pomoState.mode === "break"
+      ? (pomoState.running ? "休息中" : "准备休息")
+      : (pomoState.running ? "专注中" : pomoState.pausedAt ? "已暂停" : "准备开始");
+    $("#pomoMode").textContent = modeText;
+    const start = $("#btnPomoStart");
+    if (start) {
+      start.textContent = pomoState.running ? "暂停" : pomoState.pausedAt && remain > 0 ? "继续" : pomoState.mode === "break" ? "开始休息" : "开始专注";
+      start.classList.toggle("btn-danger", pomoState.running);
+    }
+    const skip = $("#btnPomoSkip");
+    if (skip) skip.style.display = pomoState.startedAt || pomoState.mode === "break" ? "" : "none";
+    const meta = $("#pomoSessionMeta");
+    if (meta) meta.textContent = pomoState.taskId ? `当前关联任务：${Store.getAll("tasks").find(task => task.id === pomoState.taskId)?.title || "已删除任务"}` : "每次完整专注结束后自动记录。";
   }
 
   /* ============================================================
@@ -1851,13 +2101,18 @@ const App = (() => {
       "nav.growth": "成长档案",
       "nav.ai": "AI 助手",
       "nav.weather": "天气",
+      "nav.prisma": "棱镜艺境",
+      "nav.nexus": "云门智界",
+      "nav.foldcraft": "折艺工坊",
+      "nav.securify": "守御界",
+      "nav.hero": "Velorah 序章",
       "role": "个人工作台",
       "mobile.today": "今日", "mobile.courses": "课程", "mobile.notes": "笔记", "mobile.focus": "专注", "mobile.more": "更多",
       "settings": "设置",
       "search.ph": "搜索笔记 / 任务 / 课程...",
       "title.dashboard": "今日", "title.courses": "课程作业", "title.notes": "学习笔记库",
       "title.focus": "专注学习", "title.growth": "成长档案", "title.lit": "文献资料",
-      "title.news": "热点新闻", "title.ai": "AI 助手", "title.weather": "天气",
+      "title.news": "热点新闻", "title.ai": "AI 助手", "title.weather": "天气", "title.prisma": "棱镜艺境", "title.nexus": "云门智界", "title.foldcraft": "折艺工坊", "title.securify": "守御界", "title.hero": "Velorah 序幕",
       "sub.dashboard": "学习进度一览，今天也要保持专注",
       "sub.courses": "课程、课表与作业任务管理",
       "sub.notes": "沉淀知识，构建你的笔记库",
@@ -1867,6 +2122,11 @@ const App = (() => {
       "sub.news": "每日国内外热点速递",
       "sub.ai": "你的智能学习伙伴",
       "sub.weather": "全国城市实时天气与未来一周预报",
+      "sub.prisma": "创意视觉工作室展示页",
+      "sub.nexus": "下一代智能基础设施展示页",
+      "sub.foldcraft": "视觉叙事创意工作室展示页",
+      "sub.securify": "数据安全 SaaS 展示页",
+      "sub.hero": "全屏视频 · 玻璃拟态 · 电影感标题 — 单页英雄展示页",
       "hero.todo": "待办任务", "hero.due": "今日到期", "hero.notes": "笔记", "hero.focusMin": "今日专注(分)", "hero.news": "今日热点", "hero.newsAll": "查看全部", "hero.refresh": "刷新", "hero.refreshed": "已刷新",
       "settings.title": "设置",
       "settings.theme": "界面主题", "settings.font": "界面字体", "settings.lang": "界面语言", "settings.bg": "界面背景", "bg.none": "无", "bg.guilinMist": "桂林·雾山", "bg.guilinAerial": "桂林·航拍", "bg.jiuzhaigou": "九寨沟", "bg.zhangjiajie": "张家界", "bg.hint": "以中国山河摄影作背景，文字始终清晰可读。",
@@ -1895,13 +2155,18 @@ const App = (() => {
       "nav.growth": "成長檔案",
       "nav.ai": "AI 助手",
       "nav.weather": "天氣",
+      "nav.prisma": "稜鏡藝境",
+      "nav.nexus": "雲門智界",
+      "nav.foldcraft": "摺藝工坊",
+      "nav.securify": "守禦界",
+      "nav.hero": "Velorah 序章",
       "role": "個人工作台",
       "mobile.today": "今日", "mobile.courses": "課程", "mobile.notes": "筆記", "mobile.focus": "專注", "mobile.more": "更多",
       "settings": "設定",
       "search.ph": "搜尋筆記 / 任務 / 課程...",
       "title.dashboard": "今日", "title.courses": "課程作業", "title.notes": "學習筆記庫",
       "title.focus": "專注學習", "title.growth": "成長檔案", "title.lit": "文獻資料",
-      "title.news": "熱點新聞", "title.ai": "AI 助手", "title.weather": "天氣",
+      "title.news": "熱點新聞", "title.ai": "AI 助手", "title.weather": "天氣", "title.prisma": "稜鏡藝境", "title.nexus": "雲門智界", "title.foldcraft": "摺藝工坊", "title.securify": "守禦界", "title.hero": "Velorah 序幕",
       "sub.dashboard": "學習進度一覽，今天也要保持專注",
       "sub.courses": "課程、課表與作業任務管理",
       "sub.notes": "沉澱知識，構建你的筆記庫",
@@ -1911,6 +2176,11 @@ const App = (() => {
       "sub.news": "每日國內外熱點速遞",
       "sub.ai": "你的智能學習夥伴",
       "sub.weather": "全國城市即時天氣與未來一週預報",
+      "sub.prisma": "創意視覺工作室展示頁",
+      "sub.nexus": "下一代智能基礎設施展示頁",
+      "sub.foldcraft": "視覺敘事創意工作室展示頁",
+      "sub.securify": "數據安全 SaaS 展示頁",
+      "sub.hero": "全屏影片 · 玻璃擬態 · 電影感標題 — 單頁英雄展示頁",
       "hero.todo": "待辦任務", "hero.due": "今日到期", "hero.notes": "筆記", "hero.focusMin": "今日專注(分)", "hero.news": "今日熱點", "hero.newsAll": "查看全部", "hero.refresh": "刷新", "hero.refreshed": "已刷新",
       "settings.title": "設定",
       "settings.theme": "界面主題", "settings.font": "界面字體", "settings.lang": "界面語言", "settings.bg": "界面背景", "bg.none": "無", "bg.guilinMist": "桂林·霧山", "bg.guilinAerial": "桂林·航拍", "bg.jiuzhaigou": "九寨溝", "bg.zhangjiajie": "張家界", "bg.hint": "以中國山河攝影作背景，文字始終清晰可讀。",
@@ -1939,13 +2209,18 @@ const App = (() => {
       "nav.growth": "Profile",
       "nav.ai": "AI Assistant",
       "nav.weather": "Weather",
+      "nav.prisma": "Prisma",
+      "nav.nexus": "Nexus",
+      "nav.foldcraft": "Foldcraft",
+      "nav.securify": "Securify",
+      "nav.hero": "Velorah",
       "role": "Personal workspace",
       "mobile.today": "Today", "mobile.courses": "Courses", "mobile.notes": "Notes", "mobile.focus": "Focus", "mobile.more": "More",
       "settings": "Settings",
       "search.ph": "Search notes / tasks / courses...",
       "title.dashboard": "Today", "title.courses": "Courses", "title.notes": "Notes",
       "title.focus": "Focus", "title.growth": "Profile", "title.lit": "Library",
-      "title.news": "News", "title.ai": "AI Assistant", "title.weather": "Weather",
+      "title.news": "News", "title.ai": "AI Assistant", "title.weather": "Weather", "title.prisma": "Prisma", "title.nexus": "Nexus", "title.foldcraft": "Foldcraft", "title.securify": "Securify", "title.hero": "Velorah",
       "sub.dashboard": "Your study at a glance — stay focused today",
       "sub.courses": "Courses, timetable & assignments",
       "sub.notes": "Build your knowledge base",
@@ -1955,6 +2230,11 @@ const App = (() => {
       "sub.news": "Daily headline digest",
       "sub.ai": "Your smart study partner",
       "sub.weather": "Live weather for Chinese cities with a 7-day forecast",
+      "sub.prisma": "Creative visual studio showcase",
+      "sub.nexus": "Next-layer AI infrastructure showcase",
+      "sub.foldcraft": "Visual storytelling studio showcase",
+      "sub.securify": "Data-security SaaS showcase",
+      "sub.hero": "Fullscreen video · liquid glass · cinematic type — single-page hero showcase",
       "hero.todo": "Open tasks", "hero.due": "Due today", "hero.notes": "Notes", "hero.focusMin": "Focus (min)", "hero.news": "Top News", "hero.newsAll": "View All", "hero.refresh": "Refresh", "hero.refreshed": "Updated",
       "settings.title": "Settings",
       "settings.theme": "Theme", "settings.font": "Font", "settings.lang": "Language", "settings.bg": "Background", "bg.none": "None", "bg.guilinMist": "Guilin Mist", "bg.guilinAerial": "Guilin Aerial", "bg.jiuzhaigou": "Jiuzhaigou", "bg.zhangjiajie": "Zhangjiajie", "bg.hint": "China landscape photography as backdrop; text stays readable.",
@@ -2689,18 +2969,105 @@ const App = (() => {
 
     // 专注
     $("#btnPomoStart").onclick = startPomo;
-    $("#btnPomoReset").onclick = () => {
-      clearInterval(pomoTimer);
-      pomoState.running = false;
-      pomoState.mode = "work";
-      pomoState.total = (+$("#pomoWork").value || 25) * 60;
-      pomoState.remain = pomoState.total;
-      $("#btnPomoStart").textContent = "开始专注";
-      $("#btnPomoStart").classList.remove("btn-danger");
-      $(".pomodoro-card").classList.remove("working");
-      $("#pomoMode").textContent = "准备开始";
+    $("#btnPomoSkip").onclick = () => {
+      if (pomoState.mode === "break") {
+        pomoState.running = false;
+        pomoState.endAt = 0;
+        pomoState.mode = "work";
+        pomoState.total = pomoDuration("work");
+        pomoState.remain = pomoState.total;
+        pomoState.startedAt = 0;
+        pomoState.pausedAt = 0;
+        pomoState.completed = false;
+        clearInterval(pomoTimer);
+        savePomoSession();
+        updatePomoUI();
+        toast("已跳过休息", "ok");
+      } else if (pomoState.running || pomoState.startedAt) {
+        pausePomo();
+        pomoState.running = false;
+        pomoState.endAt = 0;
+        pomoState.mode = "break";
+        pomoState.total = pomoDuration("break");
+        pomoState.remain = pomoState.total;
+        pomoState.startedAt = 0;
+        pomoState.pausedAt = 0;
+        pomoState.completed = false;
+        savePomoSession();
+        updatePomoUI();
+        toast("已跳过当前阶段", "ok");
+      }
+    };
+    $$(".pomo-presets [data-pomo-preset]").forEach(button => {
+      button.onclick = () => {
+        if (pomoState.running) return;
+        const [work, rest] = button.dataset.pomoPreset.split("-").map(Number);
+        $("#pomoWork").value = work;
+        $("#pomoBreak").value = rest;
+        syncPomoPresetUI();
+        if (!pomoState.startedAt) {
+          pomoState.mode = "work";
+          pomoState.total = work * 60;
+          pomoState.remain = pomoState.total;
+          updatePomoUI();
+        }
+      };
+    });
+    $("#pomoTask").onchange = () => {
+      pomoState.taskId = $("#pomoTask").value;
+      savePomoSession();
       updatePomoUI();
     };
+    $("#pomoSound").onchange = savePomoPrefs;
+    $("#pomoNotify").onchange = () => {
+      savePomoPrefs();
+      if ($("#pomoNotify").checked) ensureNotificationPermission();
+    };
+    $("#pomoWork").onchange = () => {
+      savePomoPrefs();
+      if (!pomoState.running && !pomoState.startedAt) {
+        pomoState.total = pomoDuration("work");
+        pomoState.remain = pomoState.total;
+        syncPomoPresetUI();
+        updatePomoUI();
+      }
+    };
+    $("#pomoBreak").onchange = () => {
+      savePomoPrefs();
+      if (!pomoState.running && pomoState.mode === "break") {
+        pomoState.total = pomoDuration("break");
+        pomoState.remain = pomoState.total;
+        syncPomoPresetUI();
+        updatePomoUI();
+      }
+    };
+    $("#btnPomoReset").onclick = () => {
+      clearInterval(pomoTimer);
+      pomoState = {
+        running: false, mode: "work", remain: pomoDuration("work"), total: pomoDuration("work"),
+        endAt: 0, startedAt: 0, pausedAt: 0, completed: false, taskId: ""
+      };
+      localStorage.removeItem(POMO_STORAGE_KEY);
+      $("#pomoTask").value = "";
+      pomoState.remain = pomoState.total;
+      updatePomoUI();
+      toast("番茄钟已重置", "ok");
+    };
+    document.addEventListener("keydown", e => {
+      if (currentView !== "focus" || openModals().length) return;
+      const tag = document.activeElement && document.activeElement.tagName;
+      if (tag === "INPUT" || tag === "SELECT" || tag === "TEXTAREA") return;
+      if (e.code === "Space") {
+        e.preventDefault();
+        startPomo();
+      } else if (e.key.toLowerCase() === "r") {
+        e.preventDefault();
+        $("#btnPomoReset").click();
+      } else if (e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        $("#btnPomoSkip").click();
+      }
+    });
 
     // 成长档案
     $("#btnEditProfile").onclick = () => openProfileForm();
@@ -2845,17 +3212,22 @@ const App = (() => {
     const lockEn = $("#lockEnabled");
     if (lockEn) lockEn.addEventListener("change", () => toggleLockFields(lockEn.checked));
     document.addEventListener("visibilitychange", () => {
+      if (!document.hidden && pomoState.running) {
+        tickPomo();
+        updatePomoUI();
+      }
       if (document.hidden && localStorage.getItem("zero_lock_enabled") === "1" && hasPin() && localStorage.getItem("zero_lock_leave") === "1") {
         lockNow();
       }
     });
+    window.addEventListener("pagehide", savePomoSession);
 
     // 热点新闻
     $("#btnRefreshNews").onclick = async () => {
-      toast("正在刷新新闻...", "ok");
+      toast("正在刷新新闻...", "ok", { key: "news-refreshing", duration: 1500 });
       newsCache = null;
       await renderNews();
-      toast("新闻已更新", "ok");
+      toast("新闻已更新", "ok", { key: "news-refreshed", duration: 2000 });
     };
     $$("[data-newstab]").forEach(btn => {
       btn.onclick = () => {

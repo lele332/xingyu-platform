@@ -13,7 +13,7 @@ A quiet monochrome document desk. The user opens the app to a blank white surfac
 
 ## Brand
 
-- **Name**: 零 · Zero
+- **Name**: 星屿（中文主名） · Zero（英文名 / 设计标识）
 - **Mark**: ○ (a simple ring / the zero glyph, set in the sidebar logo tile; mirrored as the app console-log mark)
 - **Voice**: 简洁、克制、结构化；中文优先
 
@@ -190,5 +190,5 @@ Emoji remain only where the user types them (avatar picker, note content). The c
 ## What was preserved vs replaced
 
 - **Preserved**: every JS file; all data schemas in localStorage; all functional behaviors; HTML structure (every id and class referenced by JS still present).
-- **Replaced**: visual identity (palette → black/white/gray, type → single sans, removed serif/emoji/stamps/call numbers/gradients); brand name & mark (索引·⌖ → 零·○); chart palette; course/tag colors; AI assistant system-prompt brand name; nav and card-head emoji removed.
+- **Replaced**: visual identity (palette → black/white/gray, type → single sans, removed serif/emoji/stamps/call numbers/gradients); brand mark (索引·⌖ → 星屿·○, English "Zero"); chart palette; course/tag colors; AI assistant system-prompt brand name; nav and card-head emoji removed.
 - **Incompatible old data**: existing localStorage entries with course/task colors from the previous palette keep their original hex until the user re-saves them. New entries use the gray palette. No migration script needed.

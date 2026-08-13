@@ -4,6 +4,8 @@
 const Store = (() => {
   const KEY = "xingyu_platform_v1";
   const CORRUPT_KEY_PREFIX = KEY + "_corrupt_";
+  const OVERFLOW_KEY = KEY + "_overflow";   // localStorage 写满 → 切 IndexedDB 主存储的标记
+  const SECRET_KEY = KEY + "_secret";        // 敏感配置（apiKey）单独存放，overflow 时也不丢
   const SCHEMA_VERSION = 3;
 
   const defaults = () => {
@@ -20,6 +22,7 @@ const Store = (() => {
       skills: [],        // {id, name, level(1-100)}
       projects: [],      // {id, name, role, desc, link, start, end}
       literature: [],    // {id, title, authors, journal, year, doi, tags[], notes, favorite, createdAt}
+      exams: [],         // {id, subject, name, date(ISO), location, note, createdAt}
       trash: []          // {id, entityKey, item, deletedAt}
     };
     // 本地配置（local-config.js，含用户 API Key，不随仓库发布）
@@ -32,7 +35,7 @@ const Store = (() => {
   };
 
   let data = null;
-  const ARRAY_KEYS = ["courses", "tasks", "notes", "cards", "pomodoros", "grades", "skills", "projects", "literature", "trash"];
+  const ARRAY_KEYS = ["courses", "tasks", "notes", "cards", "pomodoros", "grades", "skills", "projects", "literature", "exams", "trash"];
   let lastError = "";
   let firstRun = false;
 
@@ -79,6 +82,7 @@ const Store = (() => {
     normalized.skills = normalized.skills.filter(isRecord);
     normalized.projects = normalized.projects.filter(isRecord);
     normalized.literature = normalized.literature.filter(isRecord);
+    normalized.exams = normalized.exams.filter(isRecord);
     normalized.trash = normalized.trash.filter(isRecord).filter(entry => {
       const ts = new Date(entry.deletedAt || 0).getTime();
       return ts && Date.now() - ts < 30 * 86400000;
@@ -88,13 +92,17 @@ const Store = (() => {
 
   const saveHooks = [];
   const deleteHooks = [];
+  const restoreHooks = [];
+
+  function onRestore(fn) { restoreHooks.push(fn); }
 
   function load() {
     lastError = "";
     let hadStoredData = false;
+    const overflow = storageGet(OVERFLOW_KEY) === "1";
     try {
       const raw = storageGet(KEY);
-      if (raw) {
+      if (raw && !overflow) {
         hadStoredData = true;
         const parsed = JSON.parse(raw);
         data = normalizeData(parsed);
@@ -116,16 +124,75 @@ const Store = (() => {
     }
     firstRun = !hadStoredData;
     data = defaults();
-    // 首次使用，写入示例数据
-    seedDemo();
+    // localStorage 无数据 / 已损坏 / 处于 overflow 模式：从 IndexedDB 恢复，再播种示例
+    restoreFromIdb().then(restored => {
+      if (restored) return;
+      seedDemo();
+    });
+  }
+
+  // 敏感配置（apiKey）单独持久化，避免 overflow 模式下随主数据一起丢失
+  function persistSecret() {
+    try {
+      const s = data && isRecord(data.settings) ? data.settings : {};
+      localStorage.setItem(SECRET_KEY, JSON.stringify({ apiKey: s.apiKey || "" }));
+    } catch (e) {}
+  }
+
+  function loadSecret() {
+    try {
+      const raw = localStorage.getItem(SECRET_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch (e) {}
+    return null;
   }
 
   function save() {
     if (!data) data = defaults();
     data.schemaVersion = SCHEMA_VERSION;
     const ok = storageSet(KEY, JSON.stringify(data));
+    if (ok) {
+      storageRemove(OVERFLOW_KEY);
+    } else {
+      // localStorage 写不下（大概率 QuotaExceeded，数据超 5MB）：切 IndexedDB 主存储
+      lastError = "本地空间已满，已自动切换到大容量存储，数据不会丢失";
+      try { localStorage.setItem(OVERFLOW_KEY, "1"); } catch (e) {}
+      persistSecret();
+    }
+    // 镜像到 IndexedDB（大容量兜底；剔除敏感 apiKey）
+    mirrorToIdb();
     saveHooks.forEach(fn => { try { fn(); } catch (e) { console.warn("save hook 错误", e); } });
     return ok;
+  }
+
+  // 镜像：localStorage 被清空/写满时，可从 IndexedDB 恢复
+  function mirrorToIdb() {
+    try {
+      const snapshot = JSON.parse(JSON.stringify(data));
+      if (snapshot.settings) snapshot.settings.apiKey = "";
+      Idb.set(JSON.stringify(snapshot));
+    } catch (e) { console.warn("[星屿] IndexedDB 镜像失败", e); }
+  }
+
+  // 从 IndexedDB 恢复（localStorage 无数据 / 被清空 / overflow 时调用）
+  function restoreFromIdb() {
+    return Idb.get().then(raw => {
+      if (!raw) return false;
+      const parsed = JSON.parse(raw);
+      // 恢复敏感配置：优先独立 secret 存储，其次当前 localStorage 的 settings
+      const curSettings = data && isRecord(data.settings) ? data.settings : {};
+      const secret = loadSecret();
+      const restored = normalizeData(parsed);
+      if (secret && secret.apiKey) restored.settings.apiKey = secret.apiKey;
+      else if (curSettings.apiKey) restored.settings.apiKey = curSettings.apiKey;
+      data = restored;
+      // 同步写回 localStorage（双写合一）；写回成功则退出 overflow 模式
+      const ok = storageSet(KEY, JSON.stringify(data));
+      if (ok) storageRemove(OVERFLOW_KEY);
+      else persistSecret();
+      restoreHooks.forEach(fn => { try { fn(); } catch (e) {} });
+      return true;
+    }).catch(e => { console.warn("[星屿] IndexedDB 恢复失败", e); return false; });
   }
 
   function onSave(fn) { saveHooks.push(fn); }
@@ -311,7 +378,7 @@ const Store = (() => {
     return { key: KEY, schemaVersion: SCHEMA_VERSION, lastError, healthy: !lastError, firstRun };
   }
 
-  return { load, save, onSave, onDelete, uid, getAll, add, update, remove, replaceAll,
+  return { load, save, onSave, onDelete, onRestore, uid, getAll, add, update, remove, replaceAll,
            getProfile, setProfile, getSettings, setSettings, getCourseName,
            exportAll, importAll, clearAll, getStorageInfo, getTrash, restoreTrash, emptyTrash };
 })();
