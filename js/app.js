@@ -824,6 +824,26 @@ const App = (() => {
     $("#pomoMode").textContent = "专注中 ";
     if (window.AnimeFX) AnimeFX.pomoPulse();
     pomoTimer = setInterval(tickPomo, 1000);
+    openFocusScene();
+  }
+
+  /* ============================================================
+     沉浸式专注场景（点击「开始专注」后全屏展示，可切换三套电影感场景）
+     ============================================================ */
+  function openFocusScene() {
+    const overlay = $("#focusOverlay");
+    const frame = $("#focusFrame");
+    if (!overlay || !frame) return;
+    const minutes = Math.max(1, Math.round(pomoState.total / 60) || 25);
+    overlay.style.display = "block";
+    frame.src = "focus/index.html?minutes=" + minutes;
+  }
+
+  function closeFocusScene() {
+    const overlay = $("#focusOverlay");
+    const frame = $("#focusFrame");
+    if (overlay) overlay.style.display = "none";
+    if (frame) frame.src = "about:blank";
   }
 
   function pausePomo() {
@@ -3033,6 +3053,10 @@ const App = (() => {
       });
     });
     bindEvents();
+    // 监听沉浸式专注场景的退出消息（iframe 内点击退出 / 按 Esc 时关闭）
+    window.addEventListener("message", e => {
+      if (e.data && e.data.type === "xingyu-focus-exit") closeFocusScene();
+    });
     window.Sync && Sync.init();
     applyI18n();
     // Apple 风格即时按压反馈（不使用 Material 涟漪）
