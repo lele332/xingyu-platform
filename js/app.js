@@ -1255,6 +1255,7 @@ const App = (() => {
     if (window.Knowledge) {
       Knowledge.renderBooks();
       Knowledge.renderKnowledge();
+      Knowledge.renderJournals();
     }
     renderLitList();
   }
