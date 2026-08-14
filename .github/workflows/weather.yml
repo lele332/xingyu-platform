@@ -1,0 +1,36 @@
+name: 天气数据更新
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"        # 每 30 分钟自动更新一次
+  workflow_dispatch:              # 也支持手动触发
+
+permissions:
+  contents: write
+
+jobs:
+  update-weather:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 安装 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: 抓取中国天气数据
+        run: python tools/fetch_weather.py
+
+      - name: 提交并推送天气数据
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/weather
+          if git diff --cached --quiet; then
+            echo "天气数据无变化，跳过提交"
+          else
+            git commit -m "auto: 更新天气数据"
+            git push
+          fi
