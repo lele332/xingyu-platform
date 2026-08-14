@@ -3512,6 +3512,10 @@ const App = (() => {
     console.log("星屿 · 个人学习工作台已启动");
   }
 
+  // 暴露弹窗控制，供外部模块（如文献沉浸式阅读的来源选择）复用
+  window.showModal = showModal;
+  window.closeModal = closeModal;
+
   return { init };
 })();
 

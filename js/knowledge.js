@@ -196,7 +196,58 @@
   }
 
   /* ================= 沉浸式阅读器 ================= */
-  var ZLIB_BASE = "https://z-lib.io/s/";
+  /* ================= 电子书多源搜索 ================= */
+  var SOURCES = [
+    { name: "鸠摩搜索", note: "中文电子书聚合搜 · 国内可用", url: "https://www.jiumodiary.com/?q=" },
+    { name: "微信读书", note: "正版阅读 · 国内可用", url: "https://weread.qq.com/web/search/books?keyword=" },
+    { name: "豆瓣读书", note: "书目与版本信息", url: "https://book.douban.com/subject_search?search_text=" },
+    { name: "古登堡计划", note: "全球公版原著 · 多英文", url: "https://www.gutenberg.org/ebooks/search/?query=" },
+    { name: "书格", note: "古籍 / 公版扫描", url: "https://www.shuge.org/?s=" },
+    { name: "古诗文网", note: "文言 / 诗词原文", url: "https://so.gushiwen.cn/search.aspx?value=" },
+    { name: "Z-Library", note: "免费电子书 · 国内需代理", url: "https://z-lib.io/s/" }
+  ];
+  function sourceUrl(src, q) { return src.url + encodeURIComponent(q); }
+  function openSource(src, q) { if (q) window.open(sourceUrl(src, q), "_blank", "noopener"); }
+  function renderEbookSources(containerId, picker) {
+    var box = document.getElementById(containerId);
+    if (!box) return;
+    box.innerHTML = SOURCES.map(function (src, i) {
+      return '<button class="ebook-source" data-src="' + i + '">' +
+        '<span class="ebook-source-name">' + esc(src.name) + '</span>' +
+        '<span class="ebook-source-note">' + esc(src.note) + '</span>' +
+      '</button>';
+    }).join("");
+    box.querySelectorAll("[data-src]").forEach(function (b) {
+      b.onclick = function () {
+        var src = SOURCES[parseInt(b.dataset.src, 10)];
+        var q = picker
+          ? (readerState.book && readerState.book.title || "")
+          : (document.getElementById("ebookInput") && document.getElementById("ebookInput").value || "").trim();
+        if (picker && window.closeModal) window.closeModal("readerSourceModal");
+        openSource(src, q);
+      };
+    });
+  }
+  function wireEbook() {
+    var go = document.getElementById("ebookGo");
+    var input = document.getElementById("ebookInput");
+    var doSearch = function () {
+      var q = (input && input.value || "").trim();
+      if (!q) return;
+      openSource(SOURCES[0], q);
+    };
+    if (go) go.onclick = doSearch;
+    if (input) input.addEventListener("keydown", function (e) { if (e.key === "Enter") doSearch(); });
+    renderEbookSources("ebookSources", false);
+  }
+  function openSourceModal() {
+    var m = document.getElementById("readerSourceModal");
+    if (!m) return;
+    var tt = document.getElementById("sourceBookTitle");
+    if (tt && readerState.book) tt.textContent = "「" + readerState.book.title + "」";
+    renderEbookSources("sourceList", true);
+    if (window.showModal) window.showModal("readerSourceModal");
+  }
   var readerState = { fontSize: 19, light: false, book: null };
 
   function openReader(book) {
@@ -224,11 +275,11 @@
         '<div class="reader-lead">' + esc(book.why) + '</div>' +
         '<div class="reader-body-text">' + esc(book.excerpt) + '</div>' +
         '<div class="reader-actions">' +
-          '<button class="btn btn-primary" id="readerZlibBtn">在 Z-Library 查找完整版 ↗</button>' +
+          '<button class="btn btn-primary" id="readerZlibBtn">在线阅读完整版 ↗</button>' +
           '<a class="btn btn-ghost" id="readerMoreBtn" target="_blank" rel="noopener">了解这本书 ↗</a>' +
         '</div>';
       var zb = document.getElementById("readerZlibBtn");
-      if (zb) zb.onclick = function () { window.open(ZLIB_BASE + encodeURIComponent(book.title), "_blank", "noopener"); };
+      if (zb) zb.onclick = openSourceModal;
       var mb = document.getElementById("readerMoreBtn");
       if (mb) mb.href = "https://www.douban.com/search?q=" + encodeURIComponent(book.title);
     }
@@ -291,7 +342,7 @@
     var theme = document.getElementById("readerTheme");
     if (theme) theme.onclick = function () { readerState.light = !readerState.light; try { localStorage.setItem("lit.reader.light", readerState.light ? "1" : "0"); } catch (e) {} applyReaderTheme(); };
     var zlib = document.getElementById("readerZlib");
-    if (zlib) zlib.onclick = function () { if (readerState.book) window.open(ZLIB_BASE + encodeURIComponent(readerState.book.title), "_blank", "noopener"); };
+    if (zlib) zlib.onclick = openSourceModal;
     var main = document.getElementById("readerMain");
     if (main) main.addEventListener("scroll", updateReaderProgress);
     document.addEventListener("keydown", function (e) {
@@ -412,19 +463,6 @@
     }).join("");
   }
 
-  /* ================= Z-Library 搜索 ================= */
-  function wireZlib() {
-    var go = document.getElementById("zlibGo");
-    var input = document.getElementById("zlibInput");
-    var doSearch = function () {
-      var q = (input && input.value || "").trim();
-      if (!q) return;
-      window.open(ZLIB_BASE + encodeURIComponent(q), "_blank", "noopener");
-    };
-    if (go) go.onclick = doSearch;
-    if (input) input.addEventListener("keydown", function (e) { if (e.key === "Enter") doSearch(); });
-  }
-
   window.Knowledge = {
     renderBooks: renderBooks,
     renderDaily: renderDaily,
@@ -434,5 +472,5 @@
   window.Reader = { open: openReader, close: closeReader };
 
   wireReader();
-  wireZlib();
+  wireEbook();
 })();

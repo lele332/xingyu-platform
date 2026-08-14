@@ -2268,3 +2268,18 @@ body { transition: background-color 0.4s var(--ease-out), color 0.4s var(--ease-
   .knowledge-daily-card { flex-direction: column; }
   .knowledge-daily-img { width: 100%; min-height: 150px; }
 }
+
+/* 电子书多源搜索按钮 */
+.ebook-sources { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 8px; }
+.ebook-source {
+  display: inline-flex; flex-direction: column; align-items: flex-start; gap: 2px;
+  background: var(--fill); border: 1px solid var(--rule); color: var(--ink);
+  padding: 8px 13px; border-radius: 8px; cursor: pointer; text-align: left;
+  transition: all var(--dur-fast) var(--ease-out); font-family: var(--font);
+}
+.ebook-source:hover { border-color: var(--ink-3); background: var(--paper-hover); transform: translateY(-1px); }
+.ebook-source-name { font-size: 13px; font-weight: 700; color: var(--ink); }
+.ebook-source-note { font-size: 10.5px; color: var(--ink-3); }
+.ebook-sources-stack { flex-direction: column; }
+.ebook-sources-stack .ebook-source { width: 100%; }
+#readerSourceModal { z-index: 400; }

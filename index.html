@@ -33,7 +33,7 @@
   d.dataset.lang = localStorage.getItem("zero_lang") || "zh";
   d.dataset.bg = localStorage.getItem("zero_bg") || "none";
 })();</script>
-<link rel="stylesheet" href="css/style.css?v=20260814.25">
+<link rel="stylesheet" href="css/style.css?v=20260814.27">
 <link rel="stylesheet" href="css/apple.css?v=20260811.3">
 </head>
 <body>
@@ -619,12 +619,13 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <!-- 专业书籍 -->
         <div class="tab-panel" id="tab-lit-books">
           <div class="zlib-search">
-            <div class="zlib-search-title">全球电子图书馆 · Z-Library</div>
+            <div class="zlib-search-title">电子书 · 多源搜索</div>
             <div class="zlib-search-row">
-              <input type="text" id="zlibInput" placeholder="输入书名 / 作者，在全网电子书库中查找…" aria-label="Z-Library 搜索">
-              <button class="btn btn-primary" id="zlibGo">搜索</button>
+              <input type="text" id="ebookInput" placeholder="输入书名 / 作者，多源搜索电子书…" aria-label="多源搜索">
+              <button class="btn btn-primary" id="ebookGo">搜索</button>
             </div>
-            <p class="hint">在 Z-Library 中查找免费电子书，点击书名即可进入沉浸式阅读或下载完整版。</p>
+            <div class="ebook-sources" id="ebookSources"></div>
+            <p class="hint">默认用鸠魔搜索（国内可访问），也可点击下方源快捷切换；Z-Library 国内通常需代理。</p>
           </div>
           <p class="hint" style="margin-bottom:16px">为你精选的实用书单，按领域分类，点击任意一本书进入沉浸式阅读。</p>
 
@@ -722,6 +723,19 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
   </nav>
 </div>
 
+<!-- ================= 电子书源选择 ================= -->
+<div class="modal-mask" id="readerSourceModal" aria-hidden="true">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>在哪个源查找完整版·<span id="sourceBookTitle" style="color:var(--ink-2);font-weight:600"></span></h3>
+      <button class="modal-close" data-close="readerSourceModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="ebook-sources ebook-sources-stack" id="sourceList"></div>
+    </div>
+  </div>
+</div>
+
 <!-- ================= 沉浸式阅读器 ================= -->
 <div class="reader-mask" id="readerMask" aria-hidden="true">
   <div class="reader" id="reader">
@@ -732,7 +746,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <button class="reader-tool" id="readerTheme" title="切换阅读主题">☀</button>
         <button class="reader-tool" id="readerFontDown" title="减小字号">A−</button>
         <button class="reader-tool" id="readerFontUp" title="增大字号">A+</button>
-        <button class="reader-tool" id="readerZlib" title="在 Z-Library 查找">Z</button>
+        <button class="reader-tool" id="readerZlib" title="电子书多源搜索">搜</button>
       </div>
     </div>
     <div class="reader-body">
@@ -1168,8 +1182,8 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 <script defer src="js/icons.js?v=20260811.3.1"></script>
 <script defer src="js/motivation.js?v=20260814.6"></script>
   <script defer src="js/splashsound.js?v=20260814.2"></script>
-        <script defer src="js/knowledge.js?v=20260814.25"></script>
-<script defer src="js/app.js?v=20260814.25"></script>
+        <script defer src="js/knowledge.js?v=20260814.27"></script>
+<script defer src="js/app.js?v=20260814.27"></script>
 <script>
   if ("serviceWorker" in navigator && location.protocol !== "file:") {
     window.addEventListener("load", function () {
