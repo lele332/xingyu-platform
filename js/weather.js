@@ -1,6 +1,6 @@
 /* ============================================================
    weather.js — 实时天气（数据源：Open-Meteo，免费 · 无需 key · 支持 CORS）
-   提供：当前城市实时天气 + 未来 7 天预报 + 城市搜索/切换 + 10 分钟本地缓存
+   提供：我的城市（固定位置）+ 实时天气 + 7 天预报 + 今日提醒（穿衣/带伞/防晒…）
    ============================================================ */
 (function () {
   "use strict";
@@ -53,16 +53,52 @@
     99: { e: "⛈️", zh: "雷雨伴冰雹", ht: "雷雨伴冰雹", en: "Thunderstorm hail" }
   };
 
-  function wmo(code, lang) {
+  function wmo(code, lg) {
     var w = WMO[code] || { e: "🌡️", zh: "未知", ht: "未知", en: "Unknown" };
-    return w.e + " " + (lang === "en" ? w.en : lang === "zh-Hant" ? w.ht : w.zh);
+    return w.e + " " + (lg === "en" ? w.en : lg === "zh-Hant" ? w.ht : w.zh);
   }
 
   /* ---------- UI 文案（三语） ---------- */
   var TXT = {
-    zh:       { feels: "体感", humidity: "湿度", wind: "风速", pressure: "气压", sunrise: "日出", sunset: "日落", updated: "更新于", forecast: "未来 7 天", today: "今天", searchPh: "搜索城市（如：上海）", search: "搜索", refresh: "刷新", loading: "正在获取实时天气…", loadFail: "天气数据获取失败，请检查网络后重试", notFound: "未找到该城市，试试拼音或大城市名", now: "现在" },
-    "zh-Hant": { feels: "體感", humidity: "濕度", wind: "風速", pressure: "氣壓", sunrise: "日出", sunset: "日落", updated: "更新於", forecast: "未來 7 天", today: "今天", searchPh: "搜索城市（如：上海）", search: "搜索", refresh: "刷新", loading: "正在獲取實時天氣…", loadFail: "天氣數據獲取失敗，請檢查網絡後重試", notFound: "未找到該城市，試試拼音或大城市名", now: "現在" },
-    en:       { feels: "Feels like", humidity: "Humidity", wind: "Wind", pressure: "Pressure", sunrise: "Sunrise", sunset: "Sunset", updated: "Updated", forecast: "Next 7 days", today: "Today", searchPh: "Search city", search: "Search", refresh: "Refresh", loading: "Fetching live weather…", loadFail: "Failed to load weather. Check your network.", notFound: "City not found. Try Pinyin or a major city.", now: "Now" }
+    zh: {
+      feels: "体感", humidity: "湿度", wind: "风速", pressure: "气压", sunrise: "日出", sunset: "日落",
+      updated: "更新于", forecast: "未来 7 天", today: "今天", searchPh: "搜索城市（如：上海）", search: "搜索",
+      refresh: "刷新", loading: "正在获取实时天气…", loadFail: "天气数据获取失败，请检查网络后重试",
+      notFound: "未找到该城市，试试拼音或大城市名", now: "现在",
+      myCity: "我的城市", setMyCity: "设为我的城市", myCitySet: "已设为我的城市",
+      high: "最高", low: "最低", precip: "降水概率", uv: "紫外线", tipsTitle: "今日提醒",
+      wearHeavy: "体感寒冷，建议穿羽绒服/厚大衣", wearCoat: "体感偏凉，建议穿外套/夹克",
+      wearLight: "体感舒适，薄外套或长袖即可", wearHot: "天气炎热，注意防暑、穿轻薄透气衣物",
+      umbrella: "降水概率较高，出门记得带伞", sunscreen: "紫外线较强，外出注意防晒",
+      windy: "风力较大，外出注意防风", tempDiff: "早晚温差大，注意及时增减衣物",
+      humid: "空气湿度高，注意防潮除湿"
+    },
+    "zh-Hant": {
+      feels: "體感", humidity: "濕度", wind: "風速", pressure: "氣壓", sunrise: "日出", sunset: "日落",
+      updated: "更新於", forecast: "未來 7 天", today: "今天", searchPh: "搜索城市（如：上海）", search: "搜索",
+      refresh: "刷新", loading: "正在獲取實時天氣…", loadFail: "天氣數據獲取失敗，請檢查網絡後重試",
+      notFound: "未找到該城市，試試拼音或大城市名", now: "現在",
+      myCity: "我的城市", setMyCity: "設為我的城市", myCitySet: "已設為我的城市",
+      high: "最高", low: "最低", precip: "降水機率", uv: "紫外線", tipsTitle: "今日提醒",
+      wearHeavy: "體感寒冷，建議穿羽絨服/厚大衣", wearCoat: "體感偏涼，建議穿外套/夾克",
+      wearLight: "體感舒適，薄外套或長袖即可", wearHot: "天氣炎熱，注意防暑、穿輕薄透氣衣物",
+      umbrella: "降水機率較高，出門記得帶傘", sunscreen: "紫外線較強，外出注意防曬",
+      windy: "風力較大，外出注意防風", tempDiff: "早晚溫差大，注意及時增減衣物",
+      humid: "空氣濕度高，注意防潮除濕"
+    },
+    en: {
+      feels: "Feels like", humidity: "Humidity", wind: "Wind", pressure: "Pressure", sunrise: "Sunrise", sunset: "Sunset",
+      updated: "Updated", forecast: "Next 7 days", today: "Today", searchPh: "Search city", search: "Search",
+      refresh: "Refresh", loading: "Fetching live weather…", loadFail: "Failed to load weather. Check your network.",
+      notFound: "City not found. Try Pinyin or a major city.", now: "Now",
+      myCity: "My City", setMyCity: "Set as my city", myCitySet: "Set as your city",
+      high: "High", low: "Low", precip: "Precip.", uv: "UV", tipsTitle: "Today's tips",
+      wearHeavy: "Feels cold — wear a down jacket or heavy coat", wearCoat: "A bit cool — wear a jacket",
+      wearLight: "Comfortable — a light jacket or long sleeves", wearHot: "Hot — stay cool, wear light clothes",
+      umbrella: "High chance of rain — bring an umbrella", sunscreen: "Strong UV — use sunscreen outdoors",
+      windy: "Windy — be careful outdoors", tempDiff: "Big day/night temp gap — layer up",
+      humid: "High humidity — mind dampness"
+    }
   };
   function lang() { return document.documentElement.dataset.lang || "zh"; }
   function txt(k) { return (TXT[lang()] || TXT.zh)[k] || k; }
@@ -74,7 +110,21 @@
   }
 
   var currentCity = null;
+  var MY_KEY = "zero_wx_my_city";
   var REQUEST_TIMEOUT_MS = 12000;
+
+  /* ---------- 我的城市（固定位置，长期不变） ---------- */
+  function getMyCity() {
+    try {
+      var c = JSON.parse(localStorage.getItem(MY_KEY) || "null");
+      if (c && c.name && typeof c.lat === "number") return c;
+    } catch (e) {}
+    return null;
+  }
+  function setMyCity(c) {
+    if (!c) return;
+    localStorage.setItem(MY_KEY, JSON.stringify({ name: c.name, lat: c.lat, lon: c.lon }));
+  }
 
   /* ---------- 数据获取 ---------- */
   async function fetchJson(url) {
@@ -91,8 +141,8 @@
 
   async function fetchWeather(lat, lon) {
     var url = "https://api.open-meteo.com/v1/forecast?latitude=" + lat + "&longitude=" + lon +
-      "&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m,pressure_msl" +
-      "&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset" +
+      "&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m,pressure_msl,uv_index" +
+      "&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_probability_max,uv_index_max" +
       "&timezone=Asia%2FShanghai&forecast_days=7";
     return await fetchJson(url);
   }
@@ -106,6 +156,28 @@
     return { name: r.name, lat: r.latitude, lon: r.longitude };
   }
 
+  /* ---------- 今日提醒（智能建议） ---------- */
+  function tips(data) {
+    var cur = data.current, daily = data.daily;
+    var feels = cur.apparent_temperature;
+    var wet = daily.precipitation_probability_max ? daily.precipitation_probability_max[0] : 0;
+    var uv = daily.uv_index_max ? daily.uv_index_max[0] : 0;
+    var wind = cur.wind_speed_10m;
+    var tmax = daily.temperature_2m_max[0], tmin = daily.temperature_2m_min[0];
+    var hum = cur.relative_humidity_2m;
+    var out = [];
+    if (feels <= 5) out.push(["🧥", txt("wearHeavy")]);
+    else if (feels <= 12) out.push(["🧥", txt("wearCoat")]);
+    else if (feels <= 19) out.push(["👕", txt("wearLight")]);
+    else if (feels >= 30) out.push(["🫠", txt("wearHot")]);
+    if (wet >= 60 || (cur.precipitation && cur.precipitation > 0.1)) out.push(["☔", txt("umbrella")]);
+    if (uv >= 6) out.push(["🧴", txt("sunscreen")]);
+    if (wind >= 30) out.push(["💨", txt("windy")]);
+    if (typeof tmax === "number" && typeof tmin === "number" && tmax - tmin >= 10) out.push(["🌡️", txt("tempDiff")]);
+    if (hum >= 85) out.push(["💧", txt("humid")]);
+    return out.slice(0, 5);
+  }
+
   /* ---------- 渲染 ---------- */
   function fmtNow() {
     var locale = lang() === "en" ? "en-US" : lang() === "zh-Hant" ? "zh-TW" : "zh-CN";
@@ -115,18 +187,30 @@
   function render(data, city) {
     var box = document.getElementById("weatherContent");
     if (!box) return;
-    var cur = data.current;
-    var daily = data.daily;
+    var cur = data.current, daily = data.daily;
     var week = lang() === "en" ? ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] : ["日", "一", "二", "三", "四", "五", "六"];
     var sunrise = daily.sunrise[0].slice(11, 16);
     var sunset = daily.sunset[0].slice(11, 16);
+    var my = getMyCity();
+    var isMy = my && my.name === city.name;
+    var wet = daily.precipitation_probability_max ? daily.precipitation_probability_max[0] : null;
+    var uv = daily.uv_index_max ? daily.uv_index_max[0] : null;
+    var tmax = Math.round(daily.temperature_2m_max[0]);
+    var tmin = Math.round(daily.temperature_2m_min[0]);
+    var t = tips(data);
+
     box.innerHTML =
       '<div class="weather-hero card">' +
         '<div class="w-left">' +
-          '<div class="w-city">' + esc(city.name) + '</div>' +
+          '<div class="w-cityline">' +
+            '<span class="w-city">' + esc(city.name) + '</span>' +
+            (isMy ? '<span class="w-mybadge">' + txt("myCity") + '</span>' : '') +
+            '<button class="w-myset' + (isMy ? " on" : "") + '" id="btnSetMyCity">' + (isMy ? "⭐ " + txt("myCity") : "📍 " + txt("setMyCity")) + '</button>' +
+          '</div>' +
           '<div class="w-time">' + txt("now") + ' · ' + fmtNow() + '</div>' +
           '<div class="w-temp">' + Math.round(cur.temperature_2m) + '<span>°C</span></div>' +
           '<div class="w-desc">' + wmo(cur.weather_code, lang()) + '</div>' +
+          '<div class="w-range">' + txt("high") + ' ' + tmax + '° / ' + txt("low") + ' ' + tmin + '°</div>' +
         '</div>' +
         '<div class="w-right">' +
           '<div class="w-stat"><b>' + Math.round(cur.apparent_temperature) + '°</b><span>' + txt("feels") + '</span></div>' +
@@ -135,9 +219,18 @@
           '<div class="w-stat"><b>' + Math.round(cur.pressure_msl) + '</b><span>' + txt("pressure") + ' hPa</span></div>' +
         '</div>' +
       '</div>' +
+      ((t && t.length) ?
+        '<div class="card w-tips">' +
+          '<div class="card-head"><h3>' + txt("tipsTitle") + '</h3></div>' +
+          '<div class="w-tiplist">' +
+          t.map(function (x) { return '<div class="w-tip"><span class="w-tip-ic">' + x[0] + '</span><span>' + esc(x[1]) + '</span></div>'; }).join("") +
+          '</div>' +
+        '</div>' : '') +
       '<div class="w-suntimes">' +
         '<span>☀ ' + txt("sunrise") + ' <b>' + sunrise + '</b></span>' +
         '<span>🌇 ' + txt("sunset") + ' <b>' + sunset + '</b></span>' +
+        (wet != null ? '<span class="w-ext">🌧 ' + txt("precip") + ' <b>' + wet + '%</b></span>' : '') +
+        (uv != null ? '<span class="w-ext">☀️ ' + txt("uv") + ' <b>' + uv + '</b></span>' : '') +
       '</div>' +
       '<div class="card w-forecast">' +
         '<div class="card-head"><h3>' + txt("forecast") + '</h3><span class="w-updated">' + txt("updated") + ' ' + fmtNow() + '</span></div>' +
@@ -145,26 +238,48 @@
         daily.time.map(function (d, i) {
           var date = new Date(d + "T00:00:00");
           var label = i === 0 ? txt("today") : (lang() === "en" ? week[date.getDay()] : "周" + week[date.getDay()]);
+          var dw = daily.precipitation_probability_max ? daily.precipitation_probability_max[i] : null;
           return '<div class="w-day' + (i === 0 ? " cur" : "") + '">' +
             '<div class="w-day-name">' + label + '</div>' +
             '<div class="w-day-icon">' + wmo(daily.weather_code[i], lang()).split(" ")[0] + '</div>' +
             '<div class="w-day-temp"><b>' + Math.round(daily.temperature_2m_max[i]) + '°</b><span>' + Math.round(daily.temperature_2m_min[i]) + '°</span></div>' +
+            (dw != null ? '<div class="w-day-rain">☂ ' + dw + '%</div>' : '') +
           '</div>';
         }).join("") +
         '</div>' +
       '</div>';
+
+    var setBtn = document.getElementById("btnSetMyCity");
+    if (setBtn) setBtn.onclick = function () {
+      setMyCity(city);
+      var flag = document.createElement("span");
+      flag.className = "w-mybadge";
+      flag.textContent = txt("myCity");
+      var line = document.querySelector(".w-cityline");
+      if (line && !line.querySelector(".w-mybadge")) {
+        line.insertBefore(flag, line.querySelector(".w-myset"));
+      }
+      setBtn.classList.add("on");
+      setBtn.innerHTML = "⭐ " + txt("myCity");
+      renderCities(city.name);
+    };
   }
 
   function renderCities(activeName) {
     var box = document.getElementById("weatherCities");
     if (!box) return;
     activeName = activeName || (currentCity ? currentCity.name : "");
-    box.innerHTML = CITIES.map(function (c) {
-      return '<button class="chip' + (c.name === activeName ? " active" : "") + '" data-city="' + esc(c.name) + '">' + esc(c.name) + '</button>';
+    var my = getMyCity();
+    var list = CITIES.slice();
+    if (my && !list.some(function (c) { return c.name === my.name; })) list.unshift(my);
+    box.innerHTML = list.map(function (c) {
+      var isMy = my && c.name === my.name;
+      return '<button class="chip' + (c.name === activeName ? " active" : "") + '" data-city="' + esc(c.name) + '">' +
+        (isMy ? "⭐ " : "") + esc(c.name) + '</button>';
     }).join("");
     box.querySelectorAll("[data-city]").forEach(function (b) {
       b.onclick = function () {
-        var c = CITIES.find(function (x) { return x.name === b.dataset.city; });
+        var c = list.find(function (x) { return x.name === b.dataset.city; });
         if (c) load(c, true);
       };
     });
@@ -258,9 +373,10 @@
     if (inp) inp.onkeydown = function (e) { if (e.key === "Enter") doSearch(); };
     var ref = document.getElementById("btnWeatherRefresh");
     if (ref) ref.onclick = function () { if (currentCity) load(currentCity, true); };
-    // 默认城市：上次选择 or 北京
+    // 默认城市：我的城市 → 上次选择 → 北京
+    var myCity = getMyCity();
     var saved = localStorage.getItem("zero_wx_city");
-    var city = CITIES.find(function (c) { return c.name === saved; }) || CITIES[0];
+    var city = myCity || (CITIES.find(function (c) { return c.name === saved; }) || CITIES[0]);
     load(city);
   }
 
@@ -269,7 +385,6 @@
     load: load,
     refresh: function () { if (currentCity) load(currentCity, true); },
     reRender: function () {
-      // 用缓存数据按当前语言重渲染（语言切换用，不重新请求）
       if (!currentCity) return;
       var cached = localStorage.getItem("zero_wx_" + currentCity.name);
       if (!cached) return;

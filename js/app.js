@@ -2345,16 +2345,60 @@ const App = (() => {
      ============================================================ */
   const DEFAULT_SITE = window.XINGYU_SITE_URL || "https://lele332.github.io/xingyu-platform/";
 
-  // 使用固定的永久二维码（指向 GitHub Pages 永久链接），不再动态生成
+  // 二维码：永久访问（GitHub Pages）+ 本机局域网（同一 WiFi 完整功能）
   function renderQR() {
     const box = $("#qrCodeBox");
     box.innerHTML = "";
+    const grid = document.createElement("div");
+    grid.className = "qr-grid";
+
+    // 区块一：永久访问
+    const perm = document.createElement("div");
+    perm.className = "qr-col";
+    const pLabel = document.createElement("div");
+    pLabel.className = "qr-label";
+    pLabel.textContent = "永久访问 · 任何网络";
     const img = document.createElement("img");
     img.src = "xingyu-qrcode.png";
     img.alt = "星屿 · 永久二维码";
     img.className = "qr-static";
-    img.onerror = () => { box.innerHTML = `<span class="hint">二维码图片加载失败，请检查 xingyu-qrcode.png 是否存在。</span>`; };
-    box.appendChild(img);
+    img.onerror = () => { img.replaceWith(makeQrHint("永久二维码加载失败")); };
+    perm.appendChild(pLabel);
+    perm.appendChild(img);
+    grid.appendChild(perm);
+
+    // 区块二：本机局域网（完整功能）
+    const lan = document.createElement("div");
+    lan.className = "qr-col";
+    const lLabel = document.createElement("div");
+    lLabel.className = "qr-label";
+    lLabel.textContent = "本机局域网 · 同一 WiFi · 完整功能";
+    const host = location.hostname;
+    const isLocal = host === "127.0.0.1" || host === "localhost";
+    const isPages = /github\.io$/.test(host);
+    if (!isLocal && !isPages && host) {
+      const lanUrl = location.protocol + "//" + host + ":" + (location.port || "8620");
+      const limg = document.createElement("img");
+      limg.className = "qr-static";
+      limg.alt = "本机局域网二维码";
+      limg.src = location.protocol + "//" + host + ":8621/qrcode?text=" + encodeURIComponent(lanUrl);
+      limg.onerror = () => { limg.replaceWith(makeQrHint("本机局域网访问需在电脑上打开平台后使用")); };
+      lan.appendChild(lLabel);
+      lan.appendChild(limg);
+    } else {
+      lan.appendChild(lLabel);
+      lan.appendChild(makeQrHint("在同一 WiFi 下的电脑上打开平台，本区域会显示本机二维码"));
+    }
+    grid.appendChild(lan);
+
+    box.appendChild(grid);
+  }
+
+  function makeQrHint(text) {
+    const h = document.createElement("div");
+    h.className = "qr-lan-hint";
+    h.textContent = text;
+    return h;
   }
 
   function openQR() {

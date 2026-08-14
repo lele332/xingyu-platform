@@ -93,7 +93,7 @@
   </div>
 </div>
 <script>
-const API="http://127.0.0.1:8621";
+const API=location.protocol+"//"+location.hostname+":8621";
 let backendOk=false, file=null, lang="";
 const $=id=>document.getElementById(id);
 function fmtSize(b){ if(b>1048576)return (b/1048576).toFixed(1)+" MB"; if(b>1024)return (b/1024).toFixed(1)+" KB"; return b+" B"; }
