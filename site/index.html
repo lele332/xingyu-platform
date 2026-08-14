@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>星屿 · Xingyu — 你的个人学习工作台</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23fff'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#000000">
+<meta name="description" content="星屿：专注番茄钟 · 沉浸式开屏 · AI 工具箱 · 励志语录实时字幕 · 考试倒计时 · 实时天气 · 热点新闻。一个安静、专注、高级的个人学习与工作台。">
+<style>
+  :root{
+    --paper:#000;--paper2:#0b0b0b;--paper3:#131313;--card:#101010;
+    --ink:#fff;--ink2:#b3b3b3;--ink3:#8a8a8a;--line:#262626;
+    --serif:Georgia,"Source Han Serif SC","Songti SC","STSong",serif;
+    --mono:"SF Mono","Consolas","Menlo","Courier New",monospace;
+    --r:4px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:var(--serif);line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  ::selection{background:#fff;color:#000}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+
+  /* nav */
+  nav{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(0,0,0,.78);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .logo{font-family:var(--mono);font-size:15px;letter-spacing:.35em;display:flex;align-items:center;gap:10px}
+  .logo .dot{width:8px;height:8px;background:#fff;border-radius:50%;animation:pulse 3s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+  .nav-links{display:flex;gap:30px;font-size:13px;color:var(--ink2);font-family:var(--mono);letter-spacing:.1em}
+  .nav-links a:hover{color:#fff}
+  .cta{font-family:var(--mono);font-size:12px;letter-spacing:.15em;padding:9px 18px;border:1px solid #fff;border-radius:var(--r);transition:.25s}
+  .cta:hover{background:#fff;color:#000}
+
+  /* hero */
+  header{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden}
+  .grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:56px 56px;mask-image:radial-gradient(ellipse at 50% 40%,#000 0%,transparent 72%);-webkit-mask-image:radial-gradient(ellipse at 50% 40%,#000 0%,transparent 72%)}
+  .hero-inner{position:relative;z-index:2;padding:120px 0 60px}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.4em;color:var(--ink3);margin-bottom:26px}
+  h1{font-size:clamp(52px,9vw,120px);font-weight:700;line-height:.98;letter-spacing:-.02em}
+  h1 .thin{font-weight:400;color:var(--ink2)}
+  .sub{max-width:620px;margin:30px 0 44px;font-size:clamp(16px,2.2vw,20px);color:var(--ink2)}
+  .sub b{color:#fff;font-weight:600}
+  .hero-cta{display:flex;gap:16px;flex-wrap:wrap}
+  .btn{border-radius:var(--r);padding:16px 34px;font-family:var(--mono);font-size:13px;letter-spacing:.2em;transition:.25s}
+  .btn-solid{background:#fff;color:#000}
+  .btn-solid:hover{background:#e0e0e0}
+  .btn-outline{border:1px solid #fff;color:#fff}
+  .btn-outline:hover{background:rgba(255,255,255,.08)}
+  .meta{display:flex;gap:34px;margin-top:64px;font-family:var(--mono);font-size:12px;color:var(--ink3)}
+  .meta span{display:flex;align-items:center;gap:8px}
+  .meta i{color:var(--ink2)}
+
+  /* sections */
+  section{padding:110px 0}
+  .sec-tag{font-family:var(--mono);font-size:11px;letter-spacing:.4em;color:var(--ink3);margin-bottom:18px}
+  h2{font-size:clamp(30px,4.5vw,52px);letter-spacing:-.01em;margin-bottom:20px}
+  .sec-sub{max-width:640px;color:var(--ink2);font-size:16px;margin-bottom:56px}
+
+  /* features */
+  .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .feat{border:1px solid var(--line);border-radius:var(--r);padding:30px 26px;background:var(--card);transition:.3s;position:relative;overflow:hidden}
+  .feat:hover{border-color:#fff;transform:translateY(-4px)}
+  .feat .num{font-family:var(--mono);font-size:11px;color:var(--ink3);letter-spacing:.2em}
+  .feat .ic{font-size:34px;margin:16px 0 14px;display:block}
+  .feat h3{font-size:20px;margin-bottom:10px}
+  .feat p{font-size:14px;color:var(--ink2)}
+
+  /* stats */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:44px 0}
+  .stat{text-align:center}
+  .stat b{font-size:clamp(30px,4vw,46px);font-family:var(--mono);font-weight:700;display:block}
+  .stat span{font-size:13px;color:var(--ink3);font-family:var(--mono);letter-spacing:.15em}
+
+  /* philosophy */
+  .phil{display:grid;grid-template-columns:1.1fr 1fr;gap:60px;align-items:center}
+  .phil blockquote{border-left:2px solid #fff;padding-left:26px;font-size:clamp(20px,3vw,30px);line-height:1.5}
+  .phil blockquote span{color:var(--ink2);font-weight:400}
+  .phil p{padding-left:26px;margin-top:20px;color:var(--ink2);font-size:15px}
+
+  /* access */
+  .access{display:grid;grid-template-columns:1.2fr 1fr;gap:60px;align-items:center}
+  .qr-box{justify-self:center;border:1px solid var(--line);padding:26px;background:var(--card)}
+  .qr-box img{width:200px;height:200px;display:block}
+  .qr-cap{font-family:var(--mono);font-size:11px;color:var(--ink3);text-align:center;letter-spacing:.2em;margin-top:14px}
+  .url-box{display:flex;align-items:center;gap:12px;border:1px dashed var(--line);padding:14px 18px;margin-top:28px;font-family:var(--mono);font-size:14px;color:var(--ink2)}
+  .copy{cursor:pointer;border:1px solid var(--line);padding:6px 14px;font-size:12px;border-radius:var(--r);transition:.2s}
+  .copy:hover{border-color:#fff;color:#fff}
+
+  footer{border-top:1px solid var(--line);padding:44px 0;color:var(--ink3);font-size:13px}
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px}
+  footer .mono{font-family:var(--mono);font-size:12px;letter-spacing:.2em}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  @media(max-width:860px){
+    .feat-grid{grid-template-columns:repeat(2,1fr)}
+    .stats{grid-template-columns:repeat(2,1fr);gap:30px}
+    .phil,.access{grid-template-columns:1fr;gap:40px}
+    .nav-links{display:none}
+    .meta{flex-wrap:wrap;gap:16px}
+  }
+  @media(max-width:520px){.feat-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="logo"><span class="dot"></span>星屿</div>
+    <div class="nav-links">
+      <a href="#features">功能</a>
+      <a href="#philosophy">理念</a>
+      <a href="#access">访问</a>
+    </div>
+    <a class="cta" href="https://lele332.github.io/xingyu-platform/" target="_blank">进入应用</a>
+  </div>
+</nav>
+
+<header>
+  <div class="grid-bg"></div>
+  <div class="wrap hero-inner">
+    <div class="kicker">PERSONAL STUDY &amp; WORK SPACE</div>
+    <h1>星屿<br><span class="thin">让专注，回归安静。</span></h1>
+    <p class="sub">一个<b>黑白极简</b>的个人学习与工作台——<b>沉浸式开屏</b>、<b>专注番茄钟</b>、<b>AI 工具箱</b>、<b>励志语录实时字幕</b>、<b>考试倒计时</b>、<b>实时天气</b>。把注意力留给真正重要的事。</p>
+    <div class="hero-cta">
+      <a class="btn btn-solid" href="https://lele332.github.io/xingyu-platform/" target="_blank">开始使用</a>
+      <a class="btn btn-outline" href="#features">探索功能</a>
+    </div>
+    <div class="meta">
+      <span><i>◈</i> 双端可用 · 桌面 / 手机</span>
+      <span><i>◈</i> 数据本地存储</span>
+      <span><i>◈</i> 更新 v20260814</span>
+    </div>
+  </div>
+</header>
+
+<section id="features">
+  <div class="wrap">
+    <div class="sec-tag reveal">— 核心功能</div>
+    <h2 class="reveal">一个安静的地方，装下所有重要的事</h2>
+    <p class="sec-sub reveal">星屿把学习与生活的关键场景收进一个极简界面，去装饰、去噪音，只留下专注本身。</p>
+    <div class="feat-grid">
+      <div class="feat reveal"><span class="num">/ 01</span><span class="ic">🍅</span><h3>专注番茄钟</h3><p>沉浸式专注场景，圆环随时间流动，清晰看见每一分钟的流逝。</p></div>
+      <div class="feat reveal"><span class="num">/ 02</span><span class="ic">🎬</span><h3>沉浸式开屏</h3><p>双击启动即自动全屏、自动出声的黑白动画开屏，营造进入状态的第一刻。</p></div>
+      <div class="feat reveal"><span class="num">/ 03</span><span class="ic">🧰</span><h3>AI 工具箱</h3><p>PDF 解密、硬件信息、大文件清理、音视频转写——本机离线运行，数据不上传。</p></div>
+      <div class="feat reveal"><span class="num">/ 04</span><span class="ic">💬</span><h3>励志语录实时字幕</h3><p>播放励志音频，字幕随声音实时浮现，与你同行。</p></div>
+      <div class="feat reveal"><span class="num">/ 05</span><span class="ic">🗓️</span><h3>考试日程倒计时</h3><p>日历式规划每一项重要事件，倒计时提醒，为重要日子做准备。</p></div>
+      <div class="feat reveal"><span class="num">/ 06</span><span class="ic">🌤️</span><h3>实时天气</h3><p>接入中国天气网：实时温度、空气质量、气象预警、16 项生活指数、7 天预报。</p></div>
+      <div class="feat reveal"><span class="num">/ 07</span><span class="ic">📰</span><h3>热点新闻</h3><p>多源聚合的国内外要闻与科技 AI 资讯，不错过重要动态。</p></div>
+      <div class="feat reveal"><span class="num">/ 08</span><span class="ic">🎨</span><h3>灵感画廊</h3><p>收纳你的灵感与视觉收藏，构建属于自己的资料库。</p></div>
+      <div class="feat reveal"><span class="num">/ 09</span><span class="ic">🦾</span><h3>AI 助手</h3><p>随时在线的智能伙伴，回答问题、整理思路、陪你思考。</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap stats reveal">
+    <div class="stat"><b>42</b><span>城市天气</span></div>
+    <div class="stat"><b>16</b><span>生活指数</span></div>
+    <div class="stat"><b>11+</b><span>新闻源</span></div>
+    <div class="stat"><b>∞</b><span>安静时光</span></div>
+  </div>
+</section>
+
+<section id="philosophy">
+  <div class="wrap phil">
+    <div class="reveal">
+      <div class="sec-tag">— 设计理念</div>
+      <blockquote>
+        真正的效率，<br>来自少一点噪音，<br>多一点专注。<span>—— 星屿</span>
+      </blockquote>
+    </div>
+    <div class="reveal">
+      <p>星屿不做"更多功能"的堆砌，而是把每一个细节收敛成安静。黑白纸感、衬线排版、等宽刻度——让界面退到幕后，让事情走到台前。数据保存在自己手里，工具运行在本地，专注只属于你。</p>
+    </div>
+  </div>
+</section>
+
+<section id="access">
+  <div class="wrap access">
+    <div class="reveal">
+      <div class="sec-tag">— 访问星屿</div>
+      <h2>现在开始</h2>
+      <p class="sec-sub" style="margin-bottom:10px">桌面端双击「星屿」图标启动；手机端扫码或打开链接，即可在任何网络访问你的个人工作台。</p>
+      <div class="url-box">
+        <span>https://lele332.github.io/xingyu-platform/</span>
+        <span class="copy" onclick="copyUrl(this)">复制</span>
+      </div>
+    </div>
+    <div class="qr-box reveal">
+      <img src="qr.png" alt="星屿二维码">
+      <div class="qr-cap">手机扫码 · 立即访问</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="logo" style="font-size:13px"><span class="dot"></span>星屿</div>
+    <div class="mono">XINGYU · PERSONAL SPACE · 2026</div>
+  </div>
+</footer>
+
+<script>
+  // reveal on scroll
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el)});
+  function copyUrl(btn){navigator.clipboard.writeText('https://lele332.github.io/xingyu-platform/').then(function(){btn.textContent='已复制';setTimeout(function(){btn.textContent='复制'},1600)})}
+</script>
+</body>
+</html>
