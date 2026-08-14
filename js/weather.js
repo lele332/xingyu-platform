@@ -28,6 +28,16 @@
     catch (e) { return "http://127.0.0.1:8621"; }
   })();
 
+  /* GitHub Pages 直连地址：手机/远程原生后端不在线时，直接从 GitHub 拉取定时发布的天气 JSON */
+  function ghBase() {
+    try {
+      if (/github\.io/i.test(location.hostname)) {
+        return location.origin + location.pathname.replace(/[^/]*$/, "");
+      }
+    } catch (e) {}
+    return "https://lele332.github.io/xingyu-platform/";
+  }
+
   var currentCity = null;
   var MY_KEY = "zero_wx_my_city";
   var CACHE_TTL = 8 * 60 * 1000;
@@ -153,6 +163,14 @@
   async function searchChina(name) {
     var d = await fetchJson(API + "/weather/search?name=" + encodeURIComponent(name));
     return d && d.results ? d.results : [];
+  }
+
+  /* 直连 GitHub：读取 Actions 定时发布的 {cityid}.json */
+  async function fetchChinaGit(city) {
+    var u = ghBase() + "data/weather/" + encodeURIComponent(city.id) + ".json";
+    var d = await fetchJson(u);
+    if (!d || !d.realtime) throw new Error("bad git weather");
+    return d;
   }
 
   /* ---------- Open-Meteo 兜底 ---------- */
@@ -412,14 +430,17 @@
     } catch (e) {}
 
     try {
-      var data;
+      var data, gitOk = false;
       try {
         data = await fetchChina(city);
       } catch (chinaErr) {
-        if (city.lat != null && city.lon != null) {
+        if (city.id) {
+          try { data = await fetchChinaGit(city); gitOk = true; } catch (e) {}
+        }
+        if (!gitOk && city.lat != null && city.lon != null) {
           data = await fetchMeteo(city.lat, city.lon);
           data.source = "meteo";
-        } else {
+        } else if (!gitOk) {
           throw chinaErr;
         }
       }
