@@ -27,6 +27,24 @@ body,
   background-size: 160px 160px;
 }
 
+/* 沉浸场景视频：Ken Burns 缓慢推镜（transform 合成层动画，保证画面持续有运动感） */
+@keyframes focusKenBurns {
+  0% {
+    transform: scale(1.02) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: scale(1.13) translate3d(-1.6%, 0.6%, 0);
+  }
+  100% {
+    transform: scale(1.02) translate3d(0, 0, 0);
+  }
+}
+
+.scene-kenburns {
+  animation: focusKenBurns 42s ease-in-out infinite;
+  will-change: transform;
+}
+
 /* 液态玻璃（Asme 场景） */
 .liquid-glass {
   background: rgba(255, 255, 255, 0.01);
@@ -83,4 +101,89 @@ body,
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+
+/* ===== ?????????? ===== */
+@keyframes dialHaloSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes dialPulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.04);
+  }
+}
+.dial-halo {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: dialHaloSpin 28s linear infinite;
+  will-change: transform;
+}
+.dial-pulse {
+  animation: dialPulse 4s ease-in-out infinite;
+  will-change: opacity, transform;
+}
+
+/* ===== 可拖动实时字幕条（沉浸式专注，深色场景适配） ===== */
+.focus-subtitle {
+  position: fixed;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  max-width: min(84vw, 640px);
+  padding: 12px 20px;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 34px -12px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: center;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.focus-subtitle:hover {
+  border-color: rgba(255, 255, 255, 0.24);
+}
+.focus-subtitle.focus-sub-dragging {
+  cursor: grabbing;
+  transition: none;
+  box-shadow: 0 16px 44px -12px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+.focus-sub-live {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff4d4d;
+  box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.45);
+  animation: focusSubPulse 1.5s ease-out infinite;
+}
+@keyframes focusSubPulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.45); }
+  70% { box-shadow: 0 0 0 8px rgba(255, 77, 77, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0); }
+}
+.focus-sub-handle {
+  flex: none;
+  font-size: 13px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.45);
+  margin-left: 2px;
 }

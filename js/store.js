@@ -10,12 +10,13 @@ const Store = (() => {
     const d = {
       schemaVersion: SCHEMA_VERSION,
       profile: { name: "同学", avatar: "", school: "", major: "", grade: "", slogan: "", goal: "", email: "" },
-      settings: { baseUrl: "https://api.deepseek.com/v1", apiKey: "", model: "deepseek-chat", nickname: "" },
+      settings: { baseUrl: "https://api.deepseek.com/v1", apiKey: "", model: "deepseek-chat", nickname: "", splashSound: "intro-ambient", splashSoundEnabled: true },
       courses: [],       // {id, name, teacher, day(1-7), start, end, location, color}
       tasks: [],         // {id, title, courseId, due(ISO), priority(high/mid/low), status(todo/doing/done), estimate}
       notes: [],         // {id, title, subject, tags[], content, createdAt, updatedAt}
       cards: [],         // {id, question, answer, subject, createdAt}
       pomodoros: [],     // {id, startAt, minutes, type(focus/break)}
+      exams: [],         // {id, title, type(exam/homework/event/important), date(YYYY-MM-DD), time, note, status(upcoming/done), createdAt}
       grades: [],        // {id, subject, name, score, credit, semester}
       skills: [],        // {id, name, level(1-100)}
       projects: [],      // {id, name, role, desc, link, start, end}
@@ -32,7 +33,7 @@ const Store = (() => {
   };
 
   let data = null;
-  const ARRAY_KEYS = ["courses", "tasks", "notes", "cards", "pomodoros", "grades", "skills", "projects", "literature", "trash"];
+  const ARRAY_KEYS = ["courses", "tasks", "notes", "cards", "pomodoros", "exams", "grades", "skills", "projects", "literature", "trash"];
   let lastError = "";
   let firstRun = false;
 

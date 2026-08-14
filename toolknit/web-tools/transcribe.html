@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>星屿 · 音视频提取文字</title>
+<style>
+  :root{--bg:#0b0e1a;--panel:rgba(255,255,255,.045);--line:rgba(255,255,255,.09);--txt:#e8ecf5;--dim:#8b93a7;--acc:#4cc9ff;--acc2:#9b6bff}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Segoe UI","Microsoft YaHei",system-ui,sans-serif;background:radial-gradient(1100px 550px at 85% -10%,rgba(155,107,255,.14),transparent 60%),radial-gradient(850px 480px at -10% 110%,rgba(76,201,255,.12),transparent 60%),var(--bg);color:var(--txt);min-height:100vh;padding:26px clamp(14px,4vw,44px) 60px}
+  .wrap{max-width:820px;margin:0 auto}
+  header{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+  .back{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--txt);cursor:pointer;font-size:13px;transition:.2s}
+  .back:hover{border-color:var(--acc)}
+  h1{font-size:22px;font-weight:700}
+  .note{width:100%;color:var(--dim);font-size:12.5px;background:rgba(255,193,7,.08);border:1px solid rgba(255,193,7,.25);border-radius:10px;padding:9px 12px;margin-top:4px}
+  .note.ok{border-color:rgba(46,204,113,.4);background:rgba(46,204,113,.07)}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px}
+  .dz{border:1.5px dashed rgba(255,255,255,.16);border-radius:14px;padding:30px 18px;text-align:center;cursor:pointer;transition:.2s}
+  .dz:hover,.dz.over{border-color:var(--acc);background:rgba(76,201,255,.05)}
+  .dz .ic{font-size:32px;margin-bottom:8px}
+  .dz p{color:var(--dim);font-size:14px}
+  .dz p b{color:var(--txt)}
+  .fsel{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--line);font-size:13px}
+  .fsel .nm{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .fsel .sz{color:var(--dim);font-size:12px}
+  .cfg{display:flex;align-items:flex-end;gap:22px;flex-wrap:wrap;margin-top:16px}
+  .seg{display:flex;flex-direction:column;gap:6px}
+  .seg label{font-size:12px;color:var(--dim)}
+  .opts{display:flex;gap:6px}
+  .opt{padding:7px 13px;border-radius:10px;border:1px solid var(--line);background:#0f1322;color:var(--dim);cursor:pointer;font-size:13px;transition:.2s}
+  .opt:hover{color:var(--txt)}
+  .opt.active{color:#fff;background:linear-gradient(135deg,rgba(76,201,255,.22),rgba(155,107,255,.22));border-color:rgba(76,201,255,.5)}
+  .run{margin-left:auto;padding:11px 30px;border-radius:12px;border:none;cursor:pointer;font-size:15px;font-weight:600;color:#fff;background:linear-gradient(135deg,#2fb6ff,#8a5cf6);transition:.2s}
+  .run:hover{filter:brightness(1.1)}
+  .run:disabled{opacity:.4;cursor:not-allowed;filter:none}
+  .status{font-size:12.5px;color:var(--dim);margin-top:14px;min-height:18px;line-height:1.6}
+  .err{margin-top:14px;padding:12px 14px;border-radius:12px;background:rgba(255,107,107,.08);border:1px solid rgba(255,107,107,.3);color:#ff8f8f;font-size:13px;display:none}
+  .result{margin-top:18px;display:none}
+  .result.show{display:block}
+  .bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+  .bar .meta{font-size:12.5px;color:var(--dim)}
+  .bar .meta b{color:var(--acc)}
+  .dl{display:flex;gap:8px;margin-left:auto}
+  .dl a{padding:7px 15px;border-radius:9px;text-decoration:none;font-weight:600;font-size:12px;background:linear-gradient(135deg,#2fb6ff,#8a5cf6);color:#fff}
+  .segs{display:flex;flex-direction:column;gap:8px;max-height:430px;overflow:auto}
+  .segrow{display:flex;gap:14px;padding:11px 14px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid var(--line);font-size:13px}
+  .segrow .t{flex-shrink:0;color:var(--acc);font-size:12px;padding-top:1px;font-variant-numeric:tabular-nums;min-width:118px}
+  .segrow .tx{flex:1;line-height:1.6}
+  .spinner{display:inline-block;width:16px;height:16px;border:3px solid rgba(255,255,255,.15);border-top-color:var(--acc);border-radius:50%;animation:sp 1s linear infinite;vertical-align:-3px;margin-right:8px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  @media(max-width:560px){.cfg{flex-direction:column;align-items:flex-start}.run{margin-left:0}.dl{margin-left:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <button class="back" id="backBtn">← 返回工具箱</button>
+    <h1>音视频提取文字</h1>
+    <div class="note" id="note">正在连接本机原生服务…</div>
+  </header>
+  <div class="panel">
+    <div class="dz" id="dz">
+      <div class="ic">🎙️</div>
+      <p>拖拽音频 / 视频到此处，或 <b>点击选择文件</b></p>
+      <p style="margin-top:6px;font-size:12px;color:rgba(139,147,167,.7)">支持 MP3 / WAV / M4A / MP4 / MKV 等，本机离线识别中英文</p>
+    </div>
+    <input id="fileInput" type="file" accept="audio/*,video/*" hidden>
+    <div class="cfg">
+      <div class="seg">
+        <label>识别语言</label>
+        <div class="opts" id="langOpts">
+          <button class="opt active" data-lang="">自动识别</button>
+          <button class="opt" data-lang="zh">中文</button>
+          <button class="opt" data-lang="en">English</button>
+        </div>
+      </div>
+      <button class="run" id="runBtn" disabled>开始识别</button>
+    </div>
+    <div class="status" id="status">上传音频或视频后点击「开始识别」。首次使用需加载本地识别模型（约数秒）。</div>
+    <div class="err" id="err"></div>
+    <div class="result" id="result">
+      <div class="bar">
+        <span class="meta" id="meta"></span>
+        <div class="dl">
+          <a id="dlTxt" download="transcript.txt" href="#">TXT</a>
+          <a id="dlSrt" download="transcript.srt" href="#">SRT</a>
+          <a id="dlJson" download="transcript.json" href="#">JSON</a>
+        </div>
+      </div>
+      <div class="segs" id="segs"></div>
+    </div>
+  </div>
+</div>
+<script>
+const API="http://127.0.0.1:8621";
+let backendOk=false, file=null, lang="";
+const $=id=>document.getElementById(id);
+function fmtSize(b){ if(b>1048576)return (b/1048576).toFixed(1)+" MB"; if(b>1024)return (b/1024).toFixed(1)+" KB"; return b+" B"; }
+function esc(s){ return String(s==null?"":s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
+function setNote(ok,txt){ const n=$("note"); n.textContent=txt; n.classList.toggle("ok",ok); }
+function showErr(m){ const e=$("err"); e.textContent=m; e.style.display="block"; }
+function upRun(){ $("runBtn").disabled = !backendOk || !file; }
+function fmtT(t){ const s=Math.floor(t); const mm=String(Math.floor(s/60)).padStart(2,"0"); const ss=String(s%60).padStart(2,"0"); return mm+":"+ss; }
+$("dz").addEventListener("click",()=>$("fileInput").click());
+$("fileInput").addEventListener("change",e=>{ if(e.target.files.length){ file=e.target.files[0]; renderFile(); } e.target.value=""; });
+["dragover","dragenter"].forEach(ev=>$("dz").addEventListener(ev,e=>{e.preventDefault();$("dz").classList.add("over");}));
+["dragleave","drop"].forEach(ev=>$("dz").addEventListener(ev,e=>{e.preventDefault();$("dz").classList.remove("over");}));
+$("dz").addEventListener("drop",e=>{ if(e.dataTransfer.files.length){ file=e.dataTransfer.files[0]; renderFile(); } });
+document.querySelectorAll("#langOpts .opt").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("#langOpts .opt").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active"); lang=b.dataset.lang||"";
+}));
+function renderFile(){
+  const sel=document.getElementById("fsel"); if(sel) sel.remove();
+  const d=document.createElement("div"); d.className="fsel"; d.id="fsel";
+  const nm=document.createElement("span"); nm.className="nm"; nm.textContent=file.name;
+  const sz=document.createElement("span"); sz.className="sz"; sz.textContent=fmtSize(file.size);
+  d.appendChild(nm); d.appendChild(sz); $("dz").appendChild(d);
+  $("err").style.display="none"; $("result").classList.remove("show"); upRun();
+}
+function extOf(n){ const i=n.lastIndexOf("."); return i>0?n.slice(i+1).toLowerCase():"bin"; }
+$("runBtn").addEventListener("click",async()=>{
+  const btn=$("runBtn"); btn.disabled=true; $("err").style.display="none"; $("result").classList.remove("show");
+  $("status").innerHTML='<span class="spinner"></span>正在转写「'+esc(file.name)+'」，本机离线识别中，请稍候…';
+  try{
+    const bytes=new Uint8Array(await file.arrayBuffer());
+    const r=await fetch(API+"/transcribe/start?language="+encodeURIComponent(lang)+"&ext="+encodeURIComponent(extOf(file.name)), {
+      method:"POST", body:bytes, headers:{"Content-Type":"application/octet-stream"}
+    });
+    if(!r.ok){ let m="启动失败"; try{ m=(await r.json()).error||m; }catch(e){} showErr(m); return; }
+    const j=await r.json();
+    for(;;){
+      const s=await (await fetch(API+"/transcribe/status?job="+j.job)).json();
+      if(s.state==="done"){ render(s); break; }
+      if(s.state==="error"){ showErr("转写失败："+s.error); break; }
+      await new Promise(res=>setTimeout(res,700));
+    }
+  }catch(e){ showErr("连接原生服务失败："+(e.message||e)); }
+  finally{ btn.disabled=false; upRun(); }
+});
+function render(s){
+  $("status").textContent="识别完成，共 "+s.segments.length+" 段。";
+  const langName={zh:"中文",en:"English"}[s.language]||(s.language||"自动");
+  $("meta").innerHTML="语言 <b>"+esc(String(langName))+"</b> · 共 <b>"+s.segments.length+"</b> 段";
+  const segs=$("segs"); segs.innerHTML="";
+  s.segments.forEach(x=>{
+    const d=document.createElement("div"); d.className="segrow";
+    const t=document.createElement("span"); t.className="t"; t.textContent=fmtT(x.start)+" – "+fmtT(x.end);
+    const tx=document.createElement("span"); tx.className="tx"; tx.textContent=x.text;
+    d.appendChild(t); d.appendChild(tx); segs.appendChild(d);
+  });
+  const base=(file?file.name.replace(/\.[^.]+$/,""):"transcript");
+  const dl=(id,name,data,type)=>{ const a=$(id); a.download=base+name; a.href=URL.createObjectURL(new Blob([data],{type:type})); a.setAttribute("target","_blank"); };
+  dl("dlTxt","_转录.txt",s.txt,"text/plain;charset=utf-8");
+  dl("dlSrt","_字幕.srt",s.srt,"application/x-subrip");
+  dl("dlJson","_转录.json",JSON.stringify(s.segments,null,2),"application/json");
+  $("result").classList.add("show");
+}
+$("backBtn").addEventListener("click",()=>history.back());
+(async()=>{
+  try{ const r=await fetch(API+"/health"); backendOk=(await r.json()).status==="ok"; }
+  catch(e){ backendOk=false; }
+  if(backendOk){ setNote(true,"已连接本机原生服务，可离线识别音频/视频。"); }
+  else { setNote(false,"本机原生服务未启动，请重启「星屿」桌面图标。"); }
+  upRun();
+})();
+</script>
+</body>
+</html>

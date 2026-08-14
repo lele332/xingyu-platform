@@ -33,7 +33,7 @@
   d.dataset.lang = localStorage.getItem("zero_lang") || "zh";
   d.dataset.bg = localStorage.getItem("zero_bg") || "none";
 })();</script>
-<link rel="stylesheet" href="css/style.css?v=20260811.3">
+<link rel="stylesheet" href="css/style.css?v=20260814.4.1.1">
 <link rel="stylesheet" href="css/apple.css?v=20260811.3">
 </head>
 <body>
@@ -46,6 +46,7 @@
   </div>
   <video id="splashVideo" src="assets/intro-720.mp4" muted playsinline preload="metadata"></video>
   <button class="splash-skip" id="splashSkip" type="button">跳过</button>
+  <button class="splash-sound" id="splashSound" type="button">🔇 开启声音</button>
 </div>
 <style>
 .splash{position:fixed;inset:0;z-index:99999;background:#000;display:flex;align-items:center;justify-content:center;transition:opacity .6s ease}
@@ -56,6 +57,9 @@
 .splash.fade-out{opacity:0;pointer-events:none}
 .splash-skip{position:absolute;z-index:3;right:18px;bottom:16px;padding:6px 16px;border:1px solid rgba(255,255,255,.35);border-radius:99px;background:rgba(0,0,0,.25);color:rgba(255,255,255,.75);font:inherit;font-size:13px;letter-spacing:.08em;cursor:pointer;user-select:none;transition:opacity .3s}
 .splash-skip:hover{opacity:.7}
+.splash-sound{position:absolute;z-index:3;left:18px;bottom:16px;padding:6px 16px;border:1px solid rgba(255,255,255,.35);border-radius:99px;background:rgba(0,0,0,.25);color:rgba(255,255,255,.75);font:inherit;font-size:13px;letter-spacing:.08em;cursor:pointer;user-select:none;transition:opacity .3s}
+.splash-sound:hover{opacity:.7}
+.splash-sound.on{color:#fff;border-color:rgba(255,255,255,.7)}
 @keyframes splashPulse{0%{transform:scale(.6);opacity:.25}50%{opacity:1}100%{transform:scale(1.2);opacity:.25}}
 @keyframes splashWord{from{opacity:0;transform:translateY(8px)}to{opacity:.85;transform:none}}
 @media (max-width:600px){.splash-ring{font-size:58px}.splash-word{font-size:17px;letter-spacing:.3em}}
@@ -64,11 +68,63 @@
 <script>
 (function(){
   window.__splashActive = true;
-  var splash=document.getElementById('splash'),video=document.getElementById('splashVideo'),inner=document.getElementById('splashInner'),sk=document.getElementById('splashSkip'),gone=false,playing=false;
-  // 屏幕自适应：手机/小屏不播视频，用轻量徽记动画，避免解码卡顿
+  var splash=document.getElementById('splash'),video=document.getElementById('splashVideo'),inner=document.getElementById('splashInner'),sk=document.getElementById('splashSkip'),sb=document.getElementById('splashSound'),gone=false,playing=false,soundOn=false,sfx=null,actx=null;
+  function dismiss(){if(sfx){try{sfx.pause();}catch(e){}}if(gone)return;gone=true;window.__splashActive=false;try{window.dispatchEvent(new Event('splash-done'));}catch(e){}splash.classList.add('fade-out');setTimeout(function(){splash.remove()},650);}
+  function setSoundBtn(){ if(sb){ sb.textContent = soundOn ? '\u{1F50A} \u58F0\u97F3\u5DF2\u5F00' : '\u{1F507} \u5F00\u542F\u58F0\u97F3'; if(soundOn) sb.classList.add('on'); else sb.classList.remove('on'); } }
+  function playChime(){
+    try{
+      actx = actx || new (window.AudioContext||window.webkitAudioContext)();
+      if(actx.state==='suspended') actx.resume();
+      var notes=[523.25,659.25,783.99];
+      var t=actx.currentTime;
+      for(var k=0;k<notes.length;k++){
+        var o=actx.createOscillator(),g=actx.createGain();
+        o.type='sine'; o.frequency.value=notes[k];
+        g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(0.18,t+0.02); g.gain.exponentialRampToValueAtTime(0.001,t+1.1);
+        o.connect(g); g.connect(actx.destination); o.start(t+k*0.13); o.stop(t+1.2+k*0.13);
+      }
+    }catch(e){}
+  }
+  function enableSound(){
+    if(soundOn) return;
+    if((window.SplashSound&&SplashSound.isEnabled)?!SplashSound.isEnabled():false) return;
+    soundOn=true;
+    setSoundBtn();
+    var srcP=(window.SplashSound&&SplashSound.getCurrentSource)?SplashSound.getCurrentSource():Promise.resolve({url:'assets/motivational/quote-perseverance.mp3',name:'默认'});
+    srcP.then(function(src){
+      if(!src){ if(video){ video.muted=true; video.defaultMuted=true; } soundOn=false; setSoundBtn(); return; } // 无声音：整体静默
+      playChime();
+      if(!sfx){ sfx=new Audio(); }
+      sfx.preload='auto';
+      sfx.src=src.url;
+      var pr=sfx.play();
+      if(pr&&pr.catch) pr.catch(function(){ soundOn=false; setSoundBtn(); }); // 自动播放被拦截时回退为手动开启
+      if(video){ video.muted=false; video.defaultMuted=false; var vp=video.play(); if(vp&&vp.catch) vp.catch(function(){}); }
+    });
+  }
+  function applySoundBtn(){
+    if(!sb) return;
+    var en=(window.SplashSound&&SplashSound.isEnabled)?SplashSound.isEnabled():true;
+    if(!en){ sb.style.display='none'; return; }
+    var sel=(window.SplashSound&&SplashSound.getSelection)?SplashSound.getSelection():'default';
+    if(sel==='none'){ sb.style.display='none'; } else { sb.style.display=''; }
+  }
+  applySoundBtn();
+  function bootSound(){ applySoundBtn(); try{ enableSound(); }catch(e){} }
+  if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',bootSound); } else { bootSound(); }
+  if(window.addEventListener) window.addEventListener('load',bootSound);
+  function disableSound(){
+    if(!soundOn) return; soundOn=false;
+    if(sfx){ sfx.pause(); }
+    if(video){ video.muted=true; video.defaultMuted=true; }
+    setSoundBtn();
+  }
+  function toggleSound(){ soundOn ? disableSound() : enableSound(); }
+  sk.addEventListener('click',function(e){ e.stopPropagation(); dismiss(); });
+  if(sb){ sb.addEventListener('click',function(e){ e.stopPropagation(); toggleSound(); }); setSoundBtn(); }
+  splash.addEventListener('click',function(){ if(!soundOn) enableSound(); });
+  splash.addEventListener('touchend',function(){ if(!soundOn) enableSound(); },{passive:true});
   var isMobile = window.matchMedia && window.matchMedia("(max-width: 900px)").matches;
-  function dismiss(){if(gone)return;gone=true;window.__splashActive=false;try{window.dispatchEvent(new Event('splash-done'));}catch(e){}splash.classList.add('fade-out');setTimeout(function(){splash.remove()},650);}
-  sk.addEventListener('click',dismiss);
   if(isMobile || !video || !video.canPlayType || video.error){ if(video) video.remove(); setTimeout(dismiss,1800); return; }
   video.muted=true; video.defaultMuted=true;
   video.addEventListener('playing',function(){ playing=true; if(inner) inner.style.display='none'; });
@@ -76,7 +132,6 @@
   video.addEventListener('error',function(){ setTimeout(dismiss, playing?0:1400); });
   var p=video.play();
   if(p && p.catch) p.catch(function(){ setTimeout(dismiss,2200); });
-  // 兜底：真在播最多 12s 放行；播不出则徽记动画后放行
   setTimeout(dismiss,12000);
 })();
 </script>
@@ -124,6 +179,9 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <button class="nav-item" data-view="weather">
           <span class="nav-label" data-i18n="nav.weather">天气</span>
         </button>
+        <button class="nav-item" data-view="exams">
+          <span class="nav-label">考试日程</span>
+        </button>
       </div>
       <div class="nav-group">
         <div class="nav-group-label" data-i18n="nav.group.study">学习资料</div>
@@ -145,6 +203,27 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <button class="nav-item" data-view="ai">
           <span class="nav-label" data-i18n="nav.ai">AI 助手</span>
           <span class="nav-badge" id="aiBadge">AI</span>
+        </button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">灵感画廊</div>
+        <button class="nav-item" data-view="prisma">
+          <span class="nav-label" data-i18n="nav.prisma">棱镜艺境</span>
+        </button>
+        <button class="nav-item" data-view="nexus">
+          <span class="nav-label" data-i18n="nav.nexus">云门智界</span>
+        </button>
+        <button class="nav-item" data-view="foldcraft">
+          <span class="nav-label" data-i18n="nav.foldcraft">折艺工坊</span>
+        </button>
+        <button class="nav-item" data-view="securify">
+          <span class="nav-label" data-i18n="nav.securify">守御界</span>
+        </button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">实用工具</div>
+        <button class="nav-item" data-view="toolknit">
+          <span class="nav-label">工具箱</span>
         </button>
       </div>
     </nav>
@@ -209,7 +288,10 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <div class="card quote-card" id="dailyQuote">
           <div class="quote-head">
             <h3 data-i18n="quote.title">每日一言</h3>
-            <button class="text-btn" id="btnNextQuote" data-i18n="quote.next">换一句</button>
+            <div class="quote-actions">
+              <button class="text-btn" id="btnNextQuote" data-i18n="quote.next">换一句</button>
+              <button class="text-btn" id="btnQuoteMotivation" type="button">▶ 播放励志</button>
+            </div>
           </div>
           <div class="quote-body">
             <span class="quote-mark">“</span>
@@ -296,13 +378,13 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
               <button class="btn btn-ghost" id="btnSmartSort" data-i18n="btn.aiSort">AI 智能排序</button>
             </div>
             <div class="filter-row">
-              <select id="taskFilterStatus" class="select">
+              <select id="taskFilterStatus" class="select" aria-label="???????">
                 <option value="all">全部状态</option>
                 <option value="todo">待完成</option>
                 <option value="doing">进行中</option>
                 <option value="done">已完成</option>
               </select>
-              <select id="taskFilterPriority" class="select">
+              <select id="taskFilterPriority" class="select" aria-label="????????">
                 <option value="all">全部优先级</option>
                 <option value="high">高</option>
                 <option value="mid">中</option>
@@ -362,7 +444,19 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
             </div>
             <div class="pomo-today">
               今日已完成 <b id="pomoTodayCount">0</b> 个番茄 · 累计 <b id="pomoTodayMin">0</b> 分钟
+<div class="pomo-motivation">
+              <div class="pomo-motivation-head">
+                <span class="pomo-motivation-badge">励志语录</span>
+                <span class="pomo-motivation-title" id="motivationTitle">点击播放即可配音励志语录</span>
+              </div>
+              <div class="pomo-motivation-controls">
+                <button class="btn btn-ghost btn-sm" id="btnMotivationPrev" type="button">上一句</button>
+                <button class="btn btn-primary btn-sm" id="btnMotivationToggle" type="button">播放</button>
+                <button class="btn btn-ghost btn-sm" id="btnMotivationNext" type="button">下一句</button>
+              </div>
             </div>
+            <div class="pomo-subtitle" id="pomoSubtitle"></div>
+          </div>
           </div>
 
           <div class="focus-side">
@@ -443,7 +537,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
               </div>
             </div>
             <div class="chat-input-row">
-              <input type="text" id="chatInput" placeholder="输入问题，或用 /学习规划 /智能排序 /知识卡片 /笔记整理 使用快捷技能...">
+              <input type="text" id="chatInput" aria-label="AI ?????" placeholder="输入问题，或用 /学习规划 /智能排序 /知识卡片 /笔记整理 使用快捷技能...">
               <button class="btn btn-primary" id="btnChatSend">发送</button>
               <button class="btn btn-danger" id="btnChatStop" style="display:none">停止</button>
             </div>
@@ -461,7 +555,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <section class="view" id="view-weather">
         <div class="view-toolbar">
           <div class="weather-search">
-            <input type="text" id="weatherCityInput" placeholder="" data-i18n-ph="weather.searchPh">
+            <input type="text" id="weatherCityInput" aria-label="????" placeholder="" data-i18n-ph="weather.searchPh">
             <button class="btn btn-primary" id="btnWeatherSearch" data-i18n="weather.search">搜索</button>
             <button class="btn btn-ghost" id="btnWeatherRefresh" data-i18n="weather.refresh">刷新</button>
           </div>
@@ -513,9 +607,9 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <!-- 我的文献库 -->
         <div class="tab-panel active" id="tab-lit-lib">
           <div class="filter-row">
-            <input type="text" id="litSearch" placeholder="搜索文献标题/作者/期刊..." style="flex:1;max-width:400px;background:var(--fill);border:none;border-radius:10px;padding:9px 14px;color:var(--text);font-size:13px;outline:none;font-family:var(--font)">
-            <select class="select" id="litFilterTag"><option value="">全部标签</option></select>
-            <select class="select" id="litFilterFav"><option value="">全部</option><option value="fav">收藏</option></select>
+            <input type="text" id="litSearch" aria-label="????" placeholder="搜索文献标题/作者/期刊..." style="flex:1;max-width:400px;background:var(--fill);border:none;border-radius:10px;padding:9px 14px;color:var(--text);font-size:13px;outline:none;font-family:var(--font)">
+            <select class="select" id="litFilterTag" aria-label="???????"><option value="">全部标签</option></select>
+            <select class="select" id="litFilterFav" aria-label="????"><option value="">全部</option><option value="fav">收藏</option></select>
           </div>
           <div id="litList"></div>
         </div>
@@ -525,6 +619,72 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <p class="hint" style="margin-bottom:16px">以下是你所在领域的主流期刊，点击直接跳转官网查看最新目录与文献：</p>
           <div class="journal-grid" id="journalGrid"></div>
         </div>
+      </section>
+
+      <!-- 考试日程 -->
+      <section class="view" id="view-exams">
+        <div class="view-toolbar">
+          <div class="toolbar-tabs">
+            <button class="tab-btn active" data-tab="exams-list">日程列表</button>
+            <button class="tab-btn" data-tab="exams-calendar">日历</button>
+          </div>
+          <div class="toolbar-actions">
+            <button class="btn btn-primary" id="btnAddExam">+ 添加考试/日程</button>
+          </div>
+        </div>
+
+        <!-- 日程列表 -->
+        <div class="tab-panel active" id="tab-exams-list">
+          <div class="exam-summary" id="examSummary"></div>
+          <div class="filter-row">
+            <select class="select" id="examFilterType">
+              <option value="">全部类型</option>
+              <option value="exam">考试</option>
+              <option value="homework">作业截止</option>
+              <option value="event">重要日程</option>
+              <option value="important">重要日子</option>
+            </select>
+            <select class="select" id="examFilterStatus">
+              <option value="">全部状态</option>
+              <option value="upcoming">未开始</option>
+              <option value="done">已完成</option>
+            </select>
+          </div>
+          <div id="examList"></div>
+        </div>
+
+        <!-- 日历 -->
+        <div class="tab-panel" id="tab-exams-calendar">
+          <div class="exam-calendar-head">
+            <button class="btn btn-ghost btn-sm" id="btnCalPrev" aria-label="上个月">‹ 上月</button>
+            <span class="exam-cal-label" id="examCalLabel"></span>
+            <button class="btn btn-ghost btn-sm" id="btnCalNext" aria-label="下个月">下月 ›</button>
+            <button class="btn btn-ghost btn-sm" id="btnCalToday" aria-label="回到今天">回到今天</button>
+          </div>
+          <div class="exam-cal-summary" id="examCalSummary"></div>
+          <div class="exam-calendar" id="examCalendar"></div>
+          <div id="examDayEvents"></div>
+        </div>
+      </section>
+      <!-- 灵感画廊：棱镜艺境 -->
+      <section class="view" id="view-prisma">
+        <iframe src="prisma/index.html" title="棱镜艺境" loading="lazy" allow="autoplay; fullscreen"></iframe>
+      </section>
+      <!-- 灵感画廊：云门智界 -->
+      <section class="view" id="view-nexus">
+        <iframe src="nexus/index.html" title="云门智界" loading="lazy" allow="autoplay; fullscreen"></iframe>
+      </section>
+      <!-- 灵感画廊：折艺工坊 -->
+      <section class="view" id="view-foldcraft">
+        <iframe src="foldcraft/index.html" title="折艺工坊" loading="lazy" allow="autoplay; fullscreen"></iframe>
+      </section>
+      <!-- 灵感画廊：守御界 -->
+      <section class="view" id="view-securify">
+        <iframe src="securify/index.html" title="守御界" loading="lazy" allow="autoplay; fullscreen"></iframe>
+      </section>
+      <!-- 工具箱（ToolKnit 桌面版网页端） -->
+      <section class="view" id="view-toolknit">
+        <iframe src="toolknit/index.html?v=20260814.13" title="工具箱" loading="lazy" allow="autoplay; fullscreen"></iframe>
       </section>
 
     </div>
@@ -661,6 +821,26 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </label>
       </div>
       <div class="setting-group">
+        <h4>开屏声音</h4>
+        <label class="lock-toggle">
+          <input type="checkbox" id="splashSoundEnabled">
+          <span>启用开屏声音</span>
+        </label>
+        <div id="splashSoundConfig">
+        <label class="field">
+          <span>开屏欢迎声音</span>
+          <select id="setSplashSound"></select>
+        </label>
+        <div class="setting-actions">
+          <button class="btn btn-ghost" id="btnUploadSplashSound" type="button">上传 MP3/MP4</button>
+          <button class="btn btn-ghost" id="btnPreviewSplashSound" type="button">试听</button>
+          <input type="file" id="splashSoundFile" accept=".mp3,.mp4,audio/*,video/*" multiple style="display:none">
+        </div>
+        <div id="splashCustomList"></div>
+        <p class="hint">选择内置励志语录，或上传你自己的 MP3/MP4 作为开屏欢迎声音。上传的文件会保存在本机浏览器，选择会一直记住。</p>
+        </div>
+      </div>
+      <div class="setting-group">
         <h4 data-i18n="settings.lock">访问密码</h4>
         <label class="lock-toggle">
           <input type="checkbox" id="lockEnabled">
@@ -704,7 +884,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <div class="setting-actions">
           <button class="btn btn-ghost" id="btnExportData" data-i18n="btn.export">导出数据(JSON)</button>
           <button class="btn btn-ghost" id="btnImportData" data-i18n="btn.importData">导入数据</button>
-          <input type="file" id="importFile" accept="application/json" style="display:none">
+          <input type="file" id="importFile" aria-label="??????" accept="application/json" style="display:none">
           <button class="btn btn-ghost" id="btnOpenTrash">回收站 <span id="trashCount">0</span></button>
           <button class="btn btn-danger" id="btnClearData" data-i18n="btn.clear">清空全部数据</button>
         </div>
@@ -929,21 +1109,23 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
   </div>
 </div>
 
-<script src="assets/js/gsap.min.js?v=20260811.3"></script>
-<script src="assets/js/ScrollTrigger.min.js?v=20260811.3"></script>
-<script src="assets/js/anime.min.js?v=20260812.1"></script>
-<script src="js/animefx.js?v=20260812.1"></script>
-<script src="js/anim.js?v=20260811.3"></script>
-<script src="js/local-config.js?v=20260811.3"></script>
-<script src="js/quotes.js?v=20260811.3"></script>
-<script src="js/lunar.js?v=20260811.3"></script>
-<script src="js/store.js?v=20260811.3"></script>
-<script src="js/sync.js?v=20260811.3"></script>
-<script src="js/charts.js?v=20260811.3"></script>
-<script src="js/ai.js?v=20260811.3"></script>
-<script src="js/weather.js?v=20260811.3"></script>
-<script src="js/icons.js?v=20260811.3"></script>
-<script src="js/app.js?v=20260811.3"></script>
+<script defer src="assets/js/gsap.min.js?v=20260811.3"></script>
+<script defer src="assets/js/ScrollTrigger.min.js?v=20260811.3"></script>
+<script defer src="assets/js/anime.min.js?v=20260812.1"></script>
+<script defer src="js/animefx.js?v=20260812.1"></script>
+<script defer src="js/anim.js?v=20260811.3"></script>
+<script defer src="js/local-config.js?v=20260811.3"></script>
+<script defer src="js/quotes.js?v=20260811.3"></script>
+<script defer src="js/lunar.js?v=20260811.3"></script>
+<script defer src="js/store.js?v=20260814.2"></script>
+<script defer src="js/sync.js?v=20260811.3"></script>
+<script defer src="js/charts.js?v=20260811.3"></script>
+<script defer src="js/ai.js?v=20260811.3"></script>
+<script defer src="js/weather.js?v=20260811.3"></script>
+<script defer src="js/icons.js?v=20260811.3.1"></script>
+<script defer src="js/motivation.js?v=20260814.6"></script>
+  <script defer src="js/splashsound.js?v=20260814.2"></script>
+        <script defer src="js/app.js?v=20260814.3"></script>
 <script>
   if ("serviceWorker" in navigator && location.protocol !== "file:") {
     window.addEventListener("load", function () {

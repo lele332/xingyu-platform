@@ -18,3 +18,12 @@ server.py
 xingyu-app.pyw
 xingyu.ico
 assets/intro-720.mp4
+
+# 本地运行 / 浏览器配置 / 数据 / 大文件（不随仓库发布到 GitHub Pages）
+edge-profile/
+native/
+work/
+bak-pomo/
+data/backups/
+focus-scenes/node_modules/
+focus/node_modules/

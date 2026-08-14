@@ -168,8 +168,8 @@ const App = (() => {
       }
       else window.Anim && Anim.viewEnter(v);
     }
-    const titles = { dashboard: t("title.dashboard"), courses: t("title.courses"), notes: t("title.notes"), focus: t("title.focus"), growth: t("title.growth"), lit: t("title.lit"), news: t("title.news"), ai: t("title.ai"), weather: t("title.weather") };
-    const subs = { dashboard: t("sub.dashboard"), courses: t("sub.courses"), notes: t("sub.notes"), focus: t("sub.focus"), growth: t("sub.growth"), lit: t("sub.lit"), news: t("sub.news"), ai: t("sub.ai"), weather: t("sub.weather") };
+    const titles = { dashboard: t("title.dashboard"), courses: t("title.courses"), notes: t("title.notes"), focus: t("title.focus"), growth: t("title.growth"), lit: t("title.lit"), news: t("title.news"), ai: t("title.ai"), weather: t("title.weather"), prisma: t("title.prisma"), nexus: t("title.nexus"), foldcraft: t("title.foldcraft"), securify: t("title.securify") };
+    const subs = { dashboard: t("sub.dashboard"), courses: t("sub.courses"), notes: t("sub.notes"), focus: t("sub.focus"), growth: t("sub.growth"), lit: t("sub.lit"), news: t("sub.news"), ai: t("sub.ai"), weather: t("sub.weather"), prisma: t("sub.prisma"), nexus: t("sub.nexus"), foldcraft: t("sub.foldcraft"), securify: t("sub.securify") };
     $("#pageTitle").textContent = titles[view] || "";
     const sub = $("#pageSub");
     if (sub) sub.textContent = subs[view] || "";
@@ -193,6 +193,7 @@ const App = (() => {
     else if (currentView === "lit") renderLit();
     else if (currentView === "news") renderNews();
     else if (currentView === "weather") { if (window.Weather) Weather.renderCities(); }
+    else if (currentView === "exams") renderExams();
     else if (currentView === "ai") renderAIStatus();
   }
 
@@ -834,6 +835,8 @@ const App = (() => {
     const overlay = $("#focusOverlay");
     const frame = $("#focusFrame");
     if (!overlay || !frame) return;
+    // 进入沉浸式专注：停止主应用励志语音，避免与场景内音频重叠
+    if (window.Motivation && window.Motivation.stop) window.Motivation.stop();
     const minutes = Math.max(1, Math.round(pomoState.total / 60) || 25);
     overlay.style.display = "block";
     frame.src = "focus/index.html?minutes=" + minutes;
@@ -845,6 +848,13 @@ const App = (() => {
     if (overlay) overlay.style.display = "none";
     if (frame) frame.src = "about:blank";
   }
+
+  // 沉浸式场景内播放励志语音时，通知主应用停止自身音频，避免双声重叠
+  window.addEventListener("message", function (ev) {
+    if (ev.data && ev.data.type === "xingyu-motivation-state" && ev.data.playing) {
+      if (window.Motivation && window.Motivation.stop) window.Motivation.stop();
+    }
+  });
 
   function pausePomo() {
     pomoState.running = false;
@@ -1731,6 +1741,10 @@ const App = (() => {
     }
     $("#lockOnLeave").checked = localStorage.getItem("zero_lock_leave") === "1";
     syncThemeUI();
+    const splashEn = $("#splashSoundEnabled");
+    if (splashEn) splashEn.checked = window.SplashSound ? SplashSound.isEnabled() : true;
+    toggleSplashSoundConfig();
+    renderSplashSoundSettings();
     showModal("settingsModal");
   }
 
@@ -1740,6 +1754,64 @@ const App = (() => {
     const hint = $("#lockEnabledHint");
     if (fields) fields.style.display = on ? "" : "none";
     if (hint) hint.style.display = on ? "" : "none";
+  }
+
+  /* ============================================================
+     开屏声音设置
+     ============================================================ */
+  function toggleSplashSoundConfig() {
+    const on = $("#splashSoundEnabled") ? $("#splashSoundEnabled").checked : true;
+    const cfg = $("#splashSoundConfig");
+    if (cfg) cfg.style.display = on ? "" : "none";
+  }
+  function renderSplashSoundSettings() {
+    const sel = $("#setSplashSound");
+    if (!sel || !window.SplashSound) return;
+    const current = SplashSound.getSelection();
+    SplashSound.listSources().then(list => {
+      sel.innerHTML = "";
+      list.forEach(o => {
+        const op = document.createElement("option");
+        op.value = o.id;
+        op.textContent = o.name;
+        if (o.id === current) op.selected = true;
+        sel.appendChild(op);
+      });
+      renderSplashCustomList();
+    }).catch(() => {});
+  }
+  function renderSplashCustomList() {
+    const box = $("#splashCustomList");
+    if (!box || !window.SplashSound) return;
+    SplashSound.listCustom().then(list => {
+      if (!list.length) { box.innerHTML = ""; return; }
+      box.innerHTML = "";
+      list.forEach(c => {
+        const row = document.createElement("div");
+        row.className = "splash-custom-item";
+        const name = document.createElement("span");
+        name.textContent = c.name || "未命名";
+        row.appendChild(name);
+        const del = document.createElement("button");
+        del.type = "button";
+        del.className = "btn btn-ghost btn-sm";
+        del.textContent = "删除";
+        del.onclick = () => { SplashSound.removeCustom(c.id).then(() => renderSplashSoundSettings()); };
+        row.appendChild(del);
+        box.appendChild(row);
+      });
+    }).catch(() => {});
+  }
+  function previewSplashSound() {
+    if (!window.SplashSound) return;
+    SplashSound.getCurrentSource().then(src => {
+      if (!src) { toast("当前开屏声音为「无声音」", "err"); return; }
+      if (window.__splashPreview) { try { window.__splashPreview.pause(); } catch (e) {} }
+      const a = new Audio();
+      a.src = src.url;
+      a.volume = 0.9;
+      a.play().then(() => { window.__splashPreview = a; }).catch(() => { toast("浏览器阻止了自动试听，请再次点击", "err"); });
+    });
   }
 
   /* ============================================================
@@ -1955,6 +2027,7 @@ const App = (() => {
       "nav.growth": "成长档案",
       "nav.ai": "AI 助手",
       "nav.weather": "天气",
+      "nav.prisma": "棱镜艺境", "nav.nexus": "云门智界", "nav.foldcraft": "折艺工坊", "nav.securify": "守御界",
       "role": "个人工作台",
       "mobile.today": "今日", "mobile.courses": "课程", "mobile.notes": "笔记", "mobile.focus": "专注", "mobile.more": "更多",
       "settings": "设置",
@@ -1962,6 +2035,7 @@ const App = (() => {
       "title.dashboard": "今日", "title.courses": "课程作业", "title.notes": "学习笔记库",
       "title.focus": "专注学习", "title.growth": "成长档案", "title.lit": "文献资料",
       "title.news": "热点新闻", "title.ai": "AI 助手", "title.weather": "天气",
+      "title.prisma": "棱镜艺境", "title.nexus": "云门智界", "title.foldcraft": "折艺工坊", "title.securify": "守御界",
       "sub.dashboard": "学习进度一览，今天也要保持专注",
       "sub.courses": "课程、课表与作业任务管理",
       "sub.notes": "沉淀知识，构建你的笔记库",
@@ -1971,6 +2045,7 @@ const App = (() => {
       "sub.news": "每日国内外热点速递",
       "sub.ai": "你的智能学习伙伴",
       "sub.weather": "全国城市实时天气与未来一周预报",
+      "sub.prisma": "创意视觉工作室展示页", "sub.nexus": "下一代智能基础设施展示页", "sub.foldcraft": "视觉叙事创意工作室展示页", "sub.securify": "数据安全 SaaS 展示页",
       "hero.todo": "待办任务", "hero.due": "今日到期", "hero.notes": "笔记", "hero.focusMin": "今日专注(分)", "hero.news": "今日热点", "hero.newsAll": "查看全部", "hero.refresh": "刷新", "hero.refreshed": "已刷新",
       "settings.title": "设置",
       "settings.theme": "界面主题", "settings.font": "界面字体", "settings.lang": "界面语言", "settings.bg": "界面背景", "bg.none": "无", "bg.guilinMist": "桂林·雾山", "bg.guilinAerial": "桂林·航拍", "bg.jiuzhaigou": "九寨沟", "bg.zhangjiajie": "张家界", "bg.hint": "以中国山河摄影作背景，文字始终清晰可读。",
@@ -1999,6 +2074,7 @@ const App = (() => {
       "nav.growth": "成長檔案",
       "nav.ai": "AI 助手",
       "nav.weather": "天氣",
+      "nav.prisma": "稜鏡藝境", "nav.nexus": "雲門智界", "nav.foldcraft": "摺藝工坊", "nav.securify": "守禦界",
       "role": "個人工作台",
       "mobile.today": "今日", "mobile.courses": "課程", "mobile.notes": "筆記", "mobile.focus": "專注", "mobile.more": "更多",
       "settings": "設定",
@@ -2006,6 +2082,7 @@ const App = (() => {
       "title.dashboard": "今日", "title.courses": "課程作業", "title.notes": "學習筆記庫",
       "title.focus": "專注學習", "title.growth": "成長檔案", "title.lit": "文獻資料",
       "title.news": "熱點新聞", "title.ai": "AI 助手", "title.weather": "天氣",
+      "title.prisma": "稜鏡藝境", "title.nexus": "雲門智界", "title.foldcraft": "摺藝工坊", "title.securify": "守禦界",
       "sub.dashboard": "學習進度一覽，今天也要保持專注",
       "sub.courses": "課程、課表與作業任務管理",
       "sub.notes": "沉澱知識，構建你的筆記庫",
@@ -2015,6 +2092,7 @@ const App = (() => {
       "sub.news": "每日國內外熱點速遞",
       "sub.ai": "你的智能學習夥伴",
       "sub.weather": "全國城市即時天氣與未來一週預報",
+      "sub.prisma": "創意視覺工作室展示頁", "sub.nexus": "下一代智能基礎設施展示頁", "sub.foldcraft": "視覺敘事創意工作室展示頁", "sub.securify": "數據安全 SaaS 展示頁",
       "hero.todo": "待辦任務", "hero.due": "今日到期", "hero.notes": "筆記", "hero.focusMin": "今日專注(分)", "hero.news": "今日熱點", "hero.newsAll": "查看全部", "hero.refresh": "刷新", "hero.refreshed": "已刷新",
       "settings.title": "設定",
       "settings.theme": "界面主題", "settings.font": "界面字體", "settings.lang": "界面語言", "settings.bg": "界面背景", "bg.none": "無", "bg.guilinMist": "桂林·霧山", "bg.guilinAerial": "桂林·航拍", "bg.jiuzhaigou": "九寨溝", "bg.zhangjiajie": "張家界", "bg.hint": "以中國山河攝影作背景，文字始終清晰可讀。",
@@ -2043,6 +2121,7 @@ const App = (() => {
       "nav.growth": "Profile",
       "nav.ai": "AI Assistant",
       "nav.weather": "Weather",
+      "nav.prisma": "Prisma", "nav.nexus": "Nexus", "nav.foldcraft": "Foldcraft", "nav.securify": "Securify",
       "role": "Personal workspace",
       "mobile.today": "Today", "mobile.courses": "Courses", "mobile.notes": "Notes", "mobile.focus": "Focus", "mobile.more": "More",
       "settings": "Settings",
@@ -2050,6 +2129,7 @@ const App = (() => {
       "title.dashboard": "Today", "title.courses": "Courses", "title.notes": "Notes",
       "title.focus": "Focus", "title.growth": "Profile", "title.lit": "Library",
       "title.news": "News", "title.ai": "AI Assistant", "title.weather": "Weather",
+      "title.prisma": "Prisma", "title.nexus": "Nexus", "title.foldcraft": "Foldcraft", "title.securify": "Securify",
       "sub.dashboard": "Your study at a glance — stay focused today",
       "sub.courses": "Courses, timetable & assignments",
       "sub.notes": "Build your knowledge base",
@@ -2059,6 +2139,7 @@ const App = (() => {
       "sub.news": "Daily headline digest",
       "sub.ai": "Your smart study partner",
       "sub.weather": "Live weather for Chinese cities with a 7-day forecast",
+      "sub.prisma": "Creative visual studio showcase", "sub.nexus": "Next-layer AI infrastructure showcase", "sub.foldcraft": "Visual storytelling studio showcase", "sub.securify": "Data-security SaaS showcase",
       "hero.todo": "Open tasks", "hero.due": "Due today", "hero.notes": "Notes", "hero.focusMin": "Focus (min)", "hero.news": "Top News", "hero.newsAll": "View All", "hero.refresh": "Refresh", "hero.refreshed": "Updated",
       "settings.title": "Settings",
       "settings.theme": "Theme", "settings.font": "Font", "settings.lang": "Language", "settings.bg": "Background", "bg.none": "None", "bg.guilinMist": "Guilin Mist", "bg.guilinAerial": "Guilin Aerial", "bg.jiuzhaigou": "Jiuzhaigou", "bg.zhangjiajie": "Zhangjiajie", "bg.hint": "China landscape photography as backdrop; text stays readable.",
@@ -2606,6 +2687,282 @@ const App = (() => {
   /* ============================================================
      事件绑定
      ============================================================ */
+﻿/* ---------- 考试日程 ---------- */
+  const EXAM_TYPES = { exam: "考试", homework: "作业截止", event: "重要日程", important: "重要日子" };
+  let calYear = 0, calMonth = 0, calSelDate = "";
+
+  function examParts(dateStr) {
+    const p = String(dateStr || "").split("-");
+    return { y: +p[0] || 0, m: +p[1] || 0, d: +p[2] || 0 };
+  }
+
+  function examStatusOf(e) {
+    if (e.status === "done") return "done";
+    const d = daysUntil(e.date);
+    if (d === null) return "upcoming";
+    if (d < 0) return "past";
+    if (d === 0) return "today";
+    return "upcoming";
+  }
+
+  function renderExams() {
+    renderExamSummary();
+    renderExamList();
+    renderExamCalendar();
+    renderExamDayEvents();
+  }
+
+  function examFiltered() {
+    const type = $("#examFilterType").value;
+    const status = $("#examFilterStatus").value;
+    return Store.getAll("exams")
+      .filter(e => (!type || e.type === type) && (!status || (status === "done" ? e.status === "done" : e.status !== "done")))
+      .sort((a, b) => String(a.date || "").localeCompare(String(b.date || "")));
+  }
+
+  function renderExamSummary() {
+    const all = Store.getAll("exams");
+    const done = all.filter(e => e.status === "done").length;
+    const upcoming = all.filter(e => e.status !== "done" && daysUntil(e.date) >= 0).length;
+    const next = all.filter(e => e.status !== "done" && daysUntil(e.date) >= 0)
+      .sort((a, b) => String(a.date || "").localeCompare(String(b.date || "")))[0];
+    const box = $("#examSummary");
+    if (!next) {
+      box.innerHTML = `
+        <div class="exam-next none">
+          <div class="exam-next-label">下一个关键时刻</div>
+          <div class="exam-next-title">暂无进行中的日程</div>
+          <div class="exam-stats">
+            <span><b>${done}</b> 已完成</span>
+            <span><b>${upcoming}</b> 未开始</span>
+            <span><b>${all.length}</b> 全部</span>
+          </div>
+        </div>`;
+      return;
+    }
+    const d = daysUntil(next.date);
+    const total = 30;
+    const prog = Math.max(0, Math.min(1, (total - d) / total));
+    const C = 326.73;
+    const off = (C * (1 - prog)).toFixed(1);
+    box.innerHTML = `
+      <div class="exam-next">
+        <div class="exam-next-head">
+          <span class="exam-next-badge">${EXAM_TYPES[next.type] || "日程"}</span>
+          <span class="exam-next-label">下一个关键时刻</span>
+        </div>
+        <div class="exam-ring-wrap">
+          <svg class="exam-ring" viewBox="0 0 120 120" aria-hidden="true">
+            <circle class="ring-bg" cx="60" cy="60" r="52"></circle>
+            <circle class="ring-fg" cx="60" cy="60" r="52" style="stroke-dasharray:${C};stroke-dashoffset:${C}"></circle>
+          </svg>
+          <div class="exam-ring-center">
+            <b data-cd="${d}">${d === 0 ? "今天" : d}</b>
+            <span>${d === 0 ? "就是今天，加油！" : (d === 1 ? "还有 1 天就要到了" : "天后到来")}</span>
+          </div>
+        </div>
+        <div class="exam-next-title">${esc(next.title)}</div>
+        <div class="exam-next-date">${fmtDateFull(next.date)}${next.time ? " · " + esc(next.time) : ""}</div>
+        <div class="exam-next-progress"><i style="width:${(prog * 100).toFixed(0)}%"></i></div>
+        <div class="exam-stats">
+          <span><b>${done}</b> 已完成</span>
+          <span><b>${upcoming}</b> 未开始</span>
+          <span><b>${all.length}</b> 全部</span>
+        </div>
+      </div>`;
+    requestAnimationFrame(() => {
+      const fg = box.querySelector(".ring-fg");
+      if (fg) fg.style.strokeDashoffset = off;
+    });
+    animateExamCount(box.querySelector(".exam-ring-center b"), d);
+  }
+
+  function animateExamCount(el, target) {
+    if (!el || target === 0) { if (el) el.textContent = "今天"; return; }
+    const start = 0;
+    const dur = 700;
+    const t0 = performance.now();
+    function step(now) {
+      const p = Math.min(1, (now - t0) / dur);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(start + (target - start) * eased);
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function renderExamList() {
+    const list = examFiltered();
+    const box = $("#examList");
+    if (!list.length) {
+      box.innerHTML = `<div class="empty-state"><div class="big">&#128197;</div><p>还没有日程，点击右上角「添加考试/日程」开始规划</p></div>`;
+      return;
+    }
+    box.innerHTML = list.map(e => {
+      const st = examStatusOf(e);
+      const d = daysUntil(e.date);
+      const badge = st === "done" ? `<span class="exam-badge done">已完成</span>`
+        : st === "past" ? `<span class="exam-badge past">已过</span>`
+        : st === "today" ? `<span class="exam-badge today">今天</span>`
+        : `<span class="exam-badge up">还有 ${d} 天</span>`;
+      const pt = examParts(e.date);
+      return `
+        <div class="exam-item ${st === "done" ? "is-done" : ""}">
+          <div class="exam-date"><b>${pt.m}月</b><span>${pt.d}日</span></div>
+          <div class="exam-info">
+            <b>${esc(e.title)}</b>
+            <span class="exam-meta">${EXAM_TYPES[e.type] || "日程"}${e.time ? " · " + esc(e.time) : ""}${e.note ? " · " + esc(e.note) : ""}</span>
+          </div>
+          ${badge}
+          <div class="row-actions">
+            <button class="mini-btn check" data-exam-done="${e.id}" title="标记完成">&#10003;</button>
+            <button class="mini-btn" data-exam-edit="${e.id}" title="编辑">&#9998;</button>
+            <button class="mini-btn del" data-exam-del="${e.id}" title="删除">&#10005;</button>
+          </div>
+        </div>`;
+    }).join("");
+    $$("[data-exam-done]").forEach(b => b.onclick = () => toggleExamDone(b.dataset.examDone));
+    $$("[data-exam-edit]").forEach(b => b.onclick = () => openExamForm(b.dataset.examEdit));
+    $$("[data-exam-del]").forEach(b => b.onclick = () => deleteExam(b.dataset.examDel));
+  }
+
+  function toggleExamDone(id) {
+    const e = Store.getAll("exams").find(x => x.id === id);
+    if (!e) return;
+    Store.update("exams", id, { status: e.status === "done" ? "upcoming" : "done" });
+    renderExams();
+  }
+
+  function deleteExam(id) {
+    if (!confirm("确定删除这条日程吗？")) return;
+    Store.remove("exams", id);
+    toast("已删除", "ok");
+    renderExams();
+  }
+
+  /* ---------- 考试日历 ---------- */
+  function initExamCal() {
+    const t = new Date();
+    calYear = t.getFullYear();
+    calMonth = t.getMonth();
+    calSelDate = todayISO();
+  }
+
+  function renderExamCalSummary(exams) {
+    const box = $("#examCalSummary");
+    if (!box) return;
+    const monthEvents = exams.filter(e => e.status !== "done");
+    const nextInWindow = Store.getAll("exams")
+      .filter(e => e.status !== "done" && daysUntil(e.date) >= 0)
+      .sort((a, b) => String(a.date || "").localeCompare(String(b.date || "")))[0];
+    const days = nextInWindow ? daysUntil(nextInWindow.date) : null;
+    let html = `<div class="exam-cal-chip">本月日程 <b>${monthEvents.length}</b></div>`;
+    html += `<div class="exam-cal-chip">未来日程 <b>${Store.getAll("exams").filter(e => e.status !== "done" && daysUntil(e.date) >= 0).length}</b></div>`;
+    html += nextInWindow
+      ? `<div class="exam-cal-chip accent">距「${esc(nextInWindow.title)}」${days === 0 ? "今天" : days + " 天"}</div>`
+      : `<div class="exam-cal-chip">暂无进行中日程</div>`;
+    box.innerHTML = html;
+  }
+
+  function calGoToday() {
+    const t = new Date();
+    calYear = t.getFullYear();
+    calMonth = t.getMonth();
+    calSelDate = todayISO();
+    renderExamCalendar();
+    renderExamDayEvents();
+  }
+
+  function renderExamCalendar() {
+    if (!calYear) initExamCal();
+    $("#examCalLabel").textContent = `${calYear}年 ${calMonth + 1}月`;
+    const first = new Date(calYear, calMonth, 1);
+    const startDow = first.getDay();
+    const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+    const exams = Store.getAll("exams").filter(e => {
+      const pt = examParts(e.date);
+      return pt.y === calYear && pt.m === calMonth + 1;
+    });
+    renderExamCalSummary(exams);
+    let html = `<div class="exam-cal-row head">${["日","一","二","三","四","五","六"].map(w => `<span class="exam-cal-cell dow">${w}</span>`).join("")}</div>`;
+    html += `<div class="exam-cal-row">`;
+    for (let i = 0; i < startDow; i++) html += `<span class="exam-cal-cell blank"></span>`;
+    for (let day = 1; day <= daysInMonth; day++) {
+      const key = `${calYear}-${String(calMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+      const has = exams.some(e => e.date === key);
+      const isToday = key === todayISO();
+      const sel = key === calSelDate;
+      html += `<button class="exam-cal-cell day ${isToday ? "today" : ""} ${sel ? "sel" : ""}" data-exam-date="${key}"><span>${day}</span>${has ? `<i class="cal-dot"></i>` : ""}</button>`;
+    }
+    html += `</div>`;
+    $("#examCalendar").innerHTML = html;
+    $$("#examCalendar .exam-cal-cell.day").forEach(c => c.onclick = () => {
+      calSelDate = c.dataset.examDate;
+      renderExamCalendar();
+      renderExamDayEvents();
+    });
+  }
+
+  function renderExamDayEvents() {
+    const box = $("#examDayEvents");
+    if (!box) return;
+    const list = Store.getAll("exams").filter(e => e.date === calSelDate);
+    if (!list.length) {
+      box.innerHTML = `<div class="exam-day-empty"><span>${calSelDate}</span> 暂无日程</div>`;
+      return;
+    }
+    box.innerHTML = `<div class="exam-day-title">${calSelDate} 的日程</div>` + list.map(e => {
+      const st = examStatusOf(e);
+      const dd = daysUntil(e.date);
+      const badge = st === "done" ? "已完成" : st === "today" ? "今天" : (dd && dd > 0 ? `还有 ${dd} 天` : "待办");
+      return `<div class="exam-day-item ${st === "done" ? "is-done" : ""}">
+        <span class="exam-day-type">${EXAM_TYPES[e.type] || "日程"}</span>
+        <b>${esc(e.title)}</b>
+        ${e.time ? `<span class="exam-meta">${esc(e.time)}</span>` : ""}
+        <span class="exam-badge ${st === "done" ? "done" : (st === "today" || (dd === 0)) ? "today" : "up"}">${badge}</span>
+      </div>`;
+    }).join("");
+  }
+
+  function examCalShift(delta) {
+    calMonth += delta;
+    if (calMonth < 0) { calMonth = 11; calYear--; }
+    if (calMonth > 11) { calMonth = 0; calYear++; }
+    renderExamCalendar();
+    renderExamDayEvents();
+  }
+
+  /* ---------- 考试表单 ---------- */
+  function openExamForm(id) {
+    hideFormDelete();
+    const e = id ? Store.getAll("exams").find(x => x.id === id) : null;
+    $("#formTitle").textContent = id ? "编辑日程" : "添加考试/日程";
+    const defDate = e ? e.date : localDateKey(new Date(Date.now() + 7 * 86400000));
+    $("#formBody").innerHTML = `
+      <div class="form-grid">
+        <label class="field full"><span>标题 *</span><input id="f-e-title" value="${esc(e?.title || "")}" placeholder="如：高等数学 期末考试"></label>
+        <label class="field"><span>类型</span><select id="f-e-type">
+          ${Object.entries(EXAM_TYPES).map(([k, v]) => `<option value="${k}" ${e?.type === k ? "selected" : ""}>${v}</option>`).join("")}
+        </select></label>
+        <label class="field"><span>日期 *</span><input type="date" id="f-e-date" value="${defDate}"></label>
+        <label class="field"><span>时间</span><input type="time" id="f-e-time" value="${e?.time || ""}"></label>
+        <label class="field full"><span>备注</span><input id="f-e-note" value="${esc(e?.note || "")}" placeholder="选填，如：带好证件、考场 1102"></label>
+      </div>`;
+    $("#btnFormSave").onclick = () => {
+      const title = $("#f-e-title").value.trim();
+      const date = $("#f-e-date").value;
+      if (!title) { toast("请填写标题", "err"); return; }
+      if (!date) { toast("请选择日期", "err"); return; }
+      const payload = { title, type: $("#f-e-type").value, date, time: $("#f-e-time").value, note: $("#f-e-note").value.trim() };
+      if (e) Store.update("exams", id, payload);
+      else Store.add("exams", payload);
+      closeModal("formModal");
+      toast("日程已保存", "ok");
+      renderExams();
+    };
+    showModal("formModal");
+  }
+
   function bindEvents() {
     document.addEventListener("keydown", e => {
       const modals = openModals();
@@ -2761,6 +3118,14 @@ const App = (() => {
     });
 
     // 笔记页
+    // 考试日程
+    $("#btnAddExam").onclick = () => openExamForm();
+    $("#btnCalPrev").onclick = () => examCalShift(-1);
+    $("#btnCalNext").onclick = () => examCalShift(1);
+    $("#btnCalToday").onclick = calGoToday;
+    $("#examFilterType").onchange = renderExamList;
+    $("#examFilterStatus").onchange = renderExamList;
+
     $("#btnAddNote").onclick = () => openNote();
     $("#btnImportNotes").onclick = openNotesImportModal;
     $("#btnParseNotes").onclick = parseNotesBtn;
@@ -2854,6 +3219,27 @@ const App = (() => {
     $$("[data-font-pick]").forEach(b => b.onclick = () => applyFont(b.dataset.fontPick));
     $$("[data-lang-pick]").forEach(b => b.onclick = () => applyLang(b.dataset.langPick));
     $$("[data-bg-pick]").forEach(b => b.onclick = () => applyBg(b.dataset.bgPick));
+    // 开屏声音
+    const splashEn = $("#splashSoundEnabled");
+    if (splashEn) splashEn.onchange = () => {
+      const on = splashEn.checked;
+      if (window.SplashSound) SplashSound.setEnabled(on);
+      toggleSplashSoundConfig();
+    };
+    const setSplash = $("#setSplashSound");
+    if (setSplash) setSplash.onchange = e => { if (window.SplashSound) SplashSound.setSelection(e.target.value); };
+    const btnUpload = $("#btnUploadSplashSound");
+    if (btnUpload) btnUpload.onclick = () => { const f = $("#splashSoundFile"); if (f) f.click(); };
+    const splashFile = $("#splashSoundFile");
+    if (splashFile) splashFile.onchange = e => {
+      const files = Array.from(e.target.files || []);
+      if (!files.length || !window.SplashSound) return;
+      let p = Promise.resolve();
+      files.forEach(f => { p = p.then(() => SplashSound.addCustom(f)); });
+      p.then(() => { e.target.value = ""; renderSplashSoundSettings(); toast(files.length + " 个开屏声音已上传", "ok"); });
+    };
+    const btnPreview = $("#btnPreviewSplashSound");
+    if (btnPreview) btnPreview.onclick = () => previewSplashSound();
     $$("#themeCustom input[type=color]").forEach(inp => {
       inp.oninput = () => {
         const colors = getCustomColors();
