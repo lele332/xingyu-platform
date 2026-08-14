@@ -1,27 +1,39 @@
 /* ============================================================
-   weather.js — 实时天气（数据源：Open-Meteo，免费 · 无需 key · 支持 CORS）
-   提供：我的城市（固定位置）+ 实时天气 + 7 天预报 + 今日提醒（穿衣/带伞/防晒…）
+   weather.js — 实时天气（数据源：中国天气 weather.com.cn，经本机原生后端代理）
+   提供：我的城市（固定位置）+ 实时天气 + 空气质量 + 气象预警 + 生活指数 + 7 天预报
+   兜底：原生后端不可用时降级到 Open-Meteo（手机/远程访问）
    ============================================================ */
 (function () {
   "use strict";
 
-  /* ---------- 常用城市 ---------- */
+  /* ---------- 常用城市（含中国天气城市编码 + 经纬度兜底） ---------- */
   var CITIES = [
-    { name: "北京", lat: 39.9075, lon: 116.3972 },
-    { name: "上海", lat: 31.2304, lon: 121.4737 },
-    { name: "广州", lat: 23.1291, lon: 113.2644 },
-    { name: "深圳", lat: 22.5431, lon: 114.0579 },
-    { name: "杭州", lat: 30.2741, lon: 120.1551 },
-    { name: "成都", lat: 30.5728, lon: 104.0668 },
-    { name: "武汉", lat: 30.5928, lon: 114.3055 },
-    { name: "西安", lat: 34.3416, lon: 108.9398 },
-    { name: "南京", lat: 32.0603, lon: 118.7969 },
-    { name: "重庆", lat: 29.5630, lon: 106.5516 },
-    { name: "长沙", lat: 28.2282, lon: 112.9388 },
-    { name: "青岛", lat: 36.0671, lon: 120.3826 }
+    { id: "101010100", name: "北京", lat: 39.9075, lon: 116.3972 },
+    { id: "101020100", name: "上海", lat: 31.2304, lon: 121.4737 },
+    { id: "101280101", name: "广州", lat: 23.1291, lon: 113.2644 },
+    { id: "101280601", name: "深圳", lat: 22.5431, lon: 114.0579 },
+    { id: "101210101", name: "杭州", lat: 30.2741, lon: 120.1551 },
+    { id: "101270101", name: "成都", lat: 30.5728, lon: 104.0668 },
+    { id: "101200101", name: "武汉", lat: 30.5928, lon: 114.3055 },
+    { id: "101110101", name: "西安", lat: 34.3416, lon: 108.9398 },
+    { id: "101190101", name: "南京", lat: 32.0603, lon: 118.7969 },
+    { id: "101040100", name: "重庆", lat: 29.5630, lon: 106.5516 },
+    { id: "101250101", name: "长沙", lat: 28.2282, lon: 112.9388 },
+    { id: "101120201", name: "青岛", lat: 36.0671, lon: 120.3826 }
   ];
 
-  /* ---------- WMO 天气代码 → emoji + 三语描述 ---------- */
+  /* 本机原生后端地址（同一 WiFi 手机访问时用局域网 IP） */
+  var API = (function () {
+    try { return location.protocol + "//" + location.hostname + ":8621"; }
+    catch (e) { return "http://127.0.0.1:8621"; }
+  })();
+
+  var currentCity = null;
+  var MY_KEY = "zero_wx_my_city";
+  var CACHE_TTL = 8 * 60 * 1000;
+  var REQUEST_TIMEOUT_MS = 12000;
+
+  /* ---------- WMO 天气代码 → emoji + 三语（Open-Meteo 兜底用） ---------- */
   var WMO = {
     0:  { e: "☀️", zh: "晴",         ht: "晴",         en: "Clear" },
     1:  { e: "🌤️", zh: "大部晴朗",   ht: "大致晴朗",   en: "Mostly clear" },
@@ -52,7 +64,6 @@
     96: { e: "⛈️", zh: "雷雨伴冰雹", ht: "雷雨伴冰雹", en: "Thunderstorm hail" },
     99: { e: "⛈️", zh: "雷雨伴冰雹", ht: "雷雨伴冰雹", en: "Thunderstorm hail" }
   };
-
   function wmo(code, lg) {
     var w = WMO[code] || { e: "🌡️", zh: "未知", ht: "未知", en: "Unknown" };
     return w.e + " " + (lg === "en" ? w.en : lg === "zh-Hant" ? w.ht : w.zh);
@@ -61,43 +72,43 @@
   /* ---------- UI 文案（三语） ---------- */
   var TXT = {
     zh: {
-      feels: "体感", humidity: "湿度", wind: "风速", pressure: "气压", sunrise: "日出", sunset: "日落",
-      updated: "更新于", forecast: "未来 7 天", today: "今天", searchPh: "搜索城市（如：上海）", search: "搜索",
-      refresh: "刷新", loading: "正在获取实时天气…", loadFail: "天气数据获取失败，请检查网络后重试",
+      feels: "体感", humidity: "湿度", wind: "风速", pressure: "气压", vis: "能见度",
+      aqi: "空气质量", updated: "更新于", forecast: "未来 7 天", today: "今天",
+      searchPh: "搜索城市（如：长沙 / 丽江）", search: "搜索", refresh: "刷新",
+      loading: "正在获取实时天气…", loadFail: "天气数据获取失败，请检查网络后重试",
       notFound: "未找到该城市，试试拼音或大城市名", now: "现在",
-      myCity: "我的城市", setMyCity: "设为我的城市", myCitySet: "已设为我的城市",
-      high: "最高", low: "最低", precip: "降水概率", uv: "紫外线", tipsTitle: "今日提醒",
-      wearHeavy: "体感寒冷，建议穿羽绒服/厚大衣", wearCoat: "体感偏凉，建议穿外套/夹克",
-      wearLight: "体感舒适，薄外套或长袖即可", wearHot: "天气炎热，注意防暑、穿轻薄透气衣物",
-      umbrella: "降水概率较高，出门记得带伞", sunscreen: "紫外线较强，外出注意防晒",
-      windy: "风力较大，外出注意防风", tempDiff: "早晚温差大，注意及时增减衣物",
-      humid: "空气湿度高，注意防潮除湿"
+      myCity: "我的城市", setMyCity: "设为我的城市", high: "最高", low: "最低",
+      tipsTitle: "今日提醒", lifeIndex: "生活指数", sunrise: "日出", sunset: "日落", alarm: "气象预警",
+      realtimeSource: "数据来源：中国天气网", sourceMeteo: "数据来源：Open-Meteo（兜底）",
+      windDir: "风向", windScale: "风力", rain: "降水",
+      aqiGood: "优", aqiFine: "良", aqiLight: "轻度污染", aqiModerate: "中度污染",
+      aqiHeavy: "重度污染", aqiSevere: "严重污染"
     },
     "zh-Hant": {
-      feels: "體感", humidity: "濕度", wind: "風速", pressure: "氣壓", sunrise: "日出", sunset: "日落",
-      updated: "更新於", forecast: "未來 7 天", today: "今天", searchPh: "搜索城市（如：上海）", search: "搜索",
-      refresh: "刷新", loading: "正在獲取實時天氣…", loadFail: "天氣數據獲取失敗，請檢查網絡後重試",
+      feels: "體感", humidity: "濕度", wind: "風速", pressure: "氣壓", vis: "能見度",
+      aqi: "空氣品質", updated: "更新於", forecast: "未來 7 天", today: "今天",
+      searchPh: "搜索城市（如：長沙 / 麗江）", search: "搜索", refresh: "刷新",
+      loading: "正在獲取實時天氣…", loadFail: "天氣數據獲取失敗，請檢查網絡後重試",
       notFound: "未找到該城市，試試拼音或大城市名", now: "現在",
-      myCity: "我的城市", setMyCity: "設為我的城市", myCitySet: "已設為我的城市",
-      high: "最高", low: "最低", precip: "降水機率", uv: "紫外線", tipsTitle: "今日提醒",
-      wearHeavy: "體感寒冷，建議穿羽絨服/厚大衣", wearCoat: "體感偏涼，建議穿外套/夾克",
-      wearLight: "體感舒適，薄外套或長袖即可", wearHot: "天氣炎熱，注意防暑、穿輕薄透氣衣物",
-      umbrella: "降水機率較高，出門記得帶傘", sunscreen: "紫外線較強，外出注意防曬",
-      windy: "風力較大，外出注意防風", tempDiff: "早晚溫差大，注意及時增減衣物",
-      humid: "空氣濕度高，注意防潮除濕"
+      myCity: "我的城市", setMyCity: "設為我的城市", high: "最高", low: "最低",
+      tipsTitle: "今日提醒", lifeIndex: "生活指數", sunrise: "日出", sunset: "日落", alarm: "氣象預警",
+      realtimeSource: "資料來源：中國天氣網", sourceMeteo: "資料來源：Open-Meteo（兜底）",
+      windDir: "風向", windScale: "風力", rain: "降水",
+      aqiGood: "優", aqiFine: "良", aqiLight: "輕度污染", aqiModerate: "中度污染",
+      aqiHeavy: "重度污染", aqiSevere: "嚴重污染"
     },
     en: {
-      feels: "Feels like", humidity: "Humidity", wind: "Wind", pressure: "Pressure", sunrise: "Sunrise", sunset: "Sunset",
-      updated: "Updated", forecast: "Next 7 days", today: "Today", searchPh: "Search city", search: "Search",
-      refresh: "Refresh", loading: "Fetching live weather…", loadFail: "Failed to load weather. Check your network.",
+      feels: "Feels like", humidity: "Humidity", wind: "Wind", pressure: "Pressure", vis: "Visibility",
+      aqi: "Air quality", updated: "Updated", forecast: "Next 7 days", today: "Today",
+      searchPh: "Search city", search: "Search", refresh: "Refresh",
+      loading: "Fetching live weather…", loadFail: "Failed to load weather. Check your network.",
       notFound: "City not found. Try Pinyin or a major city.", now: "Now",
-      myCity: "My City", setMyCity: "Set as my city", myCitySet: "Set as your city",
-      high: "High", low: "Low", precip: "Precip.", uv: "UV", tipsTitle: "Today's tips",
-      wearHeavy: "Feels cold — wear a down jacket or heavy coat", wearCoat: "A bit cool — wear a jacket",
-      wearLight: "Comfortable — a light jacket or long sleeves", wearHot: "Hot — stay cool, wear light clothes",
-      umbrella: "High chance of rain — bring an umbrella", sunscreen: "Strong UV — use sunscreen outdoors",
-      windy: "Windy — be careful outdoors", tempDiff: "Big day/night temp gap — layer up",
-      humid: "High humidity — mind dampness"
+      myCity: "My City", setMyCity: "Set as my city", high: "High", low: "Low",
+      tipsTitle: "Today's tips", lifeIndex: "Life index", sunrise: "Sunrise", sunset: "Sunset", alarm: "Weather alert",
+      realtimeSource: "Source: China Weather", sourceMeteo: "Source: Open-Meteo (fallback)",
+      windDir: "Wind dir", windScale: "Wind", rain: "Rain",
+      aqiGood: "Good", aqiFine: "Moderate", aqiLight: "Light pollution", aqiModerate: "Moderate pollution",
+      aqiHeavy: "Heavy pollution", aqiSevere: "Severe pollution"
     }
   };
   function lang() { return document.documentElement.dataset.lang || "zh"; }
@@ -109,24 +120,19 @@
     });
   }
 
-  var currentCity = null;
-  var MY_KEY = "zero_wx_my_city";
-  var REQUEST_TIMEOUT_MS = 12000;
-
   /* ---------- 我的城市（固定位置，长期不变） ---------- */
   function getMyCity() {
     try {
       var c = JSON.parse(localStorage.getItem(MY_KEY) || "null");
-      if (c && c.name && typeof c.lat === "number") return c;
+      if (c && c.name && (c.id || c.lat)) return c;
     } catch (e) {}
     return null;
   }
   function setMyCity(c) {
     if (!c) return;
-    localStorage.setItem(MY_KEY, JSON.stringify({ name: c.name, lat: c.lat, lon: c.lon }));
+    localStorage.setItem(MY_KEY, JSON.stringify({ id: c.id, name: c.name, lat: c.lat, lon: c.lon }));
   }
 
-  /* ---------- 数据获取 ---------- */
   async function fetchJson(url) {
     var controller = new AbortController();
     var timer = setTimeout(function () { controller.abort(); }, REQUEST_TIMEOUT_MS);
@@ -134,57 +140,160 @@
       var resp = await fetch(url, { signal: controller.signal });
       if (!resp.ok) throw new Error("HTTP " + resp.status);
       return await resp.json();
-    } finally {
-      clearTimeout(timer);
-    }
+    } finally { clearTimeout(timer); }
   }
 
-  async function fetchWeather(lat, lon) {
+  /* ---------- 中国天气数据（经原生后端） ---------- */
+  async function fetchChina(city) {
+    var u = API + "/weather?city=" + encodeURIComponent(city.id || city.name);
+    var d = await fetchJson(u);
+    if (!d || !d.realtime) throw new Error("bad china data");
+    return d;
+  }
+  async function searchChina(name) {
+    var d = await fetchJson(API + "/weather/search?name=" + encodeURIComponent(name));
+    return d && d.results ? d.results : [];
+  }
+
+  /* ---------- Open-Meteo 兜底 ---------- */
+  async function fetchMeteo(lat, lon) {
     var url = "https://api.open-meteo.com/v1/forecast?latitude=" + lat + "&longitude=" + lon +
       "&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m,pressure_msl,uv_index" +
       "&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_probability_max,uv_index_max" +
       "&timezone=Asia%2FShanghai&forecast_days=7";
     return await fetchJson(url);
   }
-
-  async function searchCity(name) {
+  async function searchMeteo(name) {
     var url = "https://geocoding-api.open-meteo.com/v1/search?name=" + encodeURIComponent(name) +
       "&count=1&language=" + (lang() === "en" ? "en" : "zh") + "&format=json";
     var d = await fetchJson(url);
     var r = d && d.results && d.results[0];
     if (!r) return null;
-    return { name: r.name, lat: r.latitude, lon: r.longitude };
+    return { id: "", name: r.name, lat: r.latitude, lon: r.longitude };
   }
 
-  /* ---------- 今日提醒（智能建议） ---------- */
-  function tips(data) {
-    var cur = data.current, daily = data.daily;
-    var feels = cur.apparent_temperature;
-    var wet = daily.precipitation_probability_max ? daily.precipitation_probability_max[0] : 0;
-    var uv = daily.uv_index_max ? daily.uv_index_max[0] : 0;
-    var wind = cur.wind_speed_10m;
-    var tmax = daily.temperature_2m_max[0], tmin = daily.temperature_2m_min[0];
-    var hum = cur.relative_humidity_2m;
-    var out = [];
-    if (feels <= 5) out.push(["🧥", txt("wearHeavy")]);
-    else if (feels <= 12) out.push(["🧥", txt("wearCoat")]);
-    else if (feels <= 19) out.push(["👕", txt("wearLight")]);
-    else if (feels >= 30) out.push(["🫠", txt("wearHot")]);
-    if (wet >= 60 || (cur.precipitation && cur.precipitation > 0.1)) out.push(["☔", txt("umbrella")]);
-    if (uv >= 6) out.push(["🧴", txt("sunscreen")]);
-    if (wind >= 30) out.push(["💨", txt("windy")]);
-    if (typeof tmax === "number" && typeof tmin === "number" && tmax - tmin >= 10) out.push(["🌡️", txt("tempDiff")]);
-    if (hum >= 85) out.push(["💧", txt("humid")]);
-    return out.slice(0, 5);
+  /* ---------- 空气质量分级 ---------- */
+  function aqiInfo(aqi) {
+    if (aqi == null || isNaN(aqi)) return { label: "—", cls: "na", color: "" };
+    if (aqi <= 50)  return { label: txt("aqiGood"),     cls: "green",  color: "#2ecc71" };
+    if (aqi <= 100) return { label: txt("aqiFine"),     cls: "yellow", color: "#f1c40f" };
+    if (aqi <= 150) return { label: txt("aqiLight"),    cls: "orange", color: "#e67e22" };
+    if (aqi <= 200) return { label: txt("aqiModerate"), cls: "red",    color: "#e74c3c" };
+    if (aqi <= 300) return { label: txt("aqiHeavy"),    cls: "purple", color: "#9b59b6" };
+    return { label: txt("aqiSevere"), cls: "maroon", color: "#7f1d1d" };
   }
 
-  /* ---------- 渲染 ---------- */
   function fmtNow() {
     var locale = lang() === "en" ? "en-US" : lang() === "zh-Hant" ? "zh-TW" : "zh-CN";
     return new Date().toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" });
   }
 
-  function render(data, city) {
+  /* ---------- 生活指数图标 ---------- */
+  var IDX_ICON = {
+    ct: "👕", uv: "🧴", gm: "🤧", yd: "🏃", xc: "🚗", ls: "👗", ys: "☂️", fs: "🧴",
+    ac: "❄️", tr: "🏖️", pl: "🌫️", cl: "🤸", dy: "🎣", ag: "😷", jt: "🚗", zs: "🥵"
+  };
+
+  /* ---------- 渲染：中国天气 ---------- */
+  function renderChina(d, city) {
+    var box = document.getElementById("weatherContent");
+    if (!box) return;
+    var rt = d.realtime;
+    var my = getMyCity();
+    var isMy = my && (my.id === city.id || my.name === city.name);
+    var ai = aqiInfo(rt.aqi);
+    var warns = d.alarm || [];
+    var indices = d.indices || [];
+    var fc = d.forecast || [];
+
+    var hero =
+      '<div class="weather-hero card">' +
+        '<div class="w-left">' +
+          '<div class="w-cityline">' +
+            '<span class="w-city">' + esc(city.name) + '</span>' +
+            (isMy ? '<span class="w-mybadge">' + txt("myCity") + '</span>' : '') +
+            '<button class="w-myset' + (isMy ? " on" : "") + '" id="btnSetMyCity">' + (isMy ? "⭐ " + txt("myCity") : "📍 " + txt("setMyCity")) + '</button>' +
+          '</div>' +
+          '<div class="w-time">' + txt("now") + ' · ' + esc(rt.time || fmtNow()) + '</div>' +
+          '<div class="w-temp">' + Math.round(rt.temp) + '<span>°C</span></div>' +
+          '<div class="w-desc">' + rt.icon + ' ' + esc(rt.weather) + '</div>' +
+          '<div class="w-range">' + (fc[0] ? txt("high") + ' ' + fc[0].high + '° / ' + txt("low") + ' ' + fc[0].low + '°' : '') + '</div>' +
+        '</div>' +
+        '<div class="w-right">' +
+          (rt.aqi != null ? '<div class="w-stat w-aqi" style="--aqi:' + ai.color + '"><b>' + rt.aqi + '</b><span>' + txt("aqi") + ' · ' + ai.label + '</span></div>' : '') +
+          (rt.humidity != null ? '<div class="w-stat"><b>' + rt.humidity + '%</b><span>' + txt("humidity") + '</span></div>' : '') +
+          '<div class="w-stat"><b>' + esc(rt.wind_dir || "—") + '<small>' + esc(rt.wind_scale || "") + '</small></b><span>' + txt("wind") + '</span></div>' +
+          (rt.pressure != null ? '<div class="w-stat"><b>' + Math.round(rt.pressure) + '</b><span>' + txt("pressure") + ' hPa</span></div>' : '') +
+          (rt.visibility ? '<div class="w-stat"><b>' + esc(rt.visibility) + '</b><span>' + txt("vis") + '</span></div>' : '') +
+          (rt.pm25 != null ? '<div class="w-stat"><b>' + rt.pm25 + '</b><span>PM2.5</span></div>' : '') +
+        '</div>' +
+      '</div>';
+
+    var alarmHtml = '';
+    if (warns.length) {
+      var a = warns[0];
+      var levelCls = (a.level || "").indexOf("红") >= 0 ? "red" : (a.level || "").indexOf("橙") >= 0 ? "orange" : (a.level || "").indexOf("黄") >= 0 ? "yellow" : "blue";
+      alarmHtml =
+        '<div class="card w-alarm ' + levelCls + '">' +
+          '<div class="w-alarm-head">⚠️ ' + txt("alarm") + ' · <b>' + esc(a.type) + ' ' + esc(a.level) + '</b></div>' +
+          '<div class="w-alarm-title">' + esc(a.title) + '</div>' +
+          '<div class="w-alarm-detail">' + esc(a.detail) + '</div>' +
+          '<div class="w-alarm-time">' + esc(a.time) + '</div>' +
+        '</div>';
+    }
+
+    var idxHtml = '';
+    if (indices.length) {
+      idxHtml =
+        '<div class="card w-indices">' +
+          '<div class="card-head"><h3>🧭 ' + txt("lifeIndex") + '</h3></div>' +
+          '<div class="w-idx-grid">' +
+          indices.map(function (x) {
+            return '<div class="w-idx" title="' + esc(x.desc) + '">' +
+              '<span class="w-idx-ic">' + (IDX_ICON[x.key] || "•") + '</span>' +
+              '<div class="w-idx-body"><span class="w-idx-name">' + esc(x.name) + '</span><span class="w-idx-hint">' + esc(x.hint) + '</span></div>' +
+            '</div>';
+          }).join("") +
+          '</div>' +
+        '</div>';
+    }
+
+    var fcHtml =
+      '<div class="card w-forecast">' +
+        '<div class="card-head"><h3>' + txt("forecast") + '</h3><span class="w-updated">' + txt("updated") + ' ' + esc(d.updated || fmtNow()) + '</span></div>' +
+        '<div class="w-days">' +
+        fc.map(function (f, i) {
+          return '<div class="w-day' + (i === 0 ? " cur" : "") + '">' +
+            '<div class="w-day-name">' + esc(f.day) + '</div>' +
+            '<div class="w-day-icon">' + f.iconDay + '</div>' +
+            '<div class="w-day-text">' + esc(f.textDay) + '</div>' +
+            '<div class="w-day-temp"><b>' + f.high + '°</b><span>' + f.low + '°</span></div>' +
+            '<div class="w-day-wind">' + esc(f.windDay || "") + ' ' + esc(f.windScaleDay || "") + '</div>' +
+          '</div>';
+        }).join("") +
+        '</div>' +
+      '</div>';
+
+    var source = '<div class="w-source">' + txt("realtimeSource") + ' · ' + esc(fmtNow()) + '</div>';
+
+    box.innerHTML = hero + alarmHtml + idxHtml + fcHtml + source;
+
+    var setBtn = document.getElementById("btnSetMyCity");
+    if (setBtn) setBtn.onclick = function () {
+      setMyCity(city);
+      var flag = document.createElement("span");
+      flag.className = "w-mybadge";
+      flag.textContent = txt("myCity");
+      var line = document.querySelector(".w-cityline");
+      if (line && !line.querySelector(".w-mybadge")) line.insertBefore(flag, line.querySelector(".w-myset"));
+      setBtn.classList.add("on");
+      setBtn.innerHTML = "⭐ " + txt("myCity");
+      renderCities(city.name);
+    };
+  }
+
+  /* ---------- 渲染：Open-Meteo 兜底 ---------- */
+  function renderMeteo(data, city) {
     var box = document.getElementById("weatherContent");
     if (!box) return;
     var cur = data.current, daily = data.daily;
@@ -192,12 +301,11 @@
     var sunrise = daily.sunrise[0].slice(11, 16);
     var sunset = daily.sunset[0].slice(11, 16);
     var my = getMyCity();
-    var isMy = my && my.name === city.name;
+    var isMy = my && (my.id === city.id || my.name === city.name);
     var wet = daily.precipitation_probability_max ? daily.precipitation_probability_max[0] : null;
     var uv = daily.uv_index_max ? daily.uv_index_max[0] : null;
     var tmax = Math.round(daily.temperature_2m_max[0]);
     var tmin = Math.round(daily.temperature_2m_min[0]);
-    var t = tips(data);
 
     box.innerHTML =
       '<div class="weather-hero card">' +
@@ -219,18 +327,11 @@
           '<div class="w-stat"><b>' + Math.round(cur.pressure_msl) + '</b><span>' + txt("pressure") + ' hPa</span></div>' +
         '</div>' +
       '</div>' +
-      ((t && t.length) ?
-        '<div class="card w-tips">' +
-          '<div class="card-head"><h3>' + txt("tipsTitle") + '</h3></div>' +
-          '<div class="w-tiplist">' +
-          t.map(function (x) { return '<div class="w-tip"><span class="w-tip-ic">' + x[0] + '</span><span>' + esc(x[1]) + '</span></div>'; }).join("") +
-          '</div>' +
-        '</div>' : '') +
       '<div class="w-suntimes">' +
         '<span>☀ ' + txt("sunrise") + ' <b>' + sunrise + '</b></span>' +
         '<span>🌇 ' + txt("sunset") + ' <b>' + sunset + '</b></span>' +
-        (wet != null ? '<span class="w-ext">🌧 ' + txt("precip") + ' <b>' + wet + '%</b></span>' : '') +
-        (uv != null ? '<span class="w-ext">☀️ ' + txt("uv") + ' <b>' + uv + '</b></span>' : '') +
+        (wet != null ? '<span>🌧 ' + txt("rain") + ' <b>' + wet + '%</b></span>' : '') +
+        (uv != null ? '<span>☀️ UV <b>' + uv + '</b></span>' : '') +
       '</div>' +
       '<div class="card w-forecast">' +
         '<div class="card-head"><h3>' + txt("forecast") + '</h3><span class="w-updated">' + txt("updated") + ' ' + fmtNow() + '</span></div>' +
@@ -238,27 +339,24 @@
         daily.time.map(function (d, i) {
           var date = new Date(d + "T00:00:00");
           var label = i === 0 ? txt("today") : (lang() === "en" ? week[date.getDay()] : "周" + week[date.getDay()]);
-          var dw = daily.precipitation_probability_max ? daily.precipitation_probability_max[i] : null;
           return '<div class="w-day' + (i === 0 ? " cur" : "") + '">' +
             '<div class="w-day-name">' + label + '</div>' +
             '<div class="w-day-icon">' + wmo(daily.weather_code[i], lang()).split(" ")[0] + '</div>' +
             '<div class="w-day-temp"><b>' + Math.round(daily.temperature_2m_max[i]) + '°</b><span>' + Math.round(daily.temperature_2m_min[i]) + '°</span></div>' +
-            (dw != null ? '<div class="w-day-rain">☂ ' + dw + '%</div>' : '') +
           '</div>';
         }).join("") +
         '</div>' +
-      '</div>';
+      '</div>' +
+      '<div class="w-source">' + txt("sourceMeteo") + '</div>';
 
     var setBtn = document.getElementById("btnSetMyCity");
     if (setBtn) setBtn.onclick = function () {
       setMyCity(city);
+      var line = document.querySelector(".w-cityline");
       var flag = document.createElement("span");
       flag.className = "w-mybadge";
       flag.textContent = txt("myCity");
-      var line = document.querySelector(".w-cityline");
-      if (line && !line.querySelector(".w-mybadge")) {
-        line.insertBefore(flag, line.querySelector(".w-myset"));
-      }
+      if (line && !line.querySelector(".w-mybadge")) line.insertBefore(flag, line.querySelector(".w-myset"));
       setBtn.classList.add("on");
       setBtn.innerHTML = "⭐ " + txt("myCity");
       renderCities(city.name);
@@ -285,7 +383,7 @@
     });
   }
 
-  /* ---------- 加载（带 10 分钟本地缓存） ---------- */
+  /* ---------- 加载（优先中国天气，失败降级 Open-Meteo；带本地缓存） ---------- */
   async function load(city, force) {
     if (!city) return;
     currentCity = city;
@@ -294,13 +392,15 @@
     var content = document.getElementById("weatherContent");
     if (loading) loading.style.display = "";
     if (content) content.style.display = "none";
-    var cacheKey = "zero_wx_" + city.name;
+    var cacheKey = "zero_wx_" + (city.id || city.name);
+
     try {
       var cached = localStorage.getItem(cacheKey);
       if (!force && cached) {
         var c = JSON.parse(cached);
-        if (c && c.data && Date.now() - c.ts < 600000) {
-          render(c.data, city);
+        if (c && c.data && Date.now() - c.ts < CACHE_TTL) {
+          if (c.data.source === "china") renderChina(c.data, city);
+          else renderMeteo(c.data, city);
           renderCities(city.name);
           if (loading) loading.style.display = "none";
           if (content) content.style.display = "";
@@ -309,11 +409,23 @@
           return;
         }
       }
-    } catch (e) { /* 缓存损坏则忽略 */ }
+    } catch (e) {}
+
     try {
-      var data = await fetchWeather(city.lat, city.lon);
+      var data;
+      try {
+        data = await fetchChina(city);
+      } catch (chinaErr) {
+        if (city.lat != null && city.lon != null) {
+          data = await fetchMeteo(city.lat, city.lon);
+          data.source = "meteo";
+        } else {
+          throw chinaErr;
+        }
+      }
       localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), data: data }));
-      render(data, city);
+      if (data.source === "china") renderChina(data, city);
+      else renderMeteo(data, city);
       renderCities(city.name);
       if (loading) loading.style.display = "none";
       if (content) content.style.display = "";
@@ -326,7 +438,8 @@
         try {
           var stale = JSON.parse(localStorage.getItem(cacheKey) || "null");
           if (stale && stale.data) {
-            render(stale.data, city);
+            if (stale.data.source === "china") renderChina(stale.data, city);
+            else renderMeteo(stale.data, city);
             renderCities(city.name);
             content.insertAdjacentHTML("afterbegin", '<div class="weather-stale">' + txt("loadFail") + ' · 已显示缓存数据</div>');
             return;
@@ -346,26 +459,24 @@
     if (loading) loading.style.display = "";
     if (content) content.style.display = "none";
     try {
-      var city = await searchCity(name);
-      if (!city) {
+      var found = null;
+      try {
+        var res = await searchChina(name);
+        if (res && res.length) found = { id: res[0].id, name: res[0].name, lat: null, lon: null };
+      } catch (e) {}
+      if (!found) found = await searchMeteo(name);
+      if (!found) {
         if (loading) loading.style.display = "none";
-        if (content) {
-          content.style.display = "";
-          content.innerHTML = '<div class="empty-state"><p>' + txt("notFound") + '</p></div>';
-        }
+        if (content) { content.style.display = ""; content.innerHTML = '<div class="empty-state"><p>' + txt("notFound") + '</p></div>'; }
         return;
       }
-      await load(city, true);
+      await load(found, true);
     } catch (e) {
       if (loading) loading.style.display = "none";
-      if (content) {
-        content.style.display = "";
-        content.innerHTML = '<div class="empty-state"><p>' + txt("loadFail") + '</p></div>';
-      }
+      if (content) { content.style.display = ""; content.innerHTML = '<div class="empty-state"><p>' + txt("loadFail") + '</p></div>'; }
     }
   }
 
-  /* ---------- 初始化 ---------- */
   function init() {
     var btn = document.getElementById("btnWeatherSearch");
     if (btn) btn.onclick = doSearch;
@@ -373,7 +484,6 @@
     if (inp) inp.onkeydown = function (e) { if (e.key === "Enter") doSearch(); };
     var ref = document.getElementById("btnWeatherRefresh");
     if (ref) ref.onclick = function () { if (currentCity) load(currentCity, true); };
-    // 默认城市：我的城市 → 上次选择 → 北京
     var myCity = getMyCity();
     var saved = localStorage.getItem("zero_wx_city");
     var city = myCity || (CITIES.find(function (c) { return c.name === saved; }) || CITIES[0]);
@@ -386,14 +496,18 @@
     refresh: function () { if (currentCity) load(currentCity, true); },
     reRender: function () {
       if (!currentCity) return;
-      var cached = localStorage.getItem("zero_wx_" + currentCity.name);
+      var cached = localStorage.getItem("zero_wx_" + (currentCity.id || currentCity.name));
       if (!cached) return;
       try {
         var c = JSON.parse(cached);
-        if (c && c.data) { render(c.data, currentCity); renderCities(currentCity.name); }
+        if (c && c.data) {
+          if (c.data.source === "china") renderChina(c.data, currentCity);
+          else renderMeteo(c.data, currentCity);
+          renderCities(currentCity.name);
+        }
       } catch (e) {}
     },
     renderCities: renderCities,
-    searchCity: searchCity
+    searchCity: searchChina
   };
 })();

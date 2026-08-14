@@ -1862,6 +1862,30 @@ body { transition: background-color 0.4s var(--ease-out), color 0.4s var(--ease-
 .w-suntimes .w-ext { font-variant-numeric: tabular-nums; }
 .w-day-rain { font-size: 10px; color: var(--ink-3); margin-top: 4px; font-variant-numeric: tabular-nums; }
 
+.w-stat.w-aqi b { color: var(--aqi, var(--ink)); }
+.w-stat.w-aqi { border-color: color-mix(in srgb, var(--aqi, var(--ink)) 45%, transparent); }
+.w-day-text { font-size: 11px; color: var(--ink-2); margin-bottom: 4px; }
+.w-day-wind { font-size: 9.5px; color: var(--ink-3); margin-top: 4px; font-variant-numeric: tabular-nums; }
+.w-alarm { margin-bottom: 16px; border-left: 4px solid var(--warn, #e67e22); }
+.w-alarm.red { border-color: #e74c3c; }
+.w-alarm.orange { border-color: #e67e22; }
+.w-alarm.yellow { border-color: #f1c40f; }
+.w-alarm.blue { border-color: #3b82f6; }
+.w-alarm-head { font-size: 13.5px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+.w-alarm-title { font-size: 13px; color: var(--ink-2); margin-bottom: 4px; }
+.w-alarm-detail { font-size: 12px; color: var(--ink-3); line-height: 1.6; }
+.w-alarm-time { font-size: 10.5px; color: var(--ink-3); margin-top: 7px; font-family: var(--font-mono); letter-spacing: 0.5px; }
+.w-indices { margin-bottom: 16px; }
+.w-indices .card-head { margin-bottom: 10px; }
+.w-idx-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.w-idx { display: flex; align-items: center; gap: 9px; padding: 10px 12px; background: var(--fill); border: 1px solid var(--rule-thin); border-radius: 8px; cursor: default; transition: all var(--dur-fast) var(--ease-out); }
+.w-idx:hover { border-color: var(--ink-3); background: var(--fill-2); }
+.w-idx-ic { font-size: 17px; flex-shrink: 0; }
+.w-idx-body { display: flex; flex-direction: column; min-width: 0; }
+.w-idx-name { font-size: 11px; color: var(--ink-3); }
+.w-idx-hint { font-size: 13px; font-weight: 600; color: var(--ink); }
+.w-source { font-size: 10.5px; color: var(--ink-3); text-align: right; margin-top: 10px; font-family: var(--font-mono); letter-spacing: 0.5px; }
+
 @media (max-width: 760px) {
   .w-days { grid-template-columns: repeat(4, 1fr); }
   .w-temp { font-size: 56px; }
