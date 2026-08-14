@@ -596,7 +596,8 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <div class="view-toolbar">
           <div class="toolbar-tabs">
             <button class="tab-btn active" data-tab="lit-lib">我的文献库</button>
-            <button class="tab-btn" data-tab="lit-journal">期刊导航</button>
+            <button class="tab-btn" data-tab="lit-books">专业书籍</button>
+            <button class="tab-btn" data-tab="lit-knowledge">每日知识</button>
           </div>
           <div class="toolbar-actions">
             <button class="btn btn-ghost" id="btnImportLit">导入文献</button>
@@ -614,10 +615,17 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <div id="litList"></div>
         </div>
 
-        <!-- 期刊导航 -->
-        <div class="tab-panel" id="tab-lit-journal">
-          <p class="hint" style="margin-bottom:16px">以下是你所在领域的主流期刊，点击直接跳转官网查看最新目录与文献：</p>
-          <div class="journal-grid" id="journalGrid"></div>
+        <!-- 专业书籍 -->
+        <div class="tab-panel" id="tab-lit-books">
+          <p class="hint" style="margin-bottom:16px">为你精选的实用书单，按领域分类，没事翻一翻，挑一本感兴趣的。</p>
+          <div class="book-grid" id="bookGrid"></div>
+        </div>
+
+        <!-- 每日知识 -->
+        <div class="tab-panel" id="tab-lit-knowledge">
+          <div class="knowledge-daily" id="knowledgeDaily"></div>
+          <div class="knowledge-cats" id="knowledgeCats"></div>
+          <div class="knowledge-list" id="knowledgeList"></div>
         </div>
       </section>
 
@@ -1123,7 +1131,8 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 <script defer src="js/icons.js?v=20260811.3.1"></script>
 <script defer src="js/motivation.js?v=20260814.6"></script>
   <script defer src="js/splashsound.js?v=20260814.2"></script>
-        <script defer src="js/app.js?v=20260814.3"></script>
+        <script defer src="js/knowledge.js?v=20260814.23"></script>
+<script defer src="js/app.js?v=20260814.3"></script>
 <script>
   if ("serviceWorker" in navigator && location.protocol !== "file:") {
     window.addEventListener("load", function () {

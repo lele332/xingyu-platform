@@ -1249,41 +1249,14 @@ const App = (() => {
   /* ============================================================
      文献资料
      ============================================================ */
-  const JOURNALS = [
-    { name: "中国公路学报", org: "中国公路学会", url: "http://zgglxb.chd.edu.cn/", level: "EI / 北大核心", desc: "公路交通领域权威期刊" },
-    { name: "公路交通科技", org: "交通部公路科学研究院", url: "https://www.gljtkj.com/", level: "北大核心", desc: "公路与桥梁技术研究" },
-    { name: "桥梁建设", org: "中铁大桥局", url: "http://qljs.chd.edu.cn/", level: "EI / 北大核心", desc: "桥梁工程专业期刊" },
-    { name: "土木工程学报", org: "中国土木工程学会", url: "http://www.civiljournal.com/", level: "EI / 北大核心", desc: "土木工程综合权威" },
-    { name: "工程力学", org: "中国力学学会", url: "http://www.engineeringmechanics.cn/", level: "EI / 北大核心", desc: "力学与结构工程" },
-    { name: "交通运输工程学报", org: "长安大学", url: "http://jtysjtxb.chd.edu.cn/", level: "EI / 北大核心", desc: "交通运输综合研究" },
-    { name: "振动与冲击", org: "中国振动工程学会", url: "http://www.jvsj.net/", level: "EI / 北大核心", desc: "结构振动与抗震" },
-    { name: "建筑材料学报", org: "同济大学", url: "http://jcb.clarivate.com/", level: "EI", desc: "建筑材料与结构" },
-    { name: "公路", org: "交通部公路科学研究院", url: "https://www.gljtkj.com/", level: "北大核心", desc: "公路工程技术应用" },
-    { name: "中外公路", org: "长沙理工大学", url: "http://www.zwgl.com.cn/", level: "北大核心", desc: "国内外公路技术" },
-    { name: "知网 CNKI", org: "中国知网", url: "https://www.cnki.net/", level: "数据库", desc: "最全文献检索平台" },
-    { name: "万方数据", org: "万方", url: "https://www.wanfangdata.com.cn/", level: "数据库", desc: "学术文献数据库" },
-    { name: "维普网", org: "维普", url: "https://www.cqvip.com/", level: "数据库", desc: "中文期刊服务平台" },
-  ];
-
   let litEditId = null;
 
   function renderLit() {
-    renderJournalGrid();
+    if (window.Knowledge) {
+      Knowledge.renderBooks();
+      Knowledge.renderKnowledge();
+    }
     renderLitList();
-  }
-
-  function renderJournalGrid() {
-    const box = $("#journalGrid");
-    if (!box) return;
-    box.innerHTML = JOURNALS.map(j => `
-      <a class="journal-card" href="${j.url}" target="_blank" rel="noopener">
-        <div class="journal-head">
-          <span class="journal-name">${esc(j.name)}</span>
-          <span class="journal-level">${esc(j.level)}</span>
-        </div>
-        <div class="journal-org">${esc(j.org)}</div>
-        <div class="journal-desc">${esc(j.desc)}</div>
-      </a>`).join("");
   }
 
   function getLitTags() {
