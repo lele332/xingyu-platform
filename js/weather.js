@@ -89,7 +89,7 @@
       notFound: "未找到该城市，试试拼音或大城市名", now: "现在",
       myCity: "我的城市", setMyCity: "设为我的城市", high: "最高", low: "最低",
       tipsTitle: "今日提醒", lifeIndex: "生活指数", sunrise: "日出", sunset: "日落", alarm: "气象预警",
-      realtimeSource: "数据来源：中国天气网", sourceMeteo: "数据来源：备用气象源（降级）",
+      realtimeSource: "数据来源：中国天气网", sourceMeteo: "数据来源：Open-Meteo（兜底）",
       windDir: "风向", windScale: "风力", rain: "降水",
       aqiGood: "优", aqiFine: "良", aqiLight: "轻度污染", aqiModerate: "中度污染",
       aqiHeavy: "重度污染", aqiSevere: "严重污染"
@@ -102,7 +102,7 @@
       notFound: "未找到該城市，試試拼音或大城市名", now: "現在",
       myCity: "我的城市", setMyCity: "設為我的城市", high: "最高", low: "最低",
       tipsTitle: "今日提醒", lifeIndex: "生活指數", sunrise: "日出", sunset: "日落", alarm: "氣象預警",
-      realtimeSource: "資料來源：中國天氣網", sourceMeteo: "資料來源：備用氣象源（降級）",
+      realtimeSource: "資料來源：中國天氣網", sourceMeteo: "資料來源：Open-Meteo（兜底）",
       windDir: "風向", windScale: "風力", rain: "降水",
       aqiGood: "優", aqiFine: "良", aqiLight: "輕度污染", aqiModerate: "中度污染",
       aqiHeavy: "重度污染", aqiSevere: "嚴重污染"
@@ -241,9 +241,9 @@
           (rt.aqi != null ? '<div class="w-stat w-aqi" style="--aqi:' + ai.color + '"><b>' + rt.aqi + '</b><span>' + txt("aqi") + ' · ' + ai.label + '</span></div>' : '') +
           (rt.humidity != null ? '<div class="w-stat"><b>' + rt.humidity + '%</b><span>' + txt("humidity") + '</span></div>' : '') +
           '<div class="w-stat"><b>' + esc(rt.wind_dir || "—") + '<small>' + esc(rt.wind_scale || "") + '</small></b><span>' + txt("wind") + '</span></div>' +
-          (rt.pressure != null ? '<div class="w-stat"><b>' + Math.round(rt.pressure) + '</b><span>' + txt("pressure") + ' 百帕</span></div>' : '') +
-          (rt.visibility ? '<div class="w-stat"><b>' + esc(rt.visibility + '').replace(/km/i, ' 公里') + '</b><span>' + txt("vis") + '</span></div>' : '') +
-          (rt.pm25 != null ? '<div class="w-stat"><b>' + rt.pm25 + '</b><span>细颗粒物</span></div>' : '') +
+          (rt.pressure != null ? '<div class="w-stat"><b>' + Math.round(rt.pressure) + '</b><span>' + txt("pressure") + ' hPa</span></div>' : '') +
+          (rt.visibility ? '<div class="w-stat"><b>' + esc(rt.visibility) + '</b><span>' + txt("vis") + '</span></div>' : '') +
+          (rt.pm25 != null ? '<div class="w-stat"><b>' + rt.pm25 + '</b><span>PM2.5</span></div>' : '') +
         '</div>' +
       '</div>';
 
@@ -341,15 +341,15 @@
         '<div class="w-right">' +
           '<div class="w-stat"><b>' + Math.round(cur.apparent_temperature) + '°</b><span>' + txt("feels") + '</span></div>' +
           '<div class="w-stat"><b>' + cur.relative_humidity_2m + '%</b><span>' + txt("humidity") + '</span></div>' +
-          '<div class="w-stat"><b>' + Math.round(cur.wind_speed_10m) + '<small>公里/时</small></b><span>' + txt("wind") + '</span></div>' +
-          '<div class="w-stat"><b>' + Math.round(cur.pressure_msl) + '</b><span>' + txt("pressure") + ' 百帕</span></div>' +
+          '<div class="w-stat"><b>' + Math.round(cur.wind_speed_10m) + '<small>km/h</small></b><span>' + txt("wind") + '</span></div>' +
+          '<div class="w-stat"><b>' + Math.round(cur.pressure_msl) + '</b><span>' + txt("pressure") + ' hPa</span></div>' +
         '</div>' +
       '</div>' +
       '<div class="w-suntimes">' +
         '<span>☀ ' + txt("sunrise") + ' <b>' + sunrise + '</b></span>' +
         '<span>🌇 ' + txt("sunset") + ' <b>' + sunset + '</b></span>' +
         (wet != null ? '<span>🌧 ' + txt("rain") + ' <b>' + wet + '%</b></span>' : '') +
-        (uv != null ? '<span>☀️ 紫外线 <b>' + uv + '</b></span>' : '') +
+        (uv != null ? '<span>☀️ UV <b>' + uv + '</b></span>' : '') +
       '</div>' +
       '<div class="card w-forecast">' +
         '<div class="card-head"><h3>' + txt("forecast") + '</h3><span class="w-updated">' + txt("updated") + ' ' + fmtNow() + '</span></div>' +
