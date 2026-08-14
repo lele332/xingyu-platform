@@ -120,7 +120,7 @@ def fetch_one(cityid):
         "alarm": warns, "indices": indices, "forecast": forecast,
     }
 
-def main():
+def run():
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     ok, fail = 0, 0
     index = {"updatedAt": time.strftime("%Y-%m-%d %H:%M:%S"), "cities": []}
@@ -140,7 +140,10 @@ def main():
     (OUT_DIR / "index.json").write_text(
         json.dumps(index, ensure_ascii=False, indent=2), encoding="utf-8")
     print("done: ok=%d fail=%d -> %s" % (ok, fail, OUT_DIR), flush=True)
-    sys.exit(0 if fail == 0 else 1)
+    return fail
+
+def main():
+    sys.exit(0 if run() == 0 else 1)
 
 if __name__ == "__main__":
     main()
