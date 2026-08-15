@@ -9,7 +9,7 @@
 
   // 内置开屏声音（沿用励志语录音频）
   var BUILTIN = [
-    { id: "intro-ambient", name: "星屿 · 科技氛围（开屏）", file: "assets/intro-ambient.wav" },
+    { id: "intro-ambient", name: "星屿 · 晨曦氛围（开屏）", file: "assets/intro-ambient-v2.wav" },
     { id: "default", name: "你是一个有毅力的人", file: "assets/motivational/quote-perseverance.mp3" },
     { id: "leijun-dare", name: "雷军：敢想敢干最重要", file: "assets/motivational/leijun-dare.mp3" },
     { id: "leijun-effort", name: "雷军：努力不是万能的", file: "assets/motivational/leijun-effort.mp3" },
