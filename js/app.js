@@ -168,8 +168,8 @@ const App = (() => {
       }
       else window.Anim && Anim.viewEnter(v);
     }
-    const titles = { dashboard: t("title.dashboard"), courses: t("title.courses"), notes: t("title.notes"), focus: t("title.focus"), growth: t("title.growth"), lit: t("title.lit"), news: t("title.news"), ai: t("title.ai"), weather: t("title.weather"), prisma: t("title.prisma"), nexus: t("title.nexus"), foldcraft: t("title.foldcraft"), securify: t("title.securify") };
-    const subs = { dashboard: t("sub.dashboard"), courses: t("sub.courses"), notes: t("sub.notes"), focus: t("sub.focus"), growth: t("sub.growth"), lit: t("sub.lit"), news: t("sub.news"), ai: t("sub.ai"), weather: t("sub.weather"), prisma: t("sub.prisma"), nexus: t("sub.nexus"), foldcraft: t("sub.foldcraft"), securify: t("sub.securify") };
+    const titles = { dashboard: t("title.dashboard"), courses: t("title.courses"), notes: t("title.notes"), focus: t("title.focus"), growth: t("title.growth"), lit: t("title.lit"), news: t("title.news"), ai: t("title.ai"), weather: t("title.weather"), prisma: t("title.prisma"), nexus: t("title.nexus"), foldcraft: t("title.foldcraft"), securify: t("title.securify"), running: t("title.running") };
+    const subs = { dashboard: t("sub.dashboard"), courses: t("sub.courses"), notes: t("sub.notes"), focus: t("sub.focus"), growth: t("sub.growth"), lit: t("sub.lit"), news: t("sub.news"), ai: t("sub.ai"), weather: t("sub.weather"), prisma: t("sub.prisma"), nexus: t("sub.nexus"), foldcraft: t("sub.foldcraft"), securify: t("sub.securify"), running: t("sub.running") };
     $("#pageTitle").textContent = titles[view] || "";
     const sub = $("#pageSub");
     if (sub) sub.textContent = subs[view] || "";
@@ -195,6 +195,7 @@ const App = (() => {
     else if (currentView === "weather") { if (window.Weather) Weather.renderCities(); }
     else if (currentView === "exams") renderExams();
     else if (currentView === "ai") renderAIStatus();
+    else if (currentView === "running") { if (window.Running) Running.render(); }
   }
 
   /* ---------- 长列表滚动分批浮入（ScrollTrigger） ---------- */
@@ -2001,6 +2002,7 @@ const App = (() => {
       "nav.growth": "成长档案",
       "nav.ai": "AI 助手",
       "nav.weather": "天气",
+      "nav.running": "跑步训练",
       "nav.prisma": "棱镜艺境", "nav.nexus": "云门智界", "nav.foldcraft": "折艺工坊", "nav.securify": "守御界",
       "role": "个人工作台",
       "mobile.today": "今日", "mobile.courses": "课程", "mobile.notes": "笔记", "mobile.focus": "专注", "mobile.more": "更多",
@@ -2008,7 +2010,7 @@ const App = (() => {
       "search.ph": "搜索笔记 / 任务 / 课程...",
       "title.dashboard": "今日", "title.courses": "课程作业", "title.notes": "学习笔记库",
       "title.focus": "专注学习", "title.growth": "成长档案", "title.lit": "文献资料",
-      "title.news": "热点新闻", "title.ai": "AI 助手", "title.weather": "天气",
+      "title.news": "热点新闻", "title.ai": "AI 助手", "title.weather": "天气", "title.running": "跑步训练",
       "title.prisma": "棱镜艺境", "title.nexus": "云门智界", "title.foldcraft": "折艺工坊", "title.securify": "守御界",
       "sub.dashboard": "学习进度一览，今天也要保持专注",
       "sub.courses": "课程、课表与作业任务管理",
@@ -2019,6 +2021,7 @@ const App = (() => {
       "sub.news": "每日国内外热点速递",
       "sub.ai": "你的智能学习伙伴",
       "sub.weather": "全国城市实时天气与未来一周预报", "weather.searchPh": "搜索城市（如：上海 / 长沙）", "weather.search": "搜索", "weather.refresh": "刷新", "weather.loading": "正在获取实时天气…",
+      "sub.running": "跑步与马拉松训练记录（可导入华为运动健康数据）",
       "sub.prisma": "创意视觉工作室展示页", "sub.nexus": "下一代智能基础设施展示页", "sub.foldcraft": "视觉叙事创意工作室展示页", "sub.securify": "数据安全 SaaS 展示页",
       "hero.todo": "待办任务", "hero.due": "今日到期", "hero.notes": "笔记", "hero.focusMin": "今日专注(分)", "hero.news": "今日热点", "hero.newsAll": "查看全部", "hero.refresh": "刷新", "hero.refreshed": "已刷新",
       "settings.title": "设置",
@@ -2048,6 +2051,7 @@ const App = (() => {
       "nav.growth": "成長檔案",
       "nav.ai": "AI 助手",
       "nav.weather": "天氣",
+      "nav.running": "跑步訓練",
       "nav.prisma": "稜鏡藝境", "nav.nexus": "雲門智界", "nav.foldcraft": "摺藝工坊", "nav.securify": "守禦界",
       "role": "個人工作台",
       "mobile.today": "今日", "mobile.courses": "課程", "mobile.notes": "筆記", "mobile.focus": "專注", "mobile.more": "更多",
@@ -2055,7 +2059,7 @@ const App = (() => {
       "search.ph": "搜尋筆記 / 任務 / 課程...",
       "title.dashboard": "今日", "title.courses": "課程作業", "title.notes": "學習筆記庫",
       "title.focus": "專注學習", "title.growth": "成長檔案", "title.lit": "文獻資料",
-      "title.news": "熱點新聞", "title.ai": "AI 助手", "title.weather": "天氣",
+      "title.news": "熱點新聞", "title.ai": "AI 助手", "title.weather": "天氣", "title.running": "跑步訓練",
       "title.prisma": "稜鏡藝境", "title.nexus": "雲門智界", "title.foldcraft": "摺藝工坊", "title.securify": "守禦界",
       "sub.dashboard": "學習進度一覽，今天也要保持專注",
       "sub.courses": "課程、課表與作業任務管理",
@@ -2066,6 +2070,7 @@ const App = (() => {
       "sub.news": "每日國內外熱點速遞",
       "sub.ai": "你的智能學習夥伴",
       "sub.weather": "全國城市即時天氣與未來一週預報", "weather.searchPh": "搜索城市（如：上海 / 長沙）", "weather.search": "搜索", "weather.refresh": "刷新", "weather.loading": "正在獲取實時天氣…",
+      "sub.running": "跑步與馬拉松訓練記錄（可匯入華為運動健康數據）",
       "sub.prisma": "創意視覺工作室展示頁", "sub.nexus": "下一代智能基礎設施展示頁", "sub.foldcraft": "視覺敘事創意工作室展示頁", "sub.securify": "數據安全 SaaS 展示頁",
       "hero.todo": "待辦任務", "hero.due": "今日到期", "hero.notes": "筆記", "hero.focusMin": "今日專注(分)", "hero.news": "今日熱點", "hero.newsAll": "查看全部", "hero.refresh": "刷新", "hero.refreshed": "已刷新",
       "settings.title": "設定",
@@ -2095,6 +2100,7 @@ const App = (() => {
       "nav.growth": "Profile",
       "nav.ai": "AI Assistant",
       "nav.weather": "Weather",
+      "nav.running": "Running",
       "nav.prisma": "Prisma", "nav.nexus": "Nexus", "nav.foldcraft": "Foldcraft", "nav.securify": "Securify",
       "role": "Personal workspace",
       "mobile.today": "Today", "mobile.courses": "Courses", "mobile.notes": "Notes", "mobile.focus": "Focus", "mobile.more": "More",
@@ -2102,7 +2108,7 @@ const App = (() => {
       "search.ph": "Search notes / tasks / courses...",
       "title.dashboard": "Today", "title.courses": "Courses", "title.notes": "Notes",
       "title.focus": "Focus", "title.growth": "Profile", "title.lit": "Library",
-      "title.news": "News", "title.ai": "AI Assistant", "title.weather": "Weather",
+      "title.news": "News", "title.ai": "AI Assistant", "title.weather": "Weather", "title.running": "Running",
       "title.prisma": "Prisma", "title.nexus": "Nexus", "title.foldcraft": "Foldcraft", "title.securify": "Securify",
       "sub.dashboard": "Your study at a glance — stay focused today",
       "sub.courses": "Courses, timetable & assignments",
@@ -2113,6 +2119,7 @@ const App = (() => {
       "sub.news": "Daily headline digest",
       "sub.ai": "Your smart study partner",
       "sub.weather": "Live weather for Chinese cities with a 7-day forecast", "weather.searchPh": "Search city (e.g. Shanghai)", "weather.search": "Search", "weather.refresh": "Refresh", "weather.loading": "Fetching live weather…",
+      "sub.running": "Running & marathon training (import Huawei Health data)",
       "sub.prisma": "Creative visual studio showcase", "sub.nexus": "Next-layer AI infrastructure showcase", "sub.foldcraft": "Visual storytelling studio showcase", "sub.securify": "Data-security SaaS showcase",
       "hero.todo": "Open tasks", "hero.due": "Due today", "hero.notes": "Notes", "hero.focusMin": "Focus (min)", "hero.news": "Top News", "hero.newsAll": "View All", "hero.refresh": "Refresh", "hero.refreshed": "Updated",
       "settings.title": "Settings",
@@ -3515,6 +3522,7 @@ const App = (() => {
   // 暴露弹窗控制，供外部模块（如文献沉浸式阅读的来源选择）复用
   window.showModal = showModal;
   window.closeModal = closeModal;
+  window.toast = toast;
 
   return { init };
 })();

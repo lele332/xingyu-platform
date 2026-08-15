@@ -21,6 +21,7 @@ const Store = (() => {
       skills: [],        // {id, name, level(1-100)}
       projects: [],      // {id, name, role, desc, link, start, end}
       literature: [],    // {id, title, authors, journal, year, doi, tags[], notes, favorite, createdAt}
+      running: [],       // {id, type(run/half/full), date, distanceKm, durationMin, pace, avgHr, cadence, maxHr, calories, elevationGain, source, note, recordId, importedAt}
       trash: []          // {id, entityKey, item, deletedAt}
     };
     // 本地配置（local-config.js，含用户 API Key，不随仓库发布）
@@ -33,7 +34,7 @@ const Store = (() => {
   };
 
   let data = null;
-  const ARRAY_KEYS = ["courses", "tasks", "notes", "cards", "pomodoros", "exams", "grades", "skills", "projects", "literature", "trash"];
+  const ARRAY_KEYS = ["courses", "tasks", "notes", "cards", "pomodoros", "exams", "grades", "skills", "projects", "literature", "running", "trash"];
   let lastError = "";
   let firstRun = false;
 
@@ -80,6 +81,7 @@ const Store = (() => {
     normalized.skills = normalized.skills.filter(isRecord);
     normalized.projects = normalized.projects.filter(isRecord);
     normalized.literature = normalized.literature.filter(isRecord);
+    normalized.running = normalized.running.filter(isRecord);
     normalized.trash = normalized.trash.filter(isRecord).filter(entry => {
       const ts = new Date(entry.deletedAt || 0).getTime();
       return ts && Date.now() - ts < 30 * 86400000;

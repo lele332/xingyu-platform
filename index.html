@@ -215,6 +215,9 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <span class="nav-label" data-i18n="nav.ai">AI 助手</span>
           <span class="nav-badge" id="aiBadge">AI</span>
         </button>
+        <button class="nav-item" data-view="running">
+          <span class="nav-label" data-i18n="nav.running">跑步训练</span>
+        </button>
       </div>
       <div class="nav-group">
         <div class="nav-group-label">灵感画廊</div>
@@ -562,6 +565,33 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </div>
       </section>
 
+      <!-- 跑步训练 -->
+      <section class="view" id="view-running">
+        <div class="view-toolbar">
+          <div class="toolbar-tabs">
+            <button class="tab-btn active" data-tab="run-overview">训练总览</button>
+            <button class="tab-btn" data-tab="run-log">跑步日志</button>
+          </div>
+          <div class="toolbar-actions">
+            <button class="btn btn-ghost" id="btnImportRunning">导入华为数据</button>
+            <button class="btn btn-primary" id="btnAddRunning">+ 手动记录</button>
+          </div>
+        </div>
+
+        <div class="tab-panel active" id="tab-run-overview">
+          <div class="running-hero" id="runningStats"></div>
+          <div class="card running-weekly-card">
+            <div class="card-head"><h3>近 8 周里程</h3></div>
+            <div id="runningWeekly"></div>
+          </div>
+          <div id="runningBest"></div>
+        </div>
+
+        <div class="tab-panel" id="tab-run-log">
+          <div id="runningList"></div>
+        </div>
+      </section>
+
       <!-- 天气 -->
       <section class="view" id="view-weather">
         <div class="view-toolbar">
@@ -804,6 +834,76 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <div class="qr-actions">
         <button class="btn btn-primary" id="btnCopyLink" data-i18n="qr.copy">复制永久链接</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 弹窗：导入华为跑步数据 ================= -->
+<div class="modal-mask" id="runningImportModal">
+  <div class="modal import-modal">
+    <div class="modal-head">
+      <h3>导入华为运动健康跑步数据</h3>
+      <button class="modal-close" data-close="runningImportModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="hint">在「运动健康 App → 我的 → 隐私中心 / 数据导出」中导出数据包，解压后选择其中的 <b>motion path detail data*.json</b> 文件（可多选）。星屿会自动解析 GPS 轨迹、距离、用时、心率和步频，并识别全马 / 半马。</p>
+      <div class="drop-zone" id="runningDropZone">
+        <div class="drop-inner">
+          <span class="drop-ico"></span>
+          <p>点击选择或拖拽 JSON 文件到此处</p>
+          <p class="hint">支持 motion path detail data*.json，可多选</p>
+        </div>
+        <input type="file" id="runningImportFile" accept=".json,application/json" multiple style="display:none" aria-label="选择华为运动健康 JSON 文件">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 弹窗：手动记录跑步 ================= -->
+<div class="modal-mask" id="runningModal">
+  <div class="modal form-modal">
+    <div class="modal-head">
+      <h3>手动记录跑步</h3>
+      <button class="modal-close" data-close="runningModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <label class="field">
+          <span>日期时间</span>
+          <input type="datetime-local" id="runDate" value="">
+        </label>
+        <label class="field">
+          <span>类型</span>
+          <select id="runType">
+            <option value="run">跑步</option>
+            <option value="half">半马</option>
+            <option value="full">全马</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>距离 (km)</span>
+          <input type="number" id="runDistance" min="0" step="0.01" placeholder="例如 5.02">
+        </label>
+        <label class="field">
+          <span>时长 (分)</span>
+          <input type="number" id="runDuration" min="0" step="0.1" placeholder="例如 28.5">
+        </label>
+        <label class="field">
+          <span>平均心率 (bpm)</span>
+          <input type="number" id="runAvgHr" min="0" step="1" placeholder="可选">
+        </label>
+        <label class="field">
+          <span>平均步频 (步/分)</span>
+          <input type="number" id="runCadence" min="0" step="1" placeholder="可选">
+        </label>
+        <label class="field full">
+          <span>备注</span>
+          <textarea id="runNote" rows="2" placeholder="可选，例如：雨后晨跑 / LDS 长距离"></textarea>
+        </label>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-primary" id="btnSaveRunning">保存</button>
     </div>
   </div>
 </div>
@@ -1217,6 +1317,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 <script defer src="js/motivation.js?v=20260814.6"></script>
   <script defer src="js/splashsound.js?v=20260814.2"></script>
         <script defer src="js/knowledge.js?v=20260814.27"></script>
+<script defer src="js/running.js?v=20260815.1"></script>
 <script defer src="js/app.js?v=20260814.27"></script>
 <script>
   if ("serviceWorker" in navigator && location.protocol !== "file:") {

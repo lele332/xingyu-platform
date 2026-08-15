@@ -2440,3 +2440,37 @@ body.kno-open { overflow: hidden; }
   font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em;
   color: var(--ink-2); margin: 2px 0 10px;
 }
+
+
+/* ---------- 跑步训练模块 ---------- */
+.running-hero { margin-bottom: 18px; }
+.running-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.running-stat {
+  background: var(--paper-card); border: 1px solid var(--rule); border-radius: 8px;
+  padding: 16px 18px; box-shadow: var(--shadow-paper); text-align: center;
+}
+.running-stat b { display: block; font-size: 26px; font-weight: 700; color: var(--ink); line-height: 1.2; font-variant-numeric: tabular-nums; }
+.running-stat span { display: block; font-family: var(--font-mono); font-size: 10px; letter-spacing: 1px; color: var(--ink-3); margin-top: 6px; }
+.running-stat em { display: block; font-style: normal; font-size: 11px; color: var(--ink-2); margin-top: 2px; }
+
+.running-weekly-card { margin-bottom: 16px; }
+.running-weekly-bars { display: flex; align-items: flex-end; gap: 10px; height: 168px; padding: 8px 4px 0; }
+.running-week-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 4px; }
+.running-week-val { font-family: var(--font-mono); font-size: 10px; color: var(--ink-2); min-height: 14px; }
+.running-week-bar { width: 100%; max-width: 34px; background: var(--fill-2); border: 1px solid var(--ink-3); border-radius: 4px 4px 0 0; transition: all var(--dur-fast) var(--ease-out); }
+.running-week-col.cur .running-week-bar { background: var(--ink); border-color: var(--ink); }
+.running-week-label { font-family: var(--font-mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.5px; }
+
+.running-best { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; }
+.running-best-box { background: var(--paper-card); border: 1px solid var(--rule); border-radius: 8px; padding: 16px 18px; box-shadow: var(--shadow-paper); }
+.running-best-label { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 1px; color: var(--ink-3); margin-bottom: 8px; }
+.running-best-time { font-size: 24px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+.running-best-meta { font-size: 12px; color: var(--ink-2); margin-top: 4px; }
+
+.running-item .lit-title { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
+.running-src { font-family: var(--font-mono); font-size: 9px; color: var(--ink); background: var(--fill-2); border: 1px solid var(--rule); padding: 1px 6px; border-radius: 999px; }
+
+@media (max-width: 720px) {
+  .running-stats { grid-template-columns: repeat(2, 1fr); }
+  .running-best { grid-template-columns: 1fr; }
+}
