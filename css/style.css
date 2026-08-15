@@ -574,19 +574,19 @@ body {
   opacity: 0.22;
 }
 [data-bg="guilin-mist"] .bg-photo {
-  background-image: url("../assets/bg-guilin-mist.jpg");
+  background-image: url("../assets/bg-guilin-mist.webp"), url("../assets/bg-guilin-mist.jpg");
   opacity: 0.3;
 }
 [data-bg="guilin-aerial"] .bg-photo {
-  background-image: url("../assets/bg-guilin-aerial.jpg");
+  background-image: url("../assets/bg-guilin-aerial.webp"), url("../assets/bg-guilin-aerial.jpg");
   opacity: 0.26;
 }
 [data-bg="jiuzhaigou"] .bg-photo {
-  background-image: url("../assets/bg-jiuzhaigou.jpg");
+  background-image: url("../assets/bg-jiuzhaigou.webp"), url("../assets/bg-jiuzhaigou.jpg");
   opacity: 0.3;
 }
 [data-bg="zhangjiajie"] .bg-photo {
-  background-image: url("../assets/bg-zhangjiajie.jpg");
+  background-image: url("../assets/bg-zhangjiajie.webp"), url("../assets/bg-zhangjiajie.jpg");
   opacity: 0.28;
 }
 @media (prefers-reduced-motion: no-preference) {
@@ -1064,6 +1064,11 @@ button:focus:not(:focus-visible) { outline: none; }
   background: var(--paper-card); color: var(--ink-2); cursor: pointer; font-size: 12px;
   transition: all var(--dur-fast) var(--ease-out);
   display: inline-flex; align-items: center; justify-content: center;
+  position: relative;
+}
+/* 扩大触控目标至 44px（不影响视觉布局，WCAG 2.5.5） */
+.mini-btn::after {
+  content: ""; position: absolute; inset: -8px; border-radius: inherit;
 }
 .mini-btn:hover { color: var(--ink); background: var(--paper-hover); border-color: var(--ink-3); }
 .mini-btn:active { transform: scale(0.92); }
@@ -2283,3 +2288,155 @@ body { transition: background-color 0.4s var(--ease-out), color 0.4s var(--ease-
 .ebook-sources-stack { flex-direction: column; }
 .ebook-sources-stack .ebook-source { width: 100%; }
 #readerSourceModal { z-index: 400; }
+
+/* ---------- 沉浸式知识画面（文献资料 · 每日知识点击进入） ---------- */
+.kno-immersive {
+  position: fixed; inset: 0; z-index: 320; display: none;
+  overflow: hidden; background: #000;
+}
+.kno-immersive.show { display: block; animation: knoSceneIn 0.5s var(--ease-out) both; }
+.kno-immersive.closing { animation: knoSceneOut 0.25s var(--ease-out) forwards; }
+@keyframes knoSceneIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes knoSceneOut { from { opacity: 1; } to { opacity: 0; } }
+
+.kno-immersive-bg {
+  position: absolute; inset: -6%; background-size: cover; background-position: center;
+  filter: grayscale(45%) contrast(1.08) brightness(0.72) saturate(0.9);
+  transform: scale(1.02);
+}
+.kno-immersive.show .kno-immersive-bg { animation: knoKenBurns 18s var(--ease-in-out) infinite alternate both; }
+@keyframes knoKenBurns {
+  from { transform: scale(1.02) translate(0, 0); }
+  to { transform: scale(1.14) translate(-1.5%, 1.2%); }
+}
+.kno-immersive-vignette {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(130% 90% at 50% 32%, transparent 30%, rgba(0,0,0,0.55) 78%, rgba(0,0,0,0.92) 100%),
+    linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.18) 30%, rgba(0,0,0,0.42) 72%, rgba(0,0,0,0.86));
+}
+.kno-immersive-content {
+  position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column;
+  padding: 26px clamp(20px, 6vw, 64px) 34px;
+}
+.kno-immersive-top { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.kno-immersive-back {
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.18);
+  color: #fff; font-size: 13px; padding: 8px 16px; border-radius: 999px; cursor: pointer;
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  transition: all var(--dur-fast) var(--ease-out); font-family: var(--font);
+}
+.kno-immersive-back:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.4); }
+.kno-immersive-cat {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.28em; color: rgba(255,255,255,0.72);
+  text-transform: uppercase; padding: 6px 12px; border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 999px; background: rgba(0,0,0,0.25); backdrop-filter: blur(8px);
+}
+.kno-immersive-stage {
+  flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+  max-width: 900px; margin: 0 auto; width: 100%;
+}
+.kno-immersive-eyebrow {
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.35em; color: rgba(255,255,255,0.62);
+  margin-bottom: 22px; padding-left: 2px;
+}
+.kno-immersive-title {
+  font-family: var(--font-serif); font-size: clamp(34px, 6.5vw, 76px); font-weight: 700;
+  color: #fff; line-height: 1.18; letter-spacing: 0.01em; margin: 0 0 26px; max-width: 22ch;
+  text-shadow: 0 2px 30px rgba(0,0,0,0.55);
+}
+.kno-immersive-text {
+  font-family: var(--font-serif); font-size: clamp(16px, 2.1vw, 21px); color: rgba(255,255,255,0.9);
+  line-height: 2.05; letter-spacing: 0.02em; max-width: 60ch; margin: 0;
+  text-shadow: 0 1px 18px rgba(0,0,0,0.6);
+}
+.kno-immersive-hint {
+  text-align: center; font-size: 11px; letter-spacing: 0.18em; color: rgba(255,255,255,0.5);
+  font-family: var(--font-mono);
+}
+/* 入场时正文逐层浮现 */
+.kno-immersive.show .kno-immersive-eyebrow { animation: knoRise 0.7s var(--ease-out) 0.15s both; }
+.kno-immersive.show .kno-immersive-title { animation: knoRise 0.8s var(--ease-out) 0.28s both; }
+.kno-immersive.show .kno-immersive-text { animation: knoRise 0.9s var(--ease-out) 0.42s both; }
+@keyframes knoRise {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kno-immersive.show .kno-immersive-bg { animation: none; }
+  .kno-immersive.show .kno-immersive-eyebrow,
+  .kno-immersive.show .kno-immersive-title,
+  .kno-immersive.show .kno-immersive-text { animation: none; }
+}
+/* 不同分类的细微画面氛围（整体仍以黑白灰沉浸为主） */
+.kno-immersive[data-cat="debate"] .kno-immersive-title { border-left: 2px solid rgba(255,255,255,0.5); padding-left: 18px; }
+.kno-immersive[data-cat="magazine"] .kno-immersive-bg { filter: grayscale(20%) contrast(1.05) brightness(0.8) sepia(0.12); }
+.kno-immersive[data-cat="tech"] .kno-immersive-bg { filter: grayscale(30%) contrast(1.1) brightness(0.78) hue-rotate(180deg) saturate(0.55); }
+.kno-immersive[data-cat="geo"] .kno-immersive-bg { filter: grayscale(15%) contrast(1.08) brightness(0.8) saturate(0.7); }
+.kno-immersive[data-cat="food"] .kno-immersive-bg { filter: grayscale(25%) contrast(1.06) brightness(0.82) sepia(0.18); }
+.kno-immersive[data-cat="history"] .kno-immersive-bg { filter: grayscale(55%) contrast(1.05) brightness(0.78) sepia(0.22); }
+.kno-immersive[data-cat="health"] .kno-immersive-bg { filter: grayscale(20%) contrast(1.05) brightness(0.82) saturate(0.75); }
+.kno-immersive[data-cat="life"] .kno-immersive-bg { filter: grayscale(18%) contrast(1.06) brightness(0.82) saturate(0.6); }
+.kno-immersive[data-cat="car"] .kno-immersive-bg { filter: grayscale(35%) contrast(1.1) brightness(0.78) hue-rotate(300deg) saturate(0.5); }
+.kno-immersive[data-cat="mineral"] .kno-immersive-bg { filter: grayscale(28%) contrast(1.12) brightness(0.78) sepia(0.1) saturate(0.6); }
+.kno-immersive[data-cat="fun"] .kno-immersive-bg { filter: grayscale(30%) contrast(1.08) brightness(0.8) saturate(0.8); }
+.kno-immersive[data-cat="exam"] .kno-immersive-bg { filter: grayscale(60%) contrast(1.06) brightness(0.8); }
+@media (max-width: 700px) {
+  .kno-immersive-content { padding: 18px 20px 24px; }
+  .kno-immersive-stage { justify-content: flex-start; padding-top: 12vh; }
+}
+
+/* 知识卡片可点击 + 沉浸式入口提示 */
+.kno-openable { cursor: pointer; }
+.knowledge-open-hint {
+  margin-top: 10px; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em;
+  color: var(--ink-2); border-top: 1px solid var(--rule); padding-top: 10px;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.knowledge-card:hover .knowledge-open-hint,
+.knowledge-daily-card:hover .knowledge-open-hint { color: var(--ink); }
+body.kno-open { overflow: hidden; }
+
+/* 沉浸式知识画面：切换 / 已看控件 */
+.kno-immersive-top { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+.kno-immersive-tools { display: flex; align-items: center; gap: 8px; }
+.kno-immersive-tool {
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.18);
+  color: #fff; font-size: 12px; padding: 8px 12px; border-radius: 999px; cursor: pointer;
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  transition: all var(--dur-fast) var(--ease-out); font-family: var(--font);
+  display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
+}
+.kno-immersive-tool:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.4); }
+.kno-immersive-tool.active {
+  background: rgba(255,255,255,0.92); color: #000; border-color: rgba(255,255,255,0.92);
+}
+.kno-immersive-pos {
+  margin-left: 14px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.55);
+}
+@media (max-width: 640px) {
+  .kno-immersive-top { gap: 10px; }
+  .kno-immersive-tools { order: 3; width: 100%; justify-content: flex-end; }
+  .kno-immersive-tool { padding: 7px 10px; font-size: 11px; }
+}
+
+/* 已看徽标（知识卡片 / 今日一知） */
+.knowledge-daily-img, .knowledge-img { position: relative; }
+.knowledge-viewed-flag {
+  position: absolute; top: 10px; right: 10px; z-index: 2;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em;
+  color: #fff; background: rgba(0,0,0,0.72); border: 1px solid rgba(255,255,255,0.35);
+  padding: 3px 8px; border-radius: 999px; pointer-events: none;
+}
+.knowledge-viewed-badge {
+  display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-mono);
+  font-size: 10px; letter-spacing: 0.12em; color: var(--ink); background: var(--fill-2);
+  border: 1px solid var(--rule); padding: 2px 8px; border-radius: 999px;
+}
+
+/* 个性化推送：今日推荐理由 */
+.knowledge-daily-reason {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em;
+  color: var(--ink-2); margin: 2px 0 10px;
+}

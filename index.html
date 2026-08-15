@@ -10,6 +10,17 @@
 <link rel="icon" href="xingyu.ico">
 <link rel="apple-touch-icon" href="assets/xingyu-app-icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
+<!-- 社交分享标签（微信/QQ/浏览器分享卡片） -->
+<meta property="og:title" content="星屿 · 个人学习工作台">
+<meta property="og:description" content="把学业收拢到一张白纸：课程作业、笔记库、专注统计、成长档案、AI 助手。本地优先，黑白灰三色极简。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="assets/xingyu-app-icon-512.png">
+<meta name="twitter:card" content="summary">
+<!-- 预连接：AI/新闻接口与字体加速 -->
+<link rel="preconnect" href="https://api.deepseek.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://d8j0ntlcm91z4.cloudfront.net">
 <!-- 禁用文档缓存：更新后普通刷新即可生效，无需强制刷新 -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
@@ -662,14 +673,14 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <div class="tab-panel active" id="tab-exams-list">
           <div class="exam-summary" id="examSummary"></div>
           <div class="filter-row">
-            <select class="select" id="examFilterType">
+            <select class="select" id="examFilterType" aria-label="按类型筛选日程">
               <option value="">全部类型</option>
               <option value="exam">考试</option>
               <option value="homework">作业截止</option>
               <option value="event">重要日程</option>
               <option value="important">重要日子</option>
             </select>
-            <select class="select" id="examFilterStatus">
+            <select class="select" id="examFilterStatus" aria-label="按状态筛选日程">
               <option value="">全部状态</option>
               <option value="upcoming">未开始</option>
               <option value="done">已完成</option>
@@ -757,6 +768,29 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
   </div>
 </div>
 
+
+<!-- ================= 沉浸式知识画面（文献资料 · 每日知识点击进入） ================= -->
+<div class="kno-immersive" id="knoImmersive" aria-hidden="true">
+  <div class="kno-immersive-bg" id="knoImmersiveBg"></div>
+  <div class="kno-immersive-vignette"></div>
+  <div class="kno-immersive-content">
+    <div class="kno-immersive-top">
+      <button class="kno-immersive-back" id="knoImmersiveBack" aria-label="返回文献资料">← 返回</button>
+      <div class="kno-immersive-cat" id="knoImmersiveCat"></div>
+      <div class="kno-immersive-tools">
+        <button class="kno-immersive-tool" id="knoImmersivePrev" title="上一条" aria-label="上一条">◀</button>
+        <button class="kno-immersive-tool" id="knoImmersiveViewed" title="标记/取消已看" aria-label="标记已看" aria-pressed="false">○ 标记已看</button>
+        <button class="kno-immersive-tool" id="knoImmersiveNext" title="下一条" aria-label="下一条">▶</button>
+      </div>
+    </div>
+    <div class="kno-immersive-stage">
+      <div class="kno-immersive-eyebrow"><span id="knoImmersiveEyebrow">今日一知</span><span class="kno-immersive-pos" id="knoImmersivePos"></span></div>
+      <h2 class="kno-immersive-title" id="knoImmersiveTitle"></h2>
+      <p class="kno-immersive-text" id="knoImmersiveText"></p>
+    </div>
+    <div class="kno-immersive-hint">← ▶ 可切换 · ✓ 标记已看 · 点画面任意处或 Esc 返回</div>
+  </div>
+</div>
 <!-- ================= 弹窗：二维码 ================= -->
 <div class="modal-mask" id="qrcodeModal">
   <div class="modal qr-modal">
@@ -891,7 +925,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <div class="setting-actions">
           <button class="btn btn-ghost" id="btnUploadSplashSound" type="button">上传 MP3/MP4</button>
           <button class="btn btn-ghost" id="btnPreviewSplashSound" type="button">试听</button>
-          <input type="file" id="splashSoundFile" accept=".mp3,.mp4,audio/*,video/*" multiple style="display:none">
+          <input type="file" id="splashSoundFile" accept=".mp3,.mp4,audio/*,video/*" multiple style="display:none" aria-label="选择开屏音效文件">
         </div>
         <div id="splashCustomList"></div>
         <p class="hint">选择内置励志语录，或上传你自己的 MP3/MP4 作为开屏欢迎声音。上传的文件会保存在本机浏览器，选择会一直记住。</p>
@@ -974,7 +1008,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
             <p>点击选择或拖拽课表图片到此处</p>
             <p class="hint">支持 JPG / PNG，建议图片清晰、文字可读</p>
           </div>
-          <input type="file" id="scheduleImgFile" accept="image/*" style="display:none">
+          <input type="file" id="scheduleImgFile" accept="image/*" style="display:none" aria-label="上传课表截图">
         </div>
         <div id="imgPreview" class="img-preview"></div>
         <div class="import-actions">
@@ -986,7 +1020,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <div class="import-panel" id="itab-text">
         <p class="hint">从教务系统复制课表文字粘贴到这里，AI 或本地规则会自动解析。支持格式示例：</p>
         <div class="code-sample">周一 8:00-9:40 高等数学 教学楼A-301<br>周三 14:00-15:40 操作系统 实验楼B-105</div>
-        <textarea id="scheduleText" rows="7" placeholder="粘贴课表文本..."></textarea>
+        <textarea id="scheduleText" rows="7" placeholder="粘贴课表文本..." aria-label="粘贴课表文本"></textarea>
         <div class="import-actions">
           <button class="btn btn-primary" id="btnParseText">解析课表</button>
         </div>
@@ -1020,7 +1054,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <div class="import-panel active" id="itab-gtext">
         <p class="hint">从教务系统/成绩单复制文字粘贴到这里，AI 或本地规则会自动解析。支持格式示例：</p>
         <div class="code-sample">高等数学 期中考试 88分 5学分<br>大学英语 92<br>数据结构 期末考试 85 4学分 2026春</div>
-        <textarea id="gradesText" rows="7" placeholder="粘贴成绩文本，每行一条..."></textarea>
+        <textarea id="gradesText" rows="7" placeholder="粘贴成绩文本，每行一条..." aria-label="粘贴成绩文本"></textarea>
         <div class="import-actions">
           <button class="btn btn-primary" id="btnParseGrades">解析成绩</button>
         </div>
@@ -1034,7 +1068,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
             <p>点击选择或拖拽成绩单图片到此处</p>
             <p class="hint">支持 JPG / PNG，建议图片清晰、文字可读</p>
           </div>
-          <input type="file" id="gradesImgFile" accept="image/*" style="display:none">
+          <input type="file" id="gradesImgFile" accept="image/*" style="display:none" aria-label="上传成绩单截图">
         </div>
         <div id="gradesImgPreview" class="img-preview"></div>
         <div class="import-actions">
@@ -1070,7 +1104,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <div class="import-panel active" id="itab-ntext">
         <p class="hint">粘贴你的笔记文字，AI 或本地规则会自动识别标题、科目与标签。支持格式：</p>
         <div class="code-sample">高等数学第三章 极限与连续<br>#高数 #极限<br>极限的定义：ε-δ语言...<br>（第1行为标题，#开头为标签，其余为内容）</div>
-        <textarea id="notesText" rows="8" placeholder="粘贴笔记内容，第1行是标题，可以用 #标签 标记主题..."></textarea>
+        <textarea id="notesText" rows="8" placeholder="粘贴笔记内容，第1行是标题，可以用 #标签 标记主题..." aria-label="粘贴笔记内容"></textarea>
         <div class="import-actions">
           <button class="btn btn-primary" id="btnParseNotes">识别并整理</button>
         </div>
@@ -1084,7 +1118,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
             <p>点击选择或拖拽笔记图片到此处</p>
             <p class="hint">支持 JPG / PNG，建议文字清晰可读</p>
           </div>
-          <input type="file" id="notesImgFile" accept="image/*" style="display:none">
+          <input type="file" id="notesImgFile" accept="image/*" style="display:none" aria-label="上传笔记截图">
         </div>
         <div id="notesImgPreview" class="img-preview"></div>
         <div class="import-actions">
@@ -1160,7 +1194,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
   <div class="lock-box">
     <div class="lock-logo">星屿</div>
     <p class="lock-title" data-i18n="lock.title">平台已锁定</p>
-    <input type="password" id="lockPin" placeholder="输入访问密码" autocomplete="off">
+    <input type="password" id="lockPin" placeholder="输入访问密码" autocomplete="off" aria-label="输入访问密码">
     <button class="btn btn-primary" id="btnUnlock" data-i18n="lock.unlock">解锁</button>
     <p class="lock-hint" id="lockHint"></p>
   </div>

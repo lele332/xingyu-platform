@@ -406,31 +406,52 @@
     var box = document.getElementById("knowledgeDaily");
     if (!box) return;
     if (!dailyItem) {
-      var now = new Date();
-      var seed = now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
-      dailyItem = KNOWLEDGE[seed % KNOWLEDGE.length];
+      var stored = loadDailyPick();
+      if (stored) {
+        var found = KNOWLEDGE.find(function (k) { return viewedKey(k) === stored.key; });
+        if (found) dailyItem = found;
+      }
+      if (!dailyItem) {
+        dailyItem = pickDaily(null);
+        saveDailyPick(viewedKey(dailyItem));
+      }
     }
     var item = dailyItem;
     if (!item) return;
     box.innerHTML =
       '<div class="knowledge-daily-card">' +
-        '<div class="knowledge-daily-img"><img src="' + imgFor(item.c + "-" + item.t) + '" alt="' + esc(item.t) + '" loading="lazy"></div>' +
+        '<div class="knowledge-daily-img"><img src="' + imgFor(item.c + "-" + item.t) + '" alt="' + esc(item.t) + '" loading="lazy">' + (isViewed(item) ? '<div class="knowledge-viewed-flag">✓ 已看</div>' : '') + '</div>' +
         '<div class="knowledge-daily-body">' +
-          '<div class="knowledge-daily-top"><span class="knowledge-daily-badge">今日一知</span><span class="knowledge-daily-cat">' + esc(catName(item.c)) + '</span></div>' +
+          '<div class="knowledge-daily-top"><span class="knowledge-daily-badge">今日一知</span><span class="knowledge-daily-cat">' + esc(catName(item.c)) + '</span>' + (isViewed(item) ? '<span class="knowledge-viewed-badge">✓ 已看</span>' : '') + '</div>' +
           '<div class="knowledge-daily-title">' + esc(item.t) + '</div>' +
+          '<div class="knowledge-daily-reason">✦ 为你推荐 · ' + esc(dailyReason()) + '</div>' +
           '<div class="knowledge-daily-text">' + esc(item.d) + '</div>' +
           '<div class="knowledge-daily-actions">' +
             '<button class="btn btn-ghost btn-sm" id="btnKnoNext">↻ 换一条</button>' +
+            '<button class="btn btn-ghost btn-sm" id="btnKnoOpen">⛶ 沉浸式画面</button>' +
           '</div>' +
+          '<div class="knowledge-open-hint">点击卡片任意处，进入全屏沉浸画面</div>' +
         '</div>' +
       '</div>';
     var next = document.getElementById("btnKnoNext");
-    if (next) next.onclick = function () {
-      var i = KNOWLEDGE.indexOf(item);
-      var ni = (i + 1 + Math.floor(Math.random() * (KNOWLEDGE.length - 1))) % KNOWLEDGE.length;
-      dailyItem = KNOWLEDGE[ni];
+    if (next) next.onclick = function (e) {
+      e.stopPropagation();
+      var ni = pickDaily(item);
+      if (ni) { dailyItem = ni; saveDailyPick(viewedKey(ni)); }
       renderDaily();
     };
+    var openBtn = document.getElementById("btnKnoOpen");
+    if (openBtn) openBtn.onclick = function (e) { e.stopPropagation(); openKnowledge(item, true); };
+    var card = box.querySelector(".knowledge-daily-card");
+    if (card) {
+      card.setAttribute("role", "button");
+      card.setAttribute("tabindex", "0");
+      card.setAttribute("aria-label", "进入沉浸式画面：" + item.t);
+      card.title = "点击进入沉浸式画面";
+      card.classList.add("kno-openable");
+      card.onclick = function () { openKnowledge(item, true); };
+      card.onkeydown = function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openKnowledge(item, true); } };
+    }
   }
   function renderCats() {
     var box = document.getElementById("knowledgeCats");
@@ -452,25 +473,251 @@
     if (!box) return;
     var items = activeCat ? KNOWLEDGE.filter(function (k) { return k.c === activeCat; }) : KNOWLEDGE;
     box.innerHTML = items.map(function (k) {
-      return '<div class="knowledge-card">' +
-        '<div class="knowledge-img"><img src="' + imgFor(k.c + "-" + k.t) + '" alt="' + esc(k.t) + '" loading="lazy"></div>' +
+      return '<div class="knowledge-card kno-openable" role="button" tabindex="0" title="点击进入沉浸式画面" aria-label="进入沉浸式画面：' + esc(k.t) + '">' +
+        '<div class="knowledge-img"><img src="' + imgFor(k.c + "-" + k.t) + '" alt="' + esc(k.t) + '" loading="lazy">' + (isViewed(k) ? '<div class="knowledge-viewed-flag">✓ 已看</div>' : '') + '</div>' +
         '<div class="knowledge-body">' +
           '<div class="knowledge-card-cat">' + esc(catName(k.c)) + '</div>' +
           '<div class="knowledge-card-title">' + esc(k.t) + '</div>' +
           '<div class="knowledge-card-text">' + esc(k.d) + '</div>' +
+          '<div class="knowledge-open-hint">点击进入沉浸式画面 →</div>' +
         '</div>' +
       '</div>';
     }).join("");
+    box.querySelectorAll(".knowledge-card").forEach(function (card, i) {
+      var k = items[i];
+      if (!k) return;
+      card.onclick = function () { openKnowledge(k, false); };
+      card.onkeydown = function (e) {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openKnowledge(k, false); }
+      };
+    });
+  }
+
+  /* ================= 沉浸式知识画面（切换 + 已看标记） ================= */
+  var knoSceneOpen = false;
+  var knoNavList = [];
+  var knoNavIndex = 0;
+  var knoFromDaily = false;
+
+  /* 已看状态：本地持久化，按「分类::标题」记录 */
+  function viewedKey(k) { return (k.c || "") + "::" + (k.t || ""); }
+  var viewedCache = null;
+  function viewedSet() {
+    if (viewedCache === null) {
+      viewedCache = {};
+      try {
+        var raw = JSON.parse(localStorage.getItem("lit.knowledge.viewed") || "[]");
+        if (Object.prototype.toString.call(raw) === "[object Array]") raw.forEach(function (k) { viewedCache[k] = true; });
+      } catch (e) {}
+    }
+    return viewedCache;
+  }
+  function isViewed(k) { return !!(k && viewedSet()[viewedKey(k)]); }
+  function markViewed(k, yes) {
+    var s = viewedSet();
+    var key = viewedKey(k);
+    if (yes) s[key] = true; else delete s[key];
+    try { localStorage.setItem("lit.knowledge.viewed", JSON.stringify(Object.keys(s))); } catch (e) {}
+    if (yes) logRead(k);
+  }
+
+  /* 阅读历史：用于个性化推送 */
+  function readHistory() {
+    try { var h = JSON.parse(localStorage.getItem("lit.knowledge.history") || "[]"); return h; } catch (e) { return []; }
+  }
+  function logRead(k) {
+    try {
+      var h = readHistory();
+      h.push({ key: viewedKey(k), c: k.c || "", ts: Date.now() });
+      if (h.length > 500) h = h.slice(-500);
+      localStorage.setItem("lit.knowledge.history", JSON.stringify(h));
+    } catch (e) {}
+  }
+  function categoryAffinity() {
+    var h = readHistory();
+    var now = Date.now();
+    var counts = {};
+    h.forEach(function (e) {
+      var days = (now - e.ts) / 86400000;
+      var w = 1 / (1 + days * 0.35);
+      counts[e.c] = (counts[e.c] || 0) + w;
+    });
+    return counts;
+  }
+  function lastReadTs(k) {
+    var h = readHistory();
+    var key = viewedKey(k);
+    var last = 0;
+    for (var i = h.length - 1; i >= 0; i--) { if (h[i].key === key) { last = h[i].ts; break; } }
+    return last;
+  }
+  function knowledgeScore(k, aff) {
+    var s = 0;
+    if (!isViewed(k)) s += 1000;                              // 未读优先
+    s += (aff[k.c] || 0) * 30;                                // 常读领域加权
+    if (isViewed(k)) s += (Date.now() - lastReadTs(k)) / 86400000; // 全部读过时，优先许久未读的
+    return s;
+  }
+  function topReadCat() {
+    var aff = categoryAffinity();
+    var best = null;
+    Object.keys(aff).forEach(function (c) { if (best === null || aff[c] > aff[best]) best = c; });
+    return best ? catName(best) : "";
+  }
+  function dailyReason() {
+    var top = topReadCat();
+    return top ? "常读「" + top + "」" : "根据你的阅读偏好";
+  }
+  function loadDailyPicks() { try { return JSON.parse(localStorage.getItem("lit.knowledge.dailyPicks") || "[]"); } catch (e) { return []; } }
+  function saveDailyPicks(p) { try { localStorage.setItem("lit.knowledge.dailyPicks", JSON.stringify(p)); } catch (e) {} }
+  function todayStr() { var n = new Date(); return n.getFullYear() + "-" + (n.getMonth() + 1) + "-" + n.getDate(); }
+  function loadDailyPick() {
+    try {
+      var o = JSON.parse(localStorage.getItem("lit.knowledge.dailyPick") || "null");
+      if (o && o.date === todayStr()) return o;
+    } catch (e) {}
+    return null;
+  }
+  function saveDailyPick(key) { try { localStorage.setItem("lit.knowledge.dailyPick", JSON.stringify({ date: todayStr(), key: key })); } catch (e) {} }
+  function pickDaily(exclude) {
+    var aff = categoryAffinity();
+    var picks = loadDailyPicks();
+    var list = KNOWLEDGE.filter(function (k) {
+      var key = viewedKey(k);
+      if (exclude && k === exclude) return false;
+      if (picks.indexOf(key) >= 0) return false;
+      return true;
+    });
+    if (!list.length) list = KNOWLEDGE.slice();
+    list.sort(function (a, b) { return knowledgeScore(b, aff) - knowledgeScore(a, aff); });
+    var now = new Date();
+    var seed = now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
+    var top = list.slice(0, Math.min(5, list.length));
+    var item = top[seed % top.length];
+    var key = viewedKey(item);
+    if (picks.indexOf(key) < 0) picks.push(key);
+    if (picks.length > 60) picks = picks.slice(-60);
+    saveDailyPicks(picks);
+    return item;
+  }
+
+  function knoNavItems() {
+    if (knoFromDaily) return KNOWLEDGE.slice();
+    return activeCat ? KNOWLEDGE.filter(function (k) { return k.c === activeCat; }) : KNOWLEDGE.slice();
+  }
+
+  function renderKnoScene() {
+    var scene = document.getElementById("knoImmersive");
+    var item = knoNavList[knoNavIndex] || null;
+    if (!scene || !item) return;
+    var bg = document.getElementById("knoImmersiveBg");
+    var catEl = document.getElementById("knoImmersiveCat");
+    var eye = document.getElementById("knoImmersiveEyebrow");
+    var pos = document.getElementById("knoImmersivePos");
+    var title = document.getElementById("knoImmersiveTitle");
+    var text = document.getElementById("knoImmersiveText");
+    if (bg) bg.style.backgroundImage = "url('" + imgFor(item.c + "-" + item.t) + "')";
+    if (catEl) catEl.textContent = catName(item.c);
+    if (eye) eye.textContent = knoFromDaily ? "今日推荐 · 为你精选" : "知识阅览 · KNOWLEDGE";
+    if (pos) pos.textContent = (knoNavIndex + 1) + " / " + knoNavList.length;
+    if (title) title.textContent = item.t;
+    if (text) text.textContent = item.d;
+    scene.setAttribute("data-cat", item.c);
+    updateKnoViewedBtn();
+  }
+
+  function updateKnoViewedBtn() {
+    var btn = document.getElementById("knoImmersiveViewed");
+    var item = knoNavList[knoNavIndex];
+    if (!btn) return;
+    var v = isViewed(item);
+    btn.classList.toggle("active", v);
+    btn.textContent = v ? "✓ 已看" : "○ 标记已看";
+    btn.setAttribute("aria-pressed", v ? "true" : "false");
+  }
+
+  function openKnowledge(item, isDaily) {
+    var scene = document.getElementById("knoImmersive");
+    if (!scene || !item) return;
+    knoFromDaily = !!isDaily;
+    knoNavList = knoNavItems();
+    knoNavIndex = -1;
+    for (var i = 0; i < knoNavList.length; i++) { if (knoNavList[i] === item) { knoNavIndex = i; break; } }
+    if (knoNavIndex < 0) knoNavIndex = 0;
+    markViewed(item, true);
+    renderKnowledge();
+    renderKnoScene();
+    scene.classList.remove("closing");
+    scene.classList.add("show");
+    scene.setAttribute("aria-hidden", "false");
+    document.body.classList.add("kno-open");
+    knoSceneOpen = true;
+    var back = document.getElementById("knoImmersiveBack");
+    if (back) setTimeout(function () { back.focus({ preventScroll: true }); }, 80);
+  }
+  function closeKnowledge() {
+    var scene = document.getElementById("knoImmersive");
+    if (!scene || !scene.classList.contains("show")) return;
+    scene.classList.add("closing");
+    setTimeout(function () {
+      scene.classList.remove("show", "closing");
+      scene.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("kno-open");
+      knoSceneOpen = false;
+    }, 230);
+  }
+  function knoPrev() {
+    if (!knoNavList.length) return;
+    knoNavIndex = (knoNavIndex - 1 + knoNavList.length) % knoNavList.length;
+    markViewed(knoNavList[knoNavIndex], true);
+    renderKnowledge();
+    renderKnoScene();
+  }
+  function knoNext() {
+    if (!knoNavList.length) return;
+    knoNavIndex = (knoNavIndex + 1) % knoNavList.length;
+    markViewed(knoNavList[knoNavIndex], true);
+    renderKnowledge();
+    renderKnoScene();
+  }
+  function toggleViewed() {
+    var item = knoNavList[knoNavIndex];
+    if (!item) return;
+    markViewed(item, !isViewed(item));
+    updateKnoViewedBtn();
+    renderKnowledge();
+  }
+  function wireKnoImmersive() {
+    var scene = document.getElementById("knoImmersive");
+    if (!scene) return;
+    var back = document.getElementById("knoImmersiveBack");
+    if (back) back.onclick = closeKnowledge;
+    var prev = document.getElementById("knoImmersivePrev");
+    var next = document.getElementById("knoImmersiveNext");
+    var viewedBtn = document.getElementById("knoImmersiveViewed");
+    if (prev) prev.onclick = knoPrev;
+    if (next) next.onclick = knoNext;
+    if (viewedBtn) viewedBtn.onclick = toggleViewed;
+    scene.addEventListener("click", function (e) { if (e.target === scene) closeKnowledge(); });
+    document.addEventListener("keydown", function (e) {
+      if (!knoSceneOpen) return;
+      if (e.key === "Escape") { closeKnowledge(); return; }
+      if (e.key === "ArrowLeft") { e.preventDefault(); knoPrev(); }
+      if (e.key === "ArrowRight") { e.preventDefault(); knoNext(); }
+    });
   }
 
   window.Knowledge = {
     renderBooks: renderBooks,
     renderDaily: renderDaily,
     renderKnowledge: renderKnowledge,
-    renderJournals: renderJournals
+    renderJournals: renderJournals,
+    openKnowledge: openKnowledge,
+    closeKnowledge: closeKnowledge
   };
   window.Reader = { open: openReader, close: closeReader };
 
   wireReader();
   wireEbook();
+  wireKnoImmersive();
 })();
