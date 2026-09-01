@@ -10,7 +10,7 @@ const Store = (() => {
     const d = {
       schemaVersion: SCHEMA_VERSION,
       profile: { name: "同学", avatar: "", school: "", major: "", grade: "", slogan: "", goal: "", email: "" },
-      settings: { baseUrl: "https://api.deepseek.com/v1", apiKey: "", model: "deepseek-chat", nickname: "", splashSound: "intro-ambient", splashSoundEnabled: true },
+      settings: { baseUrl: "https://api.deepseek.com/v1", apiKey: "", model: "deepseek-chat", nickname: "", splashSound: "intro-ambient", splashSoundEnabled: true, developerMode: false, useLocalAiProxy: false },
       courses: [],       // {id, name, teacher, day(1-7), start, end, location, color}
       tasks: [],         // {id, title, courseId, due(ISO), priority(high/mid/low), status(todo/doing/done), estimate}
       notes: [],         // {id, title, subject, tags[], content, createdAt, updatedAt}
@@ -123,12 +123,60 @@ const Store = (() => {
     seedDemo();
   }
 
+  // 写入失败提示节流：配额写满时高频 save 会连续失败，提示需限流避免刷屏
+  let lastStorageWarn = 0;
+  function notifyStorageFailure() {
+    const now = Date.now();
+    if (now - lastStorageWarn < 60000) return;
+    lastStorageWarn = now;
+    try {
+      window.dispatchEvent(new CustomEvent("xingyu:storage-error", {
+        detail: { message: lastError || "本地数据保存失败" }
+      }));
+    } catch (e) {
+      console.error("[星屿]", lastError);
+    }
+  }
+
   function save() {
     if (!data) data = defaults();
     data.schemaVersion = SCHEMA_VERSION;
+    prunePomodoros(); // 归档超量番茄记录，防主键无限增长
     const ok = storageSet(KEY, JSON.stringify(data));
+    // 调用方大多忽略返回值（19 处裸调用），这里主动派发事件让 UI 提示，
+    // 否则 localStorage 写满时数据静默丢失，用户完全无感知。
+    if (!ok) notifyStorageFailure();
     saveHooks.forEach(fn => { try { fn(); } catch (e) { console.warn("save hook 错误", e); } });
     return ok;
+  }
+
+  /* ---------- pomodoros 归档（2026-08-29） ----------
+     番茄记录只增不减，数年后主键体积可观。超过阈值时把最旧的记录
+     移入独立归档键（保留全部历史，主键恒定在阈值内）。 */
+  const POMODORO_ARCHIVE_KEY = "xingyu_pomodoros_archive";
+  const POMODORO_KEEP = 600;       // 主键保留最近 600 条
+  const POMODORO_TRIGGER = 800;    // 超过 800 条才触发归档，避免频繁搬移
+  function prunePomodoros() {
+    if (!data || !Array.isArray(data.pomodoros) || data.pomodoros.length <= POMODORO_TRIGGER) return;
+    const sorted = data.pomodoros.slice().sort((a, b) => new Date(a.startAt) - new Date(b.startAt));
+    const overflow = sorted.slice(0, sorted.length - POMODORO_KEEP);
+    data.pomodoros = sorted.slice(-POMODORO_KEEP);
+    try {
+      const prev = JSON.parse(storageGet(POMODORO_ARCHIVE_KEY) || "[]");
+      if (Array.isArray(prev)) {
+        storageSet(POMODORO_ARCHIVE_KEY, JSON.stringify(prev.concat(overflow)));
+        console.info("[星屿] 番茄记录已归档", overflow.length, "条");
+      }
+    } catch (e) {
+      console.warn("[星屿] 番茄记录归档失败（保留在主数据中）", e);
+      data.pomodoros = overflow.concat(data.pomodoros); // 归档失败则还原
+    }
+  }
+  function getPomodoroArchive() {
+    try {
+      const arr = JSON.parse(storageGet(POMODORO_ARCHIVE_KEY) || "[]");
+      return Array.isArray(arr) ? arr : [];
+    } catch (e) { return []; }
   }
 
   function onSave(fn) { saveHooks.push(fn); }
@@ -256,6 +304,9 @@ const Store = (() => {
     const snapshot = JSON.parse(JSON.stringify(data));
     snapshot.schemaVersion = SCHEMA_VERSION;
     if (!options.includeSecrets && snapshot.settings) snapshot.settings.apiKey = "";
+    // 归档的番茄记录并入导出/备份，确保备份完整可恢复
+    const archive = getPomodoroArchive();
+    if (archive.length) snapshot.pomodoros = archive.concat(snapshot.pomodoros || []);
     return JSON.stringify(snapshot, null, 2);
   }
   function importAll(json) {

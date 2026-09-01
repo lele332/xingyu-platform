@@ -43,107 +43,348 @@
   d.dataset.font = localStorage.getItem("zero_font") || "default";
   d.dataset.lang = localStorage.getItem("zero_lang") || "zh";
   d.dataset.bg = localStorage.getItem("zero_bg") || "none";
+  d.dataset.bgVis = localStorage.getItem("zero_bg_vis") || "clear";
 })();</script>
-<link rel="stylesheet" href="css/style.css?v=20260814.27">
-<link rel="stylesheet" href="css/apple.css?v=20260811.3">
+<link rel="stylesheet" href="css/weather-aurora.css?v=20260831.1">
+<link rel="stylesheet" href="css/style.css?v=20260831.8">
+<link rel="stylesheet" href="css/apple.css?v=20260829.5">
+<link rel="stylesheet" href="css/synapse.css?v=20260815.1">
+<link rel="stylesheet" href="css/voxcpm.css?v=20260829.1">
+<link rel="stylesheet" href="assets/fonts/local.css?v=20260818.1">
+<!-- 原在此处 preload assets/fonts/font_52a6c245.woff2，该文件随 assets/fonts/ 目录一并丢失
+     （该目录从未纳入 Git，无法从仓库恢复），继续 preload 只会产生 404。
+     页面字体由 --font 系统字体栈提供（-apple-system / PingFang SC / Microsoft YaHei）。
+     若日后恢复自定义字体，取消下面这行注释即可：
+<link rel="preload" href="assets/fonts/font_52a6c245.woff2" as="font" type="font/woff2" crossorigin>
+-->
 </head>
 <body>
 
-<!-- 开屏欢迎动画（视频优先；视频不可用/被拦截时以 ○ 徽记动画兜底，保证手机端也有动画） -->
+<!-- 开屏（iOS 26 风格 · 液态玻璃 + 冷感衬线 hello + 系统启动音） -->
 <div id="splash" class="splash">
-  <div class="splash-inner" id="splashInner">
-    <div class="splash-ring">○</div>
-    <div class="splash-word">零</div>
+  <div class="xy-splash">
+    <canvas id="splashCanvas" class="xy-canvas"></canvas>
+    <!-- 冷感极简衬线 hello：系统启动字标风格 -->
+    <div class="xy-hello" id="xyHello" aria-hidden="true">
+      <div class="xy-hello-word">hello</div>
+      <div class="xy-hello-rule"></div>
+      <div class="xy-hello-sub">XINGYU · SYSTEM READY</div>
+    </div>
+    <div class="xy-glow"></div>
+    <!-- 液态玻璃光晕：单核心 + 柔边高光，干净克制 -->
+    <div class="xy-liquid" aria-hidden="true">
+      <span class="xy-liquid-core"></span>
+      <span class="xy-liquid-highlight"></span>
+      <span class="xy-liquid-ring"></span>
+    </div>
+    <div class="xy-brand">
+      <div class="xy-shine"></div>
+      <svg class="xy-star" viewBox="0 0 96 96" aria-hidden="true">
+        <path class="xy-star-path" d="M48 7c3.2 16.6 10.3 30.4 20.5 37-10.2 6.6-17.3 20.4-20.5 37-3.2-16.6-10.3-30.4-20.5-37C37.7 37.4 44.8 23.6 48 7z"></path>
+        <circle class="xy-star-core" cx="48" cy="48" r="5"></circle>
+      </svg>
+      <div class="xy-name">星屿</div>
+      <div class="xy-sub">XINGYU · PRIVATE WORKSPACE</div>
+    </div>
   </div>
-  <video id="splashVideo" src="assets/intro-720.mp4" muted playsinline preload="metadata"></video>
   <button class="splash-skip" id="splashSkip" type="button">跳过</button>
-  <button class="splash-sound" id="splashSound" type="button">🔇 开启声音</button>
 </div>
 <style>
-.splash{position:fixed;inset:0;z-index:99999;background:#000;display:flex;align-items:center;justify-content:center;transition:opacity .6s ease}
-.splash video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.splash-inner{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:16px;color:#fff;text-align:center}
-.splash-ring{font-size:74px;line-height:1;animation:splashPulse 1.4s var(--ease-out) infinite;pointer-events:none}
-.splash-word{font-size:20px;letter-spacing:.4em;text-indent:.4em;opacity:0;animation:splashWord 1s var(--ease-out) .2s forwards}
+.splash{position:fixed;inset:0;z-index:99999;background:#000;display:flex;align-items:center;justify-content:center;transition:opacity .4s ease;font-family:"Segoe UI Variable Display","Segoe UI",-apple-system,"SF Pro Display","PingFang SC","Microsoft YaHei",sans-serif}
+html.splash-on body > *:not(.splash){visibility:hidden}
+html.splash-on body > #splash{visibility:visible}
+.xy-splash{position:absolute;inset:0;background:#000;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.xy-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:1;contain:strict}
+.xy-glow{position:absolute;left:50%;top:50%;width:min(56vw,520px);height:min(56vw,520px);transform:translate3d(-50%,-50%,0);background:radial-gradient(circle,rgba(245,250,255,.18) 0%,rgba(255,255,255,.05) 42%,transparent 70%);filter:blur(14px);opacity:0;contain:strict;will-change:transform,opacity;animation:xyGlow .9s cubic-bezier(.16,1,.3,1) .12s forwards}
+@keyframes xyGlow{from{opacity:0;transform:translate3d(-50%,-50%,0) scale(.82)}to{opacity:.72;transform:translate3d(-50%,-50%,0) scale(1)}}
+.xy-liquid{position:absolute;z-index:0;left:50%;top:50%;width:160vw;height:160vw;transform:translate3d(-50%,-50%,0) scale(.7);opacity:0;filter:blur(100px);will-change:transform,opacity;animation:xyLiquidBloom 2.6s cubic-bezier(.22,1,.36,1) 0s forwards}
+.xy-liquid-core{position:absolute;inset:0;border-radius:42% 58% 60% 40% / 46% 38% 62% 54%;background:radial-gradient(ellipse at 35% 25%,rgba(120,170,255,.75) 0%,rgba(70,130,230,.4) 25%,rgba(40,80,180,.18) 50%,rgba(20,50,140,.05) 75%,transparent 90%);animation:xyCoreMorph 12s ease-in-out .3s infinite alternate}
+.xy-liquid-highlight{position:absolute;left:15%;top:10%;right:25%;bottom:40%;border-radius:38% 62% 55% 45% / 42% 36% 64% 58%;background:radial-gradient(ellipse at 40% 35%,rgba(180,215,255,.5) 0%,rgba(100,160,240,.2) 40%,transparent 75%);filter:blur(20px);animation:xyHighlight 9s ease-in-out .5s infinite alternate}
+.xy-liquid-ring{display:none}
+@keyframes xyLiquidBloom{from{opacity:0;transform:translate3d(-50%,-50%,0) scale(.6) rotate(-10deg)}to{opacity:.9;transform:translate3d(-50%,-50%,0) scale(1) rotate(0)}}
+@keyframes xyCoreMorph{0%{transform:rotate(0deg) scale(1);border-radius:42% 58% 60% 40% / 46% 38% 62% 54%}50%{transform:rotate(3deg) scale(1.04);border-radius:52% 48% 42% 58% / 52% 44% 56% 48%}100%{transform:rotate(-2deg) scale(.98);border-radius:46% 54% 56% 44% / 40% 56% 44% 60%}}
+@keyframes xyHighlight{0%{transform:translate3d(-2%,-3%,0) scale(.95) rotate(-5deg);opacity:.6}50%{transform:translate3d(3%,2%,0) scale(1.05) rotate(3deg);opacity:.85}100%{transform:translate3d(-1%,4%,0) scale(.98) rotate(2deg);opacity:.7}}
+@media (prefers-reduced-motion:reduce){.xy-liquid{animation:none;opacity:.8;transform:translate3d(-50%,-50%,0) scale(1)}.xy-liquid-core,.xy-liquid-highlight{animation:none}}
+.xy-hello{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;pointer-events:none;opacity:0;transform:translate3d(0,14px,0);animation:xyHelloIn .8s cubic-bezier(.2,.8,.2,1) .28s forwards,xyHelloOut .6s ease 2.6s forwards;will-change:transform,opacity}
+.xy-hello-word{position:relative;font-family:"Instrument Serif", Georgia, "Times New Roman", serif;font-weight:400;font-style:italic;font-size:clamp(72px,13vw,140px);line-height:.95;letter-spacing:.04em;background:linear-gradient(180deg,#fff 0%,#eef1f7 55%,#c2c8d4 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 24px rgba(220,228,240,.25))}
+.xy-hello-word::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.72) 48%,transparent 62%);transform:translate3d(-120%,0,0);animation:xyHelloSheen 1.05s cubic-bezier(.2,.8,.2,1) .6s forwards}
+.xy-hello-rule{width:clamp(70px,13vw,140px);height:1px;background:linear-gradient(90deg,transparent,rgba(225,230,240,.85),transparent);transform:scaleX(.1);opacity:0;animation:xyRuleIn .6s cubic-bezier(.2,.8,.2,1) .55s forwards}
+.xy-hello-sub{font-family:"Geist","Inter",-apple-system,"Segoe UI",sans-serif;font-size:11px;letter-spacing:.52em;text-indent:.52em;color:rgba(220,228,240,.5);opacity:0;transform:translate3d(0,6px,0);animation:xySubIn .5s ease .82s forwards}
+@keyframes xyHelloIn{to{opacity:1;transform:translate3d(0,0,0)}}
+@keyframes xyHelloOut{to{opacity:0;transform:translate3d(0,-14px,0) scale(1.03)}}
+@keyframes xyHelloSheen{to{transform:translate3d(120%,0,0)}}
+@keyframes xyRuleIn{to{opacity:.9;transform:scaleX(1)}}
+@keyframes xySubIn{to{opacity:1;transform:translate3d(0,0,0)}}
+.xy-brand{position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;color:#fff;text-align:center;padding:.25em .4em;margin:-.25em -.4em;overflow:hidden;opacity:0;transform:translateY(26px) scale(.97);animation:xyBrandIn 1.1s cubic-bezier(.16,1,.3,1) 2.4s forwards}
+@keyframes xyBrandIn{to{opacity:1;transform:none}}
+.xy-shine{position:absolute;left:0;top:0;bottom:0;width:38%;background:linear-gradient(105deg,transparent 0%,rgba(255,255,255,.22) 50%,transparent 100%);transform:translate3d(-150%,0,0) skewX(-18deg);animation:xyShine .9s cubic-bezier(.55,0,.3,1) 3.0s forwards;pointer-events:none;will-change:transform}
+@keyframes xyShine{0%{transform:translate3d(-150%,0,0) skewX(-18deg)}55%{transform:translate3d(360%,0,0) skewX(-18deg)}100%{transform:translate3d(360%,0,0) skewX(-18deg)}}
+.xy-star{width:clamp(88px,13vw,128px);height:clamp(88px,13vw,128px);margin-bottom:28px;filter:drop-shadow(0 0 42px rgba(235,240,250,.85)) drop-shadow(0 0 18px rgba(245,248,255,.6))}
+.xy-star-path{fill:none;stroke:#fff;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:620;stroke-dashoffset:620;animation:xyStarDraw 1.6s cubic-bezier(.6,.05,.25,1) 2.45s forwards;filter:drop-shadow(0 0 6px rgba(240,245,255,.8))}
+@keyframes xyStarDraw{to{stroke-dashoffset:0}}
+.xy-star-core{fill:#fff;r:7;opacity:0;animation:xyCore .5s ease 3.35s forwards;filter:drop-shadow(0 0 12px rgba(255,255,255,.95))}
+@keyframes xyCore{to{opacity:1}}
+.xy-name{font-family:"Segoe UI Variable Display","Segoe UI",-apple-system,"SF Pro Display","PingFang SC","Microsoft YaHei",sans-serif;font-size:clamp(48px,11vw,104px);font-weight:600;letter-spacing:.12em;text-indent:.12em;line-height:1.05;background:linear-gradient(180deg,#fff 0%,#e6eaf2 52%,#b4bac8 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 26px rgba(210,218,230,.32))}
+.xy-sub{margin-top:16px;font-size:clamp(11px,1.6vw,15px);letter-spacing:.46em;text-indent:.46em;color:rgba(230,235,245,.55);opacity:0;animation:xySub .8s ease 3.3s forwards}
+@keyframes xySub{to{opacity:1}}
 .splash.fade-out{opacity:0;pointer-events:none}
 .splash-skip{position:absolute;z-index:3;right:18px;bottom:16px;padding:6px 16px;border:1px solid rgba(255,255,255,.35);border-radius:99px;background:rgba(0,0,0,.25);color:rgba(255,255,255,.75);font:inherit;font-size:13px;letter-spacing:.08em;cursor:pointer;user-select:none;transition:opacity .3s}
 .splash-skip:hover{opacity:.7}
-.splash-sound{position:absolute;z-index:3;left:18px;bottom:16px;padding:6px 16px;border:1px solid rgba(255,255,255,.35);border-radius:99px;background:rgba(0,0,0,.25);color:rgba(255,255,255,.75);font:inherit;font-size:13px;letter-spacing:.08em;cursor:pointer;user-select:none;transition:opacity .3s}
-.splash-sound:hover{opacity:.7}
-.splash-sound.on{color:#fff;border-color:rgba(255,255,255,.7)}
-@keyframes splashPulse{0%{transform:scale(.6);opacity:.25}50%{opacity:1}100%{transform:scale(1.2);opacity:.25}}
-@keyframes splashWord{from{opacity:0;transform:translateY(8px)}to{opacity:.85;transform:none}}
-@media (max-width:600px){.splash-ring{font-size:58px}.splash-word{font-size:17px;letter-spacing:.3em}}
 @media (prefers-reduced-motion:reduce){.splash{display:none}}
 </style>
+<!-- 开屏声音必须在开屏脚本之前同步加载：开屏脚本紧接着就要读用户选的音源，
+     而文档末尾那些 defer 脚本（含 store.js）此时都还没执行。
+     该模块内部直接解析 localStorage，不依赖 Store。 -->
+<script src="js/splashsound.js?v=20260829.3"></script>
 <script>
 (function(){
+  // 手机扫码直达完整版：跳过桌面炫技开屏，避免手机浏览器把首屏误认为空白。
+  try {
+    var __qr = new URLSearchParams(location.search);
+    if (__qr.get('mobile') === '1' || __qr.get('src') === 'qr') {
+      window.__splashActive = false;
+      document.documentElement.classList.remove('splash-on');
+      var __splashNode = document.getElementById('splash');
+      if (__splashNode) __splashNode.remove();
+      return;
+    }
+  } catch(e) {}
+
   window.__splashActive = true;
-  var splash=document.getElementById('splash'),video=document.getElementById('splashVideo'),inner=document.getElementById('splashInner'),sk=document.getElementById('splashSkip'),sb=document.getElementById('splashSound'),gone=false,playing=false,soundOn=false,sfx=null,actx=null;
-  function dismiss(){if(sfx){try{sfx.pause();}catch(e){}}if(gone)return;gone=true;window.__splashActive=false;try{window.dispatchEvent(new Event('splash-done'));}catch(e){}splash.classList.add('fade-out');setTimeout(function(){splash.remove()},650);}
-  function setSoundBtn(){ if(sb){ sb.textContent = soundOn ? '\u{1F50A} \u58F0\u97F3\u5DF2\u5F00' : '\u{1F507} \u5F00\u542F\u58F0\u97F3'; if(soundOn) sb.classList.add('on'); else sb.classList.remove('on'); } }
-  function playChime(){
-    try{
-      actx = actx || new (window.AudioContext||window.webkitAudioContext)();
-      if(actx.state==='suspended') actx.resume();
-      var notes=[523.25,659.25,783.99];
-      var t=actx.currentTime;
-      for(var k=0;k<notes.length;k++){
-        var o=actx.createOscillator(),g=actx.createGain();
-        o.type='sine'; o.frequency.value=notes[k];
-        g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(0.18,t+0.02); g.gain.exponentialRampToValueAtTime(0.001,t+1.1);
-        o.connect(g); g.connect(actx.destination); o.start(t+k*0.13); o.stop(t+1.2+k*0.13);
-      }
-    }catch(e){}
+  document.documentElement.classList.add('splash-on');
+  var splash=document.getElementById('splash'),sk=document.getElementById('splashSkip'),gone=false,splashResize=null;
+
+  // 自动播放策略：能否出声取决于「环境」，而不是「有没有手势」。
+  // 原生窗口（WebView2）通过 --autoplay-policy=no-user-gesture-required 放开了自动播放，
+  // 此时即便从未有过手势也应当出声；普通浏览器标签页则会被直接拒绝。
+  // 所以这里不再把「是否已有手势」当总闸，而是直接尝试播放、以 play() 的兑现结果为准：
+  //   兑现 = 环境允许 → 正常出声；拒绝 = 环境不允许 → 静默，等首次交互补播。
+  // 手势追踪只用于判断「此刻创建 AudioContext 是否安全」——无手势时 new AudioContext()
+  // 会被浏览器拒绝并刷 "AudioContext was not allowed to start"（历史上一次冷启动刷过 12 条）。
+  var __gestured = false;
+  ['pointerdown','keydown','touchend'].forEach(function(ev){
+    window.addEventListener(ev, function(){ __gestured = true; }, {passive:true, capture:true});
+  });
+  function hasUserGesture(){
+    if(__gestured) return true;
+    try{ if(navigator.userActivation) return navigator.userActivation.hasBeenActive; }catch(e){}
+    return false;
   }
-  function enableSound(){
-    if(soundOn) return;
-    if((window.SplashSound&&SplashSound.isEnabled)?!SplashSound.isEnabled():false) return;
-    soundOn=true;
-    setSoundBtn();
-    var srcP=(window.SplashSound&&SplashSound.getCurrentSource)?SplashSound.getCurrentSource():Promise.resolve({url:'assets/motivational/quote-perseverance.mp3',name:'默认'});
-    srcP.then(function(src){
-      if(!src){ if(video){ video.muted=true; video.defaultMuted=true; } soundOn=false; setSoundBtn(); return; } // 无声音：整体静默
-      playChime();
-      if(!sfx){ sfx=new Audio(); }
-      sfx.preload='auto';
-      sfx.src=src.url;
-      var pr=sfx.play();
-      if(pr&&pr.catch) pr.catch(function(){ soundOn=false; setSoundBtn(); }); // 自动播放被拦截时回退为手动开启
-      if(video){ video.muted=false; video.defaultMuted=false; var vp=video.play(); if(vp&&vp.catch) vp.catch(function(){}); }
+
+  // 开屏声：优先播用户在「设置 → 开屏声音」里选定的音频文件；
+  // 文件这条路走不通（关掉了 / 文件缺失 / 环境不允许）且已有手势时，才回退内置合成音。
+  var __soundDone = false, __splashAudio = null;
+
+  function playSplashFile(){
+    return new Promise(function(resolve, reject){
+      var SS = window.SplashSound;
+      if(!SS || typeof SS.getCurrentSource !== 'function'){ reject('no-module'); return; }
+      if(!SS.isEnabled()){ reject('disabled'); return; }
+      SS.getCurrentSource().then(function(src){
+        if(!src || !src.url){ reject('no-source'); return; }
+        try{
+          var a = __splashAudio || (__splashAudio = new Audio());
+          a.src = src.url;
+          a.volume = 0.6;
+          a.preload = 'auto';
+          var p = a.play();
+          if(p && typeof p.then === 'function') p.then(resolve, reject);
+          else resolve();
+        }catch(e){ reject(e); }
+      }, reject);
     });
   }
-  function applySoundBtn(){
-    if(!sb) return;
-    var en=(window.SplashSound&&SplashSound.isEnabled)?SplashSound.isEnabled():true;
-    if(!en){ sb.style.display='none'; return; }
-    var sel=(window.SplashSound&&SplashSound.getSelection)?SplashSound.getSelection():'default';
-    if(sel==='none'){ sb.style.display='none'; } else { sb.style.display=''; }
+
+  // 冷感系统启动音（仅作为回退）：两声柔和钟鸣 + 薄低频底。
+  // 调用方必须确保此刻创建 AudioContext 是安全的（已有手势，或环境已放开自动播放），
+  // 否则浏览器会拒绝并刷 "AudioContext was not allowed to start"。
+  // 返回 Promise，方便与文件播放串联；单例复用上下文；播完 close 释放。
+  var __tonePlayed = false, __toneAc = null;
+  function playBootTone(){
+    return new Promise(function(resolve, reject){
+      if(__tonePlayed){ resolve(); return; }
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if(!AC){ reject('no-ac'); return; }
+      __tonePlayed = true;
+      try{
+        var ac = __toneAc || (__toneAc = new AC());
+        if(ac.state==='suspended') ac.resume();
+        var t0 = ac.currentTime + 0.04;
+      var master = ac.createGain(); master.gain.value = 1;
+      var lp = ac.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=1600; lp.Q.value=0.6;
+      master.connect(lp); lp.connect(ac.destination);
+      [0, 0.18].forEach(function(dt,idx){
+        var o1=ac.createOscillator(), o2=ac.createOscillator(), g=ac.createGain();
+        o1.type='sine'; o1.frequency.value = idx===0 ? 440 : 659.25;
+        o2.type='sine'; o2.frequency.value = (idx===0 ? 440 : 659.25) * 2.005;
+        o1.detune.value = -3; o2.detune.value = 6;
+        var gain = idx===0 ? 0.16 : 0.11;
+        g.gain.setValueAtTime(0, t0+dt);
+        g.gain.linearRampToValueAtTime(gain, t0+dt+0.015);
+        g.gain.exponentialRampToValueAtTime(0.0008, t0+dt+1.45);
+        o1.connect(g); o2.connect(g); g.connect(master);
+        o1.start(t0+dt); o2.start(t0+dt); o1.stop(t0+dt+1.5); o2.stop(t0+dt+1.5);
+      });
+      var sub=ac.createOscillator(), sg=ac.createGain();
+      sub.type='sine'; sub.frequency.value=110;
+      sg.gain.setValueAtTime(0,t0); sg.gain.linearRampToValueAtTime(0.08,t0+0.02);
+      sg.gain.exponentialRampToValueAtTime(0.0005,t0+1.6);
+      sub.connect(sg); sg.connect(master); sub.start(t0); sub.stop(t0+1.65);
+        // 音符落定后关闭上下文，避免长期持有音频硬件资源
+        setTimeout(function(){
+          try{ if(__toneAc){ __toneAc.close(); } }catch(e){}
+          __toneAc = null;
+        }, 2400);
+        resolve();
+      }catch(e){ reject(e); }
+    });
   }
-  applySoundBtn();
-  function bootSound(){ applySoundBtn(); try{ enableSound(); }catch(e){} }
-  if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',bootSound); } else { bootSound(); }
-  if(window.addEventListener) window.addEventListener('load',bootSound);
-  function disableSound(){
-    if(!soundOn) return; soundOn=false;
-    if(sfx){ sfx.pause(); }
-    if(video){ video.muted=true; video.defaultMuted=true; }
-    setSoundBtn();
+
+  // 开屏声总入口：先试用户选定的音频文件；被环境拒绝时静默等待首次交互补播。
+  function bootSound(){
+    if(__soundDone) return;
+    var SS = window.SplashSound;
+    if(SS && !SS.isEnabled()){ __soundDone = true; return; }  // 用户在设置里关掉了
+    playSplashFile().then(
+      function(){ __soundDone = true; },
+      function(){
+        // 走到这里有两种可能：环境不允许自动播放，或文件本身不可用。
+        // 只有在确实存在用户手势时才继续尝试——此时创建 AudioContext 不会被拒、也不刷警告；
+        // 否则保持静默，等到首次交互（bootChime 会再次调用）再补播。
+        if(!hasUserGesture()) throw 'autoplay-blocked';
+        return playSplashFile().catch(function(){ return playBootTone(); })
+               .then(function(){ __soundDone = true; });
+      }
+    ).catch(function(){ /* 静默：等首次交互补播 */ });
   }
-  function toggleSound(){ soundOn ? disableSound() : enableSound(); }
-  sk.addEventListener('click',function(e){ e.stopPropagation(); dismiss(); });
-  if(sb){ sb.addEventListener('click',function(e){ e.stopPropagation(); toggleSound(); }); setSoundBtn(); }
-  splash.addEventListener('click',function(){ if(!soundOn) enableSound(); });
-  splash.addEventListener('touchend',function(){ if(!soundOn) enableSound(); },{passive:true});
-  var isMobile = window.matchMedia && window.matchMedia("(max-width: 900px)").matches;
-  if(isMobile || !video || !video.canPlayType || video.error){ if(video) video.remove(); setTimeout(dismiss,1800); return; }
-  video.muted=true; video.defaultMuted=true;
-  video.addEventListener('playing',function(){ playing=true; if(inner) inner.style.display='none'; });
-  video.addEventListener('ended',dismiss);
-  video.addEventListener('error',function(){ setTimeout(dismiss, playing?0:1400); });
-  var p=video.play();
-  if(p && p.catch) p.catch(function(){ setTimeout(dismiss,2200); });
-  setTimeout(dismiss,12000);
+
+  // 星尘背景：黑底上的星星，带轻微闪烁和缓慢流动
+  var __prt = true, __raf = 0;
+  function startParticles(){
+    var cv=document.getElementById('splashCanvas');
+    if(!cv) return;
+    try{
+      if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var ctx=cv.getContext('2d'); if(!ctx) return;
+      var DPR=Math.min(window.devicePixelRatio||1,2), W=0, H=0;
+      splashResize=function(){
+        W=Math.max(2,Math.floor(cv.clientWidth*DPR)); H=Math.max(2,Math.floor(cv.clientHeight*DPR));
+        cv.width=W; cv.height=H;
+      };
+      splashResize(); window.addEventListener('resize',splashResize,{passive:true});
+      var parts=[];
+      for(var i=0;i<220;i++){
+        parts.push({
+          x:Math.random()*W, y:Math.random()*H,
+          r:0.5+Math.random()*2.0,
+          vx:(Math.random()-0.5)*0.08,
+          vy:-0.03-Math.random()*0.18,
+          tw:Math.random()*6.28,
+          ts:0.006+Math.random()*0.018
+        });
+      }
+      function frame(){
+        if(!__prt) return;
+        ctx.clearRect(0,0,W,H);
+        for(var i=0;i<parts.length;i++){
+          var p=parts[i];
+          p.x+=p.vx; p.y+=p.vy; p.tw+=p.ts;
+          if(p.y<-4) p.y=H+4;
+          if(p.x<-4) p.x=W+4;
+          if(p.x>W+4) p.x=-4;
+          var a=0.35+0.55*(0.5+0.5*Math.sin(p.tw));
+          ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.2832);
+          ctx.fillStyle='rgba(225,240,255,'+a.toFixed(3)+')';
+          ctx.shadowColor='rgba(180,210,255,'+(a*0.6).toFixed(3)+')';
+          ctx.shadowBlur=p.r*3;
+          ctx.fill();
+          ctx.shadowBlur=0;
+        }
+        __raf=requestAnimationFrame(frame);
+      }
+      __raf=requestAnimationFrame(frame);
+    }catch(e){}
+  }
+  startParticles();
+
+  // 开屏声：DOM 就绪即尝试；若被自动播放策略挡下，首次交互（点击/触摸开屏）时补播
+  function bootChime(){ try{ bootSound(); }catch(e){} }
+  if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',bootChime); } else { bootChime(); }
+  if(window.addEventListener) window.addEventListener('load',bootChime);
+  // 开屏上的点击/触摸本身就是用户手势：这里显式置位，不依赖 pointerdown → click 的先后顺序
+  function onceInteract(){ __gestured = true; bootChime(); }
+  splash.addEventListener('click',onceInteract);
+  splash.addEventListener('touchend',onceInteract,{passive:true});
+
+  function dismiss(fast){
+    if(gone)return; gone=true;
+    window.__splashCovered = true;
+    if(fast && __splashAudio){ try{ __splashAudio.pause(); }catch(e){} }
+    try{ window.dispatchEvent(new Event('splash-warm')); }catch(e){}
+    // 先让主界面在遮罩后面分段准备；开屏动画本身继续更新，避免同帧抢主线程。
+    try{ window.dispatchEvent(new Event('splash-prepare')); }catch(e){}
+    var fadeStarted=false;
+    function startFade(){
+      if(fadeStarted)return; fadeStarted=true;
+      window.__splashActive=false;
+      window.__splashCovered=false;
+      document.documentElement.classList.remove('splash-on');
+      try{window.dispatchEvent(new Event('splash-done'));}catch(e){}
+      __prt=false; if(__raf) cancelAnimationFrame(__raf);
+      if(splashResize) window.removeEventListener('resize',splashResize);
+      var cv=document.getElementById('splashCanvas');
+      if(cv){ try{cv.width=1; cv.height=1; cv.getContext('2d').clearRect(0,0,1,1);}catch(e){} }
+      setTimeout(function(){
+        splash.classList.add('fade-out');
+        setTimeout(function(){try{splash.remove();}catch(e){}},260);
+      }, 30);
+    }
+    function whenMainReady(){
+      if(window.__xingyuMainReady){ setTimeout(startFade, 40); return; }
+      var done=false, timer=setTimeout(function(){ if(!done){ done=true; startFade(); } }, 1600);
+      window.addEventListener('xingyu-main-ready', function(){
+        if(done)return; done=true; clearTimeout(timer); setTimeout(startFade, 40);
+      }, { once:true });
+    }
+    setTimeout(whenMainReady, fast?30:60);
+  }
+  sk.addEventListener('click',function(e){ e.stopPropagation(); dismiss(true); });
+  if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches){ setTimeout(dismiss,400); return; }
+
+  // 时间线：液态玻璃聚合 -> 冷感衬线 hello -> 星芒与品牌析出 -> 轻柔退场
+  setTimeout(dismiss,5700);
+  setTimeout(dismiss,7500);
+})();
+</script>
+<script>
+/* AI 球体<script>
+/* AI 球体（WebGL）改为按需加载：进入 AI 视图时才启动；
+   平时仅在系统完全空闲时低优先级预载，绝不与开屏视频、入场动画、侧边栏交互抢主线程。 */
+(function(){
+  function bootOrb(){
+    var f = document.getElementById('aiOrbFrame');
+    if (f && f.dataset.src && f.getAttribute('src') === 'about:blank') {
+      f.setAttribute('src', f.dataset.src);
+    }
+  }
+  window.__bootAiOrb = bootOrb;
+  // 空闲预载：只在浏览器空闲帧执行，避免任何可感知卡顿。
+  // 原实现固定 6s 后才启动预载，用户在 6s 内进入 AI 视图会撞上球体 iframe
+  // 首次加载的一次性开销（实测 330ms）。改为取最先到达的触发点：
+  // 开屏结束（最快，约 5.7s 前可达）→ 2.5s 兜底 → 6s 兜底。
+  var __orbPreloaded = false;
+  function preloadOrb() {
+    if (__orbPreloaded) return;
+    __orbPreloaded = true;
+    if (window.requestIdleCallback) {
+      window.requestIdleCallback(function(){ bootOrb(); }, { timeout: 4000 });
+    } else {
+      setTimeout(bootOrb, 1500);
+    }
+  }
+  window.addEventListener('splash-done', function(){ setTimeout(preloadOrb, 300); });
+  setTimeout(preloadOrb, 2500);
+  setTimeout(preloadOrb, 6000);
 })();
 </script>
 
@@ -215,8 +456,18 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <span class="nav-label" data-i18n="nav.ai">AI 助手</span>
           <span class="nav-badge" id="aiBadge">AI</span>
         </button>
+        <button class="nav-item" data-view="voice">
+          <span class="nav-label">AI 语音</span>
+        </button>
+        <button class="nav-item" data-view="aria">
+          <span class="nav-label">A.R.I.A</span>
+        </button>
         <button class="nav-item" data-view="running">
           <span class="nav-label" data-i18n="nav.running">跑步训练</span>
+        </button>
+        <button class="nav-item" data-view="running" data-camp="1">
+          <span class="nav-label">训练营</span>
+          <span class="nav-badge">华</span>
         </button>
       </div>
       <div class="nav-group">
@@ -232,6 +483,9 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </button>
         <button class="nav-item" data-view="securify">
           <span class="nav-label" data-i18n="nav.securify">守御界</span>
+        </button>
+        <button class="nav-item" data-view="particles">
+          <span class="nav-label" data-i18n="nav.particles">粒子星云</span>
         </button>
       </div>
       <div class="nav-group">
@@ -272,8 +526,18 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           autocomplete="off" aria-label="全局搜索" aria-controls="searchResults" aria-autocomplete="list">
         <div class="search-results" id="searchResults" role="listbox" aria-label="搜索结果" hidden></div>
       </div>
+        <button class="icon-btn" id="btnFullscreen" title="全屏 / 退出全屏 (F11)" aria-label="切换全屏">
+          <svg id="fsIconExpand" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2.5 5.5V2.5h3M10.5 2.5h3v3M13.5 10.5v3h-3M5.5 13.5h-3v-3"/></svg>
+          <svg id="fsIconCompress" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true" style="display:none"><path d="M5.5 2.5v3h-3M10.5 2.5v3h3M13.5 10.5h-3v3M2.5 10.5h3v3"/></svg>
+        </button>
         <button class="icon-btn" id="btnQrcode" title="扫码访问" aria-label="扫码访问">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2.5 2.5h5v5h-5zM8.5 2.5h5v5h-5zM2.5 8.5h5v5h-5z"/><path d="M8.5 8.5h2v2h-2zM11 8.5h2.5v2.5H11zM8.5 11.5H11V14H8.5zM11.5 11.5h2.5V14h-2.5z"/></svg>
+        </button>
+        <button class="icon-btn" id="btnRefresh" title="强制刷新 / 重新加载界面" aria-label="强制刷新界面">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 8a5 5 0 1 1 1.5 3.6"/><path d="M3 13.2V8.8"/><path d="M3 8.8h4.4"/></svg>
+        </button>
+        <button class="icon-btn close" id="btnCloseWindow" title="关闭星屿窗口" aria-label="关闭星屿窗口">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13"/></svg>
         </button>
         <span class="network-status" id="networkStatus" role="status" aria-live="polite" hidden>离线</span>
         <div class="clock-box" id="clockBox">
@@ -536,6 +800,9 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <section class="view" id="view-ai">
         <div class="ai-layout">
           <div class="card ai-chat-card">
+            <div class="ai-orb-avatar" title="AI 液态玻璃球">
+              <iframe id="aiOrbFrame" data-src="ai-orb.html?v=20260816.3" src="about:blank" title="AI 液态玻璃球" allow="autoplay" loading="eager"></iframe>
+            </div>
             <div class="card-head">
               <h3>AI 学习助手</h3>
               <div class="ai-head-meta">
@@ -571,6 +838,11 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <div class="toolbar-tabs">
             <button class="tab-btn active" data-tab="run-overview">训练总览</button>
             <button class="tab-btn" data-tab="run-log">跑步日志</button>
+            <button class="tab-btn" data-tab="run-coach">
+              <span class="syn-tab-wave" aria-hidden="true"></span>
+              AI 教练
+            </button>
+            <button class="tab-btn" data-tab="run-camp">训练营</button>
           </div>
           <div class="toolbar-actions">
             <button class="btn btn-ghost" id="btnImportRunning">导入华为数据</button>
@@ -590,6 +862,52 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <div class="tab-panel" id="tab-run-log">
           <div id="runningList"></div>
         </div>
+
+        <div class="tab-panel" id="tab-run-coach"></div>
+
+        <div class="tab-panel" id="tab-run-camp">
+          <div class="card camp-card">
+            <div class="camp-brand">
+              <span class="camp-logo">华</span>
+              <div>
+                <div class="camp-kicker">HUAWEI HEALTH · RUNNING</div>
+                <div class="camp-title">HUAWEI 训练营</div>
+              </div>
+              <span class="camp-status">外部服务 · 需华为账号</span>
+            </div>
+            <p class="camp-desc">华为官方跑步训练营门户：报名训练营、加入跑步战队、完成里程任务、生成专属训练计划并同步到 Watch GT / 手环。已作为「跑步训练」模块的独立入口接入本平台。</p>
+            <div class="camp-actions">
+              <button class="btn btn-primary" id="btnOpenTrainingCamp" type="button">打开华为训练营 ↗</button>
+              <button class="btn btn-ghost" id="btnCopyCampLink" type="button">复制链接</button>
+            </div>
+            <div class="hint camp-hint">说明：训练营网站在华为云端，响应头设置为 <code>X-Frame-Options: SAMEORIGIN</code>，浏览器出于安全会禁止它被第三方页面用 iframe 内嵌。因此这里提供一键在独立窗口打开——登录华为运动健康账号后即可正常使用训练营全部功能。</div>
+          </div>
+          <div class="camp-grid">
+            <div class="card camp-feature">
+              <div class="camp-feature-ic">跑</div>
+              <b>训练营报名</b>
+              <span>查看当前开放的训练营与周期课表</span>
+            </div>
+            <div class="card camp-feature">
+              <div class="camp-feature-ic">队</div>
+              <b>战队任务</b>
+              <span>加入跑步战队，完成团队里程挑战</span>
+            </div>
+            <div class="card camp-feature">
+              <div class="camp-feature-ic">表</div>
+              <b>同步手表</b>
+              <span>训练计划一键下发到 Watch GT / 手环</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- AI 语音（VoxCPM） -->
+      <section class="view" id="view-voice"></section>
+
+      <!-- A.R.I.A 交互站（Mainframe 全屏鼠标交互页） -->
+      <section class="view" id="view-aria">
+        <iframe src="about:blank" data-iframe-src="assets/mainframe.html?v=20260831.4" title="A.R.I.A" loading="lazy" allow="autoplay; fullscreen"></iframe>
       </section>
 
       <!-- 天气 -->
@@ -599,6 +917,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
             <input type="text" id="weatherCityInput" aria-label="????" placeholder="" data-i18n-ph="weather.searchPh">
             <button class="btn btn-primary" id="btnWeatherSearch" data-i18n="weather.search">搜索</button>
             <button class="btn btn-ghost" id="btnWeatherRefresh" data-i18n="weather.refresh">刷新</button>
+          <button class="btn btn-ghost" id="btnWeatherStyle" title="切换天气界面风格">Aurora</button>
           </div>
           <div class="weather-cities" id="weatherCities"></div>
         </div>
@@ -734,23 +1053,27 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       </section>
       <!-- 灵感画廊：棱镜艺境 -->
       <section class="view" id="view-prisma">
-        <iframe src="prisma/index.html" title="棱镜艺境" loading="lazy" allow="autoplay; fullscreen"></iframe>
+        <iframe src="about:blank" data-iframe-src="prisma/index.html" title="棱镜艺境" loading="lazy" allow="autoplay; fullscreen"></iframe>
       </section>
       <!-- 灵感画廊：云门智界 -->
       <section class="view" id="view-nexus">
-        <iframe src="nexus/index.html" title="云门智界" loading="lazy" allow="autoplay; fullscreen"></iframe>
+        <iframe src="about:blank" data-iframe-src="nexus/index.html" title="云门智界" loading="lazy" allow="autoplay; fullscreen"></iframe>
       </section>
       <!-- 灵感画廊：折艺工坊 -->
       <section class="view" id="view-foldcraft">
-        <iframe src="foldcraft/index.html" title="折艺工坊" loading="lazy" allow="autoplay; fullscreen"></iframe>
+        <iframe src="about:blank" data-iframe-src="foldcraft/index.html" title="折艺工坊" loading="lazy" allow="autoplay; fullscreen"></iframe>
       </section>
       <!-- 灵感画廊：守御界 -->
       <section class="view" id="view-securify">
-        <iframe src="securify/index.html" title="守御界" loading="lazy" allow="autoplay; fullscreen"></iframe>
+        <iframe src="about:blank" data-iframe-src="securify/index.html" title="守御界" loading="lazy" allow="autoplay; fullscreen"></iframe>
+      </section>
+      <!-- 灵感画廊：粒子星云 -->
+      <section class="view" id="view-particles">
+        <iframe src="about:blank" data-iframe-src="particles/index.html?v=20260816.4" title="粒子星云" loading="lazy" allow="autoplay; fullscreen"></iframe>
       </section>
       <!-- 工具箱（ToolKnit 桌面版网页端） -->
       <section class="view" id="view-toolknit">
-        <iframe src="toolknit/index.html?v=20260814.13" title="工具箱" loading="lazy" allow="autoplay; fullscreen"></iframe>
+        <iframe src="about:blank" data-iframe-src="toolknit/index.html?v=20260814.13" title="工具箱" loading="lazy" allow="autoplay; fullscreen"></iframe>
       </section>
 
     </div>
@@ -829,10 +1152,12 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <button class="modal-close" data-close="qrcodeModal">✕</button>
     </div>
     <div class="modal-body center">
-      <p class="hint" data-i18n="qr.hint">手机扫码即可永久访问你的个人工作台。</p>
       <div id="qrCodeBox" class="qr-box"></div>
+      <div id="qrNote" class="qr-note"></div>
       <div class="qr-actions">
-        <button class="btn btn-primary" id="btnCopyLink" data-i18n="qr.copy">复制永久链接</button>
+        <button class="btn btn-ghost" id="btnRefreshQr" type="button">重新生成</button>
+        <button class="btn btn-ghost" id="btnCopyPerm">复制永久链接</button>
+        <button class="btn btn-primary" id="btnCopyLan">复制局域网链接</button>
       </div>
     </div>
   </div>
@@ -916,7 +1241,16 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <button class="modal-close" data-close="settingsModal">✕</button>
     </div>
     <div class="modal-body">
-      <div class="setting-group">
+      <div class="settings-shell">
+        <nav class="settings-nav" aria-label="设置分类">
+          <button class="settings-tab" data-settings-tab="appearance"><span>外观</span></button>
+          <button class="settings-tab" data-settings-tab="personal"><span>个人</span></button>
+          <button class="settings-tab" data-settings-tab="intelligence"><span>智能</span></button>
+          <button class="settings-tab" data-settings-tab="access"><span>安全与同步</span></button>
+          <button class="settings-tab" data-settings-tab="system"><span>系统与数据</span></button>
+        </nav>
+        <div class="settings-panels">
+          <section class="settings-panel" data-settings-panel="appearance" hidden><div class="setting-group">
         <h4 data-i18n="settings.theme">界面主题</h4>
         <div class="theme-picker">
           <button class="theme-opt" data-theme-pick="system"><span class="theme-swatch sw-system"></span><span>跟随系统</span></button>
@@ -949,7 +1283,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </div>
         <p class="hint">选一套预设配色，或点「自定义」逐项调色，实时生效。</p>
       </div>
-      <div class="setting-group">
+<div class="setting-group">
         <h4 data-i18n="settings.bg">界面背景</h4>
         <div class="font-picker">
           <button class="theme-opt" data-bg-pick="none" data-i18n="bg.none">无</button>
@@ -958,9 +1292,15 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <button class="theme-opt" data-bg-pick="jiuzhaigou" data-i18n="bg.jiuzhaigou">九寨沟</button>
           <button class="theme-opt" data-bg-pick="zhangjiajie" data-i18n="bg.zhangjiajie">张家界</button>
         </div>
+        <h4 data-i18n="settings.bgVis" style="margin-top:18px">背景可见度</h4>
+        <div class="font-picker">
+          <button class="theme-opt" data-bg-vis="soft" data-i18n="bgVis.soft">隐约</button>
+          <button class="theme-opt" data-bg-vis="clear" data-i18n="bgVis.clear">清晰</button>
+          <button class="theme-opt" data-bg-vis="vivid" data-i18n="bgVis.vivid">极清晰</button>
+        </div>
         <p class="hint" data-i18n="bg.hint">以中国山河摄影作背景，文字始终清晰可读。</p>
       </div>
-      <div class="setting-group">
+<div class="setting-group">
         <h4 data-i18n="settings.font">界面字体</h4>
         <div class="font-picker">
           <button class="theme-opt" data-font-pick="default" data-i18n="font.default">默认</button>
@@ -973,7 +1313,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </div>
         <p class="hint">切换界面正文字体风格。</p>
       </div>
-      <div class="setting-group">
+<div class="setting-group">
         <h4 data-i18n="settings.lang">界面语言</h4>
         <div class="font-picker">
           <button class="theme-opt" data-lang-pick="zh" data-i18n="lang.zh">简体</button>
@@ -982,7 +1322,36 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </div>
         <p class="hint">切换界面显示语言（笔记 / 课程等数据内容保持原样）。</p>
       </div>
-      <div class="setting-group">
+<div class="setting-group">
+        <h4>图标风格</h4>
+        <div class="icon-picker">
+          <button class="icon-opt" data-icon-theme-pick="classic">
+            <span class="icon-preview classic-preview">◎</span>
+            <span>经典动态</span><small>保留当前图标</small>
+          </button>
+          <button class="icon-opt" data-icon-theme-pick="mono">
+            <span class="icon-preview mono-preview">◧</span>
+            <span>SF 单色</span><small>精确线稿</small>
+          </button>
+          <button class="icon-opt" data-icon-theme-pick="multi">
+            <span class="icon-preview multi-preview">◨</span>
+            <span>iOS 多色</span><small>系统色填充</small>
+          </button>
+          <button class="icon-opt" data-icon-theme-pick="glass">
+            <span class="icon-preview glass-preview">◫</span>
+            <span>液态玻璃</span><small>材质微光</small>
+          </button>
+        </div>
+        <p class="hint">四种方案实时切换，经典动态图标始终保留在选项里。</p>
+      </div></section>
+<section class="settings-panel" data-settings-panel="personal" hidden><div class="setting-group">
+        <h4 data-i18n="settings.nick">个人昵称</h4>
+        <label class="field">
+          <span>昵称（显示于侧边栏与问候语）</span>
+          <input type="text" id="setNickname" placeholder="同学">
+        </label>
+      </div></section>
+<section class="settings-panel" data-settings-panel="intelligence" hidden><div class="setting-group">
         <h4 data-i18n="settings.ai">AI 模型配置（OpenAI 兼容接口）</h4>
         <label class="field">
           <span>接口地址 Base URL</span>
@@ -1002,21 +1371,43 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <button class="chip" data-preset="kimi">Kimi</button>
           <button class="chip" data-preset="openai">OpenAI</button>
         </div>
-        <p class="hint">密钥仅保存在你的浏览器本地（localStorage），不会上传到任何服务器。</p>
-      </div>
-      <div class="setting-group">
-        <h4 data-i18n="settings.nick">个人昵称</h4>
-        <label class="field">
-          <span>昵称（显示于侧边栏与问候语）</span>
-          <input type="text" id="setNickname" placeholder="同学">
+        <label class="hint ai-proxy-hint" style="display:flex;gap:9px;align-items:flex-start;margin-top:6px;cursor:pointer">
+          <input type="checkbox" id="setUseProxy" style="width:auto;margin-top:2px">
+          <span>使用本机 AI 代理（桌面端）：勾选后，AI 请求走本机 127.0.0.1 服务转发，API Key 只存在本机 <code>data/ai-key-local.txt</code>，不再写入浏览器存储；手机 / 网页部署时不生效（自动回到直连）。</span>
         </label>
+        <p class="hint">直连模式：密钥仅保存在浏览器 localStorage。代理模式：请把密钥写入本机 <code>data/ai-key-local.txt</code>（或环境变量 XINGYU_AI_KEY），并把「接口地址」填成任意预设。</p>
       </div>
-      <div class="setting-group">
+<div class="setting-group">
+        <h4>AI 助手形象</h4>
+        <button class="orb-edit-card" id="btnEditOrb" type="button" aria-label="编辑 AI 球体形象">
+          <span class="orb-edit-thumb" aria-hidden="true">
+            <svg viewBox="0 0 48 48" role="presentation">
+              <defs>
+                <radialGradient id="orbGradSet" cx="36%" cy="30%" r="78%">
+                  <stop offset="0%" stop-color="rgba(255,255,255,.95)"/>
+                  <stop offset="48%" stop-color="rgba(255,255,255,.25)"/>
+                  <stop offset="100%" stop-color="rgba(255,255,255,.04)"/>
+                </radialGradient>
+              </defs>
+              <circle cx="24" cy="24" r="21" fill="url(#orbGradSet)" stroke="rgba(128,128,128,.5)"/>
+              <circle cx="18" cy="17" r="5" fill="rgba(255,255,255,.75)"/>
+              <path d="M12 34c6 5 18 5 24 0" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="1.5"/>
+            </svg>
+          </span>
+          <span class="set-row-body">
+            <span class="set-row-title">编辑球体形象</span>
+            <span class="set-row-sub">款式 · 颜色 · 质感，保存即应用到 AI 助手</span>
+          </span>
+          <span class="set-action-chevron" aria-hidden="true">›</span>
+        </button>
+      </div></section>
+<section class="settings-panel" data-settings-panel="access" hidden><div class="setting-group" style="display:none">
         <h4>开屏声音</h4>
         <label class="lock-toggle">
-          <input type="checkbox" id="splashSoundEnabled">
+          <input type="checkbox" id="splashSoundEnabled" checked>
           <span>启用开屏声音</span>
         </label>
+        <p class="hint">开屏已启用 Apple 开机音（自动播放）。</p>
         <div id="splashSoundConfig">
         <label class="field">
           <span>开屏欢迎声音</span>
@@ -1031,7 +1422,15 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <p class="hint">选择内置励志语录，或上传你自己的 MP3/MP4 作为开屏欢迎声音。上传的文件会保存在本机浏览器，选择会一直记住。</p>
         </div>
       </div>
-      <div class="setting-group">
+<div class="setting-group">
+        <h4>局域网访问令牌</h4>
+        <div class="lan-token-row">
+          <code id="lanTokenText" class="lan-token-code">仅本机可查看</code>
+          <button class="btn btn-ghost" id="btnCopyLanToken" type="button">复制</button>
+        </div>
+        <p class="hint">手机访问请先打开 <code>http://&lt;电脑IP&gt;:&lt;端口&gt;/access?token=&lt;令牌&gt;</code>；令牌只会显示在本机浏览器里。</p>
+      </div>
+<div class="setting-group">
         <h4 data-i18n="settings.lock">访问密码</h4>
         <label class="lock-toggle">
           <input type="checkbox" id="lockEnabled">
@@ -1054,7 +1453,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </div>
         <p class="hint" id="lockEnabledHint" style="display:none" data-i18n="lock.enabledHint">已开启：打开平台需输入密码。关闭此开关将清除已保存的密码。</p>
       </div>
-      <div class="setting-group">
+<div class="setting-group">
         <h4>云同步（GitHub Gist）</h4>
         <label class="lock-toggle">
           <input type="checkbox" id="syncEnabled">
@@ -1069,8 +1468,51 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </div>
         <p class="hint" id="syncStatus">未启用云同步。</p>
         <p class="hint">在 GitHub 生成带 <b>gist</b> 权限的 Token 粘贴到上方，桌面和手机共用同一份数据。冲突时以较新一端的修改为准。</p>
+      </div></section>
+<section class="settings-panel" data-settings-panel="system" hidden><div class="setting-group">
+        <h4>开发者模式</h4>
+        <div class="set-row">
+          <div class="set-row-body">
+            <div class="set-row-title">开发者模式</div>
+            <div class="set-row-sub">开启后按 F12 打开调试台，右键可“检查元素”</div>
+          </div>
+          <label class="set-switch" aria-label="启用开发者模式">
+            <input type="checkbox" id="devModeEnabled">
+            <span class="set-switch-track"></span>
+          </label>
+        </div>
+        <div class="set-row">
+          <div class="set-row-body">
+            <div class="set-row-title">当前显卡渲染</div>
+            <div class="set-row-sub" id="gpuStatusText">正在检测…</div>
+          </div>
+        </div>
+        <button class="set-action-row" id="btnOpenDevTools" type="button">
+          <span class="set-action-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l6-5-6-5"/><path d="M12 19h8"/></svg>
+          </span>
+          <span class="set-row-body">
+            <span class="set-row-title">立即打开调试台</span>
+            <span class="set-row-sub">当前窗口直接弹出 DevTools，无需重启</span>
+          </span>
+          <span class="set-action-chevron" aria-hidden="true">›</span>
+        </button>
+        <p class="hint" id="devModeHint">已关闭。开启并保存后，重启平台生效。</p>
       </div>
-      <div class="setting-group">
+<div class="setting-group">
+        <h4>问题反馈</h4>
+        <button class="set-action-row" id="btnOpenFeedback" type="button">
+          <span class="set-action-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </span>
+          <span class="set-row-body">
+            <span class="set-row-title">问题反馈与诊断</span>
+            <span class="set-row-sub">自动识别卡顿 / 视频丢帧 / 报错，一键生成报告</span>
+          </span>
+          <span class="set-action-chevron" aria-hidden="true">›</span>
+        </button>
+      </div>
+<div class="setting-group">
         <h4 data-i18n="settings.data">数据管理</h4>
         <div class="setting-actions">
           <button class="btn btn-ghost" id="btnExportData" data-i18n="btn.export">导出数据(JSON)</button>
@@ -1078,6 +1520,8 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <input type="file" id="importFile" aria-label="??????" accept="application/json" style="display:none">
           <button class="btn btn-ghost" id="btnOpenTrash">回收站 <span id="trashCount">0</span></button>
           <button class="btn btn-danger" id="btnClearData" data-i18n="btn.clear">清空全部数据</button>
+        </div>
+      </div></section>
         </div>
       </div>
     </div>
@@ -1289,6 +1733,30 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
   </div>
 </div>
 
+<!-- ================= 弹窗：问题反馈与诊断 ================= -->
+<div class="modal-mask" id="feedbackModal">
+  <div class="modal feedback-modal">
+    <div class="modal-head">
+      <h3>问题反馈与诊断</h3>
+      <button class="modal-close" data-close="feedbackModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="hint">平台会自动识别开屏视频卡顿、主线程长任务、帧率偏低、JS 报错和资源加载失败。你也可以补充描述后保存反馈，报告会存到本机 data/feedback/ 目录。</p>
+      <div id="fbSummary" class="fb-summary" aria-live="polite"></div>
+      <label class="field">
+        <span>补充说明（哪里卡、什么时候卡）</span>
+        <textarea id="fbComment" rows="3" placeholder="例如：开屏视频第 2 秒卡了一下；点侧边栏没反应..."></textarea>
+      </label>
+      <p class="hint" id="fbStatus"></p>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" id="btnFbCopy" type="button">复制报告</button>
+      <button class="btn btn-ghost" id="btnFbExport" type="button">导出 JSON</button>
+      <button class="btn btn-primary" id="btnFbSave" type="button">保存反馈</button>
+    </div>
+  </div>
+</div>
+
 <!-- ================= 锁屏（访问密码） ================= -->
 <div class="lock-mask" id="lockMask" style="display:none">
   <div class="lock-box">
@@ -1304,21 +1772,59 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 <script defer src="assets/js/ScrollTrigger.min.js?v=20260811.3"></script>
 <script defer src="assets/js/anime.min.js?v=20260812.1"></script>
 <script defer src="js/animefx.js?v=20260812.1"></script>
-<script defer src="js/anim.js?v=20260811.3"></script>
-<script defer src="js/local-config.js?v=20260811.3"></script>
+<script defer src="js/anim.js?v=20260817.8"></script>
+<script defer src="js/local-config.js?v=20260831.1"></script>
 <script defer src="js/quotes.js?v=20260811.3"></script>
 <script defer src="js/lunar.js?v=20260811.3"></script>
 <script defer src="js/store.js?v=20260814.2"></script>
 <script defer src="js/sync.js?v=20260811.3"></script>
 <script defer src="js/charts.js?v=20260811.3"></script>
 <script defer src="js/ai.js?v=20260811.3"></script>
-<script defer src="js/weather.js?v=20260811.3"></script>
-<script defer src="js/icons.js?v=20260811.3.1"></script>
-<script defer src="js/motivation.js?v=20260814.6"></script>
-  <script defer src="js/splashsound.js?v=20260814.2"></script>
-        <script defer src="js/knowledge.js?v=20260814.27"></script>
-<script defer src="js/running.js?v=20260815.1"></script>
-<script defer src="js/app.js?v=20260814.27"></script>
+<script defer src="js/icons.js?v=20260831.5"></script>
+<script defer src="js/icons-themes.js?v=20260831.5"></script>
+<script defer src="js/perf.js?v=20260816.1"></script>
+<script defer src="js/app.js?v=20260831.5"></script>
+<script defer src="js/settings-ui.js?v=20260831.5"></script>
+<script>
+/* 非关键模块懒加载：开屏期间不解析这 ~170KB JS（天气/跑步/语音/文献/激励/教练），
+   开屏结束且浏览器空闲后再逐个加载，避免长任务卡顿。 */
+(function(){
+  var LAZY=[
+    "js/weather.js?v=20260831.1",
+    "js/weather-aurora.js?v=20260831.1",
+    "js/motivation.js?v=20260817.1",
+    "js/knowledge.js?v=20260817.1",
+    "js/running.js?v=20260817.1",
+    "js/synapse-coach.js?v=20260817.1",
+    "js/voxcpm-voice.js?v=20260817.1"
+  ];
+  function afterLoad(src){
+    try{
+      var n=src.split("/")[1].split("?")[0];
+      if(n==="weather.js"&&window.Weather){ Weather.init(); if(document.querySelector("#view-weather.active")) Weather.renderCities(); }
+      if(n==="weather-aurora.js"&&window.WeatherAurora){ WeatherAurora.init(); }
+      if(n==="running.js"&&document.querySelector("#view-running.active")){ window.Running&&Running.render(); window.Synapse&&Synapse.render(); }
+      if(n==="voxcpm-voice.js"&&document.querySelector("#view-voice.active")&&window.VoxVoice) VoxVoice.render();
+    }catch(e){}
+  }
+  function loadOne(i){
+    if(i>=LAZY.length) return;
+    var s=document.createElement("script");
+    s.src=LAZY[i]; s.defer=true;
+    s.onload=function(){ afterLoad(LAZY[i]); loadOne(i+1); };
+    s.onerror=function(){ loadOne(i+1); };
+    document.head.appendChild(s);
+  }
+  function start(){
+    if(window.requestIdleCallback) window.requestIdleCallback(function(){ loadOne(0); },{timeout:2200});
+    else setTimeout(function(){ loadOne(0); },900);
+  }
+  // 关键改动：非关键模块不再与开屏动画并行加载；等主界面真正出现后逐个让出空闲时间。
+  var _bootStarted=false;
+  function bootStart(){ if(!_bootStarted){ _bootStarted=true; start(); } }
+  window.addEventListener('splash-done',bootStart,{once:true});
+})();
+</script>
 <script>
   if ("serviceWorker" in navigator && location.protocol !== "file:") {
     window.addEventListener("load", function () {
@@ -1345,6 +1851,26 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 <div id="focusOverlay" style="display:none;position:fixed;inset:0;z-index:99999;background:#000;">
   <iframe id="focusFrame" title="沉浸式专注场景" src="about:blank" style="width:100%;height:100%;border:none;display:block;" allow="autoplay; fullscreen; encrypted-media"></iframe>
 </div>
+<button id="globalExitFab" class="global-exit-fab" type="button" hidden>退出全屏</button>
+
+<!-- react-bits FX · 默认开启。关闭：控制台执行 RBFx.dispose()（或 localStorage.setItem('rb-fx','0') 后刷新） -->
+<link rel="stylesheet" href="css/reactbits-fx.css?v=20260831.3">
+<script defer src="js/reactbits-fx.js?v=20260831.4"></script>
+
+<!-- 语音智能体「小星」· Alt+V 打开面板，Alt+M 直接说话 -->
+<link rel="stylesheet" href="css/voice-agent.css?v=20260831.3">
+<script defer src="js/voice-agent.js?v=20260831.3"></script>
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+

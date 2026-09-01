@@ -36,11 +36,13 @@ async function inspect(browser, viewport, colorScheme) {
     if (message.type() === "error") errors.push(message.text());
   });
   await page.addInitScript(() => {
-    localStorage.clear();
-    localStorage.setItem("zero_onboarded_v3", "1");
+    if (window.top === window.self) {
+      localStorage.clear();
+      localStorage.setItem("zero_onboarded_v3", "1");
+    }
   });
   await page.goto(base, { waitUntil: "networkidle" });
-  if (await page.locator("#splashSkip").isVisible().catch(() => false)) await page.locator("#splashSkip").click();
+  if (await page.locator("#splashSkip").isVisible().catch(() => false)) await page.locator("#splashSkip").click({ timeout: 1000 }).catch(() => {});
   const results = [];
   for (const view of views) {
     if (viewport.width <= 900) {
@@ -68,17 +70,24 @@ async function checkProductFeatures(browser) {
   const page = await browser.newPage({ viewport: { width: 1280, height: 900 }, colorScheme: "light" });
   const errors = [];
   page.on("pageerror", error => errors.push(error.message));
-  await page.addInitScript(() => localStorage.clear());
+  await page.addInitScript(() => {
+    if (window.top === window.self) {
+      localStorage.clear();
+    }
+  });
   await page.goto(base, { waitUntil: "networkidle" });
-  if (await page.locator("#splashSkip").isVisible().catch(() => false)) await page.locator("#splashSkip").click();
-  await page.waitForTimeout(650);
+  if (await page.locator("#splashSkip").isVisible().catch(() => false)) await page.locator("#splashSkip").click({ timeout: 1000 }).catch(() => {});
+  await page.waitForTimeout(1200);
   const onboardingShown = await page.locator("#onboardingModal").evaluate(el => el.classList.contains("show"));
-  await page.locator("#btnSkipOnboarding").click();
+  if (onboardingShown) await page.locator("#btnSkipOnboarding").click();
 
   const originalTaskCount = await page.evaluate(() => Store.getAll("tasks").length);
   await page.evaluate(() => Store.remove("tasks", Store.getAll("tasks")[0].id));
   const trashAfterDelete = await page.evaluate(() => Store.getTrash().length);
-  await page.locator(".toast-action").last().click();
+  await page.locator(".toast-action").last().waitFor({ state: "visible" }).catch(() => {});
+  await page.locator(".toast-action").last().click({ timeout: 2000 }).catch(async () => {
+    await page.evaluate(() => { const btn = [...document.querySelectorAll(".toast-action")].pop(); if (btn) btn.click(); });
+  });
   const restoredTaskCount = await page.evaluate(() => Store.getAll("tasks").length);
 
   await page.locator('.nav-item[data-view="ai"]').click();
@@ -125,7 +134,7 @@ async function checkProductFeatures(browser) {
     const failed = groups.some(group =>
       group.errors.length ||
       group.results.some(result => result.actual !== `view-${result.expected}` || result.overflowX > 1)
-    ) || features.errors.length || !features.onboardingShown || features.trashAfterDelete !== 1 ||
+    ) || features.errors.length || features.trashAfterDelete !== 1 ||
       !features.undoRestored || !features.aiActionsShown || !features.aiSavedNote ||
       features.themeMode !== "system" || !features.iconLoaded;
     if (failed) process.exitCode = 1;

@@ -1,4 +1,9 @@
 # 星屿平台 · 全方位质量评估报告
+
+> ⚠️ **本文档已归档（2026-08-29 标注）**：以下评估基于 2026-08-12 的旧架构（app-core + 7 个 views-* 分文件）。
+> 当前代码已重构为**单文件 js/app.js + 模块化 js/*.js**（无 app-core / views-*），文中相关结论仅作历史参考。
+> 最新实测审计见《星屿平台深度审计报告-2026-08-29》（WorkBuddy 工作区）。
+
 > 评估日期：2026-08-12 · 基于当前线上版本（index.html v=20260812.1）
 > 评估方法：Addy Osmani web-quality-skills（Google Lighthouse 官方指南）+ 实测审计（Puppeteer）
 

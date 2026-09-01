@@ -27,3 +27,8 @@ bak-pomo/
 data/backups/
 focus-scenes/node_modules/
 focus/node_modules/
+# VoxCPM 模型权重缓存（ModelScope，体积大，不随仓库发布）
+models/
+# 本机 AI 密钥 / 反馈报告（绝不提交）
+data/ai-key-local.txt
+data/feedback/

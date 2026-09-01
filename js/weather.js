@@ -401,6 +401,18 @@
     });
   }
 
+  /* ---------- 界面分发：经典 / Aurora（weather-aurora.js） ---------- */
+  function renderDispatch(data, city) {
+    try {
+      if (window.WeatherAurora && localStorage.getItem("zero_wx_style") === "aurora") {
+        window.WeatherAurora.render(data, city);
+        return;
+      }
+    } catch (e) {}
+    if (data.source === "china") renderChina(data, city);
+    else renderMeteo(data, city);
+  }
+
   /* ---------- 加载（优先中国天气，失败降级 Open-Meteo；带本地缓存） ---------- */
   async function load(city, force) {
     if (!city) return;
@@ -417,8 +429,7 @@
       if (!force && cached) {
         var c = JSON.parse(cached);
         if (c && c.data && Date.now() - c.ts < CACHE_TTL) {
-          if (c.data.source === "china") renderChina(c.data, city);
-          else renderMeteo(c.data, city);
+          renderDispatch(c.data, city);
           renderCities(city.name);
           if (loading) loading.style.display = "none";
           if (content) content.style.display = "";
@@ -445,8 +456,7 @@
         }
       }
       localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), data: data }));
-      if (data.source === "china") renderChina(data, city);
-      else renderMeteo(data, city);
+      renderDispatch(data, city);
       renderCities(city.name);
       if (loading) loading.style.display = "none";
       if (content) content.style.display = "";
@@ -459,8 +469,7 @@
         try {
           var stale = JSON.parse(localStorage.getItem(cacheKey) || "null");
           if (stale && stale.data) {
-            if (stale.data.source === "china") renderChina(stale.data, city);
-            else renderMeteo(stale.data, city);
+            renderDispatch(stale.data, city);
             renderCities(city.name);
             content.insertAdjacentHTML("afterbegin", '<div class="weather-stale">' + txt("loadFail") + ' · 已显示缓存数据</div>');
             return;
@@ -522,13 +531,16 @@
       try {
         var c = JSON.parse(cached);
         if (c && c.data) {
-          if (c.data.source === "china") renderChina(c.data, currentCity);
-          else renderMeteo(c.data, currentCity);
+          renderDispatch(c.data, currentCity);
           renderCities(currentCity.name);
         }
       } catch (e) {}
     },
     renderCities: renderCities,
+    currentCity: function () { return currentCity; },
     searchCity: searchChina
   };
 })();
+
+
+

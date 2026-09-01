@@ -1,5 +1,5 @@
 const VIDEO =
-  'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_170732_8a9ccda6-5cff-4628-b164-059c500a2b41.mp4'
+  '/assets/scenes/hf_20260405_170732_8a9ccda6-5cff-4628-b164-059c500a2b41.mp4'
 
 /** 棱镜艺境：全屏云海视频沉浸场景（与其余场景统一，避免长页面/多视频导致卡顿） */
 export default function PrismaScene() {

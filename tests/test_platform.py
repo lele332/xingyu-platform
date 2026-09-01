@@ -1,6 +1,7 @@
 import json
 import threading
 import unittest
+import urllib.error
 import urllib.request
 from html.parser import HTMLParser
 from pathlib import Path
@@ -65,16 +66,61 @@ class PlatformSmokeTests(unittest.TestCase):
             httpd.server_close()
             thread.join(timeout=2)
 
-    def test_backup_endpoint_writes_and_lists(self):
-        import tempfile
-
+    def test_feedback_endpoint_writes(self):
         httpd = server.create_server(0, str(ROOT))
         thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+        feedback_file = None
         thread.start()
         try:
             port = httpd.server_address[1]
 
-            # 1) 非法 payload → 400
+            # 非法 payload → 400
+            req = urllib.request.Request(
+                f"http://127.0.0.1:{port}/api/feedback",
+                data=b"not-json",
+                headers={"Content-Type": "application/json"},
+                method="POST",
+            )
+            with self.assertRaises(urllib.error.HTTPError) as ctx:
+                urllib.request.urlopen(req, timeout=2)
+            self.assertEqual(ctx.exception.code, 400)
+
+            # 合法 payload → 200 且落盘
+            payload = json.dumps({
+                "type": "smoke-test",
+                "message": "feedback endpoint works",
+                "metrics": {"heapMB": 10}
+            }).encode("utf-8")
+            req = urllib.request.Request(
+                f"http://127.0.0.1:{port}/api/feedback",
+                data=payload,
+                headers={"Content-Type": "application/json"},
+                method="POST",
+            )
+            with urllib.request.urlopen(req, timeout=2) as response:
+                result = json.loads(response.read().decode("utf-8"))
+                self.assertTrue(result["ok"])
+                self.assertTrue(result["file"].startswith("report-"))
+                feedback_file = ROOT / "data" / "feedback" / result["file"]
+                self.assertTrue(feedback_file.is_file())
+                saved = json.loads(feedback_file.read_text(encoding="utf-8"))
+                self.assertEqual(saved["type"], "smoke-test")
+        finally:
+            if feedback_file and feedback_file.exists():
+                feedback_file.unlink()
+            httpd.shutdown()
+            httpd.server_close()
+            thread.join(timeout=2)
+
+    def test_backup_endpoint_writes_and_lists(self):
+        httpd = server.create_server(0, str(ROOT))
+        thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+        backup_file = None
+        thread.start()
+        try:
+            port = httpd.server_address[1]
+
+            # 非法 payload → 400
             req = urllib.request.Request(
                 f"http://127.0.0.1:{port}{server.BACKUP_PATH}",
                 data=b"not-json",
@@ -85,8 +131,11 @@ class PlatformSmokeTests(unittest.TestCase):
                 urllib.request.urlopen(req, timeout=2)
             self.assertEqual(ctx.exception.code, 400)
 
-            # 2) 合法 payload → 200 且落盘
-            payload = json.dumps({"data": json.dumps({"schemaVersion": 3, "tasks": []}), "at": "2026-08-12T00:00:00Z"}).encode("utf-8")
+            # 合法快照 → 200 且落盘
+            payload = json.dumps({
+                "data": json.dumps({"schemaVersion": 3, "tasks": []}),
+                "at": "2026-08-29T00:00:00Z"
+            }).encode("utf-8")
             req = urllib.request.Request(
                 f"http://127.0.0.1:{port}{server.BACKUP_PATH}",
                 data=payload,
@@ -97,15 +146,21 @@ class PlatformSmokeTests(unittest.TestCase):
                 result = json.loads(response.read().decode("utf-8"))
                 self.assertTrue(result["ok"])
                 self.assertGreaterEqual(result["count"], 1)
+                backup_file = ROOT / "data" / "backups" / result["file"]
+                self.assertTrue(backup_file.is_file())
 
-            # 3) 信息端点能看到刚才的备份
-            with urllib.request.urlopen(f"http://127.0.0.1:{port}{server.BACKUP_INFO_PATH}", timeout=2) as response:
+            # 信息端点能看到刚才的备份
+            with urllib.request.urlopen(
+                f"http://127.0.0.1:{port}{server.BACKUP_INFO_PATH}", timeout=2
+            ) as response:
                 info = json.loads(response.read().decode("utf-8"))
                 self.assertTrue(info["ok"])
                 self.assertGreaterEqual(info["count"], 1)
                 self.assertIsNotNone(info["lastFile"])
                 self.assertTrue(info["lastFile"].startswith("backup-"))
         finally:
+            if backup_file and backup_file.exists():
+                backup_file.unlink()
             httpd.shutdown()
             httpd.server_close()
             thread.join(timeout=2)

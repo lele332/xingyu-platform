@@ -33,6 +33,7 @@ async function main() {
   try {
     await waitForServer();
     await page.addInitScript(() => {
+      if (window.top !== window.self) return;
       if (!sessionStorage.getItem("pomo_test_initialized")) {
         localStorage.clear();
         localStorage.setItem("zero_onboarded_v3", "1");
@@ -40,100 +41,79 @@ async function main() {
       }
     });
     await page.goto(base, { waitUntil: "networkidle" });
-    if (await page.locator("#splashSkip").isVisible().catch(() => false)) await page.locator("#splashSkip").click();
+    if (await page.locator("#splashSkip").isVisible().catch(() => false)) {
+      await page.locator("#splashSkip").click();
+    }
     await page.locator('[data-mobile-view="focus"]').click();
     await page.waitForTimeout(200);
 
-    await page.locator("#pomoWork").fill("1");
+    // 2 分钟番茄：61 秒后暂停，应记录 1 分钟部分专注。
+    await page.locator("#pomoWork").fill("2");
     await page.locator("#pomoBreak").fill("1");
     await page.locator("#pomoWork").dispatchEvent("change");
     await page.locator("#pomoBreak").dispatchEvent("change");
+
     await page.locator("#btnPomoStart").click();
     const runningText = await page.locator("#pomoMode").textContent();
-    const focusModeOpened = await page.locator("#focusMode").evaluate(el => el.classList.contains("is-open"));
-    await page.waitForTimeout(1200);
-    const afterOneSecond = await page.locator("#pomoTime").textContent();
+    const overlayDisplay = await page.locator("#focusOverlay").evaluate(el => el.style.display);
+    await page.waitForTimeout(62000);
+    const beforePauseTime = await page.locator("#pomoTime").textContent();
 
-    await page.locator("#btnFocusModeToggle").click();
+    await page.keyboard.press("Escape");
+    await page.waitForTimeout(200);
+    await page.locator("#btnPomoStart").click();
+    await page.waitForTimeout(250);
     const pausedText = await page.locator("#pomoMode").textContent();
     const pausedTime = await page.locator("#pomoTime").textContent();
     await page.waitForTimeout(700);
     const pausedStableTime = await page.locator("#pomoTime").textContent();
-    const beforeReload = await page.evaluate(() => ({
-      prefs: localStorage.getItem("xingyu_pomo_prefs_v1"),
-      session: localStorage.getItem("xingyu_pomo_session_v2"),
-      current: { ...window.__debugPomo || {} }
+    const partialState = await page.evaluate(() => ({
+      records: Store.getAll("pomodoros"),
+      partialCount: Store.getAll("pomodoros").filter(p => p.type === "focus" && p.completed === false).length
     }));
 
-    await page.locator("#btnFocusModeToggle").click();
-    await page.reload({ waitUntil: "networkidle" });
-    const sessionBeforeFocusClick = await page.evaluate(() => localStorage.getItem("xingyu_pomo_session_v2"));
-    if (await page.locator("#splashSkip").isVisible().catch(() => false)) await page.locator("#splashSkip").click();
-    await page.waitForFunction(() => document.querySelector("#focusMode")?.classList.contains("is-open"));
-    const runningRestoreOpened = await page.locator("#focusMode").evaluate(el => el.classList.contains("is-open"));
-    await page.locator("#btnFocusModeToggle").click();
-    await page.keyboard.press("Escape");
-    await page.locator('[data-mobile-view="focus"]').click();
-    const restoredTime = await page.locator("#pomoTime").textContent();
-    const afterReload = await page.evaluate(() => ({
-      prefs: localStorage.getItem("xingyu_pomo_prefs_v1"),
-      session: localStorage.getItem("xingyu_pomo_session_v2"),
-      work: document.querySelector("#pomoWork")?.value,
-      mode: document.querySelector("#pomoMode")?.textContent
-    }));
-
+    // 继续按钮应从暂停位置继续，而不是重置。
     await page.locator("#btnPomoStart").click();
-    const focusModeReopened = await page.locator("#focusMode").evaluate(el => el.classList.contains("is-open"));
-    await page.keyboard.press("Escape");
-    const focusModeClosed = await page.locator("#focusMode").evaluate(el => !el.classList.contains("is-open"));
-    const escapedMode = await page.locator("#pomoMode").textContent();
+    const resumedText = await page.locator("#pomoMode").textContent();
+    await page.waitForTimeout(1100);
+    const resumedTime = await page.locator("#pomoTime").textContent();
 
+    // 重置会保留已记录的部分专注。
     await page.locator("#btnPomoReset").click();
     const afterReset = await page.locator("#pomoTime").textContent();
     const state = await page.evaluate(() => ({
-      pomos: Store.getAll("pomodoros"),
-      mode: document.querySelector("#pomoRing")?.dataset.mode,
-      progress: document.querySelector("#pomoRing")?.style.getPropertyValue("--progress"),
-      localSession: localStorage.getItem("xingyu_pomo_session_v2")
+      records: Store.getAll("pomodoros"),
+      partialCount: Store.getAll("pomodoros").filter(p => p.type === "focus" && p.completed === false).length
     }));
 
     const result = {
       runningText,
-      focusModeOpened,
-      focusModeReopened,
-      focusModeClosed,
-      escapedMode,
-      runningRestoreOpened,
-      afterOneSecond,
+      overlayDisplay,
+      beforePauseTime,
       pausedText,
       pausedTime,
       pausedStableTime,
-      restoredTime,
-      beforeReload,
-      afterReload,
-      sessionBeforeFocusClick,
+      partialState,
+      resumedText,
+      resumedTime,
       afterReset,
       state,
       errors
     };
     console.log(JSON.stringify(result, null, 2));
-    if (
+    const failed =
       errors.length ||
       !runningText.includes("专注") ||
-      !focusModeOpened ||
-      !focusModeReopened ||
-      !focusModeClosed ||
-      !runningRestoreOpened ||
-      !escapedMode.includes("暂停") ||
+      overlayDisplay !== "block" ||
       pausedTime !== pausedStableTime ||
-      Math.abs(
-        Number(restoredTime.split(":")[0]) * 60 + Number(restoredTime.split(":")[1]) -
-        (Number(pausedTime.split(":")[0]) * 60 + Number(pausedTime.split(":")[1]))
-      ) > 2 ||
-      afterReset !== "01:00" ||
-      state.pomos.length !== 0 ||
-      state.mode !== "work"
-    ) process.exitCode = 1;
+      !pausedText.includes("已暂停") ||
+      partialState.partialCount !== 1 ||
+      partialState.records[0]?.completed !== false ||
+      !resumedText.includes("专注") ||
+      resumedTime === pausedTime ||
+      afterReset !== "02:00" ||
+      state.partialCount !== 1;
+    if (failed) process.exitCode = 1;
   } finally {
     await browser.close();
     server.kill();

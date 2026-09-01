@@ -15,6 +15,20 @@ const AI = (() => {
   let activeController = null;
   let manuallyCancelled = false;
 
+  // 本机 AI 代理（桌面端）：请求走同源 /ai-proxy/，API Key 只在 server.py 侧，不落浏览器
+  function isLocalAiProxyOn() {
+    const s = Store.getSettings();
+    return !!(s && s.useLocalAiProxy) && /^https?:$/.test(location.protocol);
+  }
+  function aiEndpoint(s) {
+    return isLocalAiProxyOn() ? "/ai-proxy/chat/completions" : chatEndpoint(s.baseUrl);
+  }
+  function aiHeaders(s) {
+    const h = { "Content-Type": "application/json" };
+    if (!isLocalAiProxyOn() && s.apiKey) h.Authorization = "Bearer " + s.apiKey;
+    return h;
+  }
+
   function chatEndpoint(baseUrl) {
     let url;
     try { url = new URL(String(baseUrl || "").trim()); }
@@ -52,20 +66,17 @@ const AI = (() => {
 
   function isConfigured() {
     const s = Store.getSettings();
-    return !!(s.apiKey && s.baseUrl);
+    return isLocalAiProxyOn() || !!(s.apiKey && s.baseUrl);
   }
   /* ---------- 调用 LLM ---------- */
   async function chat(messages, { temperature = 0.7 } = {}) {
     const s = Store.getSettings();
-    if (!s.apiKey || !s.baseUrl) {
+    if (!isLocalAiProxyOn() && (!s.apiKey || !s.baseUrl)) {
       throw new Error("AI 模型未配置，请在「设置」中填写 API Key");
     }
-    const resp = await fetchWithTimeout(chatEndpoint(s.baseUrl), {
+    const resp = await fetchWithTimeout(aiEndpoint(s), {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + s.apiKey
-      },
+      headers: aiHeaders(s),
       body: JSON.stringify({
         model: s.model || "deepseek-chat",
         messages,
@@ -294,7 +305,7 @@ ${notesText}`;
   /* ---------- 图片识别（vision） ---------- */
   async function recognizeScheduleImage(base64DataUrl) {
     const s = Store.getSettings();
-    if (!s.apiKey || !s.baseUrl) {
+    if (!isLocalAiProxyOn() && (!s.apiKey || !s.baseUrl)) {
       throw new Error("AI 模型未配置，请在「设置」中填写 API Key");
     }
     const prompt = `这是一张大学课程表图片。请仔细识别图中所有课程，输出 JSON 数组，每项包含：
@@ -303,12 +314,9 @@ ${notesText}`;
 1. 严格输出 JSON 数组，不要任何额外文字或 markdown 代码块标记
 2. 如果图片无法识别出课程，输出空数组 []
 3. 时间统一为 24 小时制 HH:MM 格式`;
-    const resp = await fetchWithTimeout(chatEndpoint(s.baseUrl), {
+    const resp = await fetchWithTimeout(aiEndpoint(s), {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + s.apiKey
-      },
+      headers: aiHeaders(s),
       body: JSON.stringify({
         model: s.model || "gpt-4o-mini",
         messages: [{
@@ -498,7 +506,7 @@ ${text}`;
   /* ---------- 成绩单图片识别（vision） ---------- */
   async function recognizeGradesImage(base64DataUrl) {
     const s = Store.getSettings();
-    if (!s.apiKey || !s.baseUrl) {
+    if (!isLocalAiProxyOn() && (!s.apiKey || !s.baseUrl)) {
       throw new Error("AI 模型未配置，请在「设置」中填写 API Key");
     }
     const prompt = `这是一张大学成绩单图片。请仔细识别图中所有科目成绩，输出 JSON 数组，每项包含：
@@ -507,12 +515,9 @@ ${text}`;
 1. 严格输出 JSON 数组，不要任何额外文字或 markdown 代码块标记
 2. 如果图片无法识别，输出空数组 []
 3. score 必须为 0-100 的数字`;
-    const resp = await fetchWithTimeout(chatEndpoint(s.baseUrl), {
+    const resp = await fetchWithTimeout(aiEndpoint(s), {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + s.apiKey
-      },
+      headers: aiHeaders(s),
       body: JSON.stringify({
         model: s.model || "gpt-4o-mini",
         messages: [{
@@ -617,7 +622,7 @@ ${text}`;
   /* ---------- 笔记图片识别（vision + OCR） ---------- */
   async function recognizeNotesImage(base64DataUrl) {
     const s = Store.getSettings();
-    if (!s.apiKey || !s.baseUrl) {
+    if (!isLocalAiProxyOn() && (!s.apiKey || !s.baseUrl)) {
       throw new Error("AI 模型未配置，请在「设置」中填写 API Key");
     }
     const prompt = `这是一张学习笔记/手写笔记/书本截图。请识别图中的所有文字内容，并整理为结构化笔记，输出 JSON 数组，每项包含：{"title": "笔记标题", "subject": "科目(如高数/英语，不确定填空字符串)", "tags": ["标签1"], "content": "正文内容(保留要点与换行)"}。
@@ -625,12 +630,9 @@ ${text}`;
 1. 严格输出 JSON 数组，不要额外文字或 markdown 标记
 2. 尽量完整转录正文内容，不要省略
 3. 如果图片不是笔记/无法识别文字，输出空数组 []`;
-    const resp = await fetchWithTimeout(chatEndpoint(s.baseUrl), {
+    const resp = await fetchWithTimeout(aiEndpoint(s), {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + s.apiKey
-      },
+      headers: aiHeaders(s),
       body: JSON.stringify({
         model: s.model || "gpt-4o-mini",
         messages: [{

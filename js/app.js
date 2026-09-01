@@ -140,9 +140,82 @@ const App = (() => {
   let currentView = "dashboard";
   // dashboard 完整开场只播一次，之后切回仅轻量入场
   let _dashboardIntroPlayed = false;
+  // —— 毛玻璃抑制窗口（入场/视图切换/滚动共用，顶层作用域，init 与 switchView 均引用）——
+  let _fxRestoreTimer = null;
+  let bootEntrance = false; // 启动入场期间为 true：视图切换不抢跑毛玻璃恢复
+  // 恢复（防抖）：500ms 内无新抑制请求才真正移除抑制类。
+  // 注意：① 不能用 *{transition:...!important} 做渐显——它会覆盖全站所有元素
+  // 的 transform 过渡（侧边栏滑块、入场动画全变瞬移）；
+  // ② 移除操作必须同步执行，不能包在 requestAnimationFrame 里
+  // （rAF 被节流/冻结时 entrance-fx 将永远残留，全站毛玻璃失效）。
+  function restoreBackdropFX() {
+    clearTimeout(_fxRestoreTimer);
+    _fxRestoreTimer = setTimeout(function () {
+      if (!document.documentElement.classList.contains("entrance-fx")) return;
+      document.documentElement.classList.remove("entrance-fx");
+    }, 500);
+  }
+  // —— 滚动期间抑制毛玻璃 ——
+  // 固定悬浮的侧边栏/顶栏毛玻璃在滚动时会逐帧重采样滚动的背景，
+  // 是「用一会儿就卡」的主要来源。滚动中关闭，停止 350ms 后平滑渐显。
+  let _scrollingTimer = null;
+  let _scrolling = false;
+  function onViewScroll() {
+    // 模态框内部滚动不应影响全局毛玻璃，否则设置页会出现背景忽清忽糊。
+    if (document.body.classList.contains("modal-open")) return;
+    if (!_scrolling) {
+      _scrolling = true;
+      document.documentElement.classList.add("entrance-fx");
+    }
+    clearTimeout(_scrollingTimer);
+    _scrollingTimer = setTimeout(function () {
+      _scrolling = false;
+      restoreBackdropFX();
+    }, 350);
+  }
+  function bindScrollFX() {
+    const containers = $$(".view-container, .view, [class*='list']");
+    containers.forEach(function (el) {
+      el.addEventListener("scroll", onViewScroll, { passive: true });
+    });
+    window.addEventListener("scroll", onViewScroll, { passive: true });
+  }
+  // iframe 子应用（工具箱/粒子星云/棱镜艺境/折艺工坊/守御界/云门智界）内存管理。
+  // 实测：逐个点过去堆内存 3.9MB → 21.9MB 且单调不回落，因为这些 iframe 加载后
+  // 从不销毁。切走时置 about:blank 释放其 JS 堆，切回时还原 src。
+  // 原始地址存 data-iframe-src，避免硬编码到 JS 里。
+  const IFRAME_VIEWS = ["toolknit", "nexus", "prisma", "securify", "foldcraft", "particles", "aria"];
+  let _iframeUnloadTimer = null;
+
+  function primeIframeSrcs() {
+    IFRAME_VIEWS.forEach(function (name) {
+      const box = document.getElementById("view-" + name);
+      if (!box) return;
+      const frame = box.querySelector("iframe");
+      if (frame && (frame.getAttribute("data-iframe-src") || frame.getAttribute("src"))) frame.dataset.iframeSrc = frame.getAttribute("data-iframe-src") || frame.getAttribute("src");
+    });
+  }
+  function unloadIframe(name) {
+    const box = document.getElementById("view-" + name);
+    if (!box) return;
+    const frame = box.querySelector("iframe");
+    if (!frame) return;
+    const cur = frame.getAttribute("src");
+    if (cur && cur !== "about:blank") frame.setAttribute("src", "about:blank");
+  }
+  function loadIframe(name) {
+    const box = document.getElementById("view-" + name);
+    if (!box) return;
+    const frame = box.querySelector("iframe");
+    if (!frame) return;
+    const want = frame.dataset.iframeSrc;
+    if (want && frame.getAttribute("src") !== want) frame.setAttribute("src", want);
+  }
+
   function switchView(view) {
     if (view === currentView) { renderCurrent(); return; }
     const prev = $("#view-" + currentView);
+    const prevName = currentView;
     currentView = view;
     $$(".view").forEach(v => v.classList.remove("active"));
     $$(".nav-item").forEach(n => {
@@ -158,9 +231,25 @@ const App = (() => {
       if (active) tab.setAttribute("aria-current", "page");
       else tab.removeAttribute("aria-current");
     });
+    // 离开 iframe 视图：延迟卸载，等入场动画落定再释放，避免中途白屏闪烁
+    clearTimeout(_iframeUnloadTimer);
+    if (IFRAME_VIEWS.indexOf(prevName) >= 0 && prevName !== view) {
+      _iframeUnloadTimer = setTimeout(function () { unloadIframe(prevName); }, 500);
+    }
+    // 进入 iframe 视图：还原 src（首次由 loading="lazy" 自行加载）
+    if (IFRAME_VIEWS.indexOf(view) >= 0) loadIframe(view);
+
+    // AI 球体按需启动：首次进入 AI 视图才加载 WebGL，避免拖慢开屏后的整体交互
+    if (view === "ai" && window.__bootAiOrb) window.__bootAiOrb();
     const v = $("#view-" + view);
     if (v) {
       v.classList.add("active");
+      // 视图切换同样触发「集中首光栅」：新视图内全部毛玻璃卡片在 display:none→block
+      // 瞬间同时光栅化，核显会卡顿（诊断显示每次切视图 2s+ / 帧率掉到个位数）。
+      // 复用入场窗口：切视图期间抑制毛玻璃，动画 + 首屏光栅落定后平滑渐显。
+      // （启动入场期间由 boot 流程统一管理恢复，这里不抢跑）
+      document.documentElement.classList.add("entrance-fx");
+      if (!bootEntrance) setTimeout(restoreBackdropFX, 900);
       // dashboard 完整开场仅首次播放，后续切回用轻量入场，避免数字反复重滚
       if (view === "dashboard" && window.Anim) {
         if (!_dashboardIntroPlayed) { Anim.dashboardIntro(v); _dashboardIntroPlayed = true; }
@@ -168,8 +257,8 @@ const App = (() => {
       }
       else window.Anim && Anim.viewEnter(v);
     }
-    const titles = { dashboard: t("title.dashboard"), courses: t("title.courses"), notes: t("title.notes"), focus: t("title.focus"), growth: t("title.growth"), lit: t("title.lit"), news: t("title.news"), ai: t("title.ai"), weather: t("title.weather"), prisma: t("title.prisma"), nexus: t("title.nexus"), foldcraft: t("title.foldcraft"), securify: t("title.securify"), running: t("title.running") };
-    const subs = { dashboard: t("sub.dashboard"), courses: t("sub.courses"), notes: t("sub.notes"), focus: t("sub.focus"), growth: t("sub.growth"), lit: t("sub.lit"), news: t("sub.news"), ai: t("sub.ai"), weather: t("sub.weather"), prisma: t("sub.prisma"), nexus: t("sub.nexus"), foldcraft: t("sub.foldcraft"), securify: t("sub.securify"), running: t("sub.running") };
+    const titles = { aria: t("title.aria"), dashboard: t("title.dashboard"), courses: t("title.courses"), notes: t("title.notes"), focus: t("title.focus"), growth: t("title.growth"), lit: t("title.lit"), news: t("title.news"), ai: t("title.ai"), weather: t("title.weather"), prisma: t("title.prisma"), nexus: t("title.nexus"), foldcraft: t("title.foldcraft"), securify: t("title.securify"), particles: t("title.particles"), running: t("title.running"), voice: "AI 语音" };
+    const subs = { dashboard: t("sub.dashboard"), courses: t("sub.courses"), notes: t("sub.notes"), focus: t("sub.focus"), growth: t("sub.growth"), lit: t("sub.lit"), news: t("sub.news"), ai: t("sub.ai"), weather: t("sub.weather"), prisma: t("sub.prisma"), nexus: t("sub.nexus"), foldcraft: t("sub.foldcraft"), securify: t("sub.securify"), particles: t("sub.particles"), running: t("sub.running"), voice: "文本转语音 · VoxCPM" };
     $("#pageTitle").textContent = titles[view] || "";
     const sub = $("#pageSub");
     if (sub) sub.textContent = subs[view] || "";
@@ -177,11 +266,18 @@ const App = (() => {
     document.querySelector(".view-container").scrollTop = 0;
     // 清理旧视图的滚动 reveal（切走后不再保留 trigger）
     if (_revealCleanup) { _revealCleanup(); _revealCleanup = null; }
-    renderCurrent();
-    // 视图从 display:none 变为 block 后重算 ScrollTrigger 位置
-    window.Anim && Anim.refreshScroll();
+    // 视图内容构建拆到下一帧：入场动画（0.42s）期间填充内容视觉无感，
+    // 但主线程立即释放，点击响应与首帧不再被整视图 innerHTML 构建卡住。
+    requestAnimationFrame(function () {
+      renderCurrent();
+      // 视图从 display:none 变为 block 后重算 ScrollTrigger 位置（须在内容填充后）
+      window.Anim && Anim.refreshScroll();
+    });
     // 侧边栏滑块跟随到目标项
     window.Anim && Anim.navPillTo(view, true);
+    // 切换后 600ms 再瞬时校准一次：badge 数字/滚动条变化会让项宽高微调，
+    // 滑块按校准后几何对齐，避免高亮块与激活项出现几像素错位
+    setTimeout(function () { window.Anim && Anim.navPillTo(view, false); }, 600);
   }
 
   function renderCurrent() {
@@ -195,7 +291,11 @@ const App = (() => {
     else if (currentView === "weather") { if (window.Weather) Weather.renderCities(); }
     else if (currentView === "exams") renderExams();
     else if (currentView === "ai") renderAIStatus();
-    else if (currentView === "running") { if (window.Running) Running.render(); }
+    else if (currentView === "running") {
+      if (window.Running) Running.render();
+      if (window.Synapse) Synapse.render();
+    }
+    else if (currentView === "voice") { if (window.VoxVoice) VoxVoice.render(); }
   }
 
   /* ---------- 长列表滚动分批浮入（ScrollTrigger） ---------- */
@@ -324,9 +424,19 @@ const App = (() => {
   }
 
   function renderDashboard() {
+    // 启动引导窗口（__splashCovered=true，开屏仍完全不透明遮蔽主界面）内同步渲染重活，
+    // 让图表/热点/首要安排全部在用户不可见时完成，避免拖进开屏淡出后的可见窗口
+    // （这是“开屏结束侧边栏 2 秒卡顿”的根因之一：requestIdleCallback 把重活推到了可见时段）。
+    const syncHeavy = !!(window.__splashActive || window.__splashCovered || window.__bootPreparing);
+    const _idleRender = fn => {
+      if (syncHeavy) { try { fn(); } catch (e) {} return; }
+      if (window.requestIdleCallback) window.requestIdleCallback(() => { try { fn(); } catch (e) {} }, { timeout: 900 });
+      else setTimeout(() => { try { fn(); } catch (e) {} }, 90);
+    };
     renderQuote();
-    renderHeroNews();
-    renderHeroPriority();
+    // 热点新闻与“首要安排”卡片含稍重的 DOM 构建，启动期间同步、普通切换时放空闲帧
+    _idleRender(() => { renderHeroNews(); });
+    _idleRender(() => renderHeroPriority());
     // 问候语（按时段细化，附一句温暖副语）
     const name = Store.getProfile().name || "同学";
     const h = new Date().getHours();
@@ -359,7 +469,8 @@ const App = (() => {
       <div class="hstat"><b data-count="${pomoMin}">0</b><span>${t("hero.focusMin")}</span></div>`;
     // 数字滚动动画（GSAP 缓动；无 GSAP 时直接显示目标值）
     $$("#heroStats [data-count]").forEach(el => {
-      window.Anim && Anim.countUp(el, +el.dataset.count);
+      if (syncHeavy || !window.Anim) el.textContent = el.dataset.count;
+      else Anim.countUp(el, +el.dataset.count);
     });
 
     // 倒计时
@@ -379,10 +490,10 @@ const App = (() => {
       }).join("");
     }
 
-    // 任务完成统计（环形图）
+    // 任务完成统计（环形图）——图表较重，放到空闲帧渲染，先让文本内容出场
     const done = tasks.filter(t => t.status === "done").length;
     const total = tasks.length;
-    Charts.donut($("#taskStatsChart"), {
+    _idleRender(() => Charts.donut($("#taskStatsChart"), {
       segments: [
         { value: done, color: "var(--ink-2)" },
         { value: total - done, color: "var(--fill-2)" }
@@ -390,13 +501,13 @@ const App = (() => {
       size: 170, thickness: 22,
       centerLabel: total ? Math.round(done / total * 100) + "%" : "0%",
       centerSub: "完成率"
-    });
+    }));
     $("#taskStatsLegend").innerHTML = `
       <span><span class="legend-dot" style="background:var(--ink-2)"></span>已完成 ${done}</span>
       <span><span class="legend-dot" style="background:var(--fill-3)"></span>未完成 ${total - done}</span>`;
 
-    // 专注趋势
-    renderFocusTrend($("#focusTrendChart"), 7);
+    // 专注趋势（同样放到空闲帧）
+    _idleRender(() => renderFocusTrend($("#focusTrendChart"), 7));
 
     // 今日待办
     const todayTasks = todos.filter(t => daysUntil(t.due) === 0).slice(0, 6);
@@ -748,7 +859,7 @@ const App = (() => {
      专注学习
      ============================================================ */
   let pomoTimer = null;
-  let pomoState = { running: false, mode: "work", remain: 25 * 60, total: 25 * 60 };
+  let pomoState = { running: false, paused: false, mode: "work", remain: 25 * 60, total: 25 * 60, startedAt: null, segmentRemain: null, recordedMinutes: 0 };
 
   function renderFocus() {
     renderFocusStats();
@@ -758,7 +869,7 @@ const App = (() => {
   function renderFocusStats() {
     const pomos = Store.getAll("pomodoros");
     const today = pomos.filter(p => p.startAt && localDateKey(p.startAt) === todayISO());
-    const todayCount = today.length;
+    const todayCount = today.filter(p => p.type === "focus" && p.completed !== false).length;
     const todayMin = today.reduce((s, p) => s + (p.minutes || 0), 0);
     const weekMin = pomos.filter(p => {
       if (!p.startAt) return false;
@@ -802,9 +913,10 @@ const App = (() => {
     box.innerHTML = pomos.map(p => {
       const d = new Date(p.startAt);
       const time = `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+      const label = p.type === "break" ? "休息" : (p.completed === false ? "部分专注" : "番茄钟");
       return `<div class="history-item">
         <span class="history-dot"></span>
-        <span>番茄钟 ${p.type === "break" ? "（休息）" : ""}</span>
+        <span>${label}</span>
         <b style="color:var(--accent)">${p.minutes} 分钟</b>
         <span class="history-meta">${fmtDate(p.startAt)} ${time}</span>
       </div>`;
@@ -815,23 +927,46 @@ const App = (() => {
 
   function startPomo() {
     if (pomoState.running) { pausePomo(); return; }
+    if (pomoState.paused) { resumePomo(); return; }
+
     pomoState.running = true;
+    pomoState.paused = false;
     pomoState.mode = "work";
     pomoState.total = (+$("#pomoWork").value || 25) * 60;
     pomoState.remain = pomoState.total;
+    pomoState.startedAt = new Date().toISOString();
+    pomoState.segmentRemain = pomoState.total;
+    pomoState.recordedMinutes = 0;
     updatePomoUI();
+    setPomoRunningUI("专注中 ");
+    pomoTimer = setInterval(tickPomo, 1000);
+    openFocusScene();
+  }
+
+  function resumePomo() {
+    pomoState.running = true;
+    pomoState.paused = false;
+    pomoState.segmentRemain = pomoState.remain;
+    setPomoRunningUI(pomoState.mode === "work" ? "专注中 " : "休息中 ");
+    pomoTimer = setInterval(tickPomo, 1000);
+  }
+
+  function setPomoRunningUI(modeText) {
     $("#btnPomoStart").textContent = "暂停";
     $("#btnPomoStart").classList.add("btn-danger");
     $(".pomodoro-card").classList.add("working");
-    $("#pomoMode").textContent = "专注中 ";
+    $("#pomoMode").textContent = modeText;
     if (window.AnimeFX) AnimeFX.pomoPulse();
-    pomoTimer = setInterval(tickPomo, 1000);
-    openFocusScene();
   }
 
   /* ============================================================
      沉浸式专注场景（点击「开始专注」后全屏展示，可切换三套电影感场景）
      ============================================================ */
+  // 退出控件同步钩子：真正的实现在 init 作用域内（要用到 toggleFullscreen 等局部函数），
+  // 这里只留一个可调用入口。全局同一时刻只保留一个退出按钮，由它按状态切换文案与行为，
+  // 避免沉浸场景下出现两个按钮在右下角重叠、且文案互相矛盾的情况。
+  let syncExitFabHook = null;
+
   function openFocusScene() {
     const overlay = $("#focusOverlay");
     const frame = $("#focusFrame");
@@ -841,14 +976,31 @@ const App = (() => {
     const minutes = Math.max(1, Math.round(pomoState.total / 60) || 25);
     overlay.style.display = "block";
     frame.src = "focus/index.html?minutes=" + minutes;
+    // 场景加载完成后把键盘焦点交给 iframe，确保 Esc 第一时间可用
+    frame.onload = () => { try { frame.contentWindow && frame.contentWindow.focus(); } catch (e) {} };
+    // 唯一的悬浮退出按钮：切到「退出专注 (Esc)」文案，点击只关闭沉浸场景
+    if (syncExitFabHook) syncExitFabHook();
   }
 
   function closeFocusScene() {
     const overlay = $("#focusOverlay");
     const frame = $("#focusFrame");
     if (overlay) overlay.style.display = "none";
-    if (frame) frame.src = "about:blank";
+    if (frame) { frame.onload = null; frame.src = "about:blank"; }
+    // 重算退出按钮：若仍处于网页全屏 / 原生全屏，恢复成「退出全屏」
+    if (syncExitFabHook) syncExitFabHook();
+    try { window.focus(); } catch (e) {}
   }
+
+  // 父页面 Esc 兜底：即使键盘焦点没有进入 iframe，也能退出沉浸场景
+  document.addEventListener("keydown", e => {
+    if (e.key !== "Escape") return;
+    const overlay = $("#focusOverlay");
+    if (overlay && overlay.style.display !== "none") {
+      e.preventDefault();
+      closeFocusScene();
+    }
+  });
 
   // 沉浸式场景内播放励志语音时，通知主应用停止自身音频，避免双声重叠
   window.addEventListener("message", function (ev) {
@@ -857,8 +1009,30 @@ const App = (() => {
     }
   });
 
+  function recordPartialPomo() {
+    if (!pomoState.running || pomoState.mode !== "work") return;
+    const segmentRemain = Number.isFinite(pomoState.segmentRemain) ? pomoState.segmentRemain : pomoState.total;
+    const elapsedSeconds = Math.max(0, segmentRemain - pomoState.remain);
+    const minutes = Math.floor(elapsedSeconds / 60);
+    if (minutes < 1) return;
+    Store.add("pomodoros", {
+      startAt: new Date().toISOString(),
+      minutes,
+      type: "focus",
+      completed: false
+    });
+    pomoState.recordedMinutes += minutes;
+    pomoState.segmentRemain = pomoState.remain;
+    renderFocusStats();
+    renderFocusHistory();
+    toast(`已记录 ${minutes} 分钟部分专注`, "ok");
+  }
+
   function pausePomo() {
+    if (!pomoState.running) return;
+    recordPartialPomo();
     pomoState.running = false;
+    pomoState.paused = true;
     clearInterval(pomoTimer);
     $("#btnPomoStart").textContent = "继续";
     $("#btnPomoStart").classList.remove("btn-danger");
@@ -879,23 +1053,42 @@ const App = (() => {
   function completePomo() {
     clearInterval(pomoTimer);
     pomoState.running = false;
-    const minutes = Math.round(pomoState.total / 60);
-    Store.add("pomodoros", { startAt: new Date().toISOString(), minutes, type: pomoState.mode });
+    pomoState.paused = false;
+    const totalMinutes = Math.max(1, Math.round(pomoState.total / 60));
     if (pomoState.mode === "work") {
+      const minutes = Math.max(1, totalMinutes - pomoState.recordedMinutes);
+      Store.add("pomodoros", {
+        startAt: pomoState.startedAt || new Date().toISOString(),
+        minutes,
+        type: "focus",
+        completed: true
+      });
       toast("专注完成！休息一下吧", "ok");
       // 自动切换到休息
       pomoState.mode = "break";
       pomoState.total = (+$("#pomoBreak").value || 5) * 60;
       pomoState.remain = pomoState.total;
+      pomoState.startedAt = new Date().toISOString();
+      pomoState.segmentRemain = pomoState.total;
+      pomoState.recordedMinutes = 0;
       $("#pomoMode").textContent = "休息中 ";
       $("#btnPomoStart").textContent = "跳过休息";
       $("#btnPomoStart").classList.remove("btn-danger");
       pomoState.running = true;
       pomoTimer = setInterval(tickPomo, 1000);
     } else {
+      Store.add("pomodoros", {
+        startAt: pomoState.startedAt || new Date().toISOString(),
+        minutes: totalMinutes,
+        type: "break",
+        completed: true
+      });
       $("#pomoMode").textContent = "休息结束，继续加油！";
       $("#btnPomoStart").textContent = "开始专注";
       $("#btnPomoStart").classList.remove("btn-danger");
+      pomoState.startedAt = null;
+      pomoState.segmentRemain = null;
+      pomoState.recordedMinutes = 0;
     }
     updatePomoUI();
     renderFocusStats();
@@ -1164,6 +1357,15 @@ const App = (() => {
     }
   }
 
+  function warmLaunchAssets() {
+    if (warmLaunchAssets.done) return;
+    warmLaunchAssets.done = true;
+    // 新闻 JSON 解析是启动期少数可观测长任务之一；等主界面稳定后再让出空闲时间执行。
+    const warm = () => setTimeout(() => { try { loadNews(true).catch(() => {}); } catch (e) {} }, 2600);
+    if (window.__xingyuMainReady) warm();
+    else window.addEventListener("xingyu-main-ready", warm, { once: true });
+  }
+
   async function renderNews() {
     const box = $("#newsList");
     box.innerHTML = `<div class="empty-state"><div class="big"><span class="spinner" style="border-color:rgba(77,214,255,.3);border-top-color:var(--blue)"></span></div><p>正在加载今日热点...</p></div>`;
@@ -1187,7 +1389,9 @@ const App = (() => {
     if (newsFilter === "all") {
       filtered = data.news;
     } else if (newsFilter === "科技AI") {
-      filtered = data.news.filter(n => n.topic === "科技AI" || n.tech);
+      // topic 优先：已归为「土木行业」的条目即使 tech=true 也不混入科技 AI
+      // （实测中国公路网/交通运输部各有 1 条被标 tech，会串到科技 AI 分类里）
+      filtered = data.news.filter(n => n.topic === "科技AI" || (n.tech && n.topic !== "土木行业"));
     } else if (newsFilter === "土木行业") {
       filtered = data.news.filter(n => n.topic === "土木行业");
     } else {
@@ -1231,7 +1435,8 @@ const App = (() => {
         if (e.target.closest(".news-copy")) return;
         const link = el.dataset.link;
         if (!link) return;
-        const win = window.open(link, "_blank");
+        // noopener：防止外站通过 window.opener 反向操控本页（反向标签劫持）
+        const win = window.open(link, "_blank", "noopener");
         if (!win) location.href = link;
       };
     });
@@ -1569,6 +1774,9 @@ const App = (() => {
     } else {
       setTimeout(finish, 220);
     }
+    // 保险丝：无论 GSAP 回调链是否异常，800ms 后强制完成关闭，
+    // 防止遮罩残留 closing/show 状态挡住整个界面（侧边栏点不了的另一种隐患）
+    setTimeout(finish, 800);
   }
 
   function setupModalAccessibility() {
@@ -1666,13 +1874,8 @@ const App = (() => {
   }
 
   function maybeShowOnboarding() {
-    if (localStorage.getItem("zero_onboarded_v3") === "1") return;
-    const info = Store.getStorageInfo && Store.getStorageInfo();
-    if (!info || !info.firstRun) return;
-    const profile = Store.getProfile();
-    $("#onboardName").value = profile.name && profile.name !== "同学" ? profile.name : "";
-    $("#onboardGoal").value = profile.goal || "";
-    setTimeout(() => showModal("onboardingModal"), 500);
+    // 现在不再在开屏后自动弹引导，避免启动时被额外界面打断。
+    return;
   }
 
   function finishOnboarding() {
@@ -1701,6 +1904,8 @@ const App = (() => {
     $("#setBaseUrl").value = s.baseUrl || "";
     $("#setApiKey").value = s.apiKey || "";
     $("#setModel").value = s.model || "";
+    const setUseProxy = $("#setUseProxy");
+    if (setUseProxy) setUseProxy.checked = !!(s.useLocalAiProxy);
     $("#setNickname").value = s.nickname || "";
     const syncEn = $("#syncEnabled");
     if (syncEn) syncEn.checked = Sync.isEnabled();
@@ -1716,11 +1921,132 @@ const App = (() => {
     }
     $("#lockOnLeave").checked = localStorage.getItem("zero_lock_leave") === "1";
     syncThemeUI();
+    if (window.XingyuIconThemes) XingyuIconThemes.sync();
+    if (window.XingyuSettingsUI) XingyuSettingsUI.sync();
     const splashEn = $("#splashSoundEnabled");
     if (splashEn) splashEn.checked = window.SplashSound ? SplashSound.isEnabled() : true;
     toggleSplashSoundConfig();
     renderSplashSoundSettings();
+    const devMode = $("#devModeEnabled");
+    if (devMode) {
+      devMode.checked = !!(Store.getSettings().developerMode);
+      const hint = $("#devModeHint");
+      if (hint) hint.textContent = devMode.checked ? "已开启：保存并重启平台后，按 F12 即可打开调试台。" : "已关闭。开启并保存后，重启平台生效。";
+    }
+    const lanTokenEl = $("#lanTokenText");
+    if (lanTokenEl) {
+      lanTokenEl.textContent = "加载中…";
+      const copyBtn = $("#btnCopyLanToken");
+      fetch("/api/lan-token", { cache: "no-store" })
+        .then(r => r.ok ? r.json() : Promise.reject(r.status))
+        .then(data => {
+          lanTokenEl.textContent = data.token || "未生成";
+          if (copyBtn) copyBtn.disabled = false;
+        })
+        .catch(status => {
+          // 手机/其他已解锁设备不应该读取令牌；这里给出明确状态，而不是“加载失败”。
+          lanTokenEl.textContent = status === 403 ? "此设备已解锁；令牌仅本机显示" : "仅本机可查看";
+          if (copyBtn) copyBtn.disabled = true;
+        });
+    }
+    refreshGpuStatus();
     showModal("settingsModal");
+  }
+
+  /* ============================================================
+     问题反馈与诊断（自动性能监测）
+     ============================================================ */
+  function refreshGpuStatus() {
+    const el = $("#gpuStatusText");
+    if (!el) return;
+    try {
+      const c = document.createElement("canvas");
+      const gl = c.getContext("webgl") || c.getContext("experimental-webgl");
+      const dbg = gl && gl.getExtension && gl.getExtension("WEBGL_debug_renderer_info");
+      let r = "";
+      if (dbg && gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) {
+        r = String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL));
+      } else if (gl) {
+        r = String(gl.getParameter(gl.RENDERER));
+      }
+      r = r.replace(/\(.*?\)/g, "").replace(/\s+/g, " ").trim();
+      const useDiscrete = /nvidia|amd|radeon|rtx|gtx|geforce|arc/i.test(r);
+      el.textContent = r
+        ? (r + (useDiscrete ? " · 独立显卡/外接 GPU 加速中 ✓" : " · 当前调用层面见上"))
+        : "此窗口未暴露 WebGL 渲染器信息（仍已请求独立/外接 GPU 优先）";
+    } catch (e) {
+      el.textContent = "无法读取 GPU 状态";
+    }
+  }
+  function _fbEsc(str) {
+    return String(str == null ? "" : str).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  }
+  function renderFeedbackSummary() {
+    const box = $("#fbSummary");
+    if (!box) return;
+    if (!window.XYPerf) { box.textContent = "监测模块未加载。"; return; }
+    const rep = XYPerf.generateReport($("#fbComment") ? $("#fbComment").value.trim() : "");
+    let html = "";
+    if (!rep.issues.length) {
+      html += '<span class="fb-ok">✓ 自动巡检未发现明显异常</span>\n';
+    } else {
+      rep.issues.forEach(i => {
+        const cls = i.level === "error" ? "fb-err" : "fb-warn";
+        html += '<span class="' + cls + '">' + (i.level === "error" ? "✕ " : "⚠ ") + _fbEsc(i.msg) + "</span>\n";
+      });
+    }
+    html += "\n" + _fbEsc(XYPerf.textSummary(rep));
+    box.innerHTML = html;
+  }
+  function openFeedback() {
+    if (!window.XYPerf) { toast("监测模块未加载", "err"); return; }
+    const st = $("#fbStatus"); if (st) st.textContent = "";
+    renderFeedbackSummary();
+    showModal("feedbackModal");
+  }
+  function saveFeedback() {
+    if (!window.XYPerf) { toast("监测模块未加载", "err"); return; }
+    const st = $("#fbStatus"); if (st) st.textContent = "正在保存…";
+    const comment = $("#fbComment") ? $("#fbComment").value.trim() : "";
+    XYPerf.saveReport(comment).then(res => {
+      const ok = !!(res && res.ok);
+      if (st) st.textContent = ok ? "已保存到 data/feedback/" + (res.file || "") : "保存失败";
+      toast(ok ? "反馈已保存" : "反馈保存失败", ok ? "ok" : "err");
+    }).catch(() => {
+      if (st) st.textContent = "保存失败：本地服务不可用";
+      toast("反馈保存失败", "err");
+    });
+  }
+  function copyFeedbackReport() {
+    if (!window.XYPerf) return;
+    const text = XYPerf.textSummary(XYPerf.generateReport($("#fbComment") ? $("#fbComment").value.trim() : ""));
+    const done = () => toast("报告已复制", "ok");
+    const fail = () => toast("复制失败，请改用导出", "err");
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(() => {
+        try {
+          const ta = document.createElement("textarea");
+          ta.value = text; document.body.appendChild(ta); ta.select();
+          document.execCommand("copy"); ta.remove(); done();
+        } catch (e) { fail(); }
+      });
+    } else {
+      try {
+        const ta = document.createElement("textarea");
+        ta.value = text; document.body.appendChild(ta); ta.select();
+        document.execCommand("copy"); ta.remove(); done();
+      } catch (e) { fail(); }
+    }
+  }
+  function exportFeedbackReport() {
+    if (!window.XYPerf) return;
+    const rep = XYPerf.generateReport($("#fbComment") ? $("#fbComment").value.trim() : "");
+    const blob = new Blob([JSON.stringify(rep, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "xingyu-perf-report.json";
+    a.click();
+    toast("报告已导出", "ok");
   }
 
   // 访问密码总开关：切换密码字段显隐
@@ -1968,6 +2294,8 @@ const App = (() => {
     $$("[data-lang-pick]").forEach(b => b.classList.toggle("active", b.dataset.langPick === curLang));
     const curBg = document.documentElement.dataset.bg || "none";
     $$("[data-bg-pick]").forEach(b => b.classList.toggle("active", b.dataset.bgPick === curBg));
+    const curBgVis = document.documentElement.dataset.bgVis || "clear";
+    $$(".theme-opt[data-bg-vis]").forEach(b => b.classList.toggle("active", b.dataset.bgVis === curBgVis));
   }
   function applyTheme(mode) {
     const theme = mode === "system" ? systemTheme() : mode;
@@ -2003,15 +2331,15 @@ const App = (() => {
       "nav.ai": "AI 助手",
       "nav.weather": "天气",
       "nav.running": "跑步训练",
-      "nav.prisma": "棱镜艺境", "nav.nexus": "云门智界", "nav.foldcraft": "折艺工坊", "nav.securify": "守御界",
+      "nav.prisma": "棱镜艺境", "nav.nexus": "云门智界", "nav.foldcraft": "折艺工坊", "nav.securify": "守御界", "nav.particles": "粒子星云",
       "role": "个人工作台",
       "mobile.today": "今日", "mobile.courses": "课程", "mobile.notes": "笔记", "mobile.focus": "专注", "mobile.more": "更多",
       "settings": "设置",
       "search.ph": "搜索笔记 / 任务 / 课程...",
       "title.dashboard": "今日", "title.courses": "课程作业", "title.notes": "学习笔记库",
       "title.focus": "专注学习", "title.growth": "成长档案", "title.lit": "文献资料",
-      "title.news": "热点新闻", "title.ai": "AI 助手", "title.weather": "天气", "title.running": "跑步训练",
-      "title.prisma": "棱镜艺境", "title.nexus": "云门智界", "title.foldcraft": "折艺工坊", "title.securify": "守御界",
+      "title.news": "热点新闻", "title.ai": "AI 助手", "title.weather": "天气", "title.aria": "A.R.I.A", "sub.aria": "横向移动鼠标，驱动 A.R.I.A 的时间线", "title.running": "跑步训练",
+      "title.prisma": "棱镜艺境", "title.nexus": "云门智界", "title.foldcraft": "折艺工坊", "title.securify": "守御界", "title.particles": "粒子星云",
       "sub.dashboard": "学习进度一览，今天也要保持专注",
       "sub.courses": "课程、课表与作业任务管理",
       "sub.notes": "沉淀知识，构建你的笔记库",
@@ -2022,10 +2350,10 @@ const App = (() => {
       "sub.ai": "你的智能学习伙伴",
       "sub.weather": "全国城市实时天气与未来一周预报", "weather.searchPh": "搜索城市（如：上海 / 长沙）", "weather.search": "搜索", "weather.refresh": "刷新", "weather.loading": "正在获取实时天气…",
       "sub.running": "跑步与马拉松训练记录（可导入华为运动健康数据）",
-      "sub.prisma": "创意视觉工作室展示页", "sub.nexus": "下一代智能基础设施展示页", "sub.foldcraft": "视觉叙事创意工作室展示页", "sub.securify": "数据安全 SaaS 展示页",
+      "sub.prisma": "创意视觉工作室展示页", "sub.nexus": "下一代智能基础设施展示页", "sub.foldcraft": "视觉叙事创意工作室展示页", "sub.securify": "数据安全 SaaS 展示页", "sub.particles": "粒子聚合 · 鼠标交互浏览",
       "hero.todo": "待办任务", "hero.due": "今日到期", "hero.notes": "笔记", "hero.focusMin": "今日专注(分)", "hero.news": "今日热点", "hero.newsAll": "查看全部", "hero.refresh": "刷新", "hero.refreshed": "已刷新",
       "settings.title": "设置",
-      "settings.theme": "界面主题", "settings.font": "界面字体", "settings.lang": "界面语言", "settings.bg": "界面背景", "bg.none": "无", "bg.guilinMist": "桂林·雾山", "bg.guilinAerial": "桂林·航拍", "bg.jiuzhaigou": "九寨沟", "bg.zhangjiajie": "张家界", "bg.hint": "以中国山河摄影作背景，文字始终清晰可读。",
+      "settings.theme": "界面主题", "settings.font": "界面字体", "settings.lang": "界面语言", "settings.bg": "界面背景", "bg.none": "无", "bg.guilinMist": "桂林·雾山", "bg.guilinAerial": "桂林·航拍", "bg.jiuzhaigou": "九寨沟", "bg.zhangjiajie": "张家界", "bg.hint": "以中国山河摄影作背景，文字始终清晰可读。", "settings.bgVis": "背景可见度", "bgVis.soft": "隐约", "bgVis.clear": "清晰", "bgVis.vivid": "极清晰",
       "settings.ai": "AI 模型配置（OpenAI 兼容接口）",
       "settings.nick": "个人昵称", "settings.data": "数据管理", "settings.lock": "访问密码",
       "lock.title": "平台已锁定", "lock.unlock": "解锁", "lock.enabled": "启用访问密码", "lock.enabledHint": "已开启：打开平台需输入密码。关闭此开关将清除已保存的密码。", "lock.needPin": "请先设置访问密码", "lock.pinNew": "新密码", "lock.pinConfirm": "确认密码", "lock.onLeave": "离开页面时自动锁定", "lock.hint": "设置密码后，打开平台需输入密码才能进入；密码仅保存在本机浏览器。", "lock.wrong": "密码错误", "lock.mismatch": "两次输入的密码不一致", "lock.saved": "访问密码已设置", "lock.cleared": "访问密码已清除", "settings.saved": "设置已保存",
@@ -2052,15 +2380,15 @@ const App = (() => {
       "nav.ai": "AI 助手",
       "nav.weather": "天氣",
       "nav.running": "跑步訓練",
-      "nav.prisma": "稜鏡藝境", "nav.nexus": "雲門智界", "nav.foldcraft": "摺藝工坊", "nav.securify": "守禦界",
+      "nav.prisma": "稜鏡藝境", "nav.nexus": "雲門智界", "nav.foldcraft": "摺藝工坊", "nav.securify": "守禦界", "nav.particles": "粒子星雲",
       "role": "個人工作台",
       "mobile.today": "今日", "mobile.courses": "課程", "mobile.notes": "筆記", "mobile.focus": "專注", "mobile.more": "更多",
       "settings": "設定",
       "search.ph": "搜尋筆記 / 任務 / 課程...",
       "title.dashboard": "今日", "title.courses": "課程作業", "title.notes": "學習筆記庫",
       "title.focus": "專注學習", "title.growth": "成長檔案", "title.lit": "文獻資料",
-      "title.news": "熱點新聞", "title.ai": "AI 助手", "title.weather": "天氣", "title.running": "跑步訓練",
-      "title.prisma": "稜鏡藝境", "title.nexus": "雲門智界", "title.foldcraft": "摺藝工坊", "title.securify": "守禦界",
+      "title.news": "熱點新聞", "title.ai": "AI 助手", "title.weather": "天氣", "title.aria": "A.R.I.A", "sub.aria": "橫向移動滑鼠，驅動 A.R.I.A 的時間線", "title.running": "跑步訓練",
+      "title.prisma": "稜鏡藝境", "title.nexus": "雲門智界", "title.foldcraft": "摺藝工坊", "title.securify": "守禦界", "title.particles": "粒子星雲",
       "sub.dashboard": "學習進度一覽，今天也要保持專注",
       "sub.courses": "課程、課表與作業任務管理",
       "sub.notes": "沉澱知識，構建你的筆記庫",
@@ -2071,10 +2399,10 @@ const App = (() => {
       "sub.ai": "你的智能學習夥伴",
       "sub.weather": "全國城市即時天氣與未來一週預報", "weather.searchPh": "搜索城市（如：上海 / 長沙）", "weather.search": "搜索", "weather.refresh": "刷新", "weather.loading": "正在獲取實時天氣…",
       "sub.running": "跑步與馬拉松訓練記錄（可匯入華為運動健康數據）",
-      "sub.prisma": "創意視覺工作室展示頁", "sub.nexus": "下一代智能基礎設施展示頁", "sub.foldcraft": "視覺敘事創意工作室展示頁", "sub.securify": "數據安全 SaaS 展示頁",
+      "sub.prisma": "創意視覺工作室展示頁", "sub.nexus": "下一代智能基礎設施展示頁", "sub.foldcraft": "視覺敘事創意工作室展示頁", "sub.securify": "數據安全 SaaS 展示頁", "sub.particles": "粒子聚合 · 滑鼠互動瀏覽",
       "hero.todo": "待辦任務", "hero.due": "今日到期", "hero.notes": "筆記", "hero.focusMin": "今日專注(分)", "hero.news": "今日熱點", "hero.newsAll": "查看全部", "hero.refresh": "刷新", "hero.refreshed": "已刷新",
       "settings.title": "設定",
-      "settings.theme": "界面主題", "settings.font": "界面字體", "settings.lang": "界面語言", "settings.bg": "界面背景", "bg.none": "無", "bg.guilinMist": "桂林·霧山", "bg.guilinAerial": "桂林·航拍", "bg.jiuzhaigou": "九寨溝", "bg.zhangjiajie": "張家界", "bg.hint": "以中國山河攝影作背景，文字始終清晰可讀。",
+      "settings.theme": "界面主題", "settings.font": "界面字體", "settings.lang": "界面語言", "settings.bg": "界面背景", "bg.none": "無", "bg.guilinMist": "桂林·霧山", "bg.guilinAerial": "桂林·航拍", "bg.jiuzhaigou": "九寨溝", "bg.zhangjiajie": "張家界", "bg.hint": "以中國山河攝影作背景，文字始終清晰可讀。", "settings.bgVis": "背景可見度", "bgVis.soft": "隱約", "bgVis.clear": "清晰", "bgVis.vivid": "極清晰",
       "settings.ai": "AI 模型配置（OpenAI 兼容接口）",
       "settings.nick": "個人暱稱", "settings.data": "數據管理", "settings.lock": "訪問密碼",
       "lock.title": "平台已鎖定", "lock.unlock": "解鎖", "lock.enabled": "啟用訪問密碼", "lock.enabledHint": "已開啟：打開平台需輸入密碼。關閉此開關將清除已保存的密碼。", "lock.needPin": "請先設置訪問密碼", "lock.pinNew": "新密碼", "lock.pinConfirm": "確認密碼", "lock.onLeave": "離開頁面時自動鎖定", "lock.hint": "設置密碼後，打開平台需輸入密碼才能進入；密碼僅保存在本機瀏覽器。", "lock.wrong": "密碼錯誤", "lock.mismatch": "兩次輸入的密碼不一致", "lock.saved": "訪問密碼已設置", "lock.cleared": "訪問密碼已清除", "settings.saved": "設置已保存",
@@ -2101,15 +2429,15 @@ const App = (() => {
       "nav.ai": "AI Assistant",
       "nav.weather": "Weather",
       "nav.running": "Running",
-      "nav.prisma": "Prisma", "nav.nexus": "Nexus", "nav.foldcraft": "Foldcraft", "nav.securify": "Securify",
+      "nav.prisma": "Prisma", "nav.nexus": "Nexus", "nav.foldcraft": "Foldcraft", "nav.securify": "Securify", "nav.particles": "Particle Nebula",
       "role": "Personal workspace",
       "mobile.today": "Today", "mobile.courses": "Courses", "mobile.notes": "Notes", "mobile.focus": "Focus", "mobile.more": "More",
       "settings": "Settings",
       "search.ph": "Search notes / tasks / courses...",
       "title.dashboard": "Today", "title.courses": "Courses", "title.notes": "Notes",
       "title.focus": "Focus", "title.growth": "Profile", "title.lit": "Library",
-      "title.news": "News", "title.ai": "AI Assistant", "title.weather": "Weather", "title.running": "Running",
-      "title.prisma": "Prisma", "title.nexus": "Nexus", "title.foldcraft": "Foldcraft", "title.securify": "Securify",
+      "title.news": "News", "title.ai": "AI Assistant", "title.weather": "Weather", "title.aria": "A.R.I.A", "sub.aria": "Move your mouse to scrub A.R.I.A's timeline", "title.running": "Running",
+      "title.prisma": "Prisma", "title.nexus": "Nexus", "title.foldcraft": "Foldcraft", "title.securify": "Securify", "title.particles": "Particle Nebula",
       "sub.dashboard": "Your study at a glance — stay focused today",
       "sub.courses": "Courses, timetable & assignments",
       "sub.notes": "Build your knowledge base",
@@ -2120,10 +2448,10 @@ const App = (() => {
       "sub.ai": "Your smart study partner",
       "sub.weather": "Live weather for Chinese cities with a 7-day forecast", "weather.searchPh": "Search city (e.g. Shanghai)", "weather.search": "Search", "weather.refresh": "Refresh", "weather.loading": "Fetching live weather…",
       "sub.running": "Running & marathon training (import Huawei Health data)",
-      "sub.prisma": "Creative visual studio showcase", "sub.nexus": "Next-layer AI infrastructure showcase", "sub.foldcraft": "Visual storytelling studio showcase", "sub.securify": "Data-security SaaS showcase",
+      "sub.prisma": "Creative visual studio showcase", "sub.nexus": "Next-layer AI infrastructure showcase", "sub.foldcraft": "Visual storytelling studio showcase", "sub.securify": "Data-security SaaS showcase", "sub.particles": "Particle morph with mouse interaction",
       "hero.todo": "Open tasks", "hero.due": "Due today", "hero.notes": "Notes", "hero.focusMin": "Focus (min)", "hero.news": "Top News", "hero.newsAll": "View All", "hero.refresh": "Refresh", "hero.refreshed": "Updated",
       "settings.title": "Settings",
-      "settings.theme": "Theme", "settings.font": "Font", "settings.lang": "Language", "settings.bg": "Background", "bg.none": "None", "bg.guilinMist": "Guilin Mist", "bg.guilinAerial": "Guilin Aerial", "bg.jiuzhaigou": "Jiuzhaigou", "bg.zhangjiajie": "Zhangjiajie", "bg.hint": "China landscape photography as backdrop; text stays readable.",
+      "settings.theme": "Theme", "settings.font": "Font", "settings.lang": "Language", "settings.bg": "Background", "bg.none": "None", "bg.guilinMist": "Guilin Mist", "bg.guilinAerial": "Guilin Aerial", "bg.jiuzhaigou": "Jiuzhaigou", "bg.zhangjiajie": "Zhangjiajie", "bg.hint": "China landscape photography as backdrop; text stays readable.", "settings.bgVis": "Background visibility", "bgVis.soft": "Subtle", "bgVis.clear": "Clear", "bgVis.vivid": "Very clear",
       "settings.ai": "AI Model (OpenAI-compatible)",
       "settings.nick": "Nickname", "settings.data": "Data", "settings.lock": "Access PIN",
       "lock.title": "Locked", "lock.unlock": "Unlock", "lock.enabled": "Enable access PIN", "lock.enabledHint": "On: the platform asks for the PIN on open. Turning this off clears the saved PIN.", "lock.needPin": "Please set an access PIN first", "lock.pinNew": "New PIN", "lock.pinConfirm": "Confirm PIN", "lock.onLeave": "Lock when leaving the page", "lock.hint": "Once set, the platform asks for the PIN on open. The PIN stays only in this browser.", "lock.wrong": "Wrong PIN", "lock.mismatch": "PINs do not match", "lock.saved": "Access PIN saved", "lock.cleared": "Access PIN cleared", "settings.saved": "Settings saved",
@@ -2163,6 +2491,12 @@ const App = (() => {
     localStorage.setItem("zero_bg", bg);
     $$("[data-bg-pick]").forEach(b => b.classList.toggle("active", b.dataset.bgPick === bg));
   }
+  function applyBgVis(vis) {
+    if (!["soft", "clear", "vivid"].includes(vis)) vis = "clear";
+    document.documentElement.dataset.bgVis = vis;
+    localStorage.setItem("zero_bg_vis", vis);
+    $$(".theme-opt[data-bg-vis]").forEach(b => b.classList.toggle("active", b.dataset.bgVis === vis));
+  }
   function applyLang(lang) {
     document.documentElement.dataset.lang = lang;
     localStorage.setItem("zero_lang", lang);
@@ -2195,12 +2529,19 @@ const App = (() => {
       localStorage.removeItem("zero_lock_enabled");
       localStorage.removeItem("zero_lock_leave");
     }
+    const devModeOn = !!($("#devModeEnabled") && $("#devModeEnabled").checked);
     Store.setSettings({
       baseUrl: $("#setBaseUrl").value.trim(),
       apiKey: $("#setApiKey").value.trim(),
       model: $("#setModel").value.trim(),
-      nickname: $("#setNickname").value.trim()
+      nickname: $("#setNickname").value.trim(),
+      developerMode: devModeOn,
+      useLocalAiProxy: !!($("#setUseProxy") && $("#setUseProxy").checked)
     });
+    // 通知原生层写入/删除开发者模式标记（重启后 F12 调试台才生效）
+    try {
+      if (window.__xyCtrl) fetch(window.__xyCtrl + "/dev-mode?on=" + (devModeOn ? 1 : 0), { mode: "cors" }).catch(() => {});
+    } catch (e) {}
     const nick = $("#setNickname").value.trim();
     if (nick) Store.setProfile({ name: nick });
     closeModal("settingsModal");
@@ -2325,55 +2666,7 @@ const App = (() => {
      二维码
      ============================================================ */
   const DEFAULT_SITE = window.XINGYU_SITE_URL || "https://lele332.github.io/xingyu-platform/";
-
-  // 二维码：永久访问（GitHub Pages）+ 本机局域网（同一 WiFi 完整功能）
-  function renderQR() {
-    const box = $("#qrCodeBox");
-    box.innerHTML = "";
-    const grid = document.createElement("div");
-    grid.className = "qr-grid";
-
-    // 区块一：永久访问
-    const perm = document.createElement("div");
-    perm.className = "qr-col";
-    const pLabel = document.createElement("div");
-    pLabel.className = "qr-label";
-    pLabel.textContent = "永久访问 · 任何网络";
-    const img = document.createElement("img");
-    img.src = "xingyu-qrcode.png";
-    img.alt = "星屿 · 永久二维码";
-    img.className = "qr-static";
-    img.onerror = () => { img.replaceWith(makeQrHint("永久二维码加载失败")); };
-    perm.appendChild(pLabel);
-    perm.appendChild(img);
-    grid.appendChild(perm);
-
-    // 区块二：本机局域网（完整功能）
-    const lan = document.createElement("div");
-    lan.className = "qr-col";
-    const lLabel = document.createElement("div");
-    lLabel.className = "qr-label";
-    lLabel.textContent = "本机局域网 · 同一 WiFi · 完整功能";
-    const host = location.hostname;
-    const isLocal = host === "127.0.0.1" || host === "localhost";
-    const isPages = /github\.io$/.test(host);
-    if (!isLocal && !isPages && host) {
-      const lanUrl = location.protocol + "//" + host + ":" + (location.port || "8620");
-      const limg = document.createElement("img");
-      limg.className = "qr-static";
-      limg.alt = "本机局域网二维码";
-      limg.src = location.protocol + "//" + host + ":8621/qrcode?text=" + encodeURIComponent(lanUrl);
-      limg.onerror = () => { limg.replaceWith(makeQrHint("本机局域网访问需在电脑上打开平台后使用")); };
-      lan.appendChild(lLabel);
-      lan.appendChild(limg);
-    } else {
-      lan.appendChild(lLabel);
-      lan.appendChild(makeQrHint("在同一 WiFi 下的电脑上打开平台，本区域会显示本机二维码"));
-    }
-    grid.appendChild(lan);
-
-    box.appendChild(grid);
-  }
+  let lanUrl = "";
 
   function makeQrHint(text) {
     const h = document.createElement("div");
@@ -2382,16 +2675,93 @@ const App = (() => {
     return h;
   }
 
+  function makeQrImg(src, alt, fallback) {
+    const img = document.createElement("img");
+    img.src = src;
+    img.alt = alt;
+    img.className = "qr-static";
+    img.onerror = () => img.replaceWith(makeQrHint(fallback));
+    return img;
+  }
+
+  function makeQrCard(title, desc, node, note) {
+    const col = document.createElement("div");
+    col.className = "qr-col";
+    const label = document.createElement("div");
+    label.className = "qr-label";
+    label.textContent = title;
+    const sub = document.createElement("div");
+    sub.className = "qr-sub";
+    sub.textContent = desc;
+    col.appendChild(label);
+    col.appendChild(node);
+    col.appendChild(sub);
+    if (note) col.appendChild(note);
+    return col;
+  }
+
+  function renderQR() {
+    const box = $("#qrCodeBox");
+    const note = $("#qrNote");
+    box.innerHTML = "";
+    note.innerHTML = "";
+    const grid = document.createElement("div");
+    grid.className = "qr-grid";
+
+    // 左：永久访问
+    grid.appendChild(makeQrCard(
+      "永久访问 · 功能较少",
+      "任何网络可用，不依赖电脑开机。",
+      makeQrImg("xingyu-qrcode.png", "永久二维码", "永久二维码加载失败")
+    ));
+
+    // 右：同一 WiFi，手机适配版，走本机完整配置。
+    const lanNode = makeQrImg("/qrcode.png?text=" + encodeURIComponent("等待生成"), "手机适配版二维码", "局域网二维码生成失败");
+    const lanNote = document.createElement("div");
+    lanNote.className = "qr-url";
+    lanNote.textContent = "正在生成手机适配版…";
+    const lanCol = makeQrCard(
+      "同一 WiFi · 配置拉满",
+      "手机适配版 · 功能拉满。",
+      lanNode,
+      lanNote
+    );
+    grid.appendChild(lanCol);
+
+    fetch("/api/lan-info", { cache: "no-store" })
+      .then(r => r.ok ? r.json() : Promise.reject(r.status))
+      .then(info => {
+        const ip = info.ip || (Array.isArray(info.ips) ? info.ips[0] : "");
+        if ((!ip || !info.token) && !info.url) throw new Error("no lan info");
+        lanUrl = info.url || `http://${ip}:${info.port || 8620}/access?token=${encodeURIComponent(info.token)}`;
+        lanNode.src = `/qrcode.png?text=${encodeURIComponent(lanUrl)}&_t=${Date.now()}`;
+        lanNote.textContent = lanUrl;
+      })
+      .catch(() => {
+        // 新服务启动时会重写这个兜底图；旧服务进程则提供最后一张已知二维码。
+        lanUrl = "";
+        lanNode.src = `assets/lan-access-qr.png?_t=${Date.now()}`;
+        lanNote.textContent = "已用兜底二维码。重启星屿后这里会重新生成最新地址。";
+      });
+
+    box.appendChild(grid);
+    note.textContent = "左边适合在外面扫码；右边适合家里/宿舍同一 WiFi，手机上也是完整功能。";
+  }
+
   function openQR() {
     showModal("qrcodeModal");
     renderQR();
   }
 
-  function copyLink() {
-    navigator.clipboard.writeText(DEFAULT_SITE)
-      .then(() => toast("永久链接已复制", "ok"))
-      .catch(() => toast("复制失败，请手动复制：" + DEFAULT_SITE, "err"));
+  function copyText(url, okText) {
+    if (!url) { toast("链接还没准备好", "err"); return; }
+    navigator.clipboard.writeText(url)
+      .then(() => toast(okText, "ok"))
+      .catch(() => toast("复制失败，请手动复制：" + url, "err"));
   }
+
+  function copyPerm() { copyText(DEFAULT_SITE, "永久链接已复制"); }
+  function copyLan() { copyText(lanUrl, "局域网链接已复制"); }
 
   /* ============================================================
      导入课表
@@ -3027,6 +3397,13 @@ const App = (() => {
     $$(".nav-item").forEach(n => n.onclick = () => {
       if (window.Anim) Anim.navPulse(n);
       switchView(n.dataset.view);
+      // 侧边栏「训练营」：切到跑步视图后自动激活「训练营」标签
+      if (n.dataset.camp) {
+        setTimeout(function () {
+          var campBtn = document.querySelector('.tab-btn[data-tab="run-camp"]');
+          if (campBtn) campBtn.click();
+        }, 30);
+      }
     });
     $$(".mobile-tab").forEach(tab => tab.onclick = () => {
       const view = tab.dataset.mobileView;
@@ -3118,16 +3495,17 @@ const App = (() => {
           return { t, s };
         }).sort((a, b) => b.s - a.s);
         toast("已按 DDL + 优先级智能排序（本地规则）", "ok");
-        $("#taskList").innerHTML = "";
-        scored.forEach((item, i) => {
+        // 一次性 join 赋值：循环里 innerHTML += 每次都会整体重新解析，任务多时 O(n²)
+        const rows = scored.map((item, i) => {
           const t = item.t;
           const days = t.due ? daysUntil(t.due) : null;
-          $("#taskList").innerHTML += `<div class="task-row">
+          return `<div class="task-row">
             <span class="tag-chip" style="min-width:26px;justify-content:center">${i + 1}</span>
-            <div class="course-info"><b>${esc(t.title)}</b><span>${Store.getCourseName(t.courseId) || "无课程"} · ${days === null ? "无期限" : days < 0 ? "已逾期" : `剩 ${days} 天`}</span></div>
-            <span class="tag-chip pri-${t.priority}">${PRIORITY_MAP[t.priority]}</span>
+            <div class="course-info"><b>${esc(t.title)}</b><span>${esc(Store.getCourseName(t.courseId) || "无课程")} · ${days === null ? "无期限" : days < 0 ? "已逾期" : `剩 ${days} 天`}</span></div>
+            <span class="tag-chip pri-${esc(t.priority)}">${esc(PRIORITY_MAP[t.priority])}</span>
           </div>`;
         });
+        $("#taskList").innerHTML = rows.join("");
       }
     };
 
@@ -3139,6 +3517,8 @@ const App = (() => {
         const tab = btn.dataset.tab;
         $$(".tab-panel").forEach(p => p.classList.remove("active"));
         $("#tab-" + tab) && $("#tab-" + tab).classList.add("active");
+        // 跑步视图：切到 AI 教练 tab 时刷新数据
+        if (tab === "run-coach" && window.Synapse) Synapse.render();
       };
     });
 
@@ -3185,10 +3565,15 @@ const App = (() => {
     $("#btnPomoStart").onclick = startPomo;
     $("#btnPomoReset").onclick = () => {
       clearInterval(pomoTimer);
+      recordPartialPomo();
       pomoState.running = false;
+      pomoState.paused = false;
       pomoState.mode = "work";
       pomoState.total = (+$("#pomoWork").value || 25) * 60;
       pomoState.remain = pomoState.total;
+      pomoState.startedAt = null;
+      pomoState.segmentRemain = null;
+      pomoState.recordedMinutes = 0;
       $("#btnPomoStart").textContent = "开始专注";
       $("#btnPomoStart").classList.remove("btn-danger");
       $(".pomodoro-card").classList.remove("working");
@@ -3232,10 +3617,38 @@ const App = (() => {
     $("#btnChatStop").onclick = () => AI.cancelCurrent && AI.cancelCurrent();
     $("#chatInput").addEventListener("keydown", e => { if (e.key === "Enter") sendChat($("#chatInput").value); });
     $$(".chip[data-cmd]").forEach(c => c.onclick = () => { $("#chatInput").value = c.dataset.cmd + " "; $("#chatInput").focus(); });
+    const editOrbBtn = $("#btnEditOrb");
+    if (editOrbBtn) {
+      editOrbBtn.onclick = () => {
+        try { window.open("ai-orb-editor.html", "_blank"); }
+        catch (e) { toast("请手动打开 ai-orb-editor.html", "err"); }
+      };
+    }
 
     // 设置
     $("#btnSettings").onclick = openSettings;
     $("#btnSaveSettings").onclick = saveSettings;
+    const devSwitch = $("#devModeEnabled");
+    if (devSwitch) devSwitch.onchange = () => {
+      const hint = $("#devModeHint");
+      if (hint) hint.textContent = devSwitch.checked ? "已开启：保存并重启平台后，按 F12 即可打开调试台。" : "已关闭。开启并保存后，重启平台生效。";
+    };
+    const btnFeedback = $("#btnOpenFeedback");
+    if (btnFeedback) btnFeedback.onclick = openFeedback;
+    const btnFbSave = $("#btnFbSave");
+    if (btnFbSave) btnFbSave.onclick = saveFeedback;
+    const btnFbCopy = $("#btnFbCopy");
+    if (btnFbCopy) btnFbCopy.onclick = copyFeedbackReport;
+    const btnFbExport = $("#btnFbExport");
+    if (btnFbExport) btnFbExport.onclick = exportFeedbackReport;
+    const btnDevTools = $("#btnOpenDevTools");
+    if (btnDevTools) btnDevTools.onclick = () => {
+      const done = (ok) => toast(ok ? "调试台已打开" : "调试台只在原生窗口中可用", ok ? "ok" : "err");
+      try {
+        if (!window.__xyCtrl) { done(false); return; }
+        fetch(window.__xyCtrl + "/devtools", { mode: "cors" }).then(r => r.text()).then(t => done(t === "ok")).catch(() => done(false));
+      } catch (e) { done(false); }
+    };
     $("#btnToggleAdvancedThemes").onclick = () => {
       const shown = document.body.classList.toggle("show-advanced-themes");
       $("#btnToggleAdvancedThemes").textContent = shown ? "收起更多主题" : "显示更多主题";
@@ -3244,6 +3657,14 @@ const App = (() => {
     $$("[data-font-pick]").forEach(b => b.onclick = () => applyFont(b.dataset.fontPick));
     $$("[data-lang-pick]").forEach(b => b.onclick = () => applyLang(b.dataset.langPick));
     $$("[data-bg-pick]").forEach(b => b.onclick = () => applyBg(b.dataset.bgPick));
+    $$(".theme-opt[data-bg-vis]").forEach(b => b.onclick = () => applyBgVis(b.dataset.bgVis));
+    const btnCopyLanToken = $("#btnCopyLanToken");
+    if (btnCopyLanToken) btnCopyLanToken.onclick = async () => {
+      const token = ($("#lanTokenText")?.textContent || "").trim();
+      if (!token || token === "仅本机可查看") { toast("令牌还没加载", "err"); return; }
+      try { await navigator.clipboard.writeText(token); toast("令牌已复制", "ok"); }
+      catch { toast("复制失败，请手动选择", "err"); }
+    };
     // 开屏声音
     const splashEn = $("#splashSoundEnabled");
     if (splashEn) splashEn.onchange = () => {
@@ -3265,16 +3686,24 @@ const App = (() => {
     };
     const btnPreview = $("#btnPreviewSplashSound");
     if (btnPreview) btnPreview.onclick = () => previewSplashSound();
+    // 实时预览不落盘：拖动取色器时 input 事件每帧触发，localStorage 高频全量写浪费明显。
+    // liveColors 在取色会话内共享，保证同时拖多个取色器时互不覆盖。
+    let liveColors = null;
     $$("#themeCustom input[type=color]").forEach(inp => {
       inp.oninput = () => {
-        const colors = getCustomColors();
-        colors[inp.dataset.cvar] = inp.value;
-        localStorage.setItem("zero_custom_colors", JSON.stringify(colors));
-        applyCustomColors(colors);
+        if (!liveColors) liveColors = getCustomColors();
+        liveColors[inp.dataset.cvar] = inp.value;
+        applyCustomColors(liveColors);
         if (inp.dataset.cvar === "accent") {
           const sw = $("#swCustom");
           if (sw) sw.style.background = inp.value;
         }
+        clearTimeout(inp._cvarSaveTimer);
+        inp._cvarSaveTimer = setTimeout(() => {
+          if (!liveColors) return;
+          localStorage.setItem("zero_custom_colors", JSON.stringify(liveColors));
+          liveColors = null;
+        }, 200);
       };
     });
     $$("[data-preset]").forEach(p => p.onclick = () => {
@@ -3349,7 +3778,134 @@ const App = (() => {
     Sync.listeners.push(() => updateSyncStatus());
     // 二维码
     $("#btnQrcode").onclick = openQR;
-    $("#btnCopyLink").onclick = copyLink;
+    $("#btnCopyPerm").onclick = copyPerm;
+    $("#btnCopyLan").onclick = copyLan;
+    const btnRefreshQr = $("#btnRefreshQr");
+    if (btnRefreshQr) btnRefreshQr.onclick = () => { toast("正在重新生成二维码…", "ok"); renderQR(); };
+    $$(".qr-tab").forEach(b => b.onclick = () => renderQR(b.dataset.qrMode));
+
+    // 强制刷新：彻底重载界面（本地服务 no-cache，会重新拉取最新 index.html / JS / CSS），
+    // 感觉界面上有残留加载或卡顿时点一下即可拿到全新状态。
+    const refreshBtn = $("#btnRefresh");
+    if (refreshBtn) {
+      refreshBtn.onclick = function () {
+        toast("正在强制刷新界面…", "ok");
+        setTimeout(function () {
+          try { localStorage.setItem("zero_last_refresh", String(Date.now())); } catch (e) {}
+          location.reload();
+        }, 120);
+      };
+    }
+
+    // 全屏切换。启动器改为最大化窗口，网页内使用 Fullscreen API，退出不再依赖 Edge 的原生全屏状态。
+    const fsBtn = $("#btnFullscreen");
+    const fsExpand = $("#fsIconExpand");
+    const fsCompress = $("#fsIconCompress");
+    function syncFsIcon() {
+      const on = !!(document.fullscreenElement || document.webkitFullscreenElement);
+      if (fsExpand) fsExpand.style.display = on ? "none" : "";
+      if (fsCompress) fsCompress.style.display = on ? "" : "none";
+      if (fsBtn) {
+        fsBtn.title = on ? "退出全屏 (F11)" : "全屏 (F11)";
+        fsBtn.setAttribute("aria-label", on ? "退出全屏" : "进入全屏");
+      }
+    }
+    function toggleFullscreen() {
+      try {
+        let done = null;
+        if (document.fullscreenElement || document.webkitFullscreenElement) {
+          done = document.exitFullscreen
+            ? document.exitFullscreen()
+            : (document.webkitExitFullscreen ? document.webkitExitFullscreen() : null);
+        } else {
+          const el = document.documentElement;
+          done = el.requestFullscreen
+            ? el.requestFullscreen()
+            : (el.webkitRequestFullscreen ? el.webkitRequestFullscreen() : null);
+        }
+        if (done && done.then) {
+          done.then(() => setTimeout(syncFsIcon, 0)).catch(err => {
+            syncFsIcon();
+            toast("切换全屏失败：" + (err.message || err), "err");
+          });
+        } else {
+          setTimeout(syncFsIcon, 0);
+        }
+      } catch (e) {
+        toast("切换全屏失败：" + (e.message || e), "err");
+      }
+    }
+    if (fsBtn) fsBtn.onclick = toggleFullscreen;
+    document.addEventListener("fullscreenchange", syncFsIcon);
+    document.addEventListener("webkitfullscreenchange", syncFsIcon);
+    document.addEventListener("keydown", e => {
+      if (e.key !== "F11" && e.code !== "F11") return;
+      // Only intercept F11 when we are inside the page's Fullscreen API.
+      // Native Edge fullscreen (--start-fullscreen) is exited by letting F11 stay native.
+      if (!(document.fullscreenElement || document.webkitFullscreenElement)) return;
+      e.preventDefault();
+      e.stopPropagation();
+      toggleFullscreen();
+    }, true);
+    syncFsIcon();
+
+    // 右上角常驻关闭按钮：即使 Edge 原生全屏没有标题栏 X，也能从这里关窗口。
+    const closeBtn = $("#btnCloseWindow");
+    if (closeBtn) {
+      closeBtn.onclick = function () {
+        try { window.close(); } catch (e) {}
+        try { window.open("", "_self"); window.close(); } catch (e) {}
+        toast("若未关闭，请按 Alt+F4 或重新启动星屿。", "err");
+      };
+    }
+
+    const globalExitFab = $("#globalExitFab");
+    // 全局唯一的退出控件：按优先级「沉浸专注 > 网页全屏 > 原生全屏」自适应文案与行为。
+    // 同一时刻只渲染这一个按钮，不再叠加场景内按钮，避免右下角重叠与文案互相矛盾。
+    function syncGlobalExitFab() {
+      if (!globalExitFab) return;
+      const focusOverlay = $("#focusOverlay");
+      const inFocus = !!(focusOverlay && focusOverlay.style.display !== "none");
+      const inFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+      const inNativeFs = !!window.__xyNativeFullscreen;
+      if (inFocus) {
+        globalExitFab.hidden = false;
+        globalExitFab.textContent = "\u23CE 退出专注 (Esc)";
+        globalExitFab.title = "退出沉浸式专注场景（快捷键 Esc）";
+        globalExitFab.dataset.mode = "focus";
+      } else if (inFs || inNativeFs) {
+        globalExitFab.hidden = false;
+        globalExitFab.textContent = "退出全屏";
+        globalExitFab.title = "退出全屏（快捷键 F11）";
+        globalExitFab.dataset.mode = "fullscreen";
+      } else {
+        globalExitFab.hidden = true;
+        globalExitFab.dataset.mode = "";
+      }
+    }
+    // 暴露给模块级 openFocusScene / closeFocusScene 调用
+    syncExitFabHook = syncGlobalExitFab;
+    function exitCurrentFullscreen() {
+      const focusOverlay = $("#focusOverlay");
+      const inFocus = !!(focusOverlay && focusOverlay.style.display !== "none");
+      const inFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+      const inNativeFs = !!window.__xyNativeFullscreen;
+      if (inFocus) { closeFocusScene(); return; }
+      if (inFs) { toggleFullscreen(); return; }
+      if (inNativeFs && window.__xyCtrl) {
+        try { fetch(window.__xyCtrl + "/exit-fullscreen"); } catch (e) {}
+        return;
+      }
+      if (window.__xyCtrl) {
+        try { fetch(window.__xyCtrl + "/exit-fullscreen"); } catch (e) {}
+        return;
+      }
+      try { window.close(); } catch (e) {}
+    }
+    if (globalExitFab) globalExitFab.onclick = exitCurrentFullscreen;
+    document.addEventListener("fullscreenchange", syncGlobalExitFab);
+    document.addEventListener("webkitfullscreenchange", syncGlobalExitFab);
+    syncGlobalExitFab();
 
     // 每日一言
     $("#btnNextQuote").onclick = () => { if (window.nextQuote) { nextQuote(); renderQuote(); } };
@@ -3451,10 +4007,50 @@ const App = (() => {
     document.documentElement.dataset.online = offline ? "false" : "true";
   }
 
+  /* ---------- 本地自动备份 ---------- */
+  const AUTO_BACKUP_KEY = "xingyu_last_auto_backup";
+  const AUTO_BACKUP_INTERVAL = 6 * 60 * 60 * 1000;
+
+  function canUseLocalBackupServer() {
+    return location.protocol === "http:" &&
+      ["127.0.0.1", "localhost", "[::1]"].includes(location.hostname);
+  }
+
+  async function autoBackupToServer(force = false) {
+    if (!canUseLocalBackupServer()) return;
+    const lastAt = Number(localStorage.getItem(AUTO_BACKUP_KEY) || 0);
+    if (!force && lastAt && Date.now() - lastAt < AUTO_BACKUP_INTERVAL) return;
+    const response = await fetch("/api/backup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ data: Store.exportAll(), at: new Date().toISOString() })
+    });
+    if (!response.ok) throw new Error(`backup failed: ${response.status}`);
+    localStorage.setItem(AUTO_BACKUP_KEY, String(Date.now()));
+    const result = await response.json();
+    console.info("[星屿] 本地自动备份完成", result.file);
+  }
+
+  function setupLocalBackup() {
+    if (!canUseLocalBackupServer()) return;
+    setTimeout(() => autoBackupToServer().catch(e => {
+      console.warn("[星屿] 本地自动备份失败", e);
+    }), 1200);
+    setInterval(() => autoBackupToServer().catch(e => {
+      console.warn("[星屿] 本地自动备份失败", e);
+    }), 30 * 60 * 1000);
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "hidden") {
+        autoBackupToServer().catch(() => {});
+      }
+    });
+  }
+
   /* ---------- 启动 ---------- */
   function init() {
     window.XingyuIcons && XingyuIcons.decorateNavigation();
     setupModalAccessibility();
+    warmLaunchAssets();
     Store.onDelete && Store.onDelete(entry => {
       updateTrashCount();
       toast(`${TRASH_LABELS[entry.entityKey] || "内容"}已移至回收站`, "ok", {
@@ -3464,14 +4060,37 @@ const App = (() => {
       });
     });
     bindEvents();
+    // 记录 iframe 子应用的原始地址，供切走卸载 / 切回还原
+    primeIframeSrcs();
+    // 滚动期间抑制毛玻璃（侧边栏/顶栏逐帧重采样背景是长时使用卡顿源）
+    bindScrollFX();
     // 监听沉浸式专注场景的退出消息（iframe 内点击退出 / 按 Esc 时关闭）
     window.addEventListener("message", e => {
       if (e.data && e.data.type === "xingyu-focus-exit") closeFocusScene();
     });
+    // 本地存储写失败（配额写满等）：必须让用户看见，否则数据会无声丢失
+    window.addEventListener("xingyu:storage-error", e => {
+      const msg = (e.detail && e.detail.message) || "本地空间不足";
+      toast(msg, "warn", {
+        actionLabel: "立即导出备份",
+        onAction: () => {
+          try {
+            const blob = new Blob([Store.exportAll()], { type: "application/json" });
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "xingyu-data.json";
+            a.click();
+            setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+            toast("数据已导出，建议清理旧回收站条目", "ok");
+          } catch (err) {
+            toast("导出失败：" + (err && err.message), "err");
+          }
+        },
+        duration: 12000
+      });
+    });
     window.Sync && Sync.init();
     applyI18n();
-    // Apple 风格即时按压反馈（不使用 Material 涟漪）
-    window.Anim && Anim.initRipple();
     // nav 事件绑定与滑块初始化（轻量、立即执行）
     window.Anim && Anim.initNav();
     window.Anim && Anim.initNavPill();
@@ -3480,6 +4099,7 @@ const App = (() => {
     window.Weather && Weather.init();
     updateNetworkStatus();
     window.addEventListener("online", () => { updateNetworkStatus(); toast("网络已恢复", "ok"); });
+    setupLocalBackup();
     window.addEventListener("offline", () => { updateNetworkStatus(); toast("当前离线，将继续使用本地数据", "err"); });
     const storageInfo = Store.getStorageInfo && Store.getStorageInfo();
     if (storageInfo && storageInfo.lastError) toast(storageInfo.lastError, "err");
@@ -3496,25 +4116,61 @@ const App = (() => {
     if (nick && (!p.name || p.name === "同学")) Store.setProfile({ name: nick });
     // 迁移：清除旧默认火箭头像（新版默认无 emoji 头像，用昵称首字）
     if (p.avatar === "🚀") { Store.setProfile({ ...p, avatar: "" }); }
-    renderProfile();
-    renderDashboard();
-    // 让 AI 页面初始化状态
-    renderAIStatus();
-    // 默认展示仪表盘
-    switchView("dashboard");
-    maybeShowOnboarding();
-    // 开屏（intro）结束后再播放入场动画，避免与视频并行导致卡顿
-    var runEntrance = function () {
-      window.AnimeFX && AnimeFX.logoIn();
-      window.Anim && Anim.sidebarIntro();
-      // 兜底防重：splash-done 与 12.5s 超时都可能触发本函数，intro 只播一次
-      if (window.Anim && !_dashboardIntroPlayed) { Anim.dashboardIntro($("#view-dashboard")); _dashboardIntroPlayed = true; }
+    // 启动预热：所有首屏 DOM 与数据在黑色开屏下准备完成，再允许开屏淡出。
+    // 这样不会把 requestIdleCallback 的重活拖到用户已经看到主界面的窗口。
+    var signalMainReady = function () {
+      if (window.__xingyuMainReady) return;
+      window.__xingyuMainReady = true;
+      try { window.dispatchEvent(new Event("xingyu-main-ready")); } catch (e) {}
+    };
+    var bootHeavy = function () {
+      if (bootHeavy.done) return; bootHeavy.done = true;
+      window.__bootPreparing = true;
+      bootEntrance = true;
+      // 首屏准备期间关闭毛玻璃，避免隐藏页面同时创建大量合成层。
+      document.documentElement.classList.add("entrance-fx");
+      // 把启动重活拆成若干“画一帧再执行一小块”的节拍，避免一次性长任务冻结开屏动画。
+      const tasks = [
+        () => renderProfile(),
+        () => switchView("dashboard"),
+        () => renderAIStatus(),
+        () => { _dashboardIntroPlayed = true; }
+      ];
+      let taskIndex = 0;
+      const runNextTask = () => {
+        if (taskIndex >= tasks.length) {
+          window.__bootPreparing = false;
+          setTimeout(signalMainReady, 0);
+          return;
+        }
+        setTimeout(() => {
+          try { tasks[taskIndex++](); } catch (e) {}
+          runNextTask();
+        }, 12);
+      };
+      runNextTask();
+    };
+    var bootAfterSplash = function () {
+      if (bootAfterSplash.done) return; bootAfterSplash.done = true;
+      bootHeavy();
+      // 第一帧只揭示主界面；导航胶囊等修正延后一个稳定帧，避免揭示同帧长任务。
+      setTimeout(function () {
+        requestAnimationFrame(function () {
+          try { window.Anim && Anim.initNavPill(); } catch (e) {}
+          bootEntrance = false;
+          restoreBackdropFX();
+        });
+      }, 100);
+      setTimeout(maybeShowOnboarding, 620);
     };
     if (window.__splashActive) {
-      window.addEventListener("splash-done", runEntrance, { once: true });
-      setTimeout(runEntrance, 12500);
+      // 结构关键点：dashboard 重渲染由 splash-prepare 触发，且分帧执行。
+      // 原来的 canvas 开屏动画保持不变，只是不再跟首屏重活挤同一个主线程帧。
+      window.addEventListener("splash-prepare", bootHeavy, { once: true });
+      window.addEventListener("splash-done", bootAfterSplash, { once: true });
+      setTimeout(bootHeavy, 6500);
     } else {
-      runEntrance();
+      bootAfterSplash();
     }
     console.log("星屿 · 个人学习工作台已启动");
   }
@@ -3528,3 +4184,4 @@ const App = (() => {
 })();
 
 document.addEventListener("DOMContentLoaded", App.init);
+

@@ -9,7 +9,15 @@
 
   // 内置开屏声音（沿用励志语录音频）
   var BUILTIN = [
-    { id: "intro-ambient", name: "星屿 · 东方晨曦（自然女声开屏）", file: "assets/intro-ambient-v4.wav" },
+    // intro-ambient 是默认项 = 系统启动音（两声钟鸣 + 薄低频底，约 1.6s）。
+    // 这段音原本由 index.html 的 playBootTone() 用 Web Audio 实时合成，现已离线渲染为
+    // assets/intro-boot.wav（脚本 work/gen_boot_tone.py，参数与合成版逐项一致），
+    // 好处是设置面板的试听 / 切换都能像普通音源一样正常用。
+    { id: "intro-ambient", name: "星屿 · 系统启动音（钟鸣 1.6s）", file: "assets/intro-boot.wav" },
+    { id: "intro-tap", name: "星屿 · 轻提示音（短音效 1.4s）", file: "assets/intro-tap-v10.wav" },
+    { id: "intro-starlight", name: "星屿 · 星光入场（纯音乐·旧版）", file: "assets/intro-starlight-v7.wav" },
+    { id: "intro-ambient-v6", name: "星屿 · 晨曦序曲（空灵磬音·旧版）", file: "assets/intro-ambient-v6.wav" },
+    { id: "intro-ambient-v5", name: "星屿 · 东方晨曦（纯民乐·旧版）", file: "assets/intro-ambient-v5.wav" },
     { id: "default", name: "你是一个有毅力的人", file: "assets/motivational/quote-perseverance.mp3" },
     { id: "leijun-dare", name: "雷军：敢想敢干最重要", file: "assets/motivational/leijun-dare.mp3" },
     { id: "leijun-effort", name: "雷军：努力不是万能的", file: "assets/motivational/leijun-effort.mp3" },
@@ -81,24 +89,37 @@
     });
   }
 
-  function getSelection() {
+  var STORE_KEY = "xingyu_platform_v1";
+
+  // 读取设置的唯一入口。
+  // 关键：开屏脚本在 <head> 里同步执行，而 Store 要等文档末尾的 defer 脚本才加载，
+  // 那会儿 Store 还不存在。所以这里以「直接解析 localStorage」为主、Store 为辅：
+  // Store 是唯一写入方，底层就是 localStorage[STORE_KEY].settings，两者结构一致。
+  function readSettings() {
     try {
       if (typeof Store !== "undefined" && Store.getSettings) {
-        var v = Store.getSettings().splashSound;
-        if (v) return v === "default" ? "intro-ambient" : v;
+        var s = Store.getSettings();
+        if (s && typeof s === "object") return s;
       }
     } catch (e) {}
+    try {
+      var raw = localStorage.getItem(STORE_KEY);
+      var d = raw ? JSON.parse(raw) : null;
+      return (d && d.settings) || {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function getSelection() {
+    var v = readSettings().splashSound;
+    if (v) return v === "default" ? "intro-ambient" : v;
     return "intro-ambient";
   }
 
   function isEnabled() {
-    try {
-      if (typeof Store !== "undefined" && Store.getSettings) {
-        var v = Store.getSettings().splashSoundEnabled;
-        if (typeof v === "boolean") return v;
-      }
-    } catch (e) {}
-    return true;
+    var v = readSettings().splashSoundEnabled;
+    return typeof v === "boolean" ? v : true;
   }
   function setEnabled(on) {
     try { if (typeof Store !== "undefined" && Store.setSettings) Store.setSettings({ splashSoundEnabled: !!on }); } catch (e) {}

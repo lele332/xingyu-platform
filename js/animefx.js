@@ -159,32 +159,9 @@
         delay: window.anime.stagger(40),
         ease: "outExpo"
       });
-    },
-
-    /* ============================================================
-       品牌 ○ 标记：首载缩放浮现 + hover 微放大
-       （○ 是正圆，rotate 无视觉意义，改用 scale + 主题色反馈）
-       ============================================================ */
-    logoIn: function () {
-      var logo = document.querySelector(".logo-icon");
-      if (!logo || logo.dataset.animefx) return;
-      if (!hasAnime || reduceMotion) return;
-      logo.dataset.animefx = "1";
-      var A = window.anime;
-      A.animate(logo, {
-        scale: { from: 0.85, to: 1 },
-        opacity: { from: 0, to: 1 },
-        duration: 520,
-        ease: "outExpo",
-        complete: function () { logo.style.removeProperty("opacity"); }
-      });
-      logo.addEventListener("mouseenter", function () { AnimeFX._logoHover(logo, 1.08); });
-      logo.addEventListener("mouseleave", function () { AnimeFX._logoHover(logo, 1); });
-    },
-    _logoHover: function (el, s) {
-      if (!hasAnime || reduceMotion) return;
-      window.anime.animate(el, { scale: s, duration: 260, ease: "outExpo" });
     }
+
+    /* logoIn/_logoHover 已移除（2026-08-29）：现行代码无任何调用方，属死代码。 */
   };
 
   window.AnimeFX = AnimeFX;

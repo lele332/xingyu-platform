@@ -194,11 +194,6 @@
     renderList(records);
   }
 
-  function statBox(value, label, note) {
-    return '<div class="running-stat"><b>' + esc(value) + '</b><span>' + esc(label) + '</span>' +
-           (note ? '<em>' + esc(note) + '</em>' : '') + '</div>';
-  }
-
   function totals(records) {
     var t = { km: 0, count: 0, full: 0, half: 0, run: 0, hrs: [], paceSum: 0, paceN: 0 };
     records.forEach(function (r) {
@@ -219,12 +214,25 @@
     var el = document.getElementById("runningStats");
     if (!el) return;
     var t = totals(records);
+    var pace = fmtPace(t.avgPace);
+    var hr = t.avgHr ? t.avgHr : "\u2014";
     el.innerHTML =
-      '<div class="running-stats">' +
-        statBox(t.km.toFixed(1), "总里程 (km)", t.count + " 次") +
-        statBox(fmtPace(t.avgPace), "平均配速", "/km") +
-        statBox(t.avgHr ? t.avgHr : "—", "平均心率", "bpm") +
-        statBox(t.full + " / " + t.half, "全马 / 半马", "完成次数") +
+      '<div class="running-hero-card">' +
+        '<div class="running-hero-top">' +
+          '<span class="running-hero-kicker">Running · Training</span>' +
+          '<span class="running-hero-count">' + t.count + ' 次记录</span>' +
+        '</div>' +
+        '<div class="running-hero-main">' +
+          '<div class="running-hero-total">' +
+            '<b>' + esc(t.km.toFixed(1)) + '</b>' +
+            '<span>km · 总里程</span>' +
+          '</div>' +
+          '<div class="running-hero-stats">' +
+            '<div class="running-hero-stat"><b>' + esc(pace) + '</b><span>平均配速 /km</span></div>' +
+            '<div class="running-hero-stat"><b>' + esc(String(hr)) + '</b><span>平均心率 bpm</span></div>' +
+            '<div class="running-hero-stat"><b>' + t.full + ' / ' + t.half + '</b><span>全马 / 半马</span></div>' +
+          '</div>' +
+        '</div>' +
       '</div>';
   }
 
@@ -414,6 +422,20 @@
 
     var saveBtn = document.getElementById("btnSaveRunning");
     if (saveBtn) saveBtn.onclick = saveManual;
+
+    // HUAWEI 训练营：独立窗口打开 / 复制链接（训练营站点禁止第三方 iframe 内嵌）
+    var campUrl = "https://health.cloud.huawei.com/TrainingCamp";
+    var openCampBtn = document.getElementById("btnOpenTrainingCamp");
+    if (openCampBtn) openCampBtn.onclick = function () {
+      window.open(campUrl, "_blank", "noopener");
+    };
+    var copyCampBtn = document.getElementById("btnCopyCampLink");
+    if (copyCampBtn) copyCampBtn.onclick = function () {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(campUrl).then(function () { toast("训练营链接已复制", "ok"); })
+          .catch(function () { if (window.prompt) window.prompt("复制链接：", campUrl); });
+      } else if (window.prompt) { window.prompt("复制链接：", campUrl); }
+    };
   }
 
   window.Running = {

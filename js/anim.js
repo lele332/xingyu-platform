@@ -11,7 +11,8 @@
 
   if (hasGSAP) {
     if (window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
-    gsap.defaults({ duration: 0.42, ease: "power4.out", overwrite: "auto" });
+    // 苹果设计语言：expo.out（≈ cubic-bezier(.19,1,.22,1)）快速减速，默认 0.34s
+    gsap.defaults({ duration: 0.34, ease: "expo.out", overwrite: "auto" });
   }
 
   function dur(full) { return reduceMotion ? 0 : (full || 0.42); }
@@ -35,36 +36,39 @@
       var quote = scope.querySelector(".quote-card");
       var grid = gsap.utils.toArray(".dash-grid > .card", scope);
       var tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+      // 纯透明度淡入，不做 y/scale 位移：开屏后首个可见窗口主线程必须空闲，
+      // transform 位移 + 毛玻璃卡片并发合成是可见卡顿的来源（此处 backdrop-filter
+      // 已被入场窗口临时关闭，但位移仍需多张合成层，纯 opacity 更轻）。
       if (hero) {
         tl.fromTo(hero,
-          { autoAlpha: 0, y: 20, scale: 0.985 },
-          { autoAlpha: 1, y: 0, scale: 1, duration: 0.48, clearProps: "all" },
+          { opacity: 0 },
+          { opacity: 1, duration: 0.45, clearProps: "opacity" },
           0.05
         );
         tl.add(function () {
           gsap.utils.toArray("#heroStats [data-count]", scope).forEach(function (el) {
             Anim.countUp(el, +el.dataset.count);
           });
-        }, ">-0.12");
+        }, ">-0.1");
       }
       if (quote) {
         tl.fromTo(quote,
-          { autoAlpha: 0, y: 14 },
-          { autoAlpha: 1, y: 0, duration: 0.38, clearProps: "all" },
-          ">-0.18"
+          { opacity: 0 },
+          { opacity: 1, duration: 0.34, clearProps: "opacity" },
+          ">-0.15"
         );
       }
       if (grid.length) {
         tl.fromTo(grid,
-          { autoAlpha: 0, y: 16 },
-          { autoAlpha: 1, y: 0, duration: 0.42, stagger: 0.055, clearProps: "all" },
-          ">-0.15"
+          { opacity: 0 },
+          { opacity: 1, duration: 0.4, stagger: 0.05, clearProps: "opacity" },
+          ">-0.12"
         );
       }
       return tl;
     },
 
-    /* ---------- 视图入场：淡入 + 上移 + 轻微缩放 ---------- */
+    /* ---------- 视图入场：苹果式淡入 + 轻微上移（expo 减速） ---------- */
     viewEnter: function (el) {
       if (!el) return;
       if (!hasGSAP) {
@@ -74,11 +78,11 @@
         return;
       }
       gsap.fromTo(el,
-        { autoAlpha: 0, y: 16, scale: 0.99 },
+        { autoAlpha: 0, y: 10, scale: 0.995 },
         {
           autoAlpha: 1, y: 0, scale: 1,
-          duration: dur(),
-          ease: "power4.out",
+          duration: dur(0.38),
+          ease: "expo.out",
           clearProps: "transform,opacity,visibility"
         }
       );
@@ -107,13 +111,14 @@
       }
       gsap.fromTo(mask,
         { autoAlpha: 0 },
-        { autoAlpha: 1, duration: dur(0.2), clearProps: "opacity,visibility" }
+        { autoAlpha: 1, duration: dur(0.18), clearProps: "opacity,visibility" }
       );
+      // 苹果式弹窗：轻微 overshoot 弹性（back.out），底部上滑 + 缩放
       if (sheet) gsap.fromTo(sheet,
-        { y: 24, scale: 0.985, autoAlpha: 0 },
+        { y: 22, scale: 0.96, autoAlpha: 0 },
         {
           y: 0, scale: 1, autoAlpha: 1,
-          duration: dur(0.42), ease: "power4.out",
+          duration: dur(0.44), ease: "back.out(1.35)",
           clearProps: "transform,opacity,visibility"
         }
       );
@@ -146,7 +151,7 @@
         { scale: 0.92, autoAlpha: 0 },
         {
           scale: 1, autoAlpha: 1,
-          duration: dur(0.4), ease: "power4.out",
+          duration: dur(0.4), ease: "expo.out",
           clearProps: "transform,opacity,visibility"
         }
       );
@@ -161,31 +166,20 @@
       });
     },
 
-    /* ---------- 侧边栏入场序列（一次） ---------- */
-    sidebarIntro: function () {
-      if (!hasGSAP || reduceMotion) return;
-      var items = gsap.utils.toArray(".nav-item");
-      if (!items.length) return;
-      var brand = document.querySelector(".brand");
-      var labels = gsap.utils.toArray(".nav-group-label");
-      var tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-      if (brand) tl.fromTo(brand, { autoAlpha: 0, y: -10 }, { autoAlpha: 1, y: 0, duration: 0.4, clearProps: "all" }, 0);
-      if (labels.length) {
-        tl.fromTo(labels, { autoAlpha: 0, x: -8 }, { autoAlpha: 1, x: 0, duration: 0.28, stagger: 0.05, clearProps: "all" }, 0.1);
-      }
-      tl.fromTo(items,
-        { autoAlpha: 0, y: 10 },
-        { autoAlpha: 1, y: 0, duration: 0.32, stagger: 0.04, clearProps: "all" },
-        0.16
-      );
-      // 入场完成后初始化滑块定位（此时布局稳定）
-      tl.add(function () { Anim.initNavPill(); }, "+=0.15");
-      return tl;
-    },
+    /* ---------- 侧边栏入场序列（已移除 2026-08-29） ----------
+       原 preHideSidebar/sidebarIntro 在现行启动流程中无任何调用方
+       （开屏流程直接由 bootHeavy + splash-done 驱动），属死代码。 */
 
-    /* ---------- 移动滑块 pill：active 高亮块平滑滑动（transform 合成层动画） ---------- */
+    /* ---------- 移动滑块 pill：active 高亮块平滑滑动 ----------
+       手写 rAF 补间实现：不依赖 GSAP ticker，也不依赖 CSS transition
+       （GSAP 接触过的元素 + 全局 !important transition 会使其失效）。
+       坐标用 getBoundingClientRect 相对 sidebar-nav 的差值：
+       导航分多个 .nav-group，item.offsetTop 只在组内计数（跨组会算错成 0），
+       rect 差值不分组，任何层级都准确。 */
     _pillCtx: null,
     _pillBase: null,
+    _pillCur: null,   // 当前 transform 状态 {x,y,sx,sy}
+    _pillTimer: null, // 补间动画句柄
     initNavPill: function () {
       var nav = document.querySelector(".sidebar-nav");
       if (!nav) return;
@@ -203,30 +197,64 @@
       var active = nav.querySelector(".nav-item.active");
       if (active) Anim.navPillTo(active.dataset.view, false);
     },
+    _pillApply: function (x, y, sx, sy) {
+      var pill = Anim._pillCtx.pill;
+      pill.style.transform = "translate(" + x + "px," + y + "px) scale(" + sx + "," + sy + ")";
+      Anim._pillCur = { x: x, y: y, sx: sx, sy: sy };
+    },
     navPillTo: function (view, animate) {
       if (!Anim._pillCtx) return;
       var p = Anim._pillCtx;
-      var item = p.nav.querySelector('[data-view="' + view + '"]');
+      var item = p.nav.querySelector('.nav-item[data-view="' + view + '"]');
       if (!item) return;
-      var it = { top: item.offsetTop, left: item.offsetLeft, width: item.offsetWidth, height: item.offsetHeight };
-      // 首次定位：一次性设置静态布局（无动画），此后仅用 transform 动画，避免每帧重排
+      // 相对 sidebar-nav 的准确坐标（不分组、含滚动位置）
+      var nr = p.nav.getBoundingClientRect();
+      var ir = item.getBoundingClientRect();
+      var x = ir.left - nr.left, y = ir.top - nr.top, w = ir.width, h = ir.height;
       if (!Anim._pillBase) {
-        Anim._pillBase = { top: it.top, left: it.left, width: it.width, height: it.height };
-        gsap.set(p.pill, { top: it.top, left: it.left, width: it.width, height: it.height, x: 0, y: 0, scaleX: 1, scaleY: 1 });
+        Anim._pillBase = { x: x, y: y, w: w, h: h };
+        Anim._pillBaseView = view;
+        var st0 = p.pill.style;
+        st0.left = x + "px"; st0.top = y + "px";
+        st0.width = w + "px"; st0.height = h + "px";
+        Anim._pillApply(0, 0, 1, 1);
         return;
       }
+      // 基准项实时重捕：badge/滚动条/字体加载引起的布局漂移随时被吸收，
+      // 滑块移动量始终相对基准项当前几何计算（不再有累积误差）
       var b = Anim._pillBase;
-      var vars = {
-        x: it.left - b.left,
-        y: it.top - b.top,
-        scaleX: b.width ? it.width / b.width : 1,
-        scaleY: b.height ? it.height / b.height : 1
-      };
-      if (animate === false || !hasGSAP || reduceMotion) {
-        gsap.set(p.pill, vars);
-      } else {
-        gsap.to(p.pill, Object.assign({}, vars, { duration: 0.34, ease: "power4.out", overwrite: "auto" }));
+      if (Anim._pillBaseView) {
+        var baseItem = p.nav.querySelector('.nav-item[data-view="' + Anim._pillBaseView + '"]');
+        if (baseItem) {
+          var br = baseItem.getBoundingClientRect();
+          b = { x: br.left - nr.left, y: br.top - nr.top, w: br.width, h: br.height };
+        }
       }
+      var tx = x - b.x, ty = y - b.y;
+      var tsx = b.w ? w / b.w : 1, tsy = b.h ? h / b.h : 1;
+      if (animate === false || reduceMotion) {
+        if (Anim._pillTimer) { clearTimeout(Anim._pillTimer); Anim._pillTimer = null; }
+        Anim._pillApply(tx, ty, tsx, tsy);
+        return;
+      }
+      // rAF 补间：easeOutQuart 0.34s（setTimeout 驱动，避免 rAF 节流时动画停摆）
+      var from = Anim._pillCur || { x: 0, y: 0, sx: 1, sy: 1 };
+      var t0 = performance.now(), dur = 340;
+      if (Anim._pillTimer) { clearTimeout(Anim._pillTimer); Anim._pillTimer = null; }
+      function step() {
+        var now = performance.now();
+        var pr = Math.min((now - t0) / dur, 1);
+        var e = 1 - Math.pow(1 - pr, 4);
+        Anim._pillApply(
+          from.x + (tx - from.x) * e,
+          from.y + (ty - from.y) * e,
+          from.sx + (tsx - from.sx) * e,
+          from.sy + (tsy - from.sy) * e
+        );
+        if (pr < 1) Anim._pillTimer = setTimeout(step, 16);
+        else Anim._pillTimer = null;
+      }
+      Anim._pillTimer = setTimeout(step, 16);
     },
 
     /* ---------- 侧边栏 hover：文字右移 + 微反馈 ---------- */
@@ -241,24 +269,19 @@
       });
     },
 
-    /* ---------- 侧边栏点击：弹性反馈（滑块滑动由 navPillTo 处理） ---------- */
+    /* ---------- 侧边栏点击：苹果弹性反馈（滑块滑动由 navPillTo 处理） ---------- */
     navPulse: function (item) {
       if (!item || !hasGSAP || reduceMotion) return;
-      gsap.fromTo(item, { scale: 0.965 }, { scale: 1, duration: 0.26, ease: "power4.out", clearProps: "transform" });
+      gsap.fromTo(item, { scale: 0.97 }, { scale: 1, duration: 0.3, ease: "back.out(2.2)", clearProps: "transform" });
     },
 
-    /* ---------- 文本淡入（每日一言等） ---------- */
+    /* ---------- 文本淡入（每日一言等）：苹果 expo 减速 ---------- */
     quoteIn: function (el) {
       if (!el || !hasGSAP || reduceMotion) return;
       gsap.fromTo(el,
         { autoAlpha: 0, y: 8 },
-        { autoAlpha: 1, y: 0, duration: dur(0.36), ease: "power4.out", clearProps: "transform,opacity,visibility" }
+        { autoAlpha: 1, y: 0, duration: dur(0.36), ease: "expo.out", clearProps: "transform,opacity,visibility" }
       );
-    },
-
-    /* ---------- Apple 风格使用即时压感，不使用 Material 涟漪 ---------- */
-    initRipple: function () {
-      return;
     },
 
     /* ---------- 滚动分批浮入（ScrollTrigger），返回清理函数 ---------- */
@@ -276,7 +299,7 @@
           onEnter: function () {
             gsap.to(el, {
               autoAlpha: 1, y: 0,
-              duration: 0.42, ease: "power4.out",
+              duration: 0.4, ease: "expo.out",
               clearProps: "transform,opacity,visibility"
             });
           }
