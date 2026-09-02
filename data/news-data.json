@@ -1,74 +1,107 @@
 {
-  "updatedAt": "2026-09-02T07:31:28.545658+08:00",
-  "date": "2026年09月02日 周三",
+  "updatedAt": "2026-09-03T07:30:45.280609+08:00",
+  "date": "2026年09月03日 周四",
   "count": 98,
-  "techCount": 42,
+  "techCount": 45,
   "news": [
     {
-      "title": "我国制造业景气水平较上月明显改善",
-      "link": "https://news.cctv.com/2026/09/01/ARTI7h2Lj4QLXEOAX5ZmgBbw260901.shtml",
+      "title": "中吉教育合作持续深化 为两国友好注入青年力量",
+      "link": "https://news.cctv.com/2026/09/02/ARTI1DFNc84wFOLwTBxdz2ey260902.shtml",
       "summary": "",
       "source": "央视网",
       "region": "🇨🇳",
       "category": "国内",
       "topic": "综合",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "我国与上合组织其他成员国经贸往来稳步增长",
-      "link": "https://news.cctv.com/2026/09/01/ARTITHcetlvUrwysQ44z9vu3260901.shtml",
+      "title": "我国科研团队首次实现高光谱相机实时解析",
+      "link": "https://news.cctv.com/2026/09/02/ARTIF78MPjaOyWFfce8NgzFZ260902.shtml",
       "summary": "",
       "source": "央视网",
       "region": "🇨🇳",
       "category": "国内",
       "topic": "综合",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "短剧定制成2026年影视文旅新热点",
-      "link": "https://news.cctv.com/2026/09/01/ARTI9HkYucaXtoGaNHiSudfv260901.shtml",
+      "title": "多地风雨持续 “沙德尔”停编后为何再度加强为台风？",
+      "link": "https://news.cctv.com/2026/09/02/ARTIxYRcv49Z2go9o89LLkdc260901.shtml",
       "summary": "",
       "source": "央视网",
       "region": "🇨🇳",
       "category": "国内",
       "topic": "综合",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "目前国道216线抢通工作面临三大困难",
-      "link": "https://tv.cctv.com/2026/08/31/VIDEmwVKDxG4N4h0zoynZRyV260831.shtml",
+      "title": "百日千万招聘专项行动推出四个线上招聘专场",
+      "link": "https://tv.cctv.com/2026/09/02/VIDEFo8sN9ud0eJxkV09cXuf260902.shtml",
       "summary": "",
       "source": "央视网",
       "region": "🇨🇳",
       "category": "国内",
       "topic": "综合",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "日本防卫省宣布2027财年申请预算达新高",
-      "link": "https://tv.cctv.com/2026/09/01/VIDE7kmYyG4qFALuC4t69Aw3260901.shtml",
+      "title": "沪宁合高铁全线开始铺轨",
+      "link": "https://tv.cctv.com/2026/09/02/VIDEZDkkYgO6tqm329GZS9Ba260902.shtml",
       "summary": "",
       "source": "央视网",
       "region": "🇨🇳",
       "category": "国内",
       "topic": "综合",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "印尼多地野火持续 烟霾影响超500万人",
-      "link": "https://tv.cctv.com/2026/09/01/VIDE2E5ZME9PfYPsF5DN2bvs260901.shtml",
+      "title": "我国高海拔区春油菜单产创新高",
+      "link": "https://tv.cctv.com/2026/09/02/VIDEtxnaHLrKFklWEHHuF7tk260902.shtml",
       "summary": "",
       "source": "央视网",
       "region": "🇨🇳",
       "category": "国内",
       "topic": "综合",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
+    },
+    {
+      "title": "习近平圆满结束对埃及的国事访问",
+      "link": "https://www.chinanews.com.cn/gn/2026/09-03/10689164.shtml",
+      "summary": "",
+      "source": "中新网",
+      "region": "🇨🇳",
+      "category": "国内",
+      "topic": "综合",
+      "tech": false,
+      "time": "2026-09-03T07:30:45.280609+08:00"
+    },
+    {
+      "title": "习近平和彭丽媛同埃及总统塞西夫妇共同参观大埃及博物馆",
+      "link": "https://www.chinanews.com.cn/gn/2026/09-03/10689163.shtml",
+      "summary": "",
+      "source": "中新网",
+      "region": "🇨🇳",
+      "category": "国内",
+      "topic": "综合",
+      "tech": false,
+      "time": "2026-09-03T07:30:45.280609+08:00"
+    },
+    {
+      "title": "习近平同埃及总统塞西举行会谈",
+      "link": "https://www.chinanews.com.cn/gn/2026/09-02/10689004.shtml",
+      "summary": "",
+      "source": "中新网",
+      "region": "🇨🇳",
+      "category": "国内",
+      "topic": "综合",
+      "tech": false,
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "习近平抵达开罗对埃及进行国事访问",
@@ -79,106 +112,73 @@
       "category": "国内",
       "topic": "综合",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "习近平抵达埃及开罗国际机场发表书面讲话",
-      "link": "https://www.chinanews.com.cn/gn/2026/09-02/10688354.shtml",
+      "title": "习言道｜谈及中东局势，习近平提出四点倡议",
+      "link": "https://www.chinanews.com.cn/gn/2026/09-02/10689116.shtml",
       "summary": "",
       "source": "中新网",
       "region": "🇨🇳",
       "category": "国内",
       "topic": "综合",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "习言道｜把中埃友好的接力棒一代代传下去",
-      "link": "https://www.chinanews.com.cn/gn/2026/09-01/10687785.shtml",
+      "title": "“矢志不渝”，习近平寄语上合组织",
+      "link": "https://www.chinanews.com.cn/gn/2026/09-02/10688432.shtml",
       "summary": "",
       "source": "中新网",
       "region": "🇨🇳",
       "category": "国内",
       "topic": "综合",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "“中埃两大文明古国”，习近平这样说",
-      "link": "https://www.chinanews.com.cn/gn/2026/09-01/10687943.shtml",
+      "title": "习近平同埃及总统塞西会谈",
+      "link": "https://www.chinanews.com.cn/tp/hd2011/2026/09-02/1202955.shtml",
       "summary": "",
       "source": "中新网",
       "region": "🇨🇳",
       "category": "国内",
       "topic": "综合",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "习言道｜习近平再谈上合“初心”",
-      "link": "https://www.chinanews.com.cn/gn/2026/09-01/10688334.shtml",
+      "title": "彭丽媛同埃及总统塞西夫人依缇萨尔茶叙并参观小型手工艺品展",
+      "link": "https://www.chinanews.com.cn/gn/2026/09-02/10689001.shtml",
       "summary": "",
       "source": "中新网",
       "region": "🇨🇳",
       "category": "国内",
       "topic": "综合",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "习近平出席“上海合作组织+”会议并发表重要讲话",
-      "link": "https://www.chinanews.com.cn/gn/2026/09-01/10688131.shtml",
+      "title": "贵州黔东南：邂逅西江千户苗寨 感受吊脚楼的建筑之美",
+      "link": "https://www.chinanews.com.cn/tp/hd2011/2026/09-02/1202855.shtml",
       "summary": "",
       "source": "中新网",
       "region": "🇨🇳",
       "category": "国内",
       "topic": "综合",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "习近平出席上海合作组织成员国元首理事会第二十六次会议并发表重要讲话",
-      "link": "https://www.chinanews.com.cn/gn/2026/09-01/10687971.shtml",
+      "title": "救援力量在西藏吉隆口岸受灾核心区域开展救援工作",
+      "link": "https://www.chinanews.com.cn/tp/hd2011/2026/09-02/1202945.shtml",
       "summary": "",
       "source": "中新网",
       "region": "🇨🇳",
       "category": "国内",
       "topic": "综合",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
-    },
-    {
-      "title": "习近平圆满结束出席2026年上海合作组织峰会和对吉尔吉斯斯坦的国事访问",
-      "link": "https://www.chinanews.com.cn/gn/2026/09-01/10688207.shtml",
-      "summary": "",
-      "source": "中新网",
-      "region": "🇨🇳",
-      "category": "国内",
-      "topic": "综合",
-      "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
-    },
-    {
-      "title": "彭丽媛出席上海合作组织峰会配偶集体活动",
-      "link": "https://www.chinanews.com.cn/gn/2026/09-01/10688022.shtml",
-      "summary": "",
-      "source": "中新网",
-      "region": "🇨🇳",
-      "category": "国内",
-      "topic": "综合",
-      "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
-    },
-    {
-      "title": "智神星一号运载火箭首飞成功",
-      "link": "https://www.chinanews.com.cn/tp/hd2011/2026/09-01/1202734.shtml",
-      "summary": "",
-      "source": "中新网",
-      "region": "🇨🇳",
-      "category": "国内",
-      "topic": "综合",
-      "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "Tim Cook 掌舵十五年：哪些苹果产品真正改变了你的数字生活？",
@@ -189,7 +189,7 @@
       "category": "国内",
       "topic": "科技AI",
       "tech": true,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "YoooClaw C·ONE你的随身 AI 智能助理",
@@ -200,7 +200,7 @@
       "category": "国内",
       "topic": "科技AI",
       "tech": true,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "口袋先知墨水屏一款多功能的轻决策包挂",
@@ -211,7 +211,51 @@
       "category": "国内",
       "topic": "科技AI",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
+    },
+    {
+      "title": "折叠屏 iPhone、新款 HomePod…… Apple 发布会有哪些看点？",
+      "link": "https://sspai.com/post/114084",
+      "summary": "",
+      "source": "少数派",
+      "region": "🇨🇳",
+      "category": "国内",
+      "topic": "科技AI",
+      "tech": true,
+      "time": "2026-09-03T07:30:45.280609+08:00"
+    },
+    {
+      "title": "一日一技 | 借助 PowerShell 自定义 Windows 更新暂停时间",
+      "link": "https://sspai.com/post/80562",
+      "summary": "",
+      "source": "少数派",
+      "region": "🇨🇳",
+      "category": "国内",
+      "topic": "科技AI",
+      "tech": false,
+      "time": "2026-09-03T07:30:45.280609+08:00"
+    },
+    {
+      "title": "众测招募 | 玩转音乐生态，体验 Sonos Play 便携智能音响",
+      "link": "https://sspai.com/post/113581",
+      "summary": "",
+      "source": "少数派",
+      "region": "🇨🇳",
+      "category": "国内",
+      "topic": "科技AI",
+      "tech": true,
+      "time": "2026-09-03T07:30:45.280609+08:00"
+    },
+    {
+      "title": "英伟达正式发布 DLSS 5、戴森发布智能电动牙刷 CameraJet 等",
+      "link": "https://sspai.com/post/114093",
+      "summary": "",
+      "source": "少数派",
+      "region": "🇨🇳",
+      "category": "国内",
+      "topic": "科技AI",
+      "tech": true,
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "线下活动 | 全新 iPhone 发布在即，来与少数派一起看 Apple 发布会",
@@ -222,51 +266,7 @@
       "category": "国内",
       "topic": "科技AI",
       "tech": true,
-      "time": "2026-09-02T07:31:28.545658+08:00"
-    },
-    {
-      "title": "线索若隐若现：深入 Tim Cook 和 Nike 的商业连接",
-      "link": "https://sspai.com/post/111081",
-      "summary": "",
-      "source": "少数派",
-      "region": "🇨🇳",
-      "category": "国内",
-      "topic": "科技AI",
-      "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
-    },
-    {
-      "title": "本月玩什么｜Big Walk、潜龙谍影 大师合辑 Vol. 2",
-      "link": "https://sspai.com/post/114043",
-      "summary": "",
-      "source": "少数派",
-      "region": "🇨🇳",
-      "category": "国内",
-      "topic": "科技AI",
-      "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
-    },
-    {
-      "title": "派评 | 近期值得关注的 App",
-      "link": "https://sspai.com/post/114041",
-      "summary": "",
-      "source": "少数派",
-      "region": "🇨🇳",
-      "category": "国内",
-      "topic": "科技AI",
-      "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
-    },
-    {
-      "title": "全球仅剩三位数的物种，科学家却连一个准数都数不出来",
-      "link": "https://sspai.com/post/113827",
-      "summary": "",
-      "source": "少数派",
-      "region": "🇨🇳",
-      "category": "国内",
-      "topic": "科技AI",
-      "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "在 MWC 上找到了折叠屏最该有的样子",
@@ -277,7 +277,7 @@
       "category": "国内",
       "topic": "科技AI",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "爱范儿 | 杜晨 08-23 11:53",
@@ -288,7 +288,7 @@
       "category": "国内",
       "topic": "科技AI",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "爱范儿 | 马扶摇 08-21 17:32",
@@ -299,7 +299,7 @@
       "category": "国内",
       "topic": "科技AI",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "公司 | 柯铭源 08-22 18:00",
@@ -310,7 +310,7 @@
       "category": "国内",
       "topic": "科技AI",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "Windows 是 AI PC 路上的绊脚石",
@@ -321,40 +321,40 @@
       "category": "国内",
       "topic": "科技AI",
       "tech": true,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "3899 元！戴森发布 AI 牙刷：有水牙线不够，还要塞个摄像头",
-      "link": "https://www.ifanr.com/1678053",
+      "title": "Gemini 3.8 Flash 光速发布：干活挺勤快，就是没开窍",
+      "link": "https://www.ifanr.com/1678197",
       "summary": "",
       "source": "爱范儿",
       "region": "🇨🇳",
       "category": "国内",
       "topic": "科技AI",
       "tech": true,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "地表最强四缸守不住了！丰田 GR 硬刚 AMG，500 马力小跑车即将入场",
-      "link": "https://www.ifanr.com/1677994",
+      "title": "比亚迪六座新旗舰！海狮 08 正式上市，22.99 万元起",
+      "link": "https://www.ifanr.com/1678169",
+      "summary": "",
+      "source": "爱范儿",
+      "region": "🇨🇳",
+      "category": "国内",
+      "topic": "科技AI",
+      "tech": true,
+      "time": "2026-09-03T07:30:45.280609+08:00"
+    },
+    {
+      "title": "李飞飞的 World Labs，把赛博朋克的「超梦」做出来了",
+      "link": "https://www.ifanr.com/1678150",
       "summary": "",
       "source": "爱范儿",
       "region": "🇨🇳",
       "category": "国内",
       "topic": "科技AI",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
-    },
-    {
-      "title": "Lovart 悄悄大更新，这一次轮到 AI 适应设计师了",
-      "link": "https://www.ifanr.com/1677574",
-      "summary": "",
-      "source": "爱范儿",
-      "region": "🇨🇳",
-      "category": "国内",
-      "topic": "科技AI",
-      "tech": true,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "世界模型没那么热了，我们却看到了最好的一个",
@@ -365,7 +365,7 @@
       "category": "国内",
       "topic": "科技AI",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "一张照片，一个能用的场景世界，但他们不想叫它“世界模型”",
@@ -376,7 +376,7 @@
       "category": "国内",
       "topic": "科技AI",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "办公Agent抢位战，谁已获得了下阶段的入场券？",
@@ -387,7 +387,7 @@
       "category": "国内",
       "topic": "科技AI",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "用户规模和商业化前景开始成为核心指标",
@@ -398,7 +398,7 @@
       "category": "国内",
       "topic": "科技AI",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "美图，像创业公司一样生存",
@@ -409,7 +409,7 @@
       "category": "国内",
       "topic": "科技AI",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "美图为什么要把自己变小？",
@@ -420,7 +420,7 @@
       "category": "国内",
       "topic": "科技AI",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "Physical AI还在寻找身体，AIVA给出的答案是汽车",
@@ -431,7 +431,7 @@
       "category": "国内",
       "topic": "科技AI",
       "tech": true,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "人形之外，Physical AI 还有一条已经驶入现实世界的汽车路径",
@@ -442,7 +442,7 @@
       "category": "国内",
       "topic": "科技AI",
       "tech": true,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "老黄把CPU机柜搬上台，一场五年混战开始了",
@@ -453,7 +453,7 @@
       "category": "国内",
       "topic": "科技AI",
       "tech": true,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "泽宝门徒们还在狂奔，但一个时代已经落幕",
@@ -464,7 +464,7 @@
       "category": "国内",
       "topic": "科技AI",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "WRC 2026 大复盘：具身智能告别「表演时代」，全面进入「算账时代」",
@@ -475,7 +475,7 @@
       "category": "国内",
       "topic": "科技AI",
       "tech": true,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "独家丨从飞书火山整合，看阿里「云钉一体」踩过的坑",
@@ -486,7 +486,7 @@
       "category": "国内",
       "topic": "科技AI",
       "tech": true,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "都叫3D芯片，为什么是三门不同的生意？",
@@ -497,7 +497,7 @@
       "category": "国内",
       "topic": "科技AI",
       "tech": true,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "参数内卷的尽头，泳池机器人在等待一次范式转移",
@@ -508,7 +508,7 @@
       "category": "国内",
       "topic": "科技AI",
       "tech": true,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "奇瑞长安东风集体入局，无人配送是「真风口」还是「新泡沫」？",
@@ -519,7 +519,7 @@
       "category": "国内",
       "topic": "科技AI",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "我们用 Kimi K3 搓了一颗火影螺旋丸，只花129元就顶一个前端团队？",
@@ -530,238 +530,238 @@
       "category": "国内",
       "topic": "科技AI",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "美军再轰伊朗目标 伊朗警告美国将后悔",
-      "link": "https://www.zaobao.com/news/world/story20260902-9611327",
+      "title": "特朗普：对伊朗新一轮行动不会持续太久",
+      "link": "https://www.zaobao.com/news/world/story20260903-9617401",
       "summary": "",
       "source": "联合早报",
       "region": "🌍",
       "category": "国际",
       "topic": "综合",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "德国称俄罗斯是机场爆炸物事件幕后黑手",
-      "link": "https://www.zaobao.com/news/world/story20260902-9610947",
+      "title": "内坦亚胡誓言不会从加沙撤军 拟撤离巴勒斯坦人",
+      "link": "https://www.zaobao.com/news/world/story20260902-9616917",
       "summary": "",
       "source": "联合早报",
       "region": "🌍",
       "category": "国际",
       "topic": "综合",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "美邮局吹哨人：特朗普新邮寄选票系统或干扰中期选举",
-      "link": "https://www.zaobao.com/news/world/story20260901-9610906",
+      "title": "黄仁勋在G20促各国建设数据中心 警告AI监管过度恐落后",
+      "link": "https://www.zaobao.com/news/world/story20260902-9616870",
+      "summary": "",
+      "source": "联合早报",
+      "region": "🌍",
+      "category": "国际",
+      "topic": "综合",
+      "tech": true,
+      "time": "2026-09-03T07:30:45.280609+08:00"
+    },
+    {
+      "title": "丹麦新兵首次部署到格陵兰岛 参与军事演习",
+      "link": "https://www.zaobao.com/news/world/story20260902-9616827",
       "summary": "",
       "source": "联合早报",
       "region": "🌍",
       "category": "国际",
       "topic": "综合",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "德国一变电站遭自制炸弹袭击",
-      "link": "https://www.zaobao.com/news/world/story20260901-9610853",
+      "title": "知情者：美高级幕僚欲阻伊战在中期选举前升级",
+      "link": "https://www.zaobao.com/news/world/story20260902-9616795",
       "summary": "",
       "source": "联合早报",
       "region": "🌍",
       "category": "国际",
       "topic": "综合",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "美财长：本周预计宣布对伊朗银行制裁",
-      "link": "https://www.zaobao.com/news/world/story20260901-9610823",
+      "title": "美国拟进一步加征晶片关税 在美生产企业可获豁免",
+      "link": "https://www.zaobao.com/news/world/story20260902-9616594",
       "summary": "",
       "source": "联合早报",
       "region": "🌍",
       "category": "国际",
       "topic": "综合",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "普京特使罕见警告：俄经济恐陷入“狂暴”状态",
-      "link": "https://www.zaobao.com/news/world/story20260901-9610760",
+      "title": "消息称美国纽约公立小学初中将禁用AI",
+      "link": "https://www.zaobao.com/news/world/story20260902-9616538",
+      "summary": "",
+      "source": "联合早报",
+      "region": "🌍",
+      "category": "国际",
+      "topic": "综合",
+      "tech": true,
+      "time": "2026-09-03T07:30:45.280609+08:00"
+    },
+    {
+      "title": "地缘政治局势动荡 荷兰央行将86吨黄金从美加转至英国",
+      "link": "https://www.zaobao.com/news/world/story20260902-9616446",
       "summary": "",
       "source": "联合早报",
       "region": "🌍",
       "category": "国际",
       "topic": "综合",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "出现三起死亡病例 瑞士药企诺华叫停细胞疗法临床试验",
-      "link": "https://www.zaobao.com/news/world/story20260901-9610646",
+      "title": "以色列国防部长卡茨：若伊朗发动攻击 必将武力回击",
+      "link": "https://www.zaobao.com/news/world/story20260902-9616294",
       "summary": "",
       "source": "联合早报",
       "region": "🌍",
       "category": "国际",
       "topic": "综合",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "洪灾死难者过千 尼泊尔请求联合国拨款协助重建",
-      "link": "https://www.zaobao.com/news/world/story20260901-9610071",
+      "title": "英媒：俄罗斯多年来秘密协助伊朗研发超音速巡航导弹",
+      "link": "https://www.zaobao.com/news/world/story20260902-9615929",
       "summary": "",
       "source": "联合早报",
       "region": "🌍",
       "category": "国际",
       "topic": "综合",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "英国连续两年经历史上最热夏天",
-      "link": "https://www.zaobao.com/news/world/story20260901-9610423",
+      "title": "美财长贝森特：伊朗航空海运和数码资产或成制裁目标",
+      "link": "https://www.zaobao.com/news/world/story20260902-9616238",
+      "summary": "",
+      "source": "联合早报",
+      "region": "🌍",
+      "category": "国际",
+      "topic": "综合",
+      "tech": true,
+      "time": "2026-09-03T07:30:45.280609+08:00"
+    },
+    {
+      "title": "优步宣布裁员约3300人 占全球员工总数的10%",
+      "link": "https://www.zaobao.com/news/world/story20260902-9616174",
       "summary": "",
       "source": "联合早报",
       "region": "🌍",
       "category": "国际",
       "topic": "综合",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "俄罗斯伊朗总统会面 称要共同抵抗美单边主义",
-      "link": "https://www.zaobao.com/news/world/story20260901-9610363",
-      "summary": "",
-      "source": "联合早报",
-      "region": "🌍",
-      "category": "国际",
-      "topic": "综合",
-      "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
-    },
-    {
-      "title": "特朗普恫言将狠狠打击伊朗 伊总统呼吁通过对话解决问题",
-      "link": "https://www.zaobao.com/news/world/story20260901-9610266",
-      "summary": "",
-      "source": "联合早报",
-      "region": "🌍",
-      "category": "国际",
-      "topic": "综合",
-      "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
-    },
-    {
-      "title": "韩国情院：特金会随时可能发生 金珠爱已进入“接班人内定阶段”",
-      "link": "https://www.zaobao.com/news/world/story20260901-9609405",
-      "summary": "",
-      "source": "联合早报",
-      "region": "🌍",
-      "category": "国际",
-      "topic": "综合",
-      "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
-    },
-    {
-      "title": "杨丹旭：“习特二会”前中国元首连轴转为哪般？",
-      "link": "https://www.zaobao.com/news/china/story20260902-9610877",
+      "title": "沈泽玮：针对人民币的“新广场协议”呼声再起",
+      "link": "https://www.zaobao.com/news/china/story20260903-9616454",
       "summary": "",
       "source": "联合早报·中国",
       "region": "🇸🇬",
       "category": "国内",
       "topic": "综合",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "西藏在吉隆口岸为泥石流罹难者举行哀悼活动",
-      "link": "https://www.zaobao.com/news/china/story20260902-9610295",
+      "title": "美伊激战之际习近平出访埃及 倡构建中东安全新架构",
+      "link": "https://www.zaobao.com/news/china/story20260902-9616206",
       "summary": "",
       "source": "联合早报·中国",
       "region": "🇸🇬",
       "category": "国内",
       "topic": "综合",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "中国今起对外籍个人股息红利征收个税",
-      "link": "https://www.zaobao.com/news/china/story20260901-9610901",
+      "title": "黄之锋认串谋勾结外国势力罪名 最高可被判处终身监禁",
+      "link": "https://www.zaobao.com/news/china/story20260902-9616095",
       "summary": "",
       "source": "联合早报·中国",
       "region": "🇸🇬",
       "category": "国内",
       "topic": "综合",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "会美中贸委会 李强吁中美加强沟通协商化解矛盾摩擦",
-      "link": "https://www.zaobao.com/news/china/story20260901-9610838",
+      "title": "赖清德政府首位部长将赴中国大陆 学者：展现务实但两岸关系未变",
+      "link": "https://www.zaobao.com/news/china/story20260902-9615953",
       "summary": "",
       "source": "联合早报·中国",
       "region": "🇸🇬",
       "category": "国内",
       "topic": "综合",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "习近平上合峰会提四主张三建议 吁推动世界多极化",
-      "link": "https://www.zaobao.com/news/china/story20260901-9609826",
+      "title": "下午察：左宗棠在新疆“全面大复活”？",
+      "link": "https://www.zaobao.com/news/china/story20260902-9615937",
       "summary": "",
       "source": "联合早报·中国",
       "region": "🇸🇬",
       "category": "国内",
       "topic": "综合",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "贵州接连更换地方“一把手” 云南甘肃调整省级领导",
-      "link": "https://www.zaobao.com/news/china/story20260901-9609337",
+      "title": "韩光州双年展恢复台湾馆名称 国台办：须遵一中原则",
+      "link": "https://www.zaobao.com/news/china/story20260902-9614432",
       "summary": "",
       "source": "联合早报·中国",
       "region": "🇸🇬",
       "category": "国内",
       "topic": "综合",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "香港15所小学小一“零班” 创历年新高",
-      "link": "https://www.zaobao.com/news/china/story20260901-9610321",
+      "title": "港大医学院招生修订语言要求 由粤语能力改为中文能力",
+      "link": "https://www.zaobao.com/news/china/story20260902-9614789",
       "summary": "",
       "source": "联合早报·中国",
       "region": "🇸🇬",
       "category": "国内",
       "topic": "综合",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "阿根廷发布中尼边境泥石流言论 中使馆要求立即停止恶意揣测",
-      "link": "https://www.zaobao.com/news/china/story20260901-9609587",
+      "title": "习近平：中方愿同中东各国一道维护国际航道安全",
+      "link": "https://www.zaobao.com/news/china/story20260902-9615935",
       "summary": "",
       "source": "联合早报·中国",
       "region": "🇸🇬",
       "category": "国内",
       "topic": "综合",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "Who is John Ternus, the new Apple CEO?",
-      "link": "https://techcrunch.com/2026/09/01/who-is-john-ternus-the-incoming-apple-ceo/",
+      "title": "Adobe is making its tools available in Slack",
+      "link": "https://techcrunch.com/2026/09/02/adobe-is-making-its-tools-available-in-slack/",
       "summary": "",
       "source": "TechCrunch",
       "region": "🌍",
       "category": "国际",
       "topic": "科技AI",
-      "tech": true,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "tech": false,
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "Anthropic and OpenAI are joining the AI Stage",
@@ -772,18 +772,18 @@
       "category": "国际",
       "topic": "科技AI",
       "tech": true,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "The 3 reasons Disrupt is a must for founders",
-      "link": "https://techcrunch.com/2026/08/26/the-3-reasons-this-years-ai-centric-techcrunch-disrupt-is-a-must-for-founders/",
+      "link": "https://techcrunch.com/2026/08/26/3-reasons-founders-cant-miss-disrupt-2026/",
       "summary": "",
       "source": "TechCrunch",
       "region": "🌍",
       "category": "国际",
       "topic": "科技AI",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "Apply to host a Side Event at Disrupt",
@@ -794,7 +794,7 @@
       "category": "国际",
       "topic": "科技AI",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "Meet this year s Startup Battlefield 200",
@@ -805,18 +805,40 @@
       "category": "国际",
       "topic": "科技AI",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "Nvidia’s AI advantage is moving beyond the GPU",
-      "link": "https://techcrunch.com/2026/08/29/nvidias-ai-advantage-is-moving-beyond-the-gpu/",
+      "title": "Delivery Hero board backs Uber s $15B takeover bid",
+      "link": "https://techcrunch.com/2026/09/02/delivery-hero-board-backs-ubers-15b-takeover-bid/",
       "summary": "",
       "source": "TechCrunch",
       "region": "🌍",
       "category": "国际",
       "topic": "科技AI",
-      "tech": true,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "tech": false,
+      "time": "2026-09-03T07:30:45.280609+08:00"
+    },
+    {
+      "title": "X shifts US creator payouts from Stripe to X Money",
+      "link": "https://techcrunch.com/2026/09/02/x-shifts-us-creator-payouts-from-stripe-to-x-money/",
+      "summary": "",
+      "source": "TechCrunch",
+      "region": "🌍",
+      "category": "国际",
+      "topic": "科技AI",
+      "tech": false,
+      "time": "2026-09-03T07:30:45.280609+08:00"
+    },
+    {
+      "title": "Uber is laying off 10% of staff, or 3,300 people",
+      "link": "https://techcrunch.com/2026/09/02/uber-is-laying-off-10-of-staff-or-3300-people/",
+      "summary": "",
+      "source": "TechCrunch",
+      "region": "🌍",
+      "category": "国际",
+      "topic": "科技AI",
+      "tech": false,
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "Nvidia closes in on Hugging Face acquisition",
@@ -827,7 +849,7 @@
       "category": "国际",
       "topic": "科技AI",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "Hugging Face",
@@ -838,29 +860,29 @@
       "category": "国际",
       "topic": "科技AI",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "Startup Battlefield",
-      "link": "https://techcrunch.com/2026/08/20/the-2026-startup-battlefield-200-is-here-see-who-made-the-cut/",
+      "title": "聚力织密岛内交通网！海南“十五五”布局69项交通干线重大工程",
+      "link": "https://www.chinahighway.com/article/65413189.html",
       "summary": "",
-      "source": "TechCrunch",
-      "region": "🌍",
-      "category": "国际",
-      "topic": "科技AI",
+      "source": "中国公路网",
+      "region": "🇨🇳",
+      "category": "国内",
+      "topic": "土木行业",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "Tech Layoffs",
-      "link": "https://techcrunch.com/2025/02/28/tech-layoffs-2024-list/",
+      "title": "“首届中国公路·路风窗口实践创新案例征集活动”启动，等你来参与！",
+      "link": "https://www.chinahighway.com/article/65413188.html",
       "summary": "",
-      "source": "TechCrunch",
-      "region": "🌍",
-      "category": "国际",
-      "topic": "科技AI",
+      "source": "中国公路网",
+      "region": "🇨🇳",
+      "category": "国内",
+      "topic": "土木行业",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "“领路”案例巡展丨智破“地质迷宫” 隧贯凉山新未来——宁会隧道超特长复杂地质工程系列宣传（图）",
@@ -871,7 +893,7 @@
       "category": "国内",
       "topic": "土木行业",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "“领路”案例巡展丨一路串联山海景 多维宣传铸就交旅融合新标杆",
@@ -882,7 +904,7 @@
       "category": "国内",
       "topic": "土木行业",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "公路应急养护之应急准备",
@@ -893,18 +915,7 @@
       "category": "国内",
       "topic": "土木行业",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
-    },
-    {
-      "title": "“领路”案例巡展丨千年运河遇上“数智之拱”——杭州余杭区东西大道运河大桥建设全过程系列报道（图）",
-      "link": "https://www.chinahighway.com/article/65413170.html",
-      "summary": "",
-      "source": "中国公路网",
-      "region": "🇨🇳",
-      "category": "国内",
-      "topic": "土木行业",
-      "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "关于举办“第三届中国公路·工程传播大会暨‘领路’宣传案例交流会”的通知",
@@ -915,7 +926,7 @@
       "category": "国内",
       "topic": "土木行业",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "关于加强2026年度《中国公路》杂志 征订工作的通知",
@@ -926,51 +937,40 @@
       "category": "国内",
       "topic": "土木行业",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "长路连吉黑 通途载振兴",
-      "link": "https://www.chinahighway.com/article/65413187.html",
+      "title": "投标报价超19亿元，北京一国道项目部分标段中标信息公布",
+      "link": "https://www.chinahighway.com/article/65413192.html",
       "summary": "",
       "source": "中国公路网",
       "region": "🇨🇳",
       "category": "国内",
       "topic": "土木行业",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "“领路”案例巡展丨G4京港澳高速株耒扩容工程的创新引擎（图）",
-      "link": "https://www.chinahighway.com/article/65413182.html",
+      "title": "广东多条在建高速迎来新进展（图）",
+      "link": "https://www.chinahighway.com/article/65413191.html",
       "summary": "",
       "source": "中国公路网",
       "region": "🇨🇳",
       "category": "国内",
       "topic": "土木行业",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "“领路”案例巡展丨党建铸魂 数智赋能",
-      "link": "https://www.chinahighway.com/article/65413181.html",
+      "title": "云南交投集团京津冀及东北区域中心正式成立（图）",
+      "link": "https://www.chinahighway.com/article/65413190.html",
       "summary": "",
       "source": "中国公路网",
       "region": "🇨🇳",
       "category": "国内",
       "topic": "土木行业",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
-    },
-    {
-      "title": "8月17日—8月23日全国物流保通保畅运行情况",
-      "link": "https://www.chinahighway.com/article/65413184.html",
-      "summary": "",
-      "source": "中国公路网",
-      "region": "🇨🇳",
-      "category": "国内",
-      "topic": "土木行业",
-      "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "331国道大久才江口特大桥主塔全部封顶",
@@ -981,62 +981,51 @@
       "category": "国内",
       "topic": "土木行业",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "交通运输部召开党组会",
-      "link": "https://www.mot.gov.cn/xinwen/jiaotongyaowen/202609/t20260901_4223610.html",
+      "title": "上海力争建成国际大都市高质量一体化交通体系",
+      "link": "https://www.mot.gov.cn/xinwen/jiaotongyaowen/202609/t20260902_4223675.html",
       "summary": "",
       "source": "交通运输部",
       "region": "🇨🇳",
       "category": "国内",
       "topic": "土木行业",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "交通运输部召开部务会",
-      "link": "https://www.mot.gov.cn/xinwen/jiaotongyaowen/202609/t20260901_4223611.html",
+      "title": "吉林交通政务服务“四减”提效",
+      "link": "https://www.mot.gov.cn/xinwen/jiaotongyaowen/202609/t20260902_4223679.html",
       "summary": "",
       "source": "交通运输部",
       "region": "🇨🇳",
       "category": "国内",
       "topic": "土木行业",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "浙江明确万亿元综合交通产业核心目标",
-      "link": "https://www.mot.gov.cn/xinwen/jiaotongyaowen/202609/t20260901_4223612.html",
+      "title": "“水运中国”全媒体宣传活动走进福建",
+      "link": "https://www.mot.gov.cn/xinwen/jiaotongyaowen/202609/t20260902_4223676.html",
       "summary": "",
       "source": "交通运输部",
       "region": "🇨🇳",
       "category": "国内",
       "topic": "土木行业",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
-      "title": "绥芬河铁路口岸“宽轨重出”运输模式落地",
-      "link": "https://www.mot.gov.cn/xinwen/jiaotongyaowen/202609/t20260901_4223613.html",
+      "title": "交通运输部办公厅关于组织开展2026年全国科普月交通运输主题科普活动的通知",
+      "link": "https://xxgk.mot.gov.cn/jigou/kjs/202609/t20260902_4223716.html",
       "summary": "",
       "source": "交通运输部",
       "region": "🇨🇳",
       "category": "国内",
       "topic": "土木行业",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
-    },
-    {
-      "title": "湖北发布多式联运攻坚方案 港口集装箱铁水联运量年均增长10％左右",
-      "link": "https://www.mot.gov.cn/xinwen/jiaotongyaowen/202609/t20260901_4223616.html",
-      "summary": "",
-      "source": "交通运输部",
-      "region": "🇨🇳",
-      "category": "国内",
-      "topic": "土木行业",
-      "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "2026年上半年国内沿海省际货运船舶运力分析报告",
@@ -1047,7 +1036,7 @@
       "category": "国内",
       "topic": "土木行业",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "交通运输部所属事业单位2026年度统一公开招聘拟聘用人员公示（第七批第三次、第八批第一次）",
@@ -1058,7 +1047,7 @@
       "category": "国内",
       "topic": "土木行业",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "交通运输部发布2025年国内水路旅游客运精品航线典型案例",
@@ -1069,7 +1058,7 @@
       "category": "国内",
       "topic": "土木行业",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
     },
     {
       "title": "道路运输车辆达标车型表（第91批）公示",
@@ -1080,7 +1069,18 @@
       "category": "国内",
       "topic": "土木行业",
       "tech": false,
-      "time": "2026-09-02T07:31:28.545658+08:00"
+      "time": "2026-09-03T07:30:45.280609+08:00"
+    },
+    {
+      "title": "交通运输部关于公布第90批道路运输车辆达标车型的公告",
+      "link": "https://xxgk.mot.gov.cn/jigou/ysfws/202608/t20260826_4223243.html",
+      "summary": "",
+      "source": "交通运输部",
+      "region": "🇨🇳",
+      "category": "国内",
+      "topic": "土木行业",
+      "tech": false,
+      "time": "2026-09-03T07:30:45.280609+08:00"
     }
   ]
 }
