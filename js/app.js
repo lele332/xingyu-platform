@@ -913,7 +913,7 @@ const App = (() => {
     box.innerHTML = pomos.map(p => {
       const d = new Date(p.startAt);
       const time = `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
-      const label = p.type === "break" ? "休息" : (p.completed === false ? "部分专注" : "番茄钟");
+      const label = p.type === "break" ? "休息" : (p.completed === false ? "部分专注" : (p.source === "supervisor" ? "督学专注" : "番茄钟"));
       return `<div class="history-item">
         <span class="history-dot"></span>
         <span>${label}</span>
@@ -923,6 +923,37 @@ const App = (() => {
     }).join("");
     // 滚动分批浮入
     revealCards($("#view-focus"), ".history-item");
+  }
+
+  function renderSupervisorHistory() {
+    const sessions = Store.getAll("supervisorSessions").slice().sort((a,b) => (b.startAt || "").localeCompare(a.startAt || ""));
+    const today = sessions.filter(s => s.startAt && localDateKey(s.startAt) === todayISO());
+    const todayMin = today.reduce((sum,s) => sum + (s.minutes || 0), 0);
+    const totalMin = sessions.reduce((sum,s) => sum + (s.minutes || 0), 0);
+    const totalViolations = sessions.reduce((sum,s) => sum + (s.violations || 0), 0);
+    const statsRow = $("#supervisorStatsRow");
+    const history = $("#supervisorHistory");
+    if (!statsRow || !history) return;
+    statsRow.innerHTML = `
+      <div class="fstat"><b>${todayMin}</b><span>今日督学分钟</span></div>
+      <div class="fstat"><b>${sessions.length}</b><span>累计会话</span></div>
+      <div class="fstat"><b>${totalViolations}</b><span>累计违纪</span></div>`;
+    if (!sessions.length) {
+      history.innerHTML = `<div class="empty-state"><p>还没有督学记录，启动自研版后自动保存。</p></div>`;
+      return;
+    }
+    history.innerHTML = sessions.slice(0,8).map(s => {
+      const d = new Date(s.startAt);
+      const time = `${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
+      const label = s.completed ? "督学完成" : "督学部分";
+      const warn = (s.violations || 0) + (s.warnings || 0);
+      return `<div class="history-item">
+        <span class="history-dot"></span>
+        <span>${label}</span>
+        <b style="color:var(--accent)">${s.minutes} 分钟</b>
+        <span class="history-meta">${fmtDate(s.startAt)} ${time} · 异常 ${warn}</span>
+      </div>`;
+    }).join("");
   }
 
   function startPomo() {
@@ -967,7 +998,7 @@ const App = (() => {
   // 避免沉浸场景下出现两个按钮在右下角重叠、且文案互相矛盾的情况。
   let syncExitFabHook = null;
 
-  function openFocusScene() {
+  function openFocusScene(customSrc) {
     const overlay = $("#focusOverlay");
     const frame = $("#focusFrame");
     if (!overlay || !frame) return;
@@ -975,7 +1006,7 @@ const App = (() => {
     if (window.Motivation && window.Motivation.stop) window.Motivation.stop();
     const minutes = Math.max(1, Math.round(pomoState.total / 60) || 25);
     overlay.style.display = "block";
-    frame.src = "focus/index.html?minutes=" + minutes;
+    frame.src = customSrc || ("focus/index.html?minutes=" + minutes);
     // 场景加载完成后把键盘焦点交给 iframe，确保 Esc 第一时间可用
     frame.onload = () => { try { frame.contentWindow && frame.contentWindow.focus(); } catch (e) {} };
     // 唯一的悬浮退出按钮：切到「退出专注 (Esc)」文案，点击只关闭沉浸场景
@@ -1006,6 +1037,53 @@ const App = (() => {
   window.addEventListener("message", function (ev) {
     if (ev.data && ev.data.type === "xingyu-motivation-state" && ev.data.playing) {
       if (window.Motivation && window.Motivation.stop) window.Motivation.stop();
+    }
+  });
+
+
+  // AI 督学官：独立入口，与普通番茄钟分开
+  $("#btnOpenRedWatch").onclick = () => {
+    const win = window.open("https://redwatch.top/app/", "_blank");
+    if (win) { try { win.opener = null; } catch (e) {} }
+    else toast("浏览器拦截了新窗口，请允许弹窗后重试", "err");
+  };
+  $("#btnOpenSelfSupervisor").onclick = () => {
+    const minutes = Math.max(1, Math.round((+$("#pomoWork").value || 25)));
+    openFocusScene("focus-supervisor/index.html?minutes=" + minutes);
+  };
+
+  // 接收自研督学官 iframe 的记录/关闭消息
+  window.addEventListener("message", (ev) => {
+    const data = ev.data || {};
+    if (data.type === "xingyu-focus-supervisor-record") {
+      const minutes = Math.max(0, Math.round(+data.minutes || 0));
+      if (minutes < 1) return;
+      const record = {
+        startAt: data.startAt || new Date().toISOString(),
+        minutes,
+        type: "focus",
+        completed: data.completed !== false,
+        source: "supervisor",
+        violations: data.violations || 0
+      };
+      Store.add("pomodoros", record);
+      Store.add("supervisorSessions", {
+        startAt: record.startAt,
+        minutes,
+        completed: record.completed,
+        violations: data.violations || 0,
+        warnings: data.warnings || 0,
+        presenceRate: data.presenceRate || 0,
+        postureScore: data.postureScore || 0,
+        events: Array.isArray(data.events) ? data.events.slice(-160) : []
+      });
+      renderFocusStats();
+      renderFocusHistory();
+      renderSupervisorHistory();
+      if (currentView === "dashboard") renderDashboard();
+    }
+    if (data.type === "xingyu-focus-supervisor-close") {
+      closeFocusScene();
     }
   });
 
@@ -1873,17 +1951,43 @@ const App = (() => {
     showModal("trashModal");
   }
 
+  let onboardReplay = false; // 重看模式：不清数据、隐藏演示数据选项
   function maybeShowOnboarding() {
-    // 现在不再在开屏后自动弹引导，避免启动时被额外界面打断。
-    return;
+    // 2026-09-03 v4：引导标记升版（zero_onboarded_v4），本次更新后所有用户
+    // 都会见到一次欢迎弹窗——用户明确反馈"开屏弹窗还是没有"。
+    // 老用户（已有存档）自动进入安全重看模式：预填资料、隐藏清数据选项，
+    // 无论点哪个按钮都绝不动存档。真首跑走原始流程（含演示数据选择）。
+    try {
+      if (localStorage.getItem("zero_onboarded_v4") === "1") return;
+      const info = Store.getStorageInfo();
+      const demoRow = $("#onboardKeepDemo");
+      if (info && !info.firstRun) { replayOnboarding(); return; }
+      if (demoRow) demoRow.closest(".lock-toggle").style.display = "";
+    } catch (e) {}
+    showModal("onboardingModal");
+  }
+
+  function replayOnboarding() {
+    onboardReplay = true;
+    try {
+      const demoRow = $("#onboardKeepDemo");
+      if (demoRow) demoRow.closest(".lock-toggle").style.display = "none"; // 重看绝不提供清数据选项
+      const p = Store.getProfile();
+      $("#onboardName").value = p.name || "";
+      $("#onboardGoal").value = p.goal || "";
+    } catch (e) {}
+    showModal("onboardingModal");
   }
 
   function finishOnboarding() {
     const name = $("#onboardName").value.trim() || "同学";
     const goal = $("#onboardGoal").value.trim();
-    if (!$("#onboardKeepDemo").checked) Store.clearAll();
+    // 首跑且未勾"保留演示数据"才清空；重看模式不动任何数据
+    if (!onboardReplay && !$("#onboardKeepDemo").checked) Store.clearAll();
+    onboardReplay = false;
     Store.setProfile({ name, goal });
     localStorage.setItem("zero_onboarded_v3", "1");
+    localStorage.setItem("zero_onboarded_v4", "1");
     closeModal("onboardingModal");
     refreshAfterDataChange();
     toast(`欢迎你，${name}`, "ok");
@@ -2684,6 +2788,32 @@ const App = (() => {
     return img;
   }
 
+  // 服务 bind 在回环地址时，二维码里那个局域网 IP 是连不上的
+  // （server.py:29 BIND_HOST 默认 127.0.0.1）。与其让用户扫了白等，
+  // 不如直接告知并给出开法。
+  function isLoopbackBind(b) {
+    const s = String(b || "").trim().toLowerCase();
+    return !s || s === "localhost" || s === "::1" || /^127\./.test(s);
+  }
+
+  function makeQrBlocked(bind) {
+    const box = document.createElement("div");
+    box.className = "qr-blocked";
+    const t = document.createElement("div");
+    t.className = "qr-blocked-title";
+    t.textContent = "当前仅本机可访问";
+    const p = document.createElement("div");
+    p.className = "qr-blocked-body";
+    p.textContent = "手机扫这个码会连不上。请用桌面「星屿」快捷方式重启一次，即可开启局域网访问。";
+    const c = document.createElement("div");
+    c.className = "qr-blocked-code";
+    c.textContent = "bind=" + (bind || "127.0.0.1");
+    box.appendChild(t);
+    box.appendChild(p);
+    box.appendChild(c);
+    return box;
+  }
+
   function makeQrCard(title, desc, node, note) {
     const col = document.createElement("div");
     col.className = "qr-col";
@@ -2731,6 +2861,13 @@ const App = (() => {
     fetch("/api/lan-info", { cache: "no-store" })
       .then(r => r.ok ? r.json() : Promise.reject(r.status))
       .then(info => {
+        // bind 还在回环 = 局域网根本没开，扫了也是白扫，直接换成提示。
+        if (isLoopbackBind(info.bind)) {
+          lanNode.replaceWith(makeQrBlocked(info.bind));
+          lanNote.textContent = "服务只监听 " + (info.bind || "127.0.0.1") + "，重启星屿后自动开启局域网。";
+          lanUrl = "";
+          return;
+        }
         const ip = info.ip || (Array.isArray(info.ips) ? info.ips[0] : "");
         if ((!ip || !info.token) && !info.url) throw new Error("no lan info");
         lanUrl = info.url || `http://${ip}:${info.port || 8620}/access?token=${encodeURIComponent(info.token)}`;
@@ -3754,7 +3891,9 @@ const App = (() => {
     };
     $("#btnFinishOnboarding").onclick = finishOnboarding;
     $("#btnSkipOnboarding").onclick = () => {
+      onboardReplay = false;
       localStorage.setItem("zero_onboarded_v3", "1");
+      localStorage.setItem("zero_onboarded_v4", "1");
       closeModal("onboardingModal");
     };
 
@@ -3969,7 +4108,8 @@ const App = (() => {
         <label class="field"><span>专业</span><input id="f-pf-major" value="${esc(p.major || "")}" placeholder="选填"></label>
         <label class="field"><span>年级</span><input id="f-pf-grade" value="${esc(p.grade || "")}" placeholder="如：大二"></label>
         <label class="field"><span>邮箱（自己用的，选填）</span><input id="f-pf-email" value="${esc(p.email || "")}" placeholder="选填"></label>
-      </div>`;
+      </div>
+      <button type="button" class="btn btn-ghost" id="f-pf-replay" style="margin-top:12px">↺ 重看欢迎引导</button>`;
     // 头像选择
     let pickedAvatar = p.avatar || "";
     $$("#f-pf-avatar .avatar-opt").forEach(a => a.onclick = () => {
@@ -3994,6 +4134,10 @@ const App = (() => {
       toast("资料已保存", "ok");
       renderGrowth();
       renderDashboard();
+    };
+    $("#f-pf-replay").onclick = () => {
+      closeModal("formModal");
+      replayOnboarding();
     };
     showModal("formModal");
   }
@@ -4046,8 +4190,27 @@ const App = (() => {
     });
   }
 
+  async function restoreServerStateIfNeeded() {
+    if (!(location.protocol === "http:" && ["127.0.0.1", "localhost", "[::1]"].includes(location.hostname))) return;
+    const info = Store.getStorageInfo && Store.getStorageInfo();
+    if (!info || !info.firstRun) return;
+    try {
+      const response = await fetch("/api/state", { cache: "no-store" });
+      if (response.status === 204 || !response.ok) return;
+      const payload = await response.json();
+      const raw = payload && payload.data;
+      if (!raw) return;
+      if (Store.importAll(JSON.stringify(raw))) {
+        console.info("[星屿] 已从本机实时状态恢复数据");
+      }
+    } catch (error) {
+      console.warn("[星屿] 实时状态恢复失败", error);
+    }
+  }
+
   /* ---------- 启动 ---------- */
-  function init() {
+  async function init() {
+    await restoreServerStateIfNeeded();
     window.XingyuIcons && XingyuIcons.decorateNavigation();
     setupModalAccessibility();
     warmLaunchAssets();
@@ -4184,4 +4347,8 @@ const App = (() => {
 })();
 
 document.addEventListener("DOMContentLoaded", App.init);
+
+
+
+
 

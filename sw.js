@@ -1,5 +1,5 @@
 // 缓存版本：修改 CORE 或缓存策略时必须递增，否则客户端不会更新
-const CACHE = "xingyu-static-20260830-2";
+const CACHE = "xingyu-static-20260903-13";
 
 // 预缓存清单 = index.html 实际加载的资源（2026-08-28 实测校准）
 // 注意：旧清单里的 js/idb.js、js/backup.js、js/app-core.js、js/views-*.js 均不存在
@@ -16,6 +16,9 @@ const CORE = [
   "./css/apple.css",
   "./css/synapse.css",
   "./css/voxcpm.css",
+  "./css/weather-aurora.css",
+  "./css/reactbits-fx.css",
+  "./css/voice-agent.css",
   "./assets/fonts/local.css",
   "./assets/js/anime.min.js",
   "./assets/js/gsap.min.js",
@@ -31,12 +34,24 @@ const CORE = [
   "./js/quotes.js",
   "./js/splashsound.js",
   "./js/store.js",
-  "./js/sync.js"
+  "./js/sync.js",
+  "./js/icons-themes.js",
+  "./js/settings-ui.js",
+  "./js/reactbits-fx.js",
+  "./js/weather-aurora.js",
+  "./js/voice-agent.js"
 ];
 
 // 永不缓存：密钥配置 + 体积大的媒体/模型（避免撑爆 Cache Storage）
+// 2026-09-02：补 zip/vrm/glb/gltf/fbx —— AIRI 的 Live2D 模型包（hiyori 33MB）
+// 与 VRM 模型（28MB）体积巨大，缓存它们会撑爆 Cache Storage 配额，
+// 并连带导致其他资源的 cache.put 静默失败，表现为界面资源错乱。
+// 同日再补 ttf/otf/woff2 —— AIRI 的中文字体 cjkFonts(31MB)+XiaolaiSC(22MB)，
+// 与 duckdb wasm(32~37MB) 同理，都是几十 MB 级，必须排除。
 const NEVER_CACHE = /\/js\/local-config\.js$/;
-const LARGE_MEDIA = /\.(mp4|webm|ogg|ogv|mov|m4a|wav|mp3|flac|bin|pth|onnx|wasm)$/i;
+const LARGE_MEDIA = /\.(mp4|webm|ogg|ogv|mov|m4a|wav|mp3|flac|bin|pth|onnx|wasm|zip|vrm|glb|gltf|fbx|ttf|otf|woff2)$/i;
+// AIRI 是同源挂载的独立 SPA（/airi/），它的导航请求绝不能被当成星屿主页缓存
+const AIRI_PREFIX = /^\/airi(\/|$)/;
 
 function shouldCache(url) {
   if (NEVER_CACHE.test(url.pathname)) return false;
@@ -106,6 +121,25 @@ self.addEventListener("fetch", event => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
 
+  // 2026-09-02 修复：iframe 加载同源的 /airi/ 时 request.mode 同样是 "navigate"，
+  // 旧逻辑会把 AIRI 的 HTML 以 "./index.html" 为键写入缓存，把星屿主页的缓存覆盖掉，
+  // 结果刷新后星屿主页变成 AIRI 页面（或两者互相污染），表现为"角色/界面错乱"。
+  // 因此导航分支必须排除 /airi/，并为它单独走网络、按自己的路径缓存。
+  if (AIRI_PREFIX.test(url.pathname)) {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          if (response.ok && shouldCache(url)) {
+            const copy = response.clone();
+            caches.open(CACHE).then(cache => cache.put(request, ensureCharset(copy)));
+          }
+          return response;
+        })
+        .catch(() => caches.match(request).then(r => r ? ensureCharset(r) : r))
+    );
+    return;
+  }
+
   if (request.mode === "navigate" || url.pathname.endsWith("/index.html")) {
     event.respondWith(
       fetch(request)
@@ -148,4 +182,7 @@ self.addEventListener("fetch", event => {
     })
   );
 });
+
+
+
 

@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>星屿 · 桌面宠物</title>
+<script type="importmap">
+{"imports":{"three":"/js/vendor/three/three.module.js","three/addons/":"/js/vendor/three/addons/"}}
+</script>
+<script src="/js/vendor/l2d-widget.min.js?v=20260901.1"></script>
+<script src="/js/airi-bootstrap.js?v=20260903.2"></script>
+<style>
+  *{box-sizing:border-box}
+  html,body{width:100%;height:100%;margin:0;overflow:hidden;background:transparent;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:#eaf6ff;-webkit-user-select:none;user-select:none}
+  body{cursor:default}
+  #stage{position:absolute;inset:0;overflow:hidden;border-radius:28px}
+  #stage::after{content:'';position:absolute;left:50%;bottom:-30px;width:70%;height:24%;background:radial-gradient(closest-side,rgba(94,164,255,.16),transparent);filter:blur(26px);pointer-events:none}
+  canvas{position:absolute;inset:0;width:100%!important;height:100%!important;display:block;background:transparent}
+  #l2dHost{position:absolute;inset:0;pointer-events:none}
+  #l2dHost canvas{pointer-events:auto}
+  .toolbar{position:absolute;top:10px;right:10px;display:flex;gap:6px;padding:5px;border-radius:16px;background:rgba(8,14,24,.56);border:1px solid rgba(255,255,255,.10);backdrop-filter:blur(22px) saturate(160%);box-shadow:0 10px 30px rgba(0,0,0,.22);opacity:.12;transition:opacity .22s;z-index:20}
+  body:hover .toolbar{opacity:1}
+  .tool{width:30px;height:30px;border:0;border-radius:11px;background:rgba(255,255,255,.07);color:#fff;cursor:pointer;font-size:13px;transition:.2s}
+  .tool:hover{background:rgba(120,220,255,.20);transform:translateY(-1px)}
+  .tool.active{background:linear-gradient(135deg,rgba(64,170,255,.34),rgba(164,107,255,.28));box-shadow:0 0 14px rgba(90,180,255,.24)}
+  .tool.close:hover{background:rgba(255,90,90,.22)}
+  #badge{position:absolute;left:12px;top:10px;padding:5px 9px;border-radius:10px;background:rgba(8,14,24,.50);border:1px solid rgba(255,255,255,.09);backdrop-filter:blur(18px);font-size:10px;letter-spacing:.14em;color:rgba(226,238,252,.72);opacity:.42;transition:.25s}
+  body:hover #badge{opacity:.9}
+  #loading{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:none;flex-direction:column;align-items:center;gap:10px;z-index:15;pointer-events:none}
+  #loading.on{display:flex}
+  #loading .ring{width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,.14);border-top-color:rgba(120,200,255,.85);animation:spin .8s linear infinite}
+  #loading .txt{font-size:10px;letter-spacing:.16em;color:rgba(226,238,252,.60)}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion: reduce){#loading .ring{animation-duration:2.4s}}
+  /* A 模式：AIRI 顶栏右上角有自己的控件（设置/菜单按钮 39×39），宠物工具栏让位到左上，
+     badge 隐藏（AIRI 自己已经标识了它在跑什么）。这两条规则不能进 L 模式，
+     否则会把左上原本留给用户 hover 的 badge 区域也遮掉。 */
+  body.mode-airi .toolbar{left:10px;right:auto}
+  body.mode-airi #badge{opacity:0;pointer-events:none;transition:none}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="l2dHost"></div>
+  <div id="loading"><div class="ring"></div><div class="txt">加载中</div></div>
+  <div id="badge">LIVE2D PET</div>
+  <div class="toolbar">
+    <button class="tool active" data-mode="live2d" title="Live2D">L</button>
+    <button class="tool" data-mode="airi" title="AIRI Runtime">A</button>
+    <button class="tool close" id="btnClose" title="关闭宠物">✕</button>
+  </div>
+</div>
+<script>
+  const host=document.getElementById('l2dHost');
+  const badge=document.getElementById('badge');
+  const loadingEl=document.getElementById('loading');
+  const buttons=[...document.querySelectorAll('[data-mode]')];
+  let mode=localStorage.getItem('xingyu_pet_mode')||'live2d';
+  let widget=null, widgetRoot=null;
+  let renderer=null,scene=null,camera=null,mixer=null,model=null,clock=null,airiReady=false,airiLoading=false;
+  let state='idle';
+
+  function setBadge(text){ badge.textContent=text; }
+  function setActive(){ buttons.forEach(b=>b.classList.toggle('active',b.dataset.mode===mode)); localStorage.setItem('xingyu_pet_mode',mode); }
+  // 加载中转圈：AIRI 首屏要拉 33MB Live2D / 26MB VRM，没有反馈会让人以为点坏了
+  function showLoading(txt){ loadingEl.querySelector('.txt').textContent=txt||'加载中'; loadingEl.classList.add('on'); }
+  function hideLoading(){ loadingEl.classList.remove('on'); }
+  function api(){ return window.pywebview && window.pywebview.api; }
+
+  // 注意：这里必须是「移回 body」而不是 `.remove()`。
+  // mountWidget() 是靠扫描 document.body.children 找 zIndex=9999 的节点来定位 widget 的，
+  // 一旦真的 remove()，节点脱离文档树，之后再点模式按钮就再也捞不回来 → 宠物一片空白。
+  function removeWidgetRoot(){
+    try{
+      if(widgetRoot){
+        if(widgetRoot.parentElement!==document.body) document.body.appendChild(widgetRoot);
+      }
+    }catch(e){}
+    widgetRoot=null;
+  }
+
+  function mountWidget(){
+    try{
+      // 优先复用已记录的节点；只有在没记录 / 节点已脱离文档树时才去 body 里捞
+      let n=widgetRoot;
+      if(!n||!n.isConnected){
+        const candidates=[...document.body.children].filter(x=>x.tagName==='DIV'&&x.querySelector('canvas')&&String(x.style.zIndex||'')==='9999');
+        n=candidates[candidates.length-1];
+      }
+      if(n){
+        widgetRoot=n; host.appendChild(n);
+        // 宠物窗可缩放（min_size 260×380），widget 尺寸跟随，窄窗也不会溢出
+        const w=Math.min(260,host.clientWidth||260);
+        const h=Math.min(300,host.clientHeight||300);
+        // ⚠️ 千万别用 transform:translateX(-50%) 做水平居中 ——
+        //   l2d-widget 自己占用 transform 做入场动画（translateY(0px) + transition
+        //   1500ms + will-change），会在我们写完之后把 transform 整个覆盖掉。
+        //   实测后果：left:50% 生效、-50% 回拉失效，widget 右移半个身位，
+        //   宠物窗 317px 宽时右侧溢出 130px，连 widget 内部的悬浮工具条都跑到窗外
+        //   （diag-pet-fit.js 实测工具条 x=378 > 视口 317）。
+        //   改用 margin-left 做回拉，l2d-widget 不碰 margin。
+        Object.assign(n.style,{
+          position:'absolute',
+          left:'50%',
+          marginLeft:(-w/2)+'px',
+          right:'auto',
+          bottom:'0',
+          width:w+'px',
+          height:h+'px',
+          zIndex:'2',
+          pointerEvents:'auto'
+        });
+      }
+    }catch(e){}
+  }
+
+  async function startLive2D(){
+    disposeAiri();
+    hideLoading();
+    setBadge('LIVE2D PET');
+    // 「桌面宠物不能用」的真凶之一：旧写法是 `if(widget) return;`
+    // removeWidgetRoot() 已经把 widget 的 DOM 从 host 里摘走了，但 widget 变量还指向旧实例 ——
+    // 之后任何一次 startLive2D() 都在这里短路 return，DOM 再也挂不回来，宠物窗口一片空白。
+    // 正确写法：模型实例能复用就复用（省一次重新加载），但 DOM 挂载必须每次都重做。
+    if(!widget){
+      removeWidgetRoot();   // 只有要重建时才清旧 DOM，同模式连点不动它
+      if(!window.L2D_WIDGET||!window.L2D_WIDGET.createWidget){ showLoading(); return setTimeout(startLive2D,160); }
+      widget=window.L2D_WIDGET.createWidget({
+        model:{path:'/assets/live2d/koharu/model.json?v=20260901.1',tips:{welcomeMessage:[],messages:[]}},
+        position:'bottom-left',size:260,menus:false,statusBar:false,logLevel:'warn'
+      });
+    }
+    setTimeout(mountWidget,0);
+  }
+
+  function disposeAiri(){
+    try{ renderer&&renderer.setAnimationLoop(null); }catch(e){}
+    renderer=scene=camera=mixer=model=clock=null; airiReady=airiLoading=false;
+    // 只清 AIRI 自己建的 canvas（带 data-airi-canvas 标记）。
+    // 旧写法是 `host.querySelectorAll('canvas')` 无差别全删 —— Live2D widget 的 canvas
+    // 同样挂在 host 下，而 startLive2D() 开头会先调本函数，等于每次都把刚渲染好的
+    // 看板娘一起干掉（连点模式按钮后宠物空白，就是这个）。
+    // 注：当前本文件已不直接建 three.js canvas（renderer 从未被赋值），
+    // 这里保留带标记的清理，是为了将来 three.js 渲染回归时有个明确的口子。
+    [...host.querySelectorAll('canvas[data-airi-canvas]')].forEach(c=>c.remove());
+    const frame=document.getElementById('airiPetFrame'); if(frame) frame.remove();
+  }
+
+  async function startAiri(){
+    // 同样防重复创建：iframe onload 前（或 5s 超时前）airiReady 一直是 false，
+    // 连点 A 按钮会反复 disposeAiri() 把刚建好的 iframe 拆掉再重建，表现为「点了没反应」。
+    if(airiReady||airiLoading){ setBadge('AIRI RUNTIME'); return; }
+    disposeAiri(); try{ widget&&widget.destroy(); }catch(e){} widget=null; removeWidgetRoot();
+    airiLoading=true; setBadge('AIRI RUNTIME'); showLoading('正在启动 AIRI');
+    // 2026-09-03：宠物窗用 webview-data/pet 这个独立 storage_path，与主应用不共享
+    // localStorage —— 里面的 AIRI 是全新用户：没 provider、会弹首次引导、也没角色卡。
+    // 建 iframe 前先跑一遍预置（autoMic=false：宠物窗自动开麦会和主应用的语音助手抢麦克风）。
+    // lightStage=true：AIRI 内置起手形象是 33MB 的 Hiyori Pro，小窗冷启动会长时间转圈，
+    //   换成 13MB 的 Hiyori Free（用户从未改过舞台形象时才换，之后不覆盖）。
+    //
+    // ⚠️ 顺带记录一个已被实测证否的方案：别再想把 koharu 塞进 AIRI。
+    //    koharu 是 Cubism 2.1（model.moc + model.json），AIRI 只认 Cubism 4（.moc3 +
+    //    xxx.model3.json）。实测报 `Expected exactly one moc file, got 0` +
+    //    `Settings file not found`，舞台着墨 0%（证据：work/test-koharu.js 10/10）。
+    //    所以本文件 L 模式继续用 koharu（走 l2d-widget，支持 2.1），A 模式走 AIRI 自己的
+    //    Cubism 4 模型 —— 两条链路各用各的格式，不要试图统一。
+    try{ window.XingyuAiriBootstrap && window.XingyuAiriBootstrap.install({ autoMic:false, withCards:true, lightStage:true }); }
+    catch(e){ console.warn('[pet] AIRI 预置失败', e); }
+    const frame=document.createElement('iframe');
+    // 2026-09-03：原来指向 https://airi.moeru.ai/（官方在线站）——国内直连基本打不开，
+    // 且跨域拿不到星屿配好的 DeepSeek / VoxCPM / SenseVoice。改同源镜像 /airi/。
+    frame.id='airiPetFrame'; frame.src='/airi/'; frame.title='AIRI';
+    frame.allow='microphone; camera; autoplay; clipboard-write'; frame.referrerPolicy='no-referrer';
+    frame.style.cssText='position:absolute;inset:0;width:100%;height:100%;border:0;background:#05070c';
+    host.appendChild(frame);
+    frame.onload=()=>{
+      // iframe 的 onload 只代表 AIRI 的 HTML 到了，内部 Vue/Pinia 还没起来。
+      // 再留一小段给 store 初始化，否则转圈闪一下就没了，而舞台其实还是空的。
+      setTimeout(()=>{airiLoading=false;airiReady=true;hideLoading();},1500);
+    };
+    // 兜底：AIRI 首屏较重（33MB Live2D / 26MB VRM），给足超时，但别让转圈永远转下去
+    setTimeout(()=>{airiLoading=false;airiReady=true;hideLoading();},12000);
+  }
+
+  function resize(){
+    const w=host.clientWidth||300,h=host.clientHeight||400;
+    if(renderer){renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
+    // 宠物窗尺寸变化（用户拖边缘缩放）→ 重新按当前宽度挂 widget，避免再次溢出
+    if(mode==='live2d'&&widget)mountWidget();
+  }
+  addEventListener('resize',resize,{passive:true});
+  addEventListener('message',e=>{const d=e.data||{};if(d.type==='xingyu-agent-state'&&['idle','listening','thinking','acting','speaking'].includes(d.state)){state=d.state;}});
+
+  async function setMode(m){
+    mode=m;setActive();
+    // A 模式把 body 打 class，让 CSS 把工具栏挪到左上、隐藏 badge（详见 @style 注释）
+    document.body.classList.toggle('mode-airi', m==='airi');
+    try{ api()&&api().set_mode&&await api().set_mode(m); }catch(e){}
+    if(m==='live2d')startLive2D();else startAiri();
+  }
+
+  buttons.forEach(b=>b.onclick=e=>{e.stopPropagation();setMode(b.dataset.mode);});
+  document.getElementById('btnClose').onclick=async e=>{
+    e.stopPropagation();
+    try{ api()&&api().close_pet&&await api().close_pet(); }catch(err){ window.close(); }
+  };
+
+  setActive();
+  // 初始化时按 localStorage 恢复的 mode 同步 body class（A/L 模式 UI 区分）
+  document.body.classList.toggle('mode-airi', mode==='airi');
+  if(mode==='airi')startAiri();else startLive2D();
+  setTimeout(resize,150);
+  window.__xingyuPetReady=true;
+</script>
+</body>
+</html>

@@ -46,7 +46,7 @@
   d.dataset.bgVis = localStorage.getItem("zero_bg_vis") || "clear";
 })();</script>
 <link rel="stylesheet" href="css/weather-aurora.css?v=20260831.1">
-<link rel="stylesheet" href="css/style.css?v=20260831.8">
+<link rel="stylesheet" href="css/style.css?v=20260903.10">
 <link rel="stylesheet" href="css/apple.css?v=20260829.5">
 <link rel="stylesheet" href="css/synapse.css?v=20260815.1">
 <link rel="stylesheet" href="css/voxcpm.css?v=20260829.1">
@@ -64,6 +64,7 @@
 <div id="splash" class="splash">
   <div class="xy-splash">
     <canvas id="splashCanvas" class="xy-canvas"></canvas>
+    <div class="xy-aurora" aria-hidden="true"><i></i><i></i><i></i></div>
     <!-- 冷感极简衬线 hello：系统启动字标风格 -->
     <div class="xy-hello" id="xyHello" aria-hidden="true">
       <div class="xy-hello-word">hello</div>
@@ -88,13 +89,22 @@
     </div>
   </div>
   <button class="splash-skip" id="splashSkip" type="button">跳过</button>
+  <button class="splash-sound-hint" id="splashSoundHint" type="button"><span class="hint-icon">🔊</span><span class="hint-text">点击开启启动音</span></button>
 </div>
 <style>
 .splash{position:fixed;inset:0;z-index:99999;background:#000;display:flex;align-items:center;justify-content:center;transition:opacity .4s ease;font-family:"Segoe UI Variable Display","Segoe UI",-apple-system,"SF Pro Display","PingFang SC","Microsoft YaHei",sans-serif}
 html.splash-on body > *:not(.splash){visibility:hidden}
 html.splash-on body > #splash{visibility:visible}
 .xy-splash{position:absolute;inset:0;background:#000;overflow:hidden;display:flex;align-items:center;justify-content:center}
-.xy-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:1;contain:strict}
+.xy-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:.78;contain:strict}
+.xy-aurora{position:absolute;inset:-22vmax;z-index:0;pointer-events:none;filter:blur(64px);contain:strict;mix-blend-mode:screen}
+.xy-aurora i{position:absolute;left:50%;top:50%;width:140vmax;height:64vmax;border-radius:50%;background:conic-gradient(from 0deg,rgba(56,130,255,.18),rgba(72,220,226,.10),rgba(120,90,255,.15),transparent 55%);transform:translate3d(-50%,-50%,0);will-change:transform,opacity}
+.xy-aurora i:nth-child(1){animation:xyAuroraA 13s linear infinite}
+.xy-aurora i:nth-child(2){animation:xyAuroraB 17s linear infinite reverse;opacity:.85}
+.xy-aurora i:nth-child(3){animation:xyAuroraC 21s linear infinite;opacity:.6}
+@keyframes xyAuroraA{0%{transform:translate3d(-50%,-50%,0) rotate(0deg) scale(.72)}50%{transform:translate3d(-50%,-52%,0) rotate(24deg) scale(.90)}100%{transform:translate3d(-50%,-50%,0) rotate(360deg) scale(.72)}}
+@keyframes xyAuroraB{0%{transform:translate3d(-50%,-48%,0) rotate(0deg) scale(.85)}50%{transform:translate3d(-52%,-50%,0) rotate(-20deg) scale(.98)}100%{transform:translate3d(-50%,-48%,0) rotate(360deg) scale(.85)}}
+@keyframes xyAuroraC{0%{transform:translate3d(-50%,-52%,0) rotate(0deg) scale(1.05)}50%{transform:translate3d(-48%,-50%,0) rotate(16deg) scale(1.12)}100%{transform:translate3d(-50%,-52%,0) rotate(360deg) scale(1.05)}}
 .xy-glow{position:absolute;left:50%;top:50%;width:min(56vw,520px);height:min(56vw,520px);transform:translate3d(-50%,-50%,0);background:radial-gradient(circle,rgba(245,250,255,.18) 0%,rgba(255,255,255,.05) 42%,transparent 70%);filter:blur(14px);opacity:0;contain:strict;will-change:transform,opacity;animation:xyGlow .9s cubic-bezier(.16,1,.3,1) .12s forwards}
 @keyframes xyGlow{from{opacity:0;transform:translate3d(-50%,-50%,0) scale(.82)}to{opacity:.72;transform:translate3d(-50%,-50%,0) scale(1)}}
 .xy-liquid{position:absolute;z-index:0;left:50%;top:50%;width:160vw;height:160vw;transform:translate3d(-50%,-50%,0) scale(.7);opacity:0;filter:blur(100px);will-change:transform,opacity;animation:xyLiquidBloom 2.6s cubic-bezier(.22,1,.36,1) 0s forwards}
@@ -130,12 +140,20 @@ html.splash-on body > #splash{visibility:visible}
 .splash.fade-out{opacity:0;pointer-events:none}
 .splash-skip{position:absolute;z-index:3;right:18px;bottom:16px;padding:6px 16px;border:1px solid rgba(255,255,255,.35);border-radius:99px;background:rgba(0,0,0,.25);color:rgba(255,255,255,.75);font:inherit;font-size:13px;letter-spacing:.08em;cursor:pointer;user-select:none;transition:opacity .3s}
 .splash-skip:hover{opacity:.7}
+.splash-sound-hint{position:absolute;z-index:4;left:50%;top:50%;transform:translate(-50%,-50%);display:none;width:min(320px,78vw);padding:22px 20px;border:1px solid rgba(150,220,255,.32);border-radius:26px;background:rgba(4,8,14,.88);color:#eaf6ff;font:inherit;font-size:14px;text-align:center;cursor:pointer;backdrop-filter:blur(28px);box-shadow:0 24px 80px rgba(0,0,0,.46),0 0 0 1px rgba(255,255,255,.05);animation:soundHintPulse 2.2s ease-in-out infinite}
+.splash-sound-hint.is-show{display:block}
+.splash-sound-hint .hint-icon{display:block;font-size:28px;margin-bottom:10px}
+.splash-sound-hint .hint-text{letter-spacing:.08em}
+.splash-skip{z-index:5!important}
+@keyframes soundHintPulse{0%,100%{transform:translateY(0);box-shadow:0 0 0 rgba(120,220,255,0)}50%{transform:translateY(-2px);box-shadow:0 0 24px rgba(120,220,255,.24)}}
+#splashSoundPending{position:fixed;z-index:99998;left:50%;bottom:24px;transform:translateX(-50%);display:none;padding:12px 20px;border:1px solid rgba(120,220,255,.45);border-radius:99px;background:rgba(6,12,22,.90);color:#eaf6ff;font:inherit;font-size:13px;cursor:pointer;backdrop-filter:blur(18px);box-shadow:0 18px 50px rgba(0,0,0,.45)}
+#splashSoundPending.is-show{display:block}
 @media (prefers-reduced-motion:reduce){.splash{display:none}}
 </style>
 <!-- 开屏声音必须在开屏脚本之前同步加载：开屏脚本紧接着就要读用户选的音源，
      而文档末尾那些 defer 脚本（含 store.js）此时都还没执行。
      该模块内部直接解析 localStorage，不依赖 Store。 -->
-<script src="js/splashsound.js?v=20260829.3"></script>
+<script src="js/splashsound.js?v=20260901.4"></script>
 <script>
 (function(){
   // 手机扫码直达完整版：跳过桌面炫技开屏，避免手机浏览器把首屏误认为空白。
@@ -174,6 +192,20 @@ html.splash-on body > #splash{visibility:visible}
   // 开屏声：优先播用户在「设置 → 开屏声音」里选定的音频文件；
   // 文件这条路走不通（关掉了 / 文件缺失 / 环境不允许）且已有手势时，才回退内置合成音。
   var __soundDone = false, __splashAudio = null;
+  var __soundPending=false;
+  function hidePendingGate(){ var g=document.getElementById('splashSoundPending'); if(g) g.classList.remove('is-show'); }
+  function showSoundHint(){ var h=document.getElementById('splashSoundHint'); if(h && window.__splashActive) h.classList.add('is-show'); else showPendingGate(); }
+  function showPendingGate(){
+    var g=document.getElementById('splashSoundPending');
+    if(!g){
+      g=document.createElement('button'); g.id='splashSoundPending'; g.type='button';
+      g.innerHTML='<span>🔊 点击开启启动音</span>';
+      g.addEventListener('click',function(e){ e.stopPropagation(); __gestured=true; bootSound(); });
+      document.body.appendChild(g);
+    }
+    g.classList.add('is-show');
+  }
+  function hideSoundHint(){ var h=document.getElementById('splashSoundHint'); if(h) h.classList.remove('is-show'); hidePendingGate(); }
 
   function playSplashFile(){
     return new Promise(function(resolve, reject){
@@ -188,8 +220,8 @@ html.splash-on body > #splash{visibility:visible}
           a.volume = 0.6;
           a.preload = 'auto';
           var p = a.play();
-          if(p && typeof p.then === 'function') p.then(resolve, reject);
-          else resolve();
+          if(p && typeof p.then === 'function') p.then(function(v){ hideSoundHint(); resolve(v); }, reject);
+          else { hideSoundHint(); resolve(); }
         }catch(e){ reject(e); }
       }, reject);
     });
@@ -246,7 +278,7 @@ html.splash-on body > #splash{visibility:visible}
     var SS = window.SplashSound;
     if(SS && !SS.isEnabled()){ __soundDone = true; return; }  // 用户在设置里关掉了
     playSplashFile().then(
-      function(){ __soundDone = true; },
+      function(){ __soundDone = true; __soundPending=false; hideSoundHint(); },
       function(){
         // 走到这里有两种可能：环境不允许自动播放，或文件本身不可用。
         // 只有在确实存在用户手势时才继续尝试——此时创建 AudioContext 不会被拒、也不刷警告；
@@ -255,54 +287,42 @@ html.splash-on body > #splash{visibility:visible}
         return playSplashFile().catch(function(){ return playBootTone(); })
                .then(function(){ __soundDone = true; });
       }
-    ).catch(function(){ /* 静默：等首次交互补播 */ });
+    ).catch(function(){ __soundPending=true; showSoundHint(); });
   }
 
-  // 星尘背景：黑底上的星星，带轻微闪烁和缓慢流动
+  // 高质量极光 / 星尘开屏：WebGL shader，满帧率渲染，不再做轻量化限帧
   var __prt = true, __raf = 0;
   function startParticles(){
     var cv=document.getElementById('splashCanvas');
     if(!cv) return;
     try{
       if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      var ctx=cv.getContext('2d'); if(!ctx) return;
+      var gl=cv.getContext('webgl',{antialias:false,alpha:false,powerPreference:'high-performance'});
+      if(!gl){ var ctx=cv.getContext('2d'); if(!ctx) return; }
       var DPR=Math.min(window.devicePixelRatio||1,2), W=0, H=0;
-      splashResize=function(){
-        W=Math.max(2,Math.floor(cv.clientWidth*DPR)); H=Math.max(2,Math.floor(cv.clientHeight*DPR));
-        cv.width=W; cv.height=H;
-      };
-      splashResize(); window.addEventListener('resize',splashResize,{passive:true});
-      var parts=[];
-      for(var i=0;i<220;i++){
-        parts.push({
-          x:Math.random()*W, y:Math.random()*H,
-          r:0.5+Math.random()*2.0,
-          vx:(Math.random()-0.5)*0.08,
-          vy:-0.03-Math.random()*0.18,
-          tw:Math.random()*6.28,
-          ts:0.006+Math.random()*0.018
-        });
-      }
-      function frame(){
-        if(!__prt) return;
-        ctx.clearRect(0,0,W,H);
-        for(var i=0;i<parts.length;i++){
-          var p=parts[i];
-          p.x+=p.vx; p.y+=p.vy; p.tw+=p.ts;
-          if(p.y<-4) p.y=H+4;
-          if(p.x<-4) p.x=W+4;
-          if(p.x>W+4) p.x=-4;
-          var a=0.35+0.55*(0.5+0.5*Math.sin(p.tw));
-          ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.2832);
-          ctx.fillStyle='rgba(225,240,255,'+a.toFixed(3)+')';
-          ctx.shadowColor='rgba(180,210,255,'+(a*0.6).toFixed(3)+')';
-          ctx.shadowBlur=p.r*3;
-          ctx.fill();
-          ctx.shadowBlur=0;
-        }
+      if(gl){
+        var vs='attribute vec2 p; varying vec2 vUV; void main(){ vUV=p*.5+.5; gl_Position=vec4(p,0.,1.); }';
+        var fs='precision highp float;\nuniform vec2 res;\nuniform float time;\nfloat hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }\nfloat noise(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.-2.*f); float a=hash(i), b=hash(i+vec2(1.,0.)), c=hash(i+vec2(0.,1.)), d=hash(i+vec2(1.,1.)); return mix(mix(a,b,f.x),mix(c,d,f.x),f.y); }\nfloat fbm(vec2 p){ float s=0., a=.5; for(int i=0;i<5;i++){ s+=a*noise(p); p*=2.03; a*=.5; } return s; }\nvoid main(){ vec2 uv=gl_FragCoord.xy/res.xy; vec2 p=(gl_FragCoord.xy-.5*res.xy)/res.y; float t=time*.085; float n1=fbm(p*1.9+vec2(t*.85,-t*.52)); float n2=fbm(p*3.4+vec2(-t*.62,t*.38)); float band=smoothstep(.32,.94,n1*.75+n2*.35); vec3 col=mix(vec3(.012,.018,.042),vec3(.09,.34,.86),band); col+=vec3(.22,.85,.78)*pow(max(0.,fbm(p*2.6+vec2(t*.5,t*.3))),3.0)*.55; col+=vec3(.42,.24,.92)*pow(max(0.,fbm(p*2.2+vec2(-t*.4,-t*.28))),3.2)*.38; vec2 sp=uv*res.xy/2.2; float sd=hash(floor(sp)); float tw=sin(time*2.4+sd*60.)*.5+.5; float star=step(.9965,sd)*tw; col+=vec3(.78,.88,1.0)*star*.85; gl_FragColor=vec4(col,1.); }';
+        function sh(type,src){ var h=gl.createShader(type); gl.shaderSource(h,src); gl.compileShader(h); if(!gl.getShaderParameter(h,gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(h)); return h; }
+        var prog=gl.createProgram(); gl.attachShader(prog,sh(gl.VERTEX_SHADER,vs)); gl.attachShader(prog,sh(gl.FRAGMENT_SHADER,fs)); gl.linkProgram(prog); if(!gl.getProgramParameter(prog,gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
+        gl.useProgram(prog);
+        var buf=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,buf); gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+        var loc=gl.getAttribLocation(prog,'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+        var ures=gl.getUniformLocation(prog,'res'), utime=gl.getUniformLocation(prog,'time');
+        splashResize=function(){ W=Math.max(2,Math.floor(cv.clientWidth*DPR)); H=Math.max(2,Math.floor(cv.clientHeight*DPR)); cv.width=W; cv.height=H; gl.viewport(0,0,W,H); };
+        splashResize(); window.addEventListener('resize',splashResize,{passive:true});
+        var t0=performance.now();
+        function frame(){ if(!__prt) return; gl.uniform2f(ures,W,H); gl.uniform1f(utime,(performance.now()-t0)/1000); gl.drawArrays(gl.TRIANGLE_STRIP,0,4); __raf=requestAnimationFrame(frame); }
         __raf=requestAnimationFrame(frame);
+        return;
       }
-      __raf=requestAnimationFrame(frame);
+      // 2D fallback：高质量星尘，但只在 WebGL 不可用时启用
+      var W2=0,H2=0;
+      splashResize=function(){ W2=Math.max(2,Math.floor(cv.clientWidth*DPR)); H2=Math.max(2,Math.floor(cv.clientHeight*DPR)); cv.width=W2; cv.height=H2; };
+      splashResize(); window.addEventListener('resize',splashResize,{passive:true});
+      var parts=[]; for(var i=0;i<180;i++){ parts.push({x:Math.random()*W2,y:Math.random()*H2,r:.4+Math.random()*1.9,vx:(Math.random()-.5)*.14,vy:-.05-Math.random()*.32,tw:Math.random()*6.28,ts:.008+Math.random()*.03}); }
+      function frame2(){ if(!__prt) return; ctx.clearRect(0,0,W2,H2); ctx.globalCompositeOperation='lighter'; for(var i=0;i<parts.length;i++){ var p=parts[i]; p.x+=p.vx; p.y+=p.vy; p.tw+=p.ts; if(p.y<-4)p.y=H2+4; if(p.x<-4)p.x=W2+4; if(p.x>W2+4)p.x=-4; var a=.30+.65*(.5+.5*Math.sin(p.tw)); ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.2832); ctx.fillStyle='rgba(210,235,255,'+a.toFixed(3)+')'; ctx.fill(); } ctx.globalCompositeOperation='source-over'; __raf=requestAnimationFrame(frame2); }
+      __raf=requestAnimationFrame(frame2);
     }catch(e){}
   }
   startParticles();
@@ -313,12 +333,19 @@ html.splash-on body > #splash{visibility:visible}
   if(window.addEventListener) window.addEventListener('load',bootChime);
   // 开屏上的点击/触摸本身就是用户手势：这里显式置位，不依赖 pointerdown → click 的先后顺序
   function onceInteract(){ __gestured = true; bootChime(); }
+  var soundHintBtn=document.getElementById('splashSoundHint');
+  if(soundHintBtn) soundHintBtn.addEventListener('click', function(e){ e.stopPropagation(); __gestured=true; bootSound(); });
   splash.addEventListener('click',onceInteract);
   splash.addEventListener('touchend',onceInteract,{passive:true});
+  // 关键兜底：如果用户点了“跳过”或动画已退场，后续第一次点击也要把启动音补上。
+  document.addEventListener('pointerdown',onceInteract,{capture:true});
+  document.addEventListener('touchend',onceInteract,{passive:true,capture:true});
+  document.addEventListener('keydown',onceInteract,{capture:true});
 
   function dismiss(fast){
     if(gone)return; gone=true;
     window.__splashCovered = true;
+    if(__soundPending && !__soundDone){ showPendingGate(); }
     if(fast && __splashAudio){ try{ __splashAudio.pause(); }catch(e){} }
     try{ window.dispatchEvent(new Event('splash-warm')); }catch(e){}
     // 先让主界面在遮罩后面分段准备；开屏动画本身继续更新，避免同帧抢主线程。
@@ -352,8 +379,8 @@ html.splash-on body > #splash{visibility:visible}
   if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches){ setTimeout(dismiss,400); return; }
 
   // 时间线：液态玻璃聚合 -> 冷感衬线 hello -> 星芒与品牌析出 -> 轻柔退场
-  setTimeout(dismiss,5700);
-  setTimeout(dismiss,7500);
+  setTimeout(dismiss,5100);
+  setTimeout(dismiss,6900);
 })();
 </script>
 <script>
@@ -526,6 +553,10 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           autocomplete="off" aria-label="全局搜索" aria-controls="searchResults" aria-autocomplete="list">
         <div class="search-results" id="searchResults" role="listbox" aria-label="搜索结果" hidden></div>
       </div>
+        <button class="agent-wake-btn" id="btnWakeAgent" type="button" title="唤醒小星" aria-label="唤醒小星">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          <span>小星</span>
+        </button>
         <button class="icon-btn" id="btnFullscreen" title="全屏 / 退出全屏 (F11)" aria-label="切换全屏">
           <svg id="fsIconExpand" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2.5 5.5V2.5h3M10.5 2.5h3v3M13.5 10.5v3h-3M5.5 13.5h-3v-3"/></svg>
           <svg id="fsIconCompress" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true" style="display:none"><path d="M5.5 2.5v3h-3M10.5 2.5v3h3M13.5 10.5h-3v3M2.5 10.5h3v3"/></svg>
@@ -749,8 +780,40 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
             </div>
           </div>
         </div>
-      </section>
 
+
+      <!-- AI 督学官：体验版 + 自研版，与番茄钟明确分离 -->
+      <section class="supervisor-section">
+        <div class="card supervisor-card">
+          <div class="supervisor-head">
+            <div>
+              <h3>AI 督学官</h3>
+              <p>独立于番茄钟。体验版用于感受成熟督学产品，自研版用于长期本地留存。</p>
+            </div>
+            <div class="supervisor-actions">
+              <button class="btn btn-ghost" id="btnOpenRedWatch">体验外部版</button>
+              <button class="btn btn-primary" id="btnOpenSelfSupervisor">启动自研版</button>
+            </div>
+          </div>
+          <div class="supervisor-split">
+            <div>
+              <b>外部体验版</b>
+              <span>新窗口打开「凛冬督学局」，登录与数据由外部平台管理。</span>
+            </div>
+            <div>
+              <b>自研版</b>
+              <span>本机摄像头 / 屏幕 / 姿态 / 手机检测，不上传画面；记录写入星屿。</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>督学记录</h3></div>
+          <div class="focus-stats-row" id="supervisorStatsRow"></div>
+          <div id="supervisorHistory"></div>
+        </div>
+      </section>
+      </section>
       <!-- 成长档案 -->
       <section class="view" id="view-growth">
         <div class="growth-layout">
@@ -1243,11 +1306,12 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
     <div class="modal-body">
       <div class="settings-shell">
         <nav class="settings-nav" aria-label="设置分类">
-          <button class="settings-tab" data-settings-tab="appearance"><span>外观</span></button>
-          <button class="settings-tab" data-settings-tab="personal"><span>个人</span></button>
-          <button class="settings-tab" data-settings-tab="intelligence"><span>智能</span></button>
-          <button class="settings-tab" data-settings-tab="access"><span>安全与同步</span></button>
-          <button class="settings-tab" data-settings-tab="system"><span>系统与数据</span></button>
+          <button class="settings-tab" data-settings-tab="appearance"><span class="settings-tab-icon" aria-hidden="true">🎨</span><span>外观</span></button>
+          <button class="settings-tab" data-settings-tab="personal"><span class="settings-tab-icon" aria-hidden="true">🧑‍🎓</span><span>个人</span></button>
+          <button class="settings-tab" data-settings-tab="intelligence"><span class="settings-tab-icon" aria-hidden="true">🧠</span><span>智能</span></button>
+          <button class="settings-tab" data-settings-tab="agent"><span class="settings-tab-icon" aria-hidden="true">🛰️</span><span>智能体</span></button>
+          <button class="settings-tab" data-settings-tab="access"><span class="settings-tab-icon" aria-hidden="true">🛡️</span><span>安全与同步</span></button>
+          <button class="settings-tab" data-settings-tab="system"><span class="settings-tab-icon" aria-hidden="true">🗂️</span><span>系统与数据</span></button>
         </nav>
         <div class="settings-panels">
           <section class="settings-panel" data-settings-panel="appearance" hidden><div class="setting-group">
@@ -1401,6 +1465,85 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <span class="set-action-chevron" aria-hidden="true">›</span>
         </button>
       </div></section>
+<section class="settings-panel" data-settings-panel="agent" hidden>
+        <div class="setting-group setting-hero">
+          <div class="setting-hero-copy">
+            <h4>智能体形象</h4>
+            <p>唤醒时进入一体化 Agent Cockpit。关闭界面只隐藏形象，智能体继续在后台运行。</p>
+          </div>
+          <button class="btn btn-ghost" id="btnLaunchDesktopPet" type="button">桌面宠物</button>
+          <button class="btn btn-ghost" id="btnOpenAvatarLab" type="button">形象实验室</button>
+        </div>
+
+        <div class="setting-group">
+          <h4>角色模式</h4>
+          <div class="agent-avatar-picker" id="agentAvatarPicker">
+            <button class="agent-avatar-card" data-avatar-option="airi" type="button">
+              <span class="agent-avatar-icon" aria-hidden="true">🌌</span>
+              <span class="agent-avatar-name">AIRI 原版形象</span>
+              <span class="agent-avatar-desc">AIRI 官方角色体验，嵌入平台唤醒舱</span>
+            </button>
+            <button class="agent-avatar-card" data-avatar-option="live2d" type="button">
+              <span class="agent-avatar-icon" aria-hidden="true">🎀</span>
+              <span class="agent-avatar-name">Live2D 伴生</span>
+              <span class="agent-avatar-desc">轻量 Live2D 形象，可保留唤醒陪伴感</span>
+            </button>
+            
+            
+            
+          </div>
+          <select id="agentAvatarMode" class="select agent-state-select" aria-label="智能体形象状态">
+            <option value="airi">AIRI 原版形象</option>
+            <option value="live2d">Live2D 伴生角色</option>
+            
+            
+            
+          </select>
+        </div>
+
+        <div class="setting-group">
+          <h4>语音与唤醒</h4>
+          <div class="set-row">
+            <div class="set-row-body">
+              <div class="set-row-title">语音播报</div>
+              <div class="set-row-sub">使用优美人声朗读，新回复会自动打断旧播报</div>
+            </div>
+            <label class="set-switch" aria-label="语音播报">
+              <input type="checkbox" id="agentSpeakEnabled" checked>
+              <span class="set-switch-track"></span>
+            </label>
+          </div>
+          <div class="set-row">
+            <div class="set-row-body">
+              <div class="set-row-title">语音唤醒</div>
+              <div class="set-row-sub">后台监听“你好小星 / 贾维斯”，识别后直接执行指令</div>
+            </div>
+            <label class="set-switch" aria-label="语音唤醒">
+              <input type="checkbox" id="agentWakeEnabled" checked>
+              <span class="set-switch-track"></span>
+            </label>
+          </div>
+          <p class="hint">快捷键：Alt+V 唤起界面，Alt+M 直接说话。</p>
+        </div>
+
+        <div class="setting-group">
+          <h4>交互与维护</h4>
+          <div class="agent-layout-picker" id="agentLayoutPicker">
+            <button class="agent-layout-card" data-layout-option="companion" type="button">
+              <span class="agent-layout-name">平台伴生</span>
+              <span class="agent-layout-desc">角色和对话嵌入右侧助手舱，平台界面保持可见</span>
+            </button>
+            <button class="agent-layout-card" data-layout-option="cockpit" type="button">
+              <span class="agent-layout-name">沉浸唤醒舱</span>
+              <span class="agent-layout-desc">需要专注交互时才进入全屏动效模式</span>
+            </button>
+          </div>
+          <div class="setting-actions">
+            <button class="btn btn-ghost" id="btnAgentClearMemory" type="button">清空对话</button>
+            <button class="btn btn-ghost" id="btnAgentResetLearning" type="button">重置自我改进</button>
+          </div>
+        </div>
+      </section>
 <section class="settings-panel" data-settings-panel="access" hidden><div class="setting-group" style="display:none">
         <h4>开屏声音</h4>
         <label class="lock-toggle">
@@ -1776,14 +1919,14 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 <script defer src="js/local-config.js?v=20260831.1"></script>
 <script defer src="js/quotes.js?v=20260811.3"></script>
 <script defer src="js/lunar.js?v=20260811.3"></script>
-<script defer src="js/store.js?v=20260814.2"></script>
+<script defer src="js/store.js?v=20260903.2"></script>
 <script defer src="js/sync.js?v=20260811.3"></script>
 <script defer src="js/charts.js?v=20260811.3"></script>
 <script defer src="js/ai.js?v=20260811.3"></script>
 <script defer src="js/icons.js?v=20260831.5"></script>
 <script defer src="js/icons-themes.js?v=20260831.5"></script>
 <script defer src="js/perf.js?v=20260816.1"></script>
-<script defer src="js/app.js?v=20260831.5"></script>
+<script defer src="js/app.js?v=20260903.5"></script>
 <script defer src="js/settings-ui.js?v=20260831.5"></script>
 <script>
 /* 非关键模块懒加载：开屏期间不解析这 ~170KB JS（天气/跑步/语音/文献/激励/教练），
@@ -1849,7 +1992,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 
 <!-- 沉浸式专注场景（点击「开始专注」后全屏展示，可切换三套电影感场景） -->
 <div id="focusOverlay" style="display:none;position:fixed;inset:0;z-index:99999;background:#000;">
-  <iframe id="focusFrame" title="沉浸式专注场景" src="about:blank" style="width:100%;height:100%;border:none;display:block;" allow="autoplay; fullscreen; encrypted-media"></iframe>
+  <iframe id="focusFrame" title="沉浸式专注场景" src="about:blank" style="width:100%;height:100%;border:none;display:block;" allow="autoplay; fullscreen; encrypted-media; camera; microphone; display-capture; screen-wake-lock"></iframe>
 </div>
 <button id="globalExitFab" class="global-exit-fab" type="button" hidden>退出全屏</button>
 
@@ -1858,11 +2001,38 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 <script defer src="js/reactbits-fx.js?v=20260831.4"></script>
 
 <!-- 语音智能体「小星」· Alt+V 打开面板，Alt+M 直接说话 -->
-<link rel="stylesheet" href="css/voice-agent.css?v=20260831.3">
-<script defer src="js/voice-agent.js?v=20260831.3"></script>
+<script type="importmap">
+  {"imports":{"three":"/js/vendor/three/three.module.js","three/addons/":"/js/vendor/three/addons/"}}
+</script>
+<link rel="stylesheet" href="css/voice-agent.css?v=20260903.3">
+<script defer src="js/voice-agent.js?v=20260903.14"></script>
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

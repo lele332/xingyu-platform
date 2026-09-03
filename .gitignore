@@ -32,3 +32,27 @@ models/
 # 本机 AI 密钥 / 反馈报告（绝不提交）
 data/ai-key-local.txt
 data/feedback/
+
+# ---- 体积炸弹 / 临时产物（git add -A 的保险丝）----
+# 浏览器用户数据目录：761M 的 WebView2 缓存 + 宠物/调试 profile，绝不入库
+webview-data/
+edge-profile/
+# AIRI 同源镜像（329M 第三方前端产物，可重新拉取，不入库）
+airi/
+# 备份与一次性诊断脚本
+_bak/
+_diag*.py
+_micdiag.py
+*.lnk
+assets/intro-720.mp4.bak-apple
+assets/intro-720.orig.mp4
+# 抓取/诊断留档
+fetch_news_stderr.txt
+_audio.txt
+_priv.txt
+_sysinfo.txt
+_wtest.txt
+_tts_test.mp3
+data/access-token.txt
+data/platform.db
+data/platform-state.json

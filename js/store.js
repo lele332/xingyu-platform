@@ -22,6 +22,7 @@ const Store = (() => {
       projects: [],      // {id, name, role, desc, link, start, end}
       literature: [],    // {id, title, authors, journal, year, doi, tags[], notes, favorite, createdAt}
       running: [],       // {id, type(run/half/full), date, distanceKm, durationMin, pace, avgHr, cadence, maxHr, calories, elevationGain, source, note, recordId, importedAt}
+      supervisorSessions: [], // {id, startAt, minutes, completed, violations, warnings, presenceRate, postureScore, events}
       trash: []          // {id, entityKey, item, deletedAt}
     };
     // 本地配置（local-config.js，含用户 API Key，不随仓库发布）
@@ -34,7 +35,7 @@ const Store = (() => {
   };
 
   let data = null;
-  const ARRAY_KEYS = ["courses", "tasks", "notes", "cards", "pomodoros", "exams", "grades", "skills", "projects", "literature", "running", "trash"];
+  const ARRAY_KEYS = ["courses", "tasks", "notes", "cards", "pomodoros", "exams", "grades", "skills", "projects", "literature", "running", "supervisorSessions", "trash"];
   let lastError = "";
   let firstRun = false;
 
@@ -82,6 +83,7 @@ const Store = (() => {
     normalized.projects = normalized.projects.filter(isRecord);
     normalized.literature = normalized.literature.filter(isRecord);
     normalized.running = normalized.running.filter(isRecord);
+    normalized.supervisorSessions = normalized.supervisorSessions.filter(isRecord);
     normalized.trash = normalized.trash.filter(isRecord).filter(entry => {
       const ts = new Date(entry.deletedAt || 0).getTime();
       return ts && Date.now() - ts < 30 * 86400000;
@@ -91,6 +93,173 @@ const Store = (() => {
 
   const saveHooks = [];
   const deleteHooks = [];
+
+  /* ---------- 本机实时状态同步（防止 WebView2 / 端口变化后丢数据） ---------- */
+  const SERVER_SYNC_ENABLED = location.protocol === "http:" || location.protocol === "https:";
+  const LOCAL_STATE_ENABLED = SERVER_SYNC_ENABLED;
+  const SYNC_CURSOR_KEY = "xingyu_server_sync_cursor";
+  const DEVICE_ID_KEY = "xingyu_device_id";
+  let stateSaveTimer = 0;
+  let stateSaveInFlight = false;
+  let stateSaveQueued = false;
+  let syncReady = false;
+  let suppressServerSync = false;
+  let syncPulling = false;
+  let syncPushing = false;
+  let syncPushQueued = false;
+  let syncPullTimer = 0;
+
+  function canUseLocalStateServer() { return SERVER_SYNC_ENABLED; }
+
+  function buildStateEnvelope() {
+    return JSON.stringify({
+      data: JSON.parse(exportAll({ includeSecrets: true })),
+      updatedAt: Date.now()
+    });
+  }
+
+  async function saveStateToServer() {
+    if (!canUseLocalStateServer()) return;
+    if (stateSaveInFlight) { stateSaveQueued = true; return; }
+    stateSaveInFlight = true;
+    try {
+      const response = await fetch("/api/state", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: buildStateEnvelope()
+      });
+      if (!response.ok) throw new Error("state save failed: " + response.status);
+    } catch (error) {
+      console.warn("[星屿] 实时状态保存失败", error);
+    } finally {
+      stateSaveInFlight = false;
+      if (stateSaveQueued) {
+        stateSaveQueued = false;
+        setTimeout(() => { void saveStateToServer(); }, 200);
+      }
+    }
+  }
+
+  function scheduleServerStateSave() {
+    if (!canUseLocalStateServer() || !syncReady || suppressServerSync) return;
+    clearTimeout(stateSaveTimer);
+    stateSaveTimer = setTimeout(() => { void saveStateToServer(); }, 700);
+  }
+
+  function flushServerStateSave() {
+    if (!canUseLocalStateServer() || !syncReady || suppressServerSync) return;
+    clearTimeout(stateSaveTimer);
+    try {
+      navigator.sendBeacon("/api/state", new Blob([buildStateEnvelope()], { type: "application/json" }));
+    } catch (error) {
+      console.warn("[星屿] 实时状态 flush 失败", error);
+    }
+  }
+
+
+  function getDeviceId() {
+    try {
+      let id = localStorage.getItem(DEVICE_ID_KEY);
+      if (!id) {
+        id = "dev-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 10);
+        localStorage.setItem(DEVICE_ID_KEY, id);
+      }
+      return id;
+    } catch (e) {
+      return "dev-unknown";
+    }
+  }
+
+  function readSyncCursor() {
+    try { return Number(localStorage.getItem(SYNC_CURSOR_KEY) || 0); }
+    catch (e) { return 0; }
+  }
+
+  function writeSyncCursor(value) {
+    try {
+      const stamp = Number(value || 0);
+      if (stamp > readSyncCursor()) localStorage.setItem(SYNC_CURSOR_KEY, String(stamp));
+    } catch (e) {}
+  }
+
+  async function pushCurrentSnapshot(force = false) {
+    if (!canUseLocalStateServer() || !syncReady || suppressServerSync) return false;
+    if (syncPushing) { syncPushQueued = true; return false; }
+    syncPushing = true;
+    try {
+      const response = await fetch("/api/sync/push", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: buildStateEnvelope()
+      });
+      if (!response.ok) throw new Error("sync push failed: " + response.status);
+      const payload = await response.json();
+      const serverStamp = payload && payload.serverUpdatedAt ? new Date(payload.serverUpdatedAt).getTime() : payload.updatedAt;
+      if (serverStamp) writeSyncCursor(serverStamp);
+      return true;
+    } catch (error) {
+      console.warn("[星屿] 服务器同步推送失败", error);
+      if (force) window.dispatchEvent(new CustomEvent("xingyu:sync-error", { detail: { message: "数据同步失败" } }));
+      return false;
+    } finally {
+      syncPushing = false;
+      if (syncPushQueued) {
+        syncPushQueued = false;
+        setTimeout(() => { void pushCurrentSnapshot(false); }, 200);
+      }
+    }
+  }
+
+  async function pullServerSnapshot(force = false) {
+    if (!canUseLocalStateServer() || suppressServerSync || syncPushing) return false;
+    if (syncPulling) return false;
+    syncPulling = true;
+    try {
+      const response = await fetch("/api/data/bootstrap", { cache: "no-store" });
+      if (!response.ok) throw new Error("sync pull failed: " + response.status);
+      const snapshot = await response.json();
+      const stamp = Number(snapshot.serverUpdatedAt ? new Date(snapshot.serverUpdatedAt).getTime() : (snapshot.updatedAt || 0));
+      const cursor = readSyncCursor();
+      if (!force && stamp && stamp <= cursor) return true;
+      if (!snapshot.hasData) return false;
+      suppressServerSync = true;
+      const previousError = lastError;
+      const ok = importAll(JSON.stringify(snapshot));
+      suppressServerSync = false;
+      lastError = previousError;
+      if (!ok) throw new Error("server snapshot import failed");
+      clearTimeout(stateSaveTimer);
+      writeSyncCursor(stamp || Date.now());
+      try { window.dispatchEvent(new CustomEvent("xingyu:server-synced", { detail: { at: stamp } })); } catch (e) {}
+      return true;
+    } catch (error) {
+      suppressServerSync = false;
+      console.warn("[星屿] 服务器同步拉取失败", error);
+      return false;
+    } finally {
+      syncPulling = false;
+    }
+  }
+
+  function startServerSyncPolling() {
+    if (!canUseLocalStateServer()) return;
+    clearTimeout(syncPullTimer);
+    syncPullTimer = setInterval(() => { void pullServerSnapshot(false); }, 12000);
+  }
+
+  async function initializeServerSync() {
+    if (!canUseLocalStateServer()) return;
+    try {
+      const pulled = await pullServerSnapshot(true);
+      syncReady = true;
+      if (!pulled) await pushCurrentSnapshot(true);
+    } catch (error) {
+      syncReady = true;
+      console.warn("[星屿] 初始同步失败", error);
+    } finally {
+      startServerSyncPolling();
+    }
+  }
 
   function load() {
     lastError = "";
@@ -365,9 +534,18 @@ const Store = (() => {
     return { key: KEY, schemaVersion: SCHEMA_VERSION, lastError, healthy: !lastError, firstRun };
   }
 
+  onSave(scheduleServerStateSave);
+  window.addEventListener("pagehide", flushServerStateSave);
+
+  // 2026-09-03 修复：此前 initializeServerSync 在 IIFE 外被调用，
+  // 每次页面加载都抛 "initializeServerSync is not defined"。移回作用域内。
+  void initializeServerSync();
+
   return { load, save, onSave, onDelete, uid, getAll, add, update, remove, replaceAll,
            getProfile, setProfile, getSettings, setSettings, getCourseName,
            exportAll, importAll, clearAll, getStorageInfo, getTrash, restoreTrash, emptyTrash };
 })();
 
 Store.load();
+
+
