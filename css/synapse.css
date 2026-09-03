@@ -1,0 +1,468 @@
+/* ============================================================
+   synapse.css — 马拉松 AI 教练面板样式
+   深色科技感 + Apple 极简，与星屿整体风格统一
+   ============================================================ */
+
+/* ---------- 主题变量（跟随全局深色） ---------- */
+.synapse-wrap {
+  --syn-bg:        var(--paper-card, #14161a);
+  --syn-bg-2:      var(--paper-2, #1c1f24);
+  --syn-border:    var(--rule, #2a2f36);
+  --syn-ink:       var(--ink, #f0f0f0);
+  --syn-ink-2:     var(--ink-2, #c5c8cd);
+  --syn-ink-3:     var(--ink-3, #7f8389);
+  --syn-accent:    #4dd6ff;          /* Synapse 蓝绿科技色 */
+  --syn-accent-2:  #7c8bff;
+  --syn-pulse-1:   #4dd6ff;
+  --syn-pulse-2:   #7c8bff;
+  --syn-pulse-3:   #ff7ac6;
+  --syn-warn:      #ffb86b;
+  --syn-err:       #ff6b6b;
+  --syn-radius:    12px;
+  --syn-radius-sm: 8px;
+  --syn-mono:      var(--font-mono, ui-monospace, "SF Mono", Menlo, monospace);
+  --syn-font:      var(--font, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif);
+}
+
+/* ---------- Hero ---------- */
+.synapse-hero {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 24px;
+  padding: 26px 28px;
+  border-radius: var(--syn-radius);
+  background:
+    radial-gradient(900px 240px at 0% 0%, rgba(124,139,255,.10), transparent 60%),
+    radial-gradient(700px 200px at 100% 100%, rgba(77,214,255,.10), transparent 60%),
+    var(--syn-bg);
+  border: 1px solid var(--syn-border);
+  position: relative;
+  overflow: hidden;
+}
+.synapse-hero::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, rgba(77,214,255,.04), transparent 30%, transparent 70%, rgba(124,139,255,.04));
+  pointer-events: none;
+}
+.synapse-hero-l { z-index: 1; }
+.synapse-hero-r {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  z-index: 1;
+  align-content: center;
+}
+
+/* 品牌区：脉冲圆点 + 文本 */
+.synapse-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 11px;
+  border-radius: 99px;
+  border: 1px solid var(--syn-border);
+  background: rgba(255,255,255,.025);
+  font-family: var(--syn-mono);
+  font-size: 11px;
+  letter-spacing: .12em;
+  color: var(--syn-ink-2);
+  text-transform: uppercase;
+}
+.synapse-pulse {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+.synapse-pulse i {
+  display: inline-block;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--syn-pulse-1);
+  box-shadow: 0 0 8px var(--syn-pulse-1);
+  animation: synapsePulse 1.6s ease-in-out infinite;
+}
+.synapse-pulse i:nth-child(2) { background: var(--syn-pulse-2); box-shadow: 0 0 8px var(--syn-pulse-2); animation-delay: .18s; }
+.synapse-pulse i:nth-child(3) { background: var(--syn-pulse-3); box-shadow: 0 0 8px var(--syn-pulse-3); animation-delay: .36s; }
+@keyframes synapsePulse {
+  0%, 100% { transform: translateY(0)    scale(.6);  opacity: .35; }
+  35%      { transform: translateY(-2px) scale(1.15); opacity: 1;   }
+  70%      { transform: translateY(0)    scale(.85); opacity: .55; }
+}
+
+.synapse-title {
+  margin: 14px 0 6px;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  color: var(--syn-ink);
+}
+.synapse-sub {
+  margin: 0 0 4px;
+  color: var(--syn-ink-3);
+  font-size: 13px;
+  line-height: 1.65;
+}
+.synapse-warn {
+  margin: 10px 0 0;
+  padding: 8px 12px;
+  background: rgba(255,184,107,.08);
+  border: 1px solid rgba(255,184,107,.3);
+  border-radius: var(--syn-radius-sm);
+  color: var(--syn-warn);
+  font-size: 12px;
+}
+
+/* Hero 右侧 stats */
+.synapse-stat {
+  padding: 12px 14px;
+  border-radius: var(--syn-radius-sm);
+  border: 1px solid var(--syn-border);
+  background: rgba(255,255,255,.025);
+  display: flex; flex-direction: column;
+  gap: 4px;
+  transition: border-color .2s, background .2s;
+}
+.synapse-stat:hover { border-color: rgba(77,214,255,.35); background: rgba(77,214,255,.04); }
+.synapse-stat b {
+  font-family: var(--syn-font);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--syn-ink);
+  letter-spacing: -.01em;
+  font-variant-numeric: tabular-nums;
+}
+.synapse-stat span {
+  font-family: var(--syn-mono);
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--syn-ink-3);
+}
+
+/* ---------- Section ---------- */
+.synapse-section {
+  margin-top: 22px;
+  padding: 22px 24px;
+  border-radius: var(--syn-radius);
+  border: 1px solid var(--syn-border);
+  background: var(--syn-bg);
+}
+.synapse-h3 {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--syn-ink);
+  letter-spacing: -.005em;
+}
+.synapse-num {
+  font-family: var(--syn-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  color: var(--syn-accent);
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(77,214,255,.08);
+  border: 1px solid rgba(77,214,255,.25);
+}
+.synapse-section-sub {
+  margin: 0 0 14px;
+  font-size: 12px;
+  color: var(--syn-ink-3);
+  font-family: var(--syn-mono);
+  letter-spacing: .04em;
+}
+
+/* ---------- Templates chips ---------- */
+.synapse-templates {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+}
+.synapse-chip {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--syn-border);
+  border-radius: var(--syn-radius-sm);
+  background: var(--syn-bg-2);
+  color: var(--syn-ink-2);
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  transition: all .2s var(--ease-out);
+}
+.synapse-chip:hover {
+  border-color: rgba(77,214,255,.45);
+  background: rgba(77,214,255,.06);
+  transform: translateY(-1px);
+}
+.synapse-chip.active {
+  border-color: var(--syn-accent);
+  background: linear-gradient(180deg, rgba(77,214,255,.10), rgba(124,139,255,.06));
+  box-shadow: 0 0 0 1px rgba(77,214,255,.3), 0 8px 24px -8px rgba(77,214,255,.45);
+}
+.synapse-chip-ico {
+  font-size: 22px;
+  line-height: 1;
+  flex: 0 0 auto;
+  filter: grayscale(.15) brightness(1.05);
+}
+.synapse-chip-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.synapse-chip-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--syn-ink);
+  line-height: 1.4;
+}
+.synapse-chip-use {
+  font-family: var(--syn-mono);
+  font-size: 10.5px;
+  letter-spacing: .04em;
+  color: var(--syn-ink-3);
+  line-height: 1.5;
+}
+
+/* ---------- Custom question ---------- */
+#synapseQuestion {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border-radius: var(--syn-radius-sm);
+  border: 1px solid var(--syn-border);
+  background: var(--syn-bg-2);
+  color: var(--syn-ink);
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.6;
+  resize: vertical;
+  transition: border-color .2s, background .2s;
+}
+#synapseQuestion:focus {
+  outline: none;
+  border-color: var(--syn-accent);
+  background: rgba(77,214,255,.04);
+}
+.synapse-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.synapse-actions .btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, var(--syn-accent) 0%, var(--syn-accent-2) 100%);
+  color: #0b0d11;
+  border: none;
+  font-weight: 700;
+  letter-spacing: .02em;
+  box-shadow: 0 4px 18px -4px rgba(77,214,255,.45);
+}
+.synapse-actions .btn-primary:hover { filter: brightness(1.05); }
+.synapse-hint {
+  font-family: var(--syn-mono);
+  font-size: 11px;
+  color: var(--syn-ink-3);
+  letter-spacing: .04em;
+}
+
+/* ---------- Output ---------- */
+.synapse-output {
+  margin-top: 4px;
+  min-height: 200px;
+  position: relative;
+}
+.synapse-empty {
+  padding: 28px;
+  text-align: center;
+  border: 1px dashed var(--syn-border);
+  border-radius: var(--syn-radius-sm);
+  color: var(--syn-ink-3);
+  font-size: 12.5px;
+  line-height: 1.7;
+  background: rgba(255,255,255,.015);
+}
+.synapse-thinking {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 22px 24px;
+  border-radius: var(--syn-radius-sm);
+  background:
+    radial-gradient(400px 120px at 50% 50%, rgba(77,214,255,.06), transparent),
+    var(--syn-bg-2);
+  border: 1px solid var(--syn-border);
+  color: var(--syn-ink-2);
+  font-size: 13px;
+}
+.synapse-error {
+  padding: 16px 18px;
+  border-radius: var(--syn-radius-sm);
+  background: rgba(255,107,107,.06);
+  border: 1px solid rgba(255,107,107,.35);
+  color: var(--syn-err);
+  font-size: 13px;
+  line-height: 1.65;
+}
+.synapse-report-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: var(--syn-radius-sm) var(--syn-radius-sm) 0 0;
+  background: linear-gradient(90deg, rgba(77,214,255,.12), rgba(124,139,255,.06));
+  border: 1px solid rgba(77,214,255,.3);
+  border-bottom: none;
+}
+.synapse-report-tag {
+  font-family: var(--syn-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  color: var(--syn-accent);
+  text-transform: uppercase;
+}
+.synapse-report-meta {
+  font-family: var(--syn-mono);
+  font-size: 10.5px;
+  color: var(--syn-ink-3);
+  letter-spacing: .04em;
+}
+.synapse-report {
+  padding: 22px 26px;
+  background: var(--syn-bg-2);
+  border: 1px solid var(--syn-border);
+  border-radius: 0 0 var(--syn-radius-sm) var(--syn-radius-sm);
+  color: var(--syn-ink-2);
+  font-size: 14px;
+  line-height: 1.85;
+}
+.synapse-report h2 {
+  margin: 22px 0 10px;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--syn-ink);
+  letter-spacing: -.005em;
+  border-bottom: 1px solid var(--syn-border);
+  padding-bottom: 6px;
+}
+.synapse-report h3 {
+  margin: 18px 0 8px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--syn-ink);
+}
+.synapse-report h4 { margin: 14px 0 6px; font-size: 14.5px; font-weight: 700; color: var(--syn-accent); }
+.synapse-report h5 { margin: 10px 0 4px; font-size: 13px; font-weight: 700; color: var(--syn-ink-2); }
+.synapse-report p  { margin: 8px 0; }
+.synapse-report ul, .synapse-report ol { margin: 8px 0; padding-left: 22px; }
+.synapse-report li { margin: 3px 0; }
+.synapse-report strong { color: var(--syn-ink); font-weight: 700; }
+.synapse-report code {
+  font-family: var(--syn-mono);
+  font-size: 12.5px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: rgba(77,214,255,.08);
+  border: 1px solid rgba(77,214,255,.18);
+  color: var(--syn-accent);
+}
+.synapse-report .synapse-pre {
+  margin: 10px 0;
+  padding: 14px 16px;
+  background: #0c0e12;
+  border: 1px solid var(--syn-border);
+  border-radius: var(--syn-radius-sm);
+  overflow-x: auto;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.synapse-report .synapse-pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--syn-ink-2);
+  font-family: var(--syn-mono);
+}
+.synapse-report blockquote {
+  margin: 10px 0;
+  padding: 8px 14px;
+  border-left: 3px solid var(--syn-accent);
+  background: rgba(77,214,255,.04);
+  color: var(--syn-ink-2);
+  font-style: normal;
+  border-radius: 0 var(--syn-radius-sm) var(--syn-radius-sm) 0;
+}
+.synapse-report hr {
+  border: none;
+  border-top: 1px dashed var(--syn-border);
+  margin: 18px 0;
+}
+.synapse-report .synapse-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+  font-size: 12.5px;
+}
+.synapse-report .synapse-table th, .synapse-report .synapse-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--syn-border);
+  text-align: left;
+}
+.synapse-report .synapse-table th {
+  font-family: var(--syn-mono);
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--syn-ink-3);
+  background: rgba(255,255,255,.02);
+}
+.synapse-report-foot {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+  padding: 0 4px;
+}
+.synapse-foot-btns {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+}
+.synapse-foot-btns .text-btn#btnSynapseRead {
+  color: var(--syn-accent);
+  border: 1px solid rgba(77,214,255,.35);
+  padding: 3px 10px;
+  border-radius: 99px;
+  background: rgba(77,214,255,.06);
+  transition: all .2s;
+}
+.synapse-foot-btns .text-btn#btnSynapseRead:hover {
+  background: rgba(77,214,255,.14);
+  border-color: rgba(77,214,255,.6);
+}
+.synapse-report-foot .synapse-hint { color: var(--syn-warn); opacity: .85; }
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 900px) {
+  .synapse-hero { grid-template-columns: 1fr; }
+  .synapse-hero-r { grid-template-columns: repeat(4, 1fr); }
+  .synapse-templates { grid-template-columns: 1fr; }
+  .synapse-report { padding: 18px 18px; font-size: 13.5px; }
+}
+@media (max-width: 600px) {
+  .synapse-hero-r { grid-template-columns: repeat(2, 1fr); }
+  .synapse-hero { padding: 20px; }
+  .synapse-section { padding: 18px; }
+}

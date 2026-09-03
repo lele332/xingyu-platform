@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>星屿 · AIRI 形象</title>
+<style>
+  :root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;min-height:100vh;overflow:hidden;background:#05070d;color:#eaf6ff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+  header{position:fixed;z-index:3;left:0;right:0;top:0;padding:18px clamp(16px,4vw,48px);display:flex;gap:18px;align-items:center;justify-content:space-between;background:linear-gradient(180deg,rgba(5,7,13,.92),rgba(5,7,13,.65) 65%,transparent);backdrop-filter:blur(20px)}
+  h1{margin:0;font-size:clamp(20px,3vw,32px);letter-spacing:.06em}.eyebrow{font-size:11px;letter-spacing:.24em;color:#8fd3ff;margin-bottom:5px}
+  .hint{max-width:560px;color:#9eb0c4;font-size:13px;line-height:1.5}a{color:#8fd3ff;text-decoration:none}
+  main{position:fixed;inset:0;padding:86px clamp(12px,3vw,36px) 28px}
+  .stage{position:relative;height:100%;border-radius:26px;overflow:hidden;border:1px solid rgba(255,255,255,.10);box-shadow:0 28px 90px rgba(0,0,0,.45)}
+  iframe{display:block;width:100%;height:100%;border:0;background:#05070c}
+  footer{position:fixed;z-index:3;left:0;right:0;bottom:0;padding:12px clamp(16px,4vw,48px);color:#76869a;font-size:12px;background:linear-gradient(0deg,rgba(5,7,13,.9),transparent)}
+</style>
+</head>
+<body>
+<header><div><div class="eyebrow">AIRI OFFICIAL</div><h1>星屿 · AIRI 形象</h1></div><div class="hint">这是 AIRI 的原版浏览器体验，语音、形象与动作都由 AIRI 提供。平台内唤醒时也会使用这个形象。</div></header>
+<main><div class="stage"><iframe id="airiFrame" src="https://airi.moeru.ai/" allow="microphone; camera; autoplay; clipboard-write" referrerpolicy="no-referrer" title="AIRI"></iframe></div></main>
+<footer>技术来源：<a href="https://github.com/moeru-ai/airi" target="_blank" rel="noopener">moeru-ai/airi</a> · 需要联网加载 AIRI 官方体验</footer>
+</body>
+</html>

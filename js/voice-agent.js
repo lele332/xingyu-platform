@@ -36,22 +36,37 @@
   /* 声音策略：① edge-tts 晓晓Neural（微软神经语音，自然优美，经 /vox-proxy 秒出）
      ② 用户在 VoxCPM 面板配置的引擎  ③ 浏览器内置语音（最终兜底） */
   var AGENT_VOICE = 'zh-CN-XiaoxiaoNeural';
-  var _agentAudio = null, _voiceToken = 0, _speaking = false;
+  var _agentAudio = null, _voiceToken = 0, _speaking = false, _speakAbort = null;
+
+  // 合成超时：VoxCPM 单推理，旧请求不取消会占住引擎，新请求可能排队很久。
+  // 没有超时的话用户会干等服务端代理的 360s 上限 —— 感知就是「没声音」。
+  var SPEAK_FETCH_TIMEOUT = 30000;
 
   function stopAgentAudio() {
+    // ⚠️ 不仅要停播放，还要 abort 在途的合成 fetch：
+    // 否则 VoxCPM（单推理）还在合成上一句，下一句请求会被排队卡住，
+    // 用户「关掉再马上打开」就再也没声音（2026-09-04 用户报障真根因）。
+    try { if (_speakAbort) { _speakAbort.abort(); } } catch (e) {}
+    _speakAbort = null;
     try { if (_agentAudio) { _agentAudio.pause(); _agentAudio.src = ''; _agentAudio = null; } } catch (e) {}
   }
 
   function agentSpeak(text, token) {
     if (location.protocol === 'file:') return Promise.resolve(false);
+    var ctrl = new AbortController();
+    _speakAbort = ctrl;
+    var timer = setTimeout(function () { try { ctrl.abort(); } catch (e) {} }, SPEAK_FETCH_TIMEOUT);
     return fetch(location.origin + '/vox-proxy/v1/audio/speech', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ input: String(text), voice: AGENT_VOICE })
+      body: JSON.stringify({ input: String(text), voice: AGENT_VOICE }),
+      signal: ctrl.signal
     }).then(function (r) {
       if (!r.ok) throw new Error('HTTP ' + r.status);
       return r.blob();
     }).then(function (blob) {
+      clearTimeout(timer);
+      if (_speakAbort === ctrl) _speakAbort = null;
       return new Promise(function (resolve, reject) {
         if (token !== _voiceToken) { resolve(false); return; }
         var url = URL.createObjectURL(blob);
@@ -62,10 +77,22 @@
           URL.revokeObjectURL(url);
           if (token === _voiceToken) { _speaking = false; try { if (window.VoiceAgent && window.VoiceAgent._uiState) window.VoiceAgent._uiState('idle'); } catch (e) {} }
         };
-        a.onerror = function () { URL.revokeObjectURL(url); reject(new Error('播放失败')); };
+        a.onerror = function () {
+          if (_agentAudio === a) _agentAudio = null;
+          URL.revokeObjectURL(url);
+          // 音频Element出错也要复位播报状态，否则 UI 永远停在「播报中」
+          if (token === _voiceToken) { _speaking = false; try { if (window.VoiceAgent && window.VoiceAgent._uiState) window.VoiceAgent._uiState('idle'); } catch (e) {} }
+          reject(new Error('播放失败'));
+        };
         a.play().then(function () { resolve(true); }).catch(reject);
       });
-    }).catch(function () { return false; });
+    }).catch(function (e) {
+      clearTimeout(timer);
+      if (_speakAbort === ctrl) _speakAbort = null;
+      // abort（被新播报/停止打断）不算失败，静默让位；其余错误走兜底链
+      if (e && e.name === 'AbortError') return false;
+      return false;
+    });
   }
 
   function speak(text, rate) {
@@ -2317,6 +2344,11 @@
         var url = String(args.url || '').trim();
         if (!url) return { ok: false, msg: '缺少网址' };
         if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+        // 统一走 openExternal：桌面壳用系统浏览器开，绝不原地导航主窗口
+        if (window.openExternal) {
+          window.openExternal(url);
+          return { ok: true, msg: '已用系统浏览器打开 ' + url };
+        }
         try {
           var w = window.open(url, '_blank');
           return { ok: true, msg: w ? ('已在浏览器打开 ' + url) : ('已尝试打开 ' + url + '，若没反应请允许弹窗') };
@@ -3687,7 +3719,7 @@
     if (wakeBtn) wakeBtn.addEventListener('click', function(e){ e.stopPropagation(); UI.open(); listen({ takeOver: true }); });
     if (speakBox) speakBox.addEventListener('change', function(e){ UI.setSpeak(e.target.checked); });
     if (wakeBox) wakeBox.addEventListener('change', function(e){ _wakeDesiredOn = !!e.target.checked; if(e.target.checked) startWakeListener(); else stopWakeListener(); });
-    if (labBtn) labBtn.addEventListener('click', function(){ window.open('/avatar-lab.html','_blank','noopener'); });
+    if (labBtn) labBtn.addEventListener('click', function(){ if (window.openExternal) window.openExternal('/avatar-lab.html'); else window.open('/avatar-lab.html','_blank','noopener'); });
     if (petBtn) petBtn.addEventListener('click', async function(){
       try {
         var r = await fetch('/api/launch-pet', { method: 'GET', cache: 'no-store' });

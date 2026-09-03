@@ -14,6 +14,40 @@ const App = (() => {
   function esc(s) {
     return String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   }
+
+  /* ---------- 外链统一出口 ----------
+     ⚠️ 绝不允许 location.href 直接导航主窗口：桌面 pywebview 壳里 window.open
+     可能返回 null，旧代码兜底 location.href 会把整个星屿导航到外部网站，
+     顶栏/侧边栏/退出按钮全部消失 —— 用户看到的就是「进入新闻界面退不出、
+     没有退出按钮」（2026-09-04 用户报障的真根因）。
+     规则：桌面壳（window.pywebview 存在）→ 服务端 /api/open-url 用系统默认
+     浏览器开；普通浏览器 → window.open，被拦截就 toast + 复制链接，永不导航。 */
+  async function openExternal(url) {
+    try {
+      // 相对路径（如 /avatar-lab.html）先解析成同源绝对地址
+      url = new URL(url, location.href).href;
+      if (!/^https?:/i.test(url)) { toast("仅支持 http(s) 链接", "err"); return; }
+      if (window.pywebview && window.pywebview.api) {
+        // 桌面壳：同源服务端用系统浏览器打开（同一台电脑，行为正确）
+        try {
+          const r = await fetch("/api/open-url", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ url })
+          });
+          if (r.ok) { toast("已在系统浏览器打开链接", "ok"); return; }
+        } catch (e) { /* 服务端失败则继续走浏览器路径 */ }
+      }
+      const win = window.open(url, "_blank", "noopener");
+      if (win) return;
+      // 弹窗被拦截：复制链接让用户自己开，绝不导航主窗口
+      try { await navigator.clipboard.writeText(url); toast("浏览器拦截了弹窗，链接已复制，请粘贴到浏览器打开", "err"); }
+      catch (e) { toast("浏览器拦截了弹窗，请允许弹窗后重试：" + url, "err"); }
+    } catch (e) {
+      toast("打开链接失败：" + (e.message || e), "err");
+    }
+  }
+  window.openExternal = openExternal;
   function fmtDate(iso) {
     if (!iso) return "";
     const d = new Date(iso);
@@ -351,12 +385,20 @@ const App = (() => {
       </div>
       <div class="hero-news-list">
         ${items.map((n, i) => `
-          <a class="hero-news-item" href="${esc(n.link)}" target="_blank" rel="noopener" title="${esc(n.title)}">
+          <a class="hero-news-item" href="${esc(n.link)}" title="${esc(n.title)}">
             <span class="hero-news-rank">${i + 1}</span>
             <span class="hero-news-text">${esc(n.title)}</span>
             <span class="hero-news-src">${esc(n.source || "")}</span>
           </a>`).join("")}
       </div>`;
+    // ⚠️ 去掉 target="_blank"：pywebview 壳里 <a target=_blank> 行为不可控，
+    // 可能原地导航把整个应用顶掉。统一拦截点击走 openExternal。
+    box.querySelectorAll(".hero-news-item").forEach(a => {
+      a.addEventListener("click", (e) => {
+        e.preventDefault();
+        openExternal(a.getAttribute("href"));
+      });
+    });
     const go = box.querySelector("[data-goto='news']");
     if (go) go.onclick = () => switchView("news");
     // 刷新：重新拉取新闻数据并更新热点与新闻页
@@ -1042,11 +1084,7 @@ const App = (() => {
 
 
   // AI 督学官：独立入口，与普通番茄钟分开
-  $("#btnOpenRedWatch").onclick = () => {
-    const win = window.open("https://redwatch.top/app/", "_blank");
-    if (win) { try { win.opener = null; } catch (e) {} }
-    else toast("浏览器拦截了新窗口，请允许弹窗后重试", "err");
-  };
+  $("#btnOpenRedWatch").onclick = () => { openExternal("https://redwatch.top/app/"); };
   $("#btnOpenSelfSupervisor").onclick = () => {
     const minutes = Math.max(1, Math.round((+$("#pomoWork").value || 25)));
     openFocusScene("focus-supervisor/index.html?minutes=" + minutes);
@@ -1507,15 +1545,15 @@ const App = (() => {
     });
     box.innerHTML = html;
 
-    // 点击新闻跳转原文：用 window.open 兜底 + location 直开（兼容预览面板拦截弹窗）
+    // 点击新闻跳转原文：统一走 openExternal（桌面壳用系统浏览器开；
+    // ⚠️ 旧代码 window.open 失败后 location.href 直开，会把整个应用导航到
+    // 外部新闻站，UI 全部消失、无法退出 —— 2026-09-04 用户报障真根因）
     $$("#newsList .news-item").forEach(el => {
       el.onclick = (e) => {
         if (e.target.closest(".news-copy")) return;
         const link = el.dataset.link;
         if (!link) return;
-        // noopener：防止外站通过 window.opener 反向操控本页（反向标签劫持）
-        const win = window.open(link, "_blank", "noopener");
-        if (!win) location.href = link;
+        openExternal(link);
       };
     });
     // 复制链接
@@ -3757,7 +3795,7 @@ const App = (() => {
     const editOrbBtn = $("#btnEditOrb");
     if (editOrbBtn) {
       editOrbBtn.onclick = () => {
-        try { window.open("ai-orb-editor.html", "_blank"); }
+        try { openExternal("ai-orb-editor.html"); }
         catch (e) { toast("请手动打开 ai-orb-editor.html", "err"); }
       };
     }

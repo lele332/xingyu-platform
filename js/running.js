@@ -427,7 +427,8 @@
     var campUrl = "https://health.cloud.huawei.com/TrainingCamp";
     var openCampBtn = document.getElementById("btnOpenTrainingCamp");
     if (openCampBtn) openCampBtn.onclick = function () {
-      window.open(campUrl, "_blank", "noopener");
+      if (window.openExternal) window.openExternal(campUrl);
+      else window.open(campUrl, "_blank", "noopener");
     };
     var copyCampBtn = document.getElementById("btnCopyCampLink");
     if (copyCampBtn) copyCampBtn.onclick = function () {

@@ -208,7 +208,7 @@
     { name: "Z-Library", note: "免费电子书 · 国内需代理", url: "https://z-lib.io/s/" }
   ];
   function sourceUrl(src, q) { return src.url + encodeURIComponent(q); }
-  function openSource(src, q) { if (q) window.open(sourceUrl(src, q), "_blank", "noopener"); }
+  function openSource(src, q) { if (q && window.openExternal) window.openExternal(sourceUrl(src, q)); }
   function renderEbookSources(containerId, picker) {
     var box = document.getElementById(containerId);
     if (!box) return;

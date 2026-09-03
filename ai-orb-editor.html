@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>星屿 · AI 球体编辑器</title>
+<style>
+  :root { --bg:#000; --panel:#0d0e10; --line:#24262b; --ink:#fff; --dim:#8a8a8a; --mono:ui-monospace,Menlo,Consolas,monospace; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; height:100%; background:var(--bg); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; }
+  .wrap { display:flex; height:100vh; }
+  .stage { flex:1; position:relative; min-width:0; background:#000; }
+  #orb { position:absolute; inset:0; width:100%; height:100%; display:block; }
+  .stage .hud { position:absolute; top:16px; left:18px; font-family:var(--mono); font-size:11px; letter-spacing:.22em; color:var(--dim); text-transform:uppercase; pointer-events:none; }
+  .panel { width:340px; flex-shrink:0; background:var(--panel); border-left:1px solid var(--line); overflow-y:auto; padding:18px 16px 30px; }
+  .ptitle { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:4px; }
+  .ptitle h1 { font-size:15px; font-weight:700; margin:0; letter-spacing:.04em; }
+  .psub { font-family:var(--mono); font-size:10px; color:var(--dim); letter-spacing:.1em; margin-bottom:16px; }
+  .actions { display:flex; gap:8px; margin-bottom:18px; }
+  .btn { font-family:var(--mono); font-size:11px; letter-spacing:.06em; padding:8px 14px; border-radius:4px; border:1px solid var(--line); background:transparent; color:var(--ink); cursor:pointer; transition:all .15s ease; }
+  .btn:hover { border-color:var(--ink); }
+  .btn.primary { background:var(--ink); color:#000; border-color:var(--ink); }
+  .btn.primary:hover { background:#e0e0e0; }
+  .group { margin-bottom:16px; }
+  .group h2 { font-family:var(--mono); font-size:10px; letter-spacing:.18em; color:var(--dim); text-transform:uppercase; margin:0 0 8px; padding-bottom:6px; border-bottom:1px solid var(--line); }
+  .field { margin-bottom:10px; }
+  .field label { display:flex; justify-content:space-between; font-size:12px; color:var(--dim); margin-bottom:4px; }
+  .field label b { color:var(--ink); font-weight:600; font-variant-numeric:tabular-nums; }
+  .field input[type=range] { width:100%; accent-color:#ffffff; }
+  .swatches { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .swatch label { display:flex; align-items:center; justify-content:space-between; font-size:11px; color:var(--dim); }
+  .swatch input[type=color] { width:44px; height:26px; border:1px solid var(--line); border-radius:4px; background:none; cursor:pointer; padding:0; }
+  .status { font-family:var(--mono); font-size:10px; color:var(--dim); margin-top:10px; }
+  .status.ok { color:#9fe8b0; }
+  .save-note { margin-top:14px; font-size:11px; color:var(--dim); line-height:1.6; }
+  .preset-row { display:flex; align-items:center; gap:8px; padding:7px 10px; border:1px solid var(--line); border-radius:4px; margin-bottom:6px; background:rgba(255,255,255,.02); }
+  .preset-row.active { border-color:var(--ink); }
+  .preset-row .name { flex:1; font-size:12px; color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .preset-row .mini { font-size:10px; padding:3px 9px; border:1px solid var(--line); border-radius:3px; background:transparent; color:var(--dim); cursor:pointer; font-family:var(--mono); }
+  .preset-row .mini:hover { color:var(--ink); border-color:var(--ink); }
+  .preset-row .del { color:#ff8a8a; border-color:rgba(255,138,138,.4); }
+  .preset-empty { font-size:11px; color:var(--dim); padding:8px 2px; }
+  .builtin-btn { font-family:var(--mono); font-size:11px; padding:7px 6px; border:1px solid var(--line); border-radius:4px; background:rgba(255,255,255,.02); color:var(--dim); cursor:pointer; transition:all .15s ease; text-align:center; }
+  .builtin-btn:hover { color:var(--ink); border-color:var(--ink); }
+  @media (max-width:760px){ .wrap{ flex-direction:column; } .panel{ width:100%; height:auto; max-height:60vh; border-left:0; border-top:1px solid var(--line); } .stage{ height:40vh; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="stage">
+    <div class="hud">AI · 液态玻璃球 · 实时预览</div>
+    <canvas id="orb" aria-label="AI 液态玻璃球"></canvas>
+  </div>
+  <div class="panel">
+    <div class="ptitle"><h1>球体编辑器</h1></div>
+    <div class="psub">LIQUID GLASS ORB · WEBGPU</div>
+    <div class="actions">
+      <button class="btn primary" id="btnSave">保存并应用</button>
+      <button class="btn" id="btnSaveAs">保存为新方案</button>
+      <button class="btn" id="btnReset">恢复默认</button>
+    </div>
+
+    <div class="group"><h2>方案</h2></div>
+    <div id="presetList" style="margin-bottom:16px"></div>
+
+    <div class="group"><h2>球体款式</h2></div>
+    <div id="builtinList" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:16px"></div>
+
+    <div class="group"><h2>动态</h2></div>
+    <div class="field"><label>速度 <b id="v-speed"></b></label><input type="range" id="c-speed" min="0" max="3" step="0.01"></div>
+    <div class="field"><label>半径 <b id="v-radius"></b></label><input type="range" id="c-radius" min="0.3" max="1.5" step="0.01"></div>
+    <div class="field"><label>缩放 <b id="v-zoom"></b></label><input type="range" id="c-zoom" min="0.1" max="1.5" step="0.01"></div>
+    <div class="field"><label>扭曲 <b id="v-warp"></b></label><input type="range" id="c-warp" min="0" max="8" step="0.05"></div>
+    <div class="field"><label>波纹 <b id="v-ridgeAmt"></b></label><input type="range" id="c-ridgeAmt" min="0" max="2" step="0.01"></div>
+    <div class="field"><label>锐度 <b id="v-sharp"></b></label><input type="range" id="c-sharp" min="0" max="8" step="0.05"></div>
+
+    <div class="group"><h2>质感</h2></div>
+    <div class="field"><label>阴影 <b id="v-shade"></b></label><input type="range" id="c-shade" min="0" max="1" step="0.01"></div>
+    <div class="field"><label>光泽 <b id="v-sheen"></b></label><input type="range" id="c-sheen" min="0" max="1" step="0.01"></div>
+    <div class="field"><label>高光 <b id="v-gloss"></b></label><input type="range" id="c-gloss" min="0" max="1" step="0.01"></div>
+    <div class="field"><label>玻璃不透明度 <b id="v-glassOpacity"></b></label><input type="range" id="c-glassOpacity" min="0" max="1" step="0.01"></div>
+    <div class="field"><label>曝光 <b id="v-exposure"></b></label><input type="range" id="c-exposure" min="0.5" max="3" step="0.01"></div>
+
+    <div class="group"><h2>颜色</h2></div>
+    <div class="swatches">
+      <label>流体色 A <input type="color" id="c-colorA"></label>
+      <label>流体色 B <input type="color" id="c-colorB"></label>
+      <label>流体色 C <input type="color" id="c-colorC"></label>
+      <label>流体色 D <input type="color" id="c-colorD"></label>
+      <label>外壳 中 <input type="color" id="c-shellMid"></label>
+      <label>外壳 边 <input type="color" id="c-shellEdge"></label>
+      <label>背景 <input type="color" id="c-canvasColor"></label>
+      <label>辉光 <input type="color" id="c-glowColor"></label>
+    </div>
+
+    <div class="status" id="status"></div>
+    <div class="save-note">保存后会应用到 AI 助手页面的球体形象（同域自动同步）。若浏览器不支持 WebGPU，此处无法预览，但保存仍有效。</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var shaderUrl = "./ai-orb-shader.wgsl";
+
+  /* ---- 参数函数（与 ai-orb.html 一致） ---- */
+  var Ev = { glassEnabled: true, speed: 1, radius: .72, contourDeform: 0, bandDensity: 2, chromaticShift: .42, metalScale: .77, metalStretch: .23, metalAngle: 65, metalOffset: 0, metalPhase: 0, metalEvolution: 1, metalRoughness: .22, metalDepth: .25, zoom: .3, warp: 3, ridgeAmt: .5, sharp: 2.2, shade: .3, sheen: .36, gloss: .28, glassOpacity: .42, shellMidAlpha: .2, shellEdgeAlpha: .22, exposure: 1, edgeSoftness: .005, edgeGlow: 0, colorA: "#F7FBFF", colorB: "#D6E8F7", colorC: "#A8C8F0", colorD: "#6F9EE8", highlightColor: "#FFFFFF", shellInner: "#FFFFFF", shellMid: "#D6E8F7", shellEdge: "#6F9EE8", sheenColor: "#EAF4FF", specColor: "#DCEAFF", canvasColor: "#000000", glowColor: "#6F9EE8" };
+  var Av = { siri: 9, voiceWave: 19, aurora: 10, plasma: 11, chrome: 12, opal: 13, spectrum: 14, frost: 15, blueDrop: 20, violetEmber: 21, chromaticMetal: 22 };
+  var Nv = ["#F7FBFF", "#EFF6FD", "#E0EEF9", "#D4E6F7", "#BBD5F3", "#A6C7F0", "#87B0EB", "#6F9EE8", "#6F9EE8", "#6F9EE8", "#6F9EE8", "#6F9EE8"];
+  function Pv(e){ var t = e.slice(1); return [parseInt(t.slice(0,2),16)/255, parseInt(t.slice(2,4),16)/255, parseInt(t.slice(4,6),16)/255, 1]; }
+  function Fv(e, t, n, r, i){
+    e.fill(0); e[0]=t; e[1]=n; e[2]=r;
+    e.set([i.speed,i.radius,i.zoom,i.warp,i.ridgeAmt,i.sharp,i.shade,i.sheen,i.gloss,i.shellMidAlpha,i.shellEdgeAlpha,i.exposure,Av[i.style],i.edgeSoftness,i.edgeGlow,0,+!!i.glassEnabled,i.glassOpacity,i.contourDeform,i.bandDensity,i.chromaticShift,i.metalScale,i.metalStretch,i.metalAngle,i.metalOffset,i.metalPhase,i.metalEvolution,i.metalRoughness,i.metalDepth],3);
+    [i.colorA,i.colorB,i.colorC,i.colorD,i.highlightColor,i.shellInner,i.shellMid,i.shellEdge,i.sheenColor,i.specColor,i.canvasColor,i.glowColor].concat(Nv).forEach(function(c,n){ e.set(Pv(c), 32+n*4); });
+  }
+
+  var DEFAULT_PRESET = Object.assign({}, Ev, { style: "siri", speed: .82, zoom: .36, warp: 3.2, ridgeAmt: .5, sharp: 2.2, shade: .12, sheen: .28, gloss: .24, glassOpacity: .44, shellMidAlpha: .18, shellEdgeAlpha: .18, exposure: 2, colorA: "#FFD86B", colorB: "#82F4FF", colorC: "#FF7BD5", colorD: "#8E6CFF", shellMid: "#9BF4FF", shellEdge: "#C5A9FF", canvasColor: "#030409", glowColor: "#956CFF" });
+
+  var PRESETS_KEY = "xingyu.orbPresets";
+  var ACTIVE_KEY = "xingyu.orbPreset";
+
+  var BUILTINS = {
+    "siri": { name: "晨曦默认", preset: {"style": "siri", "glassEnabled": true, "speed": 0.82, "radius": 0.72, "contourDeform": 0, "bandDensity": 2, "chromaticShift": 0.42, "metalScale": 0.77, "metalStretch": 0.23, "metalAngle": 65, "metalOffset": 0, "metalPhase": 0, "metalEvolution": 1, "metalRoughness": 0.22, "metalDepth": 0.25, "zoom": 0.36, "warp": 3.2, "ridgeAmt": 0.5, "sharp": 2.2, "shade": 0.12, "sheen": 0.28, "gloss": 0.24, "glassOpacity": 0.44, "shellMidAlpha": 0.18, "shellEdgeAlpha": 0.18, "exposure": 2, "edgeSoftness": 0.005, "edgeGlow": 0, "colorA": "#FFD86B", "colorB": "#82F4FF", "colorC": "#FF7BD5", "colorD": "#8E6CFF", "highlightColor": "#FFFFFF", "shellInner": "#FFFFFF", "shellMid": "#9BF4FF", "shellEdge": "#C5A9FF", "sheenColor": "#EAF4FF", "specColor": "#DCEAFF", "canvasColor": "#030409", "glowColor": "#956CFF"} },
+    "voiceWave": { name: "声波", preset: {"style": "voiceWave", "glassEnabled": true, "speed": 0.95, "radius": 0.7, "contourDeform": 0.1, "bandDensity": 2, "chromaticShift": 0.42, "metalScale": 0.77, "metalStretch": 0.23, "metalAngle": 65, "metalOffset": 0, "metalPhase": 0, "metalEvolution": 1, "metalRoughness": 0.22, "metalDepth": 0.25, "zoom": 0.36, "warp": 2.6, "ridgeAmt": 0.46, "sharp": 2.2, "shade": 0.08, "sheen": 0.22, "gloss": 0.36, "glassOpacity": 0.48, "shellMidAlpha": 0.18, "shellEdgeAlpha": 0.2, "exposure": 1.35, "edgeSoftness": 0.005, "edgeGlow": 0, "colorA": "#09030E", "colorB": "#CE2CCB", "colorC": "#FF5C71", "colorD": "#7B53FF", "highlightColor": "#FFD9F0", "shellInner": "#FFFFFF", "shellMid": "#E48BFF", "shellEdge": "#FF7890", "sheenColor": "#FFF1FA", "specColor": "#E7D9FF", "canvasColor": "#020105", "glowColor": "#CE2CCB"} },
+    "aurora": { name: "极光帷幕", preset: {"style": "aurora", "glassEnabled": true, "speed": 3, "radius": 0.72, "contourDeform": 0.08, "bandDensity": 2, "chromaticShift": 0.42, "metalScale": 0.77, "metalStretch": 0.23, "metalAngle": 65, "metalOffset": 0, "metalPhase": 0, "metalEvolution": 1, "metalRoughness": 0.22, "metalDepth": 0.25, "zoom": 0.4, "warp": 4.2, "ridgeAmt": 0.62, "sharp": 2.1, "shade": 0.18, "sheen": 0.36, "gloss": 0.28, "glassOpacity": 0.42, "shellMidAlpha": 0.2, "shellEdgeAlpha": 0.22, "exposure": 1.18, "edgeSoftness": 0.005, "edgeGlow": 0, "colorA": "#030816", "colorB": "#20F0B6", "colorC": "#32A8FF", "colorD": "#A34BFF", "highlightColor": "#FFFFFF", "shellInner": "#FFFFFF", "shellMid": "#32A8FF", "shellEdge": "#20F0B6", "sheenColor": "#EAF4FF", "specColor": "#DCEAFF", "canvasColor": "#010207", "glowColor": "#20F0B6"} },
+    "plasma": { name: "神经电浆", preset: {"style": "plasma", "glassEnabled": true, "speed": 1.32, "radius": 0.72, "contourDeform": 0.05, "bandDensity": 2, "chromaticShift": 0.42, "metalScale": 0.77, "metalStretch": 0.23, "metalAngle": 65, "metalOffset": 0, "metalPhase": 0, "metalEvolution": 1, "metalRoughness": 0.22, "metalDepth": 0.25, "zoom": 0.55, "warp": 5.4, "ridgeAmt": 0.78, "sharp": 4.2, "shade": 0.16, "sheen": 0.36, "gloss": 0.28, "glassOpacity": 0.42, "shellMidAlpha": 0.2, "shellEdgeAlpha": 0.22, "exposure": 1.25, "edgeSoftness": 0.005, "edgeGlow": 0, "colorA": "#06020E", "colorB": "#0099FF", "colorC": "#258BFF", "colorD": "#1375FF", "highlightColor": "#FFFFFF", "shellInner": "#FFFFFF", "shellMid": "#1951C2", "shellEdge": "#00E9FF", "sheenColor": "#EAF4FF", "specColor": "#DCEAFF", "canvasColor": "#020105", "glowColor": "#0099FF"} },
+    "chrome": { name: "液态铬", preset: {"style": "chrome", "glassEnabled": true, "speed": 2, "radius": 0.72, "contourDeform": 0, "bandDensity": 2, "chromaticShift": 0.42, "metalScale": 0.77, "metalStretch": 0.23, "metalAngle": 65, "metalOffset": 0, "metalPhase": 0, "metalEvolution": 1, "metalRoughness": 0.22, "metalDepth": 0.25, "zoom": 0.36, "warp": 3.8, "ridgeAmt": 0.44, "sharp": 5.2, "shade": 0.58, "sheen": 0.36, "gloss": 0.28, "glassOpacity": 0.42, "shellMidAlpha": 0.2, "shellEdgeAlpha": 0.22, "exposure": 1.08, "edgeSoftness": 0.005, "edgeGlow": 0, "colorA": "#FFFFFF", "colorB": "#B9C0CA", "colorC": "#343A43", "colorD": "#030405", "highlightColor": "#FFFFFF", "shellInner": "#FFFFFF", "shellMid": "#B9C0CA", "shellEdge": "#FFFFFF", "sheenColor": "#EAF4FF", "specColor": "#DCEAFF", "canvasColor": "#050608", "glowColor": "#FFFFFF"} },
+    "opal": { name: "虹彩欧泊", preset: {"style": "opal", "glassEnabled": true, "speed": 1.5, "radius": 0.72, "contourDeform": 0, "bandDensity": 2, "chromaticShift": 0.42, "metalScale": 0.77, "metalStretch": 0.23, "metalAngle": 65, "metalOffset": 0, "metalPhase": 0, "metalEvolution": 1, "metalRoughness": 0.22, "metalDepth": 0.25, "zoom": 0.3, "warp": 2.8, "ridgeAmt": 0.36, "sharp": 2, "shade": 0.1, "sheen": 0.3, "gloss": 0.26, "glassOpacity": 0.38, "shellMidAlpha": 0.2, "shellEdgeAlpha": 0.2, "exposure": 1.12, "edgeSoftness": 0.005, "edgeGlow": 0, "colorA": "#FFF6E8", "colorB": "#6EF2CF", "colorC": "#FF91D8", "colorD": "#756BFF", "highlightColor": "#FFFFFF", "shellInner": "#FFFFFF", "shellMid": "#CDE5FF", "shellEdge": "#D9C8FF", "sheenColor": "#EAF4FF", "specColor": "#DCEAFF", "canvasColor": "#07080D", "glowColor": "#9E8CFF"} },
+    "spectrum": { name: "彩色声场", preset: {"style": "spectrum", "glassEnabled": true, "speed": 1.8, "radius": 0.72, "contourDeform": 0.03, "bandDensity": 2, "chromaticShift": 0.42, "metalScale": 0.77, "metalStretch": 0.23, "metalAngle": 65, "metalOffset": 0, "metalPhase": 0, "metalEvolution": 1, "metalRoughness": 0.22, "metalDepth": 0.25, "zoom": 0.46, "warp": 4.4, "ridgeAmt": 0.72, "sharp": 2.2, "shade": 0.06, "sheen": 0.26, "gloss": 0.24, "glassOpacity": 0.4, "shellMidAlpha": 0.18, "shellEdgeAlpha": 0.18, "exposure": 1.5, "edgeSoftness": 0.005, "edgeGlow": 0, "colorA": "#FFFFFF", "colorB": "#1677FF", "colorC": "#F249A0", "colorD": "#35E6B2", "highlightColor": "#FFFFFF", "shellInner": "#FFFFFF", "shellMid": "#66E8FF", "shellEdge": "#D26CFF", "sheenColor": "#EAF4FF", "specColor": "#DCEAFF", "canvasColor": "#03040A", "glowColor": "#1677FF"} },
+    "frost": { name: "冰霜流体", preset: {"style": "frost", "glassEnabled": true, "speed": 2.22, "radius": 0.72, "contourDeform": 0.04, "bandDensity": 2, "chromaticShift": 0.42, "metalScale": 0.77, "metalStretch": 0.23, "metalAngle": 65, "metalOffset": 0, "metalPhase": 0, "metalEvolution": 1, "metalRoughness": 0.22, "metalDepth": 0.25, "zoom": 0.36, "warp": 3.7, "ridgeAmt": 0.45, "sharp": 2.05, "shade": 0.3, "sheen": 0.34, "gloss": 0.28, "glassOpacity": 0.42, "shellMidAlpha": 0.2, "shellEdgeAlpha": 0.22, "exposure": 1, "edgeSoftness": 0.005, "edgeGlow": 0, "colorA": "#F7FBFF", "colorB": "#D6E8F7", "colorC": "#A8C8F0", "colorD": "#6F9EE8", "highlightColor": "#FFFFFF", "shellInner": "#FFFFFF", "shellMid": "#D6E8F7", "shellEdge": "#6F9EE8", "sheenColor": "#EAF4FF", "specColor": "#DCEAFF", "canvasColor": "#000000", "glowColor": "#6F9EE8"} },
+    "blueDrop": { name: "蓝晶液滴", preset: {"style": "blueDrop", "glassEnabled": true, "speed": 0.9, "radius": 0.74, "contourDeform": 0.08, "bandDensity": 2, "chromaticShift": 0.42, "metalScale": 0.77, "metalStretch": 0.23, "metalAngle": 65, "metalOffset": 0, "metalPhase": 0, "metalEvolution": 1, "metalRoughness": 0.22, "metalDepth": 0.25, "zoom": 0.48, "warp": 2.65, "ridgeAmt": 0.42, "sharp": 2.4, "shade": 0.16, "sheen": 0.22, "gloss": 0.42, "glassOpacity": 0.66, "shellMidAlpha": 0.32, "shellEdgeAlpha": 0.24, "exposure": 1.24, "edgeSoftness": 0.005, "edgeGlow": 0, "colorA": "#020B1D", "colorB": "#0756B8", "colorC": "#1EC8FF", "colorD": "#DDFBFF", "highlightColor": "#EAFBFF", "shellInner": "#F6FDFF", "shellMid": "#4FD7FF", "shellEdge": "#466DFF", "sheenColor": "#DDFBFF", "specColor": "#A8D9FF", "canvasColor": "#010207", "glowColor": "#168DFF"} },
+    "violetEmber": { name: "紫焰流核", preset: {"style": "violetEmber", "glassEnabled": true, "speed": 1.12, "radius": 0.72, "contourDeform": 0.04, "bandDensity": 2, "chromaticShift": 0.42, "metalScale": 0.77, "metalStretch": 0.23, "metalAngle": 65, "metalOffset": 0, "metalPhase": 0, "metalEvolution": 1, "metalRoughness": 0.22, "metalDepth": 0.25, "zoom": 0.58, "warp": 4.7, "ridgeAmt": 0.73, "sharp": 3.3, "shade": 0.18, "sheen": 0.2, "gloss": 0.34, "glassOpacity": 0.62, "shellMidAlpha": 0.28, "shellEdgeAlpha": 0.24, "exposure": 1.28, "edgeSoftness": 0.005, "edgeGlow": 0, "colorA": "#100016", "colorB": "#4A0E8F", "colorC": "#A52EFF", "colorD": "#F1A7FF", "highlightColor": "#FFD6FF", "shellInner": "#FCF5FF", "shellMid": "#C257FF", "shellEdge": "#6C2DFF", "sheenColor": "#F8E6FF", "specColor": "#D4B7FF", "canvasColor": "#030006", "glowColor": "#A52EFF"} },
+    "chromaticMetal": { name: "色差液态金属", preset: {"style": "chromaticMetal", "glassEnabled": true, "speed": 1.12, "radius": 0.72, "contourDeform": 0, "bandDensity": 2, "chromaticShift": 0.42, "metalScale": 0.77, "metalStretch": 0.23, "metalAngle": 65, "metalOffset": 0, "metalPhase": 0, "metalEvolution": 1, "metalRoughness": 0.16, "metalDepth": 0.38, "zoom": 0.3, "warp": 3, "ridgeAmt": 0.5, "sharp": 2.2, "shade": 0.1, "sheen": 0.14, "gloss": 0.46, "glassOpacity": 0.54, "shellMidAlpha": 0.2, "shellEdgeAlpha": 0.16, "exposure": 1.08, "edgeSoftness": 0.005, "edgeGlow": 0, "colorA": "#FBFCFB", "colorB": "#7F8683", "colorC": "#D6DAD8", "colorD": "#33373A", "highlightColor": "#FFFFFF", "shellInner": "#F7FCFF", "shellMid": "#6EDCFF", "shellEdge": "#FF806D", "sheenColor": "#F7FCFF", "specColor": "#D9F3FF", "canvasColor": "#050606", "glowColor": "#BDEFFF"} },
+  };
+
+  function loadActive(){
+    try {
+      var saved = localStorage.getItem(ACTIVE_KEY);
+      if (saved) { var p = JSON.parse(saved); if (p && typeof p === "object") return Object.assign({}, DEFAULT_PRESET, p); }
+    } catch(e){}
+    return Object.assign({}, DEFAULT_PRESET);
+  }
+  function loadPresets(){
+    try {
+      var raw = localStorage.getItem(PRESETS_KEY);
+      if (raw) { var arr = JSON.parse(raw); if (Array.isArray(arr)) return arr; }
+    } catch(e){}
+    return [];
+  }
+  function savePresets(list){
+    try { localStorage.setItem(PRESETS_KEY, JSON.stringify(list)); } catch(e){}
+  }
+  function setActive(obj){
+    try { localStorage.setItem(ACTIVE_KEY, JSON.stringify(obj)); } catch(e){}
+  }
+  var preset = loadActive();
+  var presets = loadPresets();
+
+  /* ---- controls ---- */
+  var sliderDefs = [
+    ["speed"], ["radius"], ["zoom"], ["warp"], ["ridgeAmt"], ["sharp"],
+    ["shade"], ["sheen"], ["gloss"], ["glassOpacity"], ["exposure"]
+  ];
+  var colorDefs = ["colorA","colorB","colorC","colorD","shellMid","shellEdge","canvasColor","glowColor"];
+
+  function bindSliders(){
+    sliderDefs.forEach(function(d){
+      var key = d[0];
+      var input = document.getElementById("c-" + key);
+      var val = document.getElementById("v-" + key);
+      if (!input) return;
+      input.value = preset[key];
+      val.textContent = Number(preset[key]).toFixed(2);
+      input.addEventListener("input", function(){
+        preset[key] = parseFloat(input.value);
+        val.textContent = Number(preset[key]).toFixed(2);
+      });
+    });
+  }
+  function bindColors(){
+    colorDefs.forEach(function(key){
+      var input = document.getElementById("c-" + key);
+      if (!input) return;
+      input.value = preset[key];
+      input.addEventListener("input", function(){ preset[key] = input.value; });
+    });
+  }
+
+  /* ---- presets list ---- */
+  function status(msg, ok){
+    var st = document.getElementById("status");
+    st.className = ok ? "status ok" : "status";
+    st.textContent = msg;
+  }
+  function renderPresetList(){
+    var box = document.getElementById("presetList");
+    if (!box) return;
+    if (!presets.length) { box.innerHTML = '<div class="preset-empty">还没有保存的方案，点「保存为新方案」创建一个。</div>'; return; }
+    box.innerHTML = presets.map(function(p){
+      return '<div class="preset-row" data-id="' + p.id + '">' +
+               '<button class="mini" data-load="' + p.id + '">载入</button>' +
+               '<span class="name">' + (p.name || "未命名") + '</span>' +
+               '<button class="mini del" data-del="' + p.id + '">删</button>' +
+             '</div>';
+    }).join("");
+    box.querySelectorAll("[data-load]").forEach(function(b){
+      b.onclick = function(){ loadPreset(b.getAttribute("data-load")); };
+    });
+    box.querySelectorAll("[data-del]").forEach(function(b){
+      b.onclick = function(){ deletePreset(b.getAttribute("data-del")); };
+    });
+  }
+  function loadPreset(id){
+    var found = null;
+    presets.forEach(function(p){ if (p.id === id) found = p; });
+    if (!found) return;
+    preset = Object.assign({}, DEFAULT_PRESET, found.preset);
+    setActive(preset);
+    bindSliders(); bindColors();
+    renderPresetList();
+    status("已载入方案：" + (found.name || "未命名"), true);
+  }
+  function deletePreset(id){
+    presets = presets.filter(function(p){ return p.id !== id; });
+    savePresets(presets);
+    renderPresetList();
+    status("已删除方案", true);
+  }
+
+  /* ---- builtin presets ---- */
+  function renderBuiltins(){
+    var box = document.getElementById("builtinList");
+    if (!box) return;
+    box.innerHTML = Object.keys(BUILTINS).map(function(id){
+      return '<button class="builtin-btn" data-builtin="' + id + '">' + BUILTINS[id].name + '</button>';
+    }).join("");
+    box.querySelectorAll("[data-builtin]").forEach(function(b){
+      b.onclick = function(){
+        var id = b.getAttribute("data-builtin");
+        preset = Object.assign({}, DEFAULT_PRESET, BUILTINS[id].preset);
+        setActive(preset);
+        bindSliders(); bindColors();
+        status("已切换款式：「" + BUILTINS[id].name + "」", true);
+      };
+    });
+  }
+  renderBuiltins();
+
+  /* ---- actions ---- */
+  function save(){
+    setActive(preset);
+    status("已保存 ✓ 刷新 AI 助手页面即可看到新球体", true);
+    setTimeout(function(){ status("保存会自动应用到 AI 助手的球体形象"); }, 2600);
+  }
+  function saveAs(){
+    var name = prompt("给这套球体方案起个名字：", "方案 " + (presets.length + 1));
+    if (name === null) return;
+    name = (name + "").trim() || ("方案 " + (presets.length + 1));
+    var id = Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+    presets.push({ id: id, name: name, preset: JSON.parse(JSON.stringify(preset)) });
+    savePresets(presets);
+    setActive(preset);
+    renderPresetList();
+    status("已保存方案：「" + name + "」", true);
+  }
+  function reset(){
+    preset = Object.assign({}, DEFAULT_PRESET);
+    setActive(preset);
+    bindSliders(); bindColors();
+    renderPresetList();
+    status("已恢复默认球体", true);
+  }
+  document.getElementById("btnSave").onclick = save;
+  document.getElementById("btnSaveAs").onclick = saveAs;
+  document.getElementById("btnReset").onclick = reset;
+  renderPresetList();
+
+  /* ---- renderer ---- */
+  var canvas = document.getElementById("orb");
+  function showError(msg){
+    var st = document.getElementById("status");
+    st.className = "status";
+    st.textContent = "WebGPU 不可用：" + msg;
+  }
+  async function start(shader){
+    var stopped = false, raf = 0, device = null, started = false, errored = false;
+    function fail(err){ if (stopped || errored) return; errored = true; cancelAnimationFrame(raf); if (device) device.destroy(); showError(err && err.message ? err.message : String(err)); }
+    try {
+      if (!navigator.gpu) throw new Error("当前浏览器不支持 WebGPU");
+      var adapter = await navigator.gpu.requestAdapter();
+      if (!adapter) throw new Error("未找到可用的 WebGPU 适配器");
+      device = await adapter.requestDevice();
+      if (stopped) { device.destroy(); return; }
+      var ctx = canvas.getContext("webgpu");
+      if (!ctx) throw new Error("无法创建 WebGPU 画布上下文");
+      var format = navigator.gpu.getPreferredCanvasFormat();
+      ctx.configure({ device: device, format: format, alphaMode: "premultiplied" });
+      var module = device.createShaderModule({ label: "orb-glass-liquid", code: shader });
+      var msgs = (await module.getCompilationInfo()).messages.filter(function(m){ return m.type === "error"; });
+      if (msgs.length) throw new Error(msgs.map(function(m){ return m.lineNum + ":" + m.linePos + " " + m.message; }).join("\\n"));
+      var pipeline = device.createRenderPipeline({
+        label: "orb-pipeline", layout: "auto",
+        vertex: { module: module, entryPoint: "vs_main" },
+        fragment: { module: module, entryPoint: "fs_main", targets: [{ format: format }] },
+        primitive: { topology: "triangle-list" }
+      });
+      var params = new Float32Array(128);
+      var ubuf = device.createBuffer({ size: params.byteLength, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
+      var bind = device.createBindGroup({ layout: pipeline.getBindGroupLayout(0), entries: [{ binding: 0, resource: { buffer: ubuf } }] });
+      var t0 = performance.now();
+      device.lost.then(function(e){ fail(new Error("WebGPU 设备已断开：" + (e.message || e.reason))); });
+      device.addEventListener("uncapturederror", function(e){ e.preventDefault(); fail(new Error("WebGPU 渲染错误：" + e.error.message)); });
+      function resize(){
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        var w = Math.max(1, Math.floor(canvas.clientWidth * dpr));
+        var h = Math.max(1, Math.floor(canvas.clientHeight * dpr));
+        if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+      }
+      function frame(now){
+        if (stopped || errored || !device) return;
+        try {
+          resize();
+          Fv(params, canvas.width, canvas.height, (now - t0) / 1000, preset);
+          device.queue.writeBuffer(ubuf, 0, params);
+          var enc = device.createCommandEncoder();
+          var pass = enc.beginRenderPass({ colorAttachments: [{ view: ctx.getCurrentTexture().createView(), clearValue: { r: 0, g: 0, b: 0, a: 1 }, loadOp: "clear", storeOp: "store" }] });
+          pass.setPipeline(pipeline); pass.setBindGroup(0, bind); pass.draw(3, 1, 0, 0); pass.end();
+          device.queue.submit([enc.finish()]);
+          started = true;
+          raf = requestAnimationFrame(frame);
+        } catch (e) { fail(e instanceof Error ? e : new Error(String(e))); }
+      }
+      raf = requestAnimationFrame(frame);
+    } catch (e) { fail(e instanceof Error ? e : new Error(String(e))); }
+  }
+
+  fetch(shaderUrl).then(function(r){ if (!r.ok) throw new Error("shader fetch " + r.status); return r.text(); }).then(start).catch(function(e){ showError(e && e.message ? e.message : String(e)); });
+
+  bindSliders();
+  bindColors();
+})();
+</script>
+</body>
+</html>
