@@ -1301,6 +1301,23 @@ const App = (() => {
       ${hasEmail ? `<div class="profile-email">${esc(hasEmail)}</div>` : ""}`;
   }
 
+  // ⚠️ 2026-09-05 修正：平均分必须是**学分加权**平均，不能用等权算术平均。
+  // 高校评奖评优/保研看的是加权平均分；等权会让 4 学分的高数和 1 学分的体育
+  // 权重相同，与真实学业评价口径不符（原实现直接 reduce(score)/length）。
+  // 边界：全部没填学分时退化为算术平均；单条未填学分的不参与加权。
+  function weightedAvgScore(grades) {
+    if (!grades || !grades.length) return 0;
+    let wSum = 0, wCredits = 0;
+    grades.forEach(g => {
+      const c = +g.credit || 0;
+      if (c > 0) { wSum += (+g.score || 0) * c; wCredits += c; }
+    });
+    if (wCredits > 0) return wSum / wCredits;
+    const scored = grades.filter(g => g.score != null && g.score !== "");
+    if (!scored.length) return 0;
+    return scored.reduce((s, g) => s + (+g.score || 0), 0) / scored.length;
+  }
+
   function renderGrades() {
     const grades = Store.getAll("grades");
     const credits = grades.reduce((s, g) => s + (+g.credit || 0), 0);
@@ -1321,10 +1338,10 @@ const App = (() => {
       totalPoints += gp * (+g.credit || 0);
     });
     const gpa = credits ? (totalPoints / credits) : 0;
-    const avg = grades.length ? grades.reduce((s, g) => s + (+g.score || 0), 0) / grades.length : 0;
+    const avg = weightedAvgScore(grades);
     $("#gpaSummary").innerHTML = `
       <div class="gpa-box"><b>${gpa.toFixed(2)}</b><span>GPA（4.0制）</span></div>
-      <div class="gpa-box"><b>${avg.toFixed(1)}</b><span>平均分</span></div>
+      <div class="gpa-box"><b>${avg.toFixed(1)}</b><span>加权平均分</span></div>
       <div class="gpa-box"><b>${grades.length}</b><span>成绩记录</span></div>
       <div class="gpa-box"><b>${credits}</b><span>总学分</span></div>`;
     const box = $("#gradeList");
@@ -1488,8 +1505,8 @@ const App = (() => {
       });
     }
     if (grades.length) {
-      const avg = grades.reduce((s, g) => s + (+g.score || 0), 0) / grades.length;
-      html += `<h4>学业</h4><ul><li>平均分：${avg.toFixed(1)}，共 ${grades.length} 门成绩记录</li></ul>`;
+      const avg = weightedAvgScore(grades);
+      html += `<h4>学业</h4><ul><li>加权平均分：${avg.toFixed(1)}，共 ${grades.length} 门成绩记录</li></ul>`;
     }
     box.innerHTML = html || `<div class="empty-state"><p>完善资料后这里会生成简历预览</p></div>`;
   }
@@ -3733,6 +3750,10 @@ const App = (() => {
     $("#btnAddCourse").onclick = () => openCourseForm();
     $("#btnAddTask").onclick = () => openTaskForm();
     $("#btnImportSchedule").onclick = openImportModal;
+    // ⚠️ 2026-09-05：这两个筛选下拉框此前只被 renderTaskList() 读值、从未绑定 change，
+    // 是死的——用户选了状态/优先级，列表纹丝不动。补上绑定（加判空防元素缺失）。
+    const _fs = $("#taskFilterStatus"); if (_fs) _fs.onchange = renderTaskList;
+    const _fp = $("#taskFilterPriority"); if (_fp) _fp.onchange = renderTaskList;
     $("#btnSmartSort").onclick = () => {
       if (AI.isConfigured()) {
         // 已配置 AI：跳转聊天区执行智能排序
