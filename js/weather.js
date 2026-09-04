@@ -22,7 +22,16 @@
     { id: "101120201", name: "青岛", lat: 36.0671, lon: 120.3826 }
   ];
 
-  /* 本机原生后端地址（同一 WiFi 手机访问时用局域网 IP） */
+  /* ---------- 本机原生后端地址 ----------
+     ⚠️ 2026-09-05 清理：这个 8621 后端**从未真正提供过天气服务**。
+     全项目只有 xingyu-app.pyw 提到 8621（NATIVE_PORT），而它里面并没有 /weather 实现；
+     本机实际跑的是 server.py（8620），同样没有 weather 路由。
+     => 旧代码每次加载天气都先发一个注定 CONNECTION_REFUSED 的请求，只在控制台留红字。
+     且上游 weather.com.cn 的公开接口（/data/cityinfo/、/sk_2d/）现已返回 HTML 页面
+     而非 JSON，即便补服务端代理也拿不到数据。
+     故改为：GitHub Pages 静态天气（Actions 定时发布）→ Open-Meteo 兜底。
+     常量保留仅为将来若真实现服务端代理时可复用。
+  */
   var API = (function () {
     try { return location.protocol + "//" + location.hostname + ":8621"; }
     catch (e) { return "http://127.0.0.1:8621"; }
@@ -153,16 +162,12 @@
     } finally { clearTimeout(timer); }
   }
 
-  /* ---------- 中国天气数据（经原生后端） ---------- */
-  async function fetchChina(city) {
-    var u = API + "/weather?city=" + encodeURIComponent(city.id || city.name);
-    var d = await fetchJson(u);
-    if (!d || !d.realtime) throw new Error("bad china data");
-    return d;
-  }
+  /* ---------- 中国天气数据 ----------
+     fetchChina（经 8621 原生后端）已移除：该路由从未实现，见上方 API 常量注释。
+     城市搜索同理：/weather/search 也不存在，直接走 Open-Meteo 地理编码。
+  */
   async function searchChina(name) {
-    var d = await fetchJson(API + "/weather/search?name=" + encodeURIComponent(name));
-    return d && d.results ? d.results : [];
+    return await searchMeteo(name);
   }
 
   /* 直连 GitHub：读取 Actions 定时发布的 {cityid}.json */
@@ -442,17 +447,19 @@
 
     try {
       var data, gitOk = false;
-      try {
-        data = await fetchChina(city);
-      } catch (chinaErr) {
-        if (city.id) {
-          try { data = await fetchChinaGit(city); gitOk = true; } catch (e) {}
-        }
-        if (!gitOk && city.lat != null && city.lon != null) {
+      // ① GitHub Pages 静态天气（Actions 定时发布，含实时/预警/生活指数/7天）
+      //    ⚠️ gitOk 用 !!data 判定：旧写法只要不抛异常就置 true，
+      //    GitHub 若返回空/残缺 JSON 会误判成功，后面 renderDispatch(undefined) 直接炸
+      if (city.id) {
+        try { data = await fetchChinaGit(city); gitOk = !!data; } catch (e) {}
+      }
+      // ② 兜底 Open-Meteo（需要经纬度）
+      if (!gitOk) {
+        if (city.lat != null && city.lon != null) {
           data = await fetchMeteo(city.lat, city.lon);
           data.source = "meteo";
-        } else if (!gitOk) {
-          throw chinaErr;
+        } else {
+          throw new Error("天气数据不可用：无城市编码且缺少经纬度");
         }
       }
       localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), data: data }));
