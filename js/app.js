@@ -1052,8 +1052,26 @@ const App = (() => {
     const minutes = Math.max(1, Math.round(pomoState.total / 60) || 25);
     overlay.style.display = "block";
     frame.src = customSrc || ("focus/index.html?minutes=" + minutes);
-    // 场景加载完成后把键盘焦点交给 iframe，确保 Esc 第一时间可用
-    frame.onload = () => { try { frame.contentWindow && frame.contentWindow.focus(); } catch (e) {} };
+    // 场景加载完成后把键盘焦点交给 iframe，确保 Esc 第一时间可用。
+    // ⚠️ 并向 iframe 注入捕获期 Esc 桥（同源可注入）：iframe 自己的 JS 是打包产物，
+    // 从 onload 到它挂好 keydown 有一个时序窗——窗口内按 Esc 会两边都收不到
+    // （焦点在 iframe → 父页面兜底监听收不到；iframe JS 未就绪 → 里面也没人处理）。
+    // 审计实测复现过一次「Esc 关不掉」。桥是捕获期 + 幂等关闭，双触发无副作用。
+    frame.onload = () => {
+      try {
+        const w = frame.contentWindow;
+        if (w && !w.__xyEscBridge) {
+          w.__xyEscBridge = true;
+          w.addEventListener("keydown", (ev) => {
+            if (ev && (ev.key === "Escape" || ev.keyCode === 27)) {
+              ev.preventDefault();
+              try { closeFocusScene(); } catch (e) {}
+            }
+          }, true);
+        }
+        try { w && w.focus(); } catch (e) {}
+      } catch (e) {}
+    };
     // 唯一的悬浮退出按钮：切到「退出专注 (Esc)」文案，点击只关闭沉浸场景
     if (syncExitFabHook) syncExitFabHook();
   }
@@ -1997,12 +2015,21 @@ const App = (() => {
 
   let onboardReplay = false; // 重看模式：不清数据、隐藏演示数据选项
   function maybeShowOnboarding() {
-    // 2026-09-03 v4：引导标记升版（zero_onboarded_v4），本次更新后所有用户
-    // 都会见到一次欢迎弹窗——用户明确反馈"开屏弹窗还是没有"。
+    // 2026-09-03 v4：引导标记升版（zero_onboarded_v4）。
     // 老用户（已有存档）自动进入安全重看模式：预填资料、隐藏清数据选项，
     // 无论点哪个按钮都绝不动存档。真首跑走原始流程（含演示数据选择）。
     try {
       if (localStorage.getItem("zero_onboarded_v4") === "1") return;
+      // 手机访问直接跳过完整引导（2026-09-04 深审计遗留项）：
+      // 扫码/移动端每个新设备都是"首跑"，引导弹层会把整个移动端界面挡死；
+      // 且姓名/目标/演示数据这些引导内容是桌面向的。标记已引导，资料可在设置里补。
+      const __qp = new URLSearchParams(location.search);
+      const __isMobileVisit = __qp.get("mobile") === "1" || __qp.get("src") === "qr" ||
+        (window.matchMedia && window.matchMedia("(max-width: 900px) and (pointer: coarse)").matches);
+      if (__isMobileVisit) {
+        localStorage.setItem("zero_onboarded_v4", "1");
+        return;
+      }
       const info = Store.getStorageInfo();
       const demoRow = $("#onboardKeepDemo");
       if (info && !info.firstRun) { replayOnboarding(); return; }
