@@ -246,6 +246,18 @@ const App = (() => {
     if (want && frame.getAttribute("src") !== want) frame.setAttribute("src", want);
   }
 
+  // 侧边栏「跑步训练 / 训练营」两个入口共用 data-view="running"，
+  // 高亮要跟着当前 tab 走，否则会出现「两个都亮」或「点了训练营却亮跑步」的错位。
+  function syncRunningNavHighlight(onCamp) {
+    $$(".nav-item").forEach(n => {
+      if (n.dataset.view !== "running") return;
+      const on = !!n.dataset.camp === !!onCamp;
+      n.classList.toggle("active", on);
+      if (on) n.setAttribute("aria-current", "page");
+      else n.removeAttribute("aria-current");
+    });
+  }
+
   function switchView(view) {
     if (view === currentView) { renderCurrent(); return; }
     const prev = $("#view-" + currentView);
@@ -253,7 +265,10 @@ const App = (() => {
     currentView = view;
     $$(".view").forEach(v => v.classList.remove("active"));
     $$(".nav-item").forEach(n => {
-      const active = n.dataset.view === view;
+      // ⚠️ 侧边栏有两个 data-view="running"（跑步训练 / 训练营快捷入口），
+      // 旧写法按 data-view 相等匹配会让两个同时高亮、且都打上 aria-current="page"
+      // （无障碍规范同一时刻只允许一个）。训练营带 data-camp，不参与导航高亮。
+      const active = n.dataset.view === view && !n.dataset.camp;
       n.classList.toggle("active", active);
       if (active) n.setAttribute("aria-current", "page");
       else n.removeAttribute("aria-current");
@@ -3624,7 +3639,23 @@ const App = (() => {
       if (n.dataset.camp) {
         setTimeout(function () {
           var campBtn = document.querySelector('.tab-btn[data-tab="run-camp"]');
-          if (campBtn) campBtn.click();
+          if (campBtn) {
+            campBtn.click();   // onclick 里会调 syncRunningNavHighlight(true)
+          } else {
+            syncRunningNavHighlight(true);
+          }
+        }, 30);
+      } else if (n.dataset.view === "running") {
+        // 反向：从「训练营」tab 状态点回「跑步训练」入口，要回到训练总览，
+        // 否则会出现「高亮跑步训练、内容还停在训练营」的错位。
+        // ⚠️ 不能省：已在 running 视图时 switchView 会提前 return，高亮不会自动更新
+        setTimeout(function () {
+          var campActive = document.querySelector('.tab-btn[data-tab="run-camp"].active');
+          if (campActive) {
+            var ov = document.querySelector('.tab-btn[data-tab="run-overview"]');
+            if (ov) { ov.click(); return; }   // onclick 里会 syncRunningNavHighlight(false)
+          }
+          syncRunningNavHighlight(false);
         }, 30);
       }
     });
@@ -3742,6 +3773,10 @@ const App = (() => {
         $("#tab-" + tab) && $("#tab-" + tab).classList.add("active");
         // 跑步视图：切到 AI 教练 tab 时刷新数据
         if (tab === "run-coach" && window.Synapse) Synapse.render();
+        // 跑步视图下侧边栏高亮跟随 tab（训练营 tab -> 高亮「训练营」入口）
+        if (currentView === "running" && /^run-/.test(tab)) {
+          syncRunningNavHighlight(tab === "run-camp");
+        }
       };
     });
 
