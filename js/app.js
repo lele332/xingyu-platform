@@ -291,8 +291,8 @@ const App = (() => {
       }
       else window.Anim && Anim.viewEnter(v);
     }
-    const titles = { aria: t("title.aria"), dashboard: t("title.dashboard"), courses: t("title.courses"), notes: t("title.notes"), focus: t("title.focus"), growth: t("title.growth"), lit: t("title.lit"), news: t("title.news"), ai: t("title.ai"), weather: t("title.weather"), prisma: t("title.prisma"), nexus: t("title.nexus"), foldcraft: t("title.foldcraft"), securify: t("title.securify"), particles: t("title.particles"), running: t("title.running"), voice: "AI 语音" };
-    const subs = { dashboard: t("sub.dashboard"), courses: t("sub.courses"), notes: t("sub.notes"), focus: t("sub.focus"), growth: t("sub.growth"), lit: t("sub.lit"), news: t("sub.news"), ai: t("sub.ai"), weather: t("sub.weather"), prisma: t("sub.prisma"), nexus: t("sub.nexus"), foldcraft: t("sub.foldcraft"), securify: t("sub.securify"), particles: t("sub.particles"), running: t("sub.running"), voice: "文本转语音 · VoxCPM" };
+    const titles = { aria: t("title.aria"), dashboard: t("title.dashboard"), courses: t("title.courses"), notes: t("title.notes"), focus: t("title.focus"), growth: t("title.growth"), lit: t("title.lit"), news: t("title.news"), ai: t("title.ai"), weather: t("title.weather"), prisma: t("title.prisma"), nexus: t("title.nexus"), foldcraft: t("title.foldcraft"), securify: t("title.securify"), particles: t("title.particles"), running: t("title.running"), voice: "AI 语音", toolknit: "工具箱", exams: "考试日程" };
+    const subs = { dashboard: t("sub.dashboard"), courses: t("sub.courses"), notes: t("sub.notes"), focus: t("sub.focus"), growth: t("sub.growth"), lit: t("sub.lit"), news: t("sub.news"), ai: t("sub.ai"), weather: t("sub.weather"), prisma: t("sub.prisma"), nexus: t("sub.nexus"), foldcraft: t("sub.foldcraft"), securify: t("sub.securify"), particles: t("sub.particles"), running: t("sub.running"), voice: "文本转语音 · VoxCPM", toolknit: "常用小工具合集", exams: "考试与日程管理" };
     $("#pageTitle").textContent = titles[view] || "";
     const sub = $("#pageSub");
     if (sub) sub.textContent = subs[view] || "";
@@ -1012,11 +1012,14 @@ const App = (() => {
     pomoState.recordedMinutes = 0;
     updatePomoUI();
     setPomoRunningUI("专注中 ");
+    clearInterval(pomoTimer); pomoTimer = null;   // 防孤儿计时器
     pomoTimer = setInterval(tickPomo, 1000);
     openFocusScene();
   }
 
   function resumePomo() {
+    // 防孤儿计时器：先清旧再建新（任何路径下都保证单计时器）
+    clearInterval(pomoTimer); pomoTimer = null;
     pomoState.running = true;
     pomoState.paused = false;
     pomoState.segmentRemain = pomoState.remain;
@@ -1146,10 +1149,13 @@ const App = (() => {
 
   function pausePomo() {
     if (!pomoState.running) return;
-    recordPartialPomo();
+    // ⚠️ 记录部分专注失败不能挡住暂停本身：旧写法 recordPartialPomo() 若抛错，
+    // 后面的 clearInterval 永远执行不到 → 「已暂停」但计时还在走（孤儿计时器，
+    // 深审计 A4/复测实测复现过）。记录包 try，清计时器无条件先做。
+    try { recordPartialPomo(); } catch (e) { try { console.warn("记录部分专注失败:", e); } catch (_e) {} }
     pomoState.running = false;
     pomoState.paused = true;
-    clearInterval(pomoTimer);
+    clearInterval(pomoTimer); pomoTimer = null;
     $("#btnPomoStart").textContent = "继续";
     $("#btnPomoStart").classList.remove("btn-danger");
     $(".pomodoro-card").classList.remove("working");

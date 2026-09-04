@@ -77,9 +77,19 @@
   }
 
   /* ---------- 本地 VoxCPM（OpenAI 兼容，走星屿同源代理避免 CORS） ---------- */
+  // 2026-09-04 修「停止后音频仍响起」：旧版 fetch 没有 abort，
+  // voxStop() 是空的 —— 点停止只 pause 已创建的音频，在途合成请求回来后
+  // 照样 new Audio 播放（深审计 s4-B2 实锤）。现在：代数令牌 + AbortController + 超时。
+  let _voxGen = 0, _voxCtrl = null;
+  var VOX_FETCH_TIMEOUT = 60000;   // 克隆音色合成较慢，放宽到 60s
+
   async function voxSpeak(text, rate, onEnd, onError, opts) {
     opts = opts || {};
     const s = getSettings();
+    const gen = ++_voxGen;               // 本次合成代数；stop/新播报会令其过期
+    const ctrl = new AbortController();
+    _voxCtrl = ctrl;
+    const timer = setTimeout(function () { try { ctrl.abort(); } catch (e) {} }, VOX_FETCH_TIMEOUT);
     // 走星屿 server.py 的 /vox-proxy 同源代理，绕开浏览器跨域限制
     const base = (location.protocol === "file:" || location.hostname === "")
       ? (s.voxUrl || DEFAULT_VOX_URL)
@@ -98,13 +108,18 @@
       const resp = await fetch(base + "/audio/speech", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
+        signal: ctrl.signal
       });
       if (!resp.ok) {
         const err = await resp.text().catch(() => "");
         throw new Error("VoxCPM 返回 " + resp.status + (err ? ": " + err.slice(0, 120) : ""));
       }
       const blob = await resp.blob();
+      clearTimeout(timer);
+      if (_voxCtrl === ctrl) _voxCtrl = null;
+      // 已被停止 / 更新的播报顶掉：丢弃音频，绝不响出过期声音
+      if (gen !== _voxGen || ctrl.signal.aborted) return null;
       _lastBlob = blob;
       _lastBlobName = blobFileName(text, resp.headers.get("Content-Type") || blob.type);
       const url = URL.createObjectURL(blob);
@@ -114,11 +129,19 @@
       await audio.play();
       return audio;
     } catch (e) {
+      clearTimeout(timer);
+      if (_voxCtrl === ctrl) _voxCtrl = null;
+      // 被停止/换新打断不算错误，静默让位
+      if (e && (e.name === "AbortError" || gen !== _voxGen)) return null;
       onError && onError(e.message || "调用本地 VoxCPM 失败");
       return null;
     }
   }
-  function voxStop() { }
+  function voxStop() {
+    _voxGen++;
+    try { if (_voxCtrl) _voxCtrl.abort(); } catch (e) {}
+    _voxCtrl = null;
+  }
 
   /* ---------- VoxCPM 服务检测（经星屿同源代理） ---------- */
   async function checkVoxService() {
@@ -177,6 +200,7 @@
     return _curAudio;
   }
   function stop() {
+    voxStop();               // abort 在途合成请求（否则停止后音频仍会响起）
     browserStop();
     if (_curAudio && typeof _curAudio.pause === "function") { try { _curAudio.pause(); } catch (e) {} }
     _curAudio = null;
