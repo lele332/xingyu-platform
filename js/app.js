@@ -2685,19 +2685,32 @@ const App = (() => {
 
   async function saveSettings() {
     // 访问密码：总开关关闭 → 清除密码；开启 → 校验并保存
+    // ⚠️ 旧写法在「勾了开关但没填设置密码」时直接 return 整个 saveSettings，
+    //    导致 API Key / 主题 / 同步 token 等所有其他设置被连带静默丢弃，
+    //    用户只看到一闪而过的 toast，以为都保存了（深审计 2026-09-05 发现）。
+    //    现在：锁没配好只影响锁本身，其余设置照常保存；并把开关回置为关，
+    //    避免界面显示"已开启"但实际未启用（状态不同步，是更大的坑）。
+    let lockPendingReason = "";
     const lockEnabled = $("#lockEnabled") ? $("#lockEnabled").checked : false;
     if (lockEnabled) {
       const pin = $("#setPin").value;
       const pin2 = $("#setPin2").value;
       if (pin || pin2) {
+        // 两次输入不一致是真错误，仍中止保存交由用户修正
         if (pin !== pin2) { toast(t("lock.mismatch"), "err"); return; }
         if (!(await setPin(pin))) return;
-        toast(pin ? t("lock.saved") : t("lock.cleared"), "ok");
+        toast(pin ? t("lock.saved") : "", "ok");
       }
-      // 开启但从未设过密码：要求设置
-      if (!hasPin()) { toast(t("lock.needPin"), "err"); return; }
-      localStorage.setItem("zero_lock_enabled", "1");
-      localStorage.setItem("zero_lock_leave", $("#lockOnLeave").checked ? "1" : "0");
+      if (!hasPin()) {
+        lockPendingReason = t("lock.needPin");
+        localStorage.removeItem("zero_lock_enabled");
+        localStorage.removeItem("zero_lock_leave");
+        const le = $("#lockEnabled");
+        if (le) { le.checked = false; try { toggleLockFields(false); } catch (e) {} }
+      } else {
+        localStorage.setItem("zero_lock_enabled", "1");
+        localStorage.setItem("zero_lock_leave", $("#lockOnLeave").checked ? "1" : "0");
+      }
     } else {
       // 关闭：清除密码与所有锁定偏好
       await setPin("");
@@ -2720,7 +2733,9 @@ const App = (() => {
     const nick = $("#setNickname").value.trim();
     if (nick) Store.setProfile({ name: nick });
     closeModal("settingsModal");
-    toast(t("settings.saved"), "ok");
+    // 锁没配好：明确告知"其余已保存、锁未启用"，别让用户以为全丢了或全存了
+    if (lockPendingReason) toast(lockPendingReason + "，访问密码暂未启用；其余设置已保存。", "err", { duration: 5000 });
+    else toast(t("settings.saved"), "ok");
     renderAIStatus();
     renderProfile();
     if (currentView === "dashboard") renderDashboard();
@@ -4123,9 +4138,17 @@ const App = (() => {
     // 访问密码
     $("#btnUnlock").onclick = unlock;
     $("#lockPin").addEventListener("keydown", e => { if (e.key === "Enter") unlock(); });
-    // 总开关：切换密码字段显隐
+    // 总开关：切换密码字段显隐。首次开启时自动聚焦「新密码」并提示——
+    // 否则用户勾了开关却不知道要去下面设密码，保存时才发现没配上。
     const lockEn = $("#lockEnabled");
-    if (lockEn) lockEn.addEventListener("change", () => toggleLockFields(lockEn.checked));
+    if (lockEn) lockEn.addEventListener("change", () => {
+      toggleLockFields(lockEn.checked);
+      if (lockEn.checked && !hasPin()) {
+        const p = $("#setPin");
+        try { p && p.focus(); } catch (e) {}
+        toast(t("lock.needPin"), "ok", { duration: 3000 });
+      }
+    });
     document.addEventListener("visibilitychange", () => {
       if (document.hidden && localStorage.getItem("zero_lock_enabled") === "1" && hasPin() && localStorage.getItem("zero_lock_leave") === "1") {
         lockNow();

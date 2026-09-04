@@ -111,10 +111,15 @@ const Store = (() => {
 
   function canUseLocalStateServer() { return SERVER_SYNC_ENABLED; }
 
-  function buildStateEnvelope() {
+  // 本地最近一次真实写入的时间（毫秒）。用于阻止服务端轮询把用户"刚改还没推上去"
+  // 的数据覆盖掉：推送有 700ms 防抖，这期间若发生拉取，服务端快照内容更旧、
+  // 但时间戳可能比本地游标新，就会把刚保存的改动整包回滚（深审计 2026-09-05 实锤）。
+  let localDirtyAt = 0;
+
+  function buildStateEnvelope(stamp) {
     return JSON.stringify({
       data: JSON.parse(exportAll({ includeSecrets: true })),
-      updatedAt: Date.now()
+      updatedAt: stamp || Date.now()
     });
   }
 
@@ -122,13 +127,17 @@ const Store = (() => {
     if (!canUseLocalStateServer()) return;
     if (stateSaveInFlight) { stateSaveQueued = true; return; }
     stateSaveInFlight = true;
+    const stamp = Date.now();
     try {
       const response = await fetch("/api/state", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: buildStateEnvelope()
+        body: buildStateEnvelope(stamp)
       });
       if (!response.ok) throw new Error("state save failed: " + response.status);
+      // 推送成功后必须推进本地游标：否则下一次 12s 轮询会认为"服务端更新"，
+      // 把这份内容相同、时间戳更新的快照导回来，用户期间的改动就被静默回滚。
+      writeSyncCursor(stamp);
     } catch (error) {
       console.warn("[星屿] 实时状态保存失败", error);
     } finally {
@@ -220,6 +229,8 @@ const Store = (() => {
       const snapshot = await response.json();
       const stamp = Number(snapshot.serverUpdatedAt ? new Date(snapshot.serverUpdatedAt).getTime() : (snapshot.updatedAt || 0));
       const cursor = readSyncCursor();
+      // 本地刚改过（含推送防抖窗口内）→ 先别拉，保住用户刚保存的改动
+      if (!force && localDirtyAt && (Date.now() - localDirtyAt) < 3000) return false;
       if (!force && stamp && stamp <= cursor) return true;
       if (!snapshot.hasData) return false;
       suppressServerSync = true;
@@ -312,6 +323,8 @@ const Store = (() => {
     data.schemaVersion = SCHEMA_VERSION;
     prunePomodoros(); // 归档超量番茄记录，防主键无限增长
     const ok = storageSet(KEY, JSON.stringify(data));
+    // 本地刚写过：记下脏时间戳，供服务端拉取判断"别把新改动覆盖掉"
+    localDirtyAt = Date.now();
     // 调用方大多忽略返回值（19 处裸调用），这里主动派发事件让 UI 提示，
     // 否则 localStorage 写满时数据静默丢失，用户完全无感知。
     if (!ok) notifyStorageFailure();
