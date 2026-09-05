@@ -37,8 +37,14 @@ def read(path):
 
 
 def write(path, text):
-    """⚠️ 读写分离：先读后写，绝不在 'w' 模式上调 read()"""
-    with io.open(path, "w", encoding="utf-8", newline="\n") as f:
+    """⚠️ 两道保证：
+       1. 读写分离：先读后写，绝不在 'w' 模式上调 read()
+          （2026-09-05 这样把 index.html 清空过，见文件头注释）
+       2. 不指定 newline：交给 Python 按平台转换（Windows -> CRLF）。
+          曾经显式写 newline="\\n"，文件被改成 LF，与仓库的 CRLF 不一致，
+          git 报「LF will be replaced by CRLF」，后续改动会变成整文件 diff。
+    """
+    with io.open(path, "w", encoding="utf-8") as f:
         f.write(text)
 
 
