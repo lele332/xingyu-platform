@@ -157,7 +157,6 @@ ${notesText}`;
 
   function localPriority() {
     const tasks = Store.getAll("tasks").filter(t => t.status !== "done");
-    const now = Date.now();
     const score = (t) => {
       let s = 0;
       if (t.priority === "high") s += 100;
@@ -172,9 +171,14 @@ ${notesText}`;
               补上 T00:00:00 让它按本地时间解析（与 app.js 的 daysUntil 同口径）。
            2) 「days < 1」一个分支同时兜住「已逾期」和「今天/明天到期」，
               逾期 5 天和今天到期同分——而逾期恰恰是最该先处理的那件。
-              拆出 days < 0 单独给最高分，且逾期越久越靠前（拖得越久越该清）。 */
-        const dueStr = t.due.length === 10 ? t.due + "T00:00:00" : t.due;
-        const days = (new Date(dueStr).getTime() - now) / 86400000;
+              拆出 days < 0 单独给最高分，且逾期越久越靠前（拖得越久越该清）。
+           ⚠️ 同日二修（BUG #29）：上一修用的是实时 now=Date.now() 与「今天 0 点」
+              相减，今天到期的任务 days=-20h<0 被打成逾期最高档 +400——而 app.js
+              里同一份排序给的是 +200（daysUntil 归零口径）。又是两份拷贝口径
+              分叉（模式三第二次在同一处复发）。改为直接调上面 15 行处的
+              localDaysUntil()（与 app.js daysUntil 完全同口径）：今天到期=0
+              落 <1 档，逾期才 <0。 */
+        const days = localDaysUntil(t.due);
         if (days < 0) s += 400 + Math.min(100, Math.floor(-days));
         else if (days < 1) s += 200;
         else if (days < 3) s += 120;

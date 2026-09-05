@@ -2217,11 +2217,19 @@
       if (name === 'list_exams') {
         var ex = st.getAll('exams') || [];
         if (!ex.length) return { ok: true, msg: '还没有添加考试安排。' };
+        /* ⚠️ 2026-09-05（BUG #30，时区陷阱模式四变体）：原来写
+             var d = new Date(e.date);  // 纯日期串按 UTC 解析 = 本地 08:00
+             var days = Math.ceil((d - today) / 86400000);
+           今天有考试时，凌晨 0-8 点问小星会说「还有 1 天」（本地 08:00 - 凌晨 >
+           0 被 ceil 收成 1）；白天又说「还有 0 天」。与 app.js 的 daysUntil 同
+           口径修正：两端都归零到本地 0 点再相减。 */
         var today = new Date();
+        today.setHours(0, 0, 0, 0);
         var rows = ex.map(function (e) {
-          var d = new Date(e.date);
-          var days = Math.ceil((d - today) / 86400000);
-          return e.name + '：' + fmtDate(e.date) + '（' + (days >= 0 ? '还有 ' + days + ' 天' : '已过去') + '）';
+          var d = new Date(e.date.length === 10 ? e.date + 'T00:00:00' : e.date);
+          d.setHours(0, 0, 0, 0);
+          var days = Math.round((d - today) / 86400000);
+          return e.name + '：' + fmtDate(e.date) + '（' + (days > 0 ? '还有 ' + days + ' 天' : days === 0 ? '就是今天' : '已过去') + '）';
         }).sort();
         return { ok: true, msg: '考试安排：\n' + rows.join('\n') };
       }
