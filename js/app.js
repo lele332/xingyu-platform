@@ -2036,6 +2036,29 @@ const App = (() => {
      ============================================================ */
   let modalRestoreTarget = null;
 
+  /* 关闭前守卫：返回 false 表示「先别关」。见 closeModal() 里的调用。
+     之所以需要这么个钩子，是因为模态框有三条关闭路径（Esc / ✕ / 点遮罩），
+     任何只在其中一两条上加校验的做法都会漏，而三条的终点都是 closeModal。 */
+  const modalCloseGuards = {};
+
+  /* 设置面板里有没有改过东西但还没点保存。
+     openSettings() 填充表单用的是 .value = / .checked = 赋值，不会触发
+     input/change 事件，所以打开时天然是干净的，不需要手动清零。 */
+  let settingsDirty = false;
+
+  /* 守卫：设置面板有未保存改动时，关闭前先问一句。
+     以前不管怎么关（Esc / ✕ / 点遮罩）都是静默丢弃，用户刚敲进去的一长串
+     API Key 说没就没，而且一点提示都没有 —— 他甚至不知道自己丢了东西。
+     这里用原生 confirm 而不是自定义弹层：closeModal 是同步流程，
+     自定义弹层要等异步回调，等结果回来时关闭动作已经走完一半了，状态会错乱。 */
+  function guardSettingsUnsaved() {
+    if (!settingsDirty) return true;
+    const leave = confirm("设置里有未保存的改动，确定要关闭吗？");
+    if (leave) settingsDirty = false; // 用户选择放弃，下次打开时别再问一遍
+    return leave;
+  }
+  modalCloseGuards["settingsModal"] = guardSettingsUnsaved;
+
   function openModals() {
     return Array.from(document.querySelectorAll(".modal-mask.show:not(.closing)"));
   }
@@ -2101,6 +2124,9 @@ const App = (() => {
   function closeModal(id) {
     const m = $("#" + id);
     if (!m || !m.classList.contains("show")) return;
+    // 关闭前守卫：三条关闭路径（Esc / ✕ / 点遮罩）都汇聚到这里，守一处就够
+    const guard = modalCloseGuards[id];
+    if (guard && guard() === false) return;
     /* ⚠️ 2026-09-05：引导层「静默关闭」的兜底。
        只有点「开始使用星屿」/「稍后设置」才会走 finishOnboarding() 去写
        zero_onboarded_v4 标记；而按 Esc、点遮罩这两条路径是直接调 closeModal 的，
@@ -2340,6 +2366,9 @@ const App = (() => {
         });
     }
     refreshGpuStatus();
+    // 填充完表单后统一清零：openSettings 里的 syncThemeUI() /
+    // XingyuSettingsUI.sync() 等同步 UI 若动了控件，不该算成「用户改过东西」
+    settingsDirty = false;
     showModal("settingsModal");
   }
 
@@ -2947,6 +2976,8 @@ const App = (() => {
     } catch (e) {}
     const nick = $("#setNickname").value.trim();
     if (nick) Store.setProfile({ name: nick });
+    // 已经保存过了，清掉脏标记——否则下面这次 closeModal 会被自己的守卫拦下来问一句
+    settingsDirty = false;
     closeModal("settingsModal");
     // 锁没配好：明确告知"其余已保存、锁未启用"，别让用户以为全丢了或全存了
     if (lockPendingReason) toast(lockPendingReason + "，访问密码暂未启用；其余设置已保存。", "err", { duration: 5000 });
@@ -4111,6 +4142,14 @@ const App = (() => {
     // 设置
     $("#btnSettings").onclick = openSettings;
     $("#btnSaveSettings").onclick = saveSettings;
+    // 设置面板里任何输入都标记为「有未保存改动」，供 guardSettingsUnsaved 判断。
+    // 用事件委托绑在面板根节点上，面板内以后新增任何控件都自动覆盖，不用改这里。
+    const settingsRoot = $("#settingsModal");
+    if (settingsRoot) {
+      const markDirty = () => { settingsDirty = true; };
+      settingsRoot.addEventListener("input", markDirty);
+      settingsRoot.addEventListener("change", markDirty);
+    }
     const devSwitch = $("#devModeEnabled");
     if (devSwitch) devSwitch.onchange = () => {
       const hint = $("#devModeHint");
