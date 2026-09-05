@@ -149,9 +149,20 @@ ${notesText}`;
       if (t.priority === "high") s += 100;
       else if (t.priority === "mid") s += 50;
       if (t.due) {
-        const diff = new Date(t.due).getTime() - now;
-        const days = diff / 86400000;
-        if (days < 1) s += 200;
+        /* ⚠️ 2026-09-05：这里有两个问题，都会让「越紧急越靠前」失效。
+           1) new Date("YYYY-MM-DD") 按 **UTC** 解析，而 now 是本地时间戳——
+              东八区下差 8 小时，于是「明天到期」被算成 0.714 天，掉进
+              days < 1 分支，和真正逾期的任务拿到一样的 +200。
+              实测：明天到期 0.714 天 / 逾期 5 天 -5.286 天，两者同分，
+              排序退化成按 tasks 原数组顺序，智能排序等于没排。
+              补上 T00:00:00 让它按本地时间解析（与 app.js 的 daysUntil 同口径）。
+           2) 「days < 1」一个分支同时兜住「已逾期」和「今天/明天到期」，
+              逾期 5 天和今天到期同分——而逾期恰恰是最该先处理的那件。
+              拆出 days < 0 单独给最高分，且逾期越久越靠前（拖得越久越该清）。 */
+        const dueStr = t.due.length === 10 ? t.due + "T00:00:00" : t.due;
+        const days = (new Date(dueStr).getTime() - now) / 86400000;
+        if (days < 0) s += 400 + Math.min(100, Math.floor(-days));
+        else if (days < 1) s += 200;
         else if (days < 3) s += 120;
         else if (days < 7) s += 60;
       }
@@ -237,8 +248,14 @@ ${notesText}`;
       if (!sorted.length) return "当前没有待办任务，先去「课程作业」添加一些吧～";
       const lines = ["智能排序结果（本地规则：DDL 越近 + 优先级越高越靠前）：", ""];
       sorted.forEach((t, i) => {
-        const days = t.due ? Math.max(0, Math.ceil((new Date(t.due) - Date.now()) / 86400000)) : "-";
-        lines.push(`${i + 1}. [${t.priority}] ${t.title}（${t.status === "doing" ? "进行中" : "待完成"}，剩 ${days} 天）`);
+        // ⚠️ 2026-09-05：原来是 Math.max(0, 天数)，把「已逾期 N 天」抹平显示成「剩 0 天」。
+        // 而上面 localPriority() 的排序是按真实天数算的（days < 1 包含了负数，
+        // 逾期任务会拿到 +200 的最高分排到最前）——于是出现「排在第一位、却写着
+        // 剩 0 天」的矛盾：用户看不出这恰恰是已经逾期、最该先做的那件。
+        // 这是第十六轮改 app.js 时的漏网之鱼，同一个坑在项目里第三次出现。
+        const d = t.due ? Math.ceil((new Date(t.due) - Date.now()) / 86400000) : null;
+        const dueText = d === null ? "无期限" : (d < 0 ? `已逾期 ${-d} 天` : (d === 0 ? "今天到期" : `剩 ${d} 天`));
+        lines.push(`${i + 1}. [${t.priority}] ${t.title}（${t.status === "doing" ? "进行中" : "待完成"}，${dueText}）`);
       });
       return lines.join("\n");
     }
