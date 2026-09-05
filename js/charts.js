@@ -111,14 +111,11 @@ const Charts = (() => {
     container.innerHTML = svg;
   }
 
-  /* ---------- 倒计时数字 ---------- */
-  function countdownBox(days) {
-    const cls = days <= 3 ? "urgent" : "";
-    return `<div class="cd-item ${cls}">
-      <div class="cd-num"><b>${Math.max(days, 0)}</b><span>天</span></div>
-      <div class="cd-info"><b id="cd-title"></b><span id="cd-sub"></span></div>
-    </div>`;
-  }
+  /* 2026-09-05：这里原本有个 countdownBox(days)，全项目零调用且没有随
+     return { donut, bars, line } 导出，是彻底的死代码，已删除。
+     顺带说一句它为什么该删而不是留着：里面写了 Math.max(days, 0)，
+     会把「已逾期 N 天」抹平显示成「0 天」—— 正是本项目反复踩过的坑。
+     留着这种模板，将来有人接手用到它就会重新引入同一个 BUG。 */
 
   return { donut, bars, line };
 })();

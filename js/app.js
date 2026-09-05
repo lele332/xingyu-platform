@@ -1007,7 +1007,14 @@ const App = (() => {
   function renderFocusStats() {
     const pomos = Store.getAll("pomodoros");
     const today = pomos.filter(p => p.startAt && localDateKey(p.startAt) === todayISO());
-    const todayCount = today.filter(p => p.type === "focus" && p.completed !== false).length;
+    // ⚠️ 2026-09-05：这里曾经是 p.type === "focus"，与下面算分钟用的 isFocusRecord
+    // （type !== "break"）口径不一致 —— 早期记录没有 type 字段，于是同一条记录
+    // 「分钟数算进去了、番茄个数却没算」，出现「0 个番茄 / 75 分钟」这种对不上的显示。
+    // 统一成 isFocusRecord，向后兼容。
+    // 注意 completed !== false 的不对称是**故意保留**的：completed:false 来自
+    // recordPartialPomo()（中途暂停时把已真实专注的分钟记下来），那段时间是实打实
+    // 专注过的，理应计入专注时长；但它不是一整个番茄，所以不该计入「个数」。
+    const todayCount = today.filter(p => isFocusRecord(p) && p.completed !== false).length;
     const todayMin = today.filter(isFocusRecord).reduce((s, p) => s + (p.minutes || 0), 0);
     const weekMin = pomos.filter(p => {
       if (!p.startAt || !isFocusRecord(p)) return false;
@@ -1750,8 +1757,27 @@ const App = (() => {
     return Array.from(tags);
   }
 
+  /* ⚠️ 2026-09-05：getLitTags() 写了却从没被调用过（全项目零调用），
+     于是「全部标签」下拉里永远只有 index.html 里硬编码的那一个选项 ——
+     用户加了再多标签，这个筛选框点开也只有「全部标签」，是个死控件。
+     这里在每次渲染列表时同步一遍选项，两个细节：
+       1) 必须保留当前选中值 —— renderLitList 绑在搜索框的 input 上，
+          每敲一个字符都会重跑一次，不保留的话筛选会被悄悄重置掉。
+       2) 选中的标签若已不存在（带该标签的文献被删光了）要退回「全部标签」，
+          否则会筛出 0 条且没有任何提示，看起来像文献凭空消失了。 */
+  function syncLitTagFilter() {
+    const sel = $("#litFilterTag");
+    if (!sel) return;
+    const tags = getLitTags();
+    const cur = sel.value;
+    sel.innerHTML = `<option value="">全部标签</option>` +
+      tags.map(t => `<option value="${esc(t)}">${esc(t)}</option>`).join("");
+    sel.value = tags.includes(cur) ? cur : "";
+  }
+
   function renderLitList() {
     const box = $("#litList");
+    syncLitTagFilter();
     const search = ($("#litSearch").value || "").trim().toLowerCase();
     const tagFilter = $("#litFilterTag").value;
     const favFilter = $("#litFilterFav").value;
@@ -1769,7 +1795,25 @@ const App = (() => {
     if (favFilter === "fav") items = items.filter(l => l.favorite);
 
     if (!items.length) {
-      box.innerHTML = `<div class="empty-state"><p>暂无文献。点击「+ 添加文献」或「导入文献」开始积累。</p></div>`;
+      // ⚠️ 2026-09-05：旧文案在「被筛空」时也写「暂无文献，点击添加开始积累」——
+      // 用户明明攒了几十篇文献，只是搜了个没匹配的关键词，就被劝去添加新的，是误导。
+      // 只有库里真的一条都没有时才用引导文案；被筛空时说清是筛选的缘故，
+      // 并给一个一键清除的出口，否则用户得自己挨个把三个筛选框改回去还不一定改得全。
+      const total = Store.getAll("literature").length;
+      const filtering = !!(search || tagFilter || favFilter);
+      if (total && filtering) {
+        box.innerHTML = `<div class="empty-state"><p>没有符合当前筛选条件的文献（共 ${total} 篇）。</p>
+          <button class="mini-btn" id="litClearFilter" style="margin-top:10px">清除筛选条件</button></div>`;
+        const btn = $("#litClearFilter");
+        if (btn) btn.onclick = () => {
+          $("#litSearch").value = "";
+          $("#litFilterTag").value = "";
+          $("#litFilterFav").value = "";
+          renderLitList();
+        };
+      } else {
+        box.innerHTML = `<div class="empty-state"><p>暂无文献。点击「+ 添加文献」或「导入文献」开始积累。</p></div>`;
+      }
       return;
     }
     // 收藏排前面，再按时间倒序
