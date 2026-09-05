@@ -64,6 +64,19 @@ const App = (() => {
     const d = new Date(iso); d.setHours(0, 0, 0, 0);
     return Math.ceil((d - now) / 86400000);
   }
+  // ⚠️ 2026-09-05：截止日文案必须统一，且不能把「逾期」抹平。
+  // 同一份数据在同一页面曾经有三种说法，且两处丢失逾期信息：
+  //   任务列表 renderTaskList  -> 「已逾期 3 天」          （正确）
+  //   首要任务卡片             -> 「0 天后到期」           （Math.max(0, days) 把负数吃掉）
+  //   倒计时列表               -> 「0 天」                 （同上）
+  // 更糟的是「今日待办」只收 days === 0，逾期任务（最该处理的）根本不出现。
+  // 对学生用户来说，作业逾期了却显示「0 天后到期」，很容易误以为还有时间。
+  function formatDue(days) {
+    if (days === null || days === undefined) return "无期限";
+    if (days < 0) return `已逾期 ${-days} 天`;
+    if (days === 0) return "今天到期";
+    return `剩 ${days} 天`;
+  }
   function localDateKey(value = new Date()) {
     const d = value instanceof Date ? new Date(value) : new Date(value);
     if (Number.isNaN(d.getTime())) return "";
@@ -506,7 +519,7 @@ const App = (() => {
     const task = tasks[0];
     const next = getNextCourse(Store.getAll("courses"));
     const icon = name => window.XingyuIcons ? XingyuIcons.svg(name) : "";
-    const taskMeta = task ? (task.due ? `${Math.max(0, daysUntil(task.due))} 天后到期` : "无截止日期") : "当前没有待办";
+    const taskMeta = task ? (task.due ? formatDue(daysUntil(task.due)) : "无截止日期") : "当前没有待办";
     const courseMeta = next ? (next.ongoing ? "正在进行" : next.distance < 1440 ? "今天" : `${Math.floor(next.distance / 1440)} 天后`) : "暂无课程";
     box.innerHTML = `
       <button class="priority-item" type="button" data-priority-act="task" ${task ? "" : "disabled"}>
@@ -583,11 +596,12 @@ const App = (() => {
     } else {
       cdBox.innerHTML = todoWithDue.map(t => {
         const days = daysUntil(t.due);
-        const urgent = days !== null && days <= 3;
+        const overdue = days !== null && days < 0;
+        const urgent = days !== null && days <= 3;   // 逾期自然落在 <=3 里，同样算紧急
         return `<div class="cd-item ${urgent ? "urgent" : ""}">
-          <div class="cd-num"><b>${days === null ? "—" : Math.max(days, 0)}</b><span>${days === null ? "" : "天"}</span></div>
-          <div class="cd-info"><b>${esc(t.title)}</b><span>${fmtDate(t.due)} · ${PRIORITY_MAP[t.priority]}优先级</span></div>
-          ${urgent ? '<span class="tag-chip pri-high" style="margin-left:auto">紧急</span>' : ""}
+          <div class="cd-num"><b>${days === null ? "—" : Math.abs(days)}</b><span>${days === null ? "" : "天"}</span></div>
+          <div class="cd-info"><b>${esc(t.title)}</b><span>${fmtDate(t.due)} · ${formatDue(days)} · ${PRIORITY_MAP[t.priority]}优先级</span></div>
+          ${overdue ? '<span class="tag-chip pri-high" style="margin-left:auto">已逾期</span>' : urgent ? '<span class="tag-chip pri-high" style="margin-left:auto">紧急</span>' : ""}
         </div>`;
       }).join("");
     }
@@ -611,18 +625,28 @@ const App = (() => {
     // 专注趋势（同样放到空闲帧）
     _idleRender(() => renderFocusTrend($("#focusTrendChart"), 7));
 
-    // 今日待办
-    const todayTasks = todos.filter(t => daysUntil(t.due) === 0).slice(0, 6);
+    // 今日待办：⚠️ 旧写法只收 days === 0，逾期任务（最该处理的）反而不出现。
+    // 改为收 days <= 0，并按截止日升序——逾期最久的排最前。
+    // 另：本套主题是纯黑白灰（--stamp-red / --danger 都定义成 #ffffff，设计上无彩色），
+    // 所以逾期不能靠红色标注，得用文字「已逾期 N 天」+ 已有的 pri-high 强调样式。
+    const todayTasks = todos
+      .filter(t => { const d = daysUntil(t.due); return d !== null && d <= 0; })
+      .sort((a, b) => (daysUntil(a.due) ?? 0) - (daysUntil(b.due) ?? 0))
+      .slice(0, 6);
     const ttBox = $("#todayTasks");
     if (!todayTasks.length) {
       ttBox.innerHTML = `<div class="empty-state"><p>今天没有到期任务，轻松的一天</p></div>`;
     } else {
-      ttBox.innerHTML = todayTasks.map(t => `
+      ttBox.innerHTML = todayTasks.map(t => {
+        const days = daysUntil(t.due);
+        const overdue = days !== null && days < 0;
+        return `
         <div class="todo-item">
           <span class="todo-dot" style="background:${t.priority === "high" ? "var(--ink)" : t.priority === "mid" ? "var(--ink-2)" : "var(--ink-3)"}"></span>
           <span class="todo-pri-${t.priority}">${esc(t.title)}</span>
-          <span class="todo-date">${fmtDate(t.due)}</span>
-        </div>`).join("");
+          <span class="todo-date ${overdue ? "tag-chip pri-high" : ""}">${overdue ? formatDue(days) : fmtDate(t.due)}</span>
+        </div>`;
+      }).join("");
     }
 
     // 最近笔记
@@ -731,7 +755,8 @@ const App = (() => {
     box.innerHTML = sorted.map(t => {
       const days = t.due ? daysUntil(t.due) : null;
       const overdue = days !== null && days < 0 && t.status !== "done";
-      const dueTxt = t.due ? (overdue ? `已逾期 ${-days} 天` : days === 0 ? "今天到期" : `剩 ${days} 天`) : "无期限";
+      // 已完成的任务不再提示「已逾期」：交都交了，再标逾期是误导
+      const dueTxt = t.due ? formatDue(t.status === "done" ? Math.max(days, 0) : days) : "无期限";
       return `<div class="task-row ${t.status === "done" ? "task-done" : ""}">
         <button class="mini-btn check" data-act="toggle-task" data-id="${t.id}" title="切换状态">${t.status === "done" ? "↩" : "✓"}</button>
         <div class="course-info">
