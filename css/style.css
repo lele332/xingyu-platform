@@ -2592,9 +2592,21 @@ body { transition: background-color 0.4s var(--ease-out), color 0.4s var(--ease-
 .exam-next-progress i { display: block; height: 100%; background: var(--ink); border-radius: 2px; transition: width .8s var(--ease-out); }
 .exam-next.none { text-align: left; }
 .exam-next.none .exam-next-title { font-size: 15px; }
+/* ⚠️ 2026-09-05：空态下的「过期未处理」副标题。
+   与 exam-next-date 同规格（12px / ink-2 / mono），不抢主标题视觉层级。 */
+.exam-next-sub { font-size: 12px; color: var(--ink-2); margin-top: 4px; font-family: var(--font-mono); }
 .exam-stats { display: flex; gap: 18px; margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--rule); }
 .exam-stats span { font-size: 11.5px; color: var(--ink-2); font-family: var(--font-mono); }
 .exam-stats b { color: var(--ink); font-weight: 700; font-size: 14px; font-variant-numeric: tabular-nums; }
+/* ⚠️ 2026-09-05：「已过期」统计项。
+   本套主题纯黑白灰（--stamp-red / --danger 都定义成 #ffffff，设计上无彩色），
+   不能靠红色警示，改用加粗 + 点状下划线表达「这项需要你处理」。 */
+.exam-stats .exam-stat-overdue { color: var(--ink); font-weight: 700; }
+.exam-stats .exam-stat-overdue b {
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+}
 
 .exam-item { display: flex; align-items: center; gap: 14px; padding: 12px 4px; border-bottom: 1px dashed var(--rule); }
 .exam-item:last-child { border: none; }
@@ -2663,6 +2675,16 @@ body { transition: background-color 0.4s var(--ease-out), color 0.4s var(--ease-
 }
 .exam-cal-chip b { color: var(--ink); font-weight: 700; font-variant-numeric: tabular-nums; }
 .exam-cal-chip.accent { border-color: var(--ink); background: var(--fill-2); color: var(--ink); }
+/* ⚠️ 2026-09-05：「N 项已过期未处理」。
+   本套主题纯黑白灰（--stamp-red / --danger 都定义成 #ffffff，设计上无彩色），
+   不能用红色警示，改用点状下划线（同 .exam-stat-overdue 的处理），
+   让它在几个 chip 里一眼能被认出是「需要你处理」，又不破坏无彩色的克制感。 */
+.exam-cal-chip.exam-chip-overdue { border-color: var(--ink); color: var(--ink); font-weight: 700; }
+.exam-cal-chip.exam-chip-overdue b {
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+}
 
 /* ============================================================
    文献资料改版：顶级期刊 + Z-Library + 沉浸式阅读 + 知识图文并茂

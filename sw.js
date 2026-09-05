@@ -1,5 +1,5 @@
 // 缓存版本：修改 CORE 或缓存策略时必须递增，否则客户端不会更新
-const CACHE = "xingyu-static-20260905-10";
+const CACHE = "xingyu-static-20260905-11";
 
 // 预缓存清单 = index.html 实际加载的资源（2026-08-28 实测校准）
 // 注意：旧清单里的 js/idb.js、js/backup.js、js/app-core.js、js/views-*.js 均不存在

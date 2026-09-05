@@ -3468,18 +3468,29 @@ const App = (() => {
   function renderExamSummary() {
     const all = Store.getAll("exams");
     const done = all.filter(e => e.status === "done").length;
-    const upcoming = all.filter(e => e.status !== "done" && daysUntil(e.date) >= 0).length;
-    const next = all.filter(e => e.status !== "done" && daysUntil(e.date) >= 0)
+    // ⚠️ 2026-09-05：旧写法 upcoming 只收 daysUntil >= 0，
+    // 于是「日期已过但没标记完成」的考试既不算已完成、也不算未开始，
+    // 从统计里直接消失 —— 页面上「已完成 + 未开始 ≠ 全部」，数字对不上。
+    // 改为：先取全部未完成，再把其中已过期的拆出来单独统计，
+    // 保证 done + upcoming + overdue 恒等于 all.length。
+    // （无日期的 daysUntil 返回 null，null < 0 为 false，归入 upcoming，不会漏）
+    const pending = all.filter(e => e.status !== "done");
+    const overdue = pending.filter(e => { const d = daysUntil(e.date); return d !== null && d < 0; }).length;
+    const upcoming = pending.length - overdue;
+    const next = pending
+      .filter(e => { const d = daysUntil(e.date); return d !== null && d >= 0; })
       .sort((a, b) => String(a.date || "").localeCompare(String(b.date || "")))[0];
     const box = $("#examSummary");
     if (!next) {
       box.innerHTML = `
         <div class="exam-next none">
           <div class="exam-next-label">下一个关键时刻</div>
-          <div class="exam-next-title">暂无进行中的日程</div>
+          <div class="exam-next-title">${overdue ? `有 ${overdue} 项日程已过期` : "暂无进行中的日程"}</div>
+          ${overdue ? `<div class="exam-next-sub">考试已过但尚未标记完成，去检查一下</div>` : ""}
           <div class="exam-stats">
             <span><b>${done}</b> 已完成</span>
             <span><b>${upcoming}</b> 未开始</span>
+            ${overdue ? `<span class="exam-stat-overdue"><b>${overdue}</b> 已过期</span>` : ""}
             <span><b>${all.length}</b> 全部</span>
           </div>
         </div>`;
@@ -3512,6 +3523,7 @@ const App = (() => {
         <div class="exam-stats">
           <span><b>${done}</b> 已完成</span>
           <span><b>${upcoming}</b> 未开始</span>
+          ${overdue ? `<span class="exam-stat-overdue"><b>${overdue}</b> 已过期</span>` : ""}
           <span><b>${all.length}</b> 全部</span>
         </div>
       </div>`;
@@ -3600,12 +3612,21 @@ const App = (() => {
     const nextInWindow = Store.getAll("exams")
       .filter(e => e.status !== "done" && daysUntil(e.date) >= 0)
       .sort((a, b) => String(a.date || "").localeCompare(String(b.date || "")))[0];
+    // ⚠️ 2026-09-05：只统计「还没到」的日程，过期未完成的会被 nextInWindow 漏掉。
+    // 于是当唯一剩下的日程是过期未标记时，下面会显示「暂无进行中日程」——
+    // 用户明明有一条考完忘了标记完成的日程，却被告知没事。
+    // 这里单独算出过期数，用来把那句误导性文案换成「N 项已过期未处理」。
+    const overdueCount = Store.getAll("exams")
+      .filter(e => { const d = daysUntil(e.date); return e.status !== "done" && d !== null && d < 0; })
+      .length;
     const days = nextInWindow ? daysUntil(nextInWindow.date) : null;
     let html = `<div class="exam-cal-chip">本月日程 <b>${monthEvents.length}</b></div>`;
     html += `<div class="exam-cal-chip">未来日程 <b>${Store.getAll("exams").filter(e => e.status !== "done" && daysUntil(e.date) >= 0).length}</b></div>`;
     html += nextInWindow
       ? `<div class="exam-cal-chip accent">距「${esc(nextInWindow.title)}」${days === 0 ? "今天" : days + " 天"}</div>`
-      : `<div class="exam-cal-chip">暂无进行中日程</div>`;
+      : overdueCount
+        ? `<div class="exam-cal-chip exam-chip-overdue"><b>${overdueCount}</b> 项已过期未处理</div>`
+        : `<div class="exam-cal-chip">暂无进行中日程</div>`;
     box.innerHTML = html;
   }
 
