@@ -4006,10 +4006,22 @@ const App = (() => {
         e.target.value = "";
         return;
       }
+      // ⚠️ 导入是整体覆盖，选错文件的代价太大 —— 删除笔记/清空数据都有 confirm，
+      // 导入更应该有。放在读文件之前问，省得读完才弹窗。
+      // （store 层另有两道保险：校验这是不是星屿备份 + 自动留一份导入前备份）
+      if (!confirm("导入将覆盖当前所有数据（课表 / 成绩 / 笔记等），确定继续吗？\n\n系统会自动保留一份导入前的备份。")) {
+        e.target.value = "";
+        return;
+      }
       const reader = new FileReader();
       reader.onload = () => {
         if (Store.importAll(reader.result)) { toast("数据导入成功", "ok"); renderCurrent(); renderProfile(); }
-        else toast("导入失败：JSON 格式不正确", "err");
+        else {
+          // 用 store 给的具体原因（格式不对 / 不是星屿备份 / 空文件…），
+          // 比写死的「JSON 格式不正确」好排查
+          const reason = Store.getLastError ? Store.getLastError() : "";
+          toast(reason || "导入失败：JSON 格式不正确", "err", { duration: 5000 });
+        }
       };
       reader.readAsText(file);
       e.target.value = "";

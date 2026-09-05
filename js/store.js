@@ -482,6 +482,36 @@ const Store = (() => {
     return c ? c.name : "";
   }
 
+  // 把当前数据另存为一份带时间戳的备份，只保留最近 3 份。
+  // importAll / clearAll 共用——覆盖用户数据前必须先留后路。
+  function snapshotBackup() {
+    try {
+      const backup = JSON.parse(JSON.stringify(data));
+      if (backup.settings) backup.settings.apiKey = "";
+      const backupKey = KEY + "_backup_" + Date.now();
+      storageSet(backupKey, JSON.stringify(backup));
+      const backups = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith(KEY + "_backup_")) backups.push(key);
+      }
+      backups.sort().slice(0, -3).forEach(storageRemove);
+      return backupKey;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // ⚠️ 2026-09-05：判断一份 JSON 是否真是星屿备份。
+  // 没有这道校验直接喂给 normalizeData 是灾难：normalizeData 对任意 object 都接受，
+  // 缺失字段用空值填满 => 导入一个 {"hello":1} 就会把课表/成绩/笔记全部静默清空。
+  function looksLikeXingyuData(parsed) {
+    if (!isRecord(parsed)) return false;
+    if (parsed.schemaVersion != null) return true;          // exportAll 会写
+    if (isRecord(parsed.profile) || isRecord(parsed.settings)) return true;
+    return ARRAY_KEYS.some(key => Array.isArray(parsed[key]));
+  }
+
   function exportAll(options = {}) {
     const snapshot = JSON.parse(JSON.stringify(data));
     snapshot.schemaVersion = SCHEMA_VERSION;
@@ -494,6 +524,15 @@ const Store = (() => {
   function importAll(json) {
     try {
       const parsed = JSON.parse(json);
+      if (!isRecord(parsed)) { lastError = "导入失败：文件内容不是有效的 JSON 对象"; return false; }
+      // ⚠️ 校验：不是星屿备份就拒绝，绝不能让 normalizeData 用空值覆盖掉现有数据。
+      // （importAll 还被 sync.js / 服务端同步自动调用，这里校验是最后一道防线）
+      if (!looksLikeXingyuData(parsed)) {
+        lastError = "导入失败：这不像是星屿的备份文件（未找到任何已知数据字段）";
+        return false;
+      }
+      // 覆盖前自动留一份备份，误导入还能找回
+      snapshotBackup();
       const currentSettings = data && isRecord(data.settings) ? data.settings : defaults().settings;
       data = normalizeData(parsed);
       if (!parsed.settings || !parsed.settings.apiKey) data.settings.apiKey = currentSettings.apiKey || "";
@@ -505,18 +544,7 @@ const Store = (() => {
     }
   }
   function clearAll() {
-    const backup = JSON.parse(JSON.stringify(data));
-    if (backup.settings) backup.settings.apiKey = "";
-    const backupKey = KEY + "_backup_" + Date.now();
-    storageSet(backupKey, JSON.stringify(backup));
-    try {
-      const backups = [];
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key && key.startsWith(KEY + "_backup_")) backups.push(key);
-      }
-      backups.sort().slice(0, -3).forEach(storageRemove);
-    } catch (e) {}
+    snapshotBackup();   // 与 importAll 共用同一套备份逻辑
     data = defaults();
     save();
   }
@@ -556,7 +584,9 @@ const Store = (() => {
 
   return { load, save, onSave, onDelete, uid, getAll, add, update, remove, replaceAll,
            getProfile, setProfile, getSettings, setSettings, getCourseName,
-           exportAll, importAll, clearAll, getStorageInfo, getTrash, restoreTrash, emptyTrash };
+           exportAll, importAll, clearAll, getStorageInfo, getTrash, restoreTrash, emptyTrash,
+           // 导入失败的具体原因（0/多字节、格式不对、缺少数据字段…），供 UI 直接展示
+           getLastError: function () { return lastError; } };
 })();
 
 Store.load();
