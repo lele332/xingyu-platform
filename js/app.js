@@ -576,7 +576,9 @@ const App = (() => {
     const dueToday = todos.filter(t => daysUntil(t.due) === 0);
     const notes = Store.getAll("notes");
     const pomos = Store.getAll("pomodoros").filter(p => p.startAt && localDateKey(p.startAt) === todayISO());
-    const pomoMin = pomos.reduce((s, p) => s + (p.minutes || 0), 0);
+    // 首页「专注分钟」也要排除休息段，口径与专注页保持一致
+    // （同为 isFocusRecord，避免首页和专注页两个数字对不上）
+    const pomoMin = pomos.filter(isFocusRecord).reduce((s, p) => s + (p.minutes || 0), 0);
     $("#heroStats").innerHTML = `
       <div class="hstat"><b data-count="${todos.length}">0</b><span>${t("hero.todo")}</span></div>
       <div class="hstat"><b data-count="${dueToday.length}">0</b><span>${t("hero.due")}</span></div>
@@ -673,7 +675,7 @@ const App = (() => {
     for (let i = days - 1; i >= 0; i--) {
       const d = new Date(); d.setDate(d.getDate() - i);
       const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-      const mins = pomos.filter(p => p.startAt && localDateKey(p.startAt) === key).reduce((s, p) => s + (p.minutes || 0), 0);
+      const mins = pomos.filter(p => p.startAt && isFocusRecord(p) && localDateKey(p.startAt) === key).reduce((s, p) => s + (p.minutes || 0), 0);
       labels.push(d.getDate() + "日");
       values.push(mins);
     }
@@ -993,13 +995,22 @@ const App = (() => {
     renderFocusHistory();
   }
 
+  /* ⚠️ 2026-09-05：休息段也会被写进 pomodoros（type:"break"，带完整分钟数），
+     但「专注时长」不该把休息算进去。
+     旧代码的口径是打架的：统计番茄个数时排除了休息（todayCount 用 type === "focus"），
+     算分钟数时却没排除 —— 于是跑 4 个 25 分钟番茄，界面显示「4 个番茄 / 120 分钟」，
+     而 4×25 只有 100 分钟，多出来的 20 分钟是 4 段休息，虚高 20%。
+     涉及四处：首页 hero 专注分钟、专注趋势图、renderFocusStats 三个指标、周图表。
+     这里用 !== "break" 而不是 === "focus"：早期记录没有 type 字段，按专注处理，向后兼容。 */
+  function isFocusRecord(p) { return !!p && p.type !== "break"; }
+
   function renderFocusStats() {
     const pomos = Store.getAll("pomodoros");
     const today = pomos.filter(p => p.startAt && localDateKey(p.startAt) === todayISO());
     const todayCount = today.filter(p => p.type === "focus" && p.completed !== false).length;
-    const todayMin = today.reduce((s, p) => s + (p.minutes || 0), 0);
+    const todayMin = today.filter(isFocusRecord).reduce((s, p) => s + (p.minutes || 0), 0);
     const weekMin = pomos.filter(p => {
-      if (!p.startAt) return false;
+      if (!p.startAt || !isFocusRecord(p)) return false;
       const d = new Date(p.startAt);
       d.setHours(0, 0, 0, 0);
       const now = new Date();
@@ -1007,7 +1018,7 @@ const App = (() => {
       const diff = (now - d) / 86400000;
       return diff >= 0 && diff < 7;
     }).reduce((s, p) => s + (p.minutes || 0), 0);
-    const totalMin = pomos.reduce((s, p) => s + (p.minutes || 0), 0);
+    const totalMin = pomos.filter(isFocusRecord).reduce((s, p) => s + (p.minutes || 0), 0);
     $("#pomoTodayCount").textContent = todayCount;
     $("#pomoTodayMin").textContent = todayMin;
     $("#focusStatsRow").innerHTML = `
@@ -1023,7 +1034,7 @@ const App = (() => {
     for (let i = 6; i >= 0; i--) {
       const d = new Date(); d.setDate(d.getDate() - i);
       const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-      const mins = pomos.filter(p => p.startAt && localDateKey(p.startAt) === key).reduce((s, p) => s + (p.minutes || 0), 0);
+      const mins = pomos.filter(p => p.startAt && isFocusRecord(p) && localDateKey(p.startAt) === key).reduce((s, p) => s + (p.minutes || 0), 0);
       labels.push(d.getDate() + "日");
       values.push(mins);
     }
