@@ -156,14 +156,58 @@ button, input, textarea, select {
   opacity: .72;
 }
 
+/* ⚠️ 2026-09-05 修复：侧边栏放不下，底部模块没人知道
+   实测 20 个入口内容高 1115px，而 1080p 全屏时 .sidebar-nav 可视区只有 864px
+   （900px 窗更惨，只有 684px）。也就是棱镜艺境 / 云门智界 / 折艺工坊 /
+   守御界 / 粒子星云 / 工具箱 这 6 个入口**在任何窗口高度下都藏在视野外**。
+   旧写法还把滚动条整个藏了（scrollbar-width:none + ::-webkit-scrollbar{display:none}），
+   用户既看不到「下面还有内容」的提示，也没有可拖拽的把手 —— 等于这 6 个功能不存在。
+   改为：细滚动条（可拖拽）+ 上下渐隐遮罩（视觉信号）。 */
 .sidebar-nav {
   padding: 6px 10px 12px;
   gap: 12px;
-  scrollbar-width: none;
+  scrollbar-width: thin;
+  /* --ink-3 深浅两套主题都是中性灰 #8a8a8a，用它可以同时适配，不用写两套 */
+  scrollbar-color: color-mix(in srgb, var(--ink-3) 42%, transparent) transparent;
+}
+
+.sidebar-nav:hover {
+  scrollbar-color: color-mix(in srgb, var(--ink-3) 72%, transparent) transparent;
 }
 
 .sidebar-nav::-webkit-scrollbar {
-  display: none;
+  width: 6px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--ink-3) 42%, transparent);
+  border-radius: 3px;
+}
+
+.sidebar-nav:hover::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--ink-3) 72%, transparent);
+}
+
+/* 渐隐遮罩：给「上面/下面还有内容」一个不说自明的信号（iOS 同款做法）。
+   can-scroll-up / can-scroll-down 由 JS 按滚动位置挂，滚到头自动淡出。
+   用 mask 而不是盖一层渐变 div —— 盖层会吃掉点击，且要额外对齐毛玻璃底色。 */
+.sidebar-nav.can-scroll-up.can-scroll-down {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 16px, #000 calc(100% - 24px), transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 16px, #000 calc(100% - 24px), transparent 100%);
+}
+
+.sidebar-nav.can-scroll-up:not(.can-scroll-down) {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 16px);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 16px);
+}
+
+.sidebar-nav.can-scroll-down:not(.can-scroll-up) {
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 24px), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 24px), transparent 100%);
 }
 
 .nav-group {

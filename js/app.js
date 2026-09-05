@@ -258,6 +258,48 @@ const App = (() => {
     });
   }
 
+  /* ⚠️ 2026-09-05：侧边栏装不下，底部 6 个模块用户根本看不到
+     实测 20 个入口内容高 1115px，而 .sidebar-nav 可视区：
+       视窗 900px  -> 684px（溢出 431px）
+       视窗 1080px -> 864px（溢出 251px）
+     即任何常见窗口高度下，棱镜艺境/云门智界/折艺工坊/守御界/粒子星云/工具箱
+     都在视野外；旧样式还把滚动条整个藏了，用户没有任何「下面还有」的提示。
+     下面两个函数配合 apple.css 的细滚动条 + 上下渐隐遮罩解决：
+       ① scrollNavIntoView  —— 切视图时把当前项滚进可视区，高亮不会跑到看不见处
+       ② updateNavScrollHints —— 维护 can-scroll-up/down 开关类，滚到头遮罩自动淡出 */
+  function updateNavScrollHints() {
+    const nav = $(".sidebar-nav");
+    if (!nav) return;
+    const canDown = nav.scrollHeight - nav.clientHeight - nav.scrollTop > 2;
+    const canUp = nav.scrollTop > 2;
+    nav.classList.toggle("can-scroll-down", canDown);
+    nav.classList.toggle("can-scroll-up", canUp);
+  }
+
+  function scrollNavIntoView(el) {
+    const nav = $(".sidebar-nav");
+    if (!nav || !el) return;
+    const r = el.getBoundingClientRect();
+    const nr = nav.getBoundingClientRect();
+    const pad = 8;
+    if (r.top < nr.top + pad) nav.scrollTop -= (nr.top + pad - r.top);
+    else if (r.bottom > nr.bottom - pad) nav.scrollTop += (r.bottom - (nr.bottom - pad));
+    updateNavScrollHints();
+  }
+
+  // 滚动 / 窗口尺寸变化都要重算遮罩开关；键盘 Tab 聚焦时浏览器会自动滚动，
+  // 同样要跟上（focusin 冒泡到 nav 即可覆盖所有 nav-item）。
+  (function bindNavScrollHints() {
+    const nav = $(".sidebar-nav");
+    if (!nav) return;
+    nav.addEventListener("scroll", updateNavScrollHints, { passive: true });
+    nav.addEventListener("focusin", e => scrollNavIntoView(e.target));
+    window.addEventListener("resize", updateNavScrollHints, { passive: true });
+    // 布局稳定后再算一次：字体/图标加载完高度可能变
+    requestAnimationFrame(updateNavScrollHints);
+    setTimeout(updateNavScrollHints, 1200);
+  })();
+
   function switchView(view) {
     if (view === currentView) { renderCurrent(); return; }
     const prev = $("#view-" + currentView);
@@ -273,6 +315,9 @@ const App = (() => {
       if (active) n.setAttribute("aria-current", "page");
       else n.removeAttribute("aria-current");
     });
+    // 侧边栏装不下全部 20 项，切完高亮要把当前项滚进可视区，
+    // 否则程序化/键盘切换时高亮会落在视野外，用户以为没切成功。
+    scrollNavIntoView(document.querySelector(".nav-item.active"));
     $$(".mobile-tab").forEach(tab => {
       const target = tab.dataset.mobileView;
       const active = target === view || (target === "more" && !["dashboard", "courses", "notes", "focus"].includes(view));
