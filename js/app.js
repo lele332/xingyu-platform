@@ -1059,6 +1059,11 @@ const App = (() => {
   }
 
   function startPomo() {
+    // ⚠️ 2026-09-05：休息进行中，按钮文案是「跳过休息」（completePomo 里设的），
+    // 但旧逻辑只有 running -> pausePomo，点了会变成「已暂停 / 继续」——
+    // 用户想跳过休息，却被卡在暂停态，得再点一次「继续」把休息走完。
+    // 文案和行为对不上。休息是一次性的，跳过就该直接结束，不该有暂停语义。
+    if (pomoState.running && pomoState.mode === "break") { skipBreak(); return; }
     if (pomoState.running) { pausePomo(); return; }
     if (pomoState.paused) { resumePomo(); return; }
 
@@ -1239,6 +1244,26 @@ const App = (() => {
     $(".pomodoro-card").classList.remove("working");
     $("#pomoMode").textContent = "已暂停";
     if (window.AnimeFX) AnimeFX.pomoPulse();
+  }
+
+  // 跳过休息：直接结束当前休息段，回到「开始专注」。
+  // 不写 pomodoros 记录 —— 跳过的休息不是完成的休息，记进去会污染专注统计。
+  function skipBreak() {
+    clearInterval(pomoTimer); pomoTimer = null;
+    pomoState.running = false;
+    pomoState.paused = false;
+    pomoState.mode = "work";
+    pomoState.total = (+$("#pomoWork").value || 25) * 60;
+    pomoState.remain = pomoState.total;
+    pomoState.segmentRemain = null;
+    pomoState.startedAt = null;
+    pomoState.recordedMinutes = 0;
+    $("#pomoMode").textContent = "休息已跳过";
+    $("#btnPomoStart").textContent = "开始专注";
+    $("#btnPomoStart").classList.remove("btn-danger");
+    const card = $(".pomodoro-card");
+    if (card) card.classList.remove("working");
+    updatePomoUI();
   }
 
   function tickPomo() {
