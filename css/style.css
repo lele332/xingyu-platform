@@ -1688,6 +1688,23 @@ button:focus:not(:focus-visible) { outline: none; }
 .grade-row:last-child, .skill-row:last-child, .project-row:last-child { border: none; }
 .grade-info { flex: 1; } .grade-info b { font-size: 13.5px; font-weight: 600; color: var(--ink); } .grade-info span { font-size: 11.5px; color: var(--ink-2); font-family: var(--font-mono); letter-spacing: 0.3px; }
 .grade-score { font-family: var(--font); font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--ink); }
+/* ⚠️ 2026-09-05：分数分档样式。
+   旧写法用 inline style 上 --success / --warning / --danger，两个问题：
+     1) 层级反了 —— 当前浅色主题下 --success 是 #333（较淡）、--warning 是 #111（更深），
+        结果「90 分以上」比「60-89 分」还淡，高分反而不显眼。
+     2) 挂科看不出来 —— <60 用 --danger(#111) 与 60-89 的 --warning(#111) 同色，
+        有没有挂科一眼分不出，而挂科恰恰是最需要被看见的。
+   本套主题纯黑白灰（设计上无彩色），不能用红绿，改用「墨色深浅」排出层级：
+     高分最深最显眼 -> 及格中灰 -> 不及格回到最深 + 点状下划线（同 .exam-stat-overdue 的处理）。
+   用 class 而不是 inline style，主题切换时才能跟着变。 */
+.grade-score.is-high { color: var(--ink); }
+.grade-score.is-pass { color: var(--ink-2); }
+.grade-score.is-fail {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+}
 
 .skill-bar-wrap { flex: 1; display: flex; align-items: center; gap: 10px; }
 .skill-bar { flex: 1; height: 6px; border-radius: 3px; background: var(--paper-sunk); overflow: hidden; }

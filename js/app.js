@@ -1457,7 +1457,7 @@ const App = (() => {
       box.innerHTML = grades.map(g => `
         <div class="grade-row">
           <div class="grade-info"><b>${esc(g.subject)} · ${esc(g.name)}</b><br><span>${esc(g.semester || "")} · ${g.credit}学分</span></div>
-          <span class="grade-score" style="color:${g.score >= 90 ? "var(--success)" : g.score >= 60 ? "var(--warning)" : "var(--danger)"}">${g.score}</span>
+          <span class="grade-score ${g.score >= 90 ? "is-high" : g.score >= 60 ? "is-pass" : "is-fail"}">${g.score}</span>
           <div class="row-actions">
             <button class="mini-btn" data-act="edit-grade" data-id="${g.id}">✎</button>
             <button class="mini-btn del" data-act="del-grade" data-id="${g.id}">✕</button>
