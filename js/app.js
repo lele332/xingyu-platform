@@ -2075,9 +2075,42 @@ const App = (() => {
     });
   }
 
+  /* 引导层被「非按钮路径」关闭时的兜底：只落标记，绝不动数据。
+     见 closeModal() 里的说明 —— 之所以不复用 finishOnboarding()，是因为后者带
+     Store.clearAll()，而按 Esc 的用户根本没做过「是否保留演示数据」这个选择。 */
+  function dismissOnboardingSilently() {
+    try {
+      const nameEl = $("#onboardName"), goalEl = $("#onboardGoal");
+      const name = (nameEl && nameEl.value || "").trim();
+      const goal = (goalEl && goalEl.value || "").trim();
+      // 只保存用户真的填了的内容，避免把空串写进去把已有资料冲掉
+      if (name || goal) {
+        const patch = {};
+        if (name) patch.name = name;
+        if (goal) patch.goal = goal;
+        Store.setProfile(patch);   // setProfile 内部是 Object.assign 合并，不会丢字段
+      }
+    } catch (e) {}
+    try {
+      localStorage.setItem("zero_onboarded_v3", "1");
+      localStorage.setItem("zero_onboarded_v4", "1");
+    } catch (e) {}
+    try { onboardReplay = false; } catch (e) {}
+  }
+
   function closeModal(id) {
     const m = $("#" + id);
     if (!m || !m.classList.contains("show")) return;
+    /* ⚠️ 2026-09-05：引导层「静默关闭」的兜底。
+       只有点「开始使用星屿」/「稍后设置」才会走 finishOnboarding() 去写
+       zero_onboarded_v4 标记；而按 Esc、点遮罩这两条路径是直接调 closeModal 的，
+       标记永远写不进去 —— 于是用户明明已经关掉了引导，下次启动又被挡一次，
+       而且他不知道该怎么永久关掉（必须去点那两个按钮之一），Esc 看起来像失灵。
+       放在 closeModal 里兜底而不是去改每一条关闭路径，是因为所有关闭方式
+       （Esc / 点遮罩 / 将来新增的任何入口）最终都要经过这里，补一处就都覆盖了。 */
+    if (id === "onboardingModal" && !localStorage.getItem("zero_onboarded_v4")) {
+      try { dismissOnboardingSilently(); } catch (e) {}
+    }
     m.classList.add("closing");
     const sheet = m.querySelector(".modal");
     const finish = () => {
