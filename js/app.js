@@ -4001,17 +4001,38 @@ const App = (() => {
         const scored = tasks.filter(t => t.status !== "done").map(t => {
           let s = 0;
           if (t.priority === "high") s += 100; else if (t.priority === "mid") s += 50;
-          if (t.due) { const d = (new Date(t.due) - Date.now()) / 86400000; if (d < 1) s += 200; else if (d < 3) s += 120; else if (d < 7) s += 60; }
+          /* ⚠️ 2026-09-05：与 ai.js 的 localPriority() 是同一个 BUG 的两份拷贝
+             （成因详见那边的注释，这里不复述）。原本写的是
+                 (new Date(t.due) - Date.now()) / 86400000
+             两个问题：new Date("YYYY-MM-DD") 按 UTC 解析而 Date.now() 是本地
+             时间戳（东八区差 8 小时，「明天到期」被算成 0.7 天）；且 d < 1
+             一个分支同时兜住「已逾期」和「今天到期」，两者同分。
+             于是这里会出现自相矛盾的一幕：下面第 4011 行用 daysUntil() 明明
+             显示着「已逾期」，排序却把它和「剩 1 天」的任务排在一起。
+             统一改用 daysUntil()（两端都归零到本地 0 点，与显示部分同口径），
+             并拆出 d < 0 单独给最高分——逾期是最该先处理的那件。 */
+          const d = daysUntil(t.due);
+          if (d !== null) {
+            if (d < 0) s += 400 + Math.min(100, -d);
+            else if (d < 1) s += 200;
+            else if (d < 3) s += 120;
+            else if (d < 7) s += 60;
+          }
           return { t, s };
         }).sort((a, b) => b.s - a.s);
         toast("已按 DDL + 优先级智能排序（本地规则）", "ok");
         // 一次性 join 赋值：循环里 innerHTML += 每次都会整体重新解析，任务多时 O(n²)
         const rows = scored.map((item, i) => {
           const t = item.t;
+          // ⚠️ 2026-09-05：下面显示期限必须走项目统一的 formatDue()。
+          // 原先这里内联了一套（null->无期限 / <0->已逾期 / 其余->剩 N 天），
+          // 与普通任务列表的 formatDue 对不上：同一条任务在列表里是「今天到期 /
+          // 已逾期 3 天」，点一下「AI 智能排序」就变成「剩 0 天 / 已逾期」，
+          // 天数还丢了 —— 用户会以为排序把数据排坏了。
           const days = t.due ? daysUntil(t.due) : null;
           return `<div class="task-row">
             <span class="tag-chip" style="min-width:26px;justify-content:center">${i + 1}</span>
-            <div class="course-info"><b>${esc(t.title)}</b><span>${esc(Store.getCourseName(t.courseId) || "无课程")} · ${days === null ? "无期限" : days < 0 ? "已逾期" : `剩 ${days} 天`}</span></div>
+            <div class="course-info"><b>${esc(t.title)}</b><span>${esc(Store.getCourseName(t.courseId) || "无课程")} · ${formatDue(days)}</span></div>
             <span class="tag-chip pri-${esc(t.priority)}">${esc(PRIORITY_MAP[t.priority])}</span>
           </div>`;
         });

@@ -141,6 +141,20 @@ ${notesText}`;
   }
 
   /* ---------- 本地规则引擎（未配置 AI 时兜底） ---------- */
+  /* 与 app.js 的 daysUntil() 同口径：两端都归零到**本地** 0 点后再相减。
+     ⚠️ 不能直接 new Date("YYYY-MM-DD")：纯日期串会按 **UTC** 解析，而 Date.now()
+     是本地时间戳，东八区下差 8 小时。原来这里写 Math.ceil((new Date(t.due) -
+     Date.now())/86400000)，白天用着像是对的（偏移被 ceil 吸收），但边界会错一天：
+     比如凌晨 00:30 时，今天到期的任务会被算成「剩 1 天」。
+     ai.js 是独立文件，拿不到 app.js 闭包里的 daysUntil，只能自己留一份同口径实现。 */
+  function localDaysUntil(due) {
+    if (!due) return null;
+    const n = new Date(); n.setHours(0, 0, 0, 0);
+    const d = new Date(due.length === 10 ? due + "T00:00:00" : due);
+    d.setHours(0, 0, 0, 0);
+    return Math.ceil((d - n) / 86400000);
+  }
+
   function localPriority() {
     const tasks = Store.getAll("tasks").filter(t => t.status !== "done");
     const now = Date.now();
@@ -248,12 +262,12 @@ ${notesText}`;
       if (!sorted.length) return "当前没有待办任务，先去「课程作业」添加一些吧～";
       const lines = ["智能排序结果（本地规则：DDL 越近 + 优先级越高越靠前）：", ""];
       sorted.forEach((t, i) => {
-        // ⚠️ 2026-09-05：原来是 Math.max(0, 天数)，把「已逾期 N 天」抹平显示成「剩 0 天」。
-        // 而上面 localPriority() 的排序是按真实天数算的（days < 1 包含了负数，
-        // 逾期任务会拿到 +200 的最高分排到最前）——于是出现「排在第一位、却写着
-        // 剩 0 天」的矛盾：用户看不出这恰恰是已经逾期、最该先做的那件。
-        // 这是第十六轮改 app.js 时的漏网之鱼，同一个坑在项目里第三次出现。
-        const d = t.due ? Math.ceil((new Date(t.due) - Date.now()) / 86400000) : null;
+        /* ⚠️ 2026-09-05：原来是 Math.max(0, 天数)，把「已逾期 N 天」抹平显示成
+           「剩 0 天」—— 这是第十六轮改 app.js 时的漏网之鱼，同一个坑在项目里
+           第三次出现（前两次在任务列表与首要任务卡片）。
+           现在改用 localDaysUntil()，与上面 localPriority() 的排序口径一致，
+           不再出现「排在第一位、却写着剩 0 天」的矛盾。 */
+        const d = localDaysUntil(t.due);
         const dueText = d === null ? "无期限" : (d < 0 ? `已逾期 ${-d} 天` : (d === 0 ? "今天到期" : `剩 ${d} 天`));
         lines.push(`${i + 1}. [${t.priority}] ${t.title}（${t.status === "doing" ? "进行中" : "待完成"}，${dueText}）`);
       });
