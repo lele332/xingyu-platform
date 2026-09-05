@@ -4596,8 +4596,19 @@ const App = (() => {
       body: JSON.stringify({ data: Store.exportAll(), at: new Date().toISOString() })
     });
     if (!response.ok) throw new Error(`backup failed: ${response.status}`);
-    localStorage.setItem(AUTO_BACKUP_KEY, String(Date.now()));
-    const result = await response.json();
+    // ⚠️ 2026-09-05：服务端现在会做最终节流（见 server.py _save_backup）——
+    // 客户端的 6 小时节水钟记在 localStorage，新会话 / 清过缓存的设备上是空的，
+    // 节流等于不存在。服务端跳过时会返回它那边最新备份的时间，把本地时钟
+    // 对齐过去：既避免客户端每 30 分钟白问一遍，也让节流状态不再依赖
+    // 「这个浏览器之前来过」。先解析再落时钟，解析失败别把时钟写坏。
+    let result = {};
+    try { result = await response.json(); } catch (e) {}
+    if (result.skipped && result.lastAt) {
+      try { localStorage.setItem(AUTO_BACKUP_KEY, String(result.lastAt)); } catch (e) {}
+      console.info("[星屿] 距上次自动备份不足 6 小时，服务端已跳过", result.lastFile);
+      return;
+    }
+    try { localStorage.setItem(AUTO_BACKUP_KEY, String(Date.now())); } catch (e) {}
     console.info("[星屿] 本地自动备份完成", result.file);
   }
 
