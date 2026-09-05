@@ -1683,6 +1683,12 @@ button:focus:not(:focus-visible) { outline: none; }
 .gpa-box:hover { border-color: var(--ink-3); }
 .gpa-box b { font-family: var(--font); font-size: 22px; display: block; color: var(--ink); font-weight: 700; font-variant-numeric: tabular-nums; }
 .gpa-box span { font-family: var(--font-mono); font-size: 10px; color: var(--ink-3); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; display: block; }
+/* ⚠️ 2026-09-05：GPA 摘要换成「学业进度」面板（用户不需要 GPA 功能）。
+   进度条纯黑白灰：底槽用淡墨，进度用主墨色。 */
+.gpa-box.gpa-progress { cursor: pointer; }
+.gpa-bar { height: 6px; border-radius: 3px; background: var(--fill, rgba(127,127,127,.25)); margin-top: 8px; overflow: hidden; }
+.gpa-bar i { display: block; height: 100%; background: var(--ink); border-radius: 3px; transition: width .4s ease; }
+.gpa-box.is-warn b { text-decoration: underline dotted; text-underline-offset: 3px; }
 
 .grade-row, .skill-row, .project-row { display: flex; align-items: center; gap: 12px; padding: 11px 4px; border-bottom: 1px dashed var(--rule); }
 .grade-row:last-child, .skill-row:last-child, .project-row:last-child { border: none; }

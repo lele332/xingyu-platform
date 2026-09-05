@@ -1433,30 +1433,41 @@ const App = (() => {
 
   function renderGrades() {
     const grades = Store.getAll("grades");
-    const credits = grades.reduce((s, g) => s + (+g.credit || 0), 0);
-    let totalPoints = 0;
+    /* ⚠️ 2026-09-05：GPA 摘要整块换成「学业进度」面板（用户明确不需要 GPA 功能）。
+       新四格：已修学分 / 毕业进度条（点一下可设目标）/ 加权平均分 / 重修预警。
+       统计口径：同一门课可能因补考、重修或多学期出现多条记录（当前数据里还有
+       早期测试的重复），学分、挂科、平均分一律按「课程名去重、同名取最高分」
+       计算 —— 否则重复数据会把学分虚高近一倍、平均分被拉偏。
+       4.0 制 GPA 换算代码随之删除（连同它的 60/64/68/72/75/78/82/85/90 分档表）。 */
+    const best = new Map();
     grades.forEach(g => {
-      const score = +g.score || 0;
-      // 4.0 制转换
-      let gp = 0;
-      if (score >= 90) gp = 4.0;
-      else if (score >= 85) gp = 3.7;
-      else if (score >= 82) gp = 3.3;
-      else if (score >= 78) gp = 3.0;
-      else if (score >= 75) gp = 2.7;
-      else if (score >= 72) gp = 2.3;
-      else if (score >= 68) gp = 2.0;
-      else if (score >= 64) gp = 1.5;
-      else if (score >= 60) gp = 1.0;
-      totalPoints += gp * (+g.credit || 0);
+      const key = `${g.subject || ""}|${g.name || ""}`;
+      const cur = best.get(key);
+      if (!cur || (+g.score || 0) > (+cur.score || 0)) best.set(key, g);
     });
-    const gpa = credits ? (totalPoints / credits) : 0;
-    const avg = weightedAvgScore(grades);
+    const uniq = [...best.values()];
+    const credits = uniq.reduce((s, g) => s + (+g.credit || 0), 0);
+    const avg = weightedAvgScore(uniq);
+    const failed = uniq.filter(g => { const v = +g.score; return Number.isFinite(v) && v > 0 && v < 60; });
+    const goal = Math.max(1, Math.round(+(Store.getSettings().gradCreditGoal) || 160));
+    const pct = Math.min(100, Math.round(credits / goal * 100));
     $("#gpaSummary").innerHTML = `
-      <div class="gpa-box"><b>${gpa.toFixed(2)}</b><span>GPA（4.0制）</span></div>
+      <div class="gpa-box"><b>${credits}</b><span>已修学分</span></div>
+      <div class="gpa-box gpa-progress" id="gradGoalBox" title="点击设置毕业总学分目标">
+        <b>${pct}%</b><span>毕业进度 ${credits} / ${goal} 学分</span>
+        <div class="gpa-bar"><i style="width:${pct}%"></i></div>
+      </div>
       <div class="gpa-box"><b>${avg.toFixed(1)}</b><span>加权平均分</span></div>
-      <div class="gpa-box"><b>${grades.length}</b><span>成绩记录</span></div>
-      <div class="gpa-box"><b>${credits}</b><span>总学分</span></div>`;
+      <div class="gpa-box ${failed.length ? "is-warn" : ""}"><b>${failed.length}</b><span>${failed.length ? "门需重修" : "无挂科记录"}</span></div>`;
+    $("#gradGoalBox").onclick = () => {
+      const v = prompt(`毕业总学分目标（当前 ${goal}）`, String(goal));
+      if (v === null) return;
+      const n = Math.round(+v);
+      if (!Number.isFinite(n) || n <= 0) { toast("请填写有效的学分数", "err"); return; }
+      Store.setSettings({ gradCreditGoal: n });
+      renderGrades();
+      toast(`毕业学分目标已设为 ${n} 学分`, "ok");
+    };
     const box = $("#gradeList");
     if (!grades.length) {
       box.innerHTML = `<div class="empty-state"><p>还没有成绩记录</p></div>`;
