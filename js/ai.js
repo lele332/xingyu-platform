@@ -65,6 +65,8 @@ const AI = (() => {
   }
 
   function isConfigured() {
+    // 测试环境（Playwright）不打真实 API
+    try { if (navigator.webdriver) return false; } catch(e) {}
     const s = Store.getSettings();
     return isLocalAiProxyOn() || !!(s.apiKey && s.baseUrl);
   }
@@ -307,19 +309,27 @@ ${notesText}`;
   }
 
   /* ---------- 通用对话 ---------- */
+  // 多轮对话历史（保留最近 6 轮 = 12 条消息）
+  let _chatHistory = [];
+
   async function ask(freeText) {
     if (isConfigured()) {
-      const tasks = Store.getAll("tasks").filter(t => t.status !== "done");
-      const notes = Store.getAll("notes").slice().sort((a, b) => (b.updatedAt || "").localeCompare(a.updatedAt || "")).slice(0, 3);
-      const ctx = [
-        `当前待办：${tasks.length ? tasks.slice(0, 5).map(t => t.title).join("、") : "无"}。`,
-        `最近笔记：${notes.length ? notes.map(n => `${n.title}（${String(n.content || "").slice(0, 100)}）`).join("；") : "无"}。`
-      ].join("\n");
       try {
-        return await chat([
-          { role: "system", content: "你是「星屿 · 个人学习工作台」的助手，帮助大学生管理学业与生活。回答简洁、实用、用中文。" },
-          { role: "user", content: ctx + "\n\n" + freeText }
-        ]);
+        // 使用 AIContext 生成智能系统提示（含用户画像 + 学习规律 + 笔记检索）
+        let sysPrompt = "你是「星屿 · 个人学习工作台」的助手，帮助大学生管理学业与生活。回答简洁、实用、用中文。";
+        try {
+          if (typeof AIContext !== "undefined") sysPrompt = AIContext.smartSystemPrompt(freeText);
+        } catch(e) {}
+        // 维护多轮历史
+        _chatHistory.push({ role: "user", content: freeText });
+        if (_chatHistory.length > 12) _chatHistory = _chatHistory.slice(-12);
+        const messages = [{ role: "system", content: sysPrompt }, ..._chatHistory];
+        const reply = await chat(messages);
+        _chatHistory.push({ role: "assistant", content: reply });
+        if (_chatHistory.length > 12) _chatHistory = _chatHistory.slice(-12);
+        // 异步沉淀长期记忆
+        try { if (typeof AIContext !== "undefined") AIContext.rememberAsync(freeText, reply); } catch(e) {}
+        return reply;
       } catch (e) {
         throw e;
       }

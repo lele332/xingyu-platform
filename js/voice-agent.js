@@ -2577,9 +2577,19 @@
     var d = nowInfo();
     var st = S();
     var taskCount = 0, noteCount = 0;
+    var aiProfile = '', aiPatterns = '';
+    try {
+      if (typeof AIContext !== 'undefined') {
+        aiProfile = AIContext.userProfile();
+        aiPatterns = AIContext.studyPatterns();
+      }
+    } catch(e) {}
     try { taskCount = (st.getAll('tasks') || []).filter(function (t) { return t.status !== 'done'; }).length; } catch (e) {}
     try { noteCount = (st.getAll('notes') || []).length; } catch (e) {}
-    return '你是「星屿」个人学习平台的语音智能体，名字叫小星。用户用语音跟你说话，你能真正操控这个平台。\n\n' +
+    var aiCtx = '';
+    if (aiProfile) aiCtx += '【用户画像】\n' + aiProfile + '\n\n';
+    if (aiPatterns) aiCtx += '【学习规律】\n' + aiPatterns + '\n\n';
+    return aiCtx + '你是「星屿」个人学习平台的语音智能体，名字叫小星。用户用语音跟你说话，你能真正操控这个平台。\n\n' +
       '【当前时间】' + d.cn + '，现在 ' + d.hm + '。今天是 ' + d.iso + '（ISO 格式）。\n' +
       '【平台状态】未完成待办 ' + taskCount + ' 条，笔记 ' + noteCount + ' 条。\n' +
       '【平台实时数据】\n' + platformSnapshot() + '\n' +
@@ -3797,5 +3807,6 @@
     testTool: function (n, a) { return execTool(n, a); }
   };
 })();
+
 
 
