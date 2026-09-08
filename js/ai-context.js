@@ -364,6 +364,67 @@ const AIContext = (() => {
     Store.setSettings({ aiMemory: { facts: [], feedback: [] } });
   }
 
+  /* ---------- 上下文预算 ----------
+     参考 MineEcho 的 TokenLess 思路：数据量大时不 blindly 塞满 prompt，
+     而是按任务类型控制系统上下文与历史长度，保头尾、压缩中段。 */
+  const CONTEXT_SCENARIOS = [
+    { scenario: "review", patterns: [/复习|背|记忆|卡片|知识点|错题|考试|考纲/i] },
+    { scenario: "planning", patterns: [/计划|安排|优先|时间表|deadline|截止|任务|目标/i] },
+    { scenario: "troubleshooting", patterns: [/报错|错误|异常|失败|排查|修复|debug|Error|failed/i] },
+    { scenario: "research", patterns: [/搜索|调研|最新|资料|引用|来源|论文|文献|对比/i] },
+    { scenario: "writing", patterns: [/写作|论文|报告|总结|笔记|邮件|PPT|润色/i] }
+  ];
+
+  function classifyTaskScenario(text) {
+    const value = String(text || "").trim();
+    for (const item of CONTEXT_SCENARIOS) {
+      if (item.patterns.some(pattern => pattern.test(value))) return item.scenario;
+    }
+    return "general";
+  }
+
+  function compactMiddle(text, maxChars) {
+    const value = String(text || "").replace(/\n{3,}/g, "\n\n").trim();
+    const limit = Math.max(120, Number(maxChars) || 0);
+    if (value.length <= limit) return value;
+    const headChars = Math.max(80, Math.floor(limit * 0.55));
+    const tailChars = Math.max(60, Math.max(60, limit - headChars - 70));
+    return value.slice(0, headChars).trimEnd()
+      + "\n\n[星屿已压缩中间上下文，保留关键开头与结尾]\n\n"
+      + value.slice(-tailChars).trimStart();
+  }
+
+  function planContext(messages, currentMessage, options) {
+    const opts = options || {};
+    const scenario = classifyTaskScenario(currentMessage);
+    const limits = {
+      planning: { system: 4600, history: 1800 },
+      review: { system: 5200, history: 1600 },
+      troubleshooting: { system: 4200, history: 2600 },
+      research: { system: 4200, history: 2200 },
+      writing: { system: 4200, history: 2400 },
+      general: { system: 4200, history: 2200 }
+    }[scenario];
+    const systemMax = Math.max(1200, Number(opts.systemMax) || limits.system);
+    const historyMax = Math.max(600, Number(opts.historyMax) || limits.history);
+    const planned = messages.map((message, index) => {
+      const content = String(message.content || "");
+      const isCurrent = index === messages.length - 1 && message.role === "user";
+      if (isCurrent || content.length <= (message.role === "system" ? systemMax : historyMax)) return message;
+      const reduced = compactMiddle(content, message.role === "system" ? systemMax : historyMax);
+      return Object.assign({}, message, { content: reduced });
+    });
+    const rawChars = messages.reduce((sum, m) => sum + String(m.content || "").length, 0);
+    const reducedChars = planned.reduce((sum, m) => sum + String(m.content || "").length, 0);
+    return {
+      messages: planned,
+      scenario,
+      rawChars,
+      reducedChars,
+      ratio: rawChars ? Math.round(reducedChars / rawChars * 100) / 100 : 1
+    };
+  }
+
   /* ---------- 沉淀对话为记忆 ---------- */
   function rememberAsync(userText, assistantReply) {
     if (location.protocol === "file:") return;
@@ -412,6 +473,9 @@ const AIContext = (() => {
     memoryPrompt: memoryPrompt,
     memorySummary: memorySummary,
     clearLocalMemory: clearLocalMemory,
+    classifyTaskScenario: classifyTaskScenario,
+    compactMiddle: compactMiddle,
+    planContext: planContext,
     rememberAsync: rememberAsync,
     searchLongTermMemory: searchLongTermMemory
   };

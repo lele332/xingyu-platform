@@ -328,7 +328,10 @@ ${notesText}`;
         // 维护多轮历史
         _chatHistory.push({ role: "user", content: freeText });
         if (_chatHistory.length > 12) _chatHistory = _chatHistory.slice(-12);
-        const messages = [{ role: "system", content: sysPrompt }, ..._chatHistory];
+        const planned = (typeof AIContext !== "undefined" && AIContext.planContext)
+          ? AIContext.planContext([{ role: "system", content: sysPrompt }, ..._chatHistory], freeText)
+          : { messages: [{ role: "system", content: sysPrompt }, ..._chatHistory] };
+        const messages = planned.messages;
         const reply = await chat(messages);
         _chatHistory.push({ role: "assistant", content: reply });
         if (_chatHistory.length > 12) _chatHistory = _chatHistory.slice(-12);
