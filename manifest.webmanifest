@@ -5,21 +5,51 @@
   "lang": "zh-CN",
   "start_url": "./",
   "scope": "./",
+  "id": "./",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "any",
   "background_color": "#000000",
   "theme_color": "#000000",
+  "categories": ["education", "productivity", "utilities"],
+  "launch_handler": { "client_mode": "focus-existing" },
   "icons": [
+    { "src": "assets/xingyu-app-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "assets/xingyu-app-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "shortcuts": [
     {
-      "src": "assets/xingyu-app-icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "name": "开始番茄钟",
+      "short_name": "专注",
+      "description": "直接跳到番茄钟专注模式",
+      "url": "./?view=focus&shortcut=pomo",
+      "icons": [{ "src": "assets/xingyu-app-icon-192.png", "sizes": "192x192" }]
     },
     {
-      "src": "assets/xingyu-app-icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "name": "今日复习",
+      "short_name": "复习",
+      "description": "查看待复习的知识卡片",
+      "url": "./?view=notes&shortcut=srs",
+      "icons": [{ "src": "assets/xingyu-app-icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "新建笔记",
+      "short_name": "笔记",
+      "description": "创建一条新学习笔记",
+      "url": "./?view=notes&shortcut=new-note",
+      "icons": [{ "src": "assets/xingyu-app-icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "任务看板",
+      "short_name": "任务",
+      "description": "查看和管理学习任务",
+      "url": "./?view=courses&shortcut=tasks",
+      "icons": [{ "src": "assets/xingyu-app-icon-192.png", "sizes": "192x192" }]
     }
-  ]
+  ],
+  "share_target": {
+    "action": "./?share=1",
+    "method": "GET",
+    "params": { "title": "title", "text": "text", "url": "url" }
+  }
 }

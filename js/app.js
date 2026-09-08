@@ -2469,6 +2469,65 @@ const App = (() => {
     if (window.XingyuIconThemes) XingyuIconThemes.sync();
     if (window.XingyuSettingsUI) XingyuSettingsUI.sync();
     const splashEn = $("#splashSoundEnabled");
+
+    // 桌面提醒开关
+    const remEn = $("#remindersEnabled");
+    if (remEn) {
+      remEn.checked = !!(window.XingyuReminders && XingyuReminders.isEnabled());
+      remEn.addEventListener("change", function () {
+        if (remEn.checked) { if (!XingyuReminders.enable()) remEn.checked = false; }
+        else XingyuReminders.disable();
+      });
+    }
+    const btnTestRem = $("#btnTestReminder");
+    if (btnTestRem) btnTestRem.onclick = function () {
+      if (window.XingyuReminders) XingyuReminders.test();
+    };
+
+    // iCal 导出
+    const btnIcal = $("#btnExportIcal");
+    if (btnIcal) btnIcal.onclick = function () {
+      const courses = Store.getAll("courses");
+      const exams = Store.getAll("exams");
+      if (!courses.length && !exams.length) { toast("没有可导出的课程或日程", "err"); return; }
+      const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Xingyu//Study Platform//CN", "CALSCALE:GREGORIAN"];
+      const fmt = d => { const dt = new Date(d); return dt.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z"; };
+      const DAYS = { 1: "MO", 2: "TU", 3: "WE", 4: "TH", 5: "FR", 6: "SA", 7: "SU" };
+      courses.forEach(function (c) {
+        if (!c.name || !c.day) return;
+        const day = DAYS[c.day] || "MO";
+        const start = c.start || "08:00";
+        const end = c.end || "09:40";
+        lines.push("BEGIN:VEVENT");
+        lines.push("UID:" + (c.id || Date.now()) + "@xingyu");
+        lines.push("DTSTAMP:" + fmt(new Date()));
+        lines.push("DTSTART;TZID=Asia/Shanghai:20260901T" + start.replace(":", "") + "00");
+        lines.push("DTEND;TZID=Asia/Shanghai:20260901T" + end.replace(":", "") + "00");
+        lines.push("RRULE:FREQ=WEEKLY;BYDAY=" + day);
+        lines.push("SUMMARY:" + (c.name || ""));
+        if (c.teacher) lines.push("DESCRIPTION:" + c.teacher);
+        if (c.location) lines.push("LOCATION:" + c.location);
+        lines.push("END:VEVENT");
+      });
+      exams.forEach(function (e) {
+        if (!e.date || e.status === "done") return;
+        lines.push("BEGIN:VEVENT");
+        lines.push("UID:" + (e.id || Date.now()) + "@xingyu");
+        lines.push("DTSTAMP:" + fmt(new Date()));
+        lines.push("DTSTART;VALUE=DATE:" + e.date.replace(/-/g, ""));
+        lines.push("SUMMARY:" + (e.title || "日程"));
+        if (e.note) lines.push("DESCRIPTION:" + e.note);
+        lines.push("END:VEVENT");
+      });
+      lines.push("END:VCALENDAR");
+      const blob = new Blob([lines.join("\r\n")], { type: "text/calendar;charset=utf-8" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "xingyu-schedule.ics";
+      a.click();
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+      toast("日历文件已导出", "ok");
+    };
     if (splashEn) splashEn.checked = window.SplashSound ? SplashSound.isEnabled() : true;
     toggleSplashSoundConfig();
     renderSplashSoundSettings();
@@ -4343,6 +4402,65 @@ const App = (() => {
     };
     // 开屏声音
     const splashEn = $("#splashSoundEnabled");
+
+    // 桌面提醒开关
+    const remEn = $("#remindersEnabled");
+    if (remEn) {
+      remEn.checked = !!(window.XingyuReminders && XingyuReminders.isEnabled());
+      remEn.addEventListener("change", function () {
+        if (remEn.checked) { if (!XingyuReminders.enable()) remEn.checked = false; }
+        else XingyuReminders.disable();
+      });
+    }
+    const btnTestRem = $("#btnTestReminder");
+    if (btnTestRem) btnTestRem.onclick = function () {
+      if (window.XingyuReminders) XingyuReminders.test();
+    };
+
+    // iCal 导出
+    const btnIcal = $("#btnExportIcal");
+    if (btnIcal) btnIcal.onclick = function () {
+      const courses = Store.getAll("courses");
+      const exams = Store.getAll("exams");
+      if (!courses.length && !exams.length) { toast("没有可导出的课程或日程", "err"); return; }
+      const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Xingyu//Study Platform//CN", "CALSCALE:GREGORIAN"];
+      const fmt = d => { const dt = new Date(d); return dt.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z"; };
+      const DAYS = { 1: "MO", 2: "TU", 3: "WE", 4: "TH", 5: "FR", 6: "SA", 7: "SU" };
+      courses.forEach(function (c) {
+        if (!c.name || !c.day) return;
+        const day = DAYS[c.day] || "MO";
+        const start = c.start || "08:00";
+        const end = c.end || "09:40";
+        lines.push("BEGIN:VEVENT");
+        lines.push("UID:" + (c.id || Date.now()) + "@xingyu");
+        lines.push("DTSTAMP:" + fmt(new Date()));
+        lines.push("DTSTART;TZID=Asia/Shanghai:20260901T" + start.replace(":", "") + "00");
+        lines.push("DTEND;TZID=Asia/Shanghai:20260901T" + end.replace(":", "") + "00");
+        lines.push("RRULE:FREQ=WEEKLY;BYDAY=" + day);
+        lines.push("SUMMARY:" + (c.name || ""));
+        if (c.teacher) lines.push("DESCRIPTION:" + c.teacher);
+        if (c.location) lines.push("LOCATION:" + c.location);
+        lines.push("END:VEVENT");
+      });
+      exams.forEach(function (e) {
+        if (!e.date || e.status === "done") return;
+        lines.push("BEGIN:VEVENT");
+        lines.push("UID:" + (e.id || Date.now()) + "@xingyu");
+        lines.push("DTSTAMP:" + fmt(new Date()));
+        lines.push("DTSTART;VALUE=DATE:" + e.date.replace(/-/g, ""));
+        lines.push("SUMMARY:" + (e.title || "日程"));
+        if (e.note) lines.push("DESCRIPTION:" + e.note);
+        lines.push("END:VEVENT");
+      });
+      lines.push("END:VCALENDAR");
+      const blob = new Blob([lines.join("\r\n")], { type: "text/calendar;charset=utf-8" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "xingyu-schedule.ics";
+      a.click();
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+      toast("日历文件已导出", "ok");
+    };
     if (splashEn) splashEn.onchange = () => {
       const on = splashEn.checked;
       if (window.SplashSound) SplashSound.setEnabled(on);
@@ -4917,6 +5035,7 @@ const App = (() => {
 })();
 
 document.addEventListener("DOMContentLoaded", App.init);
+
 
 
 

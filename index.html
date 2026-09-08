@@ -669,6 +669,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           </div>
           <div class="toolbar-actions">
             <button class="btn btn-ghost" id="btnImportSchedule" data-i18n="btn.import">导入课表</button>
+            <button class="btn btn-ghost" id="btnExportIcal" type="button">导出日历 (.ics)</button>
             <button class="btn btn-primary" id="btnAddCourse" data-i18n="btn.addCourse">+ 添加课程</button>
             <button class="btn btn-primary" id="btnAddTask" data-i18n="btn.addTask">+ 添加任务</button>
           </div>
@@ -1571,6 +1572,16 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <input type="file" id="splashSoundFile" accept=".mp3,.mp4,audio/*,video/*" multiple style="display:none" aria-label="选择开屏音效文件">
         </div>
         <div id="splashCustomList"></div>
+
+        <h4>桌面提醒</h4>
+        <label class="lock-toggle">
+          <input type="checkbox" id="remindersEnabled">
+          <span>开启任务截止 / 考试到期 / 复习提醒</span>
+        </label>
+        <p class="hint">开启后浏览器会请求通知权限，每天 7:00-23:00 检查即将到期的任务和考试。仅在页面运行时有效。</p>
+        <div class="setting-actions">
+          <button class="btn btn-ghost" id="btnTestReminder" type="button">发送测试通知</button>
+        </div>
         <p class="hint">选择内置励志语录，或上传你自己的 MP3/MP4 作为开屏欢迎声音。上传的文件会保存在本机浏览器，选择会一直记住。</p>
         </div>
       </div>
@@ -1936,6 +1947,8 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 <script defer src="js/icons.js?v=20260831.5"></script>
 <script defer src="js/icons-themes.js?v=20260831.5"></script>
 <script defer src="js/perf.js?v=20260816.1"></script>
+<script defer src="js/app-shell.js?v=20260909.1"></script>
+<script defer src="js/reminders.js?v=20260909.1"></script>
 <script defer src="js/app.js?v=20260908.1"></script>
 <script defer src="js/settings-ui.js?v=20260831.5"></script>
 <script>
@@ -2021,6 +2034,9 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
   <script src="js/mobile-enhance.js"></script>
 </body>
 </html>
+
+
+
 
 
 

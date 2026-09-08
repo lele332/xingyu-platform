@@ -61,3 +61,21 @@
 - 局域网设备访问 `js/local-config.js` 时服务端重写为“同源 AI 代理 + 空 Key”，不再把桌面端 API Key 泄露给已授权设备。
 - 新增局域网 local-config 脱敏测试。
 - 已完成真实浏览器 UI / 番茄钟 / SRS / Python 平台测试；临时性能探针显示控制台 0 错误，长任务主要来自开屏/启动渲染，后续可做持续性能预算。
+
+## 第二轮（2026-09-09）：App 完备性升级
+
+对标 GitHub 高星项目（Shiori-v1 / Synapse / FocusTide / DoHabit / skola / Alexandrie）后的差距修复：
+
+- PWA manifest 新增 `shortcuts`（专注/复习/笔记/任务四项）、`share_target`（从其他 app 分享文本到星屿）、`categories`、`launch_handler`、`display_override`。
+- 新增 `js/app-shell.js`：
+  - App Badge（系统级待办角标 setAppBadge/clearAppBadge）。
+  - Service Worker 更新提示（新版本缓存完成→底部横幅→点击刷新）。
+  - PWA 安装引导横幅（beforeinstallprompt → 延迟显示 → 一键安装）。
+  - 键盘快捷键系统：Alt+1~9 切视图，Ctrl+K 搜索，Alt+N 新笔记，Alt+T 新任务，Alt+P 开始专注，Alt+, 设置，Alt+/ 帮助面板。
+  - URL 参数处理：?view=xxx 直接跳转，?shortcut=pomo/new-note/new-task 触发动作，?share=1 接收分享内容。
+- 新增 `js/reminders.js`：
+  - 桌面通知提醒：任务截止 / 考试到期 / FSRS 复习到期。
+  - 每分钟检查，仅在 7:00-23:00 之间。
+  - 设置页提供开关 + 测试通知按钮。
+- 课程页新增 iCal (.ics) 导出：课程表（周循环）+ 考试日程，可直接导入 Apple Calendar / Google Calendar / Outlook。
+- Service Worker 缓存版本升至 `xingyu-static-20260909-01`，预缓存清单加入 app-shell.js 和 reminders.js。
