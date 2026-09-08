@@ -5,6 +5,11 @@ on:
     - cron: "0 * * * *"            # 每 1 小时自动更新一次
   workflow_dispatch:              # 也支持手动触发
 
+# 防止天气数据更新与新闻数据更新同时产生提交、互相覆盖。
+concurrency:
+  group: platform-data-update
+  cancel-in-progress: false
+
 permissions:
   contents: write
 

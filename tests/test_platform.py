@@ -1,6 +1,8 @@
 import json
 import threading
 import unittest
+import tempfile
+import subprocess
 import urllib.error
 import urllib.request
 from html.parser import HTMLParser
@@ -35,6 +37,37 @@ class PlatformSmokeTests(unittest.TestCase):
         for icon in manifest["icons"]:
             self.assertTrue((ROOT / icon["src"]).is_file(), icon["src"])
 
+    def test_sensitive_local_files_are_not_tracked(self):
+        for name in ("js/local-config.js", "data/ai-key-local.txt"):
+            out = subprocess.check_output(
+                ["git", "ls-files", "--", name], cwd=ROOT, text=True
+            ).strip()
+            self.assertEqual(out, "", f"{name} must stay untracked")
+
+    def test_tracked_text_files_have_no_obvious_api_keys(self):
+        out = subprocess.check_output(
+            ["git", "ls-files", "-z"], cwd=ROOT
+        ).decode("utf-8")
+        extensions = {".js", ".html", ".css", ".json", ".py", ".md", ".yml", ".yaml", ".txt", ".webmanifest"}
+        for raw in out.split("\0"):
+            if not raw:
+                continue
+            path = Path(raw)
+            if path.suffix.lower() not in extensions:
+                continue
+            target = ROOT / path
+            if not target.is_file() or target.stat().st_size > 2 * 1024 * 1024:
+                continue
+            text = target.read_text(encoding="utf-8", errors="ignore")
+            for pattern in (r"sk-[A-Za-z0-9]{20,}", r"AKIA[0-9A-Z]{16}"):
+                self.assertNotRegex(text, pattern, f"suspicious key in {raw}")
+
+    def test_srs_is_wired(self):
+        html = (ROOT / "index.html").read_text(encoding="utf-8")
+        sw = (ROOT / "sw.js").read_text(encoding="utf-8")
+        self.assertIn("js/srs.js", html)
+        self.assertIn("./js/srs.js", sw)
+
     def test_apple_icon_assets_exist(self):
         for name in (
             "assets/xingyu-app-icon-192.png",
@@ -61,12 +94,20 @@ class PlatformSmokeTests(unittest.TestCase):
                 self.assertEqual(response.headers["X-Frame-Options"], "SAMEORIGIN")
                 self.assertIn("Content-Security-Policy", response.headers)
                 self.assertIn("script-src", response.headers["Content-Security-Policy"])
+                # 主应用不需要 AIRI 的 unsafe-eval；该策略只应出现在 /airi/ 路由。
+                self.assertNotIn("'unsafe-eval'", response.headers["Content-Security-Policy"])
         finally:
             httpd.shutdown()
             httpd.server_close()
             thread.join(timeout=2)
 
     def test_feedback_endpoint_writes(self):
+        feedback_dir = tempfile.TemporaryDirectory()
+        self.addCleanup(feedback_dir.cleanup)
+        original_feedback_dir = server.FEEDBACK_DIR
+        server.FEEDBACK_DIR = feedback_dir.name
+        self.addCleanup(setattr, server, "FEEDBACK_DIR", original_feedback_dir)
+
         httpd = server.create_server(0, str(ROOT))
         thread = threading.Thread(target=httpd.serve_forever, daemon=True)
         feedback_file = None
@@ -101,7 +142,7 @@ class PlatformSmokeTests(unittest.TestCase):
                 result = json.loads(response.read().decode("utf-8"))
                 self.assertTrue(result["ok"])
                 self.assertTrue(result["file"].startswith("report-"))
-                feedback_file = ROOT / "data" / "feedback" / result["file"]
+                feedback_file = Path(server.FEEDBACK_DIR) / result["file"]
                 self.assertTrue(feedback_file.is_file())
                 saved = json.loads(feedback_file.read_text(encoding="utf-8"))
                 self.assertEqual(saved["type"], "smoke-test")
@@ -112,7 +153,84 @@ class PlatformSmokeTests(unittest.TestCase):
             httpd.server_close()
             thread.join(timeout=2)
 
+    def test_remote_head_and_sensitive_writes_require_auth(self):
+        httpd = server.create_server(0, str(ROOT))
+        thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+        thread.start()
+        original_loopback = server.XingyuHandler._is_loopback_client
+
+        def deny_loopback(handler):
+            return False
+
+        server.XingyuHandler._is_loopback_client = deny_loopback
+        try:
+            port = httpd.server_address[1]
+            cases = [
+                ("HEAD", "/", None),
+                ("HEAD", "/data/ai-key-local.txt", None),
+                ("POST", "/api/feedback", b"{}"),
+                ("POST", server.BACKUP_PATH, b"{}"),
+            ]
+            for method, path, data in cases:
+                req = urllib.request.Request(
+                    f"http://127.0.0.1:{port}{path}",
+                    data=data,
+                    headers={"Content-Type": "application/json"} if data else {},
+                    method=method,
+                )
+                with self.assertRaises(urllib.error.HTTPError, msg=f"{method} {path}") as ctx:
+                    urllib.request.urlopen(req, timeout=2)
+                self.assertEqual(ctx.exception.code, 401, f"{method} {path}")
+        finally:
+            server.XingyuHandler._is_loopback_client = original_loopback
+            httpd.shutdown()
+            httpd.server_close()
+            thread.join(timeout=2)
+
+    def test_remote_local_config_is_sanitized(self):
+        httpd = server.create_server(0, str(ROOT))
+        thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+        thread.start()
+        original_loopback = server.XingyuHandler._is_loopback_client
+
+        def deny_loopback(handler):
+            return False
+
+        server.XingyuHandler._is_loopback_client = deny_loopback
+        try:
+            port = httpd.server_address[1]
+            headers = {"X-Xingyu-Access": server.ACCESS_TOKEN}
+            req = urllib.request.Request(
+                f"http://127.0.0.1:{port}/js/local-config.js",
+                headers=headers,
+                method="GET",
+            )
+            with urllib.request.urlopen(req, timeout=2) as response:
+                text = response.read().decode("utf-8")
+                self.assertEqual(response.status, 200)
+            self.assertIn("useLocalAiProxy:true", text)
+            self.assertNotIn("sk-", text)
+
+            req = urllib.request.Request(
+                f"http://127.0.0.1:{port}/js/local-config.js",
+                headers=headers,
+                method="HEAD",
+            )
+            with urllib.request.urlopen(req, timeout=2) as response:
+                self.assertEqual(response.status, 200)
+        finally:
+            server.XingyuHandler._is_loopback_client = original_loopback
+            httpd.shutdown()
+            httpd.server_close()
+            thread.join(timeout=2)
+
     def test_backup_endpoint_writes_and_lists(self):
+        backup_dir = tempfile.TemporaryDirectory()
+        self.addCleanup(backup_dir.cleanup)
+        original_backup_dir = server.BACKUP_DIR
+        server.BACKUP_DIR = backup_dir.name
+        self.addCleanup(setattr, server, "BACKUP_DIR", original_backup_dir)
+
         httpd = server.create_server(0, str(ROOT))
         thread = threading.Thread(target=httpd.serve_forever, daemon=True)
         backup_file = None
@@ -146,7 +264,7 @@ class PlatformSmokeTests(unittest.TestCase):
                 result = json.loads(response.read().decode("utf-8"))
                 self.assertTrue(result["ok"])
                 self.assertGreaterEqual(result["count"], 1)
-                backup_file = ROOT / "data" / "backups" / result["file"]
+                backup_file = Path(server.BACKUP_DIR) / result["file"]
                 self.assertTrue(backup_file.is_file())
 
             # 信息端点能看到刚才的备份

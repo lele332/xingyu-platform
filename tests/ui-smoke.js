@@ -38,7 +38,7 @@ async function inspect(browser, viewport, colorScheme) {
   await page.addInitScript(() => {
     if (window.top === window.self) {
       localStorage.clear();
-      localStorage.setItem("zero_onboarded_v3", "1");
+      localStorage.setItem("zero_onboarded_v4", "1");
     }
   });
   await page.goto(base, { waitUntil: "networkidle" });
@@ -73,6 +73,7 @@ async function checkProductFeatures(browser) {
   await page.addInitScript(() => {
     if (window.top === window.self) {
       localStorage.clear();
+      localStorage.setItem("zero_onboarded_v4", "1");
     }
   });
   await page.goto(base, { waitUntil: "networkidle" });
@@ -82,6 +83,7 @@ async function checkProductFeatures(browser) {
   if (onboardingShown) await page.locator("#btnSkipOnboarding").click();
 
   const originalTaskCount = await page.evaluate(() => Store.getAll("tasks").length);
+  const trashBeforeDelete = await page.evaluate(() => Store.getTrash().length);
   await page.evaluate(() => Store.remove("tasks", Store.getAll("tasks")[0].id));
   const trashAfterDelete = await page.evaluate(() => Store.getTrash().length);
   await page.locator(".toast-action").last().waitFor({ state: "visible" }).catch(() => {});
@@ -108,7 +110,7 @@ async function checkProductFeatures(browser) {
   await page.close();
   return {
     onboardingShown,
-    trashAfterDelete,
+    trashDelta: trashAfterDelete - trashBeforeDelete,
     undoRestored: restoredTaskCount === originalTaskCount,
     aiActionsShown,
     aiSavedNote: notesAfter === notesBefore + 1,
@@ -134,7 +136,7 @@ async function checkProductFeatures(browser) {
     const failed = groups.some(group =>
       group.errors.length ||
       group.results.some(result => result.actual !== `view-${result.expected}` || result.overflowX > 1)
-    ) || features.errors.length || features.trashAfterDelete !== 1 ||
+    ) || features.errors.length || features.trashDelta !== 1 ||
       !features.undoRestored || !features.aiActionsShown || !features.aiSavedNote ||
       features.themeMode !== "system" || !features.iconLoaded;
     if (failed) process.exitCode = 1;

@@ -14,7 +14,6 @@ __pycache__/
 .impeccable/
 news/
 scripts/
-server.py
 xingyu-app.pyw
 xingyu.ico
 assets/intro-720.mp4

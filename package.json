@@ -5,7 +5,9 @@
   "scripts": {
     "test": "python -m unittest tests.test_platform -v",
     "test:ui": "node tests/ui-smoke.js",
-    "test:pomo": "node tests/pomo-smoke.js"
+    "test:pomo": "node tests/pomo-smoke.js",
+    "test:srs": "node tests/srs-smoke.js",
+    "check": "npm run test:srs && npm test"
   },
   "devDependencies": {
     "playwright-core": "^1.62.1"

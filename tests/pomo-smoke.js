@@ -36,7 +36,7 @@ async function main() {
       if (window.top !== window.self) return;
       if (!sessionStorage.getItem("pomo_test_initialized")) {
         localStorage.clear();
-        localStorage.setItem("zero_onboarded_v3", "1");
+        localStorage.setItem("zero_onboarded_v4", "1");
         sessionStorage.setItem("pomo_test_initialized", "1");
       }
     });
@@ -53,6 +53,9 @@ async function main() {
     await page.locator("#pomoWork").dispatchEvent("change");
     await page.locator("#pomoBreak").dispatchEvent("change");
 
+    const taskOptionCount = await page.locator("#pomoTask option").count();
+    if (taskOptionCount > 1) await page.locator("#pomoTask").selectOption({ index: 1 });
+    const runStart = await page.evaluate(() => new Date(Date.now() - 1000).toISOString());
     await page.locator("#btnPomoStart").click();
     const runningText = await page.locator("#pomoMode").textContent();
     const overlayDisplay = await page.locator("#focusOverlay").evaluate(el => el.style.display);
@@ -67,10 +70,11 @@ async function main() {
     const pausedTime = await page.locator("#pomoTime").textContent();
     await page.waitForTimeout(700);
     const pausedStableTime = await page.locator("#pomoTime").textContent();
-    const partialState = await page.evaluate(() => ({
-      records: Store.getAll("pomodoros"),
-      partialCount: Store.getAll("pomodoros").filter(p => p.type === "focus" && p.completed === false).length
-    }));
+    const partialState = await page.evaluate(runStart => ({
+      records: Store.getAll("pomodoros").filter(p => p.startAt >= runStart),
+      partialCount: Store.getAll("pomodoros").filter(p => p.startAt >= runStart && p.type === "focus" && p.completed === false).length,
+      hasTaskId: !!Store.getAll("pomodoros").find(p => p.startAt >= runStart && p.type === "focus" && p.taskId)
+    }), runStart);
 
     // 继续按钮应从暂停位置继续，而不是重置。
     await page.locator("#btnPomoStart").click();
@@ -81,10 +85,10 @@ async function main() {
     // 重置会保留已记录的部分专注。
     await page.locator("#btnPomoReset").click();
     const afterReset = await page.locator("#pomoTime").textContent();
-    const state = await page.evaluate(() => ({
-      records: Store.getAll("pomodoros"),
-      partialCount: Store.getAll("pomodoros").filter(p => p.type === "focus" && p.completed === false).length
-    }));
+    const state = await page.evaluate(runStart => ({
+      records: Store.getAll("pomodoros").filter(p => p.startAt >= runStart),
+      partialCount: Store.getAll("pomodoros").filter(p => p.startAt >= runStart && p.type === "focus" && p.completed === false).length
+    }), runStart);
 
     const result = {
       runningText,
@@ -108,6 +112,7 @@ async function main() {
       pausedTime !== pausedStableTime ||
       !pausedText.includes("已暂停") ||
       partialState.partialCount !== 1 ||
+      (taskOptionCount > 1 && !partialState.hasTaskId) ||
       partialState.records[0]?.completed !== false ||
       !resumedText.includes("专注") ||
       resumedTime === pausedTime ||

@@ -1483,7 +1483,16 @@
   }
 
   var AVATAR_MODE_KEY = 'va_avatar_mode_v1';
+  function isMobileAgent() {
+    try {
+      var qp = new URLSearchParams(location.search);
+      if (qp.get('mobile') === '1' || qp.get('src') === 'qr') return true;
+    } catch (e) {}
+    try { return !!(window.matchMedia && window.matchMedia('(max-width: 920px) and (pointer: coarse)').matches); } catch (e) { return false; }
+  }
   function getAvatarMode() {
+    // 手机不自动加载 AIRI/WebGL，也不请求麦克风。
+    if (isMobileAgent()) return 'mic';
     try {
       var m = localStorage.getItem(AVATAR_MODE_KEY);
       return (m === 'realistic3d' || m === 'anime') ? 'airi' : (m || 'airi');
@@ -2584,7 +2593,8 @@
       '5. 不要输出 Markdown 符号，禁止使用 **、#、反引号；所有回复直接用自然中文短句。\n' +
       '6. 回复要短，控制在 2-3 句话，口语化，适合语音播报。不要说「好的，我已经调用了XX工具」这种技术腔，直接说结果。\n' +
       '7. 复杂任务先确定当前界面和数据，再连续调用工具；不要等待用户重复确认，除非涉及删除、覆盖或安全风险。\n' +
-      '8. 执行失败就直说原因，不要假装成功。\n\n' +
+      '8. 用户可能在手机/触屏端使用：不要提示 Alt 快捷键，优先完成文字指令，必要操作由你直接调用工具执行。\n' +
+      '9. 执行失败就直说原因，不要假装成功。\n\n' +
 
       '【你的能力清单】\n' +
       '- 平台操控：待办、笔记、课程表、考试、专注计时、切换页面、设置界面、主题、背景、昵称、AI配置、开关动效——用户提到这些就直接调用工具执行。\n' +
@@ -2789,9 +2799,9 @@
   var agentOK = null, agentCheckedAt = 0;
   function checkAgent() {
     if (agentOK !== null && Date.now() - agentCheckedAt < 30000) return Promise.resolve(agentOK);
-    return fetch(agentServiceURL() + '/__agent_health__', { cache: 'no-store' })
+    return fetch(agentServiceURL() + '/healthz', { cache: 'no-store' })
       .then(function (r) { return r.json(); })
-      .then(function (j) { agentOK = !!j.online; agentCheckedAt = Date.now(); return agentOK; })
+      .then(function (j) { agentOK = !!(j && (j.status === 'ok' || j.online === true)); agentCheckedAt = Date.now(); return agentOK; })
       .catch(function () { agentOK = false; agentCheckedAt = Date.now(); return agentOK; });
   }
 
@@ -3139,6 +3149,7 @@
         '<line x1="8" y1="23" x2="16" y2="23"/></svg>';
       ball.addEventListener('click', function (e) {
         e.stopPropagation();
+        if (isMobileAgent()) { UI.open(); UI.setHint('手机文字模式：直接输入任务'); return; }
         if (_state === 'listening') { stopListen(); UI.setState('idle'); }
         else listen({ takeOver: true });
       });
@@ -3207,6 +3218,7 @@
         speakBtn.classList.toggle('is-on', _speak);
         if (!_speak) speak_stop();
       });
+      if (isMobileAgent()) { _speak = false; speakBtn.textContent = '\ud83d\udd07'; speakBtn.classList.remove('is-on'); }
       actions.appendChild(speakBtn);
 
       // 视觉开关（2026-09-02）：让 AIRI 通过摄像头看到用户。
@@ -3385,7 +3397,7 @@
 
       var foot = el('div', 'va-foot');
       stateEl = el('span', 'va-state', '待命');
-      hintEl = el('span', 'va-hint', 'Alt+M 唤醒');
+      hintEl = el('span', 'va-hint', isMobileAgent() ? '手机文字模式' : 'Alt+M 唤醒');
       foot.appendChild(stateEl); foot.appendChild(hintEl);
       panel.appendChild(foot);
 
@@ -3400,7 +3412,7 @@
       tipRow.appendChild(el('span', 'va-tip-emoji', '👋'));
       tipRow.appendChild(el('span', 'va-tip-title', '我是小星,你的 AI 语音助手'));
       tip.appendChild(tipRow);
-      tip.appendChild(el('div', 'va-tip-sub', '点我说 · Alt+M 直接开麦 · Alt+V 打开面板'));
+      tip.appendChild(el('div', 'va-tip-sub', isMobileAgent() ? '点小星后直接输入任务' : '点我说 · Alt+M 直接开麦 · Alt+V 打开面板'));
       root.appendChild(tip);
 
       document.body.appendChild(root);
@@ -3625,8 +3637,9 @@
     var savedMode = getAvatarMode();
     var rootEl = document.querySelector('.va-root');
     if (rootEl) rootEl.dataset.avatar = savedMode;
-    // 默认开启语音唤醒；如果麦克风权限未授权，这里会静默失败，不影响平台。
-    setTimeout(function () { startWakeListener(); }, 2600);
+    // 手机禁用自动唤醒抢麦；用户直接用下方输入框下发任务。
+    if (!isMobileAgent()) setTimeout(function () { startWakeListener(); }, 2600);
+    else document.body.classList.add('va-mobile-agent');
     // 延迟一小段，避免和开屏动画抢资源
     setTimeout(function () {
       if (!rec) rec = initRec();
@@ -3724,7 +3737,11 @@
     if (avatarSel) avatarSel.addEventListener('change', function(e){ setAvatarMode(e.target.value); sync(); });
     if (modelSel) modelSel.addEventListener('change', function(e){ setAvatarModel(e.target.value); sync(); });
     // 主界面唤醒按钮 = 用户主动要跟小星说话，允许从 AIRI 手里临时接管麦克风
-    if (wakeBtn) wakeBtn.addEventListener('click', function(e){ e.stopPropagation(); UI.open(); listen({ takeOver: true }); });
+    if (wakeBtn) wakeBtn.addEventListener('click', function(e){
+      e.stopPropagation(); UI.open();
+      if (!isMobileAgent()) listen({ takeOver: true });
+      else { UI.setState('idle'); UI.setHint('手机文字模式：直接输入任务'); }
+    });
     if (speakBox) speakBox.addEventListener('change', function(e){ UI.setSpeak(e.target.checked); });
     if (wakeBox) wakeBox.addEventListener('change', function(e){ _wakeDesiredOn = !!e.target.checked; if(e.target.checked) startWakeListener(); else stopWakeListener(); });
     if (labBtn) labBtn.addEventListener('click', function(){ if (window.openExternal) window.openExternal('/avatar-lab.html'); else window.open('/avatar-lab.html','_blank','noopener'); });

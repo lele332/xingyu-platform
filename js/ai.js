@@ -125,9 +125,13 @@ ${tasks.map((t, i) => `${i + 1}. ${t.title} | 截止 ${t.due ? new Date(t.due).t
   /* ---------- 3. 知识卡片 /cards ---------- */
   function buildCardsPrompt() {
     const notes = Store.getAll("notes").slice(0, 5);
-    return `你是一名学习辅导老师。请基于以下笔记内容，生成 3 张用于复习的知识卡片。每张卡片格式：
-【问题】...
-【答案】...
+    return `你是一名学习辅导老师。请基于以下笔记内容，生成 3 张用于间隔重复复习的知识卡片。
+
+要求：
+1. 只输出 JSON 数组，不要 Markdown、不要解释、不要代码块。
+2. 每项格式：{"question":"问题","answer":"答案","subject":"科目"}
+3. 问题要能触发主动回忆；答案要短而准确；不要把整段笔记复制进答案。
+4. 用中文。
 
 笔记内容：
 ${notes.map(n => `《${n.title}》(${n.subject})\n${n.content}`).join("\n\n")}`;
@@ -138,6 +142,19 @@ ${notes.map(n => `《${n.title}》(${n.subject})\n${n.content}`).join("\n\n")}`;
     return `你是一名知识管理助手。请将以下零散内容整理成结构化的学习笔记，使用清晰的标题分层与要点列表，保留所有关键信息：
 
 ${notesText}`;
+  }
+
+  function parseCardItems(value) {
+    const list = Array.isArray(value) ? value : Array.isArray(value?.cards) ? value.cards : [];
+    return list
+      .filter(item => item && typeof item === "object")
+      .map(item => ({
+        question: String(item.question || "").trim(),
+        answer: String(item.answer || "").trim(),
+        subject: String(item.subject || "").trim()
+      }))
+      .filter(item => item.question && item.answer)
+      .slice(0, 8);
   }
 
   /* ---------- 本地规则引擎（未配置 AI 时兜底） ---------- */
@@ -250,6 +267,13 @@ ${notesText}`;
           { role: "system", content: "你是「星屿 · 个人学习工作台」平台内置的 AI 助手，回答简洁、实用、结构化。使用中文。" },
           { role: "user", content: prompt }
         ]);
+        if (skill === "cards") {
+          const parsedCards = parseCardItems(extractJSON(result));
+          const display = parsedCards.length
+            ? parsedCards.map((c, i) => `【问题】${c.question}\n【答案】${c.answer}`).join("\n\n")
+            : result;
+          return { source: "ai", text: display, cards: parsedCards };
+        }
         return { source: "ai", text: result };
       } catch (e) {
         if (e.message === "已停止生成") throw e;

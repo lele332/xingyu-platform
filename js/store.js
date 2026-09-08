@@ -15,7 +15,7 @@ const Store = (() => {
       tasks: [],         // {id, title, courseId, due(ISO), priority(high/mid/low), status(todo/doing/done), estimate}
       notes: [],         // {id, title, subject, tags[], content, createdAt, updatedAt}
       cards: [],         // {id, question, answer, subject, createdAt}
-      pomodoros: [],     // {id, startAt, minutes, type(focus/break)}
+      pomodoros: [],     // {id, startAt, minutes, type(focus/break), taskId?}
       exams: [],         // {id, title, type(exam/homework/event/important), date(YYYY-MM-DD), time, note, status(upcoming/done), createdAt}
       grades: [],        // {id, subject, name, score, credit, semester}
       skills: [],        // {id, name, level(1-100)}
@@ -318,11 +318,31 @@ const Store = (() => {
     }
   }
 
+  function emergencyFreeStorage() {
+    // 只在配额失败后调用：优先牺牲可再生的历史备份，保住当前数据。
+    // 这里的备份由 snapshotBackup() 生成；服务端自动备份仍在 data/backups/。
+    try {
+      const doomed = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith(KEY + "_backup_")) doomed.push(key);
+      }
+      doomed.forEach(storageRemove);
+      return doomed.length > 0;
+    } catch (e) {
+      return false;
+    }
+  }
+
   function save() {
     if (!data) data = defaults();
     data.schemaVersion = SCHEMA_VERSION;
     prunePomodoros(); // 归档超量番茄记录，防主键无限增长
-    const ok = storageSet(KEY, JSON.stringify(data));
+    let ok = storageSet(KEY, JSON.stringify(data));
+    if (!ok && emergencyFreeStorage()) {
+      lastError = "";
+      ok = storageSet(KEY, JSON.stringify(data));
+    }
     // 本地刚写过：记下脏时间戳，供服务端拉取判断"别把新改动覆盖掉"
     localDirtyAt = Date.now();
     // 调用方大多忽略返回值（19 处裸调用），这里主动派发事件让 UI 提示，
@@ -435,6 +455,22 @@ const Store = (() => {
     save();
     return item;
   }
+  function addMany(key, items) {
+    if (!ARRAY_KEYS.includes(key) || !Array.isArray(items)) return [];
+    if (!Array.isArray(data[key])) data[key] = [];
+    const existingIds = new Set(data[key].map(x => x && x.id));
+    const rows = items.filter(isRecord).map(item => {
+      const row = { ...item };
+      if (!row.id || existingIds.has(row.id)) row.id = uid();
+      existingIds.add(row.id);
+      return row;
+    });
+    if (!rows.length) return [];
+    data[key] = data[key].concat(rows);
+    save();
+    return rows;
+  }
+
   function update(key, id, patch) {
     if (!ARRAY_KEYS.includes(key) || !isRecord(patch)) return null;
     const idx = data[key].findIndex(x => x.id === id);
@@ -582,7 +618,7 @@ const Store = (() => {
   // 每次页面加载都抛 "initializeServerSync is not defined"。移回作用域内。
   void initializeServerSync();
 
-  return { load, save, onSave, onDelete, uid, getAll, add, update, remove, replaceAll,
+  return { load, save, onSave, onDelete, uid, getAll, add, addMany, update, remove, replaceAll,
            getProfile, setProfile, getSettings, setSettings, getCourseName,
            exportAll, importAll, clearAll, getStorageInfo, getTrash, restoreTrash, emptyTrash,
            // 导入失败的具体原因（0/多字节、格式不对、缺少数据字段…），供 UI 直接展示

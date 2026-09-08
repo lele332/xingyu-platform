@@ -626,6 +626,7 @@ const App = (() => {
 
     // 专注趋势（同样放到空闲帧）
     _idleRender(() => renderFocusTrend($("#focusTrendChart"), 7));
+    _idleRender(() => renderReviewToday());
 
     // 今日待办：⚠️ 旧写法只收 days === 0，逾期任务（最该处理的）反而不出现。
     // 改为收 days <= 0，并按截止日升序——逾期最久的排最前。
@@ -927,13 +928,21 @@ const App = (() => {
       grid.innerHTML = `<div class="empty-state"><p>还没有知识卡片，点「AI 生成卡片」或手动添加</p></div>`;
       return;
     }
-    grid.innerHTML = cards.map(c => `
+    const now = Date.now();
+    const dueIds = new Set(SRS.dueCards(cards, now).map(item => item.card.id));
+    grid.innerHTML = cards.map(c => {
+      const state = SRS.normalizeCard(c, now);
+      const badge = dueIds.has(c.id)
+        ? '<span class="tag-chip srs-due">待复习</span>'
+        : `<span class="tag-chip srs-next">下次 ${fmtDate(state.due)}</span>`;
+      return `
       <div class="flash-card" data-card-id="${c.id}">
         <div class="q">${esc(c.question)}</div>
         <div class="a">${esc(c.answer).replace(/\n/g, "<br>")}</div>
-        <div class="hint-flip">点击翻转查看答案 · ${esc(c.subject || "")}</div>
+        <div class="hint-flip">${badge} 点击翻转查看答案 · ${esc(c.subject || "")}</div>
         <button class="mini-btn del" data-act="del-card" data-id="${c.id}" style="position:absolute;top:10px;right:10px" title="删除">✕</button>
-      </div>`).join("");
+      </div>`;
+    }).join("");
     $$(".flash-card").forEach(card => {
       card.onclick = (e) => {
         if (e.target.closest("[data-act]")) return;
@@ -943,6 +952,63 @@ const App = (() => {
     $$("[data-act='del-card']").forEach(btn => {
       btn.onclick = (e) => { e.stopPropagation(); Store.remove("cards", btn.dataset.id); renderCardGrid(); };
     });
+  }
+
+  /* ============================================================
+     今日复习（FSRS 调度）
+     ============================================================ */
+  function renderReviewToday() {
+    const box = $("#todayReview");
+    if (!box) return;
+    const due = SRS.dueCards(Store.getAll("cards"));
+    const total = Store.getAll("cards").length;
+
+    if (!due.length) {
+      box.innerHTML = `
+        <div class="empty-state">
+          <p>${total ? "今天的卡片都复习完了" : "还没有知识卡片，去笔记库生成第一张"}</p>
+          ${total ? `<small class="srs-total">共 ${total} 张卡片</small>` : ""}
+        </div>`;
+      return;
+    }
+
+    const next = due[0];
+    const card = next.card;
+    const state = next.state;
+    box.innerHTML = `
+      <div class="srs-card" data-card-id="${esc(card.id)}">
+        <div class="srs-meta">
+          <span>${due.length} 张待复习</span>
+          <span>${esc(card.subject || "未分类")}</span>
+          <span>${state.state === "new" ? "新卡" : `第 ${state.reps + 1} 次`}</span>
+        </div>
+        <div class="srs-question">${esc(card.question)}</div>
+        <div class="srs-actions">
+          <button class="btn btn-primary" id="btnShowAnswer">显示答案</button>
+        </div>
+      </div>`;
+
+    box.querySelector("#btnShowAnswer").onclick = () => {
+      const shell = box.querySelector(".srs-card");
+      shell.querySelector(".srs-actions").innerHTML = `
+        <div class="srs-answer">${esc(card.answer).replace(/\n/g, "<br>")}</div>
+        <div class="srs-grades">
+          <button class="btn btn-ghost" data-grade="again">忘了</button>
+          <button class="btn btn-ghost" data-grade="hard">困难</button>
+          <button class="btn btn-primary" data-grade="good">记住了</button>
+          <button class="btn btn-ghost" data-grade="easy">简单</button>
+        </div>`;
+      shell.querySelectorAll("[data-grade]").forEach(btn => {
+        btn.onclick = () => {
+          const updated = SRS.review(card, btn.dataset.grade);
+          if (!updated) return;
+          Store.update("cards", card.id, { srs: updated });
+          toast(btn.dataset.grade === "again" ? "会安排尽快重学" : "已加入复习计划", "ok", { duration: 1500 });
+          renderReviewToday();
+          if (currentView === "notes") renderCardGrid();
+        };
+      });
+    };
   }
 
   function openNote(id) {
@@ -988,11 +1054,32 @@ const App = (() => {
      专注学习
      ============================================================ */
   let pomoTimer = null;
-  let pomoState = { running: false, paused: false, mode: "work", remain: 25 * 60, total: 25 * 60, startedAt: null, segmentRemain: null, recordedMinutes: 0 };
+  let pomoState = { running: false, paused: false, mode: "work", remain: 25 * 60, total: 25 * 60, startedAt: null, segmentRemain: null, recordedMinutes: 0, taskId: "" };
 
   function renderFocus() {
     renderFocusStats();
     renderFocusHistory();
+    renderPomoTaskOptions();
+  }
+
+  function renderPomoTaskOptions() {
+    const select = $("#pomoTask");
+    if (!select) return;
+    const previous = pomoState.taskId || select.value || "";
+    const tasks = Store.getAll("tasks")
+      .filter(task => task.status !== "done")
+      .sort((a, b) => {
+        const da = a.due ? new Date(a.due).getTime() : Number.MAX_SAFE_INTEGER;
+        const db = b.due ? new Date(b.due).getTime() : Number.MAX_SAFE_INTEGER;
+        return da - db;
+      })
+      .slice(0, 50);
+    select.innerHTML = '<option value="">自由专注</option>' + tasks.map(task => {
+      const due = task.due ? ` · ${fmtDate(task.due)}` : "";
+      return `<option value="${esc(task.id)}">${esc(task.title)}${esc(due)}</option>`;
+    }).join("");
+    if (previous && tasks.some(task => task.id === previous)) select.value = previous;
+    pomoState.taskId = select.value;
   }
 
   /* ⚠️ 2026-09-05：休息段也会被写进 pomodoros（type:"break"，带完整分钟数），
@@ -1058,12 +1145,14 @@ const App = (() => {
     box.innerHTML = pomos.map(p => {
       const d = new Date(p.startAt);
       const time = `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+      const task = p.taskId ? Store.getAll("tasks").find(item => item.id === p.taskId) : null;
       const label = p.type === "break" ? "休息" : (p.completed === false ? "部分专注" : (p.source === "supervisor" ? "督学专注" : "番茄钟"));
+      const taskMeta = task ? ` · ${task.title}` : "";
       return `<div class="history-item">
         <span class="history-dot"></span>
         <span>${label}</span>
         <b style="color:var(--accent)">${p.minutes} 分钟</b>
-        <span class="history-meta">${fmtDate(p.startAt)} ${time}</span>
+        <span class="history-meta">${fmtDate(p.startAt)} ${time}${esc(taskMeta)}</span>
       </div>`;
     }).join("");
     // 滚动分批浮入
@@ -1118,6 +1207,7 @@ const App = (() => {
     pomoState.startedAt = new Date().toISOString();
     pomoState.segmentRemain = pomoState.total;
     pomoState.recordedMinutes = 0;
+    pomoState.taskId = ($("#pomoTask")?.value || "");
     updatePomoUI();
     setPomoRunningUI("专注中 ");
     clearInterval(pomoTimer); pomoTimer = null;   // 防孤儿计时器
@@ -1254,6 +1344,10 @@ const App = (() => {
     }
   });
 
+  function currentPomoTaskPayload() {
+    return pomoState.taskId ? { taskId: pomoState.taskId } : {};
+  }
+
   function recordPartialPomo() {
     if (!pomoState.running || pomoState.mode !== "work") return;
     const segmentRemain = Number.isFinite(pomoState.segmentRemain) ? pomoState.segmentRemain : pomoState.total;
@@ -1264,7 +1358,8 @@ const App = (() => {
       startAt: new Date().toISOString(),
       minutes,
       type: "focus",
-      completed: false
+      completed: false,
+      ...currentPomoTaskPayload()
     });
     pomoState.recordedMinutes += minutes;
     pomoState.segmentRemain = pomoState.remain;
@@ -1329,7 +1424,8 @@ const App = (() => {
         startAt: pomoState.startedAt || new Date().toISOString(),
         minutes,
         type: "focus",
-        completed: true
+        completed: true,
+        ...currentPomoTaskPayload()
       });
       toast("专注完成！休息一下吧", "ok");
       // 自动切换到休息
@@ -1967,7 +2063,7 @@ const App = (() => {
     return div;
   }
 
-  function addChatActions(message, text) {
+  function addChatActions(message, text, extras = {}) {
     const bubble = message && message.querySelector(".chat-bubble");
     if (!bubble || !text) return;
     const actions = document.createElement("div");
@@ -1975,10 +2071,27 @@ const App = (() => {
     const icon = name => window.XingyuIcons ? XingyuIcons.svg(name) : "";
     actions.innerHTML = `
       <button class="chat-action" type="button" data-chat-action="copy">${icon("copy")}复制</button>
-      <button class="chat-action" type="button" data-chat-action="save">${icon("save")}保存为笔记</button>`;
+      <button class="chat-action" type="button" data-chat-action="save">${icon("save")}保存为笔记</button>
+      ${extras.cards && extras.cards.length ? `<button class="chat-action" type="button" data-chat-action="cards">${icon("cards")}加入复习卡</button>` : ""}`;
     actions.querySelector('[data-chat-action="copy"]').onclick = () => {
       navigator.clipboard.writeText(text).then(() => toast("已复制 AI 回复", "ok")).catch(() => toast("复制失败", "err"));
     };
+    const cardAction = actions.querySelector('[data-chat-action="cards"]');
+    if (cardAction) {
+      cardAction.onclick = () => {
+        const now = new Date().toISOString();
+        Store.addMany("cards", extras.cards.map(card => ({
+          question: card.question,
+          answer: card.answer,
+          subject: card.subject || "AI 助手",
+          createdAt: now
+        })));
+        cardAction.disabled = true;
+        cardAction.textContent = `${icon("cards")}已加入 ${extras.cards.length} 张`;
+        toast(`已加入 ${extras.cards.length} 张复习卡`, "ok");
+        if (currentView === "notes") renderCardGrid();
+      };
+    }
     actions.querySelector('[data-chat-action="save"]').onclick = () => {
       const now = new Date().toISOString();
       const title = text.split(/\n/).map(line => line.replace(/^[#*\-\d.\s]+/, "").trim()).find(Boolean) || "AI 学习笔记";
@@ -2014,6 +2127,7 @@ const App = (() => {
     const loading = addChatMsg("思考中…", "ai");
     loading.classList.add("chat-loading");
     const isCmd = trimmed.startsWith("/");
+    let generatedCards = [];
     try {
       let reply;
       if (isCmd) {
@@ -2022,14 +2136,18 @@ const App = (() => {
         const skill = CMD_MAP[cmd.toLowerCase()];
         if (skill === "plan") reply = (await AI.runSkill("plan")).text;
         else if (skill === "priority") reply = (await AI.runSkill("priority")).text;
-        else if (skill === "cards") reply = (await AI.runSkill("cards")).text;
+        else if (skill === "cards") {
+          const result = await AI.runSkill("cards");
+          reply = result.text;
+          generatedCards = result.cards || [];
+        }
         else if (skill === "organize") reply = (await AI.runSkill("organize", restText)).text;
         else reply = "未知命令。可用命令：/学习规划 /智能排序 /知识卡片 /笔记整理";
       } else {
         reply = await AI.ask(trimmed);
       }
       loading.querySelector(".chat-bubble").innerHTML = esc(reply).replace(/\n/g, "<br>");
-      addChatActions(loading, reply);
+      addChatActions(loading, reply, { cards: generatedCards });
     } catch (e) {
       loading.querySelector(".chat-bubble").innerHTML = e.message === "已停止生成"
         ? `<span style="color:var(--ink-3)">已停止生成</span>`
@@ -3334,13 +3452,14 @@ const App = (() => {
     const existing = Store.getAll("courses");
     const existingNames = new Set(existing.map(c => c.name));
     let added = 0, skipped = 0;
-    pendingImportCourses.forEach((c, i) => {
-      if (!c.name || !c.day) { skipped++; return; }
-      if (existingNames.has(c.name)) { skipped++; return; }
-      Store.add("courses", { ...c, color: COURSE_COLORS[i % COURSE_COLORS.length] });
+    const rows = pendingImportCourses.flatMap((c, i) => {
+      if (!c.name || !c.day || existingNames.has(c.name)) return [];
       existingNames.add(c.name);
       added++;
+      return [{ ...c, color: COURSE_COLORS[i % COURSE_COLORS.length] }];
     });
+    skipped = pendingImportCourses.length - rows.length;
+    Store.addMany("courses", rows);
     closeModal("importModal");
     toast(added ? `已导入 ${added} 门课程${skipped ? `，跳过 ${skipped} 门（重复或无效）` : ""}` : "没有新课程可导入（可能已存在）", added ? "ok" : "err");
     renderCourses();
@@ -3389,13 +3508,15 @@ const App = (() => {
     if (!pendingImportGrades.length) { toast("没有可导入的成绩", "err"); return; }
     const existing = Store.getAll("grades");
     let added = 0, skipped = 0;
-    pendingImportGrades.forEach(g => {
+    const rows = pendingImportGrades.filter(g => {
       const dup = existing.find(x => x.subject === g.subject && x.name === g.name && x.semester === g.semester);
-      if (dup) { skipped++; return; }
-      Store.add("grades", g);
+      if (dup) return false;
       existing.push(g);
       added++;
+      return true;
     });
+    skipped = pendingImportGrades.length - rows.length;
+    Store.addMany("grades", rows);
     closeModal("importGradesModal");
     toast(added ? `已导入 ${added} 条成绩${skipped ? `，跳过 ${skipped} 条重复` : ""}` : "没有新成绩可导入（可能已存在）", added ? "ok" : "err");
     renderGrowth();
@@ -3497,13 +3618,14 @@ const App = (() => {
     const existingTitles = new Set(existing.map(n => n.title));
     let added = 0, skipped = 0;
     const now = new Date().toISOString();
-    pendingImportNotes.forEach(n => {
-      if (!n.title) { skipped++; return; }
-      if (existingTitles.has(n.title)) { skipped++; return; }
-      Store.add("notes", { ...n, createdAt: now, updatedAt: now });
+    const rows = pendingImportNotes.flatMap(n => {
+      if (!n.title || existingTitles.has(n.title)) return [];
       existingTitles.add(n.title);
       added++;
+      return [{ ...n, createdAt: now, updatedAt: now }];
     });
+    skipped = pendingImportNotes.length - rows.length;
+    Store.addMany("notes", rows);
     closeModal("importNotesModal");
     toast(added ? `已导入 ${added} 条笔记${skipped ? `，跳过 ${skipped} 条重复` : ""}` : "没有新笔记可导入（可能已存在）", added ? "ok" : "err");
     renderNotes();
@@ -4593,8 +4715,8 @@ const App = (() => {
   const AUTO_BACKUP_INTERVAL = 6 * 60 * 60 * 1000;
 
   function canUseLocalBackupServer() {
-    return location.protocol === "http:" &&
-      ["127.0.0.1", "localhost", "[::1]"].includes(location.hostname);
+    // 同源 HTTP(S) 服务均可同步：局域网手机/公网通道使用访问码 Cookie。
+    return location.protocol === "http:" || location.protocol === "https:";
   }
 
   async function autoBackupToServer(force = false) {

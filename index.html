@@ -57,6 +57,7 @@
      若日后恢复自定义字体，取消下面这行注释即可：
 <link rel="preload" href="assets/fonts/font_52a6c245.woff2" as="font" type="font/woff2" crossorigin>
 -->
+  <link rel="stylesheet" href="css/mobile-patch.css">
 </head>
 <body>
 
@@ -634,6 +635,13 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
             </div>
             <div id="focusTrendChart"></div>
           </div>
+          <div class="card card-wide">
+            <div class="card-head">
+              <h3>今日复习</h3>
+              <button class="text-btn" data-goto="notes">笔记库 →</button>
+            </div>
+            <div id="todayReview"></div>
+          </div>
           <div class="card">
             <div class="card-head">
               <h3>今日待办</h3>
@@ -742,6 +750,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
                 <label>专注 <input type="number" id="pomoWork" value="25" min="1" max="120"> 分</label>
                 <label>休息 <input type="number" id="pomoBreak" value="5" min="1" max="60"> 分</label>
               </div>
+              <label class="pomo-task"><span>绑定任务</span><select id="pomoTask" aria-label="绑定番茄钟任务"><option value="">自由专注</option></select></label>
             </div>
             <div class="pomo-ring" id="pomoRing">
               <div class="pomo-time" id="pomoTime">25:00</div>
@@ -1919,14 +1928,15 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 <script defer src="js/local-config.js?v=20260831.1"></script>
 <script defer src="js/quotes.js?v=20260811.3"></script>
 <script defer src="js/lunar.js?v=20260811.3"></script>
-<script defer src="js/store.js?v=20260905.2"></script>
+<script defer src="js/store.js?v=20260908.1"></script>
+  <script defer src="js/srs.js?v=20260908.1"></script>
 <script defer src="js/sync.js?v=20260811.3"></script>
 <script defer src="js/charts.js?v=20260905.1"></script>
 <script defer src="js/ai.js?v=20260905.4"></script>
 <script defer src="js/icons.js?v=20260831.5"></script>
 <script defer src="js/icons-themes.js?v=20260831.5"></script>
 <script defer src="js/perf.js?v=20260816.1"></script>
-<script defer src="js/app.js?v=20260905.17"></script>
+<script defer src="js/app.js?v=20260908.1"></script>
 <script defer src="js/settings-ui.js?v=20260831.5"></script>
 <script>
 /* 非关键模块懒加载：开屏期间不解析这 ~170KB JS（天气/跑步/语音/文献/激励/教练），
@@ -2005,10 +2015,13 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
   {"imports":{"three":"/js/vendor/three/three.module.js","three/addons/":"/js/vendor/three/addons/"}}
 </script>
 <link rel="stylesheet" href="css/voice-agent.css?v=20260903.3">
-<script defer src="js/voice-agent.js?v=20260905.1"></script>
+<script defer src="js/voice-agent.js?v=20260906.1"></script>
 
+  <script src="js/mobile-capture.js"></script>
+  <script src="js/mobile-enhance.js"></script>
 </body>
 </html>
+
 
 
 

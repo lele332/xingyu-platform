@@ -3610,3 +3610,19 @@ body[data-icon-theme="mono"] .motion-ai path:first-of-type { stroke: var(--apple
   .supervisor-head{flex-direction:column}
   .supervisor-split{grid-template-columns:1fr}
 }
+
+
+/* FSRS 今日复习 */
+.srs-card{border:1px solid var(--rule);border-radius:18px;padding:18px;background:var(--paper-card)}
+.srs-meta{display:flex;gap:10px;align-items:center;color:var(--ink-2);font-size:12px;margin-bottom:14px}
+.srs-question{font-size:18px;line-height:1.55;font-weight:650}
+.srs-answer{padding-top:14px;border-top:1px dashed var(--rule);margin-top:14px;line-height:1.65;white-space:pre-wrap}
+.srs-actions{margin-top:16px}
+.srs-grades{display:flex;gap:8px;flex-wrap:wrap}
+.srs-total{display:block;color:var(--ink-2)}
+
+.srs-due{border-color:var(--ink);color:var(--ink);font-weight:650}
+.srs-next{opacity:.72}
+
+.pomo-task{display:flex;gap:8px;align-items:center;margin-top:10px;font-size:12px;color:var(--ink-2)}
+.pomo-task select{min-width:min(280px,100%)}
