@@ -252,10 +252,116 @@ const AIContext = (() => {
         ).join("\n") + "\n自然引用相关笔记内容。");
       }
     }
+    lines.push(memoryPrompt());
     const stateCtx = studyStatePrompt();
     if (stateCtx) lines.push(stateCtx);
     lines.push("\n【回答要求】\n- 直接回答，不要客套。\n- 结合用户实际数据给建议。\n- 结合薄弱科目和学习时段推荐方法。\n- 根据学习状态调整语气。\n- 高压状态优先理清优先级。\n- 精力低建议轻松方式。");
     return lines.join("\n");
+  }
+
+  /* ---------- 本地长期偏好记忆 ----------
+     这里是“轻量认知记忆”：只沉淀用户明确表达的偏好/目标/身份，以及 AI 回答反馈。
+     全部保存在本机 Store.settings.aiMemory 中，随星屿备份导出，不上传到第三方。 */
+  function normalizeAiMemory(raw) {
+    const m = raw && typeof raw === "object" && !Array.isArray(raw) ? raw : {};
+    const facts = Array.isArray(m.facts) ? m.facts.filter(x => x && typeof x === "object") : [];
+    const feedback = Array.isArray(m.feedback) ? m.feedback.filter(x => x && typeof x === "object") : [];
+    return { facts, feedback };
+  }
+
+  function getAiMemory() {
+    try { return normalizeAiMemory(Store.getSettings().aiMemory); }
+    catch (e) { return { facts: [], feedback: [] }; }
+  }
+
+  function saveAiMemory(memory) {
+    const m = normalizeAiMemory(memory);
+    m.facts = m.facts.slice(-60);           // 控制提示词体积，旧偏好按时间淘汰
+    m.feedback = m.feedback.slice(-80);
+    Store.setSettings({ aiMemory: m });
+    return m;
+  }
+
+  function learnFromMessage(userText) {
+    const text = String(userText || "").trim();
+    if (!text || text.startsWith("/")) return [];
+    const learned = [];
+    const rules = [
+      { re: /(?:请记住|记住一下|帮我记住|记住)[:：,，\s]+(.{2,160})/, kind: "explicit" },
+      { re: /(?:我|本人)(?:喜欢|偏好|倾向于|习惯)(.{2,140})/, kind: "preference" },
+      { re: /(?:我|本人)(?:不喜欢|讨厌|不想要|不想)(.{2,140})/, kind: "avoidance" },
+      { re: /(?:我在)(?:准备|备考|学习|学)(.{2,120})/, kind: "goal" },
+      { re: /(?:我的)(?:目标|专业|学校|年级|昵称)(?:是|叫)(.{2,120})/, kind: "profile" }
+    ];
+    rules.forEach(rule => {
+      const match = text.match(rule.re);
+      if (!match || !match[1]) return;
+      let fact = match[1].replace(/[。.;；！!？?\s]+$/g, "").trim();
+      if (rule.kind === "avoidance" && !/^(?:不|别|无)/.test(fact)) fact = "不" + fact;
+      if (fact.length < 2) return;
+      const now = new Date().toISOString();
+      const memory = getAiMemory();
+      const duplicated = memory.facts.some(f => String(f.text || "").toLowerCase() === fact.toLowerCase());
+      if (duplicated) return;
+      memory.facts.push({ text: fact, kind: rule.kind, confidence: rule.kind === "explicit" ? 0.95 : 0.75, weight: 1, createdAt: now, updatedAt: now });
+      saveAiMemory(memory);
+      learned.push(fact);
+    });
+    return learned;
+  }
+
+  function rateReply(reply, helpful, userMessage) {
+    const memory = getAiMemory();
+    const now = new Date().toISOString();
+    memory.feedback.push({
+      helpful: helpful === true,
+      question: String(userMessage || "").slice(0, 120),
+      reply: String(reply || "").slice(0, 160),
+      createdAt: now
+    });
+    // 连续负面反馈会让下一次回答更强调“短、具体、可执行”。
+    const recent = memory.feedback.slice(-8);
+    const good = recent.filter(x => x.helpful).length;
+    const bad = recent.length - good;
+    saveAiMemory(memory);
+    return { good, bad, total: recent.length };
+  }
+
+  function memoryPrompt() {
+    const memory = getAiMemory();
+    const lines = [];
+    const facts = memory.facts.slice(-14).reverse();
+    if (facts.length) {
+      lines.push("\n【用户已表达的长期偏好】");
+      facts.forEach(f => lines.push("- " + f.text + (f.kind === "avoidance" ? "（请避免）" : "")));
+    }
+    const recent = memory.feedback.slice(-8);
+    if (recent.length >= 3) {
+      const good = recent.filter(x => x.helpful).length;
+      const bad = recent.length - good;
+      if (bad > good) {
+        lines.push("\n【回复校准】");
+        lines.push("- 用户最近对较长/不够具体的回答不满意，优先给短结论和明确下一步。");
+      } else if (good > bad) {
+        lines.push("\n【回复校准】");
+        lines.push("- 用户最近认可这种回答方式，可保持具体、结构化、可执行。");
+      }
+    }
+    return lines.join("\n");
+  }
+
+  function memorySummary(limit) {
+    limit = limit || 4;
+    const memory = getAiMemory();
+    return memory.facts.slice(-limit).reverse().map(f => ({
+      text: f.text,
+      kind: f.kind,
+      createdAt: f.createdAt
+    }));
+  }
+
+  function clearLocalMemory() {
+    Store.setSettings({ aiMemory: { facts: [], feedback: [] } });
   }
 
   /* ---------- 沉淀对话为记忆 ---------- */
@@ -301,6 +407,11 @@ const AIContext = (() => {
     studyStatePrompt: studyStatePrompt,
     smartSuggestion: smartSuggestion,
     smartSystemPrompt: smartSystemPrompt,
+    learnFromMessage: learnFromMessage,
+    rateReply: rateReply,
+    memoryPrompt: memoryPrompt,
+    memorySummary: memorySummary,
+    clearLocalMemory: clearLocalMemory,
     rememberAsync: rememberAsync,
     searchLongTermMemory: searchLongTermMemory
   };

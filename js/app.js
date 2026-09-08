@@ -552,6 +552,7 @@ const App = (() => {
     // 热点新闻与“首要安排”卡片含稍重的 DOM 构建，启动期间同步、普通切换时放空闲帧
     _idleRender(() => { renderHeroNews(); });
     _idleRender(() => renderHeroPriority());
+    _idleRender(() => renderAIInsight());
     // 问候语（按时段细化，附一句温暖副语）
     const name = Store.getProfile().name || "同学";
     const h = new Date().getHours();
@@ -2052,6 +2053,32 @@ const App = (() => {
     }
   }
 
+  function renderAIInsight() {
+    const box = $("#aiInsight");
+    if (!box) return;
+    const hasContext = typeof AIContext !== "undefined";
+    const suggestion = hasContext ? AIContext.smartSuggestion() : "";
+    const state = hasContext ? AIContext.detectStudyState() : null;
+    const facts = hasContext ? AIContext.memorySummary(3) : [];
+    const lines = [];
+    if (suggestion) lines.push(suggestion);
+    if (state && state.signals.length) lines.push("当前信号：" + state.signals.slice(0, 3).join("；"));
+    if (facts.length) lines.push("AI 记住：" + facts.map(f => f.text).join("；"));
+    if (!lines.length) {
+      lines.push("AI 还没有足够的个性化信号。你可以在 AI 助手里说“请记住……”，或先完成一次专注/复习。");
+    }
+    box.innerHTML = lines.map(line => `<p>${esc(line)}</p>`).join("");
+    const action = $("#btnAIInsightAsk");
+    if (action) action.onclick = () => switchView("ai");
+    const clearBtn = $("#btnAIForget");
+    if (clearBtn) clearBtn.onclick = () => {
+      if (!confirm("确定清除 AI 的本机偏好记忆吗？学习数据不会删除。")) return;
+      if (typeof AIContext !== "undefined") AIContext.clearLocalMemory();
+      renderAIInsight();
+      toast("AI 本机偏好记忆已清除", "ok");
+    };
+  }
+
   function addChatMsg(text, who = "ai") {
     const box = $("#chatBox");
     const div = document.createElement("div");
@@ -2070,9 +2097,29 @@ const App = (() => {
     actions.className = "chat-actions";
     const icon = name => window.XingyuIcons ? XingyuIcons.svg(name) : "";
     actions.innerHTML = `
+      <button class="chat-action" type="button" data-chat-action="good">👍 有用</button>
+      <button class="chat-action" type="button" data-chat-action="bad">👎 不够好</button>
       <button class="chat-action" type="button" data-chat-action="copy">${icon("copy")}复制</button>
       <button class="chat-action" type="button" data-chat-action="save">${icon("save")}保存为笔记</button>
       ${extras.cards && extras.cards.length ? `<button class="chat-action" type="button" data-chat-action="cards">${icon("cards")}加入复习卡</button>` : ""}`;
+    const feedbackButtons = [
+      actions.querySelector('[data-chat-action="good"]'),
+      actions.querySelector('[data-chat-action="bad"]')
+    ];
+    const rateAnswer = helpful => {
+      feedbackButtons.forEach(btn => { if (btn) btn.disabled = true; });
+      if (typeof AIContext !== "undefined") {
+        const result = AIContext.rateReply(text, helpful, extras.userText || "");
+        toast(helpful ? "已记住这类回答对你有帮助" : "下次会更直接、更具体", "ok");
+        if (result.bad > result.good && result.total >= 3) {
+          toast("已自动校准：后续优先短结论和可执行步骤", "ok");
+        }
+      } else {
+        toast("反馈已忽略（AI 上下文不可用）", "err");
+      }
+    };
+    if (feedbackButtons[0]) feedbackButtons[0].onclick = () => rateAnswer(true);
+    if (feedbackButtons[1]) feedbackButtons[1].onclick = () => rateAnswer(false);
     actions.querySelector('[data-chat-action="copy"]').onclick = () => {
       navigator.clipboard.writeText(text).then(() => toast("已复制 AI 回复", "ok")).catch(() => toast("复制失败", "err"));
     };
@@ -2127,6 +2174,9 @@ const App = (() => {
     const loading = addChatMsg("思考中…", "ai");
     loading.classList.add("chat-loading");
     const isCmd = trimmed.startsWith("/");
+    const chatUserText = trimmed;
+    // 统一入口学习用户偏好：即使未配置在线模型，本地模式也要持续了解用户。
+    try { if (!isCmd && typeof AIContext !== "undefined") AIContext.learnFromMessage(trimmed); } catch (e) {}
     let generatedCards = [];
     try {
       let reply;
@@ -2147,7 +2197,7 @@ const App = (() => {
         reply = await AI.ask(trimmed);
       }
       loading.querySelector(".chat-bubble").innerHTML = esc(reply).replace(/\n/g, "<br>");
-      addChatActions(loading, reply, { cards: generatedCards });
+      addChatActions(loading, reply, { cards: generatedCards, userText: chatUserText });
     } catch (e) {
       loading.querySelector(".chat-bubble").innerHTML = e.message === "已停止生成"
         ? `<span style="color:var(--ink-3)">已停止生成</span>`

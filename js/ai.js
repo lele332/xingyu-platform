@@ -318,7 +318,12 @@ ${notesText}`;
         // 使用 AIContext 生成智能系统提示（含用户画像 + 学习规律 + 笔记检索）
         let sysPrompt = "你是「星屿 · 个人学习工作台」的助手，帮助大学生管理学业与生活。回答简洁、实用、用中文。";
         try {
-          if (typeof AIContext !== "undefined") sysPrompt = AIContext.smartSystemPrompt(freeText);
+          if (typeof AIContext !== "undefined") {
+            AIContext.learnFromMessage(freeText);
+            sysPrompt = AIContext.smartSystemPrompt(freeText);
+            const longMemory = await AIContext.searchLongTermMemory(freeText);
+            if (longMemory) sysPrompt += longMemory;
+          }
         } catch(e) {}
         // 维护多轮历史
         _chatHistory.push({ role: "user", content: freeText });

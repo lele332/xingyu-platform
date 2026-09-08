@@ -92,11 +92,17 @@ async function checkProductFeatures(browser) {
   });
   const restoredTaskCount = await page.evaluate(() => Store.getAll("tasks").length);
 
+  const aiInsightShown = await page.locator("#aiInsight p").first().isVisible();
   await page.locator('.nav-item[data-view="ai"]').click();
   const notesBefore = await page.evaluate(() => Store.getAll("notes").length);
-  await page.locator("#chatInput").fill("帮我制定一个今天的学习计划");
+  await page.locator("#chatInput").fill("请记住我喜欢短答案");
   await page.locator("#btnChatSend").click();
   await page.waitForFunction(() => document.querySelector("#btnChatSend")?.disabled === false);
+  const aiMemoryLearned = await page.evaluate(() => AIContext.memorySummary().some(item => item.text.includes("短答案")));
+  const goodAction = page.locator('[data-chat-action="good"]').last();
+  await goodAction.waitFor({ state: "visible" });
+  await goodAction.click();
+  const aiFeedbackStored = await page.evaluate(() => (Store.getSettings().aiMemory?.feedback || []).length > 0);
   const saveAction = page.locator('[data-chat-action="save"]').last();
   const aiActionsShown = await saveAction.isVisible();
   if (aiActionsShown) await saveAction.click();
@@ -112,6 +118,9 @@ async function checkProductFeatures(browser) {
     onboardingShown,
     trashDelta: trashAfterDelete - trashBeforeDelete,
     undoRestored: restoredTaskCount === originalTaskCount,
+    aiInsightShown,
+    aiMemoryLearned,
+    aiFeedbackStored,
     aiActionsShown,
     aiSavedNote: notesAfter === notesBefore + 1,
     themeMode,
@@ -137,7 +146,8 @@ async function checkProductFeatures(browser) {
       group.errors.length ||
       group.results.some(result => result.actual !== `view-${result.expected}` || result.overflowX > 1)
     ) || features.errors.length || features.trashDelta !== 1 ||
-      !features.undoRestored || !features.aiActionsShown || !features.aiSavedNote ||
+      !features.undoRestored || !features.aiInsightShown || !features.aiMemoryLearned ||
+      !features.aiFeedbackStored || !features.aiActionsShown || !features.aiSavedNote ||
       features.themeMode !== "system" || !features.iconLoaded;
     if (failed) process.exitCode = 1;
   } finally {

@@ -1732,6 +1732,14 @@ button:focus:not(:focus-visible) { outline: none; }
 .resume-preview li { font-size: 12.5px; color: var(--ink-2); margin-bottom: 4px; }
 .resume-preview .rp-item b { color: var(--ink); }
 
+/* ---------- AI 今日洞察 ---------- */
+.ai-insight { display: grid; gap: 7px; }
+.ai-insight p { margin: 0; color: var(--ink-2); font-size: 13px; line-height: 1.65; }
+.ai-insight p:first-child { color: var(--ink); font-weight: 500; }
+@media (max-width: 720px) {
+  .ai-insight-card .card-head { align-items: flex-start; flex-direction: column; gap: 8px; }
+}
+
 /* ---------- AI 助手 ---------- */
 .ai-layout { max-width: 920px; margin: 0 auto; }
 .ai-orb-avatar { position: relative; width: 108px; height: 108px; margin: 22px auto 6px; border-radius: 50%; overflow: hidden; padding: 10px; background: #000; box-shadow: 0 10px 34px rgba(0,0,0,.45); }
