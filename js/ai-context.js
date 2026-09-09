@@ -293,20 +293,20 @@ const AIContext = (() => {
       { re: /(?:我在)(?:准备|备考|学习|学)(.{2,120})/, kind: "goal" },
       { re: /(?:我的)(?:目标|专业|学校|年级|昵称)(?:是|叫)(.{2,120})/, kind: "profile" }
     ];
-    rules.forEach(rule => {
+    for (const rule of rules) {
       const match = text.match(rule.re);
-      if (!match || !match[1]) return;
+      if (!match || !match[1]) continue;
       let fact = match[1].replace(/[。.;；！!？?\s]+$/g, "").trim();
       if (rule.kind === "avoidance" && !/^(?:不|别|无)/.test(fact)) fact = "不" + fact;
-      if (fact.length < 2) return;
+      if (fact.length < 2) continue;
       const now = new Date().toISOString();
       const memory = getAiMemory();
       const duplicated = memory.facts.some(f => String(f.text || "").toLowerCase() === fact.toLowerCase());
-      if (duplicated) return;
+      if (duplicated) return [];
       memory.facts.push({ text: fact, kind: rule.kind, confidence: rule.kind === "explicit" ? 0.95 : 0.75, weight: 1, createdAt: now, updatedAt: now });
       saveAiMemory(memory);
-      learned.push(fact);
-    });
+      return [fact];
+    }
     return learned;
   }
 
@@ -362,6 +362,39 @@ const AIContext = (() => {
 
   function clearLocalMemory() {
     Store.setSettings({ aiMemory: { facts: [], feedback: [] } });
+  }
+
+  function memoryItems(limit) {
+    limit = Math.max(1, Math.min(60, Number(limit) || 60));
+    const memory = getAiMemory();
+    const items = memory.facts.slice(-limit).reverse().map((fact, visibleIndex) => {
+      const index = memory.facts.length - 1 - visibleIndex;
+      return Object.assign({}, fact, { index });
+    });
+    return items;
+  }
+
+  function removeMemoryFact(index) {
+    const memory = getAiMemory();
+    const at = Number(index);
+    if (!Number.isInteger(at) || at < 0 || at >= memory.facts.length) return false;
+    memory.facts.splice(at, 1);
+    saveAiMemory(memory);
+    return true;
+  }
+
+  function feedbackStats() {
+    const memory = getAiMemory();
+    const recent = memory.feedback.slice(-8);
+    const count = list => list.filter(item => item.helpful === true).length;
+    return {
+      total: memory.feedback.length,
+      good: count(memory.feedback),
+      bad: memory.feedback.length - count(memory.feedback),
+      recentTotal: recent.length,
+      recentGood: count(recent),
+      recentBad: recent.length - count(recent)
+    };
   }
 
   /* ---------- 上下文预算 ----------
@@ -472,6 +505,9 @@ const AIContext = (() => {
     rateReply: rateReply,
     memoryPrompt: memoryPrompt,
     memorySummary: memorySummary,
+    memoryItems: memoryItems,
+    removeMemoryFact: removeMemoryFact,
+    feedbackStats: feedbackStats,
     clearLocalMemory: clearLocalMemory,
     classifyTaskScenario: classifyTaskScenario,
     compactMiddle: compactMiddle,

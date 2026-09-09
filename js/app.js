@@ -2051,6 +2051,52 @@ const App = (() => {
       const noteCount = Store.getAll("notes").length;
       context.textContent = `参考 ${taskCount} 项任务 · ${noteCount} 篇笔记`;
     }
+    renderAIMemory();
+  }
+
+  function renderAIMemory() {
+    const listBox = $("#aiMemoryList");
+    const metaBox = $("#aiMemoryMeta");
+    if (!listBox || !metaBox) return;
+    if (typeof AIContext === "undefined") {
+      metaBox.textContent = "AI 上下文不可用";
+      listBox.innerHTML = "";
+      return;
+    }
+    const facts = AIContext.memoryItems(60);
+    const stats = AIContext.feedbackStats();
+    metaBox.innerHTML = `共 ${facts.length} 条偏好 · 累计反馈 👍 ${stats.good} / 👎 ${stats.bad} · 最近 👍 ${stats.recentGood} / 👎 ${stats.recentBad}`;
+    if (!facts.length) {
+      listBox.innerHTML = `<div class="empty-state"><p>还没有本机偏好记忆。你可以在对话里说“请记住……”。</p></div>`;
+    } else {
+      const kindName = { explicit: "明确指令", preference: "偏好", avoidance: "回避", goal: "目标", profile: "画像" };
+      listBox.innerHTML = facts.map(fact => `
+        <div class="ai-memory-item">
+          <div class="ai-memory-copy">
+            <span class="tag-chip">${esc(kindName[fact.kind] || "记忆")}</span>
+            <span>${esc(fact.text)}</span>
+          </div>
+          <button class="chat-action" type="button" data-memory-remove="${fact.index}">删除</button>
+        </div>`).join("");
+      $$("#aiMemoryList [data-memory-remove]").forEach(btn => {
+        btn.onclick = () => {
+          const removed = AIContext.removeMemoryFact(btn.dataset.memoryRemove);
+          if (removed) {
+            renderAIMemory();
+            renderAIInsight();
+            toast("已删除这条 AI 记忆", "ok");
+          }
+        };
+      });
+    }
+    const clearBtn = $("#btnAIMemoryClear");
+    if (clearBtn) clearBtn.onclick = () => {
+      if (!confirm("确定清空 AI 偏好和反馈记忆吗？学习数据不会删除。")) return;
+      AIContext.clearLocalMemory();
+      renderAIMemory();
+      renderAIInsight();
+      toast("AI 本机记忆已清空", "ok");
+    };
   }
 
   function renderAIInsight() {
@@ -2207,6 +2253,7 @@ const App = (() => {
       loading.classList.remove("chat-loading");
       $("#btnChatSend").disabled = false;
       $("#btnChatStop").style.display = "none";
+      try { if (typeof AIContext !== "undefined") renderAIMemory(); } catch (e) {}
     }
   }
 

@@ -103,6 +103,13 @@ async function checkProductFeatures(browser) {
   await goodAction.waitFor({ state: "visible" });
   await goodAction.click();
   const aiFeedbackStored = await page.evaluate(() => (Store.getSettings().aiMemory?.feedback || []).length > 0);
+  const aiMemoryPanelShown = await page.locator("#aiMemoryList").innerText().then(text => text.includes("短答案"));
+  const aiMemoryRemoved = await page.evaluate(() => {
+    const before = AIContext.memoryItems().length;
+    if (before < 1) return false;
+    document.querySelector("#aiMemoryList [data-memory-remove]").click();
+    return AIContext.memoryItems().length === before - 1;
+  });
   const saveAction = page.locator('[data-chat-action="save"]').last();
   const aiActionsShown = await saveAction.isVisible();
   if (aiActionsShown) await saveAction.click();
@@ -121,6 +128,8 @@ async function checkProductFeatures(browser) {
     aiInsightShown,
     aiMemoryLearned,
     aiFeedbackStored,
+    aiMemoryPanelShown,
+    aiMemoryRemoved,
     aiActionsShown,
     aiSavedNote: notesAfter === notesBefore + 1,
     themeMode,
@@ -147,7 +156,8 @@ async function checkProductFeatures(browser) {
       group.results.some(result => result.actual !== `view-${result.expected}` || result.overflowX > 1)
     ) || features.errors.length || features.trashDelta !== 1 ||
       !features.undoRestored || !features.aiInsightShown || !features.aiMemoryLearned ||
-      !features.aiFeedbackStored || !features.aiActionsShown || !features.aiSavedNote ||
+      !features.aiFeedbackStored || !features.aiMemoryPanelShown || !features.aiMemoryRemoved ||
+      !features.aiActionsShown || !features.aiSavedNote ||
       features.themeMode !== "system" || !features.iconLoaded;
     if (failed) process.exitCode = 1;
   } finally {

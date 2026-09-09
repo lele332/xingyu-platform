@@ -265,8 +265,21 @@ ${notesText}`;
         else if (skill === "cards") prompt = buildCardsPrompt();
         else if (skill === "organize") prompt = buildOrganizePrompt(rawText || "请把下面这段整理成笔记，如果我没有提供内容请提示我。");
 
+        const skillQuery = ({
+          plan: "学习规划 任务安排 截止日期",
+          priority: "任务优先级排序 紧急重要",
+          cards: "生成复习知识卡片 主动回忆",
+          organize: "整理学习笔记 结构化归纳"
+        })[skill] || "";
+        let systemPrompt = "你是「星屿 · 个人学习工作台」平台内置的 AI 助手，回答简洁、实用、结构化。使用中文。";
+        try {
+          if (typeof AIContext !== "undefined") {
+            systemPrompt = AIContext.smartSystemPrompt((skillQuery + " " + (rawText || "")).trim());
+            systemPrompt += "\n\n【技能模式】\n- 严格完成当前技能任务。\n- 保留用户要求的结构化输出。\n- 融合画像、状态和偏好，但不要重复罗列上下文。";
+          }
+        } catch (e) {}
         const result = await chat([
-          { role: "system", content: "你是「星屿 · 个人学习工作台」平台内置的 AI 助手，回答简洁、实用、结构化。使用中文。" },
+          { role: "system", content: systemPrompt },
           { role: "user", content: prompt }
         ]);
         if (skill === "cards") {

@@ -9,10 +9,12 @@ function loadAIContext() {
     "Store", "document", "window", "location", "navigator",
     source + "\n;return AIContext;"
   );
+  const store = { settings: {} };
   return factory(
     {
       getProfile: () => ({}),
-      getSettings: () => ({ aiMemory: { facts: [], feedback: [] } }),
+      getSettings: () => store.settings,
+      setSettings: patch => Object.assign(store.settings, patch),
       getAll: () => []
     },
     { documentElement: { dataset: { lang: "zh" } } },
@@ -44,4 +46,12 @@ assert.ok(planned.messages[0].content.length < longSystem.length, "system contex
 assert.ok(planned.messages[1].content.length < longHistory.length, "history should be compacted");
 assert.equal(planned.messages.at(-1).content, "帮我安排今天的复习计划", "current message should remain intact");
 assert.ok(planned.reducedChars < planned.rawChars, "context budget should reduce total characters");
+const learned = AIContext.learnFromMessage("请记住：我喜欢短答案和明确步骤");
+assert.equal(learned.length, 1);
+assert.ok(AIContext.memoryItems().some(item => item.text.includes("短答案")));
+const stats = AIContext.rateReply("好的，先做第一步。", true, "怎么开始？");
+assert.ok(stats.good === 1 && stats.total === 1);
+assert.equal(AIContext.removeMemoryFact(AIContext.memoryItems()[0].index), true);
+assert.equal(AIContext.memoryItems().length, 0);
+assert.equal(AIContext.feedbackStats().total, 1);
 console.log("AI context budget test OK");
