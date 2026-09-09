@@ -9,22 +9,24 @@ function loadAIContext() {
     "Store", "document", "window", "location", "navigator",
     source + "\n;return AIContext;"
   );
-  const store = { settings: {} };
-  return factory(
+  const store = { settings: {}, notes: [], saveHooks: [] };
+  const ai = factory(
     {
       getProfile: () => ({}),
       getSettings: () => store.settings,
       setSettings: patch => Object.assign(store.settings, patch),
-      getAll: () => []
+      getAll: key => key === "notes" ? store.notes : [],
+      onSave: fn => store.saveHooks.push(fn)
     },
     { documentElement: { dataset: { lang: "zh" } } },
     {},
     { protocol: "file:" },
     {}
   );
+  return { AIContext: ai, store };
 }
 
-const AIContext = loadAIContext();
+const { AIContext, store } = loadAIContext();
 assert.equal(AIContext.classifyTaskScenario("帮我安排本周复习计划"), "review");
 assert.equal(AIContext.classifyTaskScenario("帮我安排本周任务和截止时间"), "planning");
 assert.equal(AIContext.classifyTaskScenario("这道题总报错，帮我修复"), "troubleshooting");
@@ -54,4 +56,13 @@ assert.ok(stats.good === 1 && stats.total === 1);
 assert.equal(AIContext.removeMemoryFact(AIContext.memoryItems()[0].index), true);
 assert.equal(AIContext.memoryItems().length, 0);
 assert.equal(AIContext.feedbackStats().total, 1);
+store.notes = Array.from({ length: 3000 }, (_, index) => ({
+  title: "笔记 " + index,
+  content: "普通学习内容 " + index,
+  tags: [],
+  updatedAt: new Date().toISOString()
+}));
+store.notes[2999] = { title: "操作系统页面置换算法", content: "LRU 是页面置换算法，重点看缺页率。", tags: ["操作系统"], updatedAt: new Date().toISOString() };
+const hits = AIContext.searchNotes("LRU 页面置换", 3);
+assert.ok(hits.length && hits[0].title === "操作系统页面置换算法", "cached BM25 should find the relevant note");
 console.log("AI context budget test OK");

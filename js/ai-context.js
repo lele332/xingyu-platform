@@ -6,6 +6,9 @@
 const AIContext = (() => {
   "use strict";
 
+  // Store 数据变化后重建检索索引；记忆面板写入也会触发，代价可接受。
+  try { if (Store && typeof Store.onSave === "function") Store.onSave(invalidateNoteIndex); } catch (e) {}
+
   /* ---------- 用户结构化画像 ---------- */
   function userProfile() {
     const p = Store.getProfile();
@@ -102,7 +105,25 @@ const AIContext = (() => {
     return lines.join("\n");
   }
 
-  /* ---------- BM25 笔记检索 ---------- */
+  /* ---------- BM25 笔记检索 ----------
+     大数据量时避免每次提问重建全文；Store.save 后索引自动失效。
+     查询只做一次全文扫描，并用 split 计词频，避免动态正则放大开销。 */
+  let noteIndex = null;
+  function invalidateNoteIndex() { noteIndex = null; }
+  function ensureNoteIndex(notes) {
+    if (noteIndex && noteIndex.count === notes.length) return noteIndex;
+    const docs = notes.map(n => ({
+      note: n,
+      title: String(n.title || "").toLowerCase(),
+      content: String(n.content || "").toLowerCase(),
+      tags: (n.tags || []).map(t => String(t).toLowerCase()),
+      fullText: (String(n.title || "") + " " + String(n.content || "") + " " + (n.tags || []).join(" ")).toLowerCase(),
+      updatedAt: new Date(n.updatedAt || n.createdAt || 0).getTime()
+    }));
+    noteIndex = { count: notes.length, docs };
+    return noteIndex;
+  }
+
   function searchNotes(query, limit) {
     limit = limit || 5;
     if (!query || !String(query).trim()) return [];
@@ -112,36 +133,44 @@ const AIContext = (() => {
     if (!words.length) return [];
     const notes = Store.getAll("notes");
     if (!notes.length) return [];
-    const docFreq = {};
-    notes.forEach(n => {
-      const seen = new Set();
+    const index = ensureNoteIndex(notes);
+    const hitDocs = [];
+    index.docs.forEach(doc => {
+      const hits = {};
       words.forEach(w => {
-        const text = ((n.title || "") + " " + (n.content || "") + " " + (n.tags || []).join(" ")).toLowerCase();
-        if (text.includes(w) && !seen.has(w)) { docFreq[w] = (docFreq[w] || 0) + 1; seen.add(w); }
+        // split 比 new RegExp 快且天然避免用户输入中的正则元字符。
+        const tf = doc.fullText.split(w).length - 1;
+        if (tf > 0) {
+          hits[w] = {
+            tf,
+            inTitle: doc.title.includes(w),
+            inTags: doc.tags.some(tag => tag.includes(w))
+          };
+        }
       });
+      if (Object.keys(hits).length) hitDocs.push({ doc, hits });
     });
     const N = notes.length;
-    const scored = notes.map(n => {
-      const title = (n.title || "").toLowerCase();
-      const content = (n.content || "").toLowerCase();
-      const tags = (n.tags || []).map(t => t.toLowerCase());
-      const fullText = title + " " + content + " " + tags.join(" ");
+    const docFreq = {};
+    words.forEach(w => {
+      docFreq[w] = hitDocs.reduce((sum, hit) => sum + (hit.hits[w] ? 1 : 0), 0);
+    });
+    const scored = hitDocs.map(hit => {
       let score = 0;
       words.forEach(w => {
-        const idf = Math.log(1 + N / (1 + (docFreq[w] || 0)));
-        const safeW = w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-        const tf = (fullText.match(new RegExp(safeW, "g")) || []).length;
-        const tfNorm = tf * 2.2 / (tf + 1.2);
+        const term = hit.hits[w];
+        if (!term) return;
+        const idf = Math.log(1 + N / (1 + docFreq[w]));
+        const tfNorm = term.tf * 2.2 / (term.tf + 1.2);
         score += idf * tfNorm;
-        if (title.includes(w)) score += idf * 1.5;
-        if (tags.some(t => t.includes(w))) score += idf * 1.2;
+        if (term.inTitle) score += idf * 1.5;
+        if (term.inTags) score += idf * 1.2;
       });
-      const updatedAt = new Date(n.updatedAt || n.createdAt || 0).getTime();
-      if (updatedAt > 0) {
-        const ageDays = (Date.now() - updatedAt) / 86400000;
+      if (hit.doc.updatedAt > 0) {
+        const ageDays = (Date.now() - hit.doc.updatedAt) / 86400000;
         score *= Math.pow(0.5, ageDays / 14);
       }
-      return { note: n, score: Math.round(score * 100) / 100 };
+      return { note: hit.doc.note, score: Math.round(score * 100) / 100 };
     }).filter(r => r.score > 0)
       .sort((a, b) => b.score - a.score)
       .slice(0, limit);
