@@ -1,5 +1,5 @@
 // 缓存版本：修改 CORE 或缓存策略时必须递增，否则客户端不会更新
-const CACHE = "xingyu-static-20260910-01";
+const CACHE = "xingyu-static-20260910-02";
 
 // 预缓存清单 = index.html 实际加载的资源（2026-08-28 实测校准）
 // 注意：旧清单里的 js/idb.js、js/backup.js、js/app-core.js、js/views-*.js 均不存在
@@ -13,6 +13,7 @@ const CORE = [
   "./assets/xingyu-app-icon-256.png",
   "./assets/xingyu-app-icon-512.png",
   "./css/brand-system.css",
+  "./css/mobile-patch.css",
   "./css/style.css",
   "./css/apple.css",
   "./css/synapse.css",
@@ -31,6 +32,8 @@ const CORE = [
   "./js/app.js",
   "./js/app-shell.js",
   "./js/reminders.js",
+  "./js/mobile-capture.js",
+  "./js/mobile-enhance.js",
   "./js/charts.js",
   "./js/icons.js",
   "./js/lunar.js",
