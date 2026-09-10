@@ -10,13 +10,14 @@
   var LAST_AUTO_KEY = "xingyu_perf_auto_v3";
   var ISSUE_HISTORY_KEY = "xingyu_perf_issue_history_v1";
   var TREND_KEY = "xingyu_perf_trend_v1";
+  var QUEUE_KEY = "xingyu_perf_feedback_queue_v1";
   var ALERT_KEY = "xingyu_perf_alert_mode";
 
   var alertMode = "standard";
   try { alertMode = localStorage.getItem(ALERT_KEY) || "standard"; } catch (e) {}
   if (!["standard", "quiet", "off"].includes(alertMode)) alertMode = "standard";
 
-  var lastAutoAt = 0, issueHistory = {}, trend = { samples: [], autoReports: [] };
+  var lastAutoAt = 0, issueHistory = {}, trend = { samples: [], autoReports: [] }, feedbackQueue = [];
   try { lastAutoAt = Number(localStorage.getItem(LAST_AUTO_KEY) || 0) || 0; } catch (e) {}
   try { issueHistory = JSON.parse(localStorage.getItem(ISSUE_HISTORY_KEY) || "{}") || {}; } catch (e) { issueHistory = {}; }
   try { trend = JSON.parse(localStorage.getItem(TREND_KEY) || '{"samples":[],"autoReports":[]}') || { samples: [], autoReports: [] }; } catch (e) { trend = { samples: [], autoReports: [] }; }
@@ -27,6 +28,9 @@
     x.signatures = Array.isArray(x.signatures) ? x.signatures : [];
   });
   trend.autoReports = trend.autoReports.filter(function (x) { return x && typeof x.at === "number"; }).slice(-12);
+  try { feedbackQueue = JSON.parse(localStorage.getItem(QUEUE_KEY) || "[]") || []; } catch (e) { feedbackQueue = []; }
+  if (!Array.isArray(feedbackQueue)) feedbackQueue = [];
+  feedbackQueue = feedbackQueue.filter(function (x) { return x && typeof x === "object"; }).slice(-10);
 
   function phase() {
     return window.__splashCovered ? "boot-cover" : (window.__splashActive ? "splash" : "main");
@@ -299,13 +303,44 @@
   }
 
   var source = "manual";
+  function persistQueue() {
+    try { localStorage.setItem(QUEUE_KEY, JSON.stringify(feedbackQueue.slice(-10))); } catch (e) {}
+  }
+  function queueReport(report) {
+    feedbackQueue.push(report); feedbackQueue = feedbackQueue.slice(-10); persistQueue();
+  }
+  var queueSending = false;
+  function flushQueue() {
+    if (queueSending || !feedbackQueue.length) return Promise.resolve({ flushed: 0 });
+    queueSending = true;
+    var sent = 0;
+    function next() {
+      if (!feedbackQueue.length) { queueSending = false; return Promise.resolve({ flushed: sent }); }
+      var report = feedbackQueue[0];
+      report.queuedRetry = true;
+      return fetch("/api/feedback", {
+        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(report)
+      }).then(function (r) { return r.json(); }).then(function (res) {
+        if (!res || !res.ok) throw new Error("queue save failed");
+        feedbackQueue.shift(); persistQueue(); sent++;
+        return next();
+      }).catch(function () {
+        queueSending = false;
+        return { flushed: sent };
+      });
+    }
+    return next();
+  }
   function saveReport(comment, reportSource) {
     source = reportSource === "auto" ? "auto" : "manual";
     var rep = generateReport(typeof comment === "string" ? comment : "");
     if (source === "auto") rep.autoTrigger = autoEligibleIssues().map(function (i) { return i.key; });
     return fetch("/api/feedback", {
       method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(rep)
-    }).then(function (r) { return r.json(); });
+    }).then(function (r) { return r.json(); }).catch(function (err) {
+      queueReport(rep);
+      throw err;
+    });
   }
 
   function setAlertMode(mode) {
@@ -366,12 +401,14 @@
     setTimeout(autoCheck, 24000);
   } else setTimeout(autoCheck, 10000);
   setInterval(autoCheck, 30000);
+  setTimeout(flushQueue, 5000);
+  window.addEventListener("online", flushQueue);
 
   window.XYPerf = {
     detectIssues: detectIssues, autoEligibleIssues: autoEligibleIssues,
     generateReport: generateReport, textSummary: textSummary, saveReport: saveReport,
     autoCheck: autoCheck, setAlertMode: setAlertMode, get alertMode() { return alertMode; },
-    healthSummary: healthSummary, get trend() { return trend; }, raw: S
+    healthSummary: healthSummary, flushQueue: flushQueue, get trend() { return trend; }, raw: S
   };
   document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll("[data-perf-alert]").forEach(function (btn) {

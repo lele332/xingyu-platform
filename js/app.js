@@ -2735,8 +2735,9 @@ const App = (() => {
       if (st) st.textContent = ok ? "已保存到 data/feedback/" + (res.file || "") : "保存失败";
       toast(ok ? "反馈已保存" : "反馈保存失败", ok ? "ok" : "err");
     }).catch(() => {
-      if (st) st.textContent = "保存失败：本地服务不可用";
-      toast("反馈保存失败", "err");
+      const queued = !!window.XYPerf?.trend && window.XYPerf.flushQueue;
+      if (st) st.textContent = queued ? "本地服务暂时不可用，诊断已暂存，恢复后会自动补传。" : "保存失败：本地服务不可用";
+      toast(queued ? "反馈已本机暂存" : "反馈保存失败", queued ? "warn" : "err");
     });
   }
   function copyFeedbackReport() {
