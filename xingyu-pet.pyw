@@ -20,7 +20,9 @@ import threading
 import webview
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-URL = "http://127.0.0.1:8620/agent-pet.html"
+URL = os.environ.get("XINGYU_PET_URL") or (
+    "http://127.0.0.1:%s/agent-pet.html" % os.environ.get("XINGYU_PORT", "8620")
+)
 PROFILE = os.path.join(ROOT, "webview-data", "pet")
 POSITION_FILE = os.path.join(PROFILE, "window-position.json")
 LOCK_PORT = 8640

@@ -1267,6 +1267,10 @@ class XingyuHandler(http.server.SimpleHTTPRequestHandler):
             #      ok:true, pending:true → 进程已拉起、还在加载，稍等即出现（不是失败）
             #      ok:false              → 进程真的没拉起来 / 起来后立刻退出
             _proc = {}
+            try:
+                server_port = int(self.server.server_address[1])
+            except Exception:
+                server_port = DEFAULT_PORT
 
             def _spawn_pet():
                 # ⚠️ 别再把 stdout/stderr 丢给 DEVNULL。
@@ -1285,10 +1289,12 @@ class XingyuHandler(http.server.SimpleHTTPRequestHandler):
                     log_fp = subprocess.DEVNULL
                 try:
                     flags = getattr(subprocess, "DETACHED_PROCESS", 0) | getattr(subprocess, "CREATE_NO_WINDOW", 0)
+                    pet_env = os.environ.copy()
+                    pet_env["XINGYU_PORT"] = str(server_port)
                     _proc["p"] = subprocess.Popen(
                         [exe, script], cwd=root_dir, creationflags=flags,
                         stdin=subprocess.DEVNULL, stdout=log_fp,
-                        stderr=log_fp, close_fds=True)
+                        stderr=log_fp, close_fds=True, env=pet_env)
                 except Exception as exc:
                     _proc["err"] = str(exc)
 
