@@ -659,13 +659,10 @@ def _pet_context(handler):
         _send_json(handler, 401, {"ok": False, "error": "unauthorized"})
         return
     try:
-        with open(STATE_PATH, "r", encoding="utf-8") as f:
-            envelope = json.load(f)
-        data = envelope.get("data") if isinstance(envelope, dict) else None
+        # 直接读数据库，保证宠物看到的任务与主应用 / API 写入保持一致。
+        data = platform_db.bootstrap()
         if not isinstance(data, dict):
             data = {}
-    except FileNotFoundError:
-        data = {}
     except Exception as exc:
         _send_json(handler, 500, {"ok": False, "error": str(exc)})
         return
@@ -697,6 +694,7 @@ def _pet_context(handler):
             "daysLeft": days,
         })
     tasks.sort(key=lambda x: (x["daysLeft"] is None, x["daysLeft"] if x["daysLeft"] is not None else 9999))
+    # actions 给桌面宠物操作层使用；tasks 只用于 AI 上下文摘要，避免超长提示。
 
     raw_courses = data.get("courses") if isinstance(data.get("courses"), list) else []
     weekday = today.isoweekday()
@@ -758,6 +756,10 @@ def _pet_context(handler):
             "goal": str(profile.get("goal", ""))[:160],
             "generatedAt": now.isoformat(timespec="seconds"),
             "tasks": tasks[:8],
+            "actions": [
+                {"id": x["id"], "title": x["title"], "status": x["status"], "priority": x["priority"]}
+                for x in tasks[:40]
+            ],
             "overdueCount": sum(1 for x in tasks if isinstance(x.get("daysLeft"), int) and x["daysLeft"] < 0),
             "dueTodayCount": sum(1 for x in tasks if x.get("daysLeft") == 0),
             "courses": courses[:6],

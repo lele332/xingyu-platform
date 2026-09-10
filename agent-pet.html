@@ -298,12 +298,67 @@
     items.push({label:'40分钟计划',ask:'我只有 40 分钟，帮我安排一段高效学习。'});
     items.push({label:'开始任务',ask:'我有点拖延，给我一个立刻能开始的小任务。'});
     items.push({label:'复盘提问',ask:'我刚学完一小时，给我一个简短复盘问题。'});
-    items.push({label:'鼓励我',ask:'我有点累，用一句话鼓励我一下。'});
+    if(first&&first.id)items.push({label:'完成首个',action:'complete',task:first});
     chips.innerHTML='';
-    items.forEach(({label,ask})=>{
+    items.forEach(({label,ask,action,task})=>{
       const b=document.createElement('button');b.type='button';b.className='chip';b.textContent=label;
-      b.addEventListener('click',()=>askAI(ask));chips.appendChild(b);
+      b.addEventListener('click',()=>action?taskAction(task,action):askAI(ask));chips.appendChild(b);
     });
+  }
+  async function taskAction(task,action){
+    if(!task||!task.id){addMsg('ai','没有找到可操作的任务。','error');return;}
+    const patch=action==='start'?{status:'doing'}:{status:'done'};
+    try{
+      const r=await fetch(`/api/data/tasks/${encodeURIComponent(task.id)}`,{
+        method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({patch})
+      });
+      const j=await r.json();
+      if(!r.ok||!j.ok)throw new Error(j.error||('HTTP '+r.status));
+      addMsg('ai',action==='start'?`已开始「${task.title}」。先做 10 分钟就好。`:`已完成「${task.title}」，干得漂亮。`);
+      speak(action==='start'?'已开始任务。':'任务已完成。');
+      await loadContext();
+    }catch(err){
+      addMsg('ai','任务操作没有成功：'+(err.message||'本地服务不可用。'),'error');
+    }
+  }
+  function createTask(title,estimate){
+    const clean=title.replace(/[,，。.!?！？]+$/,'').slice(0,80);
+    if(!clean)return Promise.resolve(false);
+    return fetch('/api/data/tasks',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({item:{title:clean,status:'todo',priority:'mid',estimate:estimate||null}})
+    }).then(async r=>{
+      const j=await r.json();
+      if(!r.ok||!j.ok)throw new Error(j.error||('HTTP '+r.status));
+      addMsg('ai',`已创建任务「${clean}」。我先从它最清楚的一小步开始。`);
+      speak('任务已创建。');await loadContext();return true;
+    }).catch(err=>{addMsg('ai','创建任务没有成功：'+(err.message||'本地服务不可用。'),'error');return false;});
+  }
+  function actionableTasks(){
+    return (Array.isArray(platformContext?.actions)&&platformContext.actions.length?platformContext.actions:platformContext?.tasks)||[];
+  }
+  function findTask(text){
+    const q=text.replace(/^(?:任务|待办)[：:]?/,'').trim();
+    if(/^(?:第一个|第一项|首个)/.test(q))return actionableTasks()[0];
+    const key=q.replace(/^(?:把|将|去)/,'').replace(/(?:完成|做完|开始|推进)$/,'').trim();
+    return actionableTasks().find(t=>t.title.includes(key)||key.includes(t.title));
+  }
+  async function tryAction(text){
+    const create=text.match(/(?:新建|创建|添加)(?:任务|待办)?[：:]\s*(.+)/);
+    if(create){
+      const raw=create[1];const mins=raw.match(/(?:预计|大概|用)?\s*(\d{1,3})\s*分钟/);
+      await createTask(raw.replace(/(?:，|,)?\s*(?:预计|大概|用)?\s*\d{1,3}\s*分钟.*$/,''),mins?Number(mins[1]):null);
+      return true;
+    }
+    if(/(?:标记完成|完成|做完)(?:任务|待办)?/.test(text)){
+      const task=findTask(text.replace(/.*?(?:标记完成|完成|做完)/,''));
+      if(task){await taskAction(task,'complete');return true;}
+    }
+    if(/(?:开始|推进)(?:任务|待办)?/.test(text)){
+      const task=findTask(text.replace(/.*?(?:开始|推进)/,''));
+      if(task){await taskAction(task,'start');return true;}
+    }
+    return false;
   }
 
   /* ---------- 记忆、AI 与语音 ---------- */
@@ -338,6 +393,7 @@
   async function askAI(text,{silent=false}={}){
     lastActivityAt=Date.now();rememberFrom(text);
     if(!silent)addMsg('user',text);
+    if(await tryAction(text)){setStatus('就绪');setMood('');return;}
     setThinking(true);setMood('thinking');setStatus('思考中');
     try{
       const configured=await checkAi();
