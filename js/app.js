@@ -2699,6 +2699,8 @@ const App = (() => {
         html += '<span class="' + cls + '">' + (i.level === "error" ? "✕ " : "⚠ ") + _fbEsc(i.msg) + "</span>\n";
       });
     }
+    const nf = rep.metrics && rep.metrics.noiseFiltered;
+    if (nf) html += "<span class=\"fb-warn\">已过滤噪声：JS " + nf.errors + " 条 / 资源 " + nf.resources + " 个（仅记录，不打扰）</span>\n";
     html += "\n" + _fbEsc(XYPerf.textSummary(rep));
     box.innerHTML = html;
   }

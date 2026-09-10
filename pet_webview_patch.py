@@ -149,8 +149,12 @@ def _patch():
                 try:
                     if not getattr(window, "transparent", False):
                         return
-                    self.form.BackColor = Color.Black
-                    self.form.TransparencyKey = Color.Black
+                    # 2026-09-10：不再用黑色 chromakey，避免暗色模型/暗色 UI 被误抠成透明。
+                    # 使用 1,2,3 这种页面里几乎不可能出现的“隐私色”。HTML 本体是 transparent，
+                    # 所以这个颜色只承担 WinForms 抠像，不会出现在用户看到的宠物上。
+                    chroma = Color.FromArgb(255, 1, 2, 3)
+                    self.form.BackColor = chroma
+                    self.form.TransparencyKey = chroma
                     # WebView2 层的 DefaultBackgroundColor 由 pywebview 自己管，
                     # 这里一个字都别动（覆盖它反而会变白框）。
                 except Exception:

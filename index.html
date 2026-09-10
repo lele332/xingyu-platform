@@ -58,7 +58,7 @@
 <link rel="preload" href="assets/fonts/font_52a6c245.woff2" as="font" type="font/woff2" crossorigin>
 -->
   <link rel="stylesheet" href="css/mobile-patch.css">
-<link rel="stylesheet" href="css/brand-system.css?v=20260910.1">
+<link rel="stylesheet" href="css/brand-system.css?v=20260910.2">
 </head>
 <body>
 
@@ -1922,7 +1922,7 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
       <button class="modal-close" data-close="feedbackModal">✕</button>
     </div>
     <div class="modal-body">
-      <p class="hint">平台会自动识别开屏视频卡顿、主线程长任务、帧率偏低、JS 报错和资源加载失败。你也可以补充描述后保存反馈，报告会存到本机 data/feedback/ 目录。</p>
+      <p class="hint">自动巡检只记录持续 4 秒以上的明显掉帧、连续主线程阻塞或非噪声 JS 错误；轻微卡顿和非关键资源 404 只会留在原始指标里，不会打扰你。你补充的描述会一起存到本机 data/feedback/ 目录。</p>
       <div id="fbSummary" class="fb-summary" aria-live="polite"></div>
       <label class="field">
         <span>补充说明（哪里卡、什么时候卡）</span>
@@ -1963,12 +1963,12 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
 <script defer src="js/charts.js?v=20260905.1"></script>
 <script defer src="js/ai-context.js?v=20260909.2"></script>
 <script defer src="js/ai.js?v=20260909.1"></script>
-<script defer src="js/icons.js?v=20260831.5"></script>
+<script defer src="js/icons.js?v=20260910.1"></script>
 <script defer src="js/icons-themes.js?v=20260831.5"></script>
-<script defer src="js/perf.js?v=20260816.1"></script>
-<script defer src="js/app-shell.js?v=20260909.1"></script>
+<script defer src="js/perf.js?v=20260910.1"></script>
+<script defer src="js/app-shell.js?v=20260910.1"></script>
 <script defer src="js/reminders.js?v=20260909.1"></script>
-<script defer src="js/app.js?v=20260909.1"></script>
+<script defer src="js/app.js?v=20260910.1"></script>
 <script defer src="js/settings-ui.js?v=20260831.5"></script>
 <script>
 /* 非关键模块懒加载：开屏期间不解析这 ~170KB JS（天气/跑步/语音/文献/激励/教练），
@@ -2049,7 +2049,7 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
 <link rel="stylesheet" href="css/voice-agent.css?v=20260903.3">
 <script defer src="js/voice-agent.js?v=20260906.1"></script>
 
-  <link rel="stylesheet" href="css/brand-system.css?v=20260910.1">
+  <link rel="stylesheet" href="css/brand-system.css?v=20260910.2">
   <script defer src="js/ux-system.js?v=20260910.1"></script>
   <script src="js/mobile-capture.js"></script>
   <script src="js/mobile-enhance.js"></script>

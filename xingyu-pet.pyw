@@ -89,16 +89,16 @@ def main():
         "XingyuPet",   # ASCII 标题，方便自动化按窗口标题探针；UI 里的徽章仍是中文
         URL,
         js_api=api,
-        width=330,
-        height=470,
-        min_size=(260, 380),
+        width=360,
+        height=540,
+        min_size=(320, 460),
         frameless=True,
-        easy_drag=True,
+        easy_drag=False,
         transparent=True,
         on_top=True,
         shadow=False,
         resizable=True,
-        background_color="#000000",
+        background_color="#010203",
     )
     api.window = window
     threading.Thread(target=_lock_server, args=(api,), daemon=True).start()

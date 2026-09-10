@@ -307,3 +307,21 @@ input[type="text"], input[type="search"], input[type="password"], input[type="em
   --ink-3: #6b7280;
   --ink-faint: #9ca3af;
 }
+
+/* ---------- 侧边栏图标系统 v2 ---------- */
+.nav-item .xy-icon,
+.mobile-nav-item .xy-icon {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  opacity: .76;
+  transition: opacity var(--xy-fast) var(--xy-ease), transform var(--xy-fast) var(--xy-ease);
+}
+.nav-item .xy-icon { margin-right: 2px; }
+.mobile-nav-item .xy-icon { width: 19px; height: 19px; margin-bottom: 1px; }
+.nav-item:hover .xy-icon,
+.mobile-nav-item:hover .xy-icon,
+.nav-item.active .xy-icon,
+.mobile-nav-item.active .xy-icon { opacity: 1; transform: translateY(-.5px); }
+.nav-item.active .xy-icon { color: var(--xy-star); }
+.mobile-nav-item.active .xy-icon { color: #03192a; }

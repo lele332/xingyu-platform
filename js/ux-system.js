@@ -276,13 +276,4 @@
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, { once: true });
   else boot();
-
-  // 全局资源/运行错误只轻提示一次，避免把学习流程打断成技术弹窗。
-  let errorNotified = false;
-  window.addEventListener("unhandledrejection", event => {
-    if (errorNotified) return;
-    errorNotified = true;
-    toast("部分联网能力暂时不可用，本地功能不受影响", { type: "error", duration: 4200 });
-  });
 })();
-
