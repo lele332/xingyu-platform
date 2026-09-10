@@ -1,0 +1,11 @@
+/* 本地字体（占位）
+ *
+ * 说明：原 assets/fonts/ 下的自定义字体文件已丢失 —— 该目录从未纳入 Git
+ * 版本控制，因此无法从仓库恢复（线上 GitHub Pages 版本同样缺失）。
+ *
+ * 影响：无。页面字体由 css/style.css 与 css/apple.css 的 --font 变量提供完整
+ * 系统字体回退栈（-apple-system / SF Pro Text / PingFang SC / Microsoft YaHei），
+ * 排版与功能均不受影响。保留本文件仅用于消除 404 请求。
+ *
+ * 若需恢复自定义字体：将字体文件放回本目录，并在此处补充 @font-face 规则即可。
+ */
