@@ -1,5 +1,5 @@
 // 缓存版本：修改 CORE 或缓存策略时必须递增，否则客户端不会更新
-const CACHE = "xingyu-static-20260909-05";
+const CACHE = "xingyu-static-20260910-01";
 
 // 预缓存清单 = index.html 实际加载的资源（2026-08-28 实测校准）
 // 注意：旧清单里的 js/idb.js、js/backup.js、js/app-core.js、js/views-*.js 均不存在
@@ -12,6 +12,7 @@ const CORE = [
   "./assets/xingyu-app-icon-192.png",
   "./assets/xingyu-app-icon-256.png",
   "./assets/xingyu-app-icon-512.png",
+  "./css/brand-system.css",
   "./css/style.css",
   "./css/apple.css",
   "./css/synapse.css",
@@ -56,9 +57,11 @@ const NEVER_CACHE = /\/js\/local-config\.js$/;
 const LARGE_MEDIA = /\.(mp4|webm|ogg|ogv|mov|m4a|wav|mp3|flac|bin|pth|onnx|wasm|zip|vrm|glb|gltf|fbx|ttf|otf|woff2)$/i;
 // AIRI 是同源挂载的独立 SPA（/airi/），它的导航请求绝不能被当成星屿主页缓存
 const AIRI_PREFIX = /^\/airi(\/|$)/;
+const DYNAMIC_API = /^\/(api|ai-proxy)\//;
 
 function shouldCache(url) {
   if (NEVER_CACHE.test(url.pathname)) return false;
+  if (DYNAMIC_API.test(url.pathname)) return false;
   if (LARGE_MEDIA.test(url.pathname)) return false;
   return true;
 }
