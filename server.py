@@ -19,6 +19,7 @@ import webbrowser
 import urllib.error
 import urllib.request
 import qrcode
+from datetime import datetime
 from urllib.parse import parse_qs, unquote, urlsplit
 
 import platform_db
@@ -652,6 +653,121 @@ def _get_state(handler):
         _send_json(handler, 500, {"ok": False, "error": str(exc)})
 
 
+def _pet_context(handler):
+    """给桌面宠物提供一个最小、脱敏的学习上下文。"""
+    if not handler._authorized():
+        _send_json(handler, 401, {"ok": False, "error": "unauthorized"})
+        return
+    try:
+        with open(STATE_PATH, "r", encoding="utf-8") as f:
+            envelope = json.load(f)
+        data = envelope.get("data") if isinstance(envelope, dict) else None
+        if not isinstance(data, dict):
+            data = {}
+    except FileNotFoundError:
+        data = {}
+    except Exception as exc:
+        _send_json(handler, 500, {"ok": False, "error": str(exc)})
+        return
+
+    now = datetime.now()
+    today = now.date()
+    profile = data.get("profile") if isinstance(data.get("profile"), dict) else {}
+
+    def parse_dt(value):
+        try:
+            return datetime.fromisoformat(str(value).replace("Z", "+00:00")).replace(tzinfo=None)
+        except Exception:
+            return None
+
+    raw_tasks = data.get("tasks") if isinstance(data.get("tasks"), list) else []
+    tasks = []
+    for item in raw_tasks:
+        if not isinstance(item, dict) or item.get("status") == "done":
+            continue
+        due_dt = parse_dt(item.get("due", ""))
+        days = (due_dt.date() - today).days if due_dt else None
+        tasks.append({
+            "id": str(item.get("id", ""))[:40],
+            "title": str(item.get("title", "未命名任务"))[:120],
+            "priority": item.get("priority", "mid"),
+            "status": item.get("status", "todo"),
+            "estimate": item.get("estimate", None),
+            "due": item.get("due", ""),
+            "daysLeft": days,
+        })
+    tasks.sort(key=lambda x: (x["daysLeft"] is None, x["daysLeft"] if x["daysLeft"] is not None else 9999))
+
+    raw_courses = data.get("courses") if isinstance(data.get("courses"), list) else []
+    weekday = today.isoweekday()
+    courses = []
+    for item in raw_courses:
+        if isinstance(item, dict) and item.get("day") == weekday:
+            courses.append({
+                "name": str(item.get("name", "课程"))[:80],
+                "start": str(item.get("start", ""))[:10],
+                "end": str(item.get("end", ""))[:10],
+                "location": str(item.get("location", ""))[:80],
+            })
+    courses.sort(key=lambda x: x["start"])
+
+    raw_notes = data.get("notes") if isinstance(data.get("notes"), list) else []
+    notes = []
+    for item in reversed(raw_notes[-8:]):
+        if isinstance(item, dict):
+            notes.append({
+                "id": str(item.get("id", ""))[:40],
+                "title": str(item.get("title", "未命名笔记"))[:100],
+                "subject": str(item.get("subject", ""))[:60],
+            })
+
+    raw_pomos = data.get("pomodoros") if isinstance(data.get("pomodoros"), list) else []
+    today_pomos = 0
+    today_focus_minutes = 0
+    for item in raw_pomos:
+        if not isinstance(item, dict):
+            continue
+        started = parse_dt(item.get("startAt", ""))
+        if not started or started.date() != today:
+            continue
+        if item.get("type") == "focus":
+            today_pomos += 1
+            try:
+                today_focus_minutes += int(item.get("minutes", 0) or 0)
+            except Exception:
+                pass
+
+    raw_exams = data.get("exams") if isinstance(data.get("exams"), list) else []
+    exams = []
+    for item in raw_exams:
+        if not isinstance(item, dict):
+            continue
+        due_dt = parse_dt(item.get("date", "") or item.get("due", "") or item.get("startAt", ""))
+        if due_dt and due_dt.date() >= today:
+            exams.append({
+                "title": str(item.get("title", "") or item.get("name", "考试"))[:100],
+                "date": item.get("date", "") or item.get("due", "") or item.get("startAt", ""),
+                "daysLeft": (due_dt.date() - today).days,
+            })
+    exams.sort(key=lambda x: x["daysLeft"])
+
+    _send_json(handler, 200, {
+        "ok": True,
+        "context": {
+            "nickname": str(profile.get("nickname", "") or profile.get("name", "") or "同学")[:40],
+            "goal": str(profile.get("goal", ""))[:160],
+            "generatedAt": now.isoformat(timespec="seconds"),
+            "tasks": tasks[:8],
+            "overdueCount": sum(1 for x in tasks if isinstance(x.get("daysLeft"), int) and x["daysLeft"] < 0),
+            "dueTodayCount": sum(1 for x in tasks if x.get("daysLeft") == 0),
+            "courses": courses[:6],
+            "notes": notes[:6],
+            "focus": {"sessions": today_pomos, "minutes": today_focus_minutes},
+            "exams": exams[:3],
+        }
+    })
+
+
 def _save_state(handler, body):
     """保存实时状态；本机/已授权局域网设备均可调用。"""
     try:
@@ -1008,6 +1124,9 @@ class XingyuHandler(http.server.SimpleHTTPRequestHandler):
             self.send_header("Content-Length", str(len(payload)))
             self.end_headers()
             self.wfile.write(payload)
+            return
+        if path == "/api/pet-context":
+            _pet_context(self)
             return
         if path == "/api/state":
             _get_state(self)
@@ -1724,7 +1843,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-

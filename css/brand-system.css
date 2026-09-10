@@ -325,3 +325,32 @@ input[type="text"], input[type="search"], input[type="password"], input[type="em
 .mobile-nav-item.active .xy-icon { opacity: 1; transform: translateY(-.5px); }
 .nav-item.active .xy-icon { color: var(--xy-star); }
 .mobile-nav-item.active .xy-icon { color: #03192a; }
+
+/* ---------- 性能反馈提醒档位 ---------- */
+.fb-alert-picker {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: var(--ink-2, #9fb0c4);
+}
+.fb-alert-picker button {
+  min-height: 30px;
+  padding: 6px 11px;
+  border: 1px solid var(--rule, #2b3b4a);
+  border-radius: 99px;
+  background: transparent;
+  color: var(--ink-2, #9fb0c4);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color var(--xy-fast) var(--xy-ease), color var(--xy-fast) var(--xy-ease), border-color var(--xy-fast) var(--xy-ease);
+}
+.fb-alert-picker button:hover { color: var(--ink, #eaf6ff); border-color: rgba(125,211,252,.38); background: rgba(125,211,252,.10); }
+.fb-alert-picker button.active { color: #03192a; border-color: transparent; background: var(--xy-brand-grad); font-weight: 650; }
+.fb-alert-picker button:focus-visible { box-shadow: var(--xy-focus) !important; }
+
+.icon-preview{display:grid;place-items:center;width:40px;height:40px;border-radius:13px;background:rgba(125,211,252,.10)}
+.icon-preview .xy-icon{width:24px;height:24px}
+[data-icon-theme="mono"] .icon-preview .xy-icon{opacity:.84}

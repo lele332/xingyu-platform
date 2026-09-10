@@ -58,7 +58,7 @@
 <link rel="preload" href="assets/fonts/font_52a6c245.woff2" as="font" type="font/woff2" crossorigin>
 -->
   <link rel="stylesheet" href="css/mobile-patch.css">
-<link rel="stylesheet" href="css/brand-system.css?v=20260910.2">
+<link rel="stylesheet" href="css/brand-system.css?v=20260910.3">
 </head>
 <body>
 
@@ -1418,23 +1418,14 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
         <h4>图标风格</h4>
         <div class="icon-picker">
           <button class="icon-opt" data-icon-theme-pick="classic">
-            <span class="icon-preview classic-preview">◎</span>
-            <span>经典动态</span><small>保留当前图标</small>
+            <span class="icon-preview classic-preview" data-icon-preview="classic" aria-hidden="true"></span>
+            <span>星屿线性</span><small>简洁清晰</small>
           </button>
           <button class="icon-opt" data-icon-theme-pick="mono">
-            <span class="icon-preview mono-preview">◧</span>
-            <span>SF 单色</span><small>精确线稿</small>
-          </button>
-          <button class="icon-opt" data-icon-theme-pick="multi">
-            <span class="icon-preview multi-preview">◨</span>
-            <span>iOS 多色</span><small>系统色填充</small>
-          </button>
-          <button class="icon-opt" data-icon-theme-pick="glass">
-            <span class="icon-preview glass-preview">◫</span>
-            <span>液态玻璃</span><small>材质微光</small>
-          </button>
-        </div>
-        <p class="hint">四种方案实时切换，经典动态图标始终保留在选项里。</p>
+            <span class="icon-preview mono-preview" data-icon-preview="mono" aria-hidden="true"></span>
+            <span>单色线稿</span><small>更低存在感</small>
+          </button></div>
+        <p class="hint">两套线性方案实时切换；默认星屿线性，保持全站视觉一致。</p>
       </div></section>
 <section class="settings-panel" data-settings-panel="personal" hidden><div class="setting-group">
         <h4 data-i18n="settings.nick">个人昵称</h4>
@@ -1922,8 +1913,14 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
       <button class="modal-close" data-close="feedbackModal">✕</button>
     </div>
     <div class="modal-body">
-      <p class="hint">自动巡检只记录持续 4 秒以上的明显掉帧、连续主线程阻塞或非噪声 JS 错误；轻微卡顿和非关键资源 404 只会留在原始指标里，不会打扰你。你补充的描述会一起存到本机 data/feedback/ 目录。</p>
-      <div id="fbSummary" class="fb-summary" aria-live="polite"></div>
+      <p class="hint">自动巡检会观察 5/15/60 分钟滚动趋势，只在问题持续或严重时提醒；轻微卡顿、非关键 404、焦点输入和专注模式都会安静降级。标准 / 安静 / 关闭三档可随时切换，报告仅保存在本机。</p>
+      <div class="fb-alert-picker" role="group" aria-label="自动提醒档位">
+      <span>自动提醒</span>
+      <button type="button" data-perf-alert="standard">标准</button>
+      <button type="button" data-perf-alert="quiet">安静</button>
+      <button type="button" data-perf-alert="off">关闭</button>
+    </div>
+    <div id="fbSummary" class="fb-summary" aria-live="polite"></div>
       <label class="field">
         <span>补充说明（哪里卡、什么时候卡）</span>
         <textarea id="fbComment" rows="3" placeholder="例如：开屏视频第 2 秒卡了一下；点侧边栏没反应..."></textarea>
@@ -1964,8 +1961,8 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
 <script defer src="js/ai-context.js?v=20260909.2"></script>
 <script defer src="js/ai.js?v=20260909.1"></script>
 <script defer src="js/icons.js?v=20260910.1"></script>
-<script defer src="js/icons-themes.js?v=20260831.5"></script>
-<script defer src="js/perf.js?v=20260910.1"></script>
+<script defer src="js/icons-themes.js?v=20260910.2"></script>
+<script defer src="js/perf.js?v=20260910.2"></script>
 <script defer src="js/app-shell.js?v=20260910.1"></script>
 <script defer src="js/reminders.js?v=20260909.1"></script>
 <script defer src="js/app.js?v=20260910.1"></script>
@@ -2049,7 +2046,7 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
 <link rel="stylesheet" href="css/voice-agent.css?v=20260903.3">
 <script defer src="js/voice-agent.js?v=20260906.1"></script>
 
-  <link rel="stylesheet" href="css/brand-system.css?v=20260910.2">
+  <link rel="stylesheet" href="css/brand-system.css?v=20260910.3">
   <script defer src="js/ux-system.js?v=20260910.1"></script>
   <script src="js/mobile-capture.js"></script>
   <script src="js/mobile-enhance.js"></script>

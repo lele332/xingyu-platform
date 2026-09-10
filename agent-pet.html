@@ -7,23 +7,29 @@
 <script type="importmap">
 {"imports":{"three":"/js/vendor/three/three.module.js","three/addons/":"/js/vendor/three/addons/"}}
 </script>
-<script src="/js/vendor/l2d-widget.min.js?v=20260910.1"></script>
-<script src="/js/airi-bootstrap.js?v=20260910.1"></script>
+<script src="/js/vendor/l2d-widget.min.js?v=20260910.2"></script>
+<script src="/js/airi-bootstrap.js?v=20260910.2"></script>
 <style>
   *{box-sizing:border-box}
   html,body{width:100%;height:100%;margin:0;overflow:hidden;background:transparent;color:#eaf6ff;
     font:13px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
     -webkit-user-select:none;user-select:none}
-  #dragLayer{position:absolute;inset:0;z-index:0;border-radius:30px}
+  #dragLayer{position:absolute;inset:0;z-index:0;border-radius:34px}
   #l2dHost{position:absolute;inset:0;z-index:1;pointer-events:none}
   #l2dHost canvas{pointer-events:auto}
   canvas{position:absolute;inset:0;width:100%!important;height:100%!important;display:block;background:transparent}
 
   #brand{position:absolute;left:18px;top:14px;z-index:20;display:flex;align-items:center;gap:7px;
-    padding:7px 10px;border-radius:14px;border:1px solid rgba(255,255,255,.09);background:rgba(7,16,24,.52);
+    padding:7px 10px;border-radius:14px;border:1px solid rgba(255,255,255,.09);background:rgba(7,16,24,.50);
     backdrop-filter:blur(18px);font-size:11px;letter-spacing:.10em;color:rgba(226,238,252,.74);
-    opacity:.52;transition:opacity .22s,transform .22s}
-  body:hover #brand,body.chat-open #brand{opacity:.92}
+    opacity:.52;transition:opacity .22s}
+  body:hover #brand,body.chat-open #brand{opacity:.94}
+
+  #mood{position:absolute;left:14px;bottom:20px;z-index:18;width:9px;height:9px;border-radius:50%;
+    background:linear-gradient(135deg,#7dd3fc,#818cf8);box-shadow:0 0 18px rgba(125,211,252,.42)}
+  #mood.listening{background:#fbbf24;box-shadow:0 0 18px rgba(251,191,36,.42)}
+  #mood.thinking{background:#818cf8;box-shadow:0 0 18px rgba(129,140,248,.48)}
+  #mood.speaking{background:#34d399;box-shadow:0 0 18px rgba(52,211,153,.42)}
 
   #loading{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);display:none;flex-direction:column;
     align-items:center;gap:9px;z-index:24;pointer-events:none;color:rgba(226,238,252,.78)}
@@ -32,20 +38,21 @@
   #loading .txt{font-size:10px;letter-spacing:.14em}
   @keyframes spin{to{transform:rotate(360deg)}}
 
-  #chatPanel{position:absolute;left:12px;right:12px;bottom:62px;z-index:30;max-height:min(58vh,430px);
-    display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:9px;padding:11px;border-radius:22px;
-    border:1px solid rgba(255,255,255,.10);background:rgba(7,16,24,.80);backdrop-filter:blur(24px) saturate(150%);
+  #chatPanel{position:absolute;left:12px;right:12px;bottom:64px;z-index:30;max-height:min(62vh,470px);
+    display:grid;grid-template-rows:auto minmax(0,1fr) auto auto;gap:9px;padding:11px;border-radius:22px;
+    border:1px solid rgba(255,255,255,.10);background:rgba(7,16,24,.82);backdrop-filter:blur(24px) saturate(150%);
     box-shadow:0 22px 64px rgba(0,0,0,.24);opacity:0;transform:translateY(18px) scale(.98);pointer-events:none;
     transition:opacity .24s cubic-bezier(.32,.72,.16,1),transform .24s cubic-bezier(.32,.72,.16,1)}
   body.chat-open #chatPanel{opacity:1;transform:none;pointer-events:auto}
   #chatHead{display:flex;align-items:center;gap:8px;color:rgba(226,238,252,.82);font-size:11px;letter-spacing:.10em}
   #chatHead .mark{width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,#7dd3fc,#818cf8);box-shadow:0 0 0 4px rgba(125,211,252,.10)}
   #chatHead .status{margin-left:auto;font-size:10px;color:rgba(226,238,252,.48)}
-  #chatBody{min-height:90px;overflow-y:auto;padding-right:4px;display:flex;flex-direction:column;gap:8px;scrollbar-width:thin}
+  #chatBody{min-height:92px;overflow-y:auto;padding-right:4px;display:flex;flex-direction:column;gap:8px;scrollbar-width:thin}
   .msg{max-width:88%;padding:8px 10px;border-radius:15px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:12.5px}
   .msg.ai{align-self:flex-start;color:#eaf6ff;border:1px solid rgba(125,211,252,.14);background:rgba(125,211,252,.10)}
   .msg.user{align-self:flex-end;color:#03192a;background:linear-gradient(135deg,#7dd3fc,#818cf8)}
   .msg.error{align-self:flex-start;color:#fecaca;border:1px solid rgba(248,113,113,.24);background:rgba(248,113,113,.10)}
+  .msg.context{align-self:flex-start;color:rgba(226,238,252,.70);border:1px dashed rgba(125,211,252,.16);background:rgba(125,211,252,.05);font-size:11px}
   .msg.thinking span{display:inline-block;width:5px;height:5px;margin-right:3px;border-radius:50%;background:rgba(226,238,252,.64);animation:blink 1.2s infinite}
   .msg.thinking span:nth-child(2){animation-delay:.18s}
   .msg.thinking span:nth-child(3){animation-delay:.36s}
@@ -65,17 +72,26 @@
   #btnSend:hover{filter:brightness(1.06)}
   #btnSend:active{transform:scale(.96)}
 
-  .dock{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:35;display:flex;gap:6px;padding:5px;
+  .dock{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:35;display:flex;gap:5px;padding:5px;
     border-radius:18px;border:1px solid rgba(255,255,255,.09);background:rgba(7,16,24,.62);backdrop-filter:blur(20px);
-    box-shadow:0 14px 36px rgba(0,0,0,.16);opacity:.22;transition:opacity .22s,transform .22s}
+    box-shadow:0 14px 36px rgba(0,0,0,.16);opacity:.22;transition:opacity .22s}
   body:hover .dock,body.chat-open .dock{opacity:1}
   .tool{width:30px;height:30px;border:0;border-radius:11px;background:rgba(255,255,255,.06);color:rgba(226,238,252,.78);
     cursor:pointer;font-size:11px;font-weight:650;transition:.18s}
   .tool:hover{color:#fff;background:rgba(125,211,252,.16);transform:translateY(-1px)}
   .tool.active{color:#03192a;background:linear-gradient(135deg,#7dd3fc,#818cf8)}
   .tool.close:hover{background:rgba(248,113,113,.20)}
+  #bubble{position:absolute;right:16px;top:64px;z-index:28;max-width:214px;padding:9px 11px;border-radius:16px 16px 16px 5px;
+    border:1px solid rgba(125,211,252,.14);background:rgba(7,16,24,.80);backdrop-filter:blur(20px);
+    color:rgba(228,240,252,.90);font-size:11.5px;line-height:1.48;box-shadow:0 16px 38px rgba(0,0,0,.18);
+    opacity:0;transform:translateY(8px) scale(.97);pointer-events:none;transition:.24s cubic-bezier(.32,.72,.16,1)}
+  #bubble.on{opacity:1;transform:none;pointer-events:auto}
+  #bubble:before{content:"✦";position:absolute;left:-17px;bottom:4px;font-size:10px;color:rgba(125,211,252,.70)}
+  body[data-mood="thinking"] #mood{background:#818cf8;box-shadow:0 0 18px rgba(129,140,248,.48)}
+  body[data-mood="speaking"] #mood{background:#34d399;box-shadow:0 0 18px rgba(52,211,153,.42)}
+  body[data-mood="listening"] #mood{background:#fbbf24;box-shadow:0 0 18px rgba(251,191,36,.42)}
+  body.chat-open #bubble{opacity:0;pointer-events:none}
   #airiPetFrame{position:absolute;inset:0;z-index:2;width:100%;height:100%;border:0;background:transparent}
-  body.mode-airi #chatPanel{bottom:62px}
   @media (prefers-reduced-motion: reduce){*{transition-duration:1ms!important;animation-duration:1ms!important}}
 </style>
 </head>
@@ -83,27 +99,27 @@
 <div id="dragLayer" class="pywebview-drag-region"></div>
 <div id="l2dHost"></div>
 <div id="brand"><span>✦</span><span>墨小星</span></div>
+<div id="mood" title="当前状态"></div>
+<div id="bubble" role="status"></div>
 <div id="loading"><div class="ring"></div><div class="txt">唤醒中</div></div>
 
 <section id="chatPanel" aria-label="宠物对话">
-  <header id="chatHead"><span class="mark"></span><span>学习搭子 · 墨小星</span><span id="chatStatus">就绪</span></header>
-  <div id="chatBody"></div>
-  <div id="chips">
-    <button class="chip" type="button" data-ask="我只有 40 分钟，帮我安排一段高效学习。">40分钟计划</button>
-    <button class="chip" type="button" data-ask="我有点拖延，给我一个立刻能开始的小任务。">开始任务</button>
-    <button class="chip" type="button" data-ask="我刚学完一小时，给我一个简短复盘问题。">复盘提问</button>
-    <button class="chip" type="button" data-ask="我有点累，用一句话鼓励我一下。">鼓励我</button>
-  </div>
+  <header id="chatHead"><span class="mark"></span><span>学习搭子 · 墨小星</span><span id="chatStatus">唤醒中</span></header>
+  <div id="chatBody" aria-live="polite"></div>
+  <div id="chips"></div>
   <form id="chatForm">
-    <input id="chatInput" type="text" autocomplete="off" placeholder="说点什么…">
+    <input id="chatInput" type="text" autocomplete="off" placeholder="说点什么，或让我帮你拆任务…">
     <button id="btnSend" type="submit" aria-label="发送">↑</button>
   </form>
 </section>
 
 <div class="dock">
   <button class="tool active" id="btnChat" title="对话">✦</button>
+  <button class="tool" id="btnMic" title="语音输入">🎤</button>
+  <button class="tool" id="btnSpeak" title="朗读回复">🔈</button>
   <button class="tool active" data-mode="live2d" title="Live2D">L</button>
   <button class="tool" data-mode="airi" title="AIRI Runtime">A</button>
+  <button class="tool" id="btnClear" title="清空本机对话记忆">⟲</button>
   <button class="tool close" id="btnClose" title="关闭">✕</button>
 </div>
 
@@ -114,43 +130,84 @@
   const chatBody=document.getElementById('chatBody');
   const chatInput=document.getElementById('chatInput');
   const chatStatus=document.getElementById('chatStatus');
+  const chips=document.getElementById('chips');
+  const mood=document.getElementById('mood');
   let mode=localStorage.getItem('xingyu_pet_mode')||'live2d';
-  let widget=null, widgetRoot=null;
+  let widget=null,widgetRoot=null;
   let renderer=null,scene=null,camera=null,mixer=null,model=null,clock=null,airiReady=false,airiLoading=false;
-  let aiConfigured=null;
+  let aiConfigured=null,platformContext=null,speechOn=false,recognizer=null,listening=false;
+  let lastActivityAt=Date.now(),bubbleTimer=null;
   const chatHistory=[];
 
-  function api(){ return window.pywebview && window.pywebview.api; }
-  function showLoading(txt){ loadingEl.querySelector('.txt').textContent=txt||'唤醒中'; loadingEl.classList.add('on'); }
-  function hideLoading(){ loadingEl.classList.remove('on'); }
-  function setActive(){
-    buttons.forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));
-    localStorage.setItem('xingyu_pet_mode',mode);
+  const MEM_KEY='xingyu_pet_memory_v2';
+  let memory=loadMemory();
+  function loadMemory(){
+    try{
+      const raw=JSON.parse(localStorage.getItem(MEM_KEY)||'{}');
+      return {
+        facts:Array.isArray(raw.facts)?raw.facts.slice(-12):[],
+        messages:Array.isArray(raw.messages)?raw.messages.slice(-24):[],
+        lastGreetingAt:raw.lastGreetingAt||'',
+        cues:raw.cues&&typeof raw.cues==='object'?raw.cues:{}
+      };
+    }catch(e){return {facts:[],messages:[],lastGreetingAt:'',cues:{}};}
+  }
+  function saveMemory(){
+    try{
+      localStorage.setItem(MEM_KEY,JSON.stringify({
+        facts:memory.facts.slice(-12),messages:chatHistory.slice(-24),lastGreetingAt:memory.lastGreetingAt,cues:memory.cues||{}
+      }));
+    }catch(e){}
   }
 
-  function scrollChat(){ chatBody.scrollTop=chatBody.scrollHeight; }
+  function api(){return window.pywebview&&window.pywebview.api;}
+  function showLoading(txt){loadingEl.querySelector('.txt').textContent=txt||'唤醒中';loadingEl.classList.add('on');}
+  function hideLoading(){loadingEl.classList.remove('on');}
+  function setStatus(text){chatStatus.textContent=text||'就绪';}
+  function setMood(m){mood.className=m||'';document.body.dataset.mood=m||'idle';}
+  function setActive(){buttons.forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));localStorage.setItem('xingyu_pet_mode',mode);}
+
+  function scrollChat(){chatBody.scrollTop=chatBody.scrollHeight;}
   function addMsg(role,text,cls=''){
     const el=document.createElement('div');
     el.className='msg '+role+' '+cls;
     el.textContent=text;
-    chatBody.appendChild(el);
-    scrollChat();
-    return el;
+    chatBody.appendChild(el);scrollChat();return el;
+  }
+  function showBubble(text){
+    const el=document.getElementById('bubble');if(!el)return;
+    el.textContent=text;el.classList.add('on');
+    clearTimeout(bubbleTimer);bubbleTimer=setTimeout(()=>el.classList.remove('on'),9000);
+  }
+  function rememberFrom(text){
+    const clean=String(text||'').replace(/\s+/g,' ').trim();
+    if(!clean||clean.length>90)return;
+    const rules=[
+      [/(?:我叫|我的名字叫|称呼我)([^，。,.!!?？]{1,12})/,m=>`称呼：${m[1].trim()}`],
+      [/(?:我喜欢|偏爱)([^，。,.!!?？]{1,24})/,m=>`喜欢：${m[1].trim()}`],
+      [/(?:我不喜欢|讨厌|不要|别)([^，。,.!!?？]{1,24})/,m=>`避免：${m[1].trim()}`],
+      [/(?:我的目标|近期目标|目标|备考|准备考|我想考)([^，。,.!!?？]{1,42})/,m=>`目标：${m[1].trim().replace(/^(?:是|要|为)/,'')}`],
+      [/(?:每天|每晚|每周|周末)([^，。,.!!?？]{1,36})/,m=>`节奏：${m[0].trim()}`]
+    ];
+    let changed=false;
+    for(const [re,fn] of rules){
+      const m=clean.match(re);
+      if(!m)continue;
+      const fact=fn(m).slice(0,72);
+      if(fact&&!memory.facts.includes(fact)){memory.facts.push(fact);changed=true;}
+    }
+    if(changed){memory.facts=memory.facts.slice(-12);saveMemory();}
   }
   function setThinking(on){
-    const old=chatBody.querySelector('.thinking'); if(old) old.remove();
-    if(!on) return;
-    const el=document.createElement('div');
-    el.className='msg ai thinking';
+    chatBody.querySelector('.thinking')?.remove();
+    if(!on)return;
+    const el=document.createElement('div');el.className='msg ai thinking';
     el.innerHTML='<span></span><span></span><span></span>';
-    chatBody.appendChild(el); scrollChat();
+    chatBody.appendChild(el);scrollChat();
   }
-  function setStatus(text){ chatStatus.textContent=text||'就绪'; }
 
   function removeWidgetRoot(){
-    try{
-      if(widgetRoot && widgetRoot.parentElement!==document.body) document.body.appendChild(widgetRoot);
-    }catch(e){}
+    try{if(widgetRoot&&widgetRoot.parentElement!==document.body)document.body.appendChild(widgetRoot);}catch(e){}
     widgetRoot=null;
   }
   function mountWidget(){
@@ -160,144 +217,232 @@
         const candidates=[...document.body.children].filter(x=>x.tagName==='DIV'&&x.querySelector('canvas')&&String(x.style.zIndex||'')==='9999');
         n=candidates[candidates.length-1];
       }
-      if(!n) return;
-      widgetRoot=n; host.appendChild(n);
-      const w=Math.min(270,host.clientWidth||270);
-      const h=Math.min(310,host.clientHeight||310);
-      Object.assign(n.style,{
-        position:'absolute',left:'50%',marginLeft:(-w/2)+'px',right:'auto',bottom:'18px',
-        width:w+'px',height:h+'px',zIndex:'2',pointerEvents:'auto'
-      });
+      if(!n)return;
+      widgetRoot=n;host.appendChild(n);
+      const w=Math.min(272,host.clientWidth||272),h=Math.min(314,host.clientHeight||314);
+      Object.assign(n.style,{position:'absolute',left:'50%',marginLeft:(-w/2)+'px',right:'auto',bottom:'20px',
+        width:w+'px',height:h+'px',zIndex:'2',pointerEvents:'auto'});
     }catch(e){}
   }
-
   function disposeAiri(){
-    try{ renderer&&renderer.setAnimationLoop(null); }catch(e){}
-    renderer=scene=camera=mixer=model=clock=null; airiReady=airiLoading=false;
+    try{renderer&&renderer.setAnimationLoop(null);}catch(e){}
+    renderer=scene=camera=mixer=model=clock=null;airiReady=airiLoading=false;
     [...host.querySelectorAll('canvas[data-airi-canvas]')].forEach(c=>c.remove());
-    const frame=document.getElementById('airiPetFrame'); if(frame) frame.remove();
+    document.getElementById('airiPetFrame')?.remove();
   }
-
   async function startLive2D(){
-    disposeAiri(); hideLoading(); setStatus('正在唤醒');
+    disposeAiri();hideLoading();setStatus('正在唤醒');setMood('');
     if(!widget){
       removeWidgetRoot();
-      if(!window.L2D_WIDGET||!window.L2D_WIDGET.createWidget){ showLoading(); return setTimeout(startLive2D,160); }
+      if(!window.L2D_WIDGET||!window.L2D_WIDGET.createWidget){showLoading();return setTimeout(startLive2D,160);}
       widget=window.L2D_WIDGET.createWidget({
-        model:{path:'/assets/live2d/koharu/model.json?v=20260910.1',tips:{welcomeMessage:[],messages:[]}},
-        position:'bottom-left',size:270,menus:false,statusBar:false,logLevel:'warn'
+        model:{path:'/assets/live2d/koharu/model.json?v=20260910.2',tips:{welcomeMessage:[],messages:[]}},
+        position:'bottom-left',size:272,menus:false,statusBar:false,logLevel:'warn'
       });
-      setTimeout(()=>{hideLoading(); if(chatBody.children.length===0){
-        addMsg('ai','我在这里。可以直接聊，也可以让我帮你拆任务、安排专注。');
-      } setStatus('就绪');},2600);
+      setTimeout(()=>{hideLoading();mountWidget();setStatus('就绪');greet();},2600);
     }
     setTimeout(mountWidget,0);
   }
-
   async function startAiri(){
-    if(airiReady||airiLoading){ return; }
-    disposeAiri(); try{ widget&&widget.destroy(); }catch(e){} widget=null; removeWidgetRoot();
-    airiLoading=true; setStatus('AIRI 启动中'); showLoading('正在启动 AIRI');
-    try{ window.XingyuAiriBootstrap && window.XingyuAiriBootstrap.install({autoMic:false,withCards:true,lightStage:true}); }
-    catch(e){ console.warn('[pet] AIRI 预置失败',e); }
+    if(airiReady||airiLoading)return;
+    disposeAiri();try{widget&&widget.destroy();}catch(e){}widget=null;removeWidgetRoot();
+    airiLoading=true;setStatus('AIRI 启动中');showLoading('正在启动 AIRI');
+    try{window.XingyuAiriBootstrap&&window.XingyuAiriBootstrap.install({autoMic:false,withCards:true,lightStage:true});}catch(e){}
     const frame=document.createElement('iframe');
-    frame.id='airiPetFrame'; frame.src='/airi/'; frame.title='AIRI';
-    frame.allow='microphone; camera; autoplay; clipboard-write'; frame.referrerPolicy='no-referrer';
+    frame.id='airiPetFrame';frame.src='/airi/';frame.title='AIRI';
+    frame.allow='microphone; camera; autoplay; clipboard-write';frame.referrerPolicy='no-referrer';
     frame.style.cssText='position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent';
     host.appendChild(frame);
-    frame.onload=()=>setTimeout(()=>{airiLoading=false;airiReady=true;hideLoading();setStatus('AIRI 就绪');},1500);
-    setTimeout(()=>{airiLoading=false;airiReady=true;hideLoading();setStatus('AIRI 就绪');},12000);
+    frame.onload=()=>setTimeout(()=>{airiLoading=false;airiReady=true;hideLoading();setStatus('AIRI 就绪');greet();},1500);
+    setTimeout(()=>{airiLoading=false;airiReady=true;hideLoading();setStatus('AIRI 就绪');greet();},12000);
+  }
+  async function setMode(m){mode=m;setActive();document.body.classList.toggle('mode-airi',m==='airi');
+    try{api()&&api().set_mode&&await api().set_mode(m);}catch(e){}
+    if(m==='live2d')startLive2D();else startAiri();}
+
+  /* ---------- 平台上下文：只读脱敏数据，不含密钥 / 笔记正文 ---------- */
+  async function loadContext(){
+    try{
+      const r=await fetch('/api/pet-context',{cache:'no-store'});
+      if(!r.ok)return null;
+      const j=await r.json();
+      platformContext=j&&j.context?j.context:null;
+      renderChips();
+      return platformContext;
+    }catch(e){platformContext=null;return null;}
+  }
+  function contextSummary(){
+    if(!platformContext)return '';
+    const c=platformContext,n=c.nickname||'同学';
+    const lines=[`用户称呼：${n}`];
+    if(c.overdueCount)lines.push(`逾期任务：${c.overdueCount} 个`);
+    if(c.dueTodayCount)lines.push(`今天到期：${c.dueTodayCount} 个`);
+    if(Array.isArray(c.tasks)&&c.tasks.length)lines.push('最近任务：'+c.tasks.slice(0,5).map(t=>t.title).join('；'));
+    if(c.focus&&c.focus.minutes)lines.push(`今日专注：${c.focus.minutes} 分钟 / ${c.focus.sessions} 次`);
+    if(Array.isArray(c.courses)&&c.courses.length)lines.push('今日课程：'+c.courses.map(x=>`${x.name} ${x.start}`).join('；'));
+    if(c.goal)lines.push(`近期目标：${c.goal}`);
+    return lines.join('\n');
+  }
+  function renderChips(){
+    const first=platformContext&&Array.isArray(platformContext.tasks)&&platformContext.tasks[0];
+    const items=[];
+    if(first)items.push({label:`拆解：${first.title.slice(0,8)}`,ask:`我想推进「${first.title}」，请拆成今天能做的下一步。`});
+    items.push({label:'40分钟计划',ask:'我只有 40 分钟，帮我安排一段高效学习。'});
+    items.push({label:'开始任务',ask:'我有点拖延，给我一个立刻能开始的小任务。'});
+    items.push({label:'复盘提问',ask:'我刚学完一小时，给我一个简短复盘问题。'});
+    items.push({label:'鼓励我',ask:'我有点累，用一句话鼓励我一下。'});
+    chips.innerHTML='';
+    items.forEach(({label,ask})=>{
+      const b=document.createElement('button');b.type='button';b.className='chip';b.textContent=label;
+      b.addEventListener('click',()=>askAI(ask));chips.appendChild(b);
+    });
   }
 
-  async function setMode(m){
-    mode=m; setActive(); document.body.classList.toggle('mode-airi',m==='airi');
-    try{ api()&&api().set_mode&&await api().set_mode(m); }catch(e){}
-    if(m==='live2d')startLive2D();else startAiri();
-  }
-
-  /* ---------- 智能对话：本机 AI 代理 + 离线兜底 ---------- */
+  /* ---------- 记忆、AI 与语音 ---------- */
   async function checkAi(){
-    if(aiConfigured!==null) return aiConfigured;
+    if(aiConfigured!==null)return aiConfigured;
     try{
       const r=await fetch('/ai-proxy/__ai_health__',{cache:'no-store'});
-      const j=await r.json();
-      aiConfigured=!!(j&&j.configured);
-    }catch(e){ aiConfigured=false; }
+      const j=await r.json();aiConfigured=!!(j&&j.configured);
+    }catch(e){aiConfigured=false;}
     return aiConfigured;
   }
-
+  function speak(text){
+    if(!speechOn||!('speechSynthesis' in window))return;
+    try{
+      speechSynthesis.cancel();
+      const u=new SpeechSynthesisUtterance(String(text).replace(/[*#`]/g,'').slice(0,240));
+      u.lang='zh-CN';u.rate=1.05;u.pitch=1.08;
+      const voice=speechSynthesis.getVoices().find(v=>/zh-CN|Chinese/i.test(v.lang+v.name));
+      if(voice)u.voice=voice;
+      u.onstart=()=>setMood('speaking');u.onend=()=>setMood('');
+      speechSynthesis.speak(u);
+    }catch(e){}
+  }
   function localReply(text){
     const q=text.toLowerCase();
-    if(/计划|安排|规划/.test(q)) return '先把 40 分钟切成两段：25 分钟做最难的一件事，10 分钟整理结论，剩下 5 分钟休息。现在先写出第一句，就算开始。';
-    if(/累|不想|拖延|坚持/.test(q)) return '不用逼自己完成全部，先做 5 分钟。计时开始后，你只需要写下一个标题或一道题。';
-    if(/复盘|总结/.test(q)) return '问自己三个问题：今天真正推进了什么？哪里卡住最久？明天第一件事是什么？';
-    if(/你好|在吗|hi/.test(q)) return '我在。想安排任务，还是先聊两句？';
+    if(/计划|安排|规划/.test(q))return '先把 40 分钟切成两段：25 分钟做最难的一件事，10 分钟整理结论，剩下 5 分钟休息。现在先写出第一句，就算开始。';
+    if(/累|不想|拖延|坚持/.test(q))return '不用逼自己完成全部，先做 5 分钟。计时开始后，你只需要写下一个标题或一道题。';
+    if(/复盘|总结/.test(q))return '问自己三个问题：今天真正推进了什么？哪里卡住最久？明天第一件事是什么？';
+    if(/你好|在吗|hi/.test(q))return '我在。想安排任务，还是先聊两句？';
     return '我在听。可以告诉我任务、剩余时间和当前卡点，我来帮你把它拆到下一步。';
   }
-
-  async function askAI(text){
-    addMsg('user',text);
-    setThinking(true); setStatus('思考中');
+  async function askAI(text,{silent=false}={}){
+    lastActivityAt=Date.now();rememberFrom(text);
+    if(!silent)addMsg('user',text);
+    setThinking(true);setMood('thinking');setStatus('思考中');
     try{
       const configured=await checkAi();
-      if(!configured) throw new Error('offline');
+      if(!configured)throw new Error('offline');
+      await loadContext();
       const now=new Date();
-      const system='你是星屿桌面宠物「墨小星」，学生身边的学习搭子。用简体中文，语气温和、元气、具体；一般不超过三句话。你能帮用户拆解任务、安排专注、提出复盘问题，但不要编造任务数据。当前时间：'+now.toLocaleString('zh-CN');
+      const system=['你是星屿桌面宠物「墨小星」，学生身边的学习搭子。',
+        '用简体中文；语气温和、元气、具体；一般不超过三句话；给建议必须能立刻执行。',
+        '不要编造任务数据；如果上下文不足，就问一个关键问题。',
+        '当前时间：'+now.toLocaleString('zh-CN'),contextSummary(),
+        memory.facts.length?'长期偏好/记忆：'+memory.facts.join('；'):''].filter(Boolean).join('\n');
       const body={
         model:'deepseek-chat',
         messages:[{role:'system',content:system},...chatHistory.slice(-10),{role:'user',content:text}],
         temperature:.65
       };
-      const r=await fetch('/ai-proxy/chat/completions',{
-        method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)
-      });
+      const r=await fetch('/ai-proxy/chat/completions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
       const j=await r.json();
       const content=j&&j.choices&&j.choices[0]&&j.choices[0].message&&j.choices[0].message.content;
-      if(!r.ok||typeof content!=='string') throw new Error((j&&(j.error||j.message))||('HTTP '+r.status));
+      if(!r.ok||typeof content!=='string')throw new Error((j&&(j.error||j.message))||('HTTP '+r.status));
       chatHistory.push({role:'user',content:text},{role:'assistant',content});
-      if(chatHistory.length>16) chatHistory.splice(0,chatHistory.length-16);
-      addMsg('ai',content);
-      setStatus('就绪');
+      if(chatHistory.length>24)chatHistory.splice(0,chatHistory.length-24);
+      saveMemory();addMsg('ai',content);speak(content);setStatus('就绪');setMood('');
     }catch(err){
-      setThinking(false);
-      if(String(err.message)==='offline'){
-        addMsg('ai',localReply(text));
-        setStatus('离线搭子');
-      }else{
-        addMsg('ai','这条没连上 AI，先给你本地建议：\n'+localReply(text),'error');
-        setStatus('离线兜底');
-      }
-    }finally{
-      setThinking(false);
+      setMood('');setStatus('离线搭子');
+      const reply=localReply(text);
+      addMsg('ai',String(err.message)==='offline'?reply:('这条没连上 AI，先给你本地建议：\n'+reply),String(err.message)==='offline'?'':'error');
+      speak(reply);
+    }finally{setThinking(false);}
+  }
+  function cueReady(key,cooldown){
+    memory.cues=memory.cues||{};const now=Date.now();
+    if(memory.cues[key]&&now-memory.cues[key]<cooldown)return false;
+    memory.cues[key]=now;saveMemory();return true;
+  }
+  function notify(text,{speakIt=true}={}){
+    addMsg('ai',text);if(speakIt)speak(text);
+    if(!document.body.classList.contains('chat-open'))showBubble(text);
+  }
+  function checkProactive(){
+    if(document.hidden||document.body.classList.contains('chat-open'))return;
+    const c=platformContext;if(!c)return;
+    const h=new Date().getHours();
+    if(c.overdueCount&&cueReady('overdue',2*60*60*1000)){
+      notify(`有 ${c.overdueCount} 个任务已经逾期。别急着全做，我们先把它拆成 15 分钟的一小步。`);
+    }else if(c.dueTodayCount&&(h<11||h>=18)&&cueReady('dueToday',3*60*60*1000)){
+      notify(`今天还有 ${c.dueTodayCount} 件事。我建议先从最清晰的一件开始，只做 25 分钟。`);
+    }else if(h>=19&&(!c.focus||!c.focus.minutes||c.focus.minutes<30)&&cueReady('focus',6*60*60*1000)){
+      notify('今天专注还比较少。要不要安排一个 25 分钟的小段？我陪你把它做完。');
+    }else if(Date.now()-lastActivityAt>30*60*1000&&cueReady('checkin',90*60*1000)){
+      notify('我还在。想继续推进刚才的事，还是先聊两句放松一下？');
     }
+  }
+  function greet(){
+    const h=new Date().getHours();
+    const name=platformContext?.nickname||'同学';
+    if(memory.lastGreetingAt===new Date().toDateString())return;
+    memory.lastGreetingAt=new Date().toDateString();saveMemory();
+    const greeting=h<5?'夜深了，注意休息。':h<11?'早上好，今天第一件要推进的事是什么？':h<14?'午间好，下午想先攻克哪一块？':h<19?'下午好，要不要先把最难的 25 分钟开始掉？':'晚上好，今天还有一件可以推进的小事吗？';
+    addMsg('ai',`${name}，${greeting}`);
+    speak(greeting);
+    loadContext().then(()=>{
+      const c=contextSummary();
+      if(c)addMsg('context',c.split('\n').slice(1,4).join('\n'));
+      setTimeout(checkProactive,15000);
+    });
+  }
+  function restoreChat(){
+    (memory.messages||[]).slice(-6).forEach(m=>addMsg(m.role==='assistant'?'ai':'user',m.content));
+    if(chatBody.children.length===0)addMsg('ai','我在这里。可以聊学习，也可以让我帮你拆任务。');
   }
 
   /* ---------- UI ---------- */
   document.getElementById('btnChat').addEventListener('click',()=>{
     document.body.classList.toggle('chat-open');
-    if(document.body.classList.contains('chat-open')){
-      setTimeout(()=>chatInput.focus(),180);
-      if(chatBody.children.length===0) addMsg('ai','我在这里。直接说“我只有40分钟”，我来帮你安排。');
-    }
+    if(document.body.classList.contains('chat-open'))setTimeout(()=>chatInput.focus(),180);
   });
+  document.getElementById('bubble').addEventListener('click',()=>{
+    document.body.classList.add('chat-open');document.getElementById('bubble').classList.remove('on');
+    setTimeout(()=>chatInput.focus(),180);
+  });
+  ['pointerdown','keydown','wheel'].forEach(ev=>window.addEventListener(ev,()=>{lastActivityAt=Date.now();},{passive:true}));
+  setInterval(checkProactive,60000);
   document.getElementById('chatForm').addEventListener('submit',e=>{
-    e.preventDefault();
-    const text=chatInput.value.trim(); if(!text)return;
-    chatInput.value=''; askAI(text);
+    e.preventDefault();const text=chatInput.value.trim();if(!text)return;chatInput.value='';askAI(text);
   });
-  document.getElementById('chips').addEventListener('click',e=>{
-    const btn=e.target.closest('.chip'); if(!btn)return; askAI(btn.dataset.ask);
+  document.getElementById('btnSpeak').addEventListener('click',e=>{
+    speechOn=!speechOn;e.currentTarget.classList.toggle('active',speechOn);
+    if(!speechOn&&'speechSynthesis' in window)speechSynthesis.cancel();
+  });
+  document.getElementById('btnClear').addEventListener('click',()=>{
+    chatHistory.length=0;memory={facts:[],messages:[],lastGreetingAt:'',cues:{}};saveMemory();
+    chatBody.innerHTML='';addMsg('ai','本机对话记忆已清空。我们继续。');setStatus('就绪');
+  });
+  document.getElementById('btnMic').addEventListener('click',e=>{
+    const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+    if(!SR){addMsg('ai','这个窗口暂时不支持语音输入，可以直接打字。','error');return;}
+    if(listening){recognizer?.stop();return;}
+    recognizer=new SR();recognizer.lang='zh-CN';recognizer.interimResults=false;recognizer.maxAlternatives=1;
+    recognizer.onstart=()=>{listening=true;e.currentTarget.classList.add('active');setMood('listening');setStatus('聆听中');};
+    recognizer.onend=()=>{listening=false;e.currentTarget.classList.remove('active');setMood('');setStatus('就绪');};
+    recognizer.onerror=()=>{listening=false;e.currentTarget.classList.remove('active');setMood('');setStatus('就绪');};
+    recognizer.onresult=ev=>{const text=ev.results[0][0].transcript;if(text)askAI(text);};
+    recognizer.start();
   });
   document.getElementById('btnClose').addEventListener('click',async e=>{
-    e.stopPropagation();
-    try{ api()&&api().close_pet&&await api().close_pet(); }catch(err){ window.close(); }
+    e.stopPropagation();try{api()&&api().close_pet&&await api().close_pet();}catch(err){window.close();}
   });
   buttons.forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();setMode(b.dataset.mode);}));
-  ['pointerdown','mousedown','keydown','touchstart'].forEach(ev=>{
-    document.querySelector('.dock').addEventListener(ev,e=>e.stopPropagation(),{passive:true});
-    document.getElementById('chatPanel').addEventListener(ev,e=>e.stopPropagation(),{passive:true});
+  ['.dock','#chatPanel'].forEach(sel=>{
+    const n=document.querySelector(sel);
+    ['pointerdown','mousedown','keydown','touchstart'].forEach(ev=>n.addEventListener(ev,e=>e.stopPropagation(),{passive:true}));
   });
-
   function resize(){
     const w=host.clientWidth||300,h=host.clientHeight||400;
     if(renderer){renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
@@ -305,10 +450,10 @@
   }
   addEventListener('resize',resize,{passive:true});
 
-  setActive();
-  document.body.classList.toggle('mode-airi',mode==='airi');
+  setActive();document.body.classList.toggle('mode-airi',mode==='airi');
+  restoreChat();
   if(mode==='airi')startAiri();else startLive2D();
-  setTimeout(resize,150);
+  setTimeout(resize,150);loadContext();
   window.__xingyuPetReady=true;
 </script>
 </body>
