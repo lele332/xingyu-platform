@@ -157,48 +157,6 @@
       toggle.setAttribute("aria-expanded", "true");
     }
   }
-  const MOBILE_ITEMS = [
-    { view: "dashboard", label: "今日", icon: '<path d="M4 11h16M12 4v16"/><circle cx="12" cy="12" r="8.5"/>' },
-    { view: "courses", label: "任务", icon: '<path d="M8 5h11M8 12h11M8 19h11"/><path d="m3 5 1 1 2-2M3 12l1 1 2-2M3 19l1 1 2-2"/>' },
-    { view: "focus", label: "专注", icon: '<circle cx="12" cy="13" r="7.5"/><path d="M12 9.5v3.5l2.2 2.2M9 2.5h6"/>' },
-    { view: "notes", label: "笔记", icon: '<path d="M6 3.5h12v17l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>' },
-    { view: "ai", label: "小星", icon: '<path d="M12 3.5 13.9 10 20.5 12 13.9 14 12 20.5 10.1 14 3.5 12 10.1 10z"/>' }
-  ];
-
-  function installMobileNav() {
-    if (document.getElementById("xyMobileNav")) return;
-    const nav = document.createElement("nav");
-    nav.id = "xyMobileNav";
-    nav.className = "mobile-nav";
-    nav.setAttribute("aria-label", "常用功能");
-
-    MOBILE_ITEMS.forEach(({ view, label, icon }) => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "mobile-nav-item";
-      button.dataset.view = view;
-      button.setAttribute("aria-label", label);
-      button.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icon}</svg><span>${label}</span>`;
-      button.addEventListener("click", () => {
-        goTo(view);
-        nav.querySelectorAll(".mobile-nav-item").forEach(node => node.classList.remove("active"));
-        button.classList.add("active");
-      });
-      nav.appendChild(button);
-    });
-    document.body.appendChild(nav);
-
-    const sync = () => {
-      const active = document.querySelector(".nav-item.active");
-      const view = active?.dataset.view || "dashboard";
-      nav.querySelectorAll(".mobile-nav-item").forEach(node => node.classList.toggle("active", node.dataset.view === view));
-    };
-    document.addEventListener("click", event => {
-      if (event.target.closest(".nav-item")) setTimeout(sync, 80);
-    });
-    sync();
-  }
-
   const QUICK_ACTIONS = [
     { action: "new-task", label: "新建任务", icon: "＋", className: "primary" },
     { action: "start-pomo", label: "开始专注", icon: "◎" },
@@ -268,7 +226,6 @@
   function boot() {
     installProgressiveNav();
     installQuickActions();
-    installMobileNav();
     installClickFeedback();
     const active = document.querySelector(".nav-item.active");
     if (active) openMoreIfNeeded(active);
