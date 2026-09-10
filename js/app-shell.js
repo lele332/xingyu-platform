@@ -45,23 +45,15 @@
     });
 
     function showToastUpdate() {
-      if (document.getElementById("sw-update-toast")) return;
-      var el = document.createElement("div");
-      el.id = "sw-update-toast";
-      el.style.cssText = "position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:99999;"
-        + "display:flex;align-items:center;gap:12px;padding:12px 20px;border-radius:14px;"
-        + "background:rgba(6,12,22,.94);color:#eaf6ff;font:13px/1.5 system-ui,-apple-system,sans-serif;"
-        + "border:1px solid rgba(120,220,255,.35);box-shadow:0 16px 48px rgba(0,0,0,.4);"
-        + "backdrop-filter:blur(16px);cursor:pointer;transition:opacity .3s;";
-      el.innerHTML = "<span>✨ 新版本已就绪</span><span style='opacity:.6'>点击刷新</span>";
-      el.onclick = function () {
-        navigator.serviceWorker.controller.postMessage({ action: "skipWaiting" });
-        location.reload();
-      };
-      document.body.appendChild(el);
-      setTimeout(function () { el.style.opacity = "0"; setTimeout(function () { el.remove(); }, 350); }, 8000);
+      window.showToast?.("星屿已更新，刷新后生效", {
+        actionLabel: "刷新",
+        onAction: () => {
+          navigator.serviceWorker.controller?.postMessage({ action: "skipWaiting" });
+          location.reload();
+        },
+        duration: 9000
+      });
     }
-
     navigator.serviceWorker.addEventListener("message", function (event) {
       if (event.data && event.data.action === "skipWaiting") {
         self.skipWaiting && self.skipWaiting();

@@ -5120,7 +5120,7 @@ const App = (() => {
     } else {
       bootAfterSplash();
     }
-    console.log("星屿 · 个人学习工作台已启动");
+    console.log("星屿 · 学习操作系统已启动");
   }
 
   // 暴露弹窗控制，供外部模块（如文献沉浸式阅读的来源选择）复用
@@ -5132,9 +5132,3 @@ const App = (() => {
 })();
 
 document.addEventListener("DOMContentLoaded", App.init);
-
-
-
-
-
-

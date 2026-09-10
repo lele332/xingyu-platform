@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#000000">
+<meta name="theme-color" content="#071018">
 <meta name="color-scheme" content="dark light">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -11,7 +11,7 @@
 <link rel="apple-touch-icon" href="assets/xingyu-app-icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
 <!-- 社交分享标签（微信/QQ/浏览器分享卡片） -->
-<meta property="og:title" content="星屿 · 个人学习工作台">
+<meta property="og:title" content="星屿 · 学习操作系统">
 <meta property="og:description" content="把学业收拢到一张白纸：课程作业、笔记库、专注统计、成长档案、AI 助手。本地优先，黑白灰三色极简。">
 <meta property="og:type" content="website">
 <meta property="og:image" content="assets/xingyu-app-icon-512.png">
@@ -25,7 +25,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>星屿 · 个人学习工作台</title>
+<title>星屿 · 学习操作系统</title>
 <meta name="description" content="把学业收拢到一张白纸：课程作业、笔记库、专注统计、成长档案、AI 助手。本地优先，黑白灰三色极简，无任何装饰。">
 <script>(function(){
   var d = document.documentElement;
@@ -58,6 +58,7 @@
 <link rel="preload" href="assets/fonts/font_52a6c245.woff2" as="font" type="font/woff2" crossorigin>
 -->
   <link rel="stylesheet" href="css/mobile-patch.css">
+<link rel="stylesheet" href="css/brand-system.css?v=20260910.1">
 </head>
 <body>
 
@@ -417,13 +418,11 @@ html.splash-on body > #splash{visibility:visible}
 </script>
 
 <!--
-DIRECTION CONTRACT (impeccable:direction-contract 1 · seed d32a5c18)
-THESIS: 学习从零开始——把个人学习工作台收敛为一张白纸上的黑字灰阶，去除一切装饰，让「今天该做什么」一眼可见。
-OWN-WORLD: 纯黑白灰三色（白纸 #fafafa / 黑墨 #111 / 灰阶分层），全界面无彩色；一套无衬线 + 等宽数字标签；直角卡片、发丝线分隔、大留白；无渐变、无装饰阴影、无 emoji、无印章。
-STORY: 访客打开 = 一页安静的白纸工作台；左侧淡灰侧栏纯文字导航，主区白卡网格，关键数字以黑墨呈现；紧急/完成等状态仅以灰阶深浅与字重区分。
-FIRST VIEWPORT: 顶部品牌「零 ZERO」+ 全局搜索 + 时钟；左侧淡灰侧栏；主区 hero（你好同学 + 3 个灰阶 stat）+ 白卡网格（倒计时/任务统计/专注趋势/今日待办/最近笔记）。
-FORM: 方向 = 单色文档工作台（黑白灰极简）；位置 = 用户指定（简约 + 减少颜色 + 换新名字）；seed key = d32a5c18。
-FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md.
+DIRECTION CONTRACT (xingyu:direction-contract 1)
+THESIS: 星屿是学生自己的学习操作系统：打开即知今天，路径最短，本地优先。
+BRAND: 星屿 / ✦；深空底色 + 星光强调；一套令牌驱动视觉，长期稳定。
+UX: 核心导航 5 项，扩展能力渐进披露；桌面侧边栏，移动底部导航；全局即时反馈。
+FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专注趋势；核心优势以“本地优先 / 零注册 / 数据在本机”呈现。
 -->
 
 <!-- 背景（纯色白纸） -->
@@ -437,7 +436,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
   <!-- ================= 侧边栏 ================= -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">
-      <div class="logo-icon" aria-label="星屿">○</div>
+      <div class="logo-icon" aria-label="星屿">✦</div>
       <div class="logo-text">
         <span class="logo-name">星屿</span>
         <span class="logo-sub" data-i18n="logo.sub">个人学习工作台</span>
@@ -526,7 +525,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 
     <div class="sidebar-footer">
       <div class="user-chip">
-        <div class="user-avatar" id="userAvatar">零</div>
+        <div class="user-avatar" id="userAvatar">星</div>
         <div class="user-meta">
           <span class="user-name" id="userName">同学</span>
           <span class="user-role" data-i18n="role">个人工作台</span>
@@ -590,6 +589,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
             <span class="hero-date" id="heroDate"></span>
             <h2 id="heroGreeting">你好，同学</h2>
             <p id="heroQuote">今天也要保持专注，稳步向前。</p>
+          <div class="hero-trust" aria-label="平台核心优势"><span>本地优先</span><span>零注册</span><span>数据在本机</span></div>
           </div>
           <div class="hero-stats" id="heroStats"></div>
           <div class="hero-priority" id="heroPriority"></div>
@@ -2049,47 +2049,9 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 <link rel="stylesheet" href="css/voice-agent.css?v=20260903.3">
 <script defer src="js/voice-agent.js?v=20260906.1"></script>
 
+  <link rel="stylesheet" href="css/brand-system.css?v=20260910.1">
+  <script defer src="js/ux-system.js?v=20260910.1"></script>
   <script src="js/mobile-capture.js"></script>
   <script src="js/mobile-enhance.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

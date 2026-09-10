@@ -1,0 +1,309 @@
+/* ============================================================
+   星屿 · 统一品牌与体验系统 2026.09
+   目标：更流畅、更一致、更耐看；核心路径最短；扩展能力渐进展开。
+   原则：同一套视觉令牌 / 同一套交互反馈 / 桌面移动同一品牌语言。
+   ============================================================ */
+
+:root {
+  /* Brand：星屿 = 深空 + 星光。主色负责方向，不做大面积刺激。 */
+  --xy-star: #6ee7ff;
+  --xy-star-deep: #38bdf8;
+  --xy-abyss: #071018;
+  --xy-brand-grad: linear-gradient(135deg, #7dd3fc 0%, #818cf8 52%, #c084fc 100%);
+
+  /* UX tokens */
+  --xy-radius-lg: 22px;
+  --xy-radius-md: 16px;
+  --xy-control-h: 42px;
+  --xy-ease: cubic-bezier(.32,.72,.16,1);
+  --xy-fast: 160ms;
+  --xy-normal: 260ms;
+  --xy-focus: 0 0 0 2px rgba(7,16,24,.9), 0 0 0 5px rgba(56,189,248,.68);
+}
+
+[data-theme="light"] {
+  --xy-abyss: #f6f7fb;
+  --xy-focus: 0 0 0 2px rgba(255,255,255,.92), 0 0 0 5px rgba(14,165,233,.62);
+}
+
+/* 让旧变量继承品牌方向：不推翻原有可读性，但去掉视觉漂移 */
+:root,
+[data-theme="dark"],
+[data-theme="light"] {
+  --accent: var(--xy-star-deep);
+  --accent-hover: #0ea5e9;
+  --primary: var(--xy-star-deep);
+  --focus-ring: var(--xy-focus);
+}
+
+/* ---------- 全局触感：每个可点目标都有即时、可预期反馈 ---------- */
+.nav-item,
+.icon-btn,
+.side-btn,
+.text-btn,
+.btn,
+.quick-action,
+.mobile-nav-item,
+.xy-more-toggle {
+  transition: transform var(--xy-fast) var(--xy-ease),
+              background-color var(--xy-fast) var(--xy-ease),
+              border-color var(--xy-fast) var(--xy-ease),
+              box-shadow var(--xy-normal) var(--xy-ease),
+              color var(--xy-fast) var(--xy-ease);
+  will-change: transform;
+}
+
+.nav-item:active,
+.icon-btn:active,
+.side-btn:active,
+.text-btn:active,
+.btn:active,
+.quick-action:active,
+.mobile-nav-item:active,
+.xy-more-toggle:active {
+  transform: scale(.977);
+}
+
+:is(.nav-item, .icon-btn, .side-btn, .text-btn, .btn, .quick-action, .mobile-nav-item, .xy-more-toggle, input, textarea, select, [tabindex]):focus-visible {
+  outline: 0 !important;
+  box-shadow: var(--xy-focus) !important;
+}
+
+/* ---------- 品牌标 ---------- */
+.sidebar-logo { align-items: center; }
+.logo-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 15px;
+  color: #fff;
+  background: var(--xy-brand-grad);
+  box-shadow: 0 10px 28px rgba(56,189,248,.22), inset 0 1px 0 rgba(255,255,255,.38);
+  font-size: 20px;
+  line-height: 1;
+}
+.logo-name { letter-spacing: .10em; font-weight: 750; }
+.logo-sub { color: var(--ink-3, #8a8a8a); letter-spacing: .02em; }
+
+/* ---------- 精简导航：核心先看到，扩展渐进展示 ---------- */
+.sidebar-nav { display: flex; flex-direction: column; gap: 8px; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+.nav-group { margin: 0; }
+.nav-group-label { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; opacity: .48; margin: 12px 16px 7px; }
+.nav-item { position: relative; min-height: 42px; border-radius: 14px; }
+.nav-item::after {
+  content: "";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 99px;
+  background: var(--xy-star);
+  opacity: 0;
+  transform: translateY(-50%) scale(.4);
+  transition: transform var(--xy-normal) var(--xy-ease), opacity var(--xy-normal) var(--xy-ease);
+}
+.nav-item.active { color: var(--ink, #eaf6ff); background: color-mix(in srgb, var(--xy-star-deep) 15%, transparent); box-shadow: inset 0 0 0 1px rgba(125,211,252,.18); }
+.nav-item.active::after { opacity: 1; transform: translateY(-50%) scale(1); }
+
+.xy-more-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: calc(100% - 24px);
+  min-height: 40px;
+  margin: 10px 12px 6px;
+  padding: 0 14px;
+  border: 1px solid var(--rule, #2b3b4a);
+  border-radius: 14px;
+  color: var(--ink-2, #9fb0c4);
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+}
+.xy-more-toggle:hover { background: var(--fill, rgba(255,255,255,.06)); }
+.xy-more-caret { transition: transform var(--xy-normal) var(--xy-ease); }
+.xy-more-toggle[aria-expanded="true"] .xy-more-caret { transform: rotate(180deg); }
+
+.nav-group.xy-secondary {
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: grid-template-rows var(--xy-normal) var(--xy-ease),
+              opacity var(--xy-normal) var(--xy-ease),
+              transform var(--xy-normal) var(--xy-ease);
+  pointer-events: none;
+}
+.nav-group.xy-secondary.xy-open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+.xy-secondary-inner { min-height: 0; overflow: hidden; }
+
+/* ---------- 首页高频操作前置 ---------- */
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 14px 0 20px;
+}
+.quick-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: var(--xy-control-h);
+  padding: 9px 12px;
+  border: 1px solid var(--rule, #2b3b4a);
+  border-radius: 99px;
+  color: var(--ink, #eaf6ff);
+  background: color-mix(in srgb, var(--paper-card, #0f1b2a) 78%, transparent);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 650;
+  backdrop-filter: blur(12px);
+}
+.quick-action:hover { border-color: rgba(125,211,252,.48); box-shadow: 0 12px 30px rgba(8,16,24,.12); }
+.quick-action.primary { color: #03192a; border-color: transparent; background: var(--xy-brand-grad); }
+
+/* ---------- 移动端底部核心导航 ---------- */
+.mobile-nav {
+  position: fixed;
+  z-index: 960;
+  left: max(10px, env(safe-area-inset-left));
+  right: max(10px, env(safe-area-inset-right));
+  bottom: max(10px, env(safe-area-inset-bottom));
+  display: none;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 4px;
+  padding: 7px;
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 24px;
+  background: rgba(9,17,26,.86);
+  box-shadow: 0 20px 50px rgba(0,0,0,.24);
+  backdrop-filter: blur(18px) saturate(1.25);
+}
+[data-theme="light"] .mobile-nav { background: rgba(255,255,255,.88); border-color: rgba(17,24,39,.08); }
+.mobile-nav-item {
+  min-height: 48px;
+  border: 0;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  gap: 1px;
+  background: transparent;
+  color: var(--ink-2, #9fb0c4);
+  cursor: pointer;
+  font: inherit;
+}
+.mobile-nav-item svg { width: 19px; height: 19px; }
+.mobile-nav-item span { font-size: 10px; line-height: 1; letter-spacing: .04em; }
+.mobile-nav-item.active { color: #03192a; background: var(--xy-brand-grad); }
+
+/* ---------- 即时反馈：全局提示 ---------- */
+.xy-toast-region {
+  position: fixed;
+  z-index: 99999;
+  left: 50%;
+  bottom: max(22px, calc(env(safe-area-inset-bottom) + 14px));
+  display: grid;
+  gap: 9px;
+  width: min(420px, calc(100vw - 28px));
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.xy-toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid rgba(255,255,255,.11);
+  border-radius: 16px;
+  background: rgba(9,17,26,.94);
+  color: var(--ink, #eaf6ff);
+  box-shadow: 0 18px 48px rgba(0,0,0,.26);
+  backdrop-filter: blur(18px);
+  opacity: 0;
+  transform: translateY(14px) scale(.98);
+  transition: opacity var(--xy-normal) var(--xy-ease), transform var(--xy-normal) var(--xy-ease);
+  pointer-events: auto;
+  font-size: 13px;
+}
+.xy-toast.show { opacity: 1; transform: none; }
+.xy-toast-icon { width: 7px; height: 7px; border-radius: 50%; background: var(--xy-star); box-shadow: 0 0 0 4px rgba(56,189,248,.14); flex: none; }
+.xy-toast.success .xy-toast-icon { background: #34d399; box-shadow: 0 0 0 4px rgba(52,211,153,.14); }
+.xy-toast.error .xy-toast-icon { background: #f87171; box-shadow: 0 0 0 4px rgba(248,113,113,.14); }
+.xy-toast-action { margin-left: auto; flex: none; border: 0; border-radius: 10px; padding: 6px 9px; color: #7dd3fc; background: rgba(125,211,252,.10); cursor: pointer; font: inherit; font-size: 12px; }
+
+/* ---------- 统一卡片、输入和滚动 ---------- */
+.card { border-radius: var(--xy-radius-lg) !important; }
+.modal { border-radius: 24px !important; }
+input[type="text"], input[type="search"], input[type="password"], input[type="email"], input[type="number"], textarea, select {
+  min-height: 40px;
+  border-radius: 12px !important;
+  transition: border-color var(--xy-fast) var(--xy-ease), box-shadow var(--xy-fast) var(--xy-ease), background-color var(--xy-fast) var(--xy-ease);
+}
+::-webkit-scrollbar { width: 9px; height: 9px; }
+::-webkit-scrollbar-thumb { border-radius: 99px; background: color-mix(in srgb, var(--ink-3, #8a8a8a) 34%, transparent); }
+::-webkit-scrollbar-track { background: transparent; }
+::selection { background: rgba(56,189,248,.26); }
+
+@media (max-width: 900px) {
+  .mobile-nav { display: grid; }
+  .view-container { padding-bottom: calc(82px + env(safe-area-inset-bottom)); }
+  .sidebar { z-index: 1100; }
+  .quick-actions { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .quick-action.primary { grid-column: span 2; }
+}
+@media (max-width: 480px) {
+  :root { --xy-radius-lg: 19px; }
+  .quick-actions { gap: 8px; }
+  .hero-card { padding: 18px !important; }
+  .card { padding: 16px !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 1ms !important; animation-duration: 1ms !important; scroll-behavior: auto !important; }
+  .nav-item:active, .icon-btn:active, .btn:active, .quick-action:active { transform: none; }
+}
+
+/* ---------- 品牌核心优势 ---------- */
+.hero-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 12px;
+}
+.hero-trust span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 27px;
+  padding: 5px 10px;
+  border: 1px solid color-mix(in srgb, var(--xy-star-deep) 24%, transparent);
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--xy-star-deep) 8%, transparent);
+  color: var(--ink-2, #9fb0c4);
+  font-size: 12px;
+  letter-spacing: .03em;
+}
+.hero-trust span::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: var(--xy-star);
+}
+
+/* 提升浅色主题中弱化文字的可读性，同时保留层级 */
+[data-theme="light"] {
+  --ink-3: #6b7280;
+  --ink-faint: #9ca3af;
+}
