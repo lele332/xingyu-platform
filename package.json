@@ -8,7 +8,8 @@
     "test:pomo": "node tests/pomo-smoke.js",
     "test:srs": "node tests/srs-smoke.js",
     "test:ai": "node tests/context-budget.test.js",
-    "check": "npm run test:srs && npm run test:ai && npm test"
+    "check": "npm run test:srs && npm run test:ai && npm test && npm run test:quality",
+    "test:quality": "node tests/quality-smoke.js"
   },
   "devDependencies": {
     "playwright-core": "^1.62.1"
