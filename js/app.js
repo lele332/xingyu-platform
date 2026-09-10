@@ -2691,6 +2691,15 @@ const App = (() => {
     if (!window.XYPerf) { box.textContent = "监测模块未加载。"; return; }
     const rep = XYPerf.generateReport($("#fbComment") ? $("#fbComment").value.trim() : "");
     let html = "";
+    if (XYPerf.healthSummary) {
+      const trend = XYPerf.healthSummary();
+      const trendHtml = ["5min","15min","60min"].map(k => {
+        const t = trend[k] || {jank:0,lowFps:0,slowInteraction:0};
+        return '<span class="fb-trend-item"><b>' + k.replace("min"," 分钟") + '</b><i>' + t.jank + ' 阻塞 · ' + t.lowFps + ' 低帧 · ' + t.slowInteraction + ' 慢交互</i></span>';
+      }).join("");
+      const autos = Array.isArray(XYPerf.trend?.autoReports) ? XYPerf.trend.autoReports.length : 0;
+      html += '<div class="fb-trend">' + trendHtml + '<span class="fb-trend-item"><b>自动上报</b><i>近期 ' + autos + ' 次</i></span></div>';
+    }
     if (!rep.issues.length) {
       html += '<span class="fb-ok">✓ 自动巡检未发现明显异常</span>\n';
     } else {

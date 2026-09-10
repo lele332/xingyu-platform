@@ -13,6 +13,7 @@
 """
 import pet_webview_patch  # noqa: F401  必须先于 webview
 
+import json
 import os
 import socket
 import threading
@@ -21,6 +22,7 @@ import webview
 ROOT = os.path.dirname(os.path.abspath(__file__))
 URL = "http://127.0.0.1:8620/agent-pet.html"
 PROFILE = os.path.join(ROOT, "webview-data", "pet")
+POSITION_FILE = os.path.join(PROFILE, "window-position.json")
 LOCK_PORT = 8640
 _lock = None
 
@@ -33,6 +35,29 @@ class PetApi:
     def set_mode(self, mode):
         self.mode = "airi" if mode == "airi" else "live2d"
         return self.mode
+
+    def restore_position(self):
+        try:
+            with open(POSITION_FILE, "r", encoding="utf-8") as f:
+                pos = json.load(f)
+            x, y = int(pos.get("x", 0)), int(pos.get("y", 0))
+            if x or y:
+                self.window.move(x, y)
+            return {"x": x, "y": y}
+        except Exception:
+            return {"x": None, "y": None}
+
+    def save_position(self):
+        try:
+            data = {"x": int(self.window.x or 0), "y": int(self.window.y or 0)}
+            os.makedirs(PROFILE, exist_ok=True)
+            tmp = POSITION_FILE + ".tmp"
+            with open(tmp, "w", encoding="utf-8") as f:
+                json.dump(data, f)
+            os.replace(tmp, POSITION_FILE)
+            return data
+        except Exception:
+            return None
 
     def close_pet(self):
         try:
