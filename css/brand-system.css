@@ -326,6 +326,15 @@ input[type="text"], input[type="search"], input[type="password"], input[type="em
 .nav-item.active .xy-icon { color: var(--xy-star); }
 .mobile-nav-item.active .xy-icon { color: #03192a; }
 
+/* ---------- 性能反馈摘要 ---------- */
+.fb-summary { font-family: inherit; white-space: normal; }
+.fb-noise, .fb-autos { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.fb-noise { color: var(--ink-2, #9fb0c4); font-size: 12px; }
+.fb-autos span { min-height: 26px; padding: 5px 8px; border-radius: 9px; border: 1px solid rgba(125,211,252,.14); background: rgba(125,211,252,.07); color: rgba(226,238,252,.72); font-size: 11px; }
+.fb-raw { margin-top: 10px; border-top: 1px solid rgba(125,211,252,.10); padding-top: 8px; }
+.fb-raw summary { cursor: pointer; color: rgba(125,211,252,.82); font-size: 12px; }
+.fb-raw pre { margin: 8px 0 0; font-family: var(--font-mono, monospace); font-size: 11px; line-height: 1.65; color: rgba(226,238,252,.68); white-space: pre-wrap; word-break: break-word; }
+
 /* ---------- 性能反馈提醒档位 ---------- */
 .fb-alert-picker {
   display: flex;

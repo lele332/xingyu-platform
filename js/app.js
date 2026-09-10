@@ -2709,8 +2709,15 @@ const App = (() => {
       });
     }
     const nf = rep.metrics && rep.metrics.noiseFiltered;
-    if (nf) html += "<span class=\"fb-warn\">已过滤噪声：JS " + nf.errors + " 条 / 资源 " + nf.resources + " 个（仅记录，不打扰）</span>\n";
-    html += "\n" + _fbEsc(XYPerf.textSummary(rep));
+    if (nf) html += '<div class="fb-noise">已过滤噪声：JS ' + nf.errors + ' 条 / 资源 ' + nf.resources + ' 个（仅记录，不打扰）</div>';
+    const autos = Array.isArray(XYPerf.trend?.autoReports) ? XYPerf.trend.autoReports.slice(-3).reverse() : [];
+    if (autos.length) {
+      html += '<div class="fb-autos">' + autos.map(x => {
+        const time = new Date(x.at).toLocaleTimeString("zh-CN", { hour12:false });
+        return '<span>' + time + ' · ' + _fbEsc((x.issues || []).join(" / ") || "性能趋势") + '</span>';
+      }).join("") + '</div>';
+    }
+    html += '<details class="fb-raw"><summary>完整诊断</summary><pre>' + _fbEsc(XYPerf.textSummary(rep)) + '</pre></details>';
     box.innerHTML = html;
   }
   function openFeedback() {
