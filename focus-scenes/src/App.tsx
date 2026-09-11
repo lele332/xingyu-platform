@@ -6,6 +6,9 @@ import PrismaScene from './components/PrismaScene'
 import NexusScene from './components/NexusScene'
 import FoldcraftScene from './components/FoldcraftScene'
 import SecurifyScene from './components/SecurifyScene'
+import TaskRunnerScene from './components/TaskRunnerScene'
+import ConstellationScene from './components/ConstellationScene'
+import PaperFlowScene from './components/PaperFlowScene'
 
 /** 灵感画廊 4 场景：key 用于 localStorage 记忆，accent 为主题色 */
 const SCENES = [
@@ -36,6 +39,27 @@ const SCENES = [
     accent: '#9db8ff',
     accentRgb: '157,184,255',
     component: SecurifyScene,
+  },
+  {
+    key: 'task-runner',
+    name: '任务奔走',
+    accent: '#a7f3d0',
+    accentRgb: '167,243,208',
+    component: TaskRunnerScene,
+  },
+  {
+    key: 'constellation',
+    name: '记忆星图',
+    accent: '#bfdbfe',
+    accentRgb: '191,219,254',
+    component: ConstellationScene,
+  },
+  {
+    key: 'paperflow',
+    name: '纸流拾光',
+    accent: '#fde68a',
+    accentRgb: '253,230,138',
+    component: PaperFlowScene,
   },
 ]
 
@@ -265,7 +289,7 @@ export default function App() {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <Scene />
+          <Scene running={running} progress={progress} />
         </motion.div>
       </AnimatePresence>
 
@@ -681,4 +705,5 @@ function DialMinimal({ mm, ss, progress, running }: DialProps) {
     </div>
   )
 }
+
 

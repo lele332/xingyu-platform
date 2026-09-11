@@ -51,6 +51,9 @@ const App = (() => {
   function fmtDate(iso) {
     if (!iso) return "";
     const d = new Date(iso);
+    if ((document.documentElement.dataset.lang || "zh") === "en") {
+      return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    }
     return `${d.getMonth() + 1}月${d.getDate()}日`;
   }
   function fmtDateFull(iso) {
@@ -364,8 +367,8 @@ const App = (() => {
       }
       else window.Anim && Anim.viewEnter(v);
     }
-    const titles = { aria: t("title.aria"), dashboard: t("title.dashboard"), courses: t("title.courses"), notes: t("title.notes"), focus: t("title.focus"), growth: t("title.growth"), lit: t("title.lit"), news: t("title.news"), ai: t("title.ai"), weather: t("title.weather"), prisma: t("title.prisma"), nexus: t("title.nexus"), foldcraft: t("title.foldcraft"), securify: t("title.securify"), particles: t("title.particles"), running: t("title.running"), voice: "AI 语音", toolknit: "工具箱", exams: "考试日程" };
-    const subs = { dashboard: t("sub.dashboard"), courses: t("sub.courses"), notes: t("sub.notes"), focus: t("sub.focus"), growth: t("sub.growth"), lit: t("sub.lit"), news: t("sub.news"), ai: t("sub.ai"), weather: t("sub.weather"), prisma: t("sub.prisma"), nexus: t("sub.nexus"), foldcraft: t("sub.foldcraft"), securify: t("sub.securify"), particles: t("sub.particles"), running: t("sub.running"), voice: "文本转语音 · VoxCPM", toolknit: "常用小工具合集", exams: "考试与日程管理" };
+    const titles = { aria: t("title.aria"), dashboard: t("title.dashboard"), courses: t("title.courses"), notes: t("title.notes"), focus: t("title.focus"), growth: t("title.growth"), lit: t("title.lit"), news: t("title.news"), ai: t("title.ai"), weather: t("title.weather"), prisma: t("title.prisma"), nexus: t("title.nexus"), foldcraft: t("title.foldcraft"), securify: t("title.securify"), particles: t("title.particles"), running: t("title.running"), voice: "AI 语音", relax: "解压舱", toolknit: "工具箱", exams: "考试日程" };
+    const subs = { dashboard: t("sub.dashboard"), courses: t("sub.courses"), notes: t("sub.notes"), focus: t("sub.focus"), growth: t("sub.growth"), lit: t("sub.lit"), news: t("sub.news"), ai: t("sub.ai"), weather: t("sub.weather"), prisma: t("sub.prisma"), nexus: t("sub.nexus"), foldcraft: t("sub.foldcraft"), securify: t("sub.securify"), particles: t("sub.particles"), running: t("sub.running"), voice: "文本转语音 · VoxCPM", relax: "慢下来，先把自己放好", toolknit: "常用小工具合集", exams: "考试与日程管理" };
     $("#pageTitle").textContent = titles[view] || "";
     const sub = $("#pageSub");
     if (sub) sub.textContent = subs[view] || "";
@@ -395,6 +398,7 @@ const App = (() => {
     else if (currentView === "growth") renderGrowth();
     else if (currentView === "lit") renderLit();
     else if (currentView === "news") renderNews();
+    else if (currentView === "relax") { if (window.Relax) Relax.render(); }
     else if (currentView === "weather") { if (window.Weather) Weather.renderCities(); }
     else if (currentView === "exams") renderExams();
     else if (currentView === "ai") renderAIStatus();
@@ -418,6 +422,28 @@ const App = (() => {
   /* ============================================================
      每日一言（励志 / 热梗 / 毒鸡汤）
      ============================================================ */
+  let _quoteSpeaking = false;
+
+  function speakQuote() {
+    const textEl = $("#quoteText");
+    const btn = $("#btnQuoteSpeak");
+    if (!textEl || !btn || !("speechSynthesis" in window)) return;
+    if (_quoteSpeaking || speechSynthesis.speaking) {
+      speechSynthesis.cancel();
+      _quoteSpeaking = false;
+      btn.textContent = t("quote.speak");
+      return;
+    }
+    const lang = document.documentElement.dataset.lang || "zh";
+    const utter = new SpeechSynthesisUtterance(textEl.textContent);
+    utter.lang = lang === "en" ? "en-US" : lang === "zh-Hant" ? "zh-TW" : "zh-CN";
+    utter.rate = 0.96;
+    utter.pitch = 1;
+    utter.onstart = () => { _quoteSpeaking = true; btn.textContent = t("quote.speaking"); };
+    utter.onend = utter.onerror = () => { _quoteSpeaking = false; btn.textContent = t("quote.speak"); };
+    speechSynthesis.speak(utter);
+  }
+
   function renderQuote() {
     const box = $("#dailyQuote");
     const textEl = $("#quoteText");
@@ -425,6 +451,12 @@ const App = (() => {
     if (!box || !textEl) return;
     const q = window.getDailyQuote ? getDailyQuote() : null;
     if (!q) { box.style.display = "none"; return; }
+    const now = new Date();
+    const lang = document.documentElement.dataset.lang || "zh";
+    const monthEl = $("#quoteMonth"), dayEl = $("#quoteDay"), weekEl = $("#quoteWeek");
+    if (monthEl) monthEl.textContent = now.toLocaleDateString(lang === "en" ? "en-US" : "zh-CN", { month: "short" });
+    if (dayEl) dayEl.textContent = String(now.getDate()).padStart(2, "0");
+    if (weekEl) weekEl.textContent = now.toLocaleDateString(lang === "en" ? "en-US" : "zh-CN", { weekday: "short" });
     box.style.display = "";
     textEl.textContent = q.text;
     if (catEl) catEl.textContent = t("quote.cat." + q.cat);
@@ -645,12 +677,37 @@ const App = (() => {
         const days = daysUntil(t.due);
         const overdue = days !== null && days < 0;
         return `
-        <div class="todo-item">
+        <div class="todo-item" data-dash-task="${t.id}" title="打开任务">
           <span class="todo-dot" style="background:${t.priority === "high" ? "var(--ink)" : t.priority === "mid" ? "var(--ink-2)" : "var(--ink-3)"}"></span>
           <span class="todo-pri-${t.priority}">${esc(t.title)}</span>
           <span class="todo-date ${overdue ? "tag-chip pri-high" : ""}">${overdue ? formatDue(days) : fmtDate(t.due)}</span>
+          <div class="row-actions">
+            <button class="mini-btn" data-dash-act="focus" data-id="${t.id}" title="开始专注" aria-label="开始专注">▶</button>
+            <button class="mini-btn check" data-dash-act="done" data-id="${t.id}" title="完成" aria-label="完成">✓</button>
+          </div>
         </div>`;
       }).join("");
+      $$("#todayTasks [data-dash-task]").forEach(el => {
+        el.addEventListener("click", (event) => {
+          if (event.target.closest("button")) return;
+          openTaskForm(el.dataset.dashTask);
+        });
+      });
+      $$("#todayTasks [data-dash-act]").forEach(btn => {
+        btn.onclick = (event) => {
+          event.stopPropagation();
+          const id = btn.dataset.id;
+          if (btn.dataset.dashAct === "done") {
+            Store.update("tasks", id, { status: "done" });
+            renderDashboard();
+          } else {
+            pomoState.taskId = id;
+            const select = $("#pomoTask");
+            if (select) select.value = id;
+            switchView("focus");
+          }
+        };
+      });
     }
 
     // 最近笔记
@@ -678,7 +735,8 @@ const App = (() => {
       const d = new Date(); d.setDate(d.getDate() - i);
       const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
       const mins = pomos.filter(p => p.startAt && isFocusRecord(p) && localDateKey(p.startAt) === key).reduce((s, p) => s + (p.minutes || 0), 0);
-      labels.push(d.getDate() + "日");
+      const dayLabel = (document.documentElement.dataset.lang === "en") ? d.toLocaleDateString("en-US", {month: "short", day: "numeric"}) : d.getDate() + "日";
+      labels.push(dayLabel);
       values.push(mins);
     }
     if (values.every(v => v === 0)) {
@@ -1055,7 +1113,16 @@ const App = (() => {
      专注学习
      ============================================================ */
   let pomoTimer = null;
-  let pomoState = { running: false, paused: false, mode: "work", remain: 25 * 60, total: 25 * 60, startedAt: null, segmentRemain: null, recordedMinutes: 0, taskId: "" };
+  let pomoState = { running: false, paused: false, mode: "work", status: "ready", remain: 25 * 60, total: 25 * 60, startedAt: null, segmentRemain: null, recordedMinutes: 0, taskId: "" };
+
+  function setPomoStatus(status, text) {
+    pomoState.status = status;
+    const mode = $("#pomoMode");
+    if (mode) {
+      mode.dataset.status = status;
+      mode.textContent = text || t("pomo." + status);
+    }
+  }
 
   function renderFocus() {
     renderFocusStats();
@@ -1075,7 +1142,7 @@ const App = (() => {
         return da - db;
       })
       .slice(0, 50);
-    select.innerHTML = '<option value="">自由专注</option>' + tasks.map(task => {
+    select.innerHTML = '<option value="">' + t('pomo.freeFocus') + '</option>' + tasks.map(task => {
       const due = task.due ? ` · ${fmtDate(task.due)}` : "";
       return `<option value="${esc(task.id)}">${esc(task.title)}${esc(due)}</option>`;
     }).join("");
@@ -1117,9 +1184,9 @@ const App = (() => {
     $("#pomoTodayCount").textContent = todayCount;
     $("#pomoTodayMin").textContent = todayMin;
     $("#focusStatsRow").innerHTML = `
-      <div class="fstat"><b>${todayCount}</b><span>今日番茄</span></div>
-      <div class="fstat"><b>${todayMin}</b><span>今日分钟</span></div>
-      <div class="fstat"><b>${Math.round(weekMin / 60 * 10) / 10}</b><span>本周小时</span></div>`;
+      <div class="fstat"><b>${todayCount}</b><span>${t("pomo.todayCount")}</span></div>
+      <div class="fstat"><b>${todayMin}</b><span>${t("pomo.todayMin")}</span></div>
+      <div class="fstat"><b>${Math.round(weekMin / 60 * 10) / 10}</b><span>${t("pomo.weekHour")}</span></div>`;
     renderFocusWeekChart();
   }
 
@@ -1130,7 +1197,8 @@ const App = (() => {
       const d = new Date(); d.setDate(d.getDate() - i);
       const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
       const mins = pomos.filter(p => p.startAt && isFocusRecord(p) && localDateKey(p.startAt) === key).reduce((s, p) => s + (p.minutes || 0), 0);
-      labels.push(d.getDate() + "日");
+      const dayLabel = (document.documentElement.dataset.lang === "en") ? d.toLocaleDateString("en-US", {month: "short", day: "numeric"}) : d.getDate() + "日";
+      labels.push(dayLabel);
       values.push(mins);
     }
     Charts.line($("#focusWeekChart"), { labels, values, height: 190, color: "var(--ink)" });
@@ -1140,14 +1208,14 @@ const App = (() => {
     const pomos = Store.getAll("pomodoros").slice().sort((a, b) => (b.startAt || "").localeCompare(a.startAt || "")).slice(0, 10);
     const box = $("#focusHistory");
     if (!pomos.length) {
-      box.innerHTML = `<div class="empty-state"><p>还没有专注记录，点击「开始专注」</p></div>`;
+      box.innerHTML = `<div class="empty-state"><p>${t("pomo.historyEmpty")}</p></div>`;
       return;
     }
     box.innerHTML = pomos.map(p => {
       const d = new Date(p.startAt);
       const time = `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
       const task = p.taskId ? Store.getAll("tasks").find(item => item.id === p.taskId) : null;
-      const label = p.type === "break" ? "休息" : (p.completed === false ? "部分专注" : (p.source === "supervisor" ? "督学专注" : "番茄钟"));
+      const label = p.type === "break" ? t("pomo.histBreak") : (p.completed === false ? t("pomo.histPartial") : (p.source === "supervisor" ? t("pomo.histSupervisor") : t("pomo.histPomodoro")));
       const taskMeta = task ? ` · ${task.title}` : "";
       return `<div class="history-item">
         <span class="history-dot"></span>
@@ -1170,17 +1238,17 @@ const App = (() => {
     const history = $("#supervisorHistory");
     if (!statsRow || !history) return;
     statsRow.innerHTML = `
-      <div class="fstat"><b>${todayMin}</b><span>今日督学分钟</span></div>
-      <div class="fstat"><b>${sessions.length}</b><span>累计会话</span></div>
-      <div class="fstat"><b>${totalViolations}</b><span>累计违纪</span></div>`;
+      <div class="fstat"><b>${todayMin}</b><span>${t("supervisor.todayMin")}</span></div>
+      <div class="fstat"><b>${sessions.length}</b><span>${t("supervisor.totalSessions")}</span></div>
+      <div class="fstat"><b>${totalViolations}</b><span>${t("supervisor.totalViolations")}</span></div>`;
     if (!sessions.length) {
-      history.innerHTML = `<div class="empty-state"><p>还没有督学记录，启动自研版后自动保存。</p></div>`;
+      history.innerHTML = `<div class="empty-state"><p>${t("supervisor.empty")}</p></div>`;
       return;
     }
     history.innerHTML = sessions.slice(0,8).map(s => {
       const d = new Date(s.startAt);
       const time = `${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
-      const label = s.completed ? "督学完成" : "督学部分";
+      const label = s.completed ? t("supervisor.done") : t("supervisor.partial");
       const warn = (s.violations || 0) + (s.warnings || 0);
       return `<div class="history-item">
         <span class="history-dot"></span>
@@ -1210,7 +1278,7 @@ const App = (() => {
     pomoState.recordedMinutes = 0;
     pomoState.taskId = ($("#pomoTask")?.value || "");
     updatePomoUI();
-    setPomoRunningUI("专注中 ");
+    setPomoRunningUI(t("pomo.focus"), "focus");
     clearInterval(pomoTimer); pomoTimer = null;   // 防孤儿计时器
     pomoTimer = setInterval(tickPomo, 1000);
     openFocusScene();
@@ -1222,15 +1290,15 @@ const App = (() => {
     pomoState.running = true;
     pomoState.paused = false;
     pomoState.segmentRemain = pomoState.remain;
-    setPomoRunningUI(pomoState.mode === "work" ? "专注中 " : "休息中 ");
+    setPomoRunningUI(pomoState.mode === "work" ? t("pomo.focus") : t("pomo.break"), pomoState.mode === "work" ? "focus" : "break");
     pomoTimer = setInterval(tickPomo, 1000);
   }
 
-  function setPomoRunningUI(modeText) {
-    $("#btnPomoStart").textContent = "暂停";
+  function setPomoRunningUI(modeText, status = "focus") {
+    $("#btnPomoStart").textContent = t("btn.pause");
     $("#btnPomoStart").classList.add("btn-danger");
     $(".pomodoro-card").classList.add("working");
-    $("#pomoMode").textContent = modeText;
+    setPomoStatus(status, modeText);
     if (window.AnimeFX) AnimeFX.pomoPulse();
   }
 
@@ -1366,7 +1434,7 @@ const App = (() => {
     pomoState.segmentRemain = pomoState.remain;
     renderFocusStats();
     renderFocusHistory();
-    toast(`已记录 ${minutes} 分钟部分专注`, "ok");
+    toast(t("pomo.partialRecorded").replace("{m}", minutes), "ok");
   }
 
   function pausePomo() {
@@ -1378,10 +1446,10 @@ const App = (() => {
     pomoState.running = false;
     pomoState.paused = true;
     clearInterval(pomoTimer); pomoTimer = null;
-    $("#btnPomoStart").textContent = "继续";
+    $("#btnPomoStart").textContent = t("btn.resume");
     $("#btnPomoStart").classList.remove("btn-danger");
     $(".pomodoro-card").classList.remove("working");
-    $("#pomoMode").textContent = "已暂停";
+    setPomoStatus("paused");
     if (window.AnimeFX) AnimeFX.pomoPulse();
   }
 
@@ -1397,8 +1465,8 @@ const App = (() => {
     pomoState.segmentRemain = null;
     pomoState.startedAt = null;
     pomoState.recordedMinutes = 0;
-    $("#pomoMode").textContent = "休息已跳过";
-    $("#btnPomoStart").textContent = "开始专注";
+    setPomoStatus("ready");
+    $("#btnPomoStart").textContent = t("btn.startFocus");
     $("#btnPomoStart").classList.remove("btn-danger");
     const card = $(".pomodoro-card");
     if (card) card.classList.remove("working");
@@ -1428,7 +1496,7 @@ const App = (() => {
         completed: true,
         ...currentPomoTaskPayload()
       });
-      toast("专注完成！休息一下吧", "ok");
+      toast(t("pomo.focusDone"), "ok");
       // 自动切换到休息
       pomoState.mode = "break";
       pomoState.total = (+$("#pomoBreak").value || 5) * 60;
@@ -1436,8 +1504,8 @@ const App = (() => {
       pomoState.startedAt = new Date().toISOString();
       pomoState.segmentRemain = pomoState.total;
       pomoState.recordedMinutes = 0;
-      $("#pomoMode").textContent = "休息中 ";
-      $("#btnPomoStart").textContent = "跳过休息";
+      setPomoStatus("break");
+      $("#btnPomoStart").textContent = t("btn.skipBreak");
       $("#btnPomoStart").classList.remove("btn-danger");
       pomoState.running = true;
       pomoTimer = setInterval(tickPomo, 1000);
@@ -1448,8 +1516,8 @@ const App = (() => {
         type: "break",
         completed: true
       });
-      $("#pomoMode").textContent = "休息结束，继续加油！";
-      $("#btnPomoStart").textContent = "开始专注";
+      setPomoStatus("ready");
+      $("#btnPomoStart").textContent = t("btn.startFocus");
       $("#btnPomoStart").classList.remove("btn-danger");
       pomoState.startedAt = null;
       pomoState.segmentRemain = null;
@@ -2997,7 +3065,7 @@ const App = (() => {
     const advanced = !["system", "dark", "light", "ocean", "custom"].includes(curMode);
     if (advanced) document.body.classList.add("show-advanced-themes");
     const moreBtn = $("#btnToggleAdvancedThemes");
-    if (moreBtn) moreBtn.textContent = document.body.classList.contains("show-advanced-themes") ? "收起更多主题" : "显示更多主题";
+    if (moreBtn) moreBtn.textContent = document.body.classList.contains("show-advanced-themes") ? t("btn.moreThemes.hide") : t("btn.moreThemes.show");
     $$(".theme-opt").forEach(b => b.classList.toggle("active", b.dataset.themePick === curMode));
     const panel = $("#themeCustom");
     if (panel) panel.style.display = curTheme === "custom" ? "grid" : "none";
@@ -3187,6 +3255,103 @@ const App = (() => {
       "quote.title": "Daily Quote", "quote.next": "Next", "quote.cat.motivation": "Inspire", "quote.cat.memes": "Meme", "quote.cat.poison": "Savage"
     }
   };
+  Object.assign(I18N.zh, {
+    "pomo.title": "番茄钟", "pomo.workLabel": "专注", "pomo.breakLabel": "休息", "pomo.minutesUnit": "分", "pomo.bindTask": "绑定任务", "pomo.freeFocus": "自由专注", "btn.reset": "重置",
+    "pomo.todayPrefix": "今日已完成", "pomo.pomoUnit": "个番茄 · 累计", "pomo.stats": "专注统计", "pomo.history": "专注记录",
+    "pomo.motivationBadge": "励志语录", "pomo.motivationTitle": "点击播放即可配音励志语录", "pomo.prev": "上一句", "pomo.play": "播放", "pomo.next": "下一句",
+    "pomo.todayCount": "今日番茄", "pomo.todayMin": "今日分钟", "pomo.weekHour": "本周小时", "pomo.historyEmpty": "还没有专注记录，点击「开始专注」",
+    "pomo.histBreak": "休息", "pomo.histPartial": "部分专注", "pomo.histSupervisor": "督学专注", "pomo.histPomodoro": "番茄钟",
+    "supervisor.title": "AI 督学官", "supervisor.desc": "独立于番茄钟。体验版用于感受成熟督学产品，自研版用于长期本地留存。",
+    "supervisor.external": "体验外部版", "supervisor.self": "启动自研版", "supervisor.externalTitle": "外部体验版", "supervisor.externalDesc": "新窗口打开「凛冬督学局」，登录与数据由外部平台管理。",
+    "supervisor.selfTitle": "自研版", "supervisor.selfDesc": "本机摄像头 / 屏幕 / 姿态 / 手机检测，不上传画面；记录写入星屿。", "supervisor.history": "督学记录",
+    "supervisor.todayMin": "今日督学分钟", "supervisor.totalSessions": "累计会话", "supervisor.totalViolations": "累计违纪", "supervisor.empty": "还没有督学记录，启动自研版后自动保存。", "supervisor.done": "督学完成", "supervisor.partial": "督学部分", "pomo.partialRecorded": "已记录 {m} 分钟部分专注",
+
+    "agent.wake": "唤醒小星",
+    "pomo.ready": "待开始", "pomo.focus": "专注中", "pomo.paused": "已暂停", "pomo.break": "休息中", "pomo.focusDone": "专注完成！休息一下吧",
+    "btn.pause": "暂停", "btn.resume": "继续", "btn.startFocus": "开始专注", "btn.skipBreak": "跳过休息",
+    "nav.relax": "解压舱", "title.relax": "解压舱", "sub.relax": "慢下来，先把自己放好",
+    "nav.group.gallery": "灵感画廊", "nav.group.tools": "实用工具", "nav.exams": "考试日程", "nav.voice": "AI 语音", "nav.aria": "A.R.I.A", "nav.toolknit": "工具箱", "title.voice": "AI 语音", "sub.voice": "文本转语音 · VoxCPM",
+    "relax.breath": "呼吸节奏", "relax.bubbles": "气泡解压", "relax.sand": "流沙画布", "relax.flow": "流动光影", "relax.drift": "星河流转",
+    "icon.classic": "星屿线性", "icon.mono": "单色线稿", "icon.glass3d": "3D 玻璃",
+    "bg.alpsPeak": "阿尔卑斯", "bg.forestLake": "森林湖境", "bg.mistyRidge": "雾脊云线", "bg.alpineValley": "高山谷地", "bg.fjordCoast": "峡湾海岸", "bg.tropicalSea": "热带海岛", "bg.desertDunes": "大漠沙丘", "bg.nightAlps": "夜岭星河", "bg.kyotoPath": "京都小径", "bg.aegeanView": "爱琴海岸",
+    "theme.iosFrost": "iOS 霜蓝", "theme.iosGraphite": "iOS 石墨", "theme.iosAurora": "iOS 极光", "theme.iosSunset": "iOS 日落", "theme.iosMint": "iOS 薄雾", "theme.iosSpace": "iOS 深空"
+  });
+  Object.assign(I18N.en, {
+    "pomo.title": "Pomodoro", "pomo.workLabel": "Focus", "pomo.breakLabel": "Break", "pomo.minutesUnit": "min", "pomo.bindTask": "Link task", "pomo.freeFocus": "Free focus", "btn.reset": "Reset",
+    "pomo.todayPrefix": "Today", "pomo.pomoUnit": "tomatoes · total", "pomo.stats": "Focus stats", "pomo.history": "Focus history",
+    "pomo.motivationBadge": "Motivation", "pomo.motivationTitle": "Click play to hear the quote", "pomo.prev": "Previous", "pomo.play": "Play", "pomo.next": "Next",
+    "pomo.todayCount": "Today pomodoros", "pomo.todayMin": "Minutes today", "pomo.weekHour": "Hours this week", "pomo.historyEmpty": "No focus records yet. Press Start Focus.",
+    "pomo.histBreak": "Break", "pomo.histPartial": "Partial focus", "pomo.histSupervisor": "Supervised focus", "pomo.histPomodoro": "Pomodoro",
+    "supervisor.title": "AI Study Supervisor", "supervisor.desc": "Independent of the Pomodoro timer. Try the external product or launch the local-first version.",
+    "supervisor.external": "Try External", "supervisor.self": "Launch Local", "supervisor.externalTitle": "External version", "supervisor.externalDesc": "Opens the Redwatch supervisor in a new window; sign-in and data are managed externally.",
+    "supervisor.selfTitle": "Local-first version", "supervisor.selfDesc": "Uses on-device camera, screen, posture and phone detection. Nothing is uploaded; records stay in Xingyu.", "supervisor.history": "Supervisor records",
+    "supervisor.todayMin": "Supervised minutes today", "supervisor.totalSessions": "Total sessions", "supervisor.totalViolations": "Total violations", "supervisor.empty": "No supervisor records yet. Launch the local version to start saving them.", "supervisor.done": "Supervised done", "supervisor.partial": "Supervised partial", "pomo.partialRecorded": "Recorded {m} partial focus minutes",
+
+    "agent.wake": "Wake Xingyu",
+    "pomo.ready": "Ready", "pomo.focus": "Focusing", "pomo.paused": "Paused", "pomo.break": "On Break", "pomo.focusDone": "Focus done! Take a short break.",
+    "btn.pause": "Pause", "btn.resume": "Resume", "btn.startFocus": "Start Focus", "btn.skipBreak": "Skip Break",
+    "nav.relax": "Relax Studio", "title.relax": "Relax Studio", "sub.relax": "Slow down and reset for a moment",
+    "nav.group.gallery": "Inspiration", "nav.group.tools": "Tools", "nav.exams": "Exams", "nav.voice": "AI Voice", "nav.aria": "A.R.I.A", "nav.toolknit": "Toolbox", "title.voice": "AI Voice", "sub.voice": "Text to speech · VoxCPM",
+    "relax.breath": "Breathing", "relax.bubbles": "Bubble Pop", "relax.sand": "Sand Flow", "relax.flow": "Flow Light", "relax.drift": "Star Drift",
+    "icon.classic": "Classic Line", "icon.mono": "Mono Line", "icon.glass3d": "3D Glass",
+    "bg.alpsPeak": "Alps Peak", "bg.forestLake": "Forest Lake", "bg.mistyRidge": "Misty Ridge", "bg.alpineValley": "Alpine Valley", "bg.fjordCoast": "Fjord Coast", "bg.tropicalSea": "Tropical Sea", "bg.desertDunes": "Desert Dunes", "bg.nightAlps": "Night Alps", "bg.kyotoPath": "Kyoto Path", "bg.aegeanView": "Aegean View",
+    "theme.iosFrost": "iOS Frost", "theme.iosGraphite": "iOS Graphite", "theme.iosAurora": "iOS Aurora", "theme.iosSunset": "iOS Sunset", "theme.iosMint": "iOS Mint", "theme.iosSpace": "iOS Space",
+    "font.serif": "Serif", "font.mono": "Mono"
+  });
+
+  Object.assign(I18N.zh, {
+    "settings.tabAppearance": "外观", "settings.tabPersonal": "个人", "settings.tabIntelligence": "智能",
+    "settings.tabAgent": "智能体", "settings.tabAccess": "安全与同步", "settings.tabSystem": "系统与数据",
+    "theme.system": "跟随系统",
+    "btn.moreThemes.show": "显示更多主题", "btn.moreThemes.hide": "收起更多主题",
+    "color.paper": "背景色", "color.card": "卡片色", "color.drawer": "侧栏色", "color.ink": "文字色", "color.accent": "强调色", "color.rule": "边框色",
+    "custom.hint": "选一套预设配色，或点「自定义」逐项调色，实时生效。",
+    "font.hint": "切换界面正文字体风格。", "lang.hint": "切换界面显示语言（笔记 / 课程等数据内容保持原样）。",
+    "icon.title": "图标风格", "icon.classicSub": "简洁清晰", "icon.glassSub": "玻璃渲染", "icon.monoSub": "更低存在感", "icon.hint": "三套图标方案实时切换；3D 玻璃支持 Blender 管线与内置降级。",
+    "settings.nicknameLabel": "昵称（显示于侧边栏与问候语）",
+    "settings.baseUrl": "接口地址 Base URL", "settings.modelName": "模型名称", "settings.preset": "预设：",
+    "settings.proxyHint": "使用本机 AI 代理（桌面端）：勾选后，AI 请求走本机 127.0.0.1 服务转发，API Key 只存在本机 data/ai-key-local.txt，不再写入浏览器存储；手机 / 网页部署时不生效（自动回到直连）。",
+    "settings.aiHint": "直连模式：密钥仅保存在浏览器 localStorage。代理模式：请把密钥写入本机 data/ai-key-local.txt（或环境变量 XINGYU_AI_KEY），并把「接口地址」填成任意预设。",
+    "settings.orbTitle": "AI 助手形象", "orb.title": "编辑球体形象", "orb.sub": "款式 · 颜色 · 质感，保存即应用到 AI 助手",
+    "bg.auroraIceland": "冰岛极光", "bg.patagoniaRidge": "巴塔哥尼亚山脊", "bg.saharaGold": "撒哈拉金丘",
+    "bg.maldivesLagoon": "马尔代夫潟湖", "bg.tokyoNight": "东京夜色", "bg.swissValley": "瑞士山谷",
+    "bg.hint": "本地图源 + 全球精选在线风光；文字始终清晰可读。",
+    "theme.iosLavender": "iOS 薰衣草", "theme.iosPeach": "iOS 蜜桃", "theme.iosSky": "iOS 晴空", "theme.iosCarbon": "iOS 碳黑",
+    "quote.speak": "朗读今日", "quote.speaking": "朗读中…", "quote.motivationPlay": "▶ 播放励志", "quote.motivationPause": "⏸ 暂停励志",
+    "relax.breathTitle": "呼吸节奏", "relax.breathToggle": "开始", "relax.bubblesTitle": "气泡解压",
+    "relax.sandTitle": "流沙画布", "relax.sandClear": "清空", "relax.flowTitle": "流动光影", "relax.flowHint": "移动鼠标",
+    "relax.driftTitle": "星河流转", "relax.driftHint": "点击生成流星",
+    "relax.wrap": "泡泡纸", "relax.wrapTitle": "泡泡纸", "relax.wrapReset": "重置",
+    "relax.lantern": "放灯", "relax.lanternTitle": "放灯", "relax.lanternHint": "点击放一盏灯",
+    "aria.start": "启动 A.R.I.A", "aria.gateHint": "首次点击后再加载交互资源，避免进入平台就吃性能。"
+  });
+  Object.assign(I18N.en, {
+    "settings.tabAppearance": "Appearance", "settings.tabPersonal": "Personal", "settings.tabIntelligence": "Intelligence",
+    "settings.tabAgent": "Agent", "settings.tabAccess": "Privacy & Sync", "settings.tabSystem": "System & Data",
+    "theme.system": "Follow System",
+    "btn.moreThemes.show": "Show more themes", "btn.moreThemes.hide": "Hide more themes",
+    "color.paper": "Background", "color.card": "Cards", "color.drawer": "Sidebar", "color.ink": "Text", "color.accent": "Accent", "color.rule": "Borders",
+    "custom.hint": "Pick a preset or open Custom to tune every token in real time.",
+    "font.hint": "Switch the UI text style.", "lang.hint": "Switch UI language. Your notes and courses stay unchanged.",
+    "icon.title": "Icon Style", "icon.classicSub": "Crisp line", "icon.glassSub": "Glass render", "icon.monoSub": "Lower presence", "icon.hint": "Switch instantly. 3D glass supports a Blender pipeline with a built-in fallback.",
+    "settings.nicknameLabel": "Nickname (sidebar and greeting)",
+    "settings.baseUrl": "Base URL", "settings.modelName": "Model", "settings.preset": "Preset:",
+    "settings.proxyHint": "Use local AI proxy on desktop: requests are forwarded through 127.0.0.1 and the API key stays in data/ai-key-local.txt instead of browser storage. Mobile or hosted mode falls back to direct requests.",
+    "settings.aiHint": "Direct mode stores the key in browser localStorage. Proxy mode stores it in data/ai-key-local.txt or XINGYU_AI_KEY and uses any preset Base URL.",
+    "settings.orbTitle": "AI Avatar", "orb.title": "Edit orb avatar", "orb.sub": "Shape · color · finish, saved to the AI assistant",
+    "bg.auroraIceland": "Iceland Aurora", "bg.patagoniaRidge": "Patagonia Ridge", "bg.saharaGold": "Sahara Gold",
+    "bg.maldivesLagoon": "Maldives Lagoon", "bg.tokyoNight": "Tokyo Night", "bg.swissValley": "Swiss Valley",
+    "bg.hint": "Local and curated global scenery. Text remains readable.",
+    "theme.iosLavender": "iOS Lavender", "theme.iosPeach": "iOS Peach", "theme.iosSky": "iOS Sky", "theme.iosCarbon": "iOS Carbon",
+    "quote.speak": "Read today", "quote.speaking": "Speaking…", "quote.motivationPlay": "▶ Play motivation", "quote.motivationPause": "⏸ Pause motivation",
+    "relax.breathTitle": "Breathing", "relax.breathToggle": "Start", "relax.bubblesTitle": "Bubble Pop",
+    "relax.sandTitle": "Sand Canvas", "relax.sandClear": "Clear", "relax.flowTitle": "Flow Light", "relax.flowHint": "Move the cursor",
+    "relax.driftTitle": "Star Drift", "relax.driftHint": "Tap for shooting stars",
+    "relax.wrap": "Bubble Wrap", "relax.wrapTitle": "Bubble Wrap", "relax.wrapReset": "Reset",
+    "relax.lantern": "Lanterns", "relax.lanternTitle": "Lanterns", "relax.lanternHint": "Tap to release a lantern",
+    "aria.start": "Launch A.R.I.A", "aria.gateHint": "Interactive resources load only after the first tap to protect performance."
+  });
+
   function t(key) {
     const lang = document.documentElement.dataset.lang || "zh";
     const d = I18N[lang] || I18N.zh;
@@ -3200,6 +3365,10 @@ const App = (() => {
     $$("[data-i18n-ph]").forEach(el => {
       const k = el.dataset.i18nPh;
       if (k) el.placeholder = t(k);
+    });
+    $$("[data-i18n-aria]").forEach(el => {
+      const k = el.dataset.i18nAria;
+      if (k) el.setAttribute("aria-label", t(k));
     });
   }
   function applyFont(font) {
@@ -4417,10 +4586,10 @@ const App = (() => {
       pomoState.startedAt = null;
       pomoState.segmentRemain = null;
       pomoState.recordedMinutes = 0;
-      $("#btnPomoStart").textContent = "开始专注";
+      $("#btnPomoStart").textContent = t("btn.startFocus");
       $("#btnPomoStart").classList.remove("btn-danger");
       $(".pomodoro-card").classList.remove("working");
-      $("#pomoMode").textContent = "准备开始";
+      setPomoStatus("ready");
       updatePomoUI();
       if (window.AnimeFX) AnimeFX.pomoPulse();
     };
@@ -4460,6 +4629,18 @@ const App = (() => {
     $("#btnChatStop").onclick = () => AI.cancelCurrent && AI.cancelCurrent();
     $("#chatInput").addEventListener("keydown", e => { if (e.key === "Enter") sendChat($("#chatInput").value); });
     $$(".chip[data-cmd]").forEach(c => c.onclick = () => { $("#chatInput").value = c.dataset.cmd + " "; $("#chatInput").focus(); });
+    const startAriaBtn = $("#btnStartAria");
+    if (startAriaBtn) {
+      startAriaBtn.onclick = () => {
+        const frame = document.querySelector("#view-aria iframe");
+        const gate = document.getElementById("ariaGate");
+        if (!frame) return;
+        frame.dataset.iframeSrc = "assets/mainframe.html?v=20260911.1";
+        loadIframe("aria");
+        if (gate) gate.remove();
+      };
+    }
+
     const editOrbBtn = $("#btnEditOrb");
     if (editOrbBtn) {
       editOrbBtn.onclick = () => {
@@ -4832,6 +5013,7 @@ const App = (() => {
     syncGlobalExitFab();
 
     // 每日一言
+    $("#btnQuoteSpeak").onclick = speakQuote;
     $("#btnNextQuote").onclick = () => { if (window.nextQuote) { nextQuote(); renderQuote(); } };
 
     // 访问密码

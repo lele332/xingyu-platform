@@ -28,7 +28,7 @@ DEFAULT_PORT = 8620
 BUILD = "20260908.1"
 # 默认只监听本机回环地址（隐私优先，局域网内其他设备无法访问）。
 # 如需手机扫码访问，可在启动前设置环境变量 XINGYU_BIND=0.0.0.0 重新开放局域网。
-BIND_HOST = os.environ.get("XINGYU_BIND", "0.0.0.0").strip() or "0.0.0.0"
+BIND_HOST = os.environ.get("XINGYU_BIND", "127.0.0.1").strip() or "127.0.0.1"
 MAX_POST_BYTES = 200 * 1024 * 1024  # 限制请求体 200MB，避免异常超大请求拖垮内存
 FEEDBACK_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "feedback")
 MAX_FEEDBACK_BYTES = 1024 * 1024      # 反馈报告最大 1MB

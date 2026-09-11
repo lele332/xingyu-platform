@@ -25,7 +25,7 @@ var MOTIVATION_BASE = 'assets/motivational/';
   function ensure() {
     if (!audio) {
       audio = new Audio();
-      audio.preload = 'auto';
+      audio.preload = 'metadata';
       audio.addEventListener('ended', function () { next(true); });
     }
     return audio;
@@ -178,7 +178,8 @@ var MOTIVATION_BASE = 'assets/motivational/';
       var quoteBtn = document.getElementById('btnQuoteMotivation');
       if (title && st.track) title.textContent = st.track.title;
       if (toggleBtn) toggleBtn.textContent = st.playing ? '\u6682\u505c' : '\u64ad\u653e';
-      if (quoteBtn) quoteBtn.textContent = st.playing ? '\u23f8 \u6682\u505c\u52b1\u5fd7' : '\u25b6 \u64ad\u653e\u52b1\u5fd7';
+      var en = document.documentElement.dataset.lang === 'en';
+      if (quoteBtn) quoteBtn.textContent = st.playing ? (en ? '\u23f8 Pause motivation' : '\u23f8 \u6682\u505c\u52b1\u5fd7') : (en ? '\u25b6 Play motivation' : '\u25b6 \u64ad\u653e\u52b1\u5fd7');
       if (st.playing && st.track) { showPomoSubtitle(st.track.subtitle || st.track.title); } else { hidePomoSubtitle(); }
     });
   }

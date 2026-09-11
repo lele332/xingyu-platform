@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mainframe — A.R.I.A</title>
+<link rel="stylesheet" href="https://db.onlinewebfonts.com/c/5ac3fe7c6abd2f62067f266d89671492?family=HelveticaNowDisplay-Medium">
+<link rel="stylesheet" href="https://db.onlinewebfonts.com/c/1aa3377e489837a26d019bba501e779d?family=HelveticaNowDisplayW01-Rg">
+<style>
+:root {
+  --font-heading: 'HelveticaNowDisplay-Medium', 'Helvetica Neue', Arial, sans-serif;
+  --font-body: 'HelveticaNowDisplayW01-Rg', 'Helvetica Neue', Arial, sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
+body { font-family: var(--font-body); background: #060709; color: #fff; overflow: hidden; }
+
+/* ---------- 背景（鼠标滑动刷视频） ---------- */
+#bgVideo {
+  position: fixed; inset: 0; z-index: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: 70% center;
+  background: #060709;
+}
+body.no-video #bgVideo { display: none; }
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: 0;
+  background:
+    radial-gradient(120% 90% at 78% 30%, rgba(64, 74, 96, .55) 0%, transparent 60%),
+    radial-gradient(100% 80% at 20% 80%, rgba(38, 48, 44, .6) 0%, transparent 65%),
+    linear-gradient(160deg, #0a0d13 0%, #10141c 48%, #060709 100%);
+}
+.vstat {
+  position: fixed; left: 24px; bottom: 20px; z-index: 3;
+  font-family: var(--font-body); font-size: 11px; letter-spacing: .08em;
+  color: rgba(255,255,255,.55); background: rgba(0,0,0,.35);
+  padding: 4px 12px; border-radius: 999px; backdrop-filter: blur(6px);
+  transition: opacity .6s ease; pointer-events: none;
+}
+.vstat.ok { opacity: 0; }
+.vstat.bad { color: #ffb3a7; }
+
+body.no-video::after {
+  content: "\25C7  A.R.I.A  \25C7"; position: fixed; right: 24px; bottom: 20px; z-index: 2;
+  font-family: var(--font-heading); font-size: 13px; letter-spacing: .35em; color: rgba(255,255,255,.4);
+}
+
+/* ---------- 导航栏 ---------- */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px;
+}
+@media (min-width: 640px) { .nav { padding: 20px 32px; } }
+.logo { display: flex; align-items: center; gap: 12px; }
+.logo b {
+  font-family: var(--font-heading); font-weight: 500; color: #fff;
+  font-size: 21px; letter-spacing: -0.02em;
+}
+@media (min-width: 640px) { .logo b { font-size: 26px; } }
+.logo .spark { font-size: 25px; color: #fff; user-select: none; letter-spacing: -0.02em; line-height: 1; }
+@media (min-width: 640px) { .logo .spark { font-size: 30px; } }
+.nav-links { display: none; align-items: center; color: #fff; font-size: 23px; }
+@media (min-width: 768px) { .nav-links { display: flex; } }
+.nav-links a { color: #fff; text-decoration: none; transition: opacity .2s ease; }
+.nav-links a:hover { opacity: .6; }
+.nav-cta { display: none; }
+@media (min-width: 768px) { .nav-cta { display: inline; } }
+.nav-cta a {
+  color: #fff; font-size: 23px; text-decoration: underline; text-underline-offset: 2px;
+  transition: opacity .2s ease;
+}
+.nav-cta a:hover { opacity: .6; }
+
+/* 汉堡按钮 */
+.burger { display: flex; flex-direction: column; gap: 5px; background: none; border: 0; padding: 6px; cursor: pointer; }
+.burger span { display: block; width: 24px; height: 2px; background: #fff; transition: all .3s ease; }
+.burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.burger.open span:nth-child(2) { opacity: 0; }
+.burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+@media (min-width: 768px) { .burger { display: none; } }
+
+/* 移动端全屏菜单 */
+.overlay {
+  position: fixed; inset: 0; z-index: 9;
+  background: rgba(0,0,0,.9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+  padding: 0 32px; gap: 32px;
+  opacity: 0; pointer-events: none; transition: opacity .3s ease;
+}
+.overlay.show { opacity: 1; pointer-events: auto; }
+.overlay a { color: #fff; font-size: 32px; font-weight: 500; text-decoration: none; }
+.overlay a.cta { text-decoration: underline; text-underline-offset: 3px; }
+@media (min-width: 768px) { .overlay { display: none; } }
+
+/* ---------- HERO ---------- */
+.hero {
+  position: relative; z-index: 1; height: 100vh;
+  display: flex; flex-direction: column; justify-content: flex-end; padding: 0 20px 48px;
+  overflow: hidden;
+}
+@media (min-width: 640px) { .hero { padding: 0 32px 48px; } }
+@media (min-width: 768px) { .hero { justify-content: center; padding-bottom: 0; padding-left: 40px; padding-right: 40px; } }
+.hero-inner { max-width: 36rem; position: relative; z-index: 10; }
+.intro {
+  pointer-events: none; user-select: none; margin-bottom: 22px;
+  font-size: clamp(18px, 4vw, 26px); line-height: 1.3; font-weight: 400; color: #fff;
+  filter: blur(4px);
+}
+.type-line {
+  color: #fff; margin-bottom: 22px;
+  font-size: clamp(18px, 4vw, 26px); line-height: 1.35; font-weight: 400;
+  min-height: 54px;
+}
+.cursor {
+  display: inline-block; width: 2px; height: 1.1em; background: #fff;
+  vertical-align: middle; margin-left: 2px;
+  animation: blink 1s step-end infinite;
+}
+.cursor.off { display: none; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+/* 操作按钮 */
+.pills {
+  display: flex; flex-wrap: wrap; row-gap: 4px;
+  opacity: 0; transform: translateY(8px);
+  transition: opacity .4s ease, transform .4s ease;
+}
+.pills.show { opacity: 1; transform: none; }
+.pill {
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 9999px; white-space: nowrap; cursor: pointer;
+  font-family: var(--font-body); font-size: 13px;
+  padding: .3em 16px; margin: 0 .2em .4em;
+  background: #fff; color: #000; border: 1px solid rgba(0,0,0,.1);
+  transition: background-color .2s ease, color .2s ease;
+}
+@media (min-width: 640px) { .pill { font-size: 15px; padding: .3em 20px; } }
+.pill:hover { background: #000; color: #fff; }
+.pill.outline {
+  background: transparent; color: #fff; border: 1px solid #fff;
+  gap: 8px;
+}
+@media (min-width: 640px) { .pill.outline { gap: 12px; } }
+.pill.outline:hover { background: #fff; color: #000; }
+.pill.outline:hover svg { stroke: #000; }
+.pill svg { stroke: #fff; transition: stroke .2s ease; flex-shrink: 0; }
+.pill .u { text-decoration: underline; text-underline-offset: 1px; }
+</style>
+</head>
+<body>
+<video id="bgVideo" muted playsInline preload="auto"
+  src="aria-bg.mp4"></video>
+
+<nav class="nav">
+  <div class="logo">
+    <b>Mainframe&reg;</b>
+    <span class="spark">&#10035;&#65038;</span>
+  </div>
+  <div class="nav-links">
+    <a href="#">Labs</a><span>,&nbsp;</span><a href="#">Studio</a><span>,&nbsp;</span><a href="#">Openings</a><span>,&nbsp;</span><a href="#">Shop</a>
+  </div>
+  <div class="nav-cta"><a href="mailto:hello@mainframe.co">Get in touch</a></div>
+  <button class="burger" id="burger" aria-label="Menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="overlay" id="overlay">
+  <a href="#">Labs</a>
+  <a href="#">Studio</a>
+  <a href="#">Openings</a>
+  <a href="#">Shop</a>
+  <a class="cta" href="mailto:hello@mainframe.co">Get in touch</a>
+</div>
+
+<main class="hero">
+  <div class="hero-inner">
+    <p class="intro">Hey there, meet A.R.I.A,<br>Mainframe's Adaptive Response Interface Agent</p>
+    <p class="type-line"><span id="typed"></span><span class="cursor" id="cursor"></span></p>
+    <div class="pills" id="pills">
+      <button class="pill">Pitch us an idea</button>
+      <button class="pill">Come work here</button>
+      <button class="pill">Send a brief hello</button>
+      <button class="pill">See how we operate</button>
+      <button class="pill outline" id="copyBtn">
+        <span>Reach us: <span class="u">hello@mainframe.co</span></span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </button>
+    </div>
+  </div>
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- 视频随鼠标横向滑动刷时间线 ---------- */
+  var SENSITIVITY = 0.8;
+  var video = document.getElementById("bgVideo");
+  var prevX = null, targetTime = 0, seeking = false, duration = 0;
+  var SOURCES = ["aria-bg.mp4", "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260826_041744_63efcd78-bf7d-4039-99e2-2461e8a61903.mp4"];
+  var srcIdx = 0;
+  var stat = document.createElement("div");
+  stat.className = "vstat"; stat.textContent = "A.R.I.A \u89c6\u9891\u52a0\u8f7d\u4e2d\u2026";
+  document.body.appendChild(stat);
+  function setStat(t, cls) { stat.textContent = t; stat.className = "vstat" + (cls ? " " + cls : ""); }
+
+  video.addEventListener("loadedmetadata", function () { duration = video.duration || 0; });
+  /* 首帧就绪：解码并暂停在第一帧，保证未滑动鼠标时也有画面 */
+  video.addEventListener("loadeddata", function () {
+    duration = video.duration || duration;
+    document.body.classList.remove("no-video");
+    setStat("A.R.I.A \u89c6\u9891\u5c31\u7eea \u00b7 \u6a2a\u5411\u79fb\u52a8\u9f20\u6807\u4f53\u9a8c");
+    setTimeout(function () { stat.classList.add("ok"); }, 2600);
+    var p = video.play();
+    if (p && p.then) p.then(function () { video.pause(); }, function () {});
+  });
+  video.addEventListener("error", function () {
+    srcIdx++;
+    if (srcIdx < SOURCES.length) {
+      setStat("\u89c6\u9891\u6e90\u4e0d\u53ef\u7528\uff0c\u5207\u6362\u5907\u7528\u6e90\u2026");
+      video.src = SOURCES[srcIdx];
+      video.load();
+    } else {
+      var code = video.error && video.error.code ? video.error.code : "?";
+      setStat("\u89c6\u9891\u4e0d\u53ef\u7528 (code=" + code + ")\uff0c\u5df2\u5207\u6362\u4e3a\u7eaf\u8272\u80cc\u666f", "bad");
+      document.body.classList.add("no-video");
+    }
+  });
+  /* 兜底：若视频在脚本执行前已就绪（本地/缓存加载极快），补读状态并强制首帧 */
+  if (video.readyState >= 1) {
+    duration = video.duration || 0;
+    if (video.readyState >= 2) {
+      document.body.classList.remove("no-video");
+      setStat("A.R.I.A \u89c6\u9891\u5c31\u7eea \u00b7 \u6a2a\u5411\u79fb\u52a8\u9f20\u6807\u4f53\u9a8c");
+      setTimeout(function () { stat.classList.add("ok"); }, 2600);
+      var p0 = video.play();
+      if (p0 && p0.then) p0.then(function () { video.pause(); }, function () {});
+    }
+  }
+
+  window.addEventListener("mousemove", function (e) {
+    if (!duration) { prevX = e.clientX; return; }
+    if (prevX !== null) {
+      var delta = e.clientX - prevX;
+      targetTime = Math.min(duration, Math.max(0, targetTime + (delta / window.innerWidth) * SENSITIVITY * duration));
+      if (!seeking) {
+        seeking = true;
+        try { video.currentTime = targetTime; } catch (err) { seeking = false; }
+      }
+    }
+    prevX = e.clientX;
+  });
+
+  video.addEventListener("seeked", function () {
+    if (duration && Math.abs(video.currentTime - targetTime) > 0.05) {
+      try { video.currentTime = targetTime; } catch (err) { seeking = false; }
+    } else {
+      seeking = false;
+    }
+  });
+
+  /* ---------- 打字机 ---------- */
+  var TEXT = "Glad you stopped in. Good taste tends to find us. Now, what are we building?";
+  var typedEl = document.getElementById("typed");
+  var cursorEl = document.getElementById("cursor");
+  var i = 0, done = false;
+  setTimeout(function () {
+    var timer = setInterval(function () {
+      typedEl.textContent = TEXT.slice(0, ++i);
+      if (i >= TEXT.length) {
+        done = true;
+        clearInterval(timer);
+        cursorEl.classList.add("off");
+      }
+    }, 38);
+  }, 600);
+
+  /* ---------- 按钮组 400ms 后浮入 ---------- */
+  setTimeout(function () { document.getElementById("pills").classList.add("show"); }, 400);
+
+  /* ---------- 复制邮箱 ---------- */
+  var copyBtn = document.getElementById("copyBtn");
+  copyBtn.addEventListener("click", function () {
+    var email = "hello@mainframe.co";
+    function ok() {
+      var old = copyBtn.querySelector("span").innerHTML;
+      copyBtn.querySelector("span").textContent = "Copied \u2713";
+      setTimeout(function () { copyBtn.querySelector("span").innerHTML = old; }, 1400);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(email).then(ok, function () { legacyCopy(email); ok(); });
+    } else { legacyCopy(email); ok(); }
+  });
+  function legacyCopy(text) {
+    var ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
+  /* ---------- 移动端菜单 ---------- */
+  var burger = document.getElementById("burger");
+  var overlay = document.getElementById("overlay");
+  burger.addEventListener("click", function () {
+    var open = !overlay.classList.contains("show");
+    overlay.classList.toggle("show", open);
+    burger.classList.toggle("open", open);
+    burger.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+  overlay.querySelectorAll("a").forEach(function (a) {
+    a.addEventListener("click", function () {
+      overlay.classList.remove("show");
+      burger.classList.remove("open");
+      burger.setAttribute("aria-expanded", "false");
+    });
+  });
+})();
+</script>
+</body>
+</html>
+
+
+
+
+
+

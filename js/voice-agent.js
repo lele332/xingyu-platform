@@ -2298,18 +2298,18 @@
         };
       }
       if (name === 'set_theme') {
-        var themeMap = { '跟随系统': 'system', '系统': 'system', '纯黑': 'dark', '深色': 'dark', '纯白': 'light', '浅色': 'light', '墨蓝': 'ocean', '青竹': 'forest', '纸墨': 'sepia', '暮紫': 'purple', '酒红': 'wine', '晚霞': 'dusk', '云灰': 'mist', '薄荷': 'mint', '蜜糖': 'honey', '桂山': 'guishan', '丹霞': 'danxia', '青藏': 'qingzang', '草原': 'caoyuan', '大漠': 'damo', '自定义': 'custom' };
+        var themeMap = { '跟随系统': 'system', '系统': 'system', '纯黑': 'dark', '深色': 'dark', '纯白': 'light', '浅色': 'light', '墨蓝': 'ocean', '青竹': 'forest', '纸墨': 'sepia', '暮紫': 'purple', '酒红': 'wine', '晚霞': 'dusk', '云灰': 'mist', '薄荷': 'mint', '蜜糖': 'honey', '桂山': 'guishan', '丹霞': 'danxia', '青藏': 'qingzang', '草原': 'caoyuan', '大漠': 'damo', '自定义': 'custom', 'iOS 薰衣草': 'ios-lavender', 'iOS 蜜桃': 'ios-peach', 'iOS 晴空': 'ios-sky', 'iOS 碳黑': 'ios-carbon' };
         var tv = themeMap[args.theme || ''] || String(args.theme || '').toLowerCase().trim();
         var tBtn = document.querySelector('[data-theme-pick="' + tv + '"]');
         if (!tBtn) return { ok: false, msg: '没有这个主题：' + args.theme };
         var adv = document.getElementById('btnToggleAdvancedThemes');
         var advOpen = document.getElementById('themeCustom');
-        if (adv && advOpen && advOpen.style.display === 'none' && ['guishan', 'danxia', 'qingzang', 'caoyuan', 'damo', 'custom'].indexOf(tv) >= 0) adv.click();
+        if (adv && advOpen && advOpen.style.display === 'none' && ['guishan', 'danxia', 'qingzang', 'caoyuan', 'damo', 'ios-frost', 'ios-graphite', 'ios-aurora', 'ios-sunset', 'ios-mint', 'ios-space', 'ios-lavender', 'ios-peach', 'ios-sky', 'ios-carbon', 'custom'].indexOf(tv) >= 0) adv.click();
         tBtn.click();
         return { ok: true, msg: '已切换主题到「' + args.theme + '」' };
       }
       if (name === 'set_background') {
-        var bgMap = { '无': 'none', '关闭背景': 'none', '桂林雾山': 'guilin-mist', '桂林·雾山': 'guilin-mist', '桂林航拍': 'guilin-aerial', '桂林·航拍': 'guilin-aerial', '九寨沟': 'jiuzhaigou', '张家界': 'zhangjiajie' };
+        var bgMap = { '无': 'none', '关闭背景': 'none', '桂林雾山': 'guilin-mist', '桂林·雾山': 'guilin-mist', '桂林航拍': 'guilin-aerial', '桂林·航拍': 'guilin-aerial', '九寨沟': 'jiuzhaigou', '张家界': 'zhangjiajie', '冰岛极光': 'aurora-iceland', '巴塔哥尼亚山脊': 'patagonia-ridge', '撒哈拉金丘': 'sahara-gold', '马尔代夫潟湖': 'maldives-lagoon', '东京夜色': 'tokyo-night', '瑞士山谷': 'swiss-valley' };
         var bv = bgMap[args.background || ''] || String(args.background || '').toLowerCase().trim();
         var bBtn = document.querySelector('[data-bg-pick="' + bv + '"]');
         if (!bBtn) return { ok: false, msg: '没有这个背景：' + args.background };

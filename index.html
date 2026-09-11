@@ -46,7 +46,7 @@
   d.dataset.bgVis = localStorage.getItem("zero_bg_vis") || "clear";
 })();</script>
 <link rel="stylesheet" href="css/weather-aurora.css?v=20260831.1">
-<link rel="stylesheet" href="css/style.css?v=20260905.3">
+<link rel="stylesheet" href="css/style.css?v=20260911.1">
 <link rel="stylesheet" href="css/apple.css?v=20260905.1">
 <link rel="stylesheet" href="css/synapse.css?v=20260815.1">
 <link rel="stylesheet" href="css/voxcpm.css?v=20260829.1">
@@ -459,7 +459,7 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
           <span class="nav-label" data-i18n="nav.weather">天气</span>
         </button>
         <button class="nav-item" data-view="exams">
-          <span class="nav-label">考试日程</span>
+          <span class="nav-label" data-i18n="nav.exams">考试日程</span>
         </button>
       </div>
       <div class="nav-group">
@@ -484,10 +484,10 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
           <span class="nav-badge" id="aiBadge">AI</span>
         </button>
         <button class="nav-item" data-view="voice">
-          <span class="nav-label">AI 语音</span>
+          <span class="nav-label" data-i18n="nav.voice">AI 语音</span>
         </button>
         <button class="nav-item" data-view="aria">
-          <span class="nav-label">A.R.I.A</span>
+          <span class="nav-label" data-i18n="nav.aria">A.R.I.A</span>
         </button>
         <button class="nav-item" data-view="running">
           <span class="nav-label" data-i18n="nav.running">跑步训练</span>
@@ -498,7 +498,7 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
         </button>
       </div>
       <div class="nav-group">
-        <div class="nav-group-label">灵感画廊</div>
+        <div class="nav-group-label" data-i18n="nav.group.gallery">灵感画廊</div>
         <button class="nav-item" data-view="prisma">
           <span class="nav-label" data-i18n="nav.prisma">棱镜艺境</span>
         </button>
@@ -516,9 +516,12 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
         </button>
       </div>
       <div class="nav-group">
-        <div class="nav-group-label">实用工具</div>
+        <div class="nav-group-label" data-i18n="nav.group.tools">实用工具</div>
+        <button class="nav-item" data-view="relax">
+          <span class="nav-label" data-i18n="nav.relax">解压舱</span>
+        </button>
         <button class="nav-item" data-view="toolknit">
-          <span class="nav-label">工具箱</span>
+          <span class="nav-label" data-i18n="nav.toolknit">工具箱</span>
         </button>
       </div>
     </nav>
@@ -553,9 +556,9 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
           autocomplete="off" aria-label="全局搜索" aria-controls="searchResults" aria-autocomplete="list">
         <div class="search-results" id="searchResults" role="listbox" aria-label="搜索结果" hidden></div>
       </div>
-        <button class="agent-wake-btn" id="btnWakeAgent" type="button" title="唤醒小星" aria-label="唤醒小星">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-          <span>小星</span>
+        <button class="agent-wake-btn" id="btnWakeAgent" type="button" aria-label="唤醒小星" data-i18n-aria="agent.wake">
+          <span class="agent-wake-dot" aria-hidden="true"></span>
+          <span class="agent-wake-tip" role="tooltip" data-i18n="agent.wake">唤醒小星</span>
         </button>
         <button class="icon-btn" id="btnFullscreen" title="全屏 / 退出全屏 (F11)" aria-label="切换全屏">
           <svg id="fsIconExpand" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2.5 5.5V2.5h3M10.5 2.5h3v3M13.5 10.5v3h-3M5.5 13.5h-3v-3"/></svg>
@@ -594,6 +597,37 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
           <div class="hero-stats" id="heroStats"></div>
           <div class="hero-priority" id="heroPriority"></div>
         </div>
+        <!-- 今日待办：放到第一屏，优先回答“现在做什么” -->
+        <div class="card cockpit-card">
+          <div class="card-head">
+            <h3>今日待办</h3>
+            <button class="text-btn" data-goto="courses">更多 →</button>
+          </div>
+          <div id="todayTasks"></div>
+        </div>
+        <!-- 每日一言：日历卡，放仪表盘第一屏 -->
+        <div class="card quote-card quote-calendar" id="dailyQuote">
+          <div class="quote-date">
+            <span class="quote-date-month" id="quoteMonth">--</span>
+            <span class="quote-date-day" id="quoteDay">--</span>
+            <span class="quote-date-week" id="quoteWeek">--</span>
+          </div>
+          <div class="quote-main">
+            <div class="quote-head">
+              <h3 data-i18n="quote.title">每日一言</h3>
+              <div class="quote-actions">
+                <button class="text-btn" id="btnQuoteMotivation" type="button" data-i18n="quote.motivationPlay">▶ 播放励志</button>
+                <button class="text-btn" id="btnQuoteSpeak" data-i18n="quote.speak">朗读今日</button>
+                <button class="text-btn" id="btnNextQuote" data-i18n="quote.next">换一句</button>
+              </div>
+            </div>
+            <div class="quote-body">
+              <span class="quote-mark">“</span>
+              <p class="quote-text" id="quoteText"></p>
+            </div>
+            <span class="quote-cat" id="quoteCat"></span>
+          </div>
+        </div>
         <div class="card ai-insight-card">
           <div class="card-head">
             <h3>AI 今日洞察</h3>
@@ -603,23 +637,7 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
             </div>
           </div>
           <div class="ai-insight" id="aiInsight"></div>
-        </div>
-        <!-- 每日一言 -->
-        <div class="card quote-card" id="dailyQuote">
-          <div class="quote-head">
-            <h3 data-i18n="quote.title">每日一言</h3>
-            <div class="quote-actions">
-              <button class="text-btn" id="btnNextQuote" data-i18n="quote.next">换一句</button>
-              <button class="text-btn" id="btnQuoteMotivation" type="button">▶ 播放励志</button>
-            </div>
-          </div>
-          <div class="quote-body">
-            <span class="quote-mark">“</span>
-            <p class="quote-text" id="quoteText"></p>
-          </div>
-          <span class="quote-cat" id="quoteCat"></span>
-        </div>
-        <div class="card dashboard-news-card">
+        </div>        <div class="card dashboard-news-card">
           <div class="hero-news" id="heroNews"></div>
         </div>
         <div class="dash-grid">
@@ -651,13 +669,6 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
               <button class="text-btn" data-goto="notes">笔记库 →</button>
             </div>
             <div id="todayReview"></div>
-          </div>
-          <div class="card">
-            <div class="card-head">
-              <h3>今日待办</h3>
-              <button class="text-btn" data-goto="courses">更多 →</button>
-            </div>
-            <div id="todayTasks"></div>
           </div>
           <div class="card">
             <div class="card-head">
@@ -756,32 +767,33 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
         <div class="focus-layout">
           <div class="card pomodoro-card">
             <div class="card-head">
-              <h3>番茄钟</h3>
+              <h3 data-i18n="pomo.title">番茄钟</h3>
               <div class="pomo-settings">
-                <label>专注 <input type="number" id="pomoWork" value="25" min="1" max="120"> 分</label>
-                <label>休息 <input type="number" id="pomoBreak" value="5" min="1" max="60"> 分</label>
+                <label><span data-i18n="pomo.workLabel">专注</span> <input type="number" id="pomoWork" value="25" min="1" max="120" aria-label="Focus minutes"> <span data-i18n="pomo.minutesUnit">分</span></label>
+                <label><span data-i18n="pomo.breakLabel">休息</span> <input type="number" id="pomoBreak" value="5" min="1" max="60" aria-label="Break minutes"> <span data-i18n="pomo.minutesUnit">分</span></label>
               </div>
-              <label class="pomo-task"><span>绑定任务</span><select id="pomoTask" aria-label="绑定番茄钟任务"><option value="">自由专注</option></select></label>
+              <label class="pomo-task"><span data-i18n="pomo.bindTask">绑定任务</span><select id="pomoTask" aria-label="Bind task"><option value="">自由专注</option></select></label>
             </div>
             <div class="pomo-ring" id="pomoRing">
+              <img class="pomo-asset" src="assets/focus/focus-orb.png" alt="" aria-hidden="true" draggable="false">
               <div class="pomo-time" id="pomoTime">25:00</div>
-              <div class="pomo-mode" id="pomoMode">准备开始</div>
+              <div class="pomo-mode" id="pomoMode" data-status="ready" data-i18n="pomo.ready">待开始</div>
             </div>
             <div class="pomo-controls">
-              <button class="btn btn-primary btn-lg" id="btnPomoStart">开始专注</button>
-              <button class="btn btn-ghost" id="btnPomoReset">重置</button>
+              <button class="btn btn-primary btn-lg" id="btnPomoStart" data-i18n="btn.startFocus">开始专注</button>
+              <button class="btn btn-ghost" id="btnPomoReset" data-i18n="btn.reset">重置</button>
             </div>
             <div class="pomo-today">
-              今日已完成 <b id="pomoTodayCount">0</b> 个番茄 · 累计 <b id="pomoTodayMin">0</b> 分钟
+              <span data-i18n="pomo.todayPrefix">今日已完成</span> <b id="pomoTodayCount">0</b> <span data-i18n="pomo.pomoUnit">个番茄 · 累计</span> <b id="pomoTodayMin">0</b> <span data-i18n="pomo.minutesUnit">分钟</span>
 <div class="pomo-motivation">
               <div class="pomo-motivation-head">
-                <span class="pomo-motivation-badge">励志语录</span>
-                <span class="pomo-motivation-title" id="motivationTitle">点击播放即可配音励志语录</span>
+                <span class="pomo-motivation-badge" data-i18n="pomo.motivationBadge">励志语录</span>
+                <span class="pomo-motivation-title" id="motivationTitle" data-i18n="pomo.motivationTitle">点击播放即可配音励志语录</span>
               </div>
               <div class="pomo-motivation-controls">
-                <button class="btn btn-ghost btn-sm" id="btnMotivationPrev" type="button">上一句</button>
-                <button class="btn btn-primary btn-sm" id="btnMotivationToggle" type="button">播放</button>
-                <button class="btn btn-ghost btn-sm" id="btnMotivationNext" type="button">下一句</button>
+                <button class="btn btn-ghost btn-sm" id="btnMotivationPrev" type="button" data-i18n="pomo.prev">上一句</button>
+                <button class="btn btn-primary btn-sm" id="btnMotivationToggle" type="button" data-i18n="pomo.play">播放</button>
+                <button class="btn btn-ghost btn-sm" id="btnMotivationNext" type="button" data-i18n="pomo.next">下一句</button>
               </div>
             </div>
             <div class="pomo-subtitle" id="pomoSubtitle"></div>
@@ -790,12 +802,12 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
 
           <div class="focus-side">
             <div class="card">
-              <div class="card-head"><h3>专注统计</h3></div>
+              <div class="card-head"><h3 data-i18n="pomo.stats">专注统计</h3></div>
               <div class="focus-stats-row" id="focusStatsRow"></div>
               <div id="focusWeekChart" style="margin-top:16px"></div>
             </div>
             <div class="card">
-              <div class="card-head"><h3>专注记录</h3></div>
+              <div class="card-head"><h3 data-i18n="pomo.history">专注记录</h3></div>
               <div id="focusHistory"></div>
             </div>
           </div>
@@ -807,28 +819,28 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
         <div class="card supervisor-card">
           <div class="supervisor-head">
             <div>
-              <h3>AI 督学官</h3>
-              <p>独立于番茄钟。体验版用于感受成熟督学产品，自研版用于长期本地留存。</p>
+              <h3 data-i18n="supervisor.title">AI 督学官</h3>
+              <p data-i18n="supervisor.desc">独立于番茄钟。体验版用于感受成熟督学产品，自研版用于长期本地留存。</p>
             </div>
             <div class="supervisor-actions">
-              <button class="btn btn-ghost" id="btnOpenRedWatch">体验外部版</button>
-              <button class="btn btn-primary" id="btnOpenSelfSupervisor">启动自研版</button>
+              <button class="btn btn-ghost" id="btnOpenRedWatch" data-i18n="supervisor.external">体验外部版</button>
+              <button class="btn btn-primary" id="btnOpenSelfSupervisor" data-i18n="supervisor.self">启动自研版</button>
             </div>
           </div>
           <div class="supervisor-split">
             <div>
-              <b>外部体验版</b>
-              <span>新窗口打开「凛冬督学局」，登录与数据由外部平台管理。</span>
+              <b data-i18n="supervisor.externalTitle">外部体验版</b>
+              <span data-i18n="supervisor.externalDesc">新窗口打开「凛冬督学局」，登录与数据由外部平台管理。</span>
             </div>
             <div>
-              <b>自研版</b>
-              <span>本机摄像头 / 屏幕 / 姿态 / 手机检测，不上传画面；记录写入星屿。</span>
+              <b data-i18n="supervisor.selfTitle">自研版</b>
+              <span data-i18n="supervisor.selfDesc">本机摄像头 / 屏幕 / 姿态 / 手机检测，不上传画面；记录写入星屿。</span>
             </div>
           </div>
         </div>
 
         <div class="card">
-          <div class="card-head"><h3>督学记录</h3></div>
+          <div class="card-head"><h3 data-i18n="supervisor.history">督学记录</h3></div>
           <div class="focus-stats-row" id="supervisorStatsRow"></div>
           <div id="supervisorHistory"></div>
         </div>
@@ -996,9 +1008,57 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
       <!-- AI 语音（VoxCPM） -->
       <section class="view" id="view-voice"></section>
 
+      <!-- 解压舱 -->
+      <section class="view" id="view-relax">
+        <div class="view-toolbar relax-toolbar">
+          <div class="toolbar-tabs">
+            <button class="tab-btn active" data-relax-tab="breath" data-i18n="relax.breath">呼吸节奏</button>
+            <button class="tab-btn" data-relax-tab="bubbles" data-i18n="relax.bubbles">气泡解压</button>
+            <button class="tab-btn" data-relax-tab="sand" data-i18n="relax.sand">流沙画布</button>
+            <button class="tab-btn" data-relax-tab="flow" data-i18n="relax.flow">流动光影</button>
+            <button class="tab-btn" data-relax-tab="drift" data-i18n="relax.drift">星河流转</button>
+            <button class="tab-btn" data-relax-tab="wrap" data-i18n="relax.wrap">泡泡纸</button>
+            <button class="tab-btn" data-relax-tab="lantern" data-i18n="relax.lantern">放灯</button>
+          </div>
+        </div>
+        <div class="relax-grid">
+          <div class="card relax-card" data-relax-panel="breath">
+            <div class="card-head"><h3 data-i18n="relax.breathTitle">呼吸节奏</h3><button class="text-btn" id="btnBreathToggle" data-i18n="relax.breathToggle">开始</button></div>
+            <div class="breath-stage"><div class="breath-ring" id="breathRing"></div><p class="breath-label" id="breathLabel">准备</p></div>
+          </div>
+          <div class="card relax-card" data-relax-panel="bubbles">
+            <div class="card-head"><h3 data-i18n="relax.bubblesTitle">气泡解压</h3><span class="relax-score" id="bubbleScore" aria-label="score">0</span></div>
+            <canvas id="bubbleCanvas"></canvas>
+          </div>
+          <div class="card relax-card" data-relax-panel="sand">
+            <div class="card-head"><h3 data-i18n="relax.sandTitle">流沙画布</h3><button class="text-btn" id="btnSandClear" data-i18n="relax.sandClear">清空</button></div>
+            <canvas id="sandCanvas"></canvas>
+          </div>
+          <div class="card relax-card" data-relax-panel="flow">
+            <div class="card-head"><h3 data-i18n="relax.flowTitle">流动光影</h3><span class="relax-hint" data-i18n="relax.flowHint">移动鼠标</span></div>
+            <canvas id="flowCanvas"></canvas>
+          </div>
+          <div class="card relax-card" data-relax-panel="drift">
+            <div class="card-head"><h3 data-i18n="relax.driftTitle">星河流转</h3><span class="relax-hint" data-i18n="relax.driftHint">点击生成流星</span></div>
+            <canvas id="driftCanvas"></canvas>
+          </div>
+          <div class="card relax-card" data-relax-panel="wrap">
+            <div class="card-head"><h3 data-i18n="relax.wrapTitle">泡泡纸</h3><button class="text-btn" id="btnWrapReset" data-i18n="relax.wrapReset">重置</button></div>
+            <div class="wrap-stage" id="wrapStage" tabindex="0" aria-label="Bubble wrap"></div>
+          </div>
+          <div class="card relax-card" data-relax-panel="lantern">
+            <div class="card-head"><h3 data-i18n="relax.lanternTitle">放灯</h3><span class="relax-hint" data-i18n="relax.lanternHint">点击放一盏灯</span></div>
+            <canvas id="lanternCanvas"></canvas>
+          </div>
+        </div>
+      </section>
       <!-- A.R.I.A 交互站（Mainframe 全屏鼠标交互页） -->
       <section class="view" id="view-aria">
-        <iframe src="about:blank" data-iframe-src="assets/mainframe.html?v=20260831.4" title="A.R.I.A" loading="lazy" allow="autoplay; fullscreen"></iframe>
+        <iframe src="about:blank" title="A.R.I.A" loading="lazy" allow="autoplay; fullscreen"></iframe>
+        <div class="aria-gate" id="ariaGate">
+          <button class="btn btn-primary btn-lg" id="btnStartAria" type="button" data-i18n="aria.start">启动 A.R.I.A</button>
+          <p class="hint" data-i18n="aria.gateHint">首次点击后再加载交互资源，避免进入平台就吃性能。</p>
+        </div>
       </section>
 
       <!-- 天气 -->
@@ -1008,7 +1068,6 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
             <input type="text" id="weatherCityInput" aria-label="????" placeholder="" data-i18n-ph="weather.searchPh">
             <button class="btn btn-primary" id="btnWeatherSearch" data-i18n="weather.search">搜索</button>
             <button class="btn btn-ghost" id="btnWeatherRefresh" data-i18n="weather.refresh">刷新</button>
-          <button class="btn btn-ghost" id="btnWeatherStyle" title="切换天气界面风格">Aurora</button>
           </div>
           <div class="weather-cities" id="weatherCities"></div>
         </div>
@@ -1334,18 +1393,18 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
     <div class="modal-body">
       <div class="settings-shell">
         <nav class="settings-nav" aria-label="设置分类">
-          <button class="settings-tab" data-settings-tab="appearance"><span class="settings-tab-icon" aria-hidden="true">🎨</span><span>外观</span></button>
-          <button class="settings-tab" data-settings-tab="personal"><span class="settings-tab-icon" aria-hidden="true">🧑‍🎓</span><span>个人</span></button>
-          <button class="settings-tab" data-settings-tab="intelligence"><span class="settings-tab-icon" aria-hidden="true">🧠</span><span>智能</span></button>
-          <button class="settings-tab" data-settings-tab="agent"><span class="settings-tab-icon" aria-hidden="true">🛰️</span><span>智能体</span></button>
-          <button class="settings-tab" data-settings-tab="access"><span class="settings-tab-icon" aria-hidden="true">🛡️</span><span>安全与同步</span></button>
-          <button class="settings-tab" data-settings-tab="system"><span class="settings-tab-icon" aria-hidden="true">🗂️</span><span>系统与数据</span></button>
+          <button class="settings-tab" data-settings-tab="appearance"><span class="settings-tab-icon" aria-hidden="true">🎨</span><span data-i18n="settings.tabAppearance">外观</span></button>
+          <button class="settings-tab" data-settings-tab="personal"><span class="settings-tab-icon" aria-hidden="true">🧑‍🎓</span><span data-i18n="settings.tabPersonal">个人</span></button>
+          <button class="settings-tab" data-settings-tab="intelligence"><span class="settings-tab-icon" aria-hidden="true">🧠</span><span data-i18n="settings.tabIntelligence">智能</span></button>
+          <button class="settings-tab" data-settings-tab="agent"><span class="settings-tab-icon" aria-hidden="true">🛰️</span><span data-i18n="settings.tabAgent">智能体</span></button>
+          <button class="settings-tab" data-settings-tab="access"><span class="settings-tab-icon" aria-hidden="true">🛡️</span><span data-i18n="settings.tabAccess">安全与同步</span></button>
+          <button class="settings-tab" data-settings-tab="system"><span class="settings-tab-icon" aria-hidden="true">🗂️</span><span data-i18n="settings.tabSystem">系统与数据</span></button>
         </nav>
         <div class="settings-panels">
           <section class="settings-panel" data-settings-panel="appearance" hidden><div class="setting-group">
         <h4 data-i18n="settings.theme">界面主题</h4>
         <div class="theme-picker">
-          <button class="theme-opt" data-theme-pick="system"><span class="theme-swatch sw-system"></span><span>跟随系统</span></button>
+          <button class="theme-opt" data-theme-pick="system"><span class="theme-swatch sw-system"></span><span data-i18n="theme.system">跟随系统</span></button>
           <button class="theme-opt" data-theme-pick="dark"><span class="theme-swatch sw-dark"></span><span data-i18n="theme.dark">纯黑</span></button>
           <button class="theme-opt" data-theme-pick="light"><span class="theme-swatch sw-light"></span><span data-i18n="theme.light">纯白</span></button>
           <button class="theme-opt" data-theme-pick="ocean"><span class="theme-swatch sw-ocean"></span><span data-i18n="theme.ocean">墨蓝</span></button>
@@ -1362,18 +1421,28 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
           <button class="theme-opt" data-theme-pick="qingzang"><span class="theme-swatch sw-qingzang"></span><span data-i18n="theme.qingzang">青藏</span></button>
           <button class="theme-opt" data-theme-pick="caoyuan"><span class="theme-swatch sw-caoyuan"></span><span data-i18n="theme.caoyuan">草原</span></button>
           <button class="theme-opt" data-theme-pick="damo"><span class="theme-swatch sw-damo"></span><span data-i18n="theme.damo">大漠</span></button>
+          <button class="theme-opt" data-theme-pick="ios-frost"><span class="theme-swatch sw-ios-frost"></span><span data-i18n="theme.iosFrost">iOS 霜蓝</span></button>
+          <button class="theme-opt" data-theme-pick="ios-graphite"><span class="theme-swatch sw-ios-graphite"></span><span data-i18n="theme.iosGraphite">iOS 石墨</span></button>
+          <button class="theme-opt" data-theme-pick="ios-aurora"><span class="theme-swatch sw-ios-aurora"></span><span data-i18n="theme.iosAurora">iOS 极光</span></button>
+          <button class="theme-opt" data-theme-pick="ios-sunset"><span class="theme-swatch sw-ios-sunset"></span><span data-i18n="theme.iosSunset">iOS 日落</span></button>
+          <button class="theme-opt" data-theme-pick="ios-mint"><span class="theme-swatch sw-ios-mint"></span><span data-i18n="theme.iosMint">iOS 薄雾</span></button>
+          <button class="theme-opt" data-theme-pick="ios-space"><span class="theme-swatch sw-ios-space"></span><span data-i18n="theme.iosSpace">iOS 深空</span></button>
+          <button class="theme-opt" data-theme-pick="ios-lavender"><span class="theme-swatch sw-ios-lavender"></span><span data-i18n="theme.iosLavender">iOS 薰衣草</span></button>
+          <button class="theme-opt" data-theme-pick="ios-peach"><span class="theme-swatch sw-ios-peach"></span><span data-i18n="theme.iosPeach">iOS 蜜桃</span></button>
+          <button class="theme-opt" data-theme-pick="ios-sky"><span class="theme-swatch sw-ios-sky"></span><span data-i18n="theme.iosSky">iOS 晴空</span></button>
+          <button class="theme-opt" data-theme-pick="ios-carbon"><span class="theme-swatch sw-ios-carbon"></span><span data-i18n="theme.iosCarbon">iOS 碳黑</span></button>
           <button class="theme-opt" data-theme-pick="custom"><span class="theme-swatch sw-custom" id="swCustom"></span><span data-i18n="theme.custom">自定义</span></button>
         </div>
         <button class="appearance-more" id="btnToggleAdvancedThemes" type="button">显示更多主题</button>
         <div class="theme-custom" id="themeCustom" style="display:none">
-          <div class="theme-cfield"><span>背景色</span><input type="color" data-cvar="paper" value="#000000"></div>
-          <div class="theme-cfield"><span>卡片色</span><input type="color" data-cvar="card" value="#141414"></div>
-          <div class="theme-cfield"><span>侧栏色</span><input type="color" data-cvar="drawer" value="#0d0d0d"></div>
-          <div class="theme-cfield"><span>文字色</span><input type="color" data-cvar="ink" value="#ffffff"></div>
-          <div class="theme-cfield"><span>强调色</span><input type="color" data-cvar="accent" value="#ffffff"></div>
-          <div class="theme-cfield"><span>边框色</span><input type="color" data-cvar="rule" value="#2a2a2a"></div>
+          <div class="theme-cfield"><span data-i18n="color.paper">背景色</span><input type="color" data-cvar="paper" value="#000000"></div>
+          <div class="theme-cfield"><span data-i18n="color.card">卡片色</span><input type="color" data-cvar="card" value="#141414"></div>
+          <div class="theme-cfield"><span data-i18n="color.drawer">侧栏色</span><input type="color" data-cvar="drawer" value="#0d0d0d"></div>
+          <div class="theme-cfield"><span data-i18n="color.ink">文字色</span><input type="color" data-cvar="ink" value="#ffffff"></div>
+          <div class="theme-cfield"><span data-i18n="color.accent">强调色</span><input type="color" data-cvar="accent" value="#ffffff"></div>
+          <div class="theme-cfield"><span data-i18n="color.rule">边框色</span><input type="color" data-cvar="rule" value="#2a2a2a"></div>
         </div>
-        <p class="hint">选一套预设配色，或点「自定义」逐项调色，实时生效。</p>
+        <p class="hint" data-i18n="custom.hint">选一套预设配色，或点「自定义」逐项调色，实时生效。</p>
       </div>
 <div class="setting-group">
         <h4 data-i18n="settings.bg">界面背景</h4>
@@ -1383,6 +1452,22 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
           <button class="theme-opt" data-bg-pick="guilin-aerial" data-i18n="bg.guilinAerial">桂林·航拍</button>
           <button class="theme-opt" data-bg-pick="jiuzhaigou" data-i18n="bg.jiuzhaigou">九寨沟</button>
           <button class="theme-opt" data-bg-pick="zhangjiajie" data-i18n="bg.zhangjiajie">张家界</button>
+          <button class="theme-opt" data-bg-pick="alps-peak" data-i18n="bg.alpsPeak">阿尔卑斯</button>
+          <button class="theme-opt" data-bg-pick="forest-lake" data-i18n="bg.forestLake">森林湖境</button>
+          <button class="theme-opt" data-bg-pick="misty-ridge" data-i18n="bg.mistyRidge">雾脊云线</button>
+          <button class="theme-opt" data-bg-pick="alpine-valley" data-i18n="bg.alpineValley">高山谷地</button>
+          <button class="theme-opt" data-bg-pick="fjord-coast" data-i18n="bg.fjordCoast">峡湾海岸</button>
+          <button class="theme-opt" data-bg-pick="tropical-sea" data-i18n="bg.tropicalSea">热带海岛</button>
+          <button class="theme-opt" data-bg-pick="desert-dunes" data-i18n="bg.desertDunes">大漠沙丘</button>
+          <button class="theme-opt" data-bg-pick="night-alps" data-i18n="bg.nightAlps">夜岭星河</button>
+          <button class="theme-opt" data-bg-pick="kyoto-path" data-i18n="bg.kyotoPath">京都小径</button>
+          <button class="theme-opt" data-bg-pick="aegean-view" data-i18n="bg.aegeanView">爱琴海岸</button>
+          <button class="theme-opt" data-bg-pick="aurora-iceland" data-i18n="bg.auroraIceland">冰岛极光</button>
+          <button class="theme-opt" data-bg-pick="patagonia-ridge" data-i18n="bg.patagoniaRidge">巴塔哥尼亚山脊</button>
+          <button class="theme-opt" data-bg-pick="sahara-gold" data-i18n="bg.saharaGold">撒哈拉金丘</button>
+          <button class="theme-opt" data-bg-pick="maldives-lagoon" data-i18n="bg.maldivesLagoon">马尔代夫潟湖</button>
+          <button class="theme-opt" data-bg-pick="tokyo-night" data-i18n="bg.tokyoNight">东京夜色</button>
+          <button class="theme-opt" data-bg-pick="swiss-valley" data-i18n="bg.swissValley">瑞士山谷</button>
         </div>
         <h4 data-i18n="settings.bgVis" style="margin-top:18px">背景可见度</h4>
         <div class="font-picker">
@@ -1390,7 +1475,7 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
           <button class="theme-opt" data-bg-vis="clear" data-i18n="bgVis.clear">清晰</button>
           <button class="theme-opt" data-bg-vis="vivid" data-i18n="bgVis.vivid">极清晰</button>
         </div>
-        <p class="hint" data-i18n="bg.hint">以中国山河摄影作背景，文字始终清晰可读。</p>
+        <p class="hint" data-i18n="bg.hint">本地图源 + 全球精选在线风光；文字始终清晰可读。</p>
       </div>
 <div class="setting-group">
         <h4 data-i18n="settings.font">界面字体</h4>
@@ -1403,7 +1488,7 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
           <button class="theme-opt" data-font-pick="serif" data-i18n="font.serif">衬线</button>
           <button class="theme-opt" data-font-pick="mono" data-i18n="font.mono">等宽</button>
         </div>
-        <p class="hint">切换界面正文字体风格。</p>
+        <p class="hint" data-i18n="font.hint">切换界面正文字体风格。</p>
       </div>
 <div class="setting-group">
         <h4 data-i18n="settings.lang">界面语言</h4>
@@ -1412,32 +1497,36 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
           <button class="theme-opt" data-lang-pick="zh-Hant" data-i18n="lang.zhHant">繁体</button>
           <button class="theme-opt" data-lang-pick="en" data-i18n="lang.en">English</button>
         </div>
-        <p class="hint">切换界面显示语言（笔记 / 课程等数据内容保持原样）。</p>
+        <p class="hint" data-i18n="lang.hint">切换界面显示语言（笔记 / 课程等数据内容保持原样）。</p>
       </div>
 <div class="setting-group">
-        <h4>图标风格</h4>
+        <h4 data-i18n="icon.title">图标风格</h4>
         <div class="icon-picker">
           <button class="icon-opt" data-icon-theme-pick="classic">
             <span class="icon-preview classic-preview" data-icon-preview="classic" aria-hidden="true"></span>
-            <span>星屿线性</span><small>简洁清晰</small>
+            <span data-i18n="icon.classic">星屿线性</span><small data-i18n="icon.classicSub">简洁清晰</small>
           </button>
           <button class="icon-opt" data-icon-theme-pick="mono">
+          <button class="icon-opt" data-icon-theme-pick="glass3d">
+            <span class="icon-preview glass3d-preview" aria-hidden="true"></span>
+            <span data-i18n="icon.glass3d">3D 玻璃</span><small data-i18n="icon.glassSub">玻璃渲染</small>
+          </button>
             <span class="icon-preview mono-preview" data-icon-preview="mono" aria-hidden="true"></span>
-            <span>单色线稿</span><small>更低存在感</small>
+            <span data-i18n="icon.mono">单色线稿</span><small data-i18n="icon.monoSub">更低存在感</small>
           </button></div>
-        <p class="hint">两套线性方案实时切换；默认星屿线性，保持全站视觉一致。</p>
+        <p class="hint" data-i18n="icon.hint">三套图标方案实时切换；3D 玻璃支持 Blender 管线与内置降级。</p>
       </div></section>
 <section class="settings-panel" data-settings-panel="personal" hidden><div class="setting-group">
         <h4 data-i18n="settings.nick">个人昵称</h4>
         <label class="field">
-          <span>昵称（显示于侧边栏与问候语）</span>
+          <span data-i18n="settings.nicknameLabel">昵称（显示于侧边栏与问候语）</span>
           <input type="text" id="setNickname" placeholder="同学">
         </label>
       </div></section>
 <section class="settings-panel" data-settings-panel="intelligence" hidden><div class="setting-group">
         <h4 data-i18n="settings.ai">AI 模型配置（OpenAI 兼容接口）</h4>
         <label class="field">
-          <span>接口地址 Base URL</span>
+          <span data-i18n="settings.baseUrl">接口地址 Base URL</span>
           <input type="text" id="setBaseUrl" placeholder="https://api.deepseek.com/v1">
         </label>
         <label class="field">
@@ -1445,23 +1534,23 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
           <input type="password" id="setApiKey" placeholder="sk-...">
         </label>
         <label class="field">
-          <span>模型名称</span>
+          <span data-i18n="settings.modelName">模型名称</span>
           <input type="text" id="setModel" placeholder="deepseek-chat">
         </label>
         <div class="preset-row">
-          <span class="preset-label">预设：</span>
+          <span class="preset-label" data-i18n="settings.preset">预设：</span>
           <button class="chip" data-preset="deepseek">DeepSeek</button>
           <button class="chip" data-preset="kimi">Kimi</button>
           <button class="chip" data-preset="openai">OpenAI</button>
         </div>
         <label class="hint ai-proxy-hint" style="display:flex;gap:9px;align-items:flex-start;margin-top:6px;cursor:pointer">
           <input type="checkbox" id="setUseProxy" style="width:auto;margin-top:2px">
-          <span>使用本机 AI 代理（桌面端）：勾选后，AI 请求走本机 127.0.0.1 服务转发，API Key 只存在本机 <code>data/ai-key-local.txt</code>，不再写入浏览器存储；手机 / 网页部署时不生效（自动回到直连）。</span>
+          <span data-i18n="settings.proxyHint">使用本机 AI 代理（桌面端）：勾选后，AI 请求走本机 127.0.0.1 服务转发，API Key 只存在本机 data/ai-key-local.txt，不再写入浏览器存储；手机 / 网页部署时不生效（自动回到直连）。</span>
         </label>
-        <p class="hint">直连模式：密钥仅保存在浏览器 localStorage。代理模式：请把密钥写入本机 <code>data/ai-key-local.txt</code>（或环境变量 XINGYU_AI_KEY），并把「接口地址」填成任意预设。</p>
+        <p class="hint" data-i18n="settings.aiHint">直连模式：密钥仅保存在浏览器 localStorage。代理模式：请把密钥写入本机 data/ai-key-local.txt（或环境变量 XINGYU_AI_KEY），并把「接口地址」填成任意预设。</p>
       </div>
 <div class="setting-group">
-        <h4>AI 助手形象</h4>
+        <h4 data-i18n="settings.orbTitle">AI 助手形象</h4>
         <button class="orb-edit-card" id="btnEditOrb" type="button" aria-label="编辑 AI 球体形象">
           <span class="orb-edit-thumb" aria-hidden="true">
             <svg viewBox="0 0 48 48" role="presentation">
@@ -1478,8 +1567,8 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
             </svg>
           </span>
           <span class="set-row-body">
-            <span class="set-row-title">编辑球体形象</span>
-            <span class="set-row-sub">款式 · 颜色 · 质感，保存即应用到 AI 助手</span>
+            <span class="set-row-title" data-i18n="orb.title">编辑球体形象</span>
+            <span class="set-row-sub" data-i18n="orb.sub">款式 · 颜色 · 质感，保存即应用到 AI 助手</span>
           </span>
           <span class="set-action-chevron" aria-hidden="true">›</span>
         </button>
@@ -1952,6 +2041,7 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
 <script defer src="js/animefx.js?v=20260812.1"></script>
 <script defer src="js/anim.js?v=20260817.8"></script>
 <script defer src="js/local-config.js?v=20260831.1"></script>
+<script defer src="js/relax.js?v=20260911.1"></script>
 <script defer src="js/quotes.js?v=20260811.3"></script>
 <script defer src="js/lunar.js?v=20260811.3"></script>
 <script defer src="js/store.js?v=20260908.1"></script>
@@ -1965,14 +2055,14 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
 <script defer src="js/perf.js?v=20260910.3"></script>
 <script defer src="js/app-shell.js?v=20260910.1"></script>
 <script defer src="js/reminders.js?v=20260909.1"></script>
-<script defer src="js/app.js?v=20260910.2"></script>
+<script defer src="js/app.js?v=20260911.1"></script>
 <script defer src="js/settings-ui.js?v=20260831.5"></script>
 <script>
 /* 非关键模块懒加载：开屏期间不解析这 ~170KB JS（天气/跑步/语音/文献/激励/教练），
    开屏结束且浏览器空闲后再逐个加载，避免长任务卡顿。 */
 (function(){
   var LAZY=[
-    "js/weather.js?v=20260905.1",
+    "js/weather.js?v=20260911.1",
     "js/weather-aurora.js?v=20260831.1",
     "js/motivation.js?v=20260817.1",
     "js/knowledge.js?v=20260904.1",
@@ -2043,7 +2133,7 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
 <script type="importmap">
   {"imports":{"three":"/js/vendor/three/three.module.js","three/addons/":"/js/vendor/three/addons/"}}
 </script>
-<link rel="stylesheet" href="css/voice-agent.css?v=20260903.3">
+<link rel="stylesheet" href="css/voice-agent.css?v=20260911.1">
 <script defer src="js/voice-agent.js?v=20260906.1"></script>
 
   <link rel="stylesheet" href="css/brand-system.css?v=20260910.4">

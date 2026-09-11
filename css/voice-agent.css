@@ -1633,3 +1633,72 @@ body #va-avatar-stage:not(.is-visible) { opacity: 0 !important; pointer-events: 
   padding: 8px 0;
   text-align: center;
 }
+
+
+/* 2026-09-11: quiet iOS-style wake pill. Overrides the older loud mic orb. */
+.agent-wake-btn {
+  position: relative;
+  width: 34px !important;
+  height: 34px !important;
+  padding: 0 !important;
+  justify-content: center !important;
+  border-radius: 999px !important;
+  border: 1px solid var(--rule-thin, rgba(255,255,255,.12)) !important;
+  background: color-mix(in srgb, var(--paper-card, #101010) 70%, transparent) !important;
+  color: var(--ink, #fff) !important;
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  transition: background .22s var(--ease-out, ease), border-color .22s var(--ease-out, ease), transform .18s var(--ease-out, ease), box-shadow .22s var(--ease-out, ease);
+}
+
+.agent-wake-btn .agent-wake-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent, #fff) 70%, var(--ink-2, #aaa));
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent, #fff) 10%, transparent);
+}
+
+.agent-wake-btn:hover,
+.agent-wake-btn:focus-visible {
+  border-color: color-mix(in srgb, var(--accent, #fff) 34%, var(--rule, #333)) !important;
+  background: color-mix(in srgb, var(--paper-card, #101010) 88%, transparent) !important;
+  box-shadow: 0 8px 26px -16px rgba(0,0,0,.65);
+}
+
+.agent-wake-btn .agent-wake-tip {
+  display: block !important;
+  position: absolute !important;
+  left: calc(100% + 9px) !important;
+  top: 50% !important;
+  z-index: 90 !important;
+  padding: 6px 10px !important;
+  border-radius: 999px !important;
+  border: 1px solid var(--rule-thin, rgba(255,255,255,.12)) !important;
+  background: color-mix(in srgb, var(--paper-card, #101010) 92%, transparent) !important;
+  color: var(--ink, #fff) !important;
+  font-size: 12px !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  opacity: 0;
+  transform: translateY(-50%) translateX(-4px) scale(.98) !important;
+  box-shadow: 0 10px 28px -16px rgba(0,0,0,.75);
+  pointer-events: none;
+  transition: opacity .18s var(--ease-out, ease), transform .18s var(--ease-out, ease);
+}
+
+.agent-wake-btn:hover .agent-wake-tip,
+.agent-wake-btn:focus-visible .agent-wake-tip {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0) scale(1) !important;
+}
+
+.agent-wake-btn[data-state="listening"] .agent-wake-dot { background: #0a84ff; box-shadow: 0 0 0 5px rgba(10,132,255,.15); }
+.agent-wake-btn[data-state="thinking"] .agent-wake-dot,
+.agent-wake-btn[data-state="acting"] .agent-wake-dot { background: #ff9f0a; box-shadow: 0 0 0 5px rgba(255,159,10,.15); }
+.agent-wake-btn[data-state="speaking"] .agent-wake-dot { background: #34c759; box-shadow: 0 0 0 5px rgba(52,199,89,.15); }
+
+@media (max-width: 720px) {
+  .agent-wake-btn { width: 36px !important; height: 36px !important; }
+  .agent-wake-btn .agent-wake-tip { display: none !important; }
+}

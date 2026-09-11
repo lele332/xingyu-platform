@@ -1,13 +1,17 @@
-/* 星屿图标主题 v3：只保留两套稳定线性方案，避免多主题造成视觉漂移。 */
+/* 星屿图标主题 v4：经典线性 / 单色 / 3D 玻璃图标。 */
 (function () {
   "use strict";
   const KEY = "zero_icon_style";
   const base = window.XingyuIcons || {};
   if (!base.svg) return;
 
-  const THEMES = ["classic", "mono"];
+  const THEMES = ["classic", "mono", "glass3d"];
 
   function render(name, cls, style) {
+    if (style === "glass3d") {
+      const inner = (base.__paths && (base.__paths[name] || base.__paths.more)) || "";
+      return `<svg class="${cls} xy-icon-3d" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-icon-theme="glass3d" data-icon-treatment="svg-glass">${inner}</svg>`;
+    }
     if (style === "mono") {
       const inner = (base.__paths && (base.__paths[name] || base.__paths.more)) || "";
       return `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-icon-theme="mono" data-icon-treatment="system-line">${inner}</svg>`;
