@@ -97,7 +97,7 @@ const AIContext = (() => {
         return t.title + (diff <= 0 ? "(今天)" : diff + "天后");
       }).join("；"));
       const notes = Store.getAll("notes").slice().sort((a, b) => String(b.updatedAt || "").localeCompare(String(a.updatedAt || "")));
-      if (notes.length) lines.push("最近笔记: " + notes.slice(0, 5).map(n => n.title || "(无标题)").join("；"));
+      if (notes.length) lines.push("最近笔记: " + notes.slice(0, 5).map(n => (n.subject ? "[" + n.subject + "] " : "") + (n.title || "(无标题)")).join("；"));
       const exams = Store.getAll("exams").filter(e => e.status !== "done")
         .sort((a, b) => String(a.date).localeCompare(String(b.date))).slice(0, 3);
       if (exams.length) lines.push("近期考试: " + exams.map(e => (e.title || e.name || "") + " " + e.date).join("；"));

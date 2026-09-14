@@ -1285,12 +1285,15 @@ if(EMBED){
   document.documentElement.classList.add("embed-host");
   document.body.classList.add("embed");
   setTheme("dark");
+  /* 黑屏兜底（2026-09-14）：embed 先上深色等父页主题；若 1.6s 内主题握手没到达
+     （旧桥接 / 缓存错位 / SW 异常），回退浅色默认主题，保证课表可读不黑屏。 */
+  setTimeout(()=>{if(!document.documentElement.classList.contains("platform-theme")){setTheme("light");refresh();}},1600);
   const resetBtn=$("impReset");
   if(resetBtn)resetBtn.textContent="清空平台课表";
   window.addEventListener("message",e=>{
     const d=e.data||{};
     if(d.type==="xingyu-schedule-theme"){
-      applyPlatformTheme(d.theme);
+      try{applyPlatformTheme(d.theme);}catch(err){console.warn("[课表] 平台主题应用失败，保持当前主题",err);}
     }
     if(d.type==="xingyu-schedule-data"&&Array.isArray(d.courses)){
       COURSES=d.courses.map(fromPlatformCourse);

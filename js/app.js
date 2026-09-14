@@ -1004,6 +1004,19 @@ const App = (() => {
     renderCardGrid();
   }
 
+  // 笔记按课程分组（2026-09-14）：subject 与课程表课程名对齐，未匹配的进「未分类」
+  let notesSubjectFilter = "all";
+
+  function noteSubjectOf(n) {
+    const s = String(n.subject || "").trim();
+    return s || "未分类";
+  }
+
+  function courseColorFor(subject) {
+    const c = Store.getAll("courses").find(x => x && x.name === subject);
+    return (c && c.color) || "var(--accent)";
+  }
+
   function renderNoteGrid() {
     const notes = Store.getAll("notes").slice().sort((a, b) => (b.updatedAt || "").localeCompare(a.updatedAt || ""));
     const grid = $("#noteGrid");
@@ -1011,18 +1024,61 @@ const App = (() => {
       grid.innerHTML = `<div class="empty-state"><p>还没有笔记，点击「+ 新建笔记」开始记录</p></div>`;
       return;
     }
-    grid.innerHTML = notes.map(n => `
-      <div class="note-card" data-note-id="${n.id}">
-        <h4>${esc(n.title)}</h4>
-        <p>${esc(n.content).slice(0, 120)}</p>
-        <div class="note-foot">
-          <span class="tag-chip">${esc(n.subject || "未分类")}</span>
-          ${n.tags && n.tags.length ? n.tags.slice(0, 2).map(t => `<span class="tag-chip" style="opacity:.7">#${esc(t)}</span>`).join("") : ""}
-          <span class="note-date" style="margin-left:auto">${fmtDate(n.updatedAt)}</span>
+    // 分组顺序：课程表里的科目优先（按课程表顺序），其余科目按拼音，未分类始终垫底
+    const counts = new Map();
+    notes.forEach(n => { const s = noteSubjectOf(n); counts.set(s, (counts.get(s) || 0) + 1); });
+    const courseNames = [...new Set(Store.getAll("courses").map(c => c && c.name).filter(Boolean))];
+    const ordered = courseNames.filter(nm => counts.has(nm))
+      .concat([...counts.keys()].filter(k => k !== "未分类" && !courseNames.includes(k)).sort((a, b) => a.localeCompare(b, "zh")))
+      .concat(counts.has("未分类") ? ["未分类"] : []);
+    if (notesSubjectFilter !== "all" && !counts.has(notesSubjectFilter)) notesSubjectFilter = "all";
+
+    const chips = [`<button type="button" class="filter-chip${notesSubjectFilter === "all" ? " active" : ""}" data-notes-subject="all">全部 ${notes.length}</button>`]
+      .concat(ordered.map(name => `<button type="button" class="filter-chip${notesSubjectFilter === name ? " active" : ""}" data-notes-subject="${esc(name)}">${esc(name)} ${counts.get(name)}</button>`)).join("");
+
+    const groups = notesSubjectFilter === "all" ? ordered : [notesSubjectFilter];
+    grid.innerHTML = `<div class="note-filter">${chips}</div>` + groups.map(name => {
+      const items = notes.filter(n => noteSubjectOf(n) === name);
+      if (!items.length) return "";
+      return `
+      <section class="note-group">
+        <div class="note-group-head">
+          <span class="course-dot" style="background:${esc(courseColorFor(name))}"></span>
+          <h3>${esc(name)}</h3>
+          <span class="note-group-count">${items.length} 篇</span>
+          <button type="button" class="text-btn" data-ai-summary="${esc(name)}">AI 总结本科目 →</button>
         </div>
-      </div>`).join("");
-    $$(".note-card").forEach(card => {
+        <div class="note-grid">${items.map(n => `
+          <div class="note-card" data-note-id="${n.id}">
+            <h4>${esc(n.title)}</h4>
+            <p>${esc(n.content).slice(0, 120)}</p>
+            <div class="note-foot">
+              ${n.tags && n.tags.length ? n.tags.slice(0, 2).map(tg => `<span class="tag-chip" style="opacity:.7">#${esc(tg)}</span>`).join("") : ""}
+              <span class="note-date" style="margin-left:auto">${fmtDate(n.updatedAt)}</span>
+            </div>
+          </div>`).join("")}
+        </div>
+      </section>`;
+    }).join("");
+
+    $$("#noteGrid .note-card").forEach(card => {
       card.onclick = () => openNote(card.dataset.noteId);
+    });
+    $$("#noteGrid [data-notes-subject]").forEach(btn => {
+      btn.onclick = () => { notesSubjectFilter = btn.dataset.notesSubject; renderNoteGrid(); };
+    });
+    $$("#noteGrid [data-ai-summary]").forEach(btn => {
+      btn.onclick = () => {
+        const subject = btn.dataset.aiSummary;
+        switchView("ai");
+        setTimeout(() => {
+          const q = subject === "未分类"
+            ? "请通读我的未分类笔记，总结要点，并建议我把它们分别归入哪门课程。"
+            : `请通读我的《${subject}》全部笔记，总结本科目的知识框架、重点难点和复习建议。`;
+          $("#chatInput").value = q;
+          sendChat(q);
+        }, 300);
+      };
     });
     // 滚动分批浮入
     revealCards($("#view-notes"), ".note-card");
@@ -1136,7 +1192,7 @@ const App = (() => {
     $("#formBody").innerHTML = `
       <label class="field"><span>标题 *</span><input id="f-n-title" value="${esc(n?.title || "")}" placeholder="如：高数第三章笔记"></label>
       <div class="form-grid">
-        <label class="field"><span>科目</span><input id="f-n-subject" value="${esc(n?.subject || "")}" placeholder="如：高等数学"></label>
+        <label class="field"><span>科目（关联课程）</span><input id="f-n-subject" list="f-n-course-list" value="${esc(n?.subject || "")}" placeholder="选择课程或直接输入"><datalist id="f-n-course-list">${[...new Set(Store.getAll("courses").map(c => c && c.name).filter(Boolean))].map(nm => '<option value="' + esc(nm) + '"></option>').join("")}</datalist></label>
         <label class="field"><span>标签（逗号分隔）</span><input id="f-n-tags" value="${esc((n?.tags || []).join(","))}" placeholder="如：高数,极限"></label>
       </div>
       <label class="field"><span>内容 *</span><textarea id="f-n-content" placeholder="记录你的学习内容...">${esc(n?.content || "")}</textarea></label>
@@ -4653,6 +4709,15 @@ const App = (() => {
         $("#chatInput").value = "/笔记整理";
         sendChat("/organize");
       }, 300);
+    };
+    $("#btnClearNotes").onclick = () => {
+      const all = Store.getAll("notes");
+      if (!all.length) { toast("没有可清理的笔记", "err"); return; }
+      if (!confirm(`确定清空全部 ${all.length} 篇笔记吗？\n笔记会移入回收站，不会立即彻底删除。`)) return;
+      all.slice().forEach(item => Store.remove("notes", item.id));
+      notesSubjectFilter = "all";
+      toast(`已清空 ${all.length} 篇笔记（已移入回收站）`, "ok");
+      renderNotes();
     };
     $("#btnGenCards").onclick = () => {
       switchView("ai");
