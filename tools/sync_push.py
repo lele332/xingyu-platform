@@ -22,7 +22,7 @@
   python tools/sync_push.py --dry-run      # 只看会提交什么，不提交不推送
   python tools/sync_push.py -m "说明"       # 自定义提交信息
 """
-import argparse, os, re, subprocess, sys, time
+import argparse, glob, os, re, shutil, subprocess, sys, time, traceback
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -45,12 +45,42 @@ def log(msg):
     except Exception:
         pass
 
+def find_git():
+    """按候选顺序定位 git.exe。本机没有系统级 Git，只有两处便携安装，
+       计划任务的 PATH 里都没有，所以必须自己找。"""
+    env = os.environ.get("XINGYU_GIT")
+    if env and os.path.exists(env):
+        return env
+    hit = shutil.which("git")
+    if hit:
+        return hit
+    home = os.path.expanduser("~")
+    cands = [
+        r"C:\Program Files\Git\cmd\git.exe",
+        r"C:\Program Files (x86)\Git\cmd\git.exe",
+        os.path.join(home, "AppData", "Local", "Programs", "Git", "cmd", "git.exe"),
+    ]
+    # WorkBuddy 便携 Git（版本目录会随升级增加，取版本号最大的）
+    for pat in (os.path.join(home, ".workbuddy", "binaries", "PortableGit", "versions", "*", "cmd", "git.exe"),
+                os.path.join(home, ".cache", "codex-runtimes", "*", "dependencies", "native", "git", "cmd", "git.exe")):
+        found = sorted(glob.glob(pat))
+        if found:
+            cands.append(found[-1])
+    for c in cands:
+        if c and os.path.exists(c):
+            return c
+    return None
+
+GIT = find_git()
+
 def run(cmd, **kw):
     return subprocess.run(cmd, cwd=str(ROOT), capture_output=True, text=True,
                           encoding="utf-8", errors="replace", **kw)
 
 def git(*a):
-    return run(["git"] + list(a))
+    if not GIT:
+        raise RuntimeError("找不到 git.exe（设 XINGYU_GIT 环境变量指定完整路径）")
+    return run([GIT] + list(a))
 
 def die(msg, code=1):
     log("ABORT: " + msg)
@@ -111,6 +141,10 @@ def main():
                     help="连未跟踪的新文件一起收（默认只提交已跟踪文件的改动）")
     args = ap.parse_args()
 
+    if not GIT:
+        die("找不到 git.exe。本机没有系统级 Git，请设 XINGYU_GIT 指向便携 Git，"
+            "或安装 Git for Windows 后重试。")
+    log("git = %s" % GIT)
     if git("rev-parse", "--git-dir").returncode != 0:
         die("not a git repo: %s" % ROOT)
 
@@ -185,4 +219,16 @@ def main():
     return 0
 
 if __name__ == "__main__":
-    sys.exit(main())
+    # 计划任务用 pythonw 跑：没有控制台，任何未捕获异常都会悄无声息地变成
+    # 「Last Result=1、日志一行没有」。这里兜住并写进日志，方便下次排查。
+    try:
+        sys.exit(main())
+    except SystemExit:
+        raise
+    except Exception:
+        log("EXCEPTION:\n" + traceback.format_exc())
+        try:
+            git("reset", "-q")
+        except Exception:
+            pass
+        sys.exit(1)
