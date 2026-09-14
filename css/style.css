@@ -4524,14 +4524,30 @@ body:has(#view-courses.active) .mobile-tabbar {
   color: rgba(226, 238, 255, .9) !important;
 }
 
-/* ===== 笔记按课程分组 + 筛选（2026-09-14）===== */
+/* ===== 笔记按课程分组 v2（2026-09-14 · 参考 Hover States 微交互 / Collect UI 密度 / Reeoo 色彩 / Apple HIG 分组列表）===== */
 .note-filter{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;align-items:flex-start}
-.filter-chip{border:.5px solid var(--rule);background:var(--paper-2);color:var(--ink-2);border-radius:99px;padding:6px 14px;font-size:13px;cursor:pointer;transition:all .15s}
-.filter-chip:hover{background:var(--paper-3);color:var(--ink)}
+.filter-chip{border:.5px solid var(--rule);background:var(--paper-2);color:var(--ink-2);border-radius:99px;padding:6px 14px;font-size:13px;cursor:pointer;transition:all .18s ease}
+.filter-chip:hover{background:var(--paper-3);color:var(--ink);transform:translateY(-1px)}
+.filter-chip:active{transform:scale(.96)}
 .filter-chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
-.note-group{grid-column:1/-1;margin-bottom:24px}
-.note-group-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.note-group-head h3{margin:0;font-size:16px}
-.course-dot{width:10px;height:10px;border-radius:50%;flex:none}
+.note-group{grid-column:1/-1;margin-bottom:22px}
+.note-group-head{display:flex;align-items:center;gap:10px;padding:0 6px;margin-bottom:8px;cursor:pointer;user-select:none}
+.note-group-head h3{margin:0;font-size:13px;font-weight:600;letter-spacing:.02em;color:var(--ink-2)}
+.course-dot{width:9px;height:9px;border-radius:50%;flex:none}
 .note-group-count{font-size:12px;color:var(--ink-3)}
 .note-group-head .text-btn{margin-left:auto;font-size:12px}
+.ng-chevron{color:var(--ink-3);font-size:14px;transition:transform .25s ease}
+.note-group.collapsed .ng-chevron{transform:rotate(-90deg)}
+.note-group.collapsed .note-list{display:none}
+.note-list{background:var(--paper-2);border:.5px solid var(--rule);border-radius:14px;overflow:hidden}
+.note-row{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;transition:background .15s, transform .12s}
+.note-row + .note-row{border-top:.5px solid var(--rule-thin)}
+.note-row:hover{background:var(--paper-hover)}
+.note-row:active{transform:scale(.995)}
+.nr-main{flex:1;min-width:0}
+.nr-main b{display:block;font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nr-main p{margin:0;font-size:12px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nr-side{display:flex;align-items:center;gap:8px;flex:none;font-size:12px;color:var(--ink-3)}
+.nr-tags{opacity:.75}
+.nr-go{color:var(--ink-faint);font-size:16px}
+.nr-assign{max-width:110px;font-size:12px;padding:3px 6px;border:.5px solid var(--rule);border-radius:8px;background:var(--paper);color:var(--ink-2);cursor:pointer}

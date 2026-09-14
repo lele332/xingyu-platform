@@ -2,6 +2,7 @@
 """星屿本地静态服务器：缓存控制、健康检查、VoxCPM 同源代理与安全响应头。"""
 
 import http.server
+import base64
 import hmac
 import ipaddress
 import io
@@ -587,6 +588,63 @@ def _save_feedback(handler, body):
     handler.send_header("Content-Length", str(len(payload)))
     handler.end_headers()
     handler.wfile.write(payload)
+
+
+def _extract_text(handler, body):
+    """POST /api/extract-text：把上传的文档（txt/md/docx/pdf）解析成纯文本，供「导入笔记」用。
+    仅限本机回环调用 —— 局域网手机不应往服务端丢文件解析（与 /api/open-url 同一门禁）。"""
+    if not handler._is_loopback_client():
+        _send_json(handler, 403, {"ok": False, "error": "forbidden"})
+        return
+    try:
+        payload = json.loads(body.decode("utf-8") or "{}")
+    except Exception:
+        _send_json(handler, 400, {"ok": False, "error": "bad json"})
+        return
+    name = str(payload.get("filename") or "").lower()
+    try:
+        raw = base64.b64decode(str(payload.get("data") or ""), validate=False)
+    except Exception:
+        _send_json(handler, 400, {"ok": False, "error": "bad base64"})
+        return
+    if not raw:
+        _send_json(handler, 400, {"ok": False, "error": "empty file"})
+        return
+    if len(raw) > 12 * 1024 * 1024:
+        _send_json(handler, 413, {"ok": False, "error": "file too large (max 12MB)"})
+        return
+    text = ""
+    try:
+        if name.endswith((".txt", ".md", ".markdown", ".csv")):
+            for enc in ("utf-8", "gb18030", "utf-16"):
+                try:
+                    text = raw.decode(enc)
+                    break
+                except UnicodeDecodeError:
+                    continue
+        elif name.endswith(".docx"):
+            import docx
+            doc = docx.Document(io.BytesIO(raw))
+            text = "\n".join(par.text for par in doc.paragraphs if par.text.strip())
+        elif name.endswith(".pdf"):
+            try:
+                from pdfminer.high_level import extract_text as _pdf_extract
+                text = _pdf_extract(io.BytesIO(raw)) or ""
+            except Exception:
+                from pypdf import PdfReader
+                reader = PdfReader(io.BytesIO(raw))
+                text = "\n".join((pg.extract_text() or "") for pg in reader.pages)
+        else:
+            _send_json(handler, 415, {"ok": False, "error": "unsupported file type"})
+            return
+    except Exception as exc:
+        _send_json(handler, 422, {"ok": False, "error": "extract failed: %s" % exc})
+        return
+    text = (text or "").strip()
+    if not text:
+        _send_json(handler, 422, {"ok": False, "error": "no text extracted"})
+        return
+    _send_json(handler, 200, {"ok": True, "text": text[:200000], "chars": len(text)})
 
 
 def _send_json(handler, status, data):
@@ -1697,6 +1755,18 @@ class XingyuHandler(http.server.SimpleHTTPRequestHandler):
                 return
             body = self.rfile.read(length) if length > 0 else b""
             _save_state(self, body)
+            return
+        if path == "/api/extract-text":
+            try:
+                length = int(self.headers.get("Content-Length", 0) or 0)
+            except ValueError:
+                self.send_error(400, "Bad Request")
+                return
+            if length > 17 * 1024 * 1024:  # base64 比原始文件大约 4/3
+                self.send_error(413, "Payload Too Large")
+                return
+            body = self.rfile.read(length) if length > 0 else b""
+            _extract_text(self, body)
             return
         if path.startswith("/api/data/"):
             _handle_api_data(self, "POST", self.path)

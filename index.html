@@ -47,7 +47,7 @@
 })();</script>
 <link rel="stylesheet" href="css/weather-aurora.css?v=20260831.1">
 <link rel="stylesheet" href="css/weather.css?v=20260914.2">
-<link rel="stylesheet" href="css/style.css?v=20260914.4">
+<link rel="stylesheet" href="css/style.css?v=20260914.5">
 <link rel="stylesheet" href="css/apple.css?v=20260905.1">
 <link rel="stylesheet" href="css/synapse.css?v=20260815.1">
 <link rel="stylesheet" href="css/voxcpm.css?v=20260829.1">
@@ -1903,6 +1903,7 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
       <div class="import-tabs">
         <button class="import-tab active" data-itab="ntext">粘贴文本</button>
         <button class="import-tab" data-itab="nimg">上传截图</button>
+        <button class="import-tab" data-itab="ndoc">导入文档</button>
       </div>
 
       <div class="import-panel active" id="itab-ntext">
@@ -1927,6 +1928,22 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
         <div id="notesImgPreview" class="img-preview"></div>
         <div class="import-actions">
           <button class="btn btn-primary" id="btnRecognizeNotes" disabled>AI 识别笔记</button>
+        </div>
+      </div>
+
+      <div class="import-panel" id="itab-ndoc">
+        <p class="hint">上传课程文档（讲义 / 课件整理 / 课堂记录），自动提取文字并由 AI 整理成结构化笔记。</p>
+        <div class="drop-zone" id="dropZoneDoc">
+          <div class="drop-inner">
+            <span class="drop-ico"></span>
+            <p>点击选择或拖拽文档到此处</p>
+            <p class="hint">支持 .docx / .pdf / .txt / .md，单个不超过 10MB</p>
+          </div>
+          <input type="file" id="notesDocFile" accept=".docx,.pdf,.txt,.md,.markdown" style="display:none" aria-label="上传笔记文档">
+        </div>
+        <div id="notesDocInfo" class="hint" style="margin-top:8px"></div>
+        <div class="import-actions">
+          <button class="btn btn-primary" id="btnParseDoc" disabled>提取并整理</button>
         </div>
       </div>
 
@@ -2055,7 +2072,7 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
 <script defer src="js/perf.js?v=20260910.3"></script>
 <script defer src="js/app-shell.js?v=20260910.1"></script>
 <script defer src="js/reminders.js?v=20260909.1"></script>
-<script defer src="js/app.js?v=20260914.4"></script>
+<script defer src="js/app.js?v=20260914.5"></script>
 <script defer src="js/schedule-bridge.js?v=20260913.6"></script>
 <script defer src="js/settings-ui.js?v=20260831.5"></script>
 <script>

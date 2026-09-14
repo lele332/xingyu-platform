@@ -1004,13 +1004,9 @@ const App = (() => {
     renderCardGrid();
   }
 
-  // 笔记按课程分组（2026-09-14）：subject 与课程表课程名对齐，未匹配的进「未分类」
+  // 笔记按课程分组 v2（2026-09-14）：严格按课程表课程分组，匹配不上的进「其他笔记」
   let notesSubjectFilter = "all";
-
-  function noteSubjectOf(n) {
-    const s = String(n.subject || "").trim();
-    return s || "未分类";
-  }
+  const notesCollapsed = new Set();
 
   function courseColorFor(subject) {
     const c = Store.getAll("courses").find(x => x && x.name === subject);
@@ -1024,64 +1020,88 @@ const App = (() => {
       grid.innerHTML = `<div class="empty-state"><p>还没有笔记，点击「+ 新建笔记」开始记录</p></div>`;
       return;
     }
-    // 分组顺序：课程表里的科目优先（按课程表顺序），其余科目按拼音，未分类始终垫底
-    const counts = new Map();
-    notes.forEach(n => { const s = noteSubjectOf(n); counts.set(s, (counts.get(s) || 0) + 1); });
+    // 严格按课程表：subject 命中课程名的进对应课程组（按课程表顺序），其余全部进「其他笔记」
     const courseNames = [...new Set(Store.getAll("courses").map(c => c && c.name).filter(Boolean))];
-    const ordered = courseNames.filter(nm => counts.has(nm))
-      .concat([...counts.keys()].filter(k => k !== "未分类" && !courseNames.includes(k)).sort((a, b) => a.localeCompare(b, "zh")))
-      .concat(counts.has("未分类") ? ["未分类"] : []);
-    if (notesSubjectFilter !== "all" && !counts.has(notesSubjectFilter)) notesSubjectFilter = "all";
+    const courseSet = new Set(courseNames);
+    const groupDefs = [];
+    courseNames.forEach(nm => {
+      const items = notes.filter(n => String(n.subject || "").trim() === nm);
+      if (items.length) groupDefs.push({ name: nm, items, isOther: false });
+    });
+    const others = notes.filter(n => !courseSet.has(String(n.subject || "").trim()));
+    if (others.length) groupDefs.push({ name: "其他笔记", items: others, isOther: true });
+    if (notesSubjectFilter !== "all" && !groupDefs.some(g => g.name === notesSubjectFilter)) notesSubjectFilter = "all";
 
     const chips = [`<button type="button" class="filter-chip${notesSubjectFilter === "all" ? " active" : ""}" data-notes-subject="all">全部 ${notes.length}</button>`]
-      .concat(ordered.map(name => `<button type="button" class="filter-chip${notesSubjectFilter === name ? " active" : ""}" data-notes-subject="${esc(name)}">${esc(name)} ${counts.get(name)}</button>`)).join("");
+      .concat(groupDefs.map(g => `<button type="button" class="filter-chip${notesSubjectFilter === g.name ? " active" : ""}" data-notes-subject="${esc(g.name)}">${esc(g.name)} ${g.items.length}</button>`)).join("");
 
-    const groups = notesSubjectFilter === "all" ? ordered : [notesSubjectFilter];
-    grid.innerHTML = `<div class="note-filter">${chips}</div>` + groups.map(name => {
-      const items = notes.filter(n => noteSubjectOf(n) === name);
-      if (!items.length) return "";
-      return `
-      <section class="note-group">
-        <div class="note-group-head">
-          <span class="course-dot" style="background:${esc(courseColorFor(name))}"></span>
-          <h3>${esc(name)}</h3>
-          <span class="note-group-count">${items.length} 篇</span>
-          <button type="button" class="text-btn" data-ai-summary="${esc(name)}">AI 总结本科目 →</button>
+    const groups = notesSubjectFilter === "all" ? groupDefs : groupDefs.filter(g => g.name === notesSubjectFilter);
+    grid.innerHTML = `<div class="note-filter">${chips}</div>` + groups.map(g => `
+      <section class="note-group${notesCollapsed.has(g.name) ? " collapsed" : ""}">
+        <div class="note-group-head" data-group-toggle="${esc(g.name)}">
+          <span class="course-dot" style="background:${esc(g.isOther ? "var(--ink-3)" : courseColorFor(g.name))}"></span>
+          <h3>${esc(g.name)}</h3>
+          <span class="note-group-count">${g.items.length} 篇</span>
+          <button type="button" class="text-btn" data-ai-summary="${esc(g.name)}">AI 阶段复习</button>
+          <span class="ng-chevron">›</span>
         </div>
-        <div class="note-grid">${items.map(n => `
-          <div class="note-card" data-note-id="${n.id}">
-            <h4>${esc(n.title)}</h4>
-            <p>${esc(n.content).slice(0, 120)}</p>
-            <div class="note-foot">
-              ${n.tags && n.tags.length ? n.tags.slice(0, 2).map(tg => `<span class="tag-chip" style="opacity:.7">#${esc(tg)}</span>`).join("") : ""}
-              <span class="note-date" style="margin-left:auto">${fmtDate(n.updatedAt)}</span>
+        <div class="note-list">${g.items.map(n => `
+          <article class="note-row" data-note-id="${n.id}">
+            <div class="nr-main">
+              <b>${esc(n.title)}</b>
+              <p>${esc(n.content).slice(0, 80)}</p>
             </div>
-          </div>`).join("")}
+            <div class="nr-side">
+              ${g.isOther ? `<select class="nr-assign" data-assign="${n.id}"><option value="">归入课程…</option>${courseNames.map(nm => `<option value="${esc(nm)}">${esc(nm)}</option>`).join("")}</select>` : ""}
+              ${g.isOther && String(n.subject || "").trim() ? `<span class="tag-chip">${esc(n.subject)}</span>` : ""}
+              ${n.tags && n.tags.length ? `<span class="nr-tags">#${esc(n.tags[0])}</span>` : ""}
+              <span class="nr-date">${fmtDate(n.updatedAt)}</span>
+              <span class="nr-go">›</span>
+            </div>
+          </article>`).join("")}
         </div>
-      </section>`;
-    }).join("");
+      </section>`).join("");
 
-    $$("#noteGrid .note-card").forEach(card => {
-      card.onclick = () => openNote(card.dataset.noteId);
+    $$("#noteGrid .note-row").forEach(row => {
+      row.onclick = () => openNote(row.dataset.noteId);
+    });
+    $$("#noteGrid .nr-assign").forEach(sel => {
+      sel.onclick = (e) => e.stopPropagation();
+      sel.onchange = () => {
+        if (!sel.value) return;
+        Store.update("notes", sel.dataset.assign, { subject: sel.value, updatedAt: new Date().toISOString() });
+        toast(`已归入「${sel.value}」`, "ok");
+        renderNoteGrid();
+      };
     });
     $$("#noteGrid [data-notes-subject]").forEach(btn => {
       btn.onclick = () => { notesSubjectFilter = btn.dataset.notesSubject; renderNoteGrid(); };
     });
+    $$("#noteGrid [data-group-toggle]").forEach(head => {
+      head.onclick = (e) => {
+        if (e.target.closest("[data-ai-summary]")) return;
+        const name = head.dataset.groupToggle;
+        if (notesCollapsed.has(name)) notesCollapsed.delete(name); else notesCollapsed.add(name);
+        renderNoteGrid();
+      };
+    });
     $$("#noteGrid [data-ai-summary]").forEach(btn => {
-      btn.onclick = () => {
-        const subject = btn.dataset.aiSummary;
+      btn.onclick = (e) => {
+        e.stopPropagation();
+        const g = groupDefs.find(x => x.name === btn.dataset.aiSummary);
+        if (!g) return;
         switchView("ai");
         setTimeout(() => {
-          const q = subject === "未分类"
-            ? "请通读我的未分类笔记，总结要点，并建议我把它们分别归入哪门课程。"
-            : `请通读我的《${subject}》全部笔记，总结本科目的知识框架、重点难点和复习建议。`;
+          const q = g.isOther
+            ? `这些是我还没归到课程的 ${g.items.length} 篇笔记。请帮我：1）按内容建议分别归入哪门课；2）基于已有内容整理复习要点。`
+            : `这是我《${g.name}》课到目前为止的 ${g.items.length} 篇课堂笔记（这门课还在学习中，没学完）。请只基于这些已学内容：1）按主题整理知识框架；2）标出最可能考的重点和易错点；3）出 3 道自测题并附答案。`;
           $("#chatInput").value = q;
           sendChat(q);
         }, 300);
       };
     });
     // 滚动分批浮入
-    revealCards($("#view-notes"), ".note-card");
+    revealCards($("#view-notes"), ".note-row");
   }
 
   function renderCardGrid() {
@@ -1189,10 +1209,13 @@ const App = (() => {
       };
     }
     $("#formTitle").textContent = n ? "编辑笔记" : "新建笔记";
+    const _courseOpts = [...new Set(Store.getAll("courses").map(c => c && c.name).filter(Boolean))];
+    const _curSubject = (n && n.subject) || "";
+    if (_curSubject && !_courseOpts.includes(_curSubject)) _courseOpts.push(_curSubject);
     $("#formBody").innerHTML = `
       <label class="field"><span>标题 *</span><input id="f-n-title" value="${esc(n?.title || "")}" placeholder="如：高数第三章笔记"></label>
       <div class="form-grid">
-        <label class="field"><span>科目（关联课程）</span><input id="f-n-subject" list="f-n-course-list" value="${esc(n?.subject || "")}" placeholder="选择课程或直接输入"><datalist id="f-n-course-list">${[...new Set(Store.getAll("courses").map(c => c && c.name).filter(Boolean))].map(nm => '<option value="' + esc(nm) + '"></option>').join("")}</datalist></label>
+        <label class="field"><span>所属课程</span><select id="f-n-subject"><option value="">未分类</option>${_courseOpts.map(nm => '<option value="' + esc(nm) + '"' + (nm === _curSubject ? " selected" : "") + ">" + esc(nm) + "</option>").join("")}</select></label>
         <label class="field"><span>标签（逗号分隔）</span><input id="f-n-tags" value="${esc((n?.tags || []).join(","))}" placeholder="如：高数,极限"></label>
       </div>
       <label class="field"><span>内容 *</span><textarea id="f-n-content" placeholder="记录你的学习内容...">${esc(n?.content || "")}</textarea></label>
@@ -4073,6 +4096,13 @@ const App = (() => {
     $("#notesImgPreview").innerHTML = "";
     $("#notesImportResult").style.display = "none";
     $("#btnRecognizeNotes").disabled = true;
+    pendingDocFile = null;
+    const _docInput = $("#notesDocFile");
+    if (_docInput) _docInput.value = "";
+    const _docInfo = $("#notesDocInfo");
+    if (_docInfo) _docInfo.textContent = "";
+    const _docBtn = $("#btnParseDoc");
+    if (_docBtn) _docBtn.disabled = true;
     $$(".import-tab").forEach(t => t.classList.toggle("active", t.dataset.itab === "ntext"));
     $$(".import-panel").forEach(p => p.classList.toggle("active", p.id === "itab-ntext"));
     showModal("importNotesModal");
@@ -4167,6 +4197,64 @@ const App = (() => {
     } finally {
       btn.disabled = false;
       btn.textContent = "AI 识别笔记";
+    }
+  }
+
+  /* ---------- 文档导入笔记（.docx/.pdf/.txt/.md） ---------- */
+  let pendingDocFile = null;
+
+  function handleNotesDoc() {
+    const file = $("#notesDocFile").files[0];
+    if (!file) return;
+    if (file.size > 10 * 1024 * 1024) {
+      toast("文档超过 10MB，请拆分后再导入", "err");
+      $("#notesDocFile").value = "";
+      return;
+    }
+    pendingDocFile = file;
+    $("#notesDocInfo").textContent = `已选择：${file.name}（${(file.size / 1024).toFixed(0)} KB）`;
+    $("#btnParseDoc").disabled = false;
+  }
+
+  function readFileBase64(file) {
+    return new Promise((resolve, reject) => {
+      const r = new FileReader();
+      r.onload = () => resolve(String(r.result).split(",")[1] || "");
+      r.onerror = () => reject(new Error("读取文件失败"));
+      r.readAsDataURL(file);
+    });
+  }
+
+  async function parseDocBtn() {
+    if (!pendingDocFile) return;
+    const btn = $("#btnParseDoc");
+    btn.disabled = true;
+    btn.innerHTML = `<span class="spinner"></span>提取中...`;
+    try {
+      let text = "";
+      if (/\.(txt|md|markdown)$/i.test(pendingDocFile.name)) {
+        text = await pendingDocFile.text();
+      } else {
+        const data = await readFileBase64(pendingDocFile);
+        const resp = await fetch("/api/extract-text", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ filename: pendingDocFile.name, data })
+        });
+        const json = await resp.json().catch(() => ({}));
+        if (!resp.ok || !json.ok) throw new Error(json.error || `解析失败（HTTP ${resp.status}）`);
+        text = json.text || "";
+      }
+      if (!text.trim()) throw new Error("没能从文档里提取到文字");
+      btn.innerHTML = `<span class="spinner"></span>AI 整理中...`;
+      const notes = await AI.parseNotesText(text);
+      showNotesImportResult(notes);
+      if (!notes.length) toast("未能整理出笔记，请检查文档内容", "err");
+    } catch (e) {
+      toast(e.message || "文档解析失败", "err");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "提取并整理";
     }
   }
 
@@ -4703,6 +4791,16 @@ const App = (() => {
     $("#notesImgFile").onchange = handleNotesImg;
     $("#btnCancelNotesImport").onclick = () => { pendingImportNotes = []; closeModal("importNotesModal"); };
     $("#btnConfirmNotesImport").onclick = confirmNotesImport;
+    $("#dropZoneDoc").onclick = () => $("#notesDocFile").click();
+    $("#dropZoneDoc").ondragover = (e) => { e.preventDefault(); $("#dropZoneDoc").classList.add("drag-over"); };
+    $("#dropZoneDoc").ondragleave = () => $("#dropZoneDoc").classList.remove("drag-over");
+    $("#dropZoneDoc").ondrop = (e) => {
+      e.preventDefault();
+      $("#dropZoneDoc").classList.remove("drag-over");
+      if (e.dataTransfer.files.length) { $("#notesDocFile").files = e.dataTransfer.files; handleNotesDoc(); }
+    };
+    $("#notesDocFile").onchange = handleNotesDoc;
+    $("#btnParseDoc").onclick = parseDocBtn;
     $("#btnAiOrganize").onclick = () => {
       switchView("ai");
       setTimeout(() => {
