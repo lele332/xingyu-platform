@@ -46,7 +46,8 @@
   d.dataset.bgVis = localStorage.getItem("zero_bg_vis") || "clear";
 })();</script>
 <link rel="stylesheet" href="css/weather-aurora.css?v=20260831.1">
-<link rel="stylesheet" href="css/style.css?v=20260911.1">
+<link rel="stylesheet" href="css/weather.css?v=20260914.2">
+<link rel="stylesheet" href="css/style.css?v=20260914.3">
 <link rel="stylesheet" href="css/apple.css?v=20260905.1">
 <link rel="stylesheet" href="css/synapse.css?v=20260815.1">
 <link rel="stylesheet" href="css/voxcpm.css?v=20260829.1">
@@ -58,7 +59,7 @@
 <link rel="preload" href="assets/fonts/font_52a6c245.woff2" as="font" type="font/woff2" crossorigin>
 -->
   <link rel="stylesheet" href="css/mobile-patch.css">
-<link rel="stylesheet" href="css/brand-system.css?v=20260910.4">
+<link rel="stylesheet" href="css/brand-system.css?v=20260913.6">
 </head>
 <body>
 
@@ -362,7 +363,16 @@ html.splash-on body > #splash{visibility:visible}
       __prt=false; if(__raf) cancelAnimationFrame(__raf);
       if(splashResize) window.removeEventListener('resize',splashResize);
       var cv=document.getElementById('splashCanvas');
-      if(cv){ try{cv.width=1; cv.height=1; cv.getContext('2d').clearRect(0,0,1,1);}catch(e){} }
+      if(cv){
+        // 显式释放 WebGL 上下文：原来对 webgl canvas 调 getContext('2d') 只会拿到 null
+        // （并向控制台刷类型冲突警告），GPU 上下文一直占着，WebView2 低端场景下
+        // 会拖慢开屏结束后首屏的合成。改为主动 loseContext 并把画布缩到 1px。
+        try{
+          var __gl=cv.getContext('webgl')||cv.getContext('experimental-webgl');
+          if(__gl&&__gl.getExtension){ var __le=__gl.getExtension('WEBGL_lose_context'); if(__le) __le.loseContext(); }
+        }catch(e){}
+        try{cv.width=1; cv.height=1;}catch(e){}
+      }
       setTimeout(function(){
         splash.classList.add('fade-out');
         setTimeout(function(){try{splash.remove();}catch(e){}},260);
@@ -370,7 +380,7 @@ html.splash-on body > #splash{visibility:visible}
     }
     function whenMainReady(){
       if(window.__xingyuMainReady){ setTimeout(startFade, 40); return; }
-      var done=false, timer=setTimeout(function(){ if(!done){ done=true; startFade(); } }, 1600);
+      var done=false, timer=setTimeout(function(){ if(!done){ done=true; startFade(); } }, 1000);
       window.addEventListener('xingyu-main-ready', function(){
         if(done)return; done=true; clearTimeout(timer); setTimeout(startFade, 40);
       }, { once:true });
@@ -411,7 +421,7 @@ html.splash-on body > #splash{visibility:visible}
       setTimeout(bootOrb, 1500);
     }
   }
-  window.addEventListener('splash-done', function(){ setTimeout(preloadOrb, 300); });
+  window.addEventListener('splash-done', function(){ setTimeout(preloadOrb, 2200); });
   setTimeout(preloadOrb, 2500);
   setTimeout(preloadOrb, 6000);
 })();
@@ -444,41 +454,39 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
     </div>
 
     <nav class="sidebar-nav">
-      <div class="nav-group">
-        <div class="nav-group-label" data-i18n="nav.group.work">工作台</div>
+      <!-- 语义分组导航（2026-09-13 重构）
+           分组：今日 / 学习 / AI 智能体 / 运动健康 / 生活 / 灵感画廊
+           data-group 必须与 js/ux-system.js 的 NAV_GROUPS 一一对应；
+           分组头可折叠，开合状态持久化在 localStorage["xingyu_nav_groups"]。
+           没有 .nav-group-label 的分组（today）视为置顶组，不参与折叠。 -->
+      <div class="nav-group xy-group" data-group="today">
         <button class="nav-item active" data-view="dashboard">
           <span class="nav-label" data-i18n="nav.dashboard">今日</span>
         </button>
+      </div>
+      <div class="nav-group xy-group" data-group="study">
+        <div class="nav-group-label" data-i18n="nav.group.study">学习</div>
         <button class="nav-item" data-view="courses">
           <span class="nav-label" data-i18n="nav.courses">课程作业</span>
-        </button>
-        <button class="nav-item" data-view="focus">
-          <span class="nav-label" data-i18n="nav.focus">专注学习</span>
-        </button>
-        <button class="nav-item" data-view="weather">
-          <span class="nav-label" data-i18n="nav.weather">天气</span>
         </button>
         <button class="nav-item" data-view="exams">
           <span class="nav-label" data-i18n="nav.exams">考试日程</span>
         </button>
-      </div>
-      <div class="nav-group">
-        <div class="nav-group-label" data-i18n="nav.group.study">学习资料</div>
+        <button class="nav-item" data-view="focus">
+          <span class="nav-label" data-i18n="nav.focus">专注学习</span>
+        </button>
         <button class="nav-item" data-view="notes">
           <span class="nav-label" data-i18n="nav.notes">学习笔记库</span>
         </button>
         <button class="nav-item" data-view="lit">
           <span class="nav-label" data-i18n="nav.lit">文献资料</span>
         </button>
-        <button class="nav-item" data-view="news">
-          <span class="nav-label" data-i18n="nav.news">热点新闻</span>
-        </button>
-      </div>
-      <div class="nav-group">
-        <div class="nav-group-label" data-i18n="nav.group.growth">自我成长</div>
         <button class="nav-item" data-view="growth">
           <span class="nav-label" data-i18n="nav.growth">成长档案</span>
         </button>
+      </div>
+      <div class="nav-group xy-group" data-group="ai">
+        <div class="nav-group-label" data-i18n="nav.group.ai">AI 智能体</div>
         <button class="nav-item" data-view="ai">
           <span class="nav-label" data-i18n="nav.ai">AI 助手</span>
           <span class="nav-badge" id="aiBadge">AI</span>
@@ -489,15 +497,33 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
         <button class="nav-item" data-view="aria">
           <span class="nav-label" data-i18n="nav.aria">A.R.I.A</span>
         </button>
+      </div>
+      <div class="nav-group xy-group" data-group="health">
+        <div class="nav-group-label" data-i18n="nav.group.health">运动健康</div>
         <button class="nav-item" data-view="running">
           <span class="nav-label" data-i18n="nav.running">跑步训练</span>
         </button>
-        <button class="nav-item" data-view="running" data-camp="1">
-          <span class="nav-label">训练营</span>
+        <button class="nav-item" data-view="running" data-camp="1" data-icon="camp">
+          <span class="nav-label" data-i18n="nav.camp">训练营</span>
           <span class="nav-badge">华</span>
         </button>
+        <button class="nav-item" data-view="relax" data-icon="relax">
+          <span class="nav-label" data-i18n="nav.relax">解压舱</span>
+        </button>
       </div>
-      <div class="nav-group">
+      <div class="nav-group xy-group" data-group="life">
+        <div class="nav-group-label" data-i18n="nav.group.life">生活</div>
+        <button class="nav-item" data-view="weather">
+          <span class="nav-label" data-i18n="nav.weather">天气</span>
+        </button>
+        <button class="nav-item" data-view="news">
+          <span class="nav-label" data-i18n="nav.news">热点新闻</span>
+        </button>
+        <button class="nav-item" data-view="toolknit">
+          <span class="nav-label" data-i18n="nav.toolknit">工具箱</span>
+        </button>
+      </div>
+      <div class="nav-group xy-group" data-group="gallery">
         <div class="nav-group-label" data-i18n="nav.group.gallery">灵感画廊</div>
         <button class="nav-item" data-view="prisma">
           <span class="nav-label" data-i18n="nav.prisma">棱镜艺境</span>
@@ -513,15 +539,6 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
         </button>
         <button class="nav-item" data-view="particles">
           <span class="nav-label" data-i18n="nav.particles">粒子星云</span>
-        </button>
-      </div>
-      <div class="nav-group">
-        <div class="nav-group-label" data-i18n="nav.group.tools">实用工具</div>
-        <button class="nav-item" data-view="relax">
-          <span class="nav-label" data-i18n="nav.relax">解压舱</span>
-        </button>
-        <button class="nav-item" data-view="toolknit">
-          <span class="nav-label" data-i18n="nav.toolknit">工具箱</span>
         </button>
       </div>
     </nav>
@@ -697,10 +714,11 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
         </div>
 
         <div class="tab-panel active" id="tab-courses-week">
-          <div class="week-toolbar">
-            <span id="weekLabel">本周</span>
+          <div class="super-schedule-wrap">
+            <iframe id="superScheduleFrame" src="schedule.html?v=20260913.25&embed=1" title="超级课程表" loading="lazy"></iframe>
           </div>
-          <div class="week-grid" id="weekGrid"></div>
+          <div class="week-toolbar" style="display:none" aria-hidden="true"><span id="weekLabel">本周</span></div>
+          <div class="week-grid" id="weekGrid" style="display:none" aria-hidden="true"></div>
         </div>
 
         <div class="tab-panel" id="tab-courses-list">
@@ -1010,49 +1028,29 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
 
       <!-- 解压舱 -->
       <section class="view" id="view-relax">
-        <div class="view-toolbar relax-toolbar">
-          <div class="toolbar-tabs">
-            <button class="tab-btn active" data-relax-tab="breath" data-i18n="relax.breath">呼吸节奏</button>
-            <button class="tab-btn" data-relax-tab="bubbles" data-i18n="relax.bubbles">气泡解压</button>
-            <button class="tab-btn" data-relax-tab="sand" data-i18n="relax.sand">流沙画布</button>
-            <button class="tab-btn" data-relax-tab="flow" data-i18n="relax.flow">流动光影</button>
-            <button class="tab-btn" data-relax-tab="drift" data-i18n="relax.drift">星河流转</button>
-            <button class="tab-btn" data-relax-tab="wrap" data-i18n="relax.wrap">泡泡纸</button>
-            <button class="tab-btn" data-relax-tab="lantern" data-i18n="relax.lantern">放灯</button>
+        <div class="relax-toolbar" style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;">
+          <div><h2 style="margin:0;font-size:18px;">🎮 星屿游戏仓</h2><p style="margin:4px 0 0;font-size:13px;opacity:.7;">本地单机游戏集合 · 全部带暂停、难度与最高分</p></div>
+          <button class="text-btn" id="btnGamehubFull" type="button" onclick="window.open('/gamehub/','_blank')" style="white-space:nowrap;">全屏打开 ↗</button>
+        </div>
+        <!-- ⚠️ 2026-09-14 两处改动（见 js/app.js setupGamehubFallback）：
+             ① 改 about:blank + data-iframe-src 懒加载。原来 src="/gamehub/" 是硬编码直载，
+                开屏就请求游戏仓首页 —— 那正是 server.py keep-alive 目录污染 bug 的触发点
+                （天气转圈的根因）。服务端已修，这里再从源头摘掉触发条件，双保险；
+                顺带和其他 6 个子应用一致：切走卸载、切回还原，省内存。
+             ② GitHub Pages 线上镜像没有 /gamehub/（游戏仓只存在于本机 D:\星屿游戏仓），
+                线上访问时不再把裸 404 塞进 iframe，而是显示降级说明卡。 -->
+        <div class="gamehub-offline" id="gamehubOffline" hidden>
+          <div class="gamehub-offline-card">
+            <div class="gamehub-offline-ico" aria-hidden="true">🎮</div>
+            <h3>星屿游戏仓只存在于你自己的电脑上</h3>
+            <p>20 款本地单机游戏放在 <code>D:\星屿游戏仓</code>，由本机服务（端口 8620）代理成 <code>/gamehub/</code> 才能玩。</p>
+            <p>你现在打开的是 <b>GitHub Pages 线上镜像</b>（永久二维码指向的地址），那里没有这些游戏文件，所以这一栏不加载。</p>
+            <p class="gamehub-offline-tip">想玩：回到自己电脑，双击桌面的「星屿」图标打开本机版即可。</p>
           </div>
         </div>
-        <div class="relax-grid">
-          <div class="card relax-card" data-relax-panel="breath">
-            <div class="card-head"><h3 data-i18n="relax.breathTitle">呼吸节奏</h3><button class="text-btn" id="btnBreathToggle" data-i18n="relax.breathToggle">开始</button></div>
-            <div class="breath-stage"><div class="breath-ring" id="breathRing"></div><p class="breath-label" id="breathLabel">准备</p></div>
-          </div>
-          <div class="card relax-card" data-relax-panel="bubbles">
-            <div class="card-head"><h3 data-i18n="relax.bubblesTitle">气泡解压</h3><span class="relax-score" id="bubbleScore" aria-label="score">0</span></div>
-            <canvas id="bubbleCanvas"></canvas>
-          </div>
-          <div class="card relax-card" data-relax-panel="sand">
-            <div class="card-head"><h3 data-i18n="relax.sandTitle">流沙画布</h3><button class="text-btn" id="btnSandClear" data-i18n="relax.sandClear">清空</button></div>
-            <canvas id="sandCanvas"></canvas>
-          </div>
-          <div class="card relax-card" data-relax-panel="flow">
-            <div class="card-head"><h3 data-i18n="relax.flowTitle">流动光影</h3><span class="relax-hint" data-i18n="relax.flowHint">移动鼠标</span></div>
-            <canvas id="flowCanvas"></canvas>
-          </div>
-          <div class="card relax-card" data-relax-panel="drift">
-            <div class="card-head"><h3 data-i18n="relax.driftTitle">星河流转</h3><span class="relax-hint" data-i18n="relax.driftHint">点击生成流星</span></div>
-            <canvas id="driftCanvas"></canvas>
-          </div>
-          <div class="card relax-card" data-relax-panel="wrap">
-            <div class="card-head"><h3 data-i18n="relax.wrapTitle">泡泡纸</h3><button class="text-btn" id="btnWrapReset" data-i18n="relax.wrapReset">重置</button></div>
-            <div class="wrap-stage" id="wrapStage" tabindex="0" aria-label="Bubble wrap"></div>
-          </div>
-          <div class="card relax-card" data-relax-panel="lantern">
-            <div class="card-head"><h3 data-i18n="relax.lanternTitle">放灯</h3><span class="relax-hint" data-i18n="relax.lanternHint">点击放一盏灯</span></div>
-            <canvas id="lanternCanvas"></canvas>
-          </div>
-        </div>
+        <iframe id="gamehubFrame" src="about:blank" data-iframe-src="/gamehub/" title="星屿游戏仓" loading="lazy" style="display:block;width:100%;height:calc(100vh - 96px);border:0;border-radius:18px;background:#0a0e1a;"></iframe>
       </section>
-      <!-- A.R.I.A 交互站（Mainframe 全屏鼠标交互页） -->
+<!-- A.R.I.A 交互站（Mainframe 全屏鼠标交互页） -->
       <section class="view" id="view-aria">
         <iframe src="about:blank" title="A.R.I.A" loading="lazy" allow="autoplay; fullscreen"></iframe>
         <div class="aria-gate" id="ariaGate">
@@ -2039,9 +2037,10 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
 <script defer src="assets/js/ScrollTrigger.min.js?v=20260811.3"></script>
 <script defer src="assets/js/anime.min.js?v=20260812.1"></script>
 <script defer src="js/animefx.js?v=20260812.1"></script>
-<script defer src="js/anim.js?v=20260817.8"></script>
+<script defer src="js/anim.js?v=20260913.1"></script>
 <script defer src="js/local-config.js?v=20260831.1"></script>
-<script defer src="js/relax.js?v=20260911.1"></script>
+<script defer src="js/relax.js?v=20260911.2"></script>
+<script defer src="js/relax-arcade.js?v=20260912.2"></script>
 <script defer src="js/quotes.js?v=20260811.3"></script>
 <script defer src="js/lunar.js?v=20260811.3"></script>
 <script defer src="js/store.js?v=20260908.1"></script>
@@ -2050,51 +2049,158 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
 <script defer src="js/charts.js?v=20260905.1"></script>
 <script defer src="js/ai-context.js?v=20260909.2"></script>
 <script defer src="js/ai.js?v=20260909.1"></script>
-<script defer src="js/icons.js?v=20260910.1"></script>
-<script defer src="js/icons-themes.js?v=20260910.2"></script>
+<script defer src="js/icons.js?v=20260913.1"></script>
+<script defer src="js/icons-themes.js?v=20260913.2"></script>
 <script defer src="js/perf.js?v=20260910.3"></script>
 <script defer src="js/app-shell.js?v=20260910.1"></script>
 <script defer src="js/reminders.js?v=20260909.1"></script>
-<script defer src="js/app.js?v=20260911.1"></script>
+<script defer src="js/app.js?v=20260914.3"></script>
+<script defer src="js/schedule-bridge.js?v=20260913.6"></script>
 <script defer src="js/settings-ui.js?v=20260831.5"></script>
 <script>
 /* 非关键模块懒加载：开屏期间不解析这 ~170KB JS（天气/跑步/语音/文献/激励/教练），
-   开屏结束且浏览器空闲后再逐个加载，避免长任务卡顿。 */
+   开屏结束且浏览器空闲后再逐个加载，避免长任务卡顿。
+
+   2026-09-14 加固（三处，都是为了「天气界面一直显示正在获取信息」这类永久 loading）：
+   1) onerror 不再静默跳过：每个模块最多重试 3 次（带 cache-buster），并上报 /api/diag。
+      旧实现 s.onerror=next() 会让 weather.js 一次加载失败就永远没有 window.Weather。
+   2) bootStart 增加 10s 兜底定时器：万一 splash-done 没派发，模块也一定会加载。
+   3) 暴露 window.__xyLazy.ensure(name) + 天气看门狗：视图已激活却仍停在 loading 时，
+      主动补加载 / 调 Weather.refresh() / 最终给出可点的「重试」，绝不无限转圈。 */
 (function(){
   var LAZY=[
-    "js/weather.js?v=20260911.1",
+    "js/weather.js?v=20260914.2",
     "js/weather-aurora.js?v=20260831.1",
     "js/motivation.js?v=20260817.1",
     "js/knowledge.js?v=20260904.1",
     "js/running.js?v=20260904.1",
     "js/synapse-coach.js?v=20260817.1",
-    "js/voxcpm-voice.js?v=20260905.2"
+    "js/voxcpm-voice.js?v=20260912.7"
   ];
+  var MAX_RETRY=3;
+  var loaded={}, pending={}, givenUp={};
+  function nameOf(src){ return src.split("/").pop().split("?")[0]; }
+  // 去重（保持顺序）
+  LAZY=LAZY.filter(function(v,i,a){ return a.map(nameOf).indexOf(nameOf(v))===i; });
+
+  function reportDiag(msg, detail){
+    try{
+      if(!/^https?:$/.test(location.protocol)) return;
+      fetch("/api/diag",{method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({mod:"bootstrap",msg:msg,detail:detail||null,href:location.href.slice(0,160)})}).catch(function(){});
+    }catch(e){}
+  }
   function afterLoad(src){
     try{
-      var n=src.split("/")[1].split("?")[0];
+      var n=nameOf(src);
       if(n==="weather.js"&&window.Weather){ Weather.init(); if(document.querySelector("#view-weather.active")) Weather.renderCities(); }
       if(n==="weather-aurora.js"&&window.WeatherAurora){ WeatherAurora.init(); }
       if(n==="running.js"&&document.querySelector("#view-running.active")){ window.Running&&Running.render(); window.Synapse&&Synapse.render(); }
       if(n==="voxcpm-voice.js"&&document.querySelector("#view-voice.active")&&window.VoxVoice) VoxVoice.render();
-    }catch(e){}
+    }catch(e){ reportDiag("afterLoad_throw",{src:src,msg:e&&e.message}); }
+  }
+  function inject(src, attempt){
+    return new Promise(function(res,rej){
+      var s=document.createElement("script");
+      s.src = attempt>0 ? (src+(src.indexOf("?")>=0?"&":"?")+"r="+attempt) : src;
+      s.defer=true;
+      var to=setTimeout(function(){ try{s.remove();}catch(e){} rej(new Error("timeout")); }, 20000);
+      s.onload=function(){ clearTimeout(to); res(); };
+      s.onerror=function(){ clearTimeout(to); try{s.remove();}catch(e){} rej(new Error("onerror")); };
+      document.head.appendChild(s);
+    });
+  }
+  function attempt(src, n){
+    return inject(src,n).catch(function(err){
+      if(n+1>=MAX_RETRY){ givenUp[nameOf(src)]=true; reportDiag("lazy_module_failed",{src:src,attempts:n+1,err:String(err&&err.message||err)}); throw err; }
+      return new Promise(function(r){ setTimeout(r, 500*(n+1)+Math.random()*300); }).then(function(){ return attempt(src,n+1); });
+    });
+  }
+  function ensure(name){
+    if(loaded[name]) return Promise.resolve(name);
+    if(pending[name]) return pending[name];
+    var src=null;
+    for(var i=0;i<LAZY.length;i++){ if(nameOf(LAZY[i])===name){ src=LAZY[i]; break; } }
+    if(!src) return Promise.reject(new Error("unknown module "+name));
+    var p=attempt(src,0).then(function(){
+      delete pending[name]; loaded[name]=true; afterLoad(src); return name;
+    },function(e){ delete pending[name]; throw e; });
+    pending[name]=p; return p;
+  }
+  function idle(fn,arg){
+    if(window.requestIdleCallback) window.requestIdleCallback(function(){ fn(arg); },{timeout:4000});
+    else setTimeout(function(){ fn(arg); },300);
   }
   function loadOne(i){
     if(i>=LAZY.length) return;
-    var s=document.createElement("script");
-    s.src=LAZY[i]; s.defer=true;
-    s.onload=function(){ afterLoad(LAZY[i]); loadOne(i+1); };
-    s.onerror=function(){ loadOne(i+1); };
-    document.head.appendChild(s);
+    // 关键修复（2026-09-14）：原来 onload 后立即串下一个，7 个模块的 eval 在
+    // 主界面刚出现的 1~2 秒内连成长任务串，体感就是「开屏结束点不动」。
+    // 现在每个模块之间强制让出：idle 窗口 + 至少 350ms 间隔，点击永远优先。
+    var next=function(){ setTimeout(function(){ idle(loadOne,i+1); },350); };
+    ensure(nameOf(LAZY[i])).then(next, next);
   }
-  function start(){
-    if(window.requestIdleCallback) window.requestIdleCallback(function(){ loadOne(0); },{timeout:2200});
-    else setTimeout(function(){ loadOne(0); },900);
+  function start(){ idle(function(){ loadOne(0); }); }
+  // 开屏动画中段只做网络预取（走 SW network-first 顺便入缓存），不解析不执行；
+  // 开屏结束后 loadOne 从 HTTP 缓存秒读，省去网络等待时间。
+  function prefetch(){
+    for(var i=0;i<LAZY.length;i++){ try{ fetch(LAZY[i],{priority:"low"}).catch(function(){}); }catch(e){} }
   }
-  // 关键改动：非关键模块不再与开屏动画并行加载；等主界面真正出现后逐个让出空闲时间。
+  setTimeout(prefetch,1800);
   var _bootStarted=false;
   function bootStart(){ if(!_bootStarted){ _bootStarted=true; start(); } }
   window.addEventListener('splash-done',bootStart,{once:true});
+  // 兜底：splash-done 万一没派发（开屏脚本异常/被跳过），10s 后也必须开始加载
+  setTimeout(function(){ if(!_bootStarted){ reportDiag("boot_fallback_no_splash_done",{}); bootStart(); } },10000);
+  window.__xyLazy={ ensure:ensure, loaded:function(){return Object.keys(loaded);}, failed:function(){return Object.keys(givenUp);}, list:LAZY.slice() };
+
+  /* ---------------- 天气看门狗 ----------------
+     症状「天气界面一直显示正在获取信息」= #weatherLoading 永远不被隐藏。
+     可能原因：weather.js 加载失败 / splash-done 未派发 / 渲染抛错。
+     这里每 3s 检查一次，只在天气视图激活且确实卡住时介入，最多 6 轮。 */
+  var wxTries=0, wxDead=false;
+  function wxGiveUp(msg){
+    if(wxDead) return; wxDead=true;
+    var L=document.getElementById("weatherLoading"), C=document.getElementById("weatherContent");
+    if(L) L.style.display="none";
+    if(!C) return;
+    C.style.display="";
+    C.innerHTML='<div class="empty-state" style="padding:48px 20px;text-align:center">'
+      +'<div class="big" style="font-size:38px;line-height:1">\u26A0\uFE0F</div>'
+      +'<p style="margin:14px 0 6px;font-size:15px;opacity:.92">天气模块没能启动</p>'
+      +'<p style="margin:0 0 18px;font-size:12px;opacity:.45;word-break:break-all">'+String(msg||"").replace(/[<>&"]/g,"")+'</p>'
+      +'<button class="btn btn-primary" id="wxBsRetry">重新加载天气模块</button></div>';
+    var b=document.getElementById("wxBsRetry");
+    if(b) b.onclick=function(){ wxDead=false; wxTries=0; try{ C.innerHTML=""; }catch(e){}
+      if(L){ L.style.display=""; L.textContent="正在重新加载天气模块…"; }
+      loaded["weather.js"]=false; delete loaded["weather.js"];
+      ensure("weather.js").then(function(){ try{ window.Weather&&Weather.init(); }catch(e){ wxGiveUp("init: "+(e&&e.message)); } },
+                                function(e){ wxGiveUp("加载失败: "+(e&&e.message)); });
+    };
+    reportDiag("weather_giveup",{msg:String(msg||"").slice(0,200)});
+  }
+  function wxWatch(){
+    var view=document.querySelector("#view-weather");
+    if(!view||!view.classList.contains("active")) { wxTries=0; return; }
+    var L=document.getElementById("weatherLoading"), C=document.getElementById("weatherContent");
+    if(!L||!C||wxDead) return;
+    var vis=getComputedStyle(L).display!=="none";
+    var empty=!C.innerHTML.trim();
+    if(!vis||!empty){ wxTries=0; return; }
+    wxTries++;
+    reportDiag("weather_stuck",{tries:wxTries,hasWeather:typeof window.Weather,
+      ping:(window.Weather&&Weather.ping)?(function(){try{return Weather.ping()}catch(e){return "throw"}})():"none"});
+    if(wxTries>6){ wxGiveUp("天气界面持续停在加载态（已尝试 "+wxTries+" 次）"); return; }
+    if(window.Weather){
+      try{
+        if(wxTries<=2) Weather.refresh();
+        else if(wxTries===3){ Weather.diagnose&&Weather.diagnose(); Weather.refresh(); }
+        else { Weather.init&&Weather.init(); }
+      }catch(e){ wxGiveUp("Weather 调用异常: "+(e&&e.message)); }
+    }else{
+      ensure("weather.js").catch(function(e){ /* 交给后续轮次 / wxGiveUp */ });
+    }
+  }
+  setInterval(wxWatch,3000);
 })();
 </script>
 <script>
@@ -2133,12 +2239,17 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
 <script type="importmap">
   {"imports":{"three":"/js/vendor/three/three.module.js","three/addons/":"/js/vendor/three/addons/"}}
 </script>
-<link rel="stylesheet" href="css/voice-agent.css?v=20260911.1">
+<link rel="stylesheet" href="css/voice-agent.css?v=20260912.1">
 <script defer src="js/voice-agent.js?v=20260906.1"></script>
 
-  <link rel="stylesheet" href="css/brand-system.css?v=20260910.4">
-  <script defer src="js/ux-system.js?v=20260910.1"></script>
+  <script defer src="js/ux-system.js?v=20260913.2"></script>
   <script src="js/mobile-capture.js"></script>
   <script src="js/mobile-enhance.js"></script>
 </body>
 </html>
+
+
+
+
+
+

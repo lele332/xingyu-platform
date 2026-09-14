@@ -7,7 +7,32 @@
   "use strict";
 
   const REGION_ID = "xyToastRegion";
-  const MORE_KEY = "xingyu_nav_more_open";
+
+  /* ---------- 侧边栏语义分组（2026-09-13 重构） ----------
+     旧实现把 5 个核心项之外的 16 个入口全部塞进一个折叠的「扩展能力」里：
+     分组语义丢了，用户找「跑步」要先猜它在“更多”里。
+     现在按用户心智分成 6 组，顺序与默认开合在这里集中定义，
+     index.html 里的 data-group 必须和这份表对齐。 */
+  const GROUP_KEY = "xingyu_nav_groups";
+  const LEGACY_MORE_KEY = "xingyu_nav_more_open";   // 旧「扩展能力」开关，启动时清掉
+  const NAV_GROUPS = {
+    study:   { open: true  },   // 学习：课程作业 / 考试日程 / 专注学习 / 笔记库 / 文献 / 成长档案
+    ai:      { open: true  },   // AI 智能体：AI 助手 / AI 语音 / A.R.I.A
+    health:  { open: true  },   // 运动健康：跑步训练 / 训练营 / 解压舱
+    life:    { open: false },   // 生活：天气 / 热点新闻 / 工具箱
+    gallery: { open: false }    // 灵感画廊：5 个展示模块（手机端整组隐藏）
+  };
+  const CARET_SVG = '<svg class="xy-group-caret" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>';
+
+  function readGroupState() {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(GROUP_KEY) || "null");
+      return parsed && typeof parsed === "object" ? parsed : {};
+    } catch (e) { return {}; }
+  }
+  function writeGroupState(state) {
+    try { localStorage.setItem(GROUP_KEY, JSON.stringify(state)); } catch (e) {}
+  }
 
   function createToastRegion() {
     let region = document.getElementById(REGION_ID);
@@ -69,20 +94,59 @@
     return document.querySelector(selector);
   }
 
-  function openMoreIfNeeded(nav) {
+  function groupOf(el) {
+    return el && el.closest ? el.closest(".nav-group.xy-group") : null;
+  }
+
+  /* 折叠/展开之后要补算两件事：
+     ① 侧边栏上下渐隐遮罩 —— app.js 的 updateNavScrollHints 只听 scroll/resize，
+        这里派发一个 scroll 事件借它的手重算，不必把私有函数暴露成全局；
+     ② 高亮滑块 .nav-pill —— anim.js 用 rect 差值定位，分组高度一变就会偏。
+     都得等 grid-template-rows 过渡结束再算，动画期间位置一直在变。 */
+  function syncAfterLayout(group) {
+    const nav = group.closest(".sidebar-nav");
     if (!nav) return;
-    const group = nav.closest(".nav-group.xy-secondary");
+    let settled = false;
+    const settle = () => {
+      if (settled) return;
+      settled = true;
+      nav.dispatchEvent(new Event("scroll"));
+      const active = nav.querySelector(".nav-item.active");
+      if (active && window.Anim && typeof Anim.navPillTo === "function") {
+        try { Anim.navPillTo(active.dataset.view, false); } catch (e) {}
+      }
+    };
+    const body = group.querySelector(":scope > .xy-group-body");
+    if (body) body.addEventListener("transitionend", settle, { once: true });
+    setTimeout(settle, 480);   // 过渡被打断/不支持时的兜底
+  }
+
+  function setGroupOpen(group, open, persist) {
     if (!group) return;
-    group.classList.add("xy-open");
-    const toggle = group.previousElementSibling;
-    if (toggle && toggle.classList.contains("xy-more-toggle")) toggle.setAttribute("aria-expanded", "true");
-    try { localStorage.setItem(MORE_KEY, "1"); } catch (e) {}
+    const key = group.dataset.group;
+    const wasOpen = !group.classList.contains("xy-collapsed");
+    open = !!open;
+    group.classList.toggle("xy-collapsed", !open);
+    const head = group.querySelector(":scope > .nav-group-head");
+    if (head) head.setAttribute("aria-expanded", String(open));
+    if (persist !== false && key) {
+      const state = readGroupState();
+      state[key] = open ? 1 : 0;
+      writeGroupState(state);
+    }
+    if (wasOpen !== open) syncAfterLayout(group);
+  }
+
+  // 目标入口若在收起的组里，先展开再点，否则高亮会落在看不见的地方。
+  function openGroupOf(el) {
+    const group = groupOf(el);
+    if (group) setGroupOpen(group, true);
   }
 
   function goTo(view, camp, extra) {
     const nav = findNav(view, camp);
     if (!nav) return false;
-    openMoreIfNeeded(nav);
+    openGroupOf(nav);
     nav.click();
     if (extra && typeof extra === "function") setTimeout(extra, 260);
     return true;
@@ -90,73 +154,105 @@
 
   window.XingyuUX.goTo = goTo;
 
-  function installProgressiveNav() {
-    const sidebarNav = document.querySelector("#sidebar .sidebar-nav");
-    if (!sidebarNav || sidebarNav.dataset.xyProgressive === "1") return;
-    sidebarNav.dataset.xyProgressive = "1";
-
-    const coreViews = ["dashboard", "courses", "focus", "notes", "ai"];
-    const allItems = Array.from(sidebarNav.querySelectorAll(".nav-item"));
-    const coreItems = coreViews
-      .map(view => allItems.find(item => item.dataset.view === view && !item.dataset.camp))
-      .filter(Boolean);
-
-    const secondaryGroup = document.createElement("div");
-    secondaryGroup.id = "xyMoreNav";
-    secondaryGroup.className = "nav-group xy-secondary";
-    const secondaryInner = document.createElement("div");
-    secondaryInner.className = "xy-secondary-inner";
-    const secondaryLabel = document.createElement("div");
-    secondaryLabel.className = "nav-group-label";
-    secondaryLabel.textContent = "扩展能力";
-    secondaryInner.appendChild(secondaryLabel);
-    secondaryGroup.appendChild(secondaryInner);
-
-    // 非 Core 能力全部移动到渐进区；原分组只在一级导航造成 21 个入口时才暴露复杂度。
-    allItems.forEach(item => {
-      if (!coreItems.includes(item)) secondaryInner.appendChild(item);
+  /* 分组计数徽标要数「当前视口下真的看得见」的入口：
+     移动端 CSS 会隐藏 aria / toolknit（桌面端全显示），
+     徽标若按 DOM 数量写死，手机上就会出现「标 3 个、只列 2 个」的错位。
+     只看 display，不看 visibility：折叠态是靠 .xy-group-body 的 visibility 做的，
+     要是连它一起算，收起的组就会显示 0。 */
+  function updateGroupCounts(nav) {
+    if (!nav) return;
+    nav.querySelectorAll(":scope > .nav-group").forEach(group => {
+      const badge = group.querySelector(":scope > .nav-group-head > .xy-group-count");
+      if (!badge) return;
+      const visible = Array.from(group.querySelectorAll(".nav-item"))
+        .filter(item => getComputedStyle(item).display !== "none").length;
+      badge.textContent = String(visible);
+      badge.style.display = visible ? "" : "none";
     });
-
-    const firstGroup = sidebarNav.querySelector(":scope > .nav-group");
-    if (firstGroup) {
-      const coreSet = new Set(coreItems);
-      Array.from(firstGroup.querySelectorAll(".nav-item")).forEach(item => {
-        if (!coreSet.has(item)) item.remove();
-      });
-      coreItems.forEach(item => firstGroup.appendChild(item));
-    }
-
-    // 清空并移除旧分组，避免产生空标题。
-    Array.from(sidebarNav.querySelectorAll(":scope > .nav-group")).forEach(group => {
-      if (group === firstGroup) return;
-      if (!group.querySelector(".nav-item")) group.remove();
-      else secondaryInner.appendChild(group);
-    });
-
-    const toggle = document.createElement("button");
-    toggle.type = "button";
-    toggle.className = "xy-more-toggle";
-    toggle.setAttribute("aria-expanded", "false");
-    toggle.setAttribute("aria-controls", "xyMoreNav");
-    toggle.innerHTML = `<span>更多能力</span><svg class="xy-more-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>`;
-    toggle.addEventListener("click", () => {
-      const open = !secondaryGroup.classList.contains("xy-open");
-      secondaryGroup.classList.toggle("xy-open", open);
-      toggle.setAttribute("aria-expanded", String(open));
-      try { localStorage.setItem(MORE_KEY, open ? "1" : "0"); } catch (e) {}
-    });
-
-    sidebarNav.appendChild(toggle);
-    sidebarNav.appendChild(secondaryGroup);
-
-    let storedOpen = false;
-    try { storedOpen = localStorage.getItem(MORE_KEY) === "1"; } catch (e) {}
-    const activeInMore = secondaryGroup.querySelector(".nav-item.active");
-    if (activeInMore || storedOpen) {
-      secondaryGroup.classList.add("xy-open");
-      toggle.setAttribute("aria-expanded", "true");
-    }
   }
+
+  function installSemanticNav() {
+    const sidebarNav = document.querySelector("#sidebar .sidebar-nav");
+    if (!sidebarNav || sidebarNav.dataset.xySemantic === "1") return;
+    sidebarNav.dataset.xySemantic = "1";
+    try { localStorage.removeItem(LEGACY_MORE_KEY); } catch (e) {}
+
+    const stored = readGroupState();
+
+    Array.from(sidebarNav.querySelectorAll(":scope > .nav-group.xy-group")).forEach(group => {
+      const key = group.dataset.group;
+      const label = group.querySelector(":scope > .nav-group-label");
+      const items = Array.from(group.querySelectorAll(":scope > .nav-item"));
+      // 没有分组标题 = 置顶组（今日），不参与折叠，保证一进平台就能看到。
+      if (!label || !items.length) return;
+
+      const conf = NAV_GROUPS[key] || { open: true };
+      const open = stored[key] == null ? conf.open : (stored[key] === 1 || stored[key] === true);
+
+      // 分组标题升级成可点的折叠头；label 元素本体保留（applyI18n 靠 data-i18n 找它，
+      // 而它会整体覆盖 textContent，所以小箭头必须是兄弟节点、不能塞进 label 里）。
+      const head = document.createElement("button");
+      head.type = "button";
+      head.className = "nav-group-head";
+      head.setAttribute("aria-controls", "xyNavBody-" + key);
+      head.setAttribute("aria-expanded", String(open));
+
+      const count = document.createElement("span");
+      count.className = "xy-group-count";
+      count.setAttribute("aria-hidden", "true");
+      count.textContent = String(items.length);
+
+      group.insertBefore(head, label);
+      head.append(label, count);
+      head.insertAdjacentHTML("beforeend", CARET_SVG);
+
+      const body = document.createElement("div");
+      body.className = "xy-group-body";
+      body.id = "xyNavBody-" + key;
+      const inner = document.createElement("div");
+      inner.className = "xy-group-inner";
+      body.appendChild(inner);
+      // 移动节点不会丢事件监听，app.js / anim.js 早先绑好的行为全部保留。
+      items.forEach(item => inner.appendChild(item));
+      group.appendChild(body);
+
+      group.classList.toggle("xy-collapsed", !open);
+      head.addEventListener("click", () => {
+        setGroupOpen(group, group.classList.contains("xy-collapsed"));
+      });
+    });
+
+    watchActiveGroup(sidebarNav);
+    const active = sidebarNav.querySelector(".nav-item.active");
+    if (active) openGroupOf(active);
+
+    updateGroupCounts(sidebarNav);
+    // 视口一变（转屏 / 拖窗口跨过 820px 断点）隐藏项就变，徽标得跟着重算
+    let countTimer = null;
+    window.addEventListener("resize", () => {
+      clearTimeout(countTimer);
+      countTimer = setTimeout(() => updateGroupCounts(sidebarNav), 160);
+    });
+    // 字体 / i18n 落定后再校准一次，避免首帧算在旧布局上
+    setTimeout(() => updateGroupCounts(sidebarNav), 1200);
+  }
+
+  /* 程序化切视图（app.js switchView、app-shell.js 的深链、快捷操作 goTo）
+     不经过我们的 click，用 MutationObserver 兜底：
+     高亮项落在收起的组里就自动展开，用户不会以为“切了没反应”。 */
+  function watchActiveGroup(nav) {
+    if (typeof MutationObserver !== "function") return;
+    let busy = false;
+    new MutationObserver(() => {
+      if (busy) return;
+      const group = groupOf(nav.querySelector(".nav-item.active"));
+      if (!group || !group.classList.contains("xy-collapsed")) return;
+      busy = true;
+      setGroupOpen(group, true);
+      requestAnimationFrame(() => { busy = false; });
+    }).observe(nav, { subtree: true, attributes: true, attributeFilter: ["class"] });
+  }
+
   const QUICK_ACTIONS = [
     { action: "new-task", label: "新建任务", icon: "＋", className: "primary" },
     { action: "start-pomo", label: "开始专注", icon: "◎" },
@@ -224,11 +320,9 @@
   }
 
   function boot() {
-    installProgressiveNav();
+    installSemanticNav();
     installQuickActions();
     installClickFeedback();
-    const active = document.querySelector(".nav-item.active");
-    if (active) openMoreIfNeeded(active);
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, { once: true });

@@ -205,7 +205,10 @@
     navPillTo: function (view, animate) {
       if (!Anim._pillCtx) return;
       var p = Anim._pillCtx;
-      var item = p.nav.querySelector('.nav-item[data-view="' + view + '"]');
+      // data-view 可能对应多个入口（跑步训练 / 训练营共用 running）：
+      // 优先取当前 .active 的那一个，滑块才不会跳到同名的另一项上。
+      var item = p.nav.querySelector('.nav-item.active[data-view="' + view + '"]')
+              || p.nav.querySelector('.nav-item[data-view="' + view + '"]');
       if (!item) return;
       // 相对 sidebar-nav 的准确坐标（不分组、含滚动位置）
       var nr = p.nav.getBoundingClientRect();

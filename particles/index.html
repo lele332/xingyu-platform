@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>星屿 · 粒子星云</title>
+<style>
+  :root { --bg:#0b0c10; --ink:#e8ecf4; --muted:rgba(232,236,244,.55); --line:rgba(232,236,244,.14); }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:var(--bg); overflow:hidden; font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; color:var(--ink); }
+  #scene { position:fixed; inset:0; width:100vw; height:100vh; display:block; }
+  .vignette { position:fixed; inset:0; pointer-events:none; z-index:2; background:radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.5) 100%); }
+  .grain { position:fixed; inset:-50%; pointer-events:none; z-index:3; opacity:.05; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); animation:grain 0.9s steps(4) infinite; }
+  @keyframes grain { 0%{transform:translate(0,0)} 25%{transform:translate(-2%,1%)} 50%{transform:translate(1%,-1%)} 75%{transform:translate(-1%,2%)} 100%{transform:translate(0,0)} }
+  .hud { position:fixed; z-index:4; top:0; left:0; right:0; padding:22px 26px; display:flex; justify-content:space-between; align-items:center; pointer-events:none; }
+  .hud .brand { font-size:12px; letter-spacing:.34em; text-transform:uppercase; }
+  .hud .brand b { font-weight:600; }
+  .hud .tag { font-size:10px; letter-spacing:.22em; color:var(--muted); text-transform:uppercase; }
+  .hint { position:fixed; z-index:4; bottom:22px; left:0; right:0; text-align:center; font-size:10px; letter-spacing:.3em; color:var(--muted); text-transform:uppercase; pointer-events:none; }
+  .hint .dot { display:inline-block; width:4px; height:4px; border-radius:50%; background:currentColor; margin:0 8px; vertical-align:middle; opacity:.7; }
+  .loader { position:fixed; inset:0; z-index:10; background:var(--bg); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px; transition:opacity .8s ease; }
+  .loader.hide { opacity:0; pointer-events:none; }
+  .loader .word { font-size:12px; letter-spacing:.5em; text-transform:uppercase; color:var(--muted); }
+  .loader .bar { width:220px; height:1px; background:var(--line); position:relative; overflow:hidden; }
+  .loader .bar::after { content:""; position:absolute; inset:0; background:var(--ink); transform:scaleX(0); transform-origin:left; animation:load 1.6s var(--ease-out) forwards; }
+  @keyframes load { to { transform:scaleX(1); } }
+  .loader .enter { margin-top:6px; padding:11px 34px; border:1px solid var(--line); background:transparent; color:var(--ink); font:inherit; font-size:11px; letter-spacing:.4em; text-transform:uppercase; cursor:pointer; transition:all .3s ease; }
+  .loader .enter:hover { background:var(--ink); color:var(--bg); }
+  @media (max-width:640px){ .hud{ padding:18px 16px; } .hud .tag{ display:none; } }
+</style>
+</head>
+<body>
+  <canvas id="scene"></canvas>
+  <div class="vignette"></div>
+  <div class="grain"></div>
+
+  <div class="hud">
+    <div class="brand">星屿 · <b>粒子星云</b></div>
+    <div class="tag">WebGL · Mouse Interaction</div>
+  </div>
+  <div class="hint">移动鼠标 <span class="dot"></span> 扰动粒子 <span class="dot"></span> 进站自动聚合</div>
+
+  <div class="loader" id="loader">
+    <div class="word">Loading Particles</div>
+    <div class="bar"></div>
+    <button class="enter" id="enter" type="button">Enter</button>
+  </div>
+
+  <script type="module">
+    import * as THREE from './three.module.js?v=20260816.4';
+
+    const COUNT = 3600;
+    const canvas = document.getElementById('scene');
+    const loader = document.getElementById('loader');
+    const enterBtn = document.getElementById('enter');
+
+    let renderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:false, powerPreference:'high-performance' });
+    } catch (e) {
+      document.body.innerHTML = '<div style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;padding:24px;text-align:center"><div style="font-size:22px">⚠️</div><div style="font-size:12px;letter-spacing:.22em;color:#8a8a8a">当前环境不支持 WebGL，粒子星云无法渲染</div><button type="button" onclick="location.reload()" style="margin-top:6px;padding:10px 26px;border:1px solid rgba(255,255,255,.2);background:transparent;color:#fff;font:inherit;font-size:11px;letter-spacing:.3em;cursor:pointer">重试</button></div>';
+      throw e;
+    }
+
+    renderer.setPixelRatio(Math.min(devicePixelRatio||1, 2));
+    renderer.setSize(innerWidth, innerHeight);
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0b0c10);
+    const camera = new THREE.PerspectiveCamera(45, innerWidth/innerHeight, 0.1, 100);
+    camera.position.set(0, 0, 5.2);
+
+    function rnd(i, n=0){ const x = Math.sin((i+1)*127.1 + (n+1)*311.7)*43758.5453123; return x - Math.floor(x); }
+
+    const scattered = new Float32Array(COUNT*3);
+    for (let i=0;i<COUNT;i++){
+      const r = Math.pow(rnd(i,1), 0.6) * 3.2;
+      const th = rnd(i,2) * Math.PI * 2;
+      const ph = Math.acos(2*rnd(i,3)-1);
+      scattered[i*3] = r*Math.sin(ph)*Math.cos(th);
+      scattered[i*3+1] = r*Math.sin(ph)*Math.sin(th);
+      scattered[i*3+2] = r*Math.cos(ph);
+    }
+
+    const target = new Float32Array(COUNT*3);
+    const colors = new Float32Array(COUNT*3);
+    const sphereN = Math.floor(COUNT*0.68);
+    const gold = new THREE.Color(0xffd9a0);
+    const cyan = new THREE.Color(0x7fd8ff);
+    const white = new THREE.Color(0xeef4ff);
+    for (let i=0;i<COUNT;i++){
+      let x,y,z, kind;
+      if (i < sphereN){
+        const g = Math.PI*(3-Math.sqrt(5));
+        const yy = 1 - (i/(sphereN-1))*2;
+        const rad = Math.sqrt(Math.max(0,1-yy*yy));
+        const th = g*i;
+        const R = 1.15;
+        x = Math.cos(th)*rad*R; y = yy*R; z = Math.sin(th)*rad*R;
+        kind = 0;
+      } else {
+        const u = rnd(i,4)*Math.PI*2;
+        const v = rnd(i,5)*Math.PI*2;
+        const Rr = 1.85, rr = 0.16;
+        x = (Rr + rr*Math.cos(v))*Math.cos(u);
+        y = rr*Math.sin(v)*1.4;
+        z = (Rr + rr*Math.cos(v))*Math.sin(u);
+        kind = 1;
+      }
+      target[i*3]=x; target[i*3+1]=y; target[i*3+2]=z;
+      const t = rnd(i,6);
+      const c = kind===0 ? gold.clone().lerp(white, t*0.6) : cyan.clone().lerp(white, t*0.5);
+      colors[i*3]=c.r; colors[i*3+1]=c.g; colors[i*3+2]=c.b;
+    }
+
+    const sizes = new Float32Array(COUNT);
+    const delays = new Float32Array(COUNT);
+    for (let i=0;i<COUNT;i++){
+      sizes[i] = 0.7 + rnd(i,7)*1.6;
+      delays[i] = rnd(i,8)*0.55;
+    }
+
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(scattered, 3));
+    geometry.setAttribute('aTarget', new THREE.BufferAttribute(target, 3));
+    geometry.setAttribute('aColor', new THREE.BufferAttribute(colors, 3));
+    geometry.setAttribute('aSize', new THREE.BufferAttribute(sizes, 1));
+    geometry.setAttribute('aDelay', new THREE.BufferAttribute(delays, 1));
+
+    const material = new THREE.ShaderMaterial({
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      uniforms: {
+        uTime: { value: 0 },
+        uMorph: { value: 0 },
+        uMouse: { value: new THREE.Vector2(0,0) },
+        uHover: { value: 0 }
+      },
+      vertexShader: `
+        attribute vec3 aTarget;
+        attribute vec3 aColor;
+        attribute float aSize;
+        attribute float aDelay;
+        varying vec3 vColor;
+        varying float vAlpha;
+        uniform float uTime;
+        uniform float uMorph;
+        uniform vec2 uMouse;
+        uniform float uHover;
+        float smoother(float t){ return t*t*t*(t*(t*6.0-15.0)+10.0); }
+        void main(){
+          float local = clamp((uMorph - aDelay) / (1.0 - aDelay*0.72), 0.0, 1.0);
+          local = smoother(local);
+          vec3 p = mix(position, aTarget, local);
+          p.x += sin(uTime*0.35 + position.y*3.0 + aDelay*12.0)*0.02;
+          p.y += cos(uTime*0.29 + position.x*2.0 + aDelay*9.0)*0.018;
+          p.z += sin(uTime*0.24 + position.z*2.2)*0.012;
+          vec2 md = p.xy - uMouse;
+          float d = length(md);
+          float force = (1.0 - smoothstep(0.0, 0.55, d)) * 0.22 * (0.4 + uHover*0.6);
+          p.xy += normalize(md + 0.0001) * force;
+          vec4 mv = modelViewMatrix * vec4(p, 1.0);
+          gl_Position = projectionMatrix * mv;
+          gl_PointSize = aSize * (26.0 / -mv.z);
+          vColor = aColor;
+          vAlpha = 0.85;
+        }
+      `,
+      fragmentShader: `
+        precision highp float;
+        varying vec3 vColor;
+        varying float vAlpha;
+        void main(){
+          vec2 uv = gl_PointCoord - 0.5;
+          float d = length(uv);
+          float core = 1.0 - smoothstep(0.12, 0.5, d);
+          float sparkle = (1.0 - smoothstep(0.0, 0.18, d)) * 0.4;
+          float alpha = (core*0.75 + sparkle) * vAlpha;
+          if (alpha < 0.015) discard;
+          gl_FragColor = vec4(vColor, alpha);
+        }
+      `
+    });
+
+    const points = new THREE.Points(geometry, material);
+    scene.add(points);
+
+    const mouse = new THREE.Vector2(999,999);
+    let hover = 0;
+    addEventListener('pointermove', e => {
+      mouse.x = (e.clientX / innerWidth) * 2 - 1;
+      mouse.y = -(e.clientY / innerHeight) * 2 + 1;
+      hover = 1;
+    });
+    addEventListener('pointerleave', () => { mouse.set(999,999); hover = 0; });
+
+    addEventListener('resize', () => {
+      camera.aspect = innerWidth/innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+    });
+
+    enterBtn.addEventListener('click', () => {
+      loader.classList.add('hide');
+      setTimeout(() => loader.remove(), 900);
+    });
+    setTimeout(() => { if (loader) { loader.classList.add('hide'); setTimeout(()=>loader.remove(),900); } }, 1800);
+
+    const clock = new THREE.Clock();
+    let el = 0;
+    function tick(){
+      requestAnimationFrame(tick);
+      const t = clock.getElapsedTime();
+      el = Math.min(1, el + 0.0045);
+      const ease = 1 - Math.pow(1 - el, 3);
+      material.uniforms.uTime.value = t;
+      material.uniforms.uMorph.value = ease;
+      material.uniforms.uMouse.value.copy(mouse);
+      material.uniforms.uHover.value += (hover - material.uniforms.uHover.value) * 0.08;
+      renderer.render(scene, camera);
+    }
+    tick();
+  </script>
+</body>
+</html>

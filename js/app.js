@@ -234,7 +234,8 @@ const App = (() => {
   // 实测：逐个点过去堆内存 3.9MB → 21.9MB 且单调不回落，因为这些 iframe 加载后
   // 从不销毁。切走时置 about:blank 释放其 JS 堆，切回时还原 src。
   // 原始地址存 data-iframe-src，避免硬编码到 JS 里。
-  const IFRAME_VIEWS = ["toolknit", "nexus", "prisma", "securify", "foldcraft", "particles", "aria"];
+  // 2026-09-14：解压舱（relax）的游戏仓 iframe 也纳入统一的懒加载/卸载管理。
+  const IFRAME_VIEWS = ["toolknit", "nexus", "prisma", "securify", "foldcraft", "particles", "aria", "relax"];
   let _iframeUnloadTimer = null;
 
   function primeIframeSrcs() {
@@ -262,6 +263,37 @@ const App = (() => {
     if (want && frame.getAttribute("src") !== want) frame.setAttribute("src", want);
   }
 
+  /* ⚠️ 2026-09-14：GitHub Pages 上没有 /gamehub/。
+     游戏仓（20 款本地单机游戏）只存在于本机 D:\星屿游戏仓，由 server.py 代理。
+     永久二维码指向的就是 Pages 站点，用户扫码进来点「解压舱」会看到一个裸 404，
+     误以为平台坏了 —— 这里换成降级说明卡，并禁用「全屏打开」。
+     判定只认 github.io：本机 127.0.0.1 与局域网 IP（http://10.x:8620）都由 server.py
+     提供 /gamehub/，绝不能误降级。 */
+  function gamehubIsStaticMirror() {
+    return /(^|\.)github\.io$/i.test(location.hostname);
+  }
+  function setupGamehubFallback() {
+    if (!gamehubIsStaticMirror()) return;
+    const box = document.getElementById("view-relax");
+    if (!box) return;
+    const frame = box.querySelector("iframe");
+    if (frame) {
+      frame.dataset.iframeSrc = "";                 // loadIframe 见到空值就不会加载
+      frame.setAttribute("src", "about:blank");
+      frame.style.display = "none";
+    }
+    const notice = document.getElementById("gamehubOffline");
+    if (notice) notice.hidden = false;
+    const btn = document.getElementById("btnGamehubFull");
+    if (btn) {
+      btn.disabled = true;
+      btn.style.opacity = ".4";
+      btn.style.cursor = "not-allowed";
+      btn.title = "线上镜像不提供游戏仓";
+      btn.setAttribute("onclick", "");
+    }
+  }
+
   // 侧边栏「跑步训练 / 训练营」两个入口共用 data-view="running"，
   // 高亮要跟着当前 tab 走，否则会出现「两个都亮」或「点了训练营却亮跑步」的错位。
   function syncRunningNavHighlight(onCamp) {
@@ -272,6 +304,13 @@ const App = (() => {
       if (on) n.setAttribute("aria-current", "page");
       else n.removeAttribute("aria-current");
     });
+    // ⚠️ 2026-09-13：两个入口共用 data-view="running"。高亮从「跑步训练」跳到「训练营」时
+    // switchView 常已提前 return（视图未变），它内部那次 600ms 滑块校准也不会跑，
+    // 于是出现「高亮在训练营、滑块还压在跑步训练上」的 45px 错位。
+    // 这里按新的 .active 项主动校准一次（navPillTo 优先取 .active[data-view]，见 anim.js）。
+    if (window.Anim && typeof Anim.navPillTo === "function") {
+      try { Anim.navPillTo("running", true); } catch (e) {}
+    }
   }
 
   /* ⚠️ 2026-09-05：侧边栏装不下，底部 6 个模块用户根本看不到
@@ -321,6 +360,9 @@ const App = (() => {
     const prev = $("#view-" + currentView);
     const prevName = currentView;
     currentView = view;
+    // 超级课程表是独立全屏模块；进入时关闭主区域的 backdrop-filter 包含块，
+    // 否则 position:fixed 会被 main 的毛玻璃“困住”，不能真正铺满原生窗口。
+    document.body.classList.toggle("courses-fullscreen", view === "courses");
     $$(".view").forEach(v => v.classList.remove("active"));
     $$(".nav-item").forEach(n => {
       // ⚠️ 侧边栏有两个 data-view="running"（跑步训练 / 训练营快捷入口），
@@ -408,6 +450,12 @@ const App = (() => {
     }
     else if (currentView === "voice") { if (window.VoxVoice) VoxVoice.render(); }
   }
+
+  /* 超级课表桥接：导入/添加课程后同步刷新星屿已有列表（2026-09-13） */
+  document.addEventListener("xingyu-courses-changed", function () {
+    if (currentView === "courses") renderCourses();
+    if (currentView === "dashboard") renderDashboard();
+  });
 
   /* ---------- 长列表滚动分批浮入（ScrollTrigger） ---------- */
   let _revealCleanup = null;
@@ -3352,6 +3400,34 @@ const App = (() => {
     "aria.start": "Launch A.R.I.A", "aria.gateHint": "Interactive resources load only after the first tap to protect performance."
   });
 
+  /* 2026-09-13 侧边栏语义分组：新的分组标题键。
+     三个 locale 都要给全，缺键会回落 zh 再回落 key 原文（界面会露出 "nav.group.xxx"）。
+     nav.group.study 在此被改写为「学习」——原值「学习资料」已不再是这一组的语义。 */
+  Object.assign(I18N.zh, {
+    "nav.group.study": "学习",
+    "nav.group.ai": "AI 智能体",
+    "nav.group.health": "运动健康",
+    "nav.group.life": "生活",
+    "nav.group.gallery": "灵感画廊",
+    "nav.camp": "训练营"
+  });
+  Object.assign(I18N["zh-Hant"], {
+    "nav.group.study": "學習",
+    "nav.group.ai": "AI 智能體",
+    "nav.group.health": "運動健康",
+    "nav.group.life": "生活",
+    "nav.group.gallery": "靈感畫廊",
+    "nav.camp": "訓練營"
+  });
+  Object.assign(I18N.en, {
+    "nav.group.study": "Study",
+    "nav.group.ai": "AI Agents",
+    "nav.group.health": "Fitness & Health",
+    "nav.group.life": "Life",
+    "nav.group.gallery": "Inspiration",
+    "nav.camp": "Bootcamp"
+  });
+
   function t(key) {
     const lang = document.documentElement.dataset.lang || "zh";
     const d = I18N[lang] || I18N.zh;
@@ -3644,11 +3720,21 @@ const App = (() => {
     grid.className = "qr-grid";
 
     // 左：永久访问
-    grid.appendChild(makeQrCard(
+    // 2026-09-14 修复「永久二维码内容没有更新和同步」：
+    //   ① 旧代码 src 没有 cache-buster，配上服务端 7 天 immutable + SW cache-first，
+    //      这张图会被永久冻在最初那一版；现在每次渲染都带 _t= 强制回源。
+    //   ② 卡片下方显示真实站点地址与本地构建号，扫码前就能看出内容是否已同步。
+    const permNode = makeQrImg("assets/xingyu-qrcode.png?_t=" + Date.now(), "永久二维码", "永久二维码加载失败");
+    const permUrl = document.createElement("div");
+    permUrl.className = "qr-url";
+    permUrl.textContent = DEFAULT_SITE;
+    const permCol = makeQrCard(
       "永久访问 · 功能较少",
       "任何网络可用，不依赖电脑开机。",
-      makeQrImg("xingyu-qrcode.png", "永久二维码", "永久二维码加载失败")
-    ));
+      permNode,
+      permUrl
+    );
+    grid.appendChild(permCol);
 
     // 右：同一 WiFi，手机适配版，走本机完整配置。
     const lanNode = makeQrImg("/qrcode.png?text=" + encodeURIComponent("等待生成"), "手机适配版二维码", "局域网二维码生成失败");
@@ -3666,6 +3752,9 @@ const App = (() => {
     fetch("/api/lan-info", { cache: "no-store" })
       .then(r => r.ok ? r.json() : Promise.reject(r.status))
       .then(info => {
+        // 2026-09-14: 服务端才是 PERM_SITE_URL / BUILD 的唯一真相源，用它校准左侧显示，
+        // 一旦前端常量和服务端配置漂移，这里会立刻暴露出来。
+        if (info && info.site) permUrl.textContent = info.site + (info.build ? "  ·  本地构建 " + info.build : "");
         // bind 还在回环 = 局域网根本没开，扫了也是白扫，直接换成提示。
         if (isLoopbackBind(info.bind)) {
           lanNode.replaceWith(makeQrBlocked(info.bind));
@@ -4459,9 +4548,9 @@ const App = (() => {
     });
 
     // 课程页
-    $("#btnAddCourse").onclick = () => openCourseForm();
+    $("#btnAddCourse").onclick = () => { if (window.XingyuScheduleBridge) window.XingyuScheduleBridge.openManual(); else openCourseForm(); };
     $("#btnAddTask").onclick = () => openTaskForm();
-    $("#btnImportSchedule").onclick = openImportModal;
+    $("#btnImportSchedule").onclick = () => { if (window.XingyuScheduleBridge) window.XingyuScheduleBridge.openImport(); else openImportModal(); };
     // ⚠️ 2026-09-05：这两个筛选下拉框此前只被 renderTaskList() 读值、从未绑定 change，
     // 是死的——用户选了状态/优先级，列表纹丝不动。补上绑定（加判空防元素缺失）。
     const _fs = $("#taskFilterStatus"); if (_fs) _fs.onchange = renderTaskList;
@@ -5211,6 +5300,7 @@ const App = (() => {
     bindEvents();
     // 记录 iframe 子应用的原始地址，供切走卸载 / 切回还原
     primeIframeSrcs();
+    setupGamehubFallback();
     // 滚动期间抑制毛玻璃（侧边栏/顶栏逐帧重采样背景是长时使用卡顿源）
     bindScrollFX();
     // 监听沉浸式专注场景的退出消息（iframe 内点击退出 / 按 Esc 时关闭）
@@ -5333,3 +5423,4 @@ const App = (() => {
 })();
 
 document.addEventListener("DOMContentLoaded", App.init);
+

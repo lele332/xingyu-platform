@@ -15,7 +15,8 @@ __pycache__/
 news/
 scripts/
 xingyu-app.pyw
-xingyu.ico
+# xingyu.ico 2026-09-14 移出忽略名单：index.html 与 sw.js CORE 都引用它，
+# 之前被忽略导致线上 favicon / SW 预缓存 404（内容与 xingyu-apple.ico 完全一致）
 assets/intro-720.mp4
 
 # 本地运行 / 浏览器配置 / 数据 / 大文件（不随仓库发布到 GitHub Pages）
@@ -56,3 +57,50 @@ data/access-token.txt
 data/platform.db
 data/platform-state.json
 
+
+# ---- 2026-09-14 补：本地后端服务 / 模型权重 / 大媒体 / 开发产物 ----
+# 这些只在本机跑，GitHub Pages 用不到，且体积会把仓库撑爆（合计 >150MB）。
+agent-service/
+focus-supervisor/
+synapse-run/
+voxcpm/
+orb/
+backups/
+assets/scenes/
+assets/vrm/
+assets/live2d/
+assets/avatars/*.broken
+data/agent-memory/
+data/server-log.txt
+data/localstorage-migration.json
+tools/__pycache__/
+
+# 运行时生成：局域网码随当前网络变化，不入库（永久码 assets/xingyu-qrcode.png 要入库）
+assets/lan-access-qr.png
+
+# 文档截图（只在交接说明里用，站点不引用）
+assets/synapse-*.png
+assets/vox-*.png
+assets/voice-fixed.png
+
+# 开发 / 调试产物
+*.bak-*
+work-inspect.js
+tests/*.png
+
+# 一次性调试脚本（tests/ 里被 npm run 调用的正式用例仍入库）
+tests/_shot2.js
+tests/gsap-*.js
+tests/nav-pill-*.js
+tests/fx-*.js
+tests/entrance-*.js
+tests/splash-*.js
+tests/sidebar-*.js
+tests/scroll-src.js
+tests/transition-env.js
+tests/usage-jank-diagnose.js
+tests/verify-splash-sequence.js
+tests/artifacts/
+
+# 本机代码同步任务的运行日志（tools/sync_push.py）
+data/sync-log.txt

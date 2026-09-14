@@ -44,7 +44,7 @@
 .btn,
 .quick-action,
 .mobile-nav-item,
-.xy-more-toggle {
+.nav-group-head {
   transition: transform var(--xy-fast) var(--xy-ease),
               background-color var(--xy-fast) var(--xy-ease),
               border-color var(--xy-fast) var(--xy-ease),
@@ -60,11 +60,11 @@
 .btn:active,
 .quick-action:active,
 .mobile-nav-item:active,
-.xy-more-toggle:active {
+.nav-group-head:active {
   transform: scale(.977);
 }
 
-:is(.nav-item, .icon-btn, .side-btn, .text-btn, .btn, .quick-action, .mobile-nav-item, .xy-more-toggle, input, textarea, select, [tabindex]):focus-visible {
+:is(.nav-item, .icon-btn, .side-btn, .text-btn, .btn, .quick-action, .mobile-nav-item, .nav-group-head, input, textarea, select, [tabindex]):focus-visible {
   outline: 0 !important;
   box-shadow: var(--xy-focus) !important;
 }
@@ -107,44 +107,103 @@
 .nav-item.active { color: var(--ink, #eaf6ff); background: color-mix(in srgb, var(--xy-star-deep) 15%, transparent); box-shadow: inset 0 0 0 1px rgba(125,211,252,.18); }
 .nav-item.active::after { opacity: 1; transform: translateY(-50%) scale(1); }
 
-.xy-more-toggle {
+/* ---------- 语义分组导航：分组标题即折叠头（2026-09-13） ----------
+   结构由 js/ux-system.js 在启动时组装：
+     .nav-group.xy-group[data-group="study"]
+       > button.nav-group-head  (.nav-group-label + .xy-group-count + .xy-group-caret)
+       > .xy-group-body > .xy-group-inner > .nav-item…
+   折叠只动 grid-template-rows（0fr ↔ 1fr）和 visibility：
+   故意不碰 opacity / transform —— 那两样会给分组体造出层叠上下文，
+   把 .nav-pill（position:absolute; z-index:0）盖到内容下面，高亮滑块就"消失"了。 */
+.nav-group-head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: calc(100% - 24px);
-  min-height: 40px;
-  margin: 10px 12px 6px;
-  padding: 0 14px;
-  border: 1px solid var(--rule, #2b3b4a);
-  border-radius: 14px;
-  color: var(--ink-2, #9fb0c4);
-  background: transparent;
-  cursor: pointer;
+  gap: 4px;
+  /* 完整接管原 .nav-group-label 的外/内边距，标题文字位置一个像素都不动 */
+  margin: 12px 16px 7px;
+  padding: 0 11px 4px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: inherit;
   font: inherit;
-  font-size: 13px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
-.xy-more-toggle:hover { background: var(--fill, rgba(255,255,255,.06)); }
-.xy-more-caret { transition: transform var(--xy-normal) var(--xy-ease); }
-.xy-more-toggle[aria-expanded="true"] .xy-more-caret { transform: rotate(180deg); }
+.nav-group-head .nav-group-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  transition: opacity var(--xy-fast) var(--xy-ease);
+}
+.nav-group-head:hover .nav-group-label { opacity: .78; }
+.nav-group-head:hover .xy-group-caret { opacity: .6; }
 
-.nav-group.xy-secondary {
-  display: grid;
-  grid-template-rows: 0fr;
-  overflow: hidden;
+/* 收起时才露出条目数，给"这里还藏着东西"一个不说自明的信号 */
+.xy-group-count {
+  flex: 0 0 auto;
+  min-width: 17px;
+  padding: 0 5px;
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--ink-3, #8a8a8a) 15%, transparent);
+  color: var(--ink-3, #8a8a8a);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  line-height: 17px;
+  text-align: center;
   opacity: 0;
-  transform: translateY(-4px);
-  transition: grid-template-rows var(--xy-normal) var(--xy-ease),
-              opacity var(--xy-normal) var(--xy-ease),
-              transform var(--xy-normal) var(--xy-ease);
-  pointer-events: none;
+  transform: scale(.8);
+  transition: opacity var(--xy-fast) var(--xy-ease), transform var(--xy-fast) var(--xy-ease);
 }
-.nav-group.xy-secondary.xy-open {
+.nav-group.xy-collapsed .xy-group-count { opacity: .85; transform: none; }
+
+.xy-group-caret {
+  flex: 0 0 auto;
+  width: 12px;
+  height: 12px;
+  opacity: .28;
+  transition: transform var(--xy-normal) var(--xy-ease), opacity var(--xy-fast) var(--xy-ease);
+}
+.nav-group-head[aria-expanded="true"] .xy-group-caret { transform: rotate(90deg); }
+
+.xy-group-body {
+  display: grid;
   grid-template-rows: 1fr;
-  opacity: 1;
-  transform: none;
-  pointer-events: auto;
+  visibility: visible;
+  transition: grid-template-rows var(--xy-slow, .34s) var(--xy-ease), visibility 0s;
 }
-.xy-secondary-inner { min-height: 0; overflow: hidden; }
+.nav-group.xy-collapsed > .xy-group-body {
+  grid-template-rows: 0fr;
+  /* visibility 延迟到折叠动画放完再切：收起后条目立刻退出 Tab 序，但动画不打断 */
+  visibility: hidden;
+  transition: grid-template-rows var(--xy-slow, .34s) var(--xy-ease),
+              visibility 0s linear var(--xy-slow, .34s);
+}
+.xy-group-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;                 /* 对齐 apple.css 的 .nav-group { gap: 3px } */
+  min-height: 0;
+  overflow: hidden;
+  /* 负外边距 + 等量内边距：把裁剪框左右各放宽 6px，
+     否则 :focus-visible 的 box-shadow 光圈会被 overflow 齐齐切掉 */
+  padding: 0 6px;
+  margin: 0 -6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xy-group-body,
+  .xy-group-caret,
+  .xy-group-count { transition: none; }
+}
+
+/* 手机镜像模式：mobile-patch.css 已把画廊 5 个入口 display:none，
+   这里连分组标题一起收掉，否则会留下一个点开空无一物的"灵感画廊"。 */
+@media (max-width: 820px) {
+  .nav-group.xy-group[data-group="gallery"] { display: none; }
+}
 
 /* ---------- 首页高频操作前置 ---------- */
 .quick-actions {
@@ -368,3 +427,4 @@ input[type="text"], input[type="search"], input[type="password"], input[type="em
 .fb-trend-item{display:grid;gap:2px;padding:9px 10px;border-radius:12px;border:1px solid rgba(125,211,252,.12);background:rgba(125,211,252,.07)}
 .fb-trend-item b{font-size:11px;color:rgba(226,238,252,.86)}
 .fb-trend-item i{font-style:normal;font-size:10.5px;color:rgba(226,238,252,.58)}
+

@@ -1,14 +1,15 @@
 // 缓存版本：修改 CORE 或缓存策略时必须递增，否则客户端不会更新
-const CACHE = "xingyu-static-20260911-01";
+const CACHE = "xingyu-static-20260914-04";
 
 // 预缓存清单 = index.html 实际加载的资源（2026-08-28 实测校准）
 // 注意：旧清单里的 js/idb.js、js/backup.js、js/app-core.js、js/views-*.js 均不存在
 const CORE = [
   "./",
   "./index.html",
+  "./schedule.html",
   "./manifest.webmanifest",
   "./xingyu.ico",
-  "./xingyu-qrcode.png",
+  "./assets/xingyu-qrcode.png",
   "./assets/xingyu-app-icon-192.png",
   "./assets/xingyu-app-icon-256.png",
   "./assets/xingyu-app-icon-512.png",
@@ -19,6 +20,7 @@ const CORE = [
   "./css/synapse.css",
   "./css/voxcpm.css",
   "./css/weather-aurora.css",
+  "./css/weather.css",
   "./css/reactbits-fx.css",
   "./css/voice-agent.css",
   "./assets/fonts/local.css",
@@ -30,6 +32,7 @@ const CORE = [
   "./js/anim.js",
   "./js/animefx.js",
   "./js/app.js",
+  "./js/schedule-bridge.js",
   "./js/app-shell.js",
   "./js/reminders.js",
   "./js/mobile-capture.js",
@@ -47,8 +50,15 @@ const CORE = [
   "./js/icons-themes.js",
   "./js/settings-ui.js",
   "./js/reactbits-fx.js",
+  "./js/weather.js",
   "./js/weather-aurora.js",
-  "./js/voice-agent.js"
+  "./js/motivation.js",
+  "./js/knowledge.js",
+  "./js/running.js",
+  "./js/synapse-coach.js",
+  "./js/voxcpm-voice.js",
+  "./js/voice-agent.js",
+  "./js/ux-system.js"
 ];
 
 // 永不缓存：密钥配置 + 体积大的媒体/模型（避免撑爆 Cache Storage）
@@ -62,6 +72,10 @@ const LARGE_MEDIA = /\.(mp4|webm|ogg|ogv|mov|m4a|wav|mp3|flac|bin|pth|onnx|wasm|
 // AIRI 是同源挂载的独立 SPA（/airi/），它的导航请求绝不能被当成星屿主页缓存
 const AIRI_PREFIX = /^\/airi(\/|$)/;
 const DYNAMIC_API = /^\/(api|ai-proxy)\//;
+// 2026-09-14: 二维码图片必须走「网络优先」。旧的通用分支是 cache-first + ignoreSearch，
+// 而 assets/xingyu-qrcode.png 又在 CORE 预缓存里，导致弹窗里的永久二维码永远是最初那一张，
+// 表现为「永久二维码内容没有更新和同步」。
+const QR_ASSETS = /^\/(assets\/)?(xingyu-qrcode|lan-access-qr)\.png$/;
 
 function shouldCache(url) {
   if (NEVER_CACHE.test(url.pathname)) return false;
@@ -151,6 +165,22 @@ self.addEventListener("fetch", event => {
     return;
   }
 
+  // 超级课表是同源 iframe，必须按自身 URL 缓存；否则导航分支会污染 ./index.html。
+  if (url.pathname.endsWith("/schedule.html")) {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          if (response.ok && shouldCache(url)) {
+            const copy = response.clone();
+            caches.open(CACHE).then(cache => cache.put(request, ensureCharset(copy)));
+          }
+          return response;
+        })
+        .catch(() => caches.match(request).then(r => r ? ensureCharset(r) : r))
+    );
+    return;
+  }
+
   if (request.mode === "navigate" || url.pathname.endsWith("/index.html")) {
     event.respondWith(
       fetch(request)
@@ -160,6 +190,22 @@ self.addEventListener("fetch", event => {
           return response;
         })
         .catch(() => caches.match("./index.html").then(r => r ? ensureCharset(r) : r))
+    );
+    return;
+  }
+
+  // 二维码：网络优先，失败才回退缓存
+  if (QR_ASSETS.test(url.pathname)) {
+    event.respondWith(
+      fetch(request, { cache: "no-store" })
+        .then((response) => {
+          if (response.ok) {
+            const copy = response.clone();
+            caches.open(CACHE).then(cache => cache.put(url.pathname, copy));
+          }
+          return response;
+        })
+        .catch(() => caches.match(url.pathname).then(r => r || caches.match(request)))
     );
     return;
   }

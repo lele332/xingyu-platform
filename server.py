@@ -25,10 +25,12 @@ from urllib.parse import parse_qs, unquote, urlsplit
 import platform_db
 
 DEFAULT_PORT = 8620
-BUILD = "20260908.1"
-# 默认只监听本机回环地址（隐私优先，局域网内其他设备无法访问）。
-# 如需手机扫码访问，可在启动前设置环境变量 XINGYU_BIND=0.0.0.0 重新开放局域网。
-BIND_HOST = os.environ.get("XINGYU_BIND", "127.0.0.1").strip() or "127.0.0.1"
+BUILD = "20260914.3"
+# 默认监听 0.0.0.0（局域网开放），手机扫码「配置拉满」版开箱即用。
+# 安全：非回环客户端必须持访问令牌换取 HttpOnly Cookie（见下方安全模式），
+# 令牌持久化在 data/access-token.txt，重启不变，二维码因此长期有效。
+# 如需彻底关闭局域网访问，可设置环境变量 XINGYU_BIND=127.0.0.1。
+BIND_HOST = os.environ.get("XINGYU_BIND", "0.0.0.0").strip() or "0.0.0.0"
 MAX_POST_BYTES = 200 * 1024 * 1024  # 限制请求体 200MB，避免异常超大请求拖垮内存
 FEEDBACK_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "feedback")
 MAX_FEEDBACK_BYTES = 1024 * 1024      # 反馈报告最大 1MB
@@ -41,6 +43,13 @@ DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
 STATE_PATH = os.path.join(DATA_DIR, "platform-state.json")
 MAX_STATE_BYTES = 20 * 1024 * 1024    # 平台实时状态最大 20MB
 HEALTH_PATH = "/__xingyu_health__"
+# 2026-09-14: 前端诊断上报端点。天气等模块在真机里卡住时，页面把现场信息 POST 到这里，
+#              落盘 data/diag.log，便于事后定位（本机 headless 复现不了的 bug 靠它抓现场）。
+DIAG_PATH = "/api/diag"
+DIAG_LOG = os.path.join(DATA_DIR, "diag.log")
+MAX_DIAG_BYTES = 64 * 1024        # 单条上报最大 64KB
+MAX_DIAG_LOG_BYTES = 2 * 1024 * 1024  # diag.log 超过 2MB 自动截断保留后半段
+GAMEHUB_DIR = r"D:\星屿游戏仓"
 
 # ============ 局域网访问安全模式 ============
 # 本机访问始终放行；当服务绑定到非回环地址（例如手机扫码访问）时，
@@ -141,7 +150,35 @@ def _write_lan_qr_asset(port=None):
     except Exception:
         return ""
 
+
+# 永久访问站点（GitHub Pages 部署）。URL 恒定不变，二维码内容因此永不过期；
+# 每次启动都重新落盘，彻底解决「更新后二维码消失」（此前该文件从未存在于磁盘，
+# 全靠 Service Worker 旧缓存撑着，缓存一失效就是 404）。
+PERM_SITE_URL = os.environ.get("XINGYU_SITE_URL", "https://lele332.github.io/xingyu-platform/")
+
+
+def _write_perm_qr_asset():
+    """启动时生成「永久访问」二维码。双写：assets/（新引用路径）+ 根目录（旧 SW 缓存清单兼容）。"""
+    if not PERM_SITE_URL:
+        return ""
+    try:
+        root = os.path.dirname(os.path.abspath(__file__))
+        qr = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_M, box_size=8, border=3)
+        qr.add_data(PERM_SITE_URL)
+        qr.make(fit=True)
+        img = qr.make_image(fill_color="black", back_color="white")
+        for rel in ("assets/xingyu-qrcode.png", "xingyu-qrcode.png"):
+            try:
+                img.save(os.path.join(root, rel), format="PNG")
+            except Exception:
+                pass
+        return os.path.join(root, "assets", "xingyu-qrcode.png")
+    except Exception:
+        return ""
+
 NO_CACHE_EXTS = {".html", ".htm", ".js", ".css", ".json", ".map", ".svg", ".xml", ".webmanifest"}
+# 二维码图片：内容会随启动重算，绝不能被 7 天 immutable 缓存冻住
+QR_ASSET_PATHS = {"/xingyu-qrcode.png", "/assets/xingyu-qrcode.png", "/assets/lan-access-qr.png"}
 LONG_CACHE_EXTS = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".ico", ".mp3", ".mp4", ".webm", ".woff", ".woff2", ".ttf"}
 
 # ============ VoxCPM 同源代理（绕开浏览器 CORS） ============
@@ -560,6 +597,86 @@ def _send_json(handler, status, data):
     handler.send_header("Content-Length", str(len(payload)))
     handler.end_headers()
     handler.wfile.write(payload)
+
+
+def _diag_rotate():
+    """diag.log 超过上限时只保留后半段，避免无限增长。"""
+    try:
+        if os.path.getsize(DIAG_LOG) <= MAX_DIAG_LOG_BYTES:
+            return
+        with open(DIAG_LOG, "rb") as f:
+            f.seek(-MAX_DIAG_LOG_BYTES // 2, os.SEEK_END)
+            tail = f.read()
+        cut = tail.find(b"\n")
+        if cut >= 0:
+            tail = tail[cut + 1:]
+        with open(DIAG_LOG, "wb") as f:
+            f.write(tail)
+    except Exception:
+        pass
+
+
+def _diag_post(handler):
+    """接收前端诊断上报，追加写入 data/diag.log。"""
+    if not handler._authorized():
+        handler.send_error(401, "Unauthorized")
+        return
+    try:
+        length = int(handler.headers.get("Content-Length", 0) or 0)
+    except ValueError:
+        handler.send_error(400, "Bad Request")
+        return
+    if length > MAX_DIAG_BYTES:
+        handler.send_error(413, "Payload Too Large")
+        return
+    body = handler.rfile.read(length) if length > 0 else b""
+    try:
+        info = json.loads(body.decode("utf-8", "replace")) if body else {}
+    except Exception:
+        info = {"raw": body.decode("utf-8", "replace")[:2000]}
+    line = json.dumps({
+        "t": datetime.now().isoformat(timespec="seconds"),
+        "ua": (handler.headers.get("User-Agent") or "")[:200],
+        "ip": handler.address_string(),
+        "data": info,
+    }, ensure_ascii=False)
+    try:
+        os.makedirs(DATA_DIR, exist_ok=True)
+        with open(DIAG_LOG, "a", encoding="utf-8") as f:
+            f.write(line + "\n")
+        _diag_rotate()
+    except Exception as exc:
+        _send_json(handler, 500, {"ok": False, "error": str(exc)})
+        return
+    _send_json(handler, 200, {"ok": True})
+
+
+def _diag_get(handler):
+    """读取最近的诊断日志（仅本机），默认最后 200 条。"""
+    if not handler._is_loopback_client():
+        handler.send_error(403, "Forbidden")
+        return
+    qs = parse_qs(urlsplit(handler.path).query)
+    try:
+        n = max(1, min(2000, int(qs.get("n", ["200"])[0])))
+    except ValueError:
+        n = 200
+    lines = []
+    try:
+        with open(DIAG_LOG, "r", encoding="utf-8", errors="replace") as f:
+            lines = f.read().splitlines()[-n:]
+    except FileNotFoundError:
+        pass
+    except Exception as exc:
+        _send_json(handler, 500, {"ok": False, "error": str(exc)})
+        return
+    items = []
+    for ln in lines:
+        try:
+            items.append(json.loads(ln))
+        except Exception:
+            items.append({"raw": ln[:2000]})
+    _send_json(handler, 200, {"ok": True, "count": len(items), "items": items})
 
 
 def _backup_files():
@@ -1114,8 +1231,48 @@ class XingyuHandler(http.server.SimpleHTTPRequestHandler):
         self.send_header("Content-Length", "0")
         self.end_headers()
 
+    @staticmethod
+    def _is_gamehub(path):
+        return path == "/gamehub" or path.startswith("/gamehub/")
+
+    def _serve_gamehub(self, method):
+        """把 /gamehub/* 映射到 GAMEHUB_DIR 后交给 SimpleHTTPRequestHandler。
+
+        ⚠️ 历史 bug（2026-09-14 修复，务必保留 try/finally）：
+        旧实现直接 `self.directory = GAMEHUB_DIR` 且从不还原。本服务是
+        `protocol_version = "HTTP/1.1"` + ThreadingHTTPServer，**同一个 handler
+        实例会在一条 keep-alive 连接上连续服务几十个请求**，于是只要浏览器
+        在这条连接上访问过一次游戏仓，之后同连接上的主应用静态资源
+        （js/weather.js、js/app.js、css/style.css、index.html …）全部被按
+        D:\\星屿游戏仓 解析 -> 404。
+        实测后果：js/weather.js 404 -> window.Weather 永远不存在 ->
+        天气界面永久停在「正在获取实时天气…」（干净浏览器不复现，因为
+        干净浏览器没访问过 /gamehub，连接没被污染）。
+        """
+        rel = urlsplit(self.path).path[len("/gamehub"):] or "/"
+        if rel.startswith("/"):
+            rel = rel[1:]
+        qs = urlsplit(self.path).query
+        saved_path, saved_dir = self.path, self.directory
+        # end_headers() 需要按“浏览器请求的原始路径”而不是改写后的路径来选 CSP，
+        # 否则 /gamehub/vendor/... 被改写成 /vendor/... 后就匹配不上游戏仓分支了。
+        self._xy_csp_path = urlsplit(self.path).path
+        try:
+            self.path = "/" + rel + (("?" + qs) if qs else "")
+            self.directory = GAMEHUB_DIR
+            if method == "HEAD":
+                super(XingyuHandler, self).do_HEAD()
+            else:
+                super(XingyuHandler, self).do_GET()
+        finally:
+            self.path, self.directory = saved_path, saved_dir
+            self._xy_csp_path = None
+
     def do_GET(self):
         path = urlsplit(self.path).path
+        if self._is_gamehub(path):
+            self._serve_gamehub("GET")
+            return
         if path == HEALTH_PATH:
             payload = json.dumps(
                 {"status": "ok", "service": "xingyu", "build": BUILD},
@@ -1126,6 +1283,9 @@ class XingyuHandler(http.server.SimpleHTTPRequestHandler):
             self.send_header("Content-Length", str(len(payload)))
             self.end_headers()
             self.wfile.write(payload)
+            return
+        if path == DIAG_PATH:
+            _diag_get(self)
             return
         if path == "/api/pet-context":
             _pet_context(self)
@@ -1191,6 +1351,10 @@ class XingyuHandler(http.server.SimpleHTTPRequestHandler):
                 "port": port,
                 "token": ACCESS_TOKEN,
                 "bind": BIND_HOST,
+                # 2026-09-14: 前端二维码弹窗据此显示永久站点真实地址与本地构建号，
+                # 用户一眼能看出「扫出来的网页」和本地是不是同一个版本。
+                "site": PERM_SITE_URL,
+                "build": BUILD,
             }, ensure_ascii=False).encode("utf-8")
             self.send_response(200)
             self.send_header("Content-Type", "application/json; charset=utf-8")
@@ -1467,6 +1631,11 @@ class XingyuHandler(http.server.SimpleHTTPRequestHandler):
         # SimpleHTTPRequestHandler 自带 do_HEAD，不会进入 do_GET；
         # 这里必须重复局域网门禁与敏感数据拦截，否则远程设备可绕过 GET 门禁。
         path = urlsplit(self.path).path
+        if self._is_gamehub(path):
+            # 2026-09-14: 旧实现漏了 gamehub 分支，HEAD /gamehub/* 会去主应用目录
+            # 找文件而必然 404；同时这里也必须走 save/restore，避免污染连接。
+            self._serve_gamehub("HEAD")
+            return
         if path != HEALTH_PATH and path != "/access":
             if not self._authorized():
                 if path in ("/", "/index.html"):
@@ -1496,6 +1665,9 @@ class XingyuHandler(http.server.SimpleHTTPRequestHandler):
             self.send_error(403, "Forbidden")
             return
         path = urlsplit(self.path).path
+        if path == DIAG_PATH:
+            _diag_post(self)
+            return
         if path == "/api/sync/push":
             if not self._authorized():
                 self.send_error(401, "Unauthorized")
@@ -1679,14 +1851,28 @@ class XingyuHandler(http.server.SimpleHTTPRequestHandler):
         if path.startswith("/api/data/"):
             _handle_api_data(self, "DELETE", self.path)
             return
+        # VoxCPM 音色库：删除已保存音色（转发到 8000 适配层）
+        if path.startswith(VOX_PROXY_PREFIX):
+            _proxy_to_vox(self, "DELETE", path[len(VOX_PROXY_PREFIX):], None)
+            return
         self.send_error(405, "Method Not Allowed")
 
     def end_headers(self):
-        path = urlsplit(self.path).path.lower()
+        # _xy_csp_path：/gamehub 路由会把 self.path 改写成游戏仓内的相对路径，
+        # 这里必须用改写前的原始路径来判断该下发哪一套 CSP。
+        path = urlsplit(getattr(self, '_xy_csp_path', None) or self.path).path.lower()
         ext = os.path.splitext(path)[1]
         if path == HEALTH_PATH:
             self.send_header("Cache-Control", "no-store")
         elif ext in NO_CACHE_EXTS or not ext:
+            self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+            self.send_header("Pragma", "no-cache")
+            self.send_header("Expires", "0")
+        elif path in QR_ASSET_PATHS:
+            # 2026-09-14 修复「永久二维码内容没有更新和同步」的第一环：
+            # 这两张图每次服务启动都会按最新 PERM_SITE_URL / 局域网地址重新生成，
+            # 但 .png 走的是 max-age=604800, immutable —— 客户端整整 7 天不会回源，
+            # 于是弹窗里永远是旧图。二维码属于「必须新鲜」的资源，改成强制回源校验。
             self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
             self.send_header("Pragma", "no-cache")
             self.send_header("Expires", "0")
@@ -1699,7 +1885,20 @@ class XingyuHandler(http.server.SimpleHTTPRequestHandler):
         self.send_header("Permissions-Policy", "camera=(self), microphone=(self), display-capture=(self), screen-wake-lock=(self), geolocation=()")
         # 2026-09-08: CSP 按路由拆分。主应用不再继承 AIRI 所需的 unsafe-eval；
         # 只有同源 /airi/ 响应保留其运行时所需的宽松策略。
-        if path == "/airi" or path.startswith("/airi/"):
+        if path == "/gamehub" or path.startswith("/gamehub/"):
+            # 2026-09-14: 游戏仓内是第三方引擎（A Dark Room 的 StateManager 全部用 eval() 实现
+            # get/set/remove），缺 'unsafe-eval' 会让 $SM.get() 静默抛 EvalError 返回 undefined，
+            # 表现为「小黑屋点第一次添柴就卡死」。仅对本地游戏仓路由放开，主应用策略不变。
+            csp = ("default-src 'self'; "
+                   "script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' data: blob:; "
+                   "style-src 'self' 'unsafe-inline' https:; "
+                   "img-src 'self' data: blob: https:; media-src 'self' blob: data:; "
+                   "font-src 'self' data: https:; "
+                   "connect-src 'self' data: blob: http://localhost:* http://127.0.0.1:* https: ws://localhost:* wss:; "
+                   "worker-src 'self' blob: data:; object-src 'none'; "
+                   "base-uri 'self'; frame-src 'self'; "
+                   "frame-ancestors 'self'; form-action 'self'")
+        elif path == "/airi" or path.startswith("/airi/"):
             csp = ("default-src 'self'; "
                    "script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' data: blob: https://cdn.jsdelivr.net; "
                    "style-src 'self' 'unsafe-inline' https:; "
@@ -1812,7 +2011,7 @@ def _ensure_voxcpm_service():
                 child_env = dict(os.environ)
                 child_env.pop("PYTHONPATH", None)  # 防止 .venv-native 的包目录串进 voxvenv
                 subprocess.Popen(
-                    [py, script, "--port", "8000"],
+                    [py, script, "--port", "8000", "--model", "voxcpm1.5"],
                     cwd=os.path.dirname(script),
                     env=child_env,
                     stdout=subprocess.DEVNULL,
@@ -1832,6 +2031,7 @@ def main():
     _ensure_agent_service()
     _ensure_voxcpm_service()
     port = int(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_PORT
+    _write_perm_qr_asset()  # 永久访问二维码：每次启动都确保存在（修复「更新后二维码消失」）
     if not ipaddress.ip_address(BIND_HOST).is_loopback:
         _write_lan_qr_asset(port)
     httpd = create_server(port)

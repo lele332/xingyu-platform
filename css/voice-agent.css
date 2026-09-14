@@ -810,7 +810,7 @@ body.va-awake::after {
 #va-avatar-stage { position:fixed; left:16px; bottom:0; width:min(380px,36vw); height:min(500px,52vh); z-index:999998; pointer-events:none; opacity:0; transform:translateY(10px) scale(.99); transition:opacity .38s ease, transform .44s cubic-bezier(.22,1,.36,1); }
 #va-avatar-stage.is-visible { opacity:1; transform:none; }
 .va-avatar-aura { position:absolute; left:50%; bottom:-52px; width:76%; height:110px; transform:translateX(-50%); background:radial-gradient(ellipse at center, rgba(86,170,255,.22), rgba(126,92,255,.10) 45%, transparent 70%); filter:blur(26px); }
-#va-realistic-frame { position:relative; width:100%; height:100%; border:0; display:block; background:transparent; pointer-events:none; opacity:1; transform:none; filter:drop-shadow(0 28px 62px rgba(0,0,0,.44)); }
+#va-realistic-frame { position:relative; width:100%; height:100%; border:0; display:block; background:transparent; pointer-events:none; opacity:1; transform:none; filter:drop-shadow(0 14px 20px rgba(0,0,0,.44)); }
 .va-avatar-hotspot { position:absolute; left:6%; bottom:0; width:88%; height:78%; border:0; background:transparent; pointer-events:auto; cursor:pointer; border-radius:32px; }
 body.va-panel-open #va-avatar-stage { left:calc(50% - min(680px,48vw)); }
 @media (max-width:900px){ #va-avatar-stage { width:min(260px,58vw); height:min(360px,44vh); left:8px; } body.va-panel-open #va-avatar-stage { left:8px; opacity:.18; } }
@@ -843,7 +843,10 @@ body.va-panel-open .va-avatar-hotspot { opacity:0; pointer-events:none; }
 /* AIRI 原版形象：仅唤醒/对话时出现，平时完全隐藏 */
 .va-root[data-avatar="airi"] .va-ball,
 .va-root[data-avatar="airi"] .va-tip { display:none!important; pointer-events:none!important; }
-#va-airi-frame { position:relative; width:100%; height:100%; border:0; display:block; background:transparent; pointer-events:none; filter:drop-shadow(0 28px 62px rgba(0,0,0,.45)); }
+#va-airi-frame { position:relative; width:100%; height:100%; border:0; display:block; background:transparent; pointer-events:none; /* 2026-09-12 性能修：原来 62px 模糊半径。drop-shadow 作用在 iframe 上时，
+       浏览器要把整块 iframe 画面（AIRI 是 60fps 的 WebGL）先渲染成纹理再算阴影，
+       每帧都要重来。降到 20px 后开销约为原来的 1/10，阴影观感基本保留。 */
+       filter:drop-shadow(0 14px 20px rgba(0,0,0,.42)); }
 body:not(.va-panel-open) #va-avatar-stage { opacity:0!important; pointer-events:none!important; transform:translateY(14px) scale(.98)!important; }
 @media (max-width:900px){ body:not(.va-panel-open) #va-avatar-stage { opacity:0!important; } }
 
@@ -853,9 +856,12 @@ body:not(.va-panel-open) #va-avatar-stage { opacity:0!important; pointer-events:
   position: fixed; inset: 0; width: 100vw; height: 100vh;
   background: radial-gradient(120% 90% at 18% 0%, rgba(70,150,255,.14), transparent 58%),
               radial-gradient(120% 100% at 100% 100%, rgba(150,90,255,.12), transparent 60%),
-              rgba(4,7,12,.55);
-  backdrop-filter: blur(70px) saturate(160%);
-  -webkit-backdrop-filter: blur(70px) saturate(160%);
+              rgba(4,7,12,.70);
+  /* 2026-09-12 性能修：原 blur(70px)。全屏 70px 高斯模糊每帧重采样整个屏幕，
+     底下就是 60fps 的 AIRI WebGL 画面，核显上直接拖垮帧率（表现为视线跟随卡顿）。
+     降到 20px，并把背景不透明度 .55 → .70 补偿遮蔽感，观感几乎不变。 */
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
   z-index: 999997;
   opacity: 0; pointer-events: none; transform: scale(1.02);
   transition: opacity .42s cubic-bezier(.22,1,.36,1), transform .46s cubic-bezier(.22,1,.36,1);
@@ -1009,8 +1015,8 @@ body.va-panel-open .va-panel { visibility:visible!important; pointer-events:auto
     radial-gradient(90% 70% at 50% 8%, rgba(94,164,255,.16), transparent 62%),
     radial-gradient(80% 80% at 12% 100%, rgba(164,107,255,.13), transparent 58%),
     linear-gradient(180deg, rgba(4,7,13,.76), rgba(4,7,13,.90));
-  backdrop-filter: blur(48px) saturate(165%);
-  -webkit-backdrop-filter: blur(48px) saturate(165%);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   z-index: 999997 !important;
   opacity: 0 !important;
   pointer-events: none !important;
@@ -1059,7 +1065,7 @@ body.va-panel-open #va-avatar-stage.is-visible { opacity:1!important; pointer-ev
   margin:0!important; padding:0; border:0!important; border-left:1px solid rgba(255,255,255,.095)!important;
   border-radius:0!important; background:linear-gradient(180deg,rgba(8,12,20,.90),rgba(5,8,14,.94))!important;
   box-shadow:-70px 0 140px rgba(0,0,0,.55),inset 1px 0 0 rgba(255,255,255,.05)!important;
-  backdrop-filter:blur(52px) saturate(180%); -webkit-backdrop-filter:blur(52px) saturate(180%);
+  backdrop-filter:none; -webkit-backdrop-filter:none;
   transform:none!important;
 }
 .va-console::before { content:''; position:absolute; left:0; top:0; bottom:0; width:1px; background:linear-gradient(180deg,transparent,rgba(124,224,255,.58),rgba(164,107,255,.35),transparent); opacity:.72; z-index:3; pointer-events:none; }

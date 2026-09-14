@@ -15,6 +15,8 @@
     ai: '<path d="M12 3.8 13.8 9.7 19.7 11.5 13.8 13.3 12 19.2 10.2 13.3 4.3 11.5 10.2 9.7Z"/><path d="m18.8 17.2.7 1.9 1.9.7-1.9.7-.7 1.9-.7-1.9-1.9-.7 1.9-.7Z" fill="currentColor" stroke="none"/>',
     voice: '<rect x="8.8" y="3" width="6.4" height="11.2" rx="3.2"/><path d="M5.5 12.2a6.5 6.5 0 0 0 13 0"/><path d="M12 18.7V21"/>',
     exams: '<rect x="3.75" y="5" width="16.5" height="15.5" rx="4.5"/><path d="M8 3v4M16 3v4M3.8 10h16.4"/><path d="m9.3 15.2 1.9 1.9 3.5-3.8"/>',
+    relax: '<path d="M20.4 4.1c0 8.5-4.4 12.7-9.7 12.7a5.1 5.1 0 0 1-5.1-5.1c0-5.3 4.6-7.6 14.8-7.6Z"/><path d="M4.2 20.5c1.6-4.3 4.4-7 8.2-8.6"/>',
+    camp: '<path d="M5.6 21V3.6"/><path d="M5.6 4.7h12l-2.1 3.7 2.1 3.7H5.6"/><path d="M5.6 15.4h5.2"/>',
     running: '<circle cx="15.6" cy="4.6" r="1.8"/><path d="m14.5 7.4-1.9 5.3 3.4 2.4-1.1 5"/><path d="m12.6 12.7-3.1 1.9-2.2 4.2"/><path d="m14.5 7.4 3.5.9 1.9-1.5"/>',
     prisma: '<path d="M12 3.5 20.5 19.5H3.5Z"/><path d="M12 3.5v16"/>',
     nexus: '<circle cx="12" cy="5.9" r="2"/><circle cx="5.9" cy="17.3" r="2"/><circle cx="18.1" cy="17.3" r="2"/><path d="M10.9 7.7 7.1 15.5M13.1 7.7 16.9 15.5M8 17.3h8"/>',
@@ -43,7 +45,8 @@
 
   function decorateNavigation(root = document) {
     root.querySelectorAll(".nav-item[data-view]").forEach(item => {
-      if (!item.querySelector(".xy-icon")) item.insertAdjacentHTML("afterbegin", navSvg(item.dataset.view));
+      // data-icon 可覆写图标名：同一 data-view 的两个入口（跑步训练 / 训练营）需要区分开。
+      if (!item.querySelector(".xy-icon")) item.insertAdjacentHTML("afterbegin", navSvg(item.dataset.icon || item.dataset.view));
     });
     root.querySelectorAll(".mobile-tab[data-mobile-view], .mobile-nav-item[data-view]").forEach(item => {
       const view = item.dataset.mobileView || item.dataset.view;

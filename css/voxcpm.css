@@ -450,3 +450,91 @@
   .vox-hero-r { grid-template-columns: repeat(2, 1fr); }
   .vox-section { padding: 18px; }
 }
+
+/* ---------- 我的音色库 + 合成结果播放器（2026-09-12 新增） ---------- */
+.vox-lib-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+.vox-lib-empty {
+  display: block;
+  padding: 14px 16px;
+  border: 1px dashed var(--vx-border);
+  border-radius: var(--vx-radius-sm);
+  color: var(--vx-ink-3);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.vox-lib-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 1px solid var(--vx-border);
+  border-radius: var(--vx-radius-sm);
+  background: var(--vx-bg-2);
+  transition: border-color .18s, background .18s;
+}
+.vox-lib-item:hover { border-color: var(--vx-accent); }
+.vox-lib-item.active {
+  border-color: var(--vx-accent);
+  background: rgba(47, 107, 255, .12);
+}
+.vox-lib-meta { flex: 1; min-width: 0; }
+.vox-lib-meta b {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--vx-ink);
+  margin-right: 8px;
+}
+.vox-lib-meta em {
+  display: block;
+  font-style: normal;
+  font-size: 12px;
+  color: var(--vx-ink-3);
+  margin-top: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.vox-lib-builtin {
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgba(0, 192, 224, .16);
+  color: var(--vx-cyan);
+  vertical-align: middle;
+}
+.vox-save-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.vox-save-row input {
+  flex: 1;
+  min-width: 200px;
+  padding: 10px 14px;
+  border-radius: var(--vx-radius-sm);
+  border: 1px solid var(--vx-border);
+  background: var(--vx-bg-2);
+  color: var(--vx-ink);
+  font-size: 14px;
+}
+.vox-player-wrap {
+  margin-top: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--vx-border);
+  border-radius: var(--vx-radius-sm);
+  background: var(--vx-bg-2);
+}
+.vox-player-wrap audio {
+  width: 100%;
+  height: 38px;
+  margin-top: 8px;
+}

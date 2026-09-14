@@ -81,7 +81,7 @@
   // voxStop() 是空的 —— 点停止只 pause 已创建的音频，在途合成请求回来后
   // 照样 new Audio 播放（深审计 s4-B2 实锤）。现在：代数令牌 + AbortController + 超时。
   let _voxGen = 0, _voxCtrl = null;
-  var VOX_FETCH_TIMEOUT = 60000;   // 克隆音色合成较慢，放宽到 60s
+  var VOX_FETCH_TIMEOUT = 240000;   // 克隆合成 + 内容校验 + 重试，放宽到 4 分钟
 
   async function voxSpeak(text, rate, onEnd, onError, opts) {
     opts = opts || {};
@@ -103,6 +103,8 @@
       };
       // 声音克隆：把参考音频以 data URI 传给 voice（vLLM-Omni 支持）
       if (opts.refB64) payload.voice = "data:audio/wav;base64," + opts.refB64;
+      // 我的音色：直接指定服务端已持久保存的音色 id，无需再传音频
+      else if (opts.voiceId) payload.voice = opts.voiceId;
       // 极致克隆：参考文本
       if (opts.promptText) payload.prompt_text = opts.promptText;
       const resp = await fetch(base + "/audio/speech", {
@@ -137,6 +139,30 @@
       return null;
     }
   }
+  async function voxVerifyBlob(originalText, blob) {
+    try {
+      if (!blob || !blob.arrayBuffer) throw new Error("没有可校验音频");
+      const bytes = await blob.arrayBuffer();
+      const sttUrl = (location.protocol === "file:" || location.hostname === "")
+        ? "http://127.0.0.1:8610/stt"
+        : "/agent-proxy/stt";
+      const r = await fetch(sttUrl, {
+        method: "POST",
+        headers: { "Content-Type": "audio/wav" },
+        body: bytes
+      });
+      if (!r.ok) throw new Error("STT HTTP " + r.status);
+      const j = await r.json();
+      const recognized = String(j && j.text ? j.text : "").trim();
+      if (!recognized) throw new Error("识别结果为空");
+      const clean = (v) => String(v || "").replace(/[\p{P}\p{S}\s]/gu, "").toLowerCase();
+      const a = clean(originalText), b = clean(recognized);
+      return { text: recognized, match: a === b };
+    } catch (e) {
+      throw new Error(e && e.message ? e.message : String(e));
+    }
+  }
+
   function voxStop() {
     _voxGen++;
     try { if (_voxCtrl) _voxCtrl.abort(); } catch (e) {}
@@ -279,7 +305,7 @@
           '<h3 class="vox-h3"><span class="vox-num">03</span>声音克隆 · 音色设计 <span class="vox-tag">VoxCPM2</span>' +
             '<span class="vox-svc" id="voxSvcBadge" data-state="checking">检测中…</span>' +
           '</h3>' +
-          '<p class="vox-section-sub">本机已接入 AMD 显卡（VoxCPM.cpp Vulkan）：音色设计约 20~40 秒，参考音频克隆约 5~10 秒。每次合成都保存在 VoxCPM 本地输出目录，也可点「💾 保存音频」下载。</p>' +
+          '<p class="vox-section-sub">本机已接入 AMD 显卡（VoxCPM.cpp Vulkan）：音色设计约 20~40 秒，参考音频克隆约 8~15 秒。克隆会把参考音频的转录当作「已经说过的前文」接着往下说，所以<b>参考音频务必是 2~4 秒、只有一个人说话、没有背景音乐和杂音的干净录音</b>，否则模型会复述参考音频的内容而不是念你输入的新文本。每次「本地合成」的音频都会自动保存到桌面，也可点「💾 保存音频」下载。</p>' +
 
           '<div class="vox-mode-chips" id="voxModeChips">' +
             '<button class="vox-chip active" data-mode="design" type="button">' +
@@ -292,13 +318,17 @@
             '</button>' +
             '<button class="vox-chip" data-mode="hifi" type="button">' +
               '<span class="vox-chip-ico">🎙️</span>' +
-              '<span class="vox-chip-body"><b>极致克隆</b><em>参考音频 + 文本转录，无缝续写</em></span>' +
+              '<span class="vox-chip-body"><b>新文本克隆</b><em>用参考音色念新文字（音频要 2~4 秒）</em></span>' +
+            '</button>' +
+            '<button class="vox-chip" data-mode="lib" type="button">' +
+              '<span class="vox-chip-ico">🎚️</span>' +
+              '<span class="vox-chip-body"><b>我的音色</b><em>用保存过的音色念新文本</em></span>' +
             '</button>' +
           '</div>' +
 
           '<div class="vox-clone-grid">' +
             '<div class="vox-field" id="voxRefField" style="display:none">' +
-              '<span class="vox-label">参考音频（16kHz~48kHz WAV，建议 5~15 秒）</span>' +
+              '<span class="vox-label">参考音频（务必 2~4 秒、单人、无杂音；WAV/MP3/M4A）</span>' +
               '<div class="vox-drop" id="voxRefDrop">' +
                 '<input type="file" id="voxRefFile" accept=".wav,.mp3,.m4a,audio/*" style="display:none">' +
                 '<span class="vox-drop-ico" id="voxRefIco">🎧</span>' +
@@ -307,23 +337,37 @@
             '</div>' +
             '<div class="vox-field vox-field-wide">' +
               '<span class="vox-label" id="voxCtrlLabel">要合成的文本</span>' +
-              '<textarea id="voxCloneText" rows="2" placeholder="输入要克隆/合成的文本内容，支持中英混合。"></textarea>' +
+              '<textarea id="voxCloneText" rows="6" placeholder="输入要克隆/合成的文本内容，支持中英混合。" style="min-height:130px;font-size:16px;line-height:1.6;"></textarea>' +
             '</div>' +
             '<div class="vox-field" id="voxDesignField">' +
               '<span class="vox-label">音色描述（自然语言）</span>' +
               '<input type="text" id="voxDesignDesc" placeholder="如：年轻女性，声音温柔甜美" value="年轻女性，声音温柔甜美">' +
             '</div>' +
             '<div class="vox-field vox-field-wide" id="voxPromptTextField" style="display:none">' +
-              '<span class="vox-label">参考音频的文本转录（极致克隆必填）</span>' +
-              '<input type="text" id="voxPromptText" placeholder="输入参考音频里说话的内容，帮助模型精准续写">' +
+              '<span class="vox-label">参考音频的文本转录（自动识别填入，须与参考音频一致）</span>' +
+              '<textarea id="voxPromptText" rows="3" placeholder="自动识别结果会填在这里；识别失败请手动填写参考音频里说的话" style="min-height:64px;font-size:15px;line-height:1.5;"></textarea>' +
+            '</div>' +
+            '<div class="vox-field vox-field-wide" id="voxLibField" style="display:none">' +
+              '<span class="vox-label">我的音色库（选中一个，输入文本就能合成，不用再传音频）</span>' +
+              '<div class="vox-lib-list" id="voxLibList"><span class="vox-lib-empty">加载中…</span></div>' +
             '</div>' +
           '</div>' +
 
           '<div class="vox-actions">' +
             '<button class="btn btn-primary" id="btnVoxGenScript" type="button">⚡ 生成克隆脚本</button>' +
             '<button class="btn btn-ghost" id="btnVoxCloneLocal" type="button">▶ 本地合成（需 VoxCPM 服务）</button>' +
+            '<button class="btn btn-ghost" id="btnVoxSaveVoice" type="button">⭐ 保存为我的音色</button>' +
             '<button class="btn btn-ghost" id="btnVoxCloneSave" type="button">💾 保存音频</button>' +
             '<span class="vox-hint" id="voxCloneHint">脚本将内嵌参考音频 base64，复制后到 voxcpm/ 目录运行：python 克隆脚本.py</span>' +
+          '</div>' +
+          '<div class="vox-save-row" id="voxSaveRow" style="display:none">' +
+            '<input type="text" id="voxSaveName" placeholder="给这个音色起个名字（如：我的声音）">' +
+            '<button class="btn btn-primary" id="btnVoxSaveConfirm" type="button">确认保存</button>' +
+            '<button class="btn btn-ghost" id="btnVoxSaveCancel" type="button">取消</button>' +
+          '</div>' +
+          '<div class="vox-player-wrap" id="voxPlayerWrap" style="display:none">' +
+            '<span class="vox-label">最近一次合成结果（若没自动播放，点这里播放）</span>' +
+            '<audio id="voxPlayer" controls preload="none"></audio>' +
           '</div>' +
           '<div class="vox-script-out" id="voxScriptOut" style="display:none">' +
             '<div class="vox-script-head">' +
@@ -491,7 +535,9 @@
       // OfflineAudioContext decodes MP3/M4A reliably even before a user gesture.
       const decodeContext = new OfflineAudioContext(1, 1, 16000);
       const decoded = await decodeContext.decodeAudioData(await file.arrayBuffer());
-      const maxSeconds = 20;
+      // 3.5 秒：VoxCPM 会把这段音频的转录当作「前文」接着续写，音频越长越容易
+      // 整段复述参考音频而非念新文本。实测 3.68s 干净单句最稳。
+      const maxSeconds = 3.5;
       const sampleRate = 16000;
       const duration = Math.min(decoded.duration, maxSeconds);
       const frames = Math.max(1, Math.floor(duration * sampleRate));
@@ -511,11 +557,75 @@
     const refField = $("#voxRefField");
     const designField = $("#voxDesignField");
     const promptTextField = $("#voxPromptTextField");
+    const libField = $("#voxLibField");
     const ctrlLabel = $("#voxCtrlLabel");
     const refDrop = $("#voxRefDrop");
     const refName = $("#voxRefName");
     const refIco = $("#voxRefIco");
     let cloneBusy = false;
+    let _libVoices = [];
+    let _libSelected = "";
+
+    /* ---------- 我的音色库（服务端持久保存，下次只给文本即可复用） ---------- */
+    function libEndpoint() {
+      const direct = location.protocol === "file:" || location.hostname === "";
+      return direct ? "http://127.0.0.1:8000/xingyu" : (location.origin + "/vox-proxy/xingyu");
+    }
+
+    async function loadLibVoices() {
+      const box = $("#voxLibList");
+      if (!box) return;
+      box.innerHTML = '<span class="vox-lib-empty">加载中…</span>';
+      try {
+        const r = await fetch(libEndpoint() + "/voices", { cache: "no-store" });
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        const j = await r.json();
+        _libVoices = (j.voices || []);
+        renderLibVoices();
+      } catch (e) {
+        box.innerHTML = '<span class="vox-lib-empty">⚠ 读取音色库失败：' + esc(e && e.message ? e.message : e) + '</span>';
+      }
+    }
+
+    function renderLibVoices() {
+      const box = $("#voxLibList");
+      if (!box) return;
+      if (!_libVoices.length) {
+        box.innerHTML = '<span class="vox-lib-empty">还没有保存的音色。先到「新文本克隆」上传一段 2~4 秒干净音频，合成满意后点「⭐ 保存为我的音色」。</span>';
+        return;
+      }
+      box.innerHTML = _libVoices.map(function (v) {
+        const active = v.id === _libSelected ? " active" : "";
+        // 内置音色没有 seconds，标题右侧已有「内置」标签，正文里不要再重复写一次
+        const secs = v.seconds ? (v.seconds + " 秒") : "";
+        const tag = v.saved ? "" : '<span class="vox-lib-builtin">内置</span>';
+        const preview = v.prompt_text ? ' · ' + esc(String(v.prompt_text).slice(0, 12)) : '';
+        return '<div class="vox-lib-item' + active + '" data-id="' + esc(v.id) + '">' +
+          '<div class="vox-lib-meta"><b>' + esc(v.name) + '</b>' + tag + '<em>' + esc(secs) + preview + '</em></div>' +
+          '<button class="text-btn" data-act="use" type="button">使用</button>' +
+          '<button class="text-btn" data-act="del" type="button">删除</button>' +
+        '</div>';
+      }).join("");
+      $$(".vox-lib-item", box).forEach(function (row) {
+        const id = row.dataset.id;
+        row.querySelector('[data-act="use"]').onclick = function () {
+          _libSelected = id;
+          renderLibVoices();
+          const v = _libVoices.filter(function (x) { return x.id === id; })[0];
+          if (cloneStatus) cloneStatus.textContent = "🎚️ 已选中音色「" + (v ? v.name : id) + "」。输入下方文本后点「▶ 本地合成」即可，不用再上传音频。";
+        };
+        row.querySelector('[data-act="del"]').onclick = function () {
+          if (!confirm("确定删除音色「" + (id) + "」吗？此操作不可恢复。")) return;
+          fetch(libEndpoint() + "/voices/" + encodeURIComponent(id), { method: "DELETE" })
+            .then(function () {
+              toast("已删除音色", "ok");
+              if (_libSelected === id) _libSelected = "";
+              loadLibVoices();
+            })
+            .catch(function (e) { toast("删除失败：" + (e && e.message ? e.message : e), "err"); });
+        };
+      });
+    }
 
     // 模式切换
     $$("#voxModeChips .vox-chip").forEach(function (chip) {
@@ -524,15 +634,19 @@
         chip.classList.add("active");
         const mode = chip.dataset.mode;
         const needRef = mode === "clone" || mode === "hifi";
+        const isLib = mode === "lib";
         if (refField) refField.style.display = needRef ? "" : "none";
         if (promptTextField) promptTextField.style.display = mode === "hifi" ? "" : "none";
         if (designField) designField.style.display = mode === "design" ? "" : "none";
+        if (libField) libField.style.display = isLib ? "" : "none";
         if (ctrlLabel) ctrlLabel.textContent = mode === "design" ? "要合成的文本" : "要克隆合成的文本";
         if (cloneStatus) {
           if (mode === "design") cloneStatus.textContent = "🎨 音色设计：填写音色描述与文本，无需参考音频。";
-          else if (mode === "clone") cloneStatus.textContent = "🎛️ 可控克隆：上传参考音频（建议 5~15 秒 WAV），可选风格指令。";
-          else cloneStatus.textContent = "🎙️ 极致克隆：上传参考音频 + 填写其文本转录，模型无缝续写。";
+          else if (mode === "clone") cloneStatus.textContent = "🎛️ 可控克隆：上传 2~4 秒干净的单人参考音频，可选风格指令。";
+          else if (mode === "lib") cloneStatus.textContent = "🎚️ 我的音色：选中一个已保存音色，输入文本即可合成，无需再上传音频。";
+          else cloneStatus.textContent = "🎙️ 新文本克隆：上传 2~4 秒干净音频，再填写下方要合成的新文本。音频越长，模型越容易复述原话。";
         }
+        if (isLib) loadLibVoices();
       };
     });
 
@@ -551,13 +665,38 @@
         if (refName) refName.textContent = "✓ " + file.name + "（已转换 " + out.duration.toFixed(1) + " 秒 WAV）";
         if (refIco) refIco.textContent = "✅";
         if (cloneStatus) cloneStatus.textContent = trimmed
-          ? "✓ 参考音频已转换；为保证克隆稳定已截取前 20 秒。"
+          ? "✓ 参考音频已转换；为保证克隆效果，已自动截取前 3.5 秒。"
           : "✓ 参考音频已转换，可点「▶ 本地合成」。";
+        autoTranscribeRef(out.bytes);
       }).catch(function (e) {
         if (refName) refName.textContent = "⚠ " + file.name + " 无法解码";
         if (refIco) refIco.textContent = "❌";
         if (cloneStatus) cloneStatus.textContent = "⚠ 参考音频解码失败：" + (e && e.message ? e.message : e) + "。请改用浏览器可播放的 WAV/MP3/M4A。";
       });
+
+      function autoTranscribeRef(bytes) {
+        const promptInput = $("#voxPromptText");
+        if (!promptInput) return;
+        promptInput.value = "";
+        const sttUrl = (location.protocol === "file:" || location.hostname === "")
+          ? "http://127.0.0.1:8610/stt"
+          : "/agent-proxy/stt";
+        fetch(sttUrl, {
+          method: "POST",
+          headers: { "Content-Type": "audio/wav" },
+          body: bytes
+        }).then(function(r) {
+          if (!r.ok) throw new Error("STT HTTP " + r.status);
+          return r.json();
+        }).then(function(j) {
+          const text = (j && j.text ? String(j.text) : "").trim();
+          if (!text) throw new Error("识别结果为空");
+          promptInput.value = text;
+          if (cloneStatus) cloneStatus.textContent = "✓ 参考音频已自动转录，可检查后点「▶ 本地合成」。";
+        }).catch(function(e) {
+          if (cloneStatus) cloneStatus.textContent = "⚠ 已转换音频，但自动转录失败：" + (e && e.message ? e.message : e) + "。请在下方手动填写参考音频里说的话，否则合成会报错。";
+        });
+      }
     }
     if (refFile) refFile.onchange = function () { readRefFile(refFile.files[0]); };
     if (refDrop) {
@@ -581,7 +720,7 @@
         const promptText = ($("#voxPromptText").value || "").trim();
         if (!text) { toast("请填写要合成的文本", "err"); return; }
         if ((mode === "clone" || mode === "hifi") && !_refB64) { toast("请先上传参考音频", "err"); return; }
-        if (mode === "hifi" && !promptText) { toast("极致克隆需要填写参考音频的文本转录", "err"); return; }
+        if (mode === "hifi" && !promptText) { toast("建议等自动转录完成，或手动填写参考音频里说的话", "err"); }
 
         const script = buildCloneScript(mode, text, designDesc, promptText, _refB64, _refName);
         if (scriptPre) scriptPre.textContent = script;
@@ -614,6 +753,7 @@
         const text = ($("#voxCloneText").value || "").trim();
         if (!text) { toast("请填写要合成的文本", "err"); return; }
         if ((mode === "clone" || mode === "hifi") && !_refB64) { toast("请先上传并等待参考音频转换完成", "err"); return; }
+        if (mode === "lib" && !_libSelected) { toast("请先在「🎚️ 我的音色」里选一个音色", "err"); return; }
 
         cloneBusy = true;
         cloneLocalBtn.disabled = true;
@@ -638,13 +778,29 @@
           }
           if (cloneStatus) cloneStatus.textContent = "正在请求 AMD 显卡本地合成… 首次约 20~40 秒，之后约 5~10 秒，请不要重复点击。";
           cloneLocalBtn.textContent = "合成中…";
-          voxSpeak(finalText, 1, function () {
-            if (cloneStatus) cloneStatus.textContent = "✅ 合成完成，已播放。";
-          }, function (msg) {
-            if (cloneStatus) cloneStatus.textContent = "⚠ " + msg + "（AMD 推理服务已在线；如仍失败请换 5~15 秒清晰参考音频）";
+          voxSpeak(finalText, 1, function () {}, function (msg) {
+            if (cloneStatus) cloneStatus.textContent = "⚠ " + msg + "（AMD 推理服务已在线；如仍失败请换 5~8 秒清晰参考音频）";
           }, {
             refB64: (mode === "clone" || mode === "hifi") ? _refB64 : "",
-            promptText: promptText
+            promptText: promptText,
+            voiceId: mode === "lib" ? _libSelected : ""
+          }).then(async function (audio) {
+            // 自动播放可能被浏览器自动播放策略拦掉（合成耗时超过手势激活窗口），
+            // 所以无论如何都把结果挂到一个可见播放器上，用户点一下就能听。
+            try {
+              const pl = $("#voxPlayer"), wrap = $("#voxPlayerWrap");
+              if (pl && wrap && _lastBlob) { pl.src = URL.createObjectURL(_lastBlob); wrap.style.display = ""; }
+            } catch (e) {}
+            if (!audio || !_lastBlob) return;
+            if (cloneStatus) cloneStatus.textContent = "✅ 合成完成，正在自动校验文字…";
+            try {
+              const vr = await voxVerifyBlob(finalText, _lastBlob);
+              if (cloneStatus) cloneStatus.textContent = vr.match
+                ? "✅ 合成完成，文字校验一致：" + vr.text
+                : "✅ 合成完成，自动识别为：" + vr.text + "（同音字差异可能是识别误差）";
+            } catch (e) {
+              if (cloneStatus) cloneStatus.textContent = "✅ 合成完成，但自动校验失败：" + (e && e.message ? e.message : e);
+            }
           }).catch(function () {}).finally(resetButton);
         }).catch(function () {
           if (cloneStatus) cloneStatus.textContent = "⚠ 无法连接本地 VoxCPM 服务。";
@@ -652,6 +808,57 @@
         });
       };
     }
+
+    /* ---------- 保存为我的音色 ---------- */
+    const saveVoiceBtn = $("#btnVoxSaveVoice");
+    const saveRow = $("#voxSaveRow");
+    const saveNameInput = $("#voxSaveName");
+    if (saveVoiceBtn) {
+      saveVoiceBtn.onclick = function () {
+        const mode = currentCloneMode();
+        if ((mode !== "clone" && mode !== "hifi") || !_refB64) {
+          toast("请先切到「新文本克隆」或「可控克隆」并上传参考音频", "err");
+          return;
+        }
+        if (saveRow) saveRow.style.display = "";
+        if (saveNameInput) { saveNameInput.value = ""; saveNameInput.focus(); }
+        if (cloneStatus) cloneStatus.textContent = "⭐ 给这个音色起个名字，然后点「确认保存」。";
+      };
+    }
+    const saveCancelBtn = $("#btnVoxSaveCancel");
+    if (saveCancelBtn) saveCancelBtn.onclick = function () { if (saveRow) saveRow.style.display = "none"; };
+    const saveConfirmBtn = $("#btnVoxSaveConfirm");
+    if (saveConfirmBtn) {
+      saveConfirmBtn.onclick = function () {
+        if (!_refB64) { toast("请先上传参考音频", "err"); return; }
+        const nm = (saveNameInput && saveNameInput.value || "").trim();
+        saveConfirmBtn.disabled = true;
+        saveConfirmBtn.textContent = "保存中…";
+        fetch(libEndpoint() + "/voices", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: nm, audio: "data:audio/wav;base64," + _refB64 })
+        }).then(function (r) {
+          return r.json().then(function (j) {
+            if (!r.ok) throw new Error((j && j.error && j.error.message) || ("HTTP " + r.status));
+            return j;
+          });
+        }).then(function (j) {
+          toast("音色已保存", "ok");
+          if (cloneStatus) cloneStatus.textContent = "⭐ 音色「" + (j.name || j.id) + "」已存入音色库。切到「🎚️ 我的音色」就能反复使用，以后只需输入文本。";
+          if (saveRow) saveRow.style.display = "none";
+          loadLibVoices();
+        }).catch(function (e) {
+          toast("保存失败：" + (e && e.message ? e.message : e), "err");
+          if (cloneStatus) cloneStatus.textContent = "⚠ 保存音色失败：" + (e && e.message ? e.message : e);
+        }).finally(function () {
+          saveConfirmBtn.disabled = false;
+          saveConfirmBtn.textContent = "确认保存";
+        });
+      };
+    }
+
+    loadLibVoices();
 
     // 页面加载时自动检测 VoxCPM 服务状态
     if (svcBadge) {
@@ -711,12 +918,10 @@
       lines.push("    seed=42,");
       lines.push(")");
     } else {
-      // hifi 极致克隆
+      // hifi 新版：改为「新文本克隆」——参考音色 + 输入新文本
       lines.push("wav = model.generate(");
       lines.push("    text=" + JSON.stringify(text) + ",");
-      lines.push("    prompt_wav_path=ref_path,     # 续写起点");
-      lines.push("    prompt_text=" + JSON.stringify(promptText) + ",");
-      lines.push("    reference_wav_path=ref_path,   # 提升相似度");
+      lines.push("    reference_wav_path=ref_path,   # 克隆参考音频的音色，说出你输入的新文本");
       lines.push("    cfg_value=2.0,");
       lines.push("    inference_timesteps=10,");
       lines.push("    seed=42,");
@@ -724,7 +929,8 @@
     }
     lines.push("");
     lines.push("# 4) 保存");
-    lines.push("out = \"clone_output.wav\"");
+    lines.push("import time, pathlib");
+    lines.push("out = pathlib.Path(__file__).resolve().parent / \"clone_output_\" + time.strftime(\"%Y%m%d_%H%M%S\") + \".wav\"");
     lines.push("sf.write(out, wav, model.tts_model.sample_rate)");
     lines.push("print(\"✅ 已生成:\", out, \"采样率:\", model.tts_model.sample_rate)");
     return lines.join("\n");
@@ -738,5 +944,10 @@
     getSettings: getSettings
   };
 })();
+
+
+
+
+
 
 

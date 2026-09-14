@@ -1,0 +1,207 @@
+/* ============================================================
+   weather.css v2 · 星屿天气工作台（2026-09-14 重塑）
+   设计语言：Apple HIG 深色玻璃（灵感归档见 HAN 16.1：
+   hoverstat.es / footer.design / reeoo.com / collectui.com）
+   与 weather-aurora.css（可选 Aurora 皮肤）互不干扰。
+   ============================================================ */
+
+#view-weather { max-width: 1180px; margin: 0 auto; }
+
+/* ---------- 工具栏与城市 chips ---------- */
+.weather-search { display: flex; gap: 10px; padding: 4px 2px 12px; }
+.weather-search input {
+  flex: 1; min-width: 0; padding: 11px 16px; border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.09); background: rgba(16,22,36,.6);
+  color: var(--ink, #eef2fa); font: inherit; outline: none; backdrop-filter: blur(18px);
+}
+.weather-search input:focus { border-color: rgba(10,132,255,.55); box-shadow: 0 0 0 3px rgba(10,132,255,.18); }
+.weather-cities { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 2px 14px; }
+.weather-cities .chip {
+  padding: 7px 15px; border-radius: 99px; font-size: 13px; cursor: pointer;
+  border: 1px solid rgba(255,255,255,.09); background: rgba(16,22,36,.55); color: rgba(235,240,250,.78);
+  transition: all .2s ease; backdrop-filter: blur(14px);
+}
+.weather-cities .chip:hover { border-color: rgba(10,132,255,.4); color: #fff; }
+.weather-cities .chip.active { background: rgba(10,132,255,.22); border-color: rgba(10,132,255,.55); color: #cfe4ff; }
+
+/* ---------- 卡片基元 ---------- */
+.wx-card, .wx-hero {
+  position: relative; border-radius: 20px; padding: 20px 22px; margin: 0 0 16px;
+  background: linear-gradient(180deg, rgba(24,31,50,.62), rgba(16,21,36,.55));
+  border: 1px solid rgba(255,255,255,.08);
+  box-shadow: 0 18px 50px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.05);
+  backdrop-filter: blur(26px) saturate(1.35);
+  -webkit-backdrop-filter: blur(26px) saturate(1.35);
+}
+.wx-card-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px; }
+.wx-card-head h3 { margin: 0; font-size: 15px; font-weight: 700; letter-spacing: .02em; color: rgba(240,244,252,.92); }
+.wx-head-note { font-size: 11.5px; color: rgba(200,212,232,.5); }
+
+/* ---------- Hero ---------- */
+.wx-hero { padding: 26px 26px 22px; overflow: hidden; }
+.wx-hero::before {
+  content: ""; position: absolute; inset: -40% -20% auto auto; width: 55%; height: 130%;
+  background: radial-gradient(closest-side, rgba(10,132,255,.16), transparent 72%);
+  pointer-events: none;
+}
+.wx-hero-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+.wx-cityline { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.wx-city { font-size: 22px; font-weight: 700; color: #f4f7fd; letter-spacing: .01em; }
+.wx-badge {
+  font-size: 11px; padding: 3px 10px; border-radius: 99px; color: #9fd0ff;
+  background: rgba(10,132,255,.16); border: 1px solid rgba(10,132,255,.4);
+}
+.wx-myset {
+  font: inherit; font-size: 12px; padding: 5px 13px; border-radius: 99px; cursor: pointer;
+  border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.05); color: rgba(235,240,250,.75);
+  transition: all .2s;
+}
+.wx-myset:hover, .wx-myset.on { border-color: rgba(255,214,102,.5); color: #ffe08a; background: rgba(255,214,102,.08); }
+.wx-hero-cond { font-size: 15px; color: rgba(220,230,246,.85); white-space: nowrap; }
+.wx-temp { font-size: 96px; font-weight: 200; line-height: 1.05; color: #fff; letter-spacing: -.02em; margin: 6px 0 2px; }
+.wx-temp span { font-size: 44px; font-weight: 300; color: rgba(255,255,255,.75); vertical-align: 22px; margin-left: 2px; }
+.wx-subline { font-size: 13.5px; color: rgba(205,216,236,.72); margin-bottom: 18px; }
+.wx-hero-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(108px, 1fr)); gap: 10px; }
+.wx-stat {
+  display: flex; flex-direction: column; gap: 3px; padding: 10px 12px; border-radius: 14px;
+  background: rgba(255,255,255,.045); border: 1px solid rgba(255,255,255,.06);
+}
+.wx-stat-v { font-size: 17px; font-weight: 600; color: #eef3fc; font-variant-numeric: tabular-nums; }
+.wx-stat-v i { font-style: normal; font-size: 11.5px; font-weight: 500; color: rgba(200,212,232,.55); margin-left: 3px; }
+.wx-stat-k { font-size: 11px; color: rgba(190,203,226,.55); letter-spacing: .04em; }
+.wx-trend { font-style: normal; font-size: 10.5px; color: #8fd3a6; margin-left: 4px; }
+
+/* ---------- 分钟级降水 ---------- */
+.wx-nowcast-text { margin: 0 0 12px; font-size: 13.5px; color: rgba(225,234,248,.85); }
+.wx-nowcast.dry { border-color: rgba(48,209,88,.22); }
+.wx-m15-bars { display: flex; align-items: flex-end; gap: 2px; height: 48px; }
+.wx-m15-bars i { flex: 1; min-height: 1.5px; border-radius: 2px 2px 0 0; background: rgba(120,170,255,.22); }
+.wx-m15-bars i.hot { background: linear-gradient(180deg, #64a6ff, #0a84ff); }
+.wx-m15-labels { display: flex; justify-content: space-between; margin-top: 6px; font-size: 10.5px; color: rgba(190,203,226,.5); font-variant-numeric: tabular-nums; }
+
+/* ---------- 决策 ---------- */
+.wx-adv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+.wx-adv-item {
+  display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; border-radius: 14px;
+  background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.06);
+}
+.wx-adv-ic { font-size: 22px; line-height: 1.2; }
+.wx-adv-item b { display: block; font-size: 13.5px; color: #eef3fc; margin-bottom: 2px; }
+.wx-adv-item span { font-size: 12px; line-height: 1.55; color: rgba(200,212,232,.65); }
+
+/* ---------- 24h 图表 ---------- */
+.w-chart { display: block; }
+
+/* ---------- 双列区 ---------- */
+.wx-cols { display: grid; grid-template-columns: 1.35fr 1fr; gap: 16px; align-items: start; }
+.wx-cols .wx-card { margin-bottom: 16px; }
+@media (max-width: 900px) { .wx-cols { grid-template-columns: 1fr; } }
+
+/* ---------- 7 天 ---------- */
+.wx-days { display: flex; flex-direction: column; }
+.wx-day {
+  display: grid; grid-template-columns: 52px 30px 44px 1fr 86px;
+  align-items: center; gap: 10px; padding: 10px 4px;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+}
+.wx-day:last-child { border-bottom: none; }
+.wx-day.cur { background: rgba(10,132,255,.07); border-radius: 12px; padding-left: 10px; padding-right: 10px; }
+.wx-day-name { font-size: 13px; color: rgba(225,234,248,.85); font-weight: 600; }
+.wx-day.cur .wx-day-name { color: #cfe4ff; }
+.wx-day-icon { font-size: 17px; text-align: center; }
+.wx-day-rain { font-size: 11.5px; color: rgba(140,190,255,.85); font-variant-numeric: tabular-nums; }
+.wx-day-bar { position: relative; height: 5px; border-radius: 99px; background: rgba(255,255,255,.08); overflow: hidden; }
+.wx-day-bar i { position: absolute; top: 0; bottom: 0; border-radius: 99px; background: linear-gradient(90deg, #64d2ff, #ff9f0a); }
+.wx-day-temp { display: flex; justify-content: flex-end; gap: 7px; font-variant-numeric: tabular-nums; }
+.wx-day-temp b { font-weight: 650; color: #f2f6fd; }
+.wx-day-temp span { color: rgba(190,203,226,.55); }
+.wx-day-detail { grid-column: 1 / -1; font-size: 11px; color: rgba(185,199,222,.5); padding: 0 2px 2px; }
+
+/* ---------- 大气剖面 ---------- */
+.wx-atmo-grid, .wx-astro-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 9px; margin-bottom: 14px; }
+.wx-shear { display: flex; flex-direction: column; gap: 7px; }
+.wx-shear-row { display: flex; align-items: center; gap: 10px; font-size: 12px; }
+.wx-shear-row span { width: 38px; color: rgba(190,203,226,.6); font-variant-numeric: tabular-nums; }
+.wx-shear-row i { flex: 1; height: 6px; border-radius: 99px; background: linear-gradient(90deg, rgba(10,132,255,.5), #64d2ff); min-width: 2px; }
+.wx-shear-row b { min-width: 74px; text-align: right; color: #e8eefa; font-variant-numeric: tabular-nums; font-weight: 600; }
+.wx-shear-note { margin: 4px 0 0; font-size: 11px; color: rgba(185,199,222,.5); }
+
+/* ---------- 天文 ---------- */
+.wx-sun-arc-svg { width: 100%; height: auto; display: block; margin-bottom: 10px; }
+.wx-golden { margin: 12px 0 0; font-size: 11.5px; line-height: 1.7; color: rgba(200,212,232,.6); }
+
+/* ---------- AQI ---------- */
+.wx-aqi-badge { font-size: 12px; font-weight: 700; padding: 3px 11px; border-radius: 99px; border: 1px solid; }
+.wx-aqi-bar { height: 6px; border-radius: 99px; background: rgba(255,255,255,.08); overflow: hidden; margin-bottom: 12px; }
+.wx-aqi-bar i { display: block; height: 100%; border-radius: 99px; transition: width .6s ease; }
+.wx-air-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(86px, 1fr)); gap: 8px; }
+.wx-air-chip {
+  display: flex; flex-direction: column; gap: 2px; padding: 8px 10px; border-radius: 12px;
+  background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.06); text-align: center;
+}
+.wx-air-chip span { font-size: 10.5px; color: rgba(190,203,226,.55); }
+.wx-air-chip b { font-size: 13.5px; color: #eef3fc; font-variant-numeric: tabular-nums; }
+
+/* ---------- 往年同期 ---------- */
+.wx-ly-main { margin: 2px 0 6px; font-size: 14px; color: rgba(225,234,248,.85); }
+.wx-ly-main b { font-size: 22px; margin-left: 6px; color: #f2f6fd; }
+.wx-ly-main b.up { color: #ffb86b; }
+.wx-ly-main b.down { color: #7ec8ff; }
+.wx-ly-sub { margin: 0; font-size: 12px; color: rgba(185,199,222,.55); }
+
+/* ---------- 预警 ---------- */
+.wx-alert-item {
+  display: flex; flex-direction: column; gap: 3px; padding: 11px 14px; margin-bottom: 9px;
+  border-radius: 13px; background: rgba(255,159,10,.08); border: 1px solid rgba(255,159,10,.3);
+}
+.wx-alert-item b { font-size: 13px; color: #ffd08a; }
+.wx-alert-item span { font-size: 12px; line-height: 1.55; color: rgba(230,215,190,.75); }
+.wx-alert-empty {
+  padding: 13px 14px; border-radius: 13px; font-size: 12.5px;
+  color: rgba(142,220,160,.8); background: rgba(48,209,88,.07); border: 1px solid rgba(48,209,88,.22);
+}
+
+/* ---------- 多城市对比 ---------- */
+.wx-cmp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: 10px; }
+.wx-cmp-card {
+  position: relative; display: flex; flex-direction: column; gap: 3px; padding: 13px 14px;
+  border-radius: 15px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07);
+  transition: transform .18s ease, border-color .18s ease;
+}
+.wx-cmp-card:hover { transform: translateY(-2px); border-color: rgba(10,132,255,.4); }
+.wx-cmp-card b { font-size: 13.5px; color: #eef3fc; }
+.wx-cmp-temp { font-size: 26px; font-weight: 300; color: #fff; }
+.wx-cmp-sub, .wx-cmp-sub2 { font-size: 11px; color: rgba(195,208,230,.6); }
+.wx-cmp-del {
+  position: absolute; top: 7px; right: 8px; width: 20px; height: 20px; border-radius: 50%;
+  border: none; background: rgba(255,255,255,.07); color: rgba(235,240,250,.55);
+  font-size: 10px; cursor: pointer; opacity: 0; transition: opacity .15s;
+}
+.wx-cmp-card:hover .wx-cmp-del { opacity: 1; }
+.wx-cmp-del:hover { background: rgba(255,69,58,.3); color: #fff; }
+.wx-cmp-add input {
+  width: 100%; height: 100%; min-height: 64px; box-sizing: border-box; padding: 10px 12px;
+  border-radius: 15px; border: 1px dashed rgba(255,255,255,.16); background: rgba(255,255,255,.02);
+  color: rgba(235,240,250,.8); font: inherit; font-size: 12px; outline: none;
+}
+.wx-cmp-add input:focus { border-color: rgba(10,132,255,.5); }
+
+/* ---------- 结构化页脚（footer.design 启发） ---------- */
+.wx-footer {
+  display: flex; justify-content: space-between; align-items: flex-end; gap: 18px; flex-wrap: wrap;
+  padding: 20px 6px 8px; border-top: 1px solid rgba(255,255,255,.07); margin-top: 8px;
+}
+.wx-footer-brand b { display: block; font-size: 13px; color: rgba(235,240,250,.85); letter-spacing: .03em; }
+.wx-footer-brand span { font-size: 11.5px; color: rgba(185,199,222,.45); }
+.wx-footer-meta { display: flex; gap: 16px; flex-wrap: wrap; }
+.wx-footer-meta span { font-size: 11px; color: rgba(185,199,222,.42); font-variant-numeric: tabular-nums; }
+
+/* ---------- 旧结构兼容 ---------- */
+.weather-content { display: block; }
+.weather-loading { padding: 60px 0; text-align: center; color: rgba(200,212,232,.6); }
+
+@media (max-width: 640px) {
+  .wx-temp { font-size: 72px; }
+  .wx-hero { padding: 20px 18px 18px; }
+  .wx-day { grid-template-columns: 46px 26px 40px 1fr 74px; }
+}

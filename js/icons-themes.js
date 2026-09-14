@@ -29,10 +29,10 @@
       document.querySelectorAll(".nav-item[data-view]").forEach(item => {
         const old = item.querySelector(".xy-icon");
         if (old) old.remove();
-        item.insertAdjacentHTML("afterbegin", render(item.dataset.view, "xy-icon", style));
+        item.insertAdjacentHTML("afterbegin", render(item.dataset.icon || item.dataset.view, "xy-icon", style));
       });
       document.querySelectorAll(".mobile-tab[data-mobile-view], .mobile-nav-item[data-view]").forEach(item => {
-        const view = item.dataset.mobileView || item.dataset.view;
+        const view = item.dataset.icon || item.dataset.mobileView || item.dataset.view;
         const old = item.querySelector(".xy-icon");
         if (old) old.remove();
         item.insertAdjacentHTML("afterbegin", render(view, "xy-icon", style));
