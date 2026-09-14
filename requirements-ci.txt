@@ -1,0 +1,11 @@
+# CI 最小依赖（GitHub Actions 用）
+#
+# 为什么需要：tests/test_platform.py 会 `import server`，而 server.py 顶层
+# `import qrcode`，且启动时用 PIL 后端生成二维码 PNG（_write_perm_qr_asset）。
+# 之前 workflow 只做 setup-python + npm ci，从没装 Python 依赖，
+# 于是 `npm test` 必挂 —— 整条流水线连红了 7 天（2026-09-09 ~ 09-14）。
+#
+# 本机完整运行依赖见 requirements-native.txt（含 pywebview / pythonnet / clr_loader，
+# 那些是桌面窗口用的，CI 跑测试用不到，装了反而慢且容易在 Linux 上翻车）。
+qrcode==8.2
+pillow==12.3.0
