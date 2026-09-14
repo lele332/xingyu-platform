@@ -88,18 +88,8 @@ assets/voice-fixed.png
 work-inspect.js
 tests/*.png
 
-# 一次性调试脚本（tests/ 里被 npm run 调用的正式用例仍入库）
-tests/_shot2.js
-tests/gsap-*.js
-tests/nav-pill-*.js
-tests/fx-*.js
-tests/entrance-*.js
-tests/splash-*.js
-tests/sidebar-*.js
-tests/scroll-src.js
-tests/transition-env.js
-tests/usage-jank-diagnose.js
-tests/verify-splash-sequence.js
+# 一次性调试 / 诊断脚本与截图产物（tests/ 根只留 npm run 驱动的正式用例）
+tests/dev/
 tests/artifacts/
 
 # 本机代码同步任务的运行日志（tools/sync_push.py）

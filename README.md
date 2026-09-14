@@ -185,6 +185,10 @@ API Key 不应写入前端文件或提交到代码仓库。个人本地使用时
 - OpenAI 兼容 API 调用
 - 固定永久二维码（指向 GitHub Pages 永久链接，无需 CDN）
 
+## 📁 项目结构
+
+目录职责与维护约定见 [docs/STRUCTURE.md](docs/STRUCTURE.md)；设计/产品/审计等文档统一在 [docs/](docs/)。
+
 ## 🤖 本机 AI 代理（桌面端，密钥不落浏览器）
 
 勾选「设置 → AI 模型配置 → 使用本机 AI 代理」后，AI 请求会走本机 127.0.0.1 的 server.py（/ai-proxy/），API Key 只保存在本机，不再写入浏览器 localStorage：
