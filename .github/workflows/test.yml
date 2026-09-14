@@ -36,6 +36,12 @@ jobs:
           node --check js/app.js
           node --check js/srs.js
 
-      - name: Run all smoke tests
-        run: npm run check
+      # 2026-09-14 拆成两步：逻辑用例必须真跑真红；浏览器用例在 runner 上
+      # 没有 Chrome / 没有本机服务，会「大声跳过」而不是把整条流水线染红。
+      # （之前合在一起跑了 7 天全红，红到没人看 = 等于没有 CI）
+      - name: Run logic smoke tests (srs / ai / platform)
+        run: npm run test:srs && npm run test:ai && npm test
+
+      - name: Run browser smoke test (skips loudly when Chrome or local server is absent)
+        run: npm run test:quality
 
