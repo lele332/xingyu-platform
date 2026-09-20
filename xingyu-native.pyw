@@ -551,7 +551,8 @@ def main():
         if should_start and not core.start_server(port):
             raise RuntimeError("本地服务启动失败")
         core.start_native()
-        core.start_vox_services()
+        if core.should_start_vox():
+            core.start_vox_services()
         url = "http://127.0.0.1:%d" % port
     except Exception:
         traceback.print_exc()

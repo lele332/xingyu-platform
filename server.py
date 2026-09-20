@@ -4,6 +4,7 @@
 import http.server
 import base64
 import hmac
+import hashlib
 import ipaddress
 import io
 import json
@@ -26,7 +27,7 @@ from urllib.parse import parse_qs, unquote, urlsplit
 import platform_db
 
 DEFAULT_PORT = 8620
-BUILD = "20260914.3"
+BUILD = "20260915.5"
 # 默认监听 0.0.0.0（局域网开放），手机扫码「配置拉满」版开箱即用。
 # 安全：非回环客户端必须持访问令牌换取 HttpOnly Cookie（见下方安全模式），
 # 令牌持久化在 data/access-token.txt，重启不变，二维码因此长期有效。
@@ -280,9 +281,32 @@ def _vox_health():
         return False
 
 
+import threading as _voice_threading
+_voice_start_lock = _voice_threading.Lock()
+
+
+def _start_voice_on_demand():
+    """Serialize startup requests; reuse healthy services, never spawn on health GET."""
+    with _voice_start_lock:
+        if _vox_health():
+            return True
+        import runpy
+        try:
+            core = runpy.run_path(os.path.join(os.path.dirname(__file__), "xingyu-app.pyw"),
+                                  run_name="xingyu_voice_core")
+            return bool(core["start_vox_services"]())
+        except Exception as exc:
+            sys.stderr.write("[星屿] voice startup failed: %s\n" % exc)
+            return False
+
+
 def _proxy_to_vox(handler, method, path, body=None):
     """把请求转发到本地 VoxCPM 服务并回传响应（含二进制音频）。"""
     rel = path if path.startswith("/") else "/" + path
+    if method == "POST" and (rel == "/v1/audio/speech" or rel == "/xingyu/voices"):
+        if not _start_voice_on_demand():
+            _send_json(handler, 503, {"error": "语音服务启动未就绪，请稍后重试"})
+            return
     target = VOX_UPSTREAM + rel
     req = urllib.request.Request(target, data=body, method=method)
     if body is not None:
@@ -657,6 +681,123 @@ def _send_json(handler, status, data):
     handler.wfile.write(payload)
 
 
+# --------------------------------------------------------------------------- #
+# 课程知识库 /api/kb/*  —— 专业课 RAG：目录 / 大纲 / 检索 / 上下文组装
+# --------------------------------------------------------------------------- #
+_KB_MOD = None
+_KB_ERR = None
+
+
+def _kb_module():
+    """Load scripts/knowledge/kbcore.py on demand (keeps import side effects lazy)."""
+    global _KB_MOD, _KB_ERR
+    if _KB_MOD is not None or _KB_ERR is not None:
+        return _KB_MOD
+    try:
+        import importlib.util
+        p = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                         "scripts", "knowledge", "kbcore.py")
+        spec = importlib.util.spec_from_file_location("xy_kbcore", p)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        _KB_MOD = mod
+    except Exception as exc:  # 知识库不可用不能拖垮整个平台
+        _KB_ERR = "%s: %s" % (type(exc).__name__, exc)
+        return None
+    return _KB_MOD
+
+
+def _kb_prompt():
+    p = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                     "knowledge", "prompts", "coach-system.md")
+    try:
+        with open(p, encoding="utf-8") as f:
+            return f.read()
+    except Exception:
+        return ""
+
+
+def _handle_kb(handler, path):
+    """GET /api/kb/{subjects|outline|search|context|prompt|stats}"""
+    mod = _kb_module()
+    if mod is None:
+        _send_json(handler, 503, {"ok": False, "error": "知识库不可用: %s" % (_KB_ERR or "unknown")})
+        return
+    qs = parse_qs(urlsplit(path).query)
+
+    def q(name, default=""):
+        return (qs.get(name) or [default])[0]
+
+    route = urlsplit(path).path.rstrip("/")
+    try:
+        if route == "/api/kb/stats":
+            _send_json(handler, 200, mod.stats())
+        elif route == "/api/kb/subjects":
+            _send_json(handler, 200, {"ok": True, "items": mod.subjects()})
+        elif route == "/api/kb/outline":
+            sid = q("subject")
+            if not sid:
+                _send_json(handler, 400, {"ok": False, "error": "missing subject"})
+                return
+            _send_json(handler, 200, mod.outline(sid))
+        elif route == "/api/kb/list":
+            sid = q("subject")
+            kind = q("kind")
+            if not sid or not kind:
+                _send_json(handler, 400, {"ok": False, "error": "missing subject/kind"})
+                return
+            _send_json(handler, 200, {"ok": True, "subjectId": sid, "kind": kind,
+                                      "items": mod.list_items(sid, kind)})
+        elif route == "/api/kb/search":
+            query = q("q").strip()
+            if not query:
+                _send_json(handler, 400, {"ok": False, "error": "missing q"})
+                return
+            try:
+                top = max(1, min(30, int(q("top", "8"))))
+            except ValueError:
+                top = 8
+            kinds = tuple(k for k in q("kind").split(",") if k)
+            hits = mod.search(query, top, q("subject"), kinds)
+            _send_json(handler, 200, {"ok": True, "query": query, "count": len(hits),
+                                      "items": hits})
+        elif route == "/api/kb/context":
+            query = q("q").strip()
+            if not query:
+                _send_json(handler, 400, {"ok": False, "error": "missing q"})
+                return
+            try:
+                top = max(1, min(20, int(q("top", "8"))))
+            except ValueError:
+                top = 8
+            try:
+                budget = max(800, min(20000, int(q("budget", "6000"))))
+            except ValueError:
+                budget = 6000
+            kinds = tuple(k for k in q("kind").split(",") if k)
+            res = mod.assemble_context(query, q("subject"), top, budget, kinds, q("chapter"))
+            res["prompt"] = _kb_prompt()
+            _send_json(handler, 200, res)
+        elif route == "/api/kb/feedback":
+            # 用户对一次回答的整体评价 -> 折算到本次引用的每个条目上
+            fid = q("id")
+            kind = q("kind")
+            if not fid or not kind:
+                _send_json(handler, 400, {"ok": False, "error": "missing id/kind"})
+                return
+            ids = [x for x in fid.split(",") if x]
+            out = []
+            for one in ids[:20]:
+                out.append(mod.record_feedback(one, kind, q("q")))
+            _send_json(handler, 200, {"ok": True, "results": out, "summary": mod.feedback_summary()})
+        elif route == "/api/kb/prompt":
+            _send_json(handler, 200, {"ok": True, "prompt": _kb_prompt()})
+        else:
+            _send_json(handler, 404, {"ok": False, "error": "unknown kb route"})
+    except Exception as exc:
+        _send_json(handler, 500, {"ok": False, "error": "%s: %s" % (type(exc).__name__, exc)})
+
+
 def _diag_rotate():
     """diag.log 超过上限时只保留后半段，避免无限增长。"""
     try:
@@ -974,7 +1115,10 @@ def _save_state(handler, body):
             server_info = platform_db.state_info()
         except Exception as db_error:
             sys.stderr.write("[星屿] SQLite 镜像失败: %s\n" % db_error)
-            server_info = {"updatedAt": ""}
+            # Bootstrap reads SQLite, so acknowledging a JSON-only save would
+            # allow the next poll to overwrite the edit with stale DB contents.
+            _send_json(handler, 503, {"ok": False, "error": "database save failed; retry required"})
+            return
     finally:
         try:
             if os.path.exists(tmp_path):
@@ -1042,9 +1186,11 @@ def _api_data_get(handler, segments, query):
         since = (query.get("since", [""])[0] or "").strip()
         if not since:
             raise _ApiDataError(400, "missing since")
+        info = platform_db.state_info()
         return {
             "ok": True,
             "changes": platform_db.changes_since(since, include_deleted=True),
+            "updatedAt": info.get("updatedAt", ""),
         }
 
     if head == "profile":
@@ -1161,7 +1307,25 @@ def _handle_api_data(handler, method: str, path: str):
         query = parse_qs(parsed.query)
 
         if method == "GET":
-            _send_json(handler, 200, _api_data_get(handler, segments, query))
+            value = _api_data_get(handler, segments, query)
+            if not segments or segments == ["bootstrap"]:
+                # Hash the authorized representation, not a clock timestamp:
+                # hard deletes and writes within one millisecond must invalidate it.
+                payload = json.dumps(value, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+                etag = '"' + hashlib.sha256(payload).hexdigest() + '"'
+                unchanged = handler.headers.get("If-None-Match") == etag
+                handler.send_response(304 if unchanged else 200)
+                handler.send_header("ETag", etag)
+                handler.send_header("Cache-Control", "private, no-cache")
+                handler.send_header("Vary", "Cookie")
+                if not unchanged:
+                    handler.send_header("Content-Type", "application/json; charset=utf-8")
+                    handler.send_header("Content-Length", str(len(payload)))
+                handler.end_headers()
+                if not unchanged:
+                    handler.wfile.write(payload)
+            else:
+                _send_json(handler, 200, value)
         elif method == "POST":
             _send_json(handler, 200, _api_data_post(handler, segments))
         elif method == "PATCH":
@@ -1370,6 +1534,9 @@ class XingyuHandler(http.server.SimpleHTTPRequestHandler):
             return
         if path.startswith("/api/data/"):
             _handle_api_data(self, "GET", self.path)
+            return
+        if path.startswith("/api/kb/"):
+            _handle_kb(self, self.path)
             return
         # 仅本机可见：设置页用它展示给用户复制；远程客户端即使已有 Cookie 也不能读取令牌。
         if path == "/api/lan-token":
@@ -1723,6 +1890,19 @@ class XingyuHandler(http.server.SimpleHTTPRequestHandler):
             self.send_error(403, "Forbidden")
             return
         path = urlsplit(self.path).path
+        if path == "/api/voice/start":
+            if not self._authorized():
+                self.send_error(401, "Unauthorized")
+                return
+            # No request body is accepted; close to avoid unread HTTP/1.1 bytes.
+            self.close_connection = True
+            try:
+                ready = _start_voice_on_demand()
+                _send_json(self, 200 if ready else 503, {"ok": ready})
+            except Exception as exc:
+                sys.stderr.write("[星屿] voice startup failed: %s\n" % exc)
+                _send_json(self, 503, {"ok": False, "error": "语音服务启动失败"})
+            return
         if path == DIAG_PATH:
             _diag_post(self)
             return
@@ -2061,12 +2241,15 @@ def _voxcpm_service_alive():
 
 
 def _ensure_voxcpm_service():
-    """平台启动时自动拉起 VoxCPM 本地合成适配层（127.0.0.1:8000，已在运行则跳过）。
+    """按需自愈 VoxCPM 本地合成适配层（127.0.0.1:8000）。
 
     AIRI 的「嘴」整条链路都压在这一层上：edge-tts 快车道和 AMD GPU 兜底都走它。
     它一挂，AIRI 的表现就是「能听见我说话但不说话」，而前端只能看到一个 502，
     极难联想到是本地服务没起来。所以照 _ensure_agent_service 的样子做成启动自愈。
     """
+    # 语音模型属于重型可选服务，主平台启动时默认不拉起。
+    if os.environ.get("XINGYU_START_VOX", "").strip().lower() not in ("1", "true", "yes", "on"):
+        return
     if _voxcpm_service_alive():
         sys.stderr.write("[星屿] VoxCPM 合成服务已在运行 (127.0.0.1:8000)\n")
         return

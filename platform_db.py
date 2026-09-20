@@ -110,7 +110,7 @@ def init_db(db_path: str = DB_PATH) -> None:
         conn.execute("PRAGMA journal_mode = WAL")
         conn.execute(
             "INSERT INTO platform_meta(key, value) VALUES('schemaVersion', ?) "
-            "ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+            "ON CONFLICT(key) DO UPDATE SET value=excluded.value WHERE value <> excluded.value",
             (str(SCHEMA_VERSION),),
         )
 
@@ -132,6 +132,8 @@ def _upsert_single(
     device_id: Optional[str] = None,
 ) -> Dict[str, Any]:
     row = conn.execute(f"SELECT payload, version FROM {table} WHERE id = 1").fetchone()
+    if row and _decode_payload(row["payload"]) == value:
+        return value
     version = (row["version"] if row else 0) + 1
     conn.execute(
         f"""
@@ -327,13 +329,31 @@ def set_settings(value: Dict[str, Any], device_id: Optional[str] = None, db_path
 
 def bootstrap(db_path: str = DB_PATH) -> Dict[str, Any]:
     """返回前端 Store 当前兼容的完整快照。"""
-    return {
-        "schemaVersion": SCHEMA_VERSION,
-        "profile": get_profile(db_path),
-        "settings": get_settings(db_path),
-        **{key: list_items(key, db_path=db_path) for key in ARRAY_KEYS},
-        **state_info(db_path),
-    }
+    # One read transaction: collections and cursor must describe the same instant.
+    # Previously each collection opened a connection, allowing a mixed snapshot.
+    with connect(db_path) as conn:
+        conn.execute("BEGIN")
+        result = {
+            "schemaVersion": SCHEMA_VERSION,
+            "profile": _read_single(conn, "profile") or {},
+            "settings": _read_single(conn, "settings") or {},
+            **{key: [] for key in ARRAY_KEYS},
+        }
+        rows = conn.execute(
+            "SELECT entity, payload FROM records WHERE deleted_at IS NULL ORDER BY created_at, id"
+        ).fetchall()
+        for row in rows:
+            if row["entity"] in ARRAY_KEYS:
+                result[row["entity"]].append(_decode_payload(row["payload"]))
+        stamp = conn.execute("""
+            SELECT MAX(updated_at) FROM (
+                SELECT MAX(updated_at) AS updated_at FROM records
+                UNION ALL SELECT updated_at FROM profile
+                UNION ALL SELECT updated_at FROM settings
+            )
+        """).fetchone()[0]
+        result.update(updatedAt=stamp or "", hasData=bool(stamp))
+        return result
 
 
 def import_snapshot(
@@ -381,9 +401,13 @@ def import_snapshot(
                 payload = dict(item)
                 payload["id"] = item_id
                 row = conn.execute(
-                    "SELECT created_at, version FROM records WHERE entity = ? AND id = ?",
+                    "SELECT created_at, version, payload, deleted_at FROM records WHERE entity = ? AND id = ?",
                     (entity, item_id),
                 ).fetchone()
+                snapshot_ids.add(item_id)
+                count += 1
+                if row and row["deleted_at"] is None and _decode_payload(row["payload"]) == payload:
+                    continue
                 version = (row["version"] if row else 0) + 1
                 created_at = row["created_at"] if row else _utc_now()
                 conn.execute(
@@ -407,10 +431,8 @@ def import_snapshot(
                         device_id,
                     ),
                 )
-                snapshot_ids.add(item_id)
-                count += 1
 
-            if prune_missing and snapshot_ids:
+            if prune_missing:
                 current_rows = conn.execute(
                     "SELECT id FROM records WHERE entity = ? AND deleted_at IS NULL",
                     (entity,),
@@ -478,6 +500,22 @@ def changes_since(
             ).fetchall()
 
         result: List[Dict[str, Any]] = []
+        for table in ("profile", "settings"):
+            row = conn.execute(
+                f"SELECT payload, updated_at, version, device_id FROM {table} WHERE updated_at > ?",
+                (since,),
+            ).fetchone()
+            if row:
+                result.append({
+                    "entity": table,
+                    "id": "1",
+                    "item": _decode_payload(row["payload"]),
+                    "createdAt": row["updated_at"],
+                    "updatedAt": row["updated_at"],
+                    "deletedAt": None,
+                    "version": row["version"],
+                    "deviceId": row["device_id"],
+                })
         for row in rows:
             result.append({
                 "entity": row["entity"],
