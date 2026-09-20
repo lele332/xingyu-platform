@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>桥梁结构实验室 · 星屿</title>
+<link rel="stylesheet" href="style.css?v=20260919.5">
+</head>
+<body>
+
+<header class="bl-top">
+  <h1>桥梁结构实验室</h1>
+  <span class="sub">平面杆系有限元内核 · 影响线最不利布载 · 规范验算</span>
+  <span class="spacer"></span>
+  <span class="pill" id="pillMesh">—</span>
+  <span class="pill" id="pillValid">—</span>
+</header>
+
+<nav class="bl-mods" id="modbar">
+  <button data-m="beam" class="on">梁桥</button>
+  <button data-m="arch">拱桥</button>
+  <button data-m="cable">斜拉桥</button>
+  <button data-m="susp">悬索桥</button>
+  <button data-m="pier">桥墩与桩基</button>
+  <button data-m="hydro">桥涵水文</button>
+  <button data-m="modal3d">3D 模态</button>
+  <button data-m="guide">实验引导</button>
+  <span class="mods-hint" id="modsHint">梁桥：影响线 + 规范验算</span>
+</nav>
+
+<div class="bl-wrap">
+
+  <!-- ================= 左：参数 ================= -->
+  <aside>
+    <!-- ---------- 梁桥 ---------- -->
+    <div class="modpane" id="modBeam">
+      <div class="card">
+        <h3>桥型预设<span class="note">点一下先跑起来</span></h3>
+        <div class="preset" id="presets"></div>
+      </div>
+
+      <div class="card">
+        <h3>结构布置</h3>
+        <div class="field">
+          <label>分跨 <i>逗号分隔，单位 m</i></label>
+          <input type="text" id="pSpans" value="30">
+        </div>
+        <div class="field">
+          <label>单元目标长度 <b><span id="vMesh">1.0</span> m</b></label>
+          <input type="range" id="pMesh" min="0.5" max="3" step="0.5" value="1">
+        </div>
+        <div class="field">
+          <label>混凝土</label>
+          <select id="pGrade">
+            <option value="C40">C40</option>
+            <option value="C50" selected>C50</option>
+            <option value="C55">C55</option>
+            <option value="C60">C60</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>主梁截面</h3>
+        <div class="field">
+          <div class="seg" id="pSecKind">
+            <button data-v="box" class="on">箱形</button>
+            <button data-v="T">T 形</button>
+            <button data-v="rect">矩形</button>
+          </div>
+        </div>
+        <div class="field">
+          <label><span id="lB">顶板宽 B</span> <b><span id="vB">6.0</span> m</b></label>
+          <input type="range" id="pB" min="1" max="14" step="0.1" value="6" data-hide="rect">
+        </div>
+        <div class="field">
+          <label>梁高 H <b><span id="vH">1.8</span> m</b></label>
+          <input type="range" id="pH" min="0.6" max="6" step="0.05" value="1.8">
+        </div>
+        <div class="field">
+          <label><span id="lT1">顶板厚</span> <b><span id="vT1">0.25</span> m</b></label>
+          <input type="range" id="pT1" min="0.1" max="0.8" step="0.01" value="0.25" data-hide="rect">
+        </div>
+        <div class="field">
+          <label>底板厚 <b><span id="vT2">0.22</span> m</b></label>
+          <input type="range" id="pT2" min="0.1" max="0.8" step="0.01" value="0.22" data-hide="rect,T">
+        </div>
+        <div class="field">
+          <label><span id="lBW">腹板总宽 bw</span> <b><span id="vBW">0.80</span> m</b></label>
+          <input type="range" id="pBW" min="0.2" max="3" step="0.05" value="0.8">
+        </div>
+        <div class="kv" style="margin-top:8px"><span>截面面积 A</span><b id="vA">—</b></div>
+        <div class="kv"><span>惯性矩 I</span><b id="vI">—</b></div>
+      </div>
+
+      <div class="card">
+        <h3>荷载<span class="note">JTG D60-2015</span></h3>
+        <div class="field">
+          <label>二期恒载（铺装+护栏） <b><span id="vG2">10</span> kN/m</b></label>
+          <input type="range" id="pG2" min="0" max="40" step="1" value="10">
+        </div>
+        <div class="field">
+          <label>荷载等级</label>
+          <div class="seg" id="pCls">
+            <button data-v="I" class="on">公路-I级</button>
+            <button data-v="II">公路-II级</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>设计车道数 <b><span id="vLanes">3</span></b></label>
+          <input type="range" id="pLanes" min="1" max="6" step="1" value="3">
+        </div>
+        <div class="field">
+          <label>主梁片数 n <b><span id="vNG">5</span></b></label>
+          <input type="range" id="pNG" min="2" max="10" step="1" value="5">
+        </div>
+        <div class="field">
+          <label>主梁间距 <b><span id="vGS">2.4</span> m</b></label>
+          <input type="range" id="pGS" min="1.2" max="4" step="0.1" value="2.4">
+        </div>
+        <div class="field">
+          <label>横向分布系数 m</label>
+          <div class="seg" id="pMMode">
+            <button data-v="ecc" class="on">偏心压力法</button>
+            <button data-v="man">手动</button>
+          </div>
+        </div>
+        <div class="field" id="wrapMMan" style="display:none">
+          <label>手动 m <b><span id="vMMan">0.55</span></b></label>
+          <input type="range" id="pMMan" min="0.1" max="1.5" step="0.01" value="0.55">
+        </div>
+        <div class="field">
+          <label>冲击系数 μ</label>
+          <div class="seg" id="pMuMode">
+            <button data-v="auto" class="on">按基频估算</button>
+            <button data-v="man">手动</button>
+          </div>
+        </div>
+        <div class="field" id="wrapMuMan" style="display:none">
+          <label>手动 μ <b><span id="vMuMan">0.25</span></b></label>
+          <input type="range" id="pMuMan" min="0.05" max="0.45" step="0.01" value="0.25">
+        </div>
+        <div class="kv"><span>基频 f₁（估算）</span><b id="vFreq">—</b></div>
+      </div>
+
+      <div class="card">
+        <h3>配筋与验算<span class="note">JTG 3362-2018</span></h3>
+        <div class="field">
+          <label>受拉钢筋面积 As <b><span id="vAs">300</span> cm²</b></label>
+          <input type="range" id="pAs" min="20" max="1200" step="10" value="300">
+        </div>
+        <div class="field">
+          <label>as（合力点至底缘） <b><span id="vAs2">0.12</span> m</b></label>
+          <input type="range" id="pAsDist" min="0.05" max="0.35" step="0.01" value="0.12">
+        </div>
+        <div class="field">
+          <label>主筋牌号</label>
+          <select id="pRebar">
+            <option value="HPB300">HPB300</option>
+            <option value="HRB400" selected>HRB400</option>
+            <option value="HRB500">HRB500</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>箍筋直径 <b><span id="vSd">12</span> mm</b></label>
+          <input type="range" id="pSd" min="6" max="20" step="1" value="12">
+        </div>
+        <div class="field">
+          <label>箍筋肢数 <b><span id="vSn">4</span></b></label>
+          <input type="range" id="pSn" min="2" max="8" step="1" value="4">
+        </div>
+        <div class="field">
+          <label>箍筋间距 <b><span id="vSv">150</span> mm</b></label>
+          <input type="range" id="pSv" min="60" max="400" step="10" value="150">
+        </div>
+        <div class="field">
+          <label>安全等级</label>
+          <select id="pSafe">
+            <option value="1">一级 γ₀=1.1</option>
+            <option value="2" selected>二级 γ₀=1.0</option>
+            <option value="3">三级 γ₀=0.9</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---------- 拱桥 ---------- -->
+    <div class="modpane" id="modArch" style="display:none">
+      <div class="card">
+        <h3>拱桥 · 结构布置</h3>
+        <div class="field">
+          <label>计算跨径 L <b><span id="vaL">60</span> m</b></label>
+          <input type="range" id="aL" min="30" max="200" step="5" value="60">
+        </div>
+        <div class="field">
+          <label>矢高 f <b><span id="vaF">12</span> m</b></label>
+          <input type="range" id="aF" min="5" max="40" step="1" value="12">
+        </div>
+        <div class="field">
+          <label>拱轴线型</label>
+          <div class="seg" id="aAxis">
+            <button data-v="catenary" class="on">悬链线</button>
+            <button data-v="para">抛物线</button>
+            <button data-v="circle">圆弧</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>拱轴系数 m <b><span id="vaM">2.0</span></b></label>
+          <input type="range" id="aM" min="1.2" max="5" step="0.1" value="2">
+        </div>
+        <div class="field">
+          <label>桥面至拱顶高差 <b><span id="vaDeckH">2.0</span> m</b></label>
+          <input type="range" id="aDeckH" min="0.5" max="15" step="0.5" value="2">
+        </div>
+        <div class="field">
+          <label>立柱间距 <b><span id="vaColS">6</span> m</b></label>
+          <input type="range" id="aColS" min="3" max="15" step="1" value="6">
+        </div>
+        <div class="field">
+          <label>拱脚约束</label>
+          <div class="seg" id="aHinge">
+            <button data-v="fixed" class="on">无铰拱（固结）</button>
+            <button data-v="hinged">拱脚铰接</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>拱桥 · 截面与荷载</h3>
+        <div class="field">
+          <label>混凝土</label>
+          <select id="aGrade">
+            <option value="C40" selected>C40</option>
+            <option value="C50">C50</option>
+            <option value="C55">C55</option>
+            <option value="C60">C60</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>拱圈面积 A <b><span id="vaAA">1.2</span> m²</b></label>
+          <input type="range" id="aAA" min="0.5" max="5" step="0.1" value="1.2">
+        </div>
+        <div class="field">
+          <label>拱圈惯性矩 I <b><span id="vaAI">0.14</span> m⁴</b></label>
+          <input type="range" id="aAI" min="0.02" max="2" step="0.01" value="0.144">
+        </div>
+        <div class="field">
+          <label>桥面梁面积 A <b><span id="vaDA">1.0</span> m²</b></label>
+          <input type="range" id="aDA" min="0.5" max="3" step="0.1" value="1">
+        </div>
+        <div class="field">
+          <label>桥面梁惯性矩 I <b><span id="vaDI">0.10</span> m⁴</b></label>
+          <input type="range" id="aDI" min="0.02" max="1" step="0.01" value="0.1">
+        </div>
+        <div class="field">
+          <label>桥面恒载 q <b><span id="vaQ">40</span> kN/m</b></label>
+          <input type="range" id="aQ" min="10" max="200" step="5" value="40">
+        </div>
+      </div>
+    </div>
+
+    <!-- ---------- 斜拉桥 ---------- -->
+    <div class="modpane" id="modCable" style="display:none">
+      <div class="card">
+        <h3>斜拉桥 · 结构布置</h3>
+        <div class="field">
+          <label>主跨 L <b><span id="vcL">400</span> m</b></label>
+          <input type="range" id="cL" min="200" max="800" step="20" value="400">
+        </div>
+        <div class="field">
+          <label>塔高 Ht <b><span id="vcHt">80</span> m</b></label>
+          <input type="range" id="cHt" min="40" max="200" step="5" value="80">
+        </div>
+        <div class="field">
+          <label>每扇索数 <b><span id="vcFan">8</span></b></label>
+          <input type="range" id="cFan" min="4" max="14" step="1" value="8">
+        </div>
+        <div class="field">
+          <label>锚跨长度 <b><span id="vcAnch">140</span> m</b></label>
+          <input type="range" id="cAnch" min="60" max="300" step="10" value="140">
+        </div>
+        <div class="field">
+          <label>混凝土</label>
+          <select id="cGrade">
+            <option value="C40">C40</option>
+            <option value="C50" selected>C50</option>
+            <option value="C55">C55</option>
+            <option value="C60">C60</option>
+          </select>
+        </div>
+      </div>
+      <div class="card">
+        <h3>斜拉桥 · 截面与荷载</h3>
+        <div class="field">
+          <label>索截面积 A <b><span id="vcCA">0.005</span> m²</b></label>
+          <input type="range" id="cCA" min="0.002" max="0.05" step="0.001" value="0.005">
+        </div>
+        <div class="field">
+          <label>主梁面积 A <b><span id="vcBA">2.0</span> m²</b></label>
+          <input type="range" id="cBA" min="0.5" max="5" step="0.1" value="2">
+        </div>
+        <div class="field">
+          <label>主梁惯性矩 I <b><span id="vcBI">0.80</span> m⁴</b></label>
+          <input type="range" id="cBI" min="0.05" max="3" step="0.05" value="0.8">
+        </div>
+        <div class="field">
+          <label>塔 EA（十亿 kN）<b><span id="vcTEA">5</span></b></label>
+          <input type="range" id="cTEA" min="1" max="100" step="1" value="5">
+        </div>
+        <div class="field">
+          <label>塔 EI（亿 kN·m²）<b><span id="vcTEI">30</span></b></label>
+          <input type="range" id="cTEI" min="1" max="100" step="1" value="30">
+        </div>
+        <div class="field">
+          <label>恒载 q <b><span id="vcQ">80</span> kN/m</b></label>
+          <input type="range" id="cQ" min="20" max="200" step="5" value="80">
+        </div>
+      </div>
+    </div>
+
+    <!-- ---------- 悬索桥 ---------- -->
+    <div class="modpane" id="modSusp" style="display:none">
+      <div class="card">
+        <h3>悬索桥 · 结构布置</h3>
+        <div class="field">
+          <label>主跨 L <b><span id="vsL">1000</span> m</b></label>
+          <input type="range" id="sL" min="300" max="1500" step="50" value="1000">
+        </div>
+        <div class="field">
+          <label>主缆垂度 f <b><span id="vsF">100</span> m</b></label>
+          <input type="range" id="sF" min="50" max="200" step="10" value="100">
+        </div>
+        <div class="field">
+          <label>吊索间距 <b><span id="vsHang">20</span> m</b></label>
+          <input type="range" id="sHang" min="10" max="40" step="2" value="20">
+        </div>
+        <div class="field">
+          <label>塔高 <b><span id="vsTH">120</span> m</b></label>
+          <input type="range" id="sTH" min="80" max="200" step="5" value="120">
+        </div>
+        <div class="field">
+          <label>混凝土</label>
+          <select id="sGrade">
+            <option value="C40">C40</option>
+            <option value="C50" selected>C50</option>
+            <option value="C55">C55</option>
+            <option value="C60">C60</option>
+          </select>
+        </div>
+      </div>
+      <div class="card">
+        <h3>悬索桥 · 截面与荷载</h3>
+        <div class="field">
+          <label>主缆面积 A <b><span id="vsCA">0.40</span> m²</b></label>
+          <input type="range" id="sCA" min="0.1" max="1" step="0.05" value="0.4">
+        </div>
+        <div class="field">
+          <label>加劲梁面积 A <b><span id="vsDA">2.5</span> m²</b></label>
+          <input type="range" id="sDA" min="0.5" max="5" step="0.1" value="2.5">
+        </div>
+        <div class="field">
+          <label>加劲梁惯性矩 I <b><span id="vsDI">1.20</span> m⁴</b></label>
+          <input type="range" id="sDI" min="0.1" max="3" step="0.1" value="1.2">
+        </div>
+        <div class="field">
+          <label>塔 EA（十亿 kN）<b><span id="vsTEA">10</span></b></label>
+          <input type="range" id="sTEA" min="1" max="100" step="1" value="10">
+        </div>
+        <div class="field">
+          <label>塔 EI（亿 kN·m²）<b><span id="vsTEI">5</span></b></label>
+          <input type="range" id="sTEI" min="1" max="100" step="1" value="5">
+        </div>
+        <div class="field">
+          <label>恒载 q <b><span id="vsQ">18</span> kN/m</b></label>
+          <input type="range" id="sQ" min="10" max="100" step="2" value="18">
+        </div>
+      </div>
+    </div>
+
+    <!-- ---------- 桥墩与桩基 ---------- -->
+    <div class="modpane" id="modPier" style="display:none">
+      <div class="card">
+        <h3>墩柱 · 截面与材料</h3>
+        <div class="field">
+          <label>截面形式</label>
+          <div class="seg" id="pShapeKind">
+            <button data-v="circle" class="on">圆形</button>
+            <button data-v="rect">矩形</button>
+            <button data-v="roundRect">圆端形</button>
+          </div>
+        </div>
+        <div class="field" data-show="circle">
+          <label>直径 D <b><span id="vpD">1.3</span> m</b></label>
+          <input type="range" id="pD" min="0.8" max="3" step="0.1" value="1.3">
+        </div>
+        <div class="field" data-show="rect,roundRect" style="display:none">
+          <label>截面宽 b <b><span id="vpPB">1.5</span> m</b></label>
+          <input type="range" id="pPB" min="0.8" max="3" step="0.1" value="1.5">
+        </div>
+        <div class="field" data-show="rect" style="display:none">
+          <label>截面高 h <b><span id="vpH2">2.0</span> m</b></label>
+          <input type="range" id="pH2" min="1" max="4" step="0.1" value="2">
+        </div>
+        <div class="field" data-show="roundRect" style="display:none">
+          <label>圆端形高 H <b><span id="vpRRH">1.8</span> m</b></label>
+          <input type="range" id="pRRH" min="1" max="3.5" step="0.1" value="1.8">
+        </div>
+        <div class="field">
+          <label>混凝土</label>
+          <select id="pPGrade">
+            <option value="C30">C30</option>
+            <option value="C35">C35</option>
+            <option value="C40" selected>C40</option>
+            <option value="C50">C50</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>纵筋牌号</label>
+          <select id="pPRebar">
+            <option value="HRB400" selected>HRB400</option>
+            <option value="HRB500">HRB500</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>配筋率 ρ <b><span id="vpRho">1.0</span> %</b></label>
+          <input type="range" id="pRho" min="0.4" max="3" step="0.1" value="1">
+        </div>
+        <div class="field">
+          <label>纵筋直径 <b><span id="vpDBar">28</span> mm</b></label>
+          <input type="range" id="pDBar" min="16" max="40" step="2" value="28">
+        </div>
+        <div class="kv" style="margin-top:8px"><span>截面面积 A</span><b id="vpA">—</b></div>
+      </div>
+      <div class="card">
+        <h3>墩柱 · 计算与作用<span class="note">JTG 3362-2018 §5.3</span></h3>
+        <div class="field">
+          <label>保护层 as <b><span id="vpAsD">0.05</span> m</b></label>
+          <input type="range" id="pAsD" min="0.04" max="0.15" step="0.01" value="0.05">
+        </div>
+        <div class="field">
+          <label>计算长度 l₀ <b><span id="vpL0">7.7</span> m</b></label>
+          <input type="range" id="pL0" min="3" max="30" step="0.5" value="7.7">
+        </div>
+        <div class="field">
+          <label>轴力设计值 Nd <b><span id="vpNd">4000</span> kN</b></label>
+          <input type="range" id="pNd" min="500" max="20000" step="100" value="4000">
+        </div>
+        <div class="field">
+          <label>弯矩设计值 Md <b><span id="vpMd">3000</span> kN·m</b></label>
+          <input type="range" id="pMd" min="100" max="10000" step="100" value="3000">
+        </div>
+      </div>
+      <div class="card">
+        <h3>裂缝 · 标准值组合<span class="note">§6.4.3</span></h3>
+        <div class="field">
+          <label>轴力标准值 Ns <b><span id="vpNs">3200</span> kN</b></label>
+          <input type="range" id="pNs" min="400" max="16000" step="100" value="3200">
+        </div>
+        <div class="field">
+          <label>弯矩标准值 Ms <b><span id="vpMs">2400</span> kN·m</b></label>
+          <input type="range" id="pMs" min="80" max="8000" step="100" value="2400">
+        </div>
+      </div>
+      <div class="card">
+        <h3>桩基 · 单桩承载力<span class="note">JTG 3363-2019 §5.3.3</span></h3>
+        <div class="field">
+          <label>桩径 D <b><span id="vpPD">1.5</span> m</b></label>
+          <input type="range" id="pPD" min="0.8" max="2.5" step="0.1" value="1.5">
+        </div>
+        <div class="field">
+          <label>土层①侧摩阻 qik <b><span id="vpQ1">60</span> kPa</b></label>
+          <input type="range" id="pQ1" min="20" max="200" step="5" value="60">
+        </div>
+        <div class="field">
+          <label>土层①厚度 <b><span id="vpPT1">8</span> m</b></label>
+          <input type="range" id="pPT1" min="2" max="20" step="1" value="8">
+        </div>
+        <div class="field">
+          <label>土层②侧摩阻 qik <b><span id="vpQ2">120</span> kPa</b></label>
+          <input type="range" id="pQ2" min="40" max="300" step="5" value="120">
+        </div>
+        <div class="field">
+          <label>土层②厚度 <b><span id="vpPT2">10</span> m</b></label>
+          <input type="range" id="pPT2" min="2" max="25" step="1" value="10">
+        </div>
+        <div class="field">
+          <label>清底系数 m₀ <b><span id="vpM0">0.80</span></b></label>
+          <input type="range" id="pM0" min="0.5" max="1" step="0.05" value="0.8">
+        </div>
+        <div class="field">
+          <label>修正系数 λ <b><span id="vpLam">0.85</span></b></label>
+          <input type="range" id="pLam" min="0.6" max="1" step="0.05" value="0.85">
+        </div>
+        <div class="field">
+          <label>承载力基本值 fa₀ <b><span id="vpFa0">500</span> kPa</b></label>
+          <input type="range" id="pFa0" min="200" max="1000" step="10" value="500">
+        </div>
+        <div class="field">
+          <label>深度修正 k₂ <b><span id="vpK2">6.0</span></b></label>
+          <input type="range" id="pK2" min="1" max="10" step="0.5" value="6">
+        </div>
+        <div class="field">
+          <label>土重度 γ₂ <b><span id="vpG2s">10</span> kN/m³</b></label>
+          <input type="range" id="pG2s" min="8" max="12" step="0.5" value="10">
+        </div>
+        <div class="field">
+          <label>桩端埋深 h <b><span id="vpPH">25</span> m</b></label>
+          <input type="range" id="pPH" min="5" max="40" step="1" value="25">
+        </div>
+      </div>
+    </div>
+
+    <!-- ---------- 桥涵水文 ---------- -->
+    <div class="modpane" id="modHydro" style="display:none">
+      <div class="card">
+        <h3>水文 · 设计流量<span class="note">JTG C30-2015</span></h3>
+        <div class="field">
+          <label>桥涵分类</label>
+          <select id="hClass">
+            <option value="特大桥">特大桥</option>
+            <option value="大桥" selected>大桥</option>
+            <option value="中桥">中桥</option>
+            <option value="小桥">小桥</option>
+            <option value="涵洞">涵洞</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>公路等级</label>
+          <select id="hRoad">
+            <option value="高速">高速</option>
+            <option value="一级">一级</option>
+            <option value="二级" selected>二级</option>
+            <option value="三级">三级</option>
+            <option value="四级">四级</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>流量来源</label>
+          <div class="seg" id="hQMode">
+            <button data-v="rational" class="on">推理公式</button>
+            <button data-v="direct">直接给定 Qp</button>
+          </div>
+        </div>
+        <div class="field hQRat">
+          <label>洪峰径流系数 ψ <b><span id="vhPsi">0.60</span></b></label>
+          <input type="range" id="hPsi" min="0.2" max="1" step="0.05" value="0.6">
+        </div>
+        <div class="field hQRat">
+          <label>设计雨力 Sp <b><span id="vhSp">80</span> mm/h</b></label>
+          <input type="range" id="hSp" min="30" max="150" step="5" value="80">
+        </div>
+        <div class="field hQRat">
+          <label>汇流时间 τ <b><span id="vhTau">2.0</span> h</b></label>
+          <input type="range" id="hTau" min="0.5" max="4" step="0.1" value="2">
+        </div>
+        <div class="field hQRat">
+          <label>衰减指数 n <b><span id="vhN">0.60</span></b></label>
+          <input type="range" id="hN" min="0.3" max="0.9" step="0.05" value="0.6">
+        </div>
+        <div class="field hQRat">
+          <label>流域面积 F <b><span id="vhF">50</span> km²</b></label>
+          <input type="range" id="hF" min="5" max="500" step="5" value="50">
+        </div>
+        <div class="field hQDir" style="display:none">
+          <label>设计流量 Qp <b><span id="vhQp">3200</span> m³/s</b></label>
+          <input type="range" id="hQp" min="100" max="20000" step="100" value="3200">
+        </div>
+      </div>
+      <div class="card">
+        <h3>水文 · 河槽与桥孔</h3>
+        <div class="field">
+          <label>桥孔压缩系数 μ <b><span id="vhMu">0.90</span></b></label>
+          <input type="range" id="hMu" min="0.5" max="1" step="0.05" value="0.9">
+        </div>
+        <div class="field">
+          <label>河槽平均水深 hc <b><span id="vhHc">3.0</span> m</b></label>
+          <input type="range" id="hHc" min="1" max="6" step="0.25" value="3">
+        </div>
+        <div class="field">
+          <label>河槽流速 Vc <b><span id="vhVc">2.5</span> m/s</b></label>
+          <input type="range" id="hVc" min="0.5" max="5" step="0.25" value="2.5">
+        </div>
+        <div class="field">
+          <label>河槽宽度 B <b><span id="vhB">60</span> m</b></label>
+          <input type="range" id="hB" min="10" max="200" step="5" value="60">
+        </div>
+        <div class="field">
+          <label>平均水深 H̄ <b><span id="vhHbar">2.5</span> m</b></label>
+          <input type="range" id="hHbar" min="0.5" max="5" step="0.25" value="2.5">
+        </div>
+        <div class="field">
+          <label>最大水深 hmax <b><span id="vhHmax">4.5</span> m</b></label>
+          <input type="range" id="hHmax" min="1" max="8" step="0.5" value="4.5">
+        </div>
+      </div>
+      <div class="card">
+        <h3>水文 · 冲刷参数</h3>
+        <div class="field">
+          <label>河床土类</label>
+          <div class="seg" id="hSoil">
+            <button data-v="sand" class="on">非粘性土</button>
+            <button data-v="clay">粘性土</button>
+          </div>
+        </div>
+        <div class="field hClay" style="display:none">
+          <label>液性指数 IL <b><span id="vhIL">0.50</span></b></label>
+          <input type="range" id="hIL" min="0.2" max="1" step="0.05" value="0.5">
+        </div>
+        <div class="field">
+          <label>含沙量 Spj <b><span id="vhSpj">5</span> kg/m³</b></label>
+          <input type="range" id="hSpj" min="0.5" max="30" step="0.5" value="5">
+        </div>
+        <div class="field">
+          <label>泥沙粒径 d̄ <b><span id="vhD">30</span> mm</b></label>
+          <input type="range" id="hD" min="0.01" max="100" step="0.5" value="30">
+        </div>
+        <div class="field">
+          <label>墩形系数 Kξ <b><span id="vhKxi">1.00</span></b></label>
+          <input type="range" id="hKxi" min="0.8" max="1.4" step="0.05" value="1">
+        </div>
+        <div class="field">
+          <label>墩计算宽度 B₁ <b><span id="vhB1">1.3</span> m</b></label>
+          <input type="range" id="hB1" min="0.5" max="3" step="0.1" value="1.3">
+        </div>
+      </div>
+      <div class="card">
+        <h3>水文 · 河床高程</h3>
+        <div class="field">
+          <label>河床高程 <b><span id="vhRB">100.0</span> m</b></label>
+          <input type="range" id="hRB" min="0" max="200" step="1" value="100">
+        </div>
+        <div class="field">
+          <label>自然冲刷 Δz <b><span id="vhDz">0.30</span> m</b></label>
+          <input type="range" id="hDz" min="0" max="1" step="0.05" value="0.3">
+        </div>
+        <div class="field">
+          <label>基底安全值 Δc <b><span id="vhDc">1.5</span> m</b></label>
+          <input type="range" id="hDc" min="0.5" max="2.5" step="0.25" value="1.5">
+        </div>
+      </div>
+    </div>
+
+    <!-- ---------- 3D 模态 ---------- -->
+    <div class="modpane" id="modModal3d" style="display:none">
+    <div class="card">
+      <h3>讲解视频 · 时程分析完整实验</h3>
+      <div id="demoVideoWrap" class="dv-wrap">
+        <img src="media/demo-th-cover.jpg?v=20260919.5" alt="讲解视频封面" class="dv-cover">
+        <button id="demoVideoPlay" class="dv-play" type="button" aria-label="播放讲解视频">▶</button>
+        <div class="dv-badge">AI 配音 · 1080p 高清 · 约 5 分钟</div>
+      </div>
+      <div class="readpts">AI 逐步讲完整时程实验：原理 → 选波 → 参数 → Newmark-β 积分 → 结果解读 → 时程×反应谱对照 → 横向对比。想实时互动版，点参数区「▶ AI 演示」。</div>
+    </div>
+    <div id="demoVideoModal" class="dv-modal" style="display:none">
+      <div class="dv-box">
+        <button id="demoVideoClose" class="dv-close" type="button" aria-label="关闭">×</button>
+        <video id="demoVideoEl" controls playsinline preload="metadata" src="media/demo-th.webm?v=20260919.5"></video>
+      </div>
+    </div>
+    <style>
+.dv-wrap{position:relative;border-radius:10px;overflow:hidden;cursor:pointer;background:#000}
+.dv-cover{width:100%;display:block;aspect-ratio:16/9;object-fit:cover}
+.dv-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:64px;height:64px;border-radius:50%;border:none;background:rgba(124,58,237,.92);color:#fff;font-size:24px;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.5);transition:transform .15s}
+.dv-wrap:hover .dv-play{transform:translate(-50%,-50%) scale(1.12)}
+.dv-badge{position:absolute;left:10px;bottom:10px;background:rgba(0,0,0,.62);color:#e9d5ff;font-size:12px;padding:4px 10px;border-radius:20px}
+.dv-modal{position:fixed;inset:0;z-index:9999;background:rgba(8,8,18,.9);align-items:center;justify-content:center;padding:24px}
+.dv-box{position:relative;width:min(1100px,100%);background:#0b0b14;border-radius:12px;padding:14px;box-shadow:0 12px 60px rgba(0,0,0,.7)}
+.dv-box video{width:100%;border-radius:8px;display:block;background:#000}
+.dv-close{position:absolute;right:-10px;top:-10px;width:34px;height:34px;border-radius:50%;border:none;background:#dc2626;color:#fff;font-size:18px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.5)}
+    </style>
+    <script>
+(function(){var w=document.getElementById('demoVideoWrap'),m=document.getElementById('demoVideoModal'),v=document.getElementById('demoVideoEl'),c=document.getElementById('demoVideoClose');
+function open(){m.style.display='flex';v.play();}
+function close(){v.pause();m.style.display='none';}
+if(w){w.addEventListener('click',open);}if(c){c.addEventListener('click',close);}
+if(m){m.addEventListener('click',function(e){if(e.target===m)close();});}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&m.style.display!=='none')close();});
+})();
+    </script>
+      <div class="card">
+        <h3>3D 空间桥型<span class="note">真实模态计算</span></h3>
+        <div class="field">
+          <label>桥型</label>
+          <select id="m3dType">
+            <option value="girder">梁桥梁格</option>
+            <option value="arch">上承式拱桥</option>
+            <option value="cable">双塔斜拉桥</option>
+            <option value="suspension">悬索桥</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>分析类型</label>
+          <select id="m3dAnalysis">
+            <option value="modal">模态分析</option>
+            <option value="spectrum">反应谱分析</option>
+            <option value="timehistory">时程分析</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>桥面宽度 <b><span id="vm3dWidth">10</span> m</b></label>
+          <input type="range" id="m3dWidth" min="6" max="18" step="0.5" value="10">
+        </div>
+        <div class="field">
+          <label>每跨离散段数 <b><span id="vm3dSeg">5</span></b></label>
+          <input type="range" id="m3dSeg" min="2" max="6" step="1" value="5">
+        </div>
+        <div class="field">
+          <label>振型</label>
+          <select id="m3dMode" data-no-recompute><option value="0">计算后选择</option></select>
+        </div>
+        <div class="field">
+          <label>云图分量</label>
+          <select id="m3dCloud" data-no-recompute>
+            <option value="resultant">合位移</option>
+            <option value="x">X 向</option>
+            <option value="y">竖向 Y</option>
+            <option value="z">横向 Z</option>
+          </select>
+        </div>
+        <div class="field">
+          <button class="btn sm" id="m3dPlay">暂停振型动画</button>
+          <button class="btn sm" id="m3dReset" style="margin-top:6px">重置视角</button>
+        </div>
+      </div>
+      <div class="card" id="m3dSpectrumFields" style="display:none">
+        <h3>用户定义反应谱<span class="note">非规范预设</span></h3>
+        <div class="field">
+          <label>地震输入方向</label>
+          <select id="m3dDirection">
+            <option value="x">纵向 X</option>
+            <option value="z">横向 Z</option>
+            <option value="y">竖向 Y</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>模态组合</label>
+          <select id="m3dCombine">
+            <option value="CQC">CQC</option>
+            <option value="SRSS">SRSS</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>阻尼比 <b><span id="vm3dDamping">5</span>%</b></label>
+          <input type="range" id="m3dDamping" min="1" max="15" step="0.5" value="5">
+        </div>
+        <div class="field">
+          <label for="m3dSpectrum">谱点：周期(s), Sa(g)</label>
+          <textarea id="m3dSpectrum" rows="5">0,0.20
+0.10,0.50
+0.40,0.50
+1.50,0.12
+4.00,0.03</textarea>
+        </div>
+        <div class="readpts">示例仅用于验证反应谱算法。正式计算应粘贴项目采用规范、场地和阻尼对应的设计谱。</div>
+      </div>
+      <div class="card" id="m3dThFields" style="display:none">
+        <h3>地震动输入<span class="note">真实记录或合成波</span></h3>
+        <div class="field">
+          <label>波来源</label>
+          <select id="m3dWaveSource">
+            <option value="builtin">内置合成示例波</option>
+            <option value="paste">粘贴 / 文件导入</option>
+          </select>
+        </div>
+        <div class="field thBuiltinOnly">
+          <label>示例波</label>
+          <select id="m3dBuiltinWave"></select>
+        </div>
+        <div class="field thPasteOnly" style="display:none">
+          <label for="m3dWaveText">波数据文本</label>
+          <textarea id="m3dWaveText" rows="5" placeholder="支持 PEER .at2 全文 / 两列「t,a」/ 单列加速度"></textarea>
+        </div>
+        <div class="field thPasteOnly" style="display:none">
+          <label>从文件读取</label>
+          <input type="file" id="m3dWaveFile" accept=".txt,.at2,.asc,.csv">
+        </div>
+        <div class="field thPasteOnly" style="display:none">
+          <label>导入波单位</label>
+          <select id="m3dWaveUnit">
+            <option value="m/s2">m/s²</option>
+            <option value="g">g</option>
+            <option value="cm/s2">cm/s² (Gal)</option>
+          </select>
+        </div>
+        <div class="field thPasteOnly" style="display:none">
+          <label>单列格式 dt (s)</label>
+          <input type="number" id="m3dWaveDt" class="num solo" min="0.001" max="1" step="0.001" value="0.02">
+        </div>
+        <div class="field">
+          <label>目标 PGA 调幅 <b><span id="vm3dPga">不调幅</span></b></label>
+          <input type="range" id="m3dPga" min="0" max="4" step="0.05" value="0">
+        </div>
+        <div class="field">
+          <label>地震输入方向</label>
+          <select id="m3dThDirection">
+            <option value="x">纵向 X</option>
+            <option value="z">横向 Z</option>
+            <option value="y">竖向 Y</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>阻尼比 <b><span id="vm3dThDamping">5</span>%</b></label>
+          <input type="range" id="m3dThDamping" min="1" max="15" step="0.5" value="5">
+        </div>
+        <div class="readpts">支持 PEER NGA .at2（自动识别 NPTS/DT/单位）、两列「t,a」文本、单列加速度+dt。导入真实记录前请核对单位与采样率；步数超 6000 自动抽稀。</div>
+      </div>
+      <div class="card">
+        <h3>模型边界</h3>
+        <div class="readpts" id="m3dBoundary">选择桥型后生成对应的 3D 杆系模型。模态振型已归一化，仅用于学习空间受力、扭转和动力特性。</div>
+      </div>
+    </div>
+  <div class="modpane" id="modGuide" style="display:none">
+    <div class="card">
+      <h3>实验引导</h3>
+      <div class="readpts">选一个实验跟着步骤亲手操作：每步可「检查」验收、可「要点提示」、可「问 AI」（苏格拉底式）。进度自动保存；开始后步骤卡跟随到右下角，切模块不丢。</div>
+    </div>
+    <div id="guideList"></div>
+    <div id="guideStep" style="display:none"></div>
+  </div>
+
+  </aside>
+
+  <!-- ================= 中：图形 ================= -->
+  <main class="bl-stage">
+    <div class="banner" id="banner">
+      <span class="dot"></span>
+      <div id="bannerText">
+        这是<b>教学演示内核</b>：平面欧拉-伯努利梁单元，只算竖向弯曲，不含横向分布的空间效应、剪力滞、扭转、徐变与施工阶段。
+        荷载与抗力按 JTG D60-2015 / JTG 3362-2018 的常用条文实现，<b>正式设计请核实现行版本，并用专业软件复核</b>。
+      </div>
+    </div>
+
+    <div class="chart modal3d-card" id="modal3dCard" style="display:none">
+      <div class="chart-head">
+        <h4>3D 空间桥梁 · 振型动画</h4>
+        <span class="hint" id="m3dHint">正在等待模态计算</span>
+      </div>
+      <canvas id="m3dCanvas" aria-label="3D 空间桥梁振型动画"></canvas>
+      <div class="modal3d-legend">
+        <span><i class="modal3d-dot original"></i>未变形梁格</span>
+        <span><i class="modal3d-dot mode"></i>当前振型</span>
+        <span><i class="modal3d-dot support"></i>支座节点</span>
+      </div>
+      <div class="modal3d-scale">
+        <span>低</span><i></i><span>高</span><b id="m3dRange">—</b>
+      </div>
+      <div class="convoy" id="thTimeBar" style="display:none">
+        <input type="range" id="m3dTime" min="0" max="100" step="1" value="0">
+        <span class="val" id="vM3dTime">t = 0.00 s</span>
+      </div>
+      <div class="readpts" id="m3dRead">拖拽旋转，滚轮缩放。振型幅值已归一化，不能直接读取真实位移。</div>
+    </div>
+
+    <div class="chart" id="thChartCard" style="display:none">
+      <div class="chart-head">
+        <h4>位移时程曲线</h4>
+        <span class="hint" id="thHint">选择节点与分量</span>
+      </div>
+      <div class="th-pick">
+        <select id="m3dThNode"></select>
+        <select id="m3dThComp">
+          <option value="resultant">合位移</option>
+          <option value="x">X 向</option>
+          <option value="y">竖向 Y</option>
+          <option value="z">横向 Z</option>
+          <option value="baseShear">基底剪力</option>
+        </select>
+      </div>
+      <svg id="svgTh" viewBox="0 0 900 240" preserveAspectRatio="xMidYMid meet"></svg>
+      <div class="readpts" id="thRead">曲线为相对支座位移；峰值表见右侧计算书。</div>
+    </div>
+
+    <div class="chart" id="thExtraCard" style="display:none">
+      <div class="chart-head">
+        <h4>时程 × 反应谱 峰值对照</h4>
+        <span class="hint" id="thCmpHint">同一地震波 · 同一模型 · 同一阻尼</span>
+      </div>
+      <div id="thCompare"></div>
+      <div class="th-export">
+        <button class="btn sm" id="btnCsvNodes" type="button">导出位移时程 CSV</button>
+        <button class="btn sm" id="btnCsvBase" type="button">导出基底剪力 CSV</button>
+        <button class="btn sm" id="btnCsvWave" type="button">导出波数据 CSV</button>
+      </div>
+      <div class="readpts">对照列为「同一地震波换算的反应谱」峰值（非规范设计谱）；CSV 带表头注释，可直接用 Excel / Python 复核。</div>
+    </div>
+
+    <div class="chart" id="elevCard">
+      <div class="chart-head">
+        <h4 id="elevTitle">桥梁立面与实时变形</h4>
+        <span class="hint" id="elevHint">变形已放大显示</span>
+      </div>
+      <svg id="svgElev" viewBox="0 0 900 210" preserveAspectRatio="xMidYMid meet"></svg>
+      <div class="convoy" style="margin-top:6px" id="convoyBar">
+        <button class="btn sm" id="btnPlay">播放车队</button>
+        <input type="range" id="pConvoy" min="0" max="100" step="0.5" value="0">
+        <span class="val" id="vConvoy">车队未上桥</span>
+      </div>
+      <div class="readpts" id="elevRead"></div>
+    </div>
+
+    <div class="tabs" id="tabs">
+      <button data-v="M" class="on">弯矩 M</button>
+      <button data-v="V">剪力 V</button>
+      <button data-v="D">挠度</button>
+      <button data-v="IL">影响线</button>
+      <button data-v="ENV">内力包络</button>
+      <button data-v="CHK">承载力</button>
+    </div>
+
+    <div class="chart" id="chartCard">
+      <div class="chart-head">
+        <h4 id="chartTitle">弯矩图</h4>
+        <span class="hint" id="chartHint"></span>
+      </div>
+      <svg id="svgChart" viewBox="0 0 900 260" preserveAspectRatio="xMidYMid meet"></svg>
+      <div class="legend" id="chartLegend"></div>
+      <div class="readpts" id="chartRead"></div>
+    </div>
+  </main>
+
+  <!-- ================= 右：计算书 ================= -->
+  <aside class="bl-report">
+    <div class="card">
+      <h3>计算书<span class="note">每步可展开核对</span></h3>
+      <div id="report"></div>
+    </div>
+  </aside>
+
+</div>
+
+<script src="frame.js?v=20260919.5"></script>
+<script src="fem.js?v=20260919.5"></script>
+<script src="bridge.js?v=20260919.5"></script>
+<script src="systems.js?v=20260919.5"></script>
+<script src="pier.js?v=20260919.5"></script>
+<script src="hydrology.js?v=20260919.5"></script>
+<script src="groundmotion.js?v=20260919.5"></script>
+<script src="spatial-frame3d.js?v=20260919.5"></script>
+<script src="spatial-bridge.js?v=20260919.5"></script>
+<script src="labguide.js?v=20260919.5"></script>
+<script src="app.js?v=20260919.5"></script>
+</body>
+</html>
