@@ -1,0 +1,2573 @@
+{
+  "items": [
+    {
+      "id": "structural-design-principles-concept-001",
+      "subjectId": "structural-design-principles",
+      "chapter": "1.1",
+      "term": "结构可靠度",
+      "en": "structural reliability",
+      "definition": "结构在规定的时间内、规定的条件下，完成预定功能的概率。是对安全性、适用性、耐久性的概率度量。",
+      "formulaId": null,
+      "symbols": [
+        "Ps",
+        "Pf"
+      ],
+      "unit": "—",
+      "relations": [
+        "可靠度指标",
+        "失效概率",
+        "极限状态"
+      ],
+      "pitfalls": [
+        "可靠度是概率而非安全系数，不能与 K=R/S 混为一谈"
+      ],
+      "examAngle": "名词解释与判断题",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-design-principles-concept-002",
+      "subjectId": "structural-design-principles",
+      "chapter": "1.1",
+      "term": "可靠度指标 β",
+      "en": "reliability index",
+      "definition": "以标准正态分布的分位点度量的结构可靠程度指标，β 越大失效概率 Pf 越小。教材中常用 β 说明不同安全等级的目标可靠水平。",
+      "formulaId": null,
+      "symbols": [
+        "β"
+      ],
+      "unit": "—",
+      "relations": [
+        "失效概率",
+        "目标可靠度",
+        "安全等级"
+      ],
+      "pitfalls": [
+        "β 不是安全系数；β 与 Pf 的对应关系依赖分布假定"
+      ],
+      "examAngle": "概念辨析：β 与失效概率的单调关系",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-design-principles-concept-003",
+      "subjectId": "structural-design-principles",
+      "chapter": "1.1",
+      "term": "结构安全等级",
+      "en": "safety class of structure",
+      "definition": "按结构破坏后果严重程度划分的等级，公路桥涵通常分一级（重要）、二级（一般）、三级（次要），对应不同的结构重要性系数 γ0。",
+      "formulaId": null,
+      "symbols": [
+        "γ0"
+      ],
+      "unit": "—",
+      "relations": [
+        "结构重要性系数",
+        "目标可靠度"
+      ],
+      "pitfalls": [
+        "安全等级由设计文件给定，学生不应自行假定；取错 γ0 会使全部承载力验算偏移"
+      ],
+      "examAngle": "给出安全等级反查 γ0",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "一级/二级/三级对应的 γ0 数值（常为 1.1/1.0/0.9）请以现行 JTG D60 与教材核对"
+    },
+    {
+      "id": "structural-design-principles-concept-004",
+      "subjectId": "structural-design-principles",
+      "chapter": "1.1",
+      "term": "结构重要性系数 γ0",
+      "en": "importance coefficient of structure",
+      "definition": "承载能力极限状态计算中，为体现不同安全等级而引入的效应放大系数，作用于作用效应组合设计值 Sd 之上。",
+      "formulaId": "structural-design-principles-formula-002",
+      "symbols": [
+        "γ0"
+      ],
+      "unit": "—",
+      "relations": [
+        "安全等级",
+        "作用效应基本组合"
+      ],
+      "pitfalls": [
+        "只在承载能力极限状态使用，正常使用极限状态验算不乘 γ0"
+      ],
+      "examAngle": "计算题第一步，漏乘是最常见失分点",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "γ0 取值以现行 JTG D60 为准"
+    },
+    {
+      "id": "structural-design-principles-concept-005",
+      "subjectId": "structural-design-principles",
+      "chapter": "1.2",
+      "term": "极限状态",
+      "en": "limit state",
+      "definition": "结构或构件超过某一特定状态就不能满足设计规定的功能要求，该状态即为极限状态。分承载能力极限状态与正常使用极限状态两类。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "—",
+      "relations": [
+        "承载能力极限状态",
+        "正常使用极限状态"
+      ],
+      "pitfalls": [
+        "承载力计算与裂缝/挠度验算属于两类不同极限状态，系数与组合方式不同"
+      ],
+      "examAngle": "分类题：判断某验算属于哪一类极限状态",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-design-principles-concept-006",
+      "subjectId": "structural-design-principles",
+      "chapter": "1.2",
+      "term": "承载能力极限状态",
+      "en": "ultimate limit state, ULS",
+      "definition": "对应结构或构件达到最大承载力、出现疲劳破坏、失稳或不适于继续承载的变形等状态；验算形式为 γ0 Sd ≤ R(fcd, fsd, Ak)。",
+      "formulaId": "structural-design-principles-formula-001",
+      "symbols": [
+        "Sd",
+        "R",
+        "γ0"
+      ],
+      "unit": "—",
+      "relations": [
+        "作用效应基本组合",
+        "结构抗力"
+      ],
+      "pitfalls": [
+        "正常使用极限状态不乘 γ0，也不采用基本组合"
+      ],
+      "examAngle": "所有承载力公式的左端统一形式",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-design-principles-concept-007",
+      "subjectId": "structural-design-principles",
+      "chapter": "1.2",
+      "term": "正常使用极限状态",
+      "en": "serviceability limit state, SLS",
+      "definition": "对应结构或构件达到正常使用或耐久性能的某项规定限值，如裂缝宽度、挠度、应力限值等。",
+      "formulaId": null,
+      "symbols": [
+        "Ssd",
+        "Sfd",
+        "Sqpd"
+      ],
+      "unit": "—",
+      "relations": [
+        "标准组合",
+        "频遇组合",
+        "准永久组合",
+        "裂缝宽度",
+        "挠度"
+      ],
+      "pitfalls": [
+        "采用标准/频遇/准永久组合而非基本组合，且不计 γ0"
+      ],
+      "examAngle": "裂缝与挠度验算属此类",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-design-principles-concept-008",
+      "subjectId": "structural-design-principles",
+      "chapter": "1.3",
+      "term": "作用",
+      "en": "action",
+      "definition": "施加在结构上的集中力、分布力，以及引起结构外加变形或约束变形的原因。分永久作用、可变作用、偶然作用。",
+      "formulaId": null,
+      "symbols": [
+        "G",
+        "Q"
+      ],
+      "unit": "kN 或 kN/m²",
+      "relations": [
+        "作用效应",
+        "作用标准值"
+      ],
+      "pitfalls": [
+        "公路规范称“作用”不称“荷载”；恒载/活载是俗称"
+      ],
+      "examAngle": "概念辨析",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-design-principles-concept-009",
+      "subjectId": "structural-design-principles",
+      "chapter": "1.3",
+      "term": "作用效应 S",
+      "en": "effect of action",
+      "definition": "由作用引起的结构或构件的内力（轴力、弯矩、剪力、扭矩）与变形、裂缝等的总称，常用 S 表示。",
+      "formulaId": null,
+      "symbols": [
+        "S",
+        "Nd",
+        "Md",
+        "Vd",
+        "Td"
+      ],
+      "unit": "kN、kN·m",
+      "relations": [
+        "作用",
+        "结构抗力"
+      ],
+      "pitfalls": [
+        "弯矩与剪力要用同一截面位置的值，不能混用跨中与支座值"
+      ],
+      "examAngle": "组合计算的基本对象",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-design-principles-concept-010",
+      "subjectId": "structural-design-principles",
+      "chapter": "1.3",
+      "term": "结构抗力 R",
+      "en": "structural resistance",
+      "definition": "结构或构件承受作用效应的能力，由材料强度设计值、截面几何参数与计算模式确定，常用 R(·) 表示。",
+      "formulaId": null,
+      "symbols": [
+        "R",
+        "Nu",
+        "Mu"
+      ],
+      "unit": "kN、kN·m",
+      "relations": [
+        "作用效应",
+        "材料强度设计值"
+      ],
+      "pitfalls": [
+        "抗力用设计值算；误用标准值是常见错误"
+      ],
+      "examAngle": "承载力复核题求的就是 R",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-design-principles-concept-011",
+      "subjectId": "structural-design-principles",
+      "chapter": "1.3",
+      "term": "作用标准值",
+      "en": "characteristic value of an action",
+      "definition": "作用的基本代表值，按设计基准期内最大作用概率分布的某一分位值确定，是组合计算的基准。",
+      "formulaId": null,
+      "symbols": [
+        "SGk",
+        "SQk"
+      ],
+      "unit": "kN、kN·m",
+      "relations": [
+        "作用设计值",
+        "频遇值",
+        "准永久值",
+        "组合值"
+      ],
+      "pitfalls": [
+        "标准值 ≠ 设计值；设计值 = 分项系数 × 标准值"
+      ],
+      "examAngle": "组合题给的都是标准值，需自行乘分项系数",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-design-principles-concept-012",
+      "subjectId": "structural-design-principles",
+      "chapter": "1.3",
+      "term": "作用设计值",
+      "en": "design value of an action",
+      "definition": "作用标准值乘以作用分项系数后的值，用于承载能力极限状态的基本组合。",
+      "formulaId": "structural-design-principles-formula-003",
+      "symbols": [
+        "γG",
+        "γQ",
+        "Sd"
+      ],
+      "unit": "kN、kN·m",
+      "relations": [
+        "作用标准值",
+        "作用分项系数"
+      ],
+      "pitfalls": [
+        "与材料强度设计值的方向和含义不同，切勿混淆"
+      ],
+      "examAngle": "γG、γQ 取值必考",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "γG、γQ 的取值（1.2/1.4 等）以现行 JTG D60 为准"
+    },
+    {
+      "id": "structural-design-principles-concept-013",
+      "subjectId": "structural-design-principles",
+      "chapter": "1.3",
+      "term": "作用效应基本组合",
+      "en": "fundamental combination for ULS",
+      "definition": "承载能力极限状态设计时，永久作用与可变作用效应按分项系数与组合值系数组合得到的效应设计值 Sd。",
+      "formulaId": "structural-design-principles-formula-003",
+      "symbols": [
+        "Sd",
+        "γG",
+        "γQ1",
+        "ψc"
+      ],
+      "unit": "kN·m",
+      "relations": [
+        "偶然组合",
+        "标准组合",
+        "频遇组合",
+        "准永久组合"
+      ],
+      "pitfalls": [
+        "多个可变作用时，除主导可变作用外其余乘组合值系数 ψc"
+      ],
+      "examAngle": "作业第一题的典型考法",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "系数取值与组合式写法请以现行 JTG D60 及教材为准"
+    },
+    {
+      "id": "structural-design-principles-concept-014",
+      "subjectId": "structural-design-principles",
+      "chapter": "1.3",
+      "term": "偶然组合",
+      "en": "accidental combination",
+      "definition": "承载能力极限状态中考虑偶然作用（如撞击、地震）时的效应组合，偶然作用取标准值且不与多种可变作用同时满值组合。",
+      "formulaId": null,
+      "symbols": [
+        "SAd"
+      ],
+      "unit": "kN·m",
+      "relations": [
+        "基本组合",
+        "偶然作用"
+      ],
+      "pitfalls": [
+        "偶然作用不乘分项系数；与其同时出现的可变作用取值方式特殊"
+      ],
+      "examAngle": "概念选择",
+      "confidence": "low",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "偶然组合的完整表达式请以现行 JTG D60 为准，本条仅给出概念"
+    },
+    {
+      "id": "structural-design-principles-concept-015",
+      "subjectId": "structural-design-principles",
+      "chapter": "1.3",
+      "term": "标准组合",
+      "en": "characteristic combination",
+      "definition": "正常使用极限状态验算时，采用作用标准值组合的效应值，用于不可逆的正常使用极限状态（如裂缝宽度、应力）验算。",
+      "formulaId": "structural-design-principles-formula-004",
+      "symbols": [
+        "Ssd",
+        "ψc"
+      ],
+      "unit": "kN·m",
+      "relations": [
+        "频遇组合",
+        "准永久组合"
+      ],
+      "pitfalls": [
+        "不加分项系数、不乘 γ0"
+      ],
+      "examAngle": "裂缝宽度验算用短期（标准）效应组合",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "各组合的表达式与系数以现行 JTG D60 为准"
+    },
+    {
+      "id": "structural-design-principles-concept-016",
+      "subjectId": "structural-design-principles",
+      "chapter": "1.3",
+      "term": "频遇组合",
+      "en": "frequent combination",
+      "definition": "正常使用极限状态验算时，可变作用取频遇值的效应组合，用于可逆的正常使用极限状态验算。",
+      "formulaId": "structural-design-principles-formula-005",
+      "symbols": [
+        "Sfd",
+        "ψf"
+      ],
+      "unit": "kN·m",
+      "relations": [
+        "标准组合",
+        "准永久组合",
+        "频遇值系数"
+      ],
+      "pitfalls": [
+        "ψf 与准永久系数 ψq 不可互换"
+      ],
+      "examAngle": "系数区分",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "ψf 数值以现行 JTG D60 为准"
+    },
+    {
+      "id": "structural-design-principles-concept-017",
+      "subjectId": "structural-design-principles",
+      "chapter": "1.3",
+      "term": "准永久组合",
+      "en": "quasi-permanent combination",
+      "definition": "正常使用极限状态验算中可变作用取准永久值的效应组合，主要用于长期效应（长期刚度、徐变、长期裂缝）计算。",
+      "formulaId": "structural-design-principles-formula-006",
+      "symbols": [
+        "Sqpd",
+        "ψq"
+      ],
+      "unit": "kN·m",
+      "relations": [
+        "标准组合",
+        "频遇组合"
+      ],
+      "pitfalls": [
+        "长期刚度 B = Bs/θ 中的长期弯矩应取准永久组合效应"
+      ],
+      "examAngle": "挠度验算的长期部分",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "ψq 数值以现行 JTG D60 为准"
+    },
+    {
+      "id": "structural-design-principles-concept-018",
+      "subjectId": "structural-design-principles",
+      "chapter": "1.2",
+      "term": "设计基准期",
+      "en": "design reference period",
+      "definition": "为确定可变作用取值与可靠度分析而规定的时间参数，公路桥涵结构的设计基准期通常与设计使用年限并列给出。",
+      "formulaId": null,
+      "symbols": [
+        "T"
+      ],
+      "unit": "年",
+      "relations": [
+        "设计使用年限",
+        "作用标准值"
+      ],
+      "pitfalls": [
+        "设计基准期 ≠ 设计使用年限，两者含义不同"
+      ],
+      "examAngle": "概念辨析题",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "公路桥涵设计基准期取 100 年的说法请以现行 JTG D60 核对"
+    },
+    {
+      "id": "structural-design-principles-concept-019",
+      "subjectId": "structural-design-principles",
+      "chapter": "2.1",
+      "term": "混凝土强度等级",
+      "en": "concrete strength grade",
+      "definition": "按立方体抗压强度标准值 fcu,k（MPa）划分的等级，公路桥涵常用 C25～C50，预应力构件常不低于 C40。",
+      "formulaId": null,
+      "symbols": [
+        "fcu,k"
+      ],
+      "unit": "MPa",
+      "relations": [
+        "fck",
+        "ftk",
+        "fcd",
+        "ftd"
+      ],
+      "pitfalls": [
+        "fcu,k 与 fck 不同：fcu,k 是立方体，fck 是棱柱体轴心抗压标准值"
+      ],
+      "examAngle": "查表题的第一入口",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": "各强度等级的 fck、ftk 表值请以现行 JTG 3362/GB 50010 为准"
+    },
+    {
+      "id": "structural-design-principles-concept-020",
+      "subjectId": "structural-design-principles",
+      "chapter": "2.1",
+      "term": "混凝土强度标准值 fck、ftk",
+      "en": "characteristic strengths of concrete",
+      "definition": "混凝土轴心抗压、轴心抗拉强度的标准值，按标准试验方法测得的具有规定保证率的强度值，是设计值取值的基础。",
+      "formulaId": "structural-design-principles-formula-007",
+      "symbols": [
+        "fck",
+        "ftk"
+      ],
+      "unit": "MPa",
+      "relations": [
+        "fcu,k",
+        "fcd",
+        "ftd",
+        "材料分项系数"
+      ],
+      "pitfalls": [
+        "ftk 远小于 fck，不要错查成抗拉设计值"
+      ],
+      "examAngle": "裂缝与刚度公式中只用 ftd/ftk，不用 fcd",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": "表值请以现行 JTG 3362 或 GB 50010 为准；两套规范数值接近但不完全一致"
+    },
+    {
+      "id": "structural-design-principles-concept-021",
+      "subjectId": "structural-design-principles",
+      "chapter": "2.1",
+      "term": "混凝土强度设计值 fcd、ftd",
+      "en": "design strengths of concrete",
+      "definition": "混凝土轴心抗压、轴心抗拉强度的设计值，由标准值除以混凝土材料分项系数 γc 得到，用于承载力计算。",
+      "formulaId": "structural-design-principles-formula-007",
+      "symbols": [
+        "fcd",
+        "ftd",
+        "γc"
+      ],
+      "unit": "MPa",
+      "relations": [
+        "fck",
+        "ftk",
+        "材料分项系数"
+      ],
+      "pitfalls": [
+        "公路规范记作 fcd、ftd；建筑规范记作 fc、ft，符号口径不同，混用会算错"
+      ],
+      "examAngle": "全部承载力公式的输入量，错取则全题错",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": "本知识库例题中 C30 取 fcd=13.8 MPa、ftd=1.39 MPa（JTG 口径，γc=1.45）；请务必与本人教材表核对"
+    },
+    {
+      "id": "structural-design-principles-concept-022",
+      "subjectId": "structural-design-principles",
+      "chapter": "2.1",
+      "term": "混凝土弹性模量 Ec",
+      "en": "elastic modulus of concrete",
+      "definition": "混凝土应力–应变关系中初始（或割线）模量，随强度等级提高而增大，用于换算截面 αEs 与刚度计算。",
+      "formulaId": null,
+      "symbols": [
+        "Ec"
+      ],
+      "unit": "MPa",
+      "relations": [
+        "αEs",
+        "换算截面",
+        "短期刚度"
+      ],
+      "pitfalls": [
+        "Ec 也有标准值/设计值口径，公式中一般取弹性模量标准值表值"
+      ],
+      "examAngle": "预应力换算截面必用",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": "C30 取 3.00×10⁴ MPa、C50 取 3.45×10⁴ MPa 为常用值，请以现行规范表核对"
+    },
+    {
+      "id": "structural-design-principles-concept-023",
+      "subjectId": "structural-design-principles",
+      "chapter": "2.1",
+      "term": "混凝土徐变",
+      "en": "creep of concrete",
+      "definition": "混凝土在持续应力作用下，应变随时间持续增长的现象，是预应力长期损失与长期刚度折减的根源。",
+      "formulaId": "structural-design-principles-formula-050",
+      "symbols": [
+        "φ(t, t0)"
+      ],
+      "unit": "—",
+      "relations": [
+        "收缩",
+        "长期刚度",
+        "σl6"
+      ],
+      "pitfalls": [
+        "徐变系数与加载龄期、环境湿度有关，不能凭空取值"
+      ],
+      "examAngle": "预应力收缩徐变损失公式的组成部分",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": "徐变系数 φ(t,t0) 的取值方法请以现行规范附录为准"
+    },
+    {
+      "id": "structural-design-principles-concept-024",
+      "subjectId": "structural-design-principles",
+      "chapter": "2.1",
+      "term": "混凝土收缩",
+      "en": "shrinkage of concrete",
+      "definition": "混凝土在硬化及使用过程中因失水与碳化产生的体积减小，与徐变一起构成预应力长期损失。",
+      "formulaId": "structural-design-principles-formula-050",
+      "symbols": [
+        "εcs(t, t0)"
+      ],
+      "unit": "—",
+      "relations": [
+        "徐变",
+        "σl6"
+      ],
+      "pitfalls": [
+        "收缩应变是无量纲量，通常取 2×10⁻⁴ 量级，具体按规范表/公式确定"
+      ],
+      "examAngle": "σl6 计算",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": "εcs 取值请以现行规范为准"
+    },
+    {
+      "id": "structural-design-principles-concept-025",
+      "subjectId": "structural-design-principles",
+      "chapter": "2.2",
+      "term": "钢筋强度设计值 fsd、fsd'",
+      "en": "design strengths of reinforcement",
+      "definition": "普通钢筋抗拉、抗压强度设计值，由屈服强度标准值 fsk 除以钢筋材料分项系数 γs 得到，用于承载力计算。",
+      "formulaId": "structural-design-principles-formula-008",
+      "symbols": [
+        "fsd",
+        "fsd'",
+        "fsk"
+      ],
+      "unit": "MPa",
+      "relations": [
+        "HPB300",
+        "HRB400",
+        "材料分项系数"
+      ],
+      "pitfalls": [
+        "钢筋抗压设计值 fsd' 一般与 fsd 同值，但当 fsd > 混凝土压应变对应的应力时需折减"
+      ],
+      "examAngle": "取值题：HRB400 取 330 MPa（JTG 口径，γs=1.2）",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": "HPB300/HRB400/HRB500 的 fsd 请以现行 JTG 3362 表核对；GB 50010 的 fy 数值不同（如 HPB300 为 270 MPa）"
+    },
+    {
+      "id": "structural-design-principles-concept-026",
+      "subjectId": "structural-design-principles",
+      "chapter": "2.2",
+      "term": "普通热轧钢筋牌号",
+      "en": "hot-rolled plain/deformed bars",
+      "definition": "钢筋混凝土结构中常用的非预应力钢筋，公路桥涵现主要用 HPB300（光圆、多用于箍筋）与 HRB400、HRB500（带肋、主筋）。",
+      "formulaId": null,
+      "symbols": [
+        "HPB300",
+        "HRB400",
+        "HRB500"
+      ],
+      "unit": "—",
+      "relations": [
+        "fsd",
+        "ξb"
+      ],
+      "pitfalls": [
+        "老版教材的 R235、HRB335 已被淘汰，旧题的数值不能直接套用"
+      ],
+      "examAngle": "新旧牌号对应关系",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": "教材所用牌号与设计指标请核对本人教材版本"
+    },
+    {
+      "id": "structural-design-principles-concept-027",
+      "subjectId": "structural-design-principles",
+      "chapter": "2.2",
+      "term": "预应力钢筋",
+      "en": "prestressing tendon",
+      "definition": "用于建立预压应力的高强钢材，主要有钢绞线、消除应力钢丝与精轧螺纹钢筋；其抗拉强度标准值记为 fpk，抗拉强度设计值记为 fpd。",
+      "formulaId": null,
+      "symbols": [
+        "fpk",
+        "fpd",
+        "fpd'",
+        "Ep"
+      ],
+      "unit": "MPa",
+      "relations": [
+        "张拉控制应力",
+        "σcon",
+        "fpd"
+      ],
+      "pitfalls": [
+        "预应力筋的条件屈服点决定 fpd，不能直接用 fpk 计算承载力"
+      ],
+      "examAngle": "fpd 与 fsd 不可混用",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": "钢绞线 fpk=1860 MPa、fpd=1260 MPa、Ep=1.95×10⁵ MPa 为常用值，请以现行规范表核对"
+    },
+    {
+      "id": "structural-design-principles-concept-028",
+      "subjectId": "structural-design-principles",
+      "chapter": "2.3",
+      "term": "材料分项系数",
+      "en": "partial safety factor for material",
+      "definition": "将材料强度标准值转换为设计值的除数，反映材料强度的离散性与不利偏差。公路规范混凝土常为 γc=1.45、钢筋 γs=1.2。",
+      "formulaId": "structural-design-principles-formula-007",
+      "symbols": [
+        "γc",
+        "γs"
+      ],
+      "unit": "—",
+      "relations": [
+        "fcd",
+        "fsd",
+        "作用分项系数"
+      ],
+      "pitfalls": [
+        "与“作用分项系数”是完全不同的系数，方向和作用对象相反"
+      ],
+      "examAngle": "概念辨析",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": "γc=1.45、γs=1.2 为 JTG 3362 常用取值；GB 50010 取 γc=1.40、γs=1.10，务必区分"
+    },
+    {
+      "id": "structural-design-principles-concept-029",
+      "subjectId": "structural-design-principles",
+      "chapter": "2.4",
+      "term": "锚固长度 la",
+      "en": "anchorage length",
+      "definition": "钢筋埋入混凝土中保证其强度充分发挥所需的最小长度，与钢筋强度、混凝土抗拉强度、钢筋直径与外形有关。",
+      "formulaId": null,
+      "symbols": [
+        "la",
+        "lab",
+        "α"
+      ],
+      "unit": "mm",
+      "relations": [
+        "保护层厚度",
+        "钢筋连接",
+        "预应力传递长度"
+      ],
+      "pitfalls": [
+        "受拉与受压锚固长度不同；抗震锚固还需乘修正系数"
+      ],
+      "examAngle": "构造计算与课程设计图纸",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": "锚固长度公式与修正系数请以现行规范为准"
+    },
+    {
+      "id": "structural-design-principles-concept-030",
+      "subjectId": "structural-design-principles",
+      "chapter": "3.1",
+      "term": "适筋梁",
+      "en": "balanced-reinforced beam",
+      "definition": "配筋率处于适筋范围内的梁，破坏始于受拉钢筋屈服、终于受压区混凝土压碎，属延性破坏，是设计的目标状态。",
+      "formulaId": null,
+      "symbols": [
+        "ρ",
+        "ρmin",
+        "ρmax"
+      ],
+      "unit": "—",
+      "relations": [
+        "超筋梁",
+        "少筋梁",
+        "ξb"
+      ],
+      "pitfalls": [
+        "适筋的判据是 ξ ≤ ξb 且 ρ ≥ ρmin，两者要同时满足"
+      ],
+      "examAngle": "破坏形态判别",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-design-principles-concept-031",
+      "subjectId": "structural-design-principles",
+      "chapter": "3.1",
+      "term": "超筋梁",
+      "en": "over-reinforced beam",
+      "definition": "受拉钢筋配置过多、ξ > ξb 的梁，破坏时钢筋尚未屈服而受压区混凝土先行压碎，属脆性破坏，设计不允许。",
+      "formulaId": null,
+      "symbols": [
+        "ξ",
+        "ξb",
+        "ρmax"
+      ],
+      "unit": "—",
+      "relations": [
+        "适筋梁",
+        "相对界限受压区高度"
+      ],
+      "pitfalls": [
+        "超筋梁的承载力仍按 ξ=ξb 计算，而不是按实际配筋代入平衡方程"
+      ],
+      "examAngle": "判别后按 ξ=ξb 取 Mu 上限（常见失分点）",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-design-principles-concept-032",
+      "subjectId": "structural-design-principles",
+      "chapter": "3.1",
+      "term": "少筋梁",
+      "en": "under-reinforced beam",
+      "definition": "配筋率低于最小配筋率的梁，混凝土一开裂钢筋即屈服甚至拉断，属脆性破坏，设计不允许。",
+      "formulaId": "structural-design-principles-formula-013",
+      "symbols": [
+        "ρmin",
+        "Mcr"
+      ],
+      "unit": "—",
+      "relations": [
+        "适筋梁",
+        "最小配筋率",
+        "开裂弯矩"
+      ],
+      "pitfalls": [
+        "没有“少筋梁承载力”一说：ρ < ρmin 时应按素混凝土开裂弯矩控制或直接加大配筋"
+      ],
+      "examAngle": "ρ 与 ρmin 比较",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-design-principles-concept-033",
+      "subjectId": "structural-design-principles",
+      "chapter": "3.1",
+      "term": "平截面假定",
+      "en": "plane section assumption",
+      "definition": "构件正截面弯曲变形后，截面上的应变沿高度保持线性分布。是全部正截面承载力公式的几何基础。",
+      "formulaId": null,
+      "symbols": [
+        "εc",
+        "εs",
+        "x"
+      ],
+      "unit": "—",
+      "relations": [
+        "等效矩形应力图",
+        "相对受压区高度"
+      ],
+      "pitfalls": [
+        "斜截面与局部受压不适用此假定"
+      ],
+      "examAngle": "原理性简答题",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-design-principles-concept-034",
+      "subjectId": "structural-design-principles",
+      "chapter": "3.1",
+      "term": "等效矩形应力图",
+      "en": "equivalent rectangular stress block",
+      "definition": "把受压区混凝土实际的曲线压应力分布，等效为一个矩形应力图，其应力幅取 α1 fcd、高度取 x = β1 xn，使合力与合力矩等效。",
+      "formulaId": "structural-design-principles-formula-009",
+      "symbols": [
+        "α1",
+        "β1",
+        "x",
+        "xn"
+      ],
+      "unit": "—",
+      "relations": [
+        "平截面假定",
+        "fcd"
+      ],
+      "pitfalls": [
+        "公路规范 JTG 3362 常在 C50 及以下直接取 α1=1.0，而 GB 50010 明确给出 C55～C80 的折减表"
+      ],
+      "examAngle": "α1、β1 的取值",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "α1、β1 是否与教材写法一致请核对；GB 50010 中 ≤C50 时 α1=1.0、β1=0.80",
+      "figure": {
+        "src": "/knowledge/assets/structural-design-principles/flexural-three-stage.svg",
+        "caption": "正截面受弯的三个受力阶段及对应验算（自绘示意）",
+        "readPoints": [
+          "Ⅰ 未裂 → 抗裂验算；Ⅱ 带裂缝 → 裂缝宽度与刚度；Ⅲ 破坏 → 承载力",
+          "只有第 Ⅲ 阶段才用等效矩形应力图，拿它做抗裂验算是错的",
+          "随荷载增大，中和轴不断上移，受压区高度持续减小"
+        ]
+      }
+    },
+    {
+      "id": "structural-design-principles-concept-035",
+      "subjectId": "structural-design-principles",
+      "chapter": "3.2",
+      "term": "相对受压区高度 ξ",
+      "en": "relative depth of compression zone",
+      "definition": "受压区高度 x 与截面有效高度 h0 之比，ξ = x/h0，是判断构件破坏形态的核心无量纲量。",
+      "formulaId": "structural-design-principles-formula-011",
+      "symbols": [
+        "ξ",
+        "x",
+        "h0"
+      ],
+      "unit": "—",
+      "relations": [
+        "ξb",
+        "超筋梁",
+        "配筋率"
+      ],
+      "pitfalls": [
+        "ξ 与配筋率 ρ 通过 ξ = ρ fsd/(α1 fcd) 对应，二者判别等价"
+      ],
+      "examAngle": "判别与求解的桥梁量",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-design-principles-concept-036",
+      "subjectId": "structural-design-principles",
+      "chapter": "3.2",
+      "term": "相对界限受压区高度 ξb",
+      "en": "balanced relative depth of compression zone",
+      "definition": "受拉钢筋刚好屈服的同时受压区混凝土达到极限压应变时的 ξ 值，是适筋与超筋的分界。",
+      "formulaId": "structural-design-principles-formula-012",
+      "symbols": [
+        "ξb",
+        "β1",
+        "fsd",
+        "Es",
+        "εcu"
+      ],
+      "unit": "—",
+      "relations": [
+        "适筋梁",
+        "超筋梁",
+        "大偏心受压",
+        "小偏心受压"
+      ],
+      "pitfalls": [
+        "ξb 随钢筋牌号与混凝土强度等级变化；预应力构件的 ξb 更小（常约 0.40）"
+      ],
+      "examAngle": "查表取值：HRB400 常取 0.53",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "HRB400 取 0.53、HRB500 取 0.49、预应力构件取 0.40 均为 JTG 常用值，请按教材表核对；HPB300 值需确认"
+    },
+    {
+      "id": "structural-design-principles-concept-037",
+      "subjectId": "structural-design-principles",
+      "chapter": "3.2",
+      "term": "纵向受拉钢筋配筋率 ρ",
+      "en": "longitudinal tensile reinforcement ratio",
+      "definition": "受拉钢筋截面面积 As 与截面有效面积 b·h0 之比，ρ = As/(b h0)；对 T 形截面按肋宽 b 计算。",
+      "formulaId": "structural-design-principles-formula-013",
+      "symbols": [
+        "ρ",
+        "As",
+        "b",
+        "h0"
+      ],
+      "unit": "—",
+      "relations": [
+        "ρmin",
+        "ρmax",
+        "配箍率"
+      ],
+      "pitfalls": [
+        "计算 ρ 的分母是 b·h0 而非 b·h；T 形截面仍用肋宽 b"
+      ],
+      "examAngle": "配筋率验算",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-design-principles-concept-038",
+      "subjectId": "structural-design-principles",
+      "chapter": "3.2",
+      "term": "最小配筋率 ρmin",
+      "en": "minimum reinforcement ratio",
+      "definition": "防止少筋破坏的构造与承载力下限要求，常取 ρmin = max(0.45 ftd/fsd, 0.20%)。",
+      "formulaId": "structural-design-principles-formula-013",
+      "symbols": [
+        "ρmin",
+        "ftd",
+        "fsd"
+      ],
+      "unit": "—",
+      "relations": [
+        "少筋梁",
+        "ρ"
+      ],
+      "pitfalls": [
+        "0.45 ftd/fsd 是主要控制项，对高强混凝土与高强钢筋需重新计算"
+      ],
+      "examAngle": "每题收尾必查",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "0.20% 的下限与 0.45 ftd/fsd 的表达请以现行规范为准（受压构件、基础等另有规定）"
+    },
+    {
+      "id": "structural-design-principles-concept-039",
+      "subjectId": "structural-design-principles",
+      "chapter": "3.3",
+      "term": "双筋截面",
+      "en": "doubly reinforced section",
+      "definition": "受拉区与受压区同时配置受力纵向钢筋的截面，用于截面尺寸受限或承受异号弯矩的场合。",
+      "formulaId": "structural-design-principles-formula-014",
+      "symbols": [
+        "As",
+        "As'",
+        "as'"
+      ],
+      "unit": "mm²",
+      "relations": [
+        "单筋截面",
+        "x < 2as'"
+      ],
+      "pitfalls": [
+        "受压钢筋要能屈服需 x ≥ 2as'，否则取 Mu = fsd As(h0 − as')"
+      ],
+      "examAngle": "已知 As' 求 As 的两种情形",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-design-principles-concept-040",
+      "subjectId": "structural-design-principles",
+      "chapter": "3.4",
+      "term": "第一类 T 形截面",
+      "en": "T-section with neutral axis in flange",
+      "definition": "受压区高度 x ≤ h'f（翼缘厚度）的 T 形截面，受压区全在翼缘内，按宽度 b'f 的矩形截面计算。",
+      "formulaId": "structural-design-principles-formula-016",
+      "symbols": [
+        "x",
+        "h'f",
+        "b'f"
+      ],
+      "unit": "mm",
+      "relations": [
+        "第二类T形截面",
+        "翼缘有效宽度"
+      ],
+      "pitfalls": [
+        "判别必须用 M 与 α1 fcd b'f h'f(h0 − h'f/2) 比较，不能凭直觉"
+      ],
+      "examAngle": "判别 + 配筋",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/structural-design-principles/flange-effective-width.svg",
+        "caption": "T 形截面翼缘有效分布宽度 b′f（自绘示意）",
+        "readPoints": [
+          "翼缘压应力沿宽度不均匀，肋部最大、向两侧衰减",
+          "计算取有效宽度 b′f，不是实际翼缘宽 bf，直接代 bf 会高估承载力",
+          "b′f 与计算跨径、翼缘厚度、相邻梁净距有关，取值按现行规范核对"
+        ]
+      }
+    },
+    {
+      "id": "structural-design-principles-concept-041",
+      "subjectId": "structural-design-principles",
+      "chapter": "3.4",
+      "term": "第二类 T 形截面",
+      "en": "T-section with neutral axis in web",
+      "definition": "受压区高度 x > h'f 的 T 形截面，受压区进入肋部，需按 b 与 (b'f − b) 两部分叠加计算。",
+      "formulaId": "structural-design-principles-formula-017",
+      "symbols": [
+        "x",
+        "b",
+        "b'f",
+        "h'f"
+      ],
+      "unit": "mm",
+      "relations": [
+        "第一类T形截面"
+      ],
+      "pitfalls": [
+        "翼缘挑出部分承担的弯矩要先扣除，再对肋部求 x"
+      ],
+      "examAngle": "配筋计算（易漏掉翼缘挑出项）",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/structural-design-principles/flange-effective-width.svg",
+        "caption": "T 形截面翼缘有效分布宽度 b′f（自绘示意）",
+        "readPoints": [
+          "翼缘压应力沿宽度不均匀，肋部最大、向两侧衰减",
+          "计算取有效宽度 b′f，不是实际翼缘宽 bf，直接代 bf 会高估承载力",
+          "b′f 与计算跨径、翼缘厚度、相邻梁净距有关，取值按现行规范核对"
+        ]
+      }
+    },
+    {
+      "id": "structural-design-principles-concept-042",
+      "subjectId": "structural-design-principles",
+      "chapter": "3.4",
+      "term": "翼缘有效宽度 b'f",
+      "en": "effective flange width",
+      "definition": "考虑剪力滞影响后，参与受压工作的翼缘折算宽度，通常取计算跨径的 1/3、相邻梁平均间距与构造限值三者中的小值。",
+      "formulaId": "structural-design-principles-formula-015",
+      "symbols": [
+        "b'f",
+        "b",
+        "b'h",
+        "h'f"
+      ],
+      "unit": "mm",
+      "relations": [
+        "第一类T形截面",
+        "第二类T形截面"
+      ],
+      "pitfalls": [
+        "受压区在翼缘时用 b'f，受拉区（负弯矩）时翼缘不参与，按矩形肋宽 b 计算"
+      ],
+      "examAngle": "取值题",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "b + 2b'h + 12h'f 一类的构造限值表达式请以现行 JTG 3362 核对",
+      "figure": {
+        "src": "/knowledge/assets/structural-design-principles/flange-effective-width.svg",
+        "caption": "T 形截面翼缘有效分布宽度 b′f（自绘示意）",
+        "readPoints": [
+          "翼缘压应力沿宽度不均匀，肋部最大、向两侧衰减",
+          "计算取有效宽度 b′f，不是实际翼缘宽 bf，直接代 bf 会高估承载力",
+          "b′f 与计算跨径、翼缘厚度、相邻梁净距有关，取值按现行规范核对"
+        ]
+      }
+    },
+    {
+      "id": "structural-design-principles-concept-043",
+      "subjectId": "structural-design-principles",
+      "chapter": "4.1",
+      "term": "剪跨比 λ",
+      "en": "shear span ratio",
+      "definition": "集中荷载作用下剪跨 a 与截面有效高度 h0 之比，λ = a/h0，是决定无腹筋梁斜截面破坏形态的关键参数。",
+      "formulaId": "structural-design-principles-formula-018",
+      "symbols": [
+        "λ",
+        "a",
+        "h0"
+      ],
+      "unit": "—",
+      "relations": [
+        "斜截面破坏形态",
+        "Vcs"
+      ],
+      "pitfalls": [
+        "λ 大→斜拉破坏；λ 小→斜压破坏；中间为剪压破坏"
+      ],
+      "examAngle": "破坏形态判别",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/structural-design-principles/shear-span-ratio.svg",
+        "caption": "剪跨比 λ 决定的三种斜截面破坏形态（自绘示意）",
+        "readPoints": [
+          "λ < 1 斜压破坏、1 ≤ λ ≤ 3 剪压破坏、λ > 3 斜拉破坏",
+          "教材的抗剪承载力公式针对的是剪压破坏这一形态",
+          "斜压破坏时多配箍筋无效，须加大截面或提高混凝土强度"
+        ]
+      }
+    },
+    {
+      "id": "structural-design-principles-concept-044",
+      "subjectId": "structural-design-principles",
+      "chapter": "4.1",
+      "term": "斜截面破坏三形态",
+      "en": "three failure modes of diagonal section",
+      "definition": "斜拉破坏（λ 大、腹筋少，脆性最强）、剪压破坏（λ 适中，计算依据）、斜压破坏（λ 小或腹筋过多，由混凝土抗压控制）。",
+      "formulaId": null,
+      "symbols": [
+        "λ"
+      ],
+      "unit": "—",
+      "relations": [
+        "剪跨比",
+        "配箍率",
+        "截面尺寸验算"
+      ],
+      "pitfalls": [
+        "斜压破坏靠截面尺寸上限控制，斜拉破坏靠最小配箍率控制"
+      ],
+      "examAngle": "形态—参数—措施三者的对应",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/structural-design-principles/shear-span-ratio.svg",
+        "caption": "剪跨比 λ 决定的三种斜截面破坏形态（自绘示意）",
+        "readPoints": [
+          "λ < 1 斜压破坏、1 ≤ λ ≤ 3 剪压破坏、λ > 3 斜拉破坏",
+          "教材的抗剪承载力公式针对的是剪压破坏这一形态",
+          "斜压破坏时多配箍筋无效，须加大截面或提高混凝土强度"
+        ]
+      }
+    },
+    {
+      "id": "structural-design-principles-concept-045",
+      "subjectId": "structural-design-principles",
+      "chapter": "4.2",
+      "term": "配箍率 ρsv",
+      "en": "stirrup ratio",
+      "definition": "同一截面内箍筋各肢总面积与 (b·sv) 之比，ρsv = Asv/(b·sv)，是斜截面抗剪计算的核心配筋指标。",
+      "formulaId": "structural-design-principles-formula-019",
+      "symbols": [
+        "ρsv",
+        "Asv",
+        "sv"
+      ],
+      "unit": "—",
+      "relations": [
+        "最小配箍率",
+        "Vcs"
+      ],
+      "pitfalls": [
+        "Asv 是同一截面内箍筋各肢面积之和（n 肢乘 n）"
+      ],
+      "examAngle": "由 Vcs 反算箍筋间距 s",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-design-principles-concept-046",
+      "subjectId": "structural-design-principles",
+      "chapter": "4.2",
+      "term": "最小配箍率 ρsv,min",
+      "en": "minimum stirrup ratio",
+      "definition": "防止斜拉破坏而规定的箍筋下限，按规范给出，与箍筋牌号有关，同时受箍筋最大间距与最小直径构造约束。",
+      "formulaId": "structural-design-principles-formula-021",
+      "symbols": [
+        "ρsv,min"
+      ],
+      "unit": "—",
+      "relations": [
+        "配箍率",
+        "斜截面破坏三形态"
+      ],
+      "pitfalls": [
+        "即使剪力很小，也必须满足 ρsv,min 与间距构造"
+      ],
+      "examAngle": "构造验算",
+      "confidence": "low",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": "ρsv,min 数值（0.12%、0.18% 等）各版规范差异很大，务必按现行 JTG 3362/GB 50010 核对"
+    },
+    {
+      "id": "structural-design-principles-concept-047",
+      "subjectId": "structural-design-principles",
+      "chapter": "4.3",
+      "term": "弯起钢筋",
+      "en": "bent-up bar",
+      "definition": "将纵向受拉钢筋按一定角度（常为 45°或 60°）弯起以承担部分剪力的腹筋形式，其竖向分力计入抗剪。",
+      "formulaId": "structural-design-principles-formula-022",
+      "symbols": [
+        "Asb",
+        "θsb",
+        "Vsb"
+      ],
+      "unit": "mm²",
+      "relations": [
+        "箍筋",
+        "抵抗弯矩图",
+        "斜截面抗弯"
+      ],
+      "pitfalls": [
+        "弯起后剩余纵筋要满足正截面抗弯；弯起点必须落在抵抗弯矩图包络之内"
+      ],
+      "examAngle": "Asb 计算与构造复核",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": "Vsb 公式系数（0.75×10⁻³ 或 0.8）请以现行规范为准"
+    },
+    {
+      "id": "structural-design-principles-concept-048",
+      "subjectId": "structural-design-principles",
+      "chapter": "4.3",
+      "term": "抵抗弯矩图（材料图）",
+      "en": "moment resistance diagram",
+      "definition": "沿梁长按实际配置的钢筋面积绘制的各截面抗弯承载力图，必须包住设计弯矩图才能保证斜截面抗弯。",
+      "formulaId": null,
+      "symbols": [
+        "Mu(x)"
+      ],
+      "unit": "kN·m",
+      "relations": [
+        "弯起钢筋",
+        "斜截面抗弯",
+        "锚固长度"
+      ],
+      "pitfalls": [
+        "弯起点到充分利用点的距离有构造要求，不是任意位置都能弯起"
+      ],
+      "examAngle": "课程设计中的图形作业",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-design-principles-concept-049",
+      "subjectId": "structural-design-principles",
+      "chapter": "5.1",
+      "term": "受扭塑性抵抗矩 Wt",
+      "en": "plastic torsional section modulus",
+      "definition": "矩形截面抗扭塑性抵抗矩，Wt = b²(3h − b)/6，用于开裂扭矩与素混凝土抗扭项的计算。",
+      "formulaId": "structural-design-principles-formula-023",
+      "symbols": [
+        "Wt",
+        "b",
+        "h"
+      ],
+      "unit": "mm³",
+      "relations": [
+        "受扭构件",
+        "配筋强度比"
+      ],
+      "pitfalls": [
+        "b 取矩形截面的短边，h 取长边，写反会得到错误数值"
+      ],
+      "examAngle": "纯扭计算第一步",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": "Wt 表达式与箱形、T 形的分块算法请以现行规范为准"
+    },
+    {
+      "id": "structural-design-principles-concept-050",
+      "subjectId": "structural-design-principles",
+      "chapter": "5.1",
+      "term": "配筋强度比 ζ",
+      "en": "ratio of torsional reinforcement strength",
+      "definition": "抗扭纵筋与抗扭箍筋之间的配筋强度比，ζ = (fsd Astl sv)/(fsv Ast1 ucor)，通常限制在 0.6～1.7 之间以保证两者同时屈服。",
+      "formulaId": "structural-design-principles-formula-024",
+      "symbols": [
+        "ζ",
+        "Astl",
+        "Ast1",
+        "ucor"
+      ],
+      "unit": "—",
+      "relations": [
+        "受扭塑性抵抗矩",
+        "Acor"
+      ],
+      "pitfalls": [
+        "ζ 是纵筋与箍筋的匹配比，不是配筋率；超范围要调整"
+      ],
+      "examAngle": "抗扭配筋计算",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": "ζ 的限值 0.6～1.7 请以现行规范为准"
+    },
+    {
+      "id": "structural-design-principles-concept-051",
+      "subjectId": "structural-design-principles",
+      "chapter": "6.1",
+      "term": "轴心受压构件",
+      "en": "axially loaded compression member",
+      "definition": "纵向压力作用线与截面重心轴重合（或偏心可忽略）的构件，承载力由混凝土承压 + 纵向钢筋承压并乘以稳定系数 0.90φ。",
+      "formulaId": "structural-design-principles-formula-025",
+      "symbols": [
+        "Nd",
+        "φ",
+        "A",
+        "As'"
+      ],
+      "unit": "kN",
+      "relations": [
+        "稳定系数",
+        "螺旋箍筋柱",
+        "偏心受压"
+      ],
+      "pitfalls": [
+        "0.90 是可靠度调整系数，与 φ 不可混淆或重复相乘"
+      ],
+      "examAngle": "配筋与复核题",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "0.90 系数与稳定系数 φ 的查表值请以现行规范核对"
+    },
+    {
+      "id": "structural-design-principles-concept-052",
+      "subjectId": "structural-design-principles",
+      "chapter": "6.1",
+      "term": "稳定系数 φ",
+      "en": "stability reduction factor",
+      "definition": "反映长柱因纵向弯曲导致承载力降低的折减系数，随长细比（l0/b 或 l0/i）增大而减小，按规范表查取或内插。",
+      "formulaId": "structural-design-principles-formula-026",
+      "symbols": [
+        "φ",
+        "l0",
+        "b",
+        "i"
+      ],
+      "unit": "—",
+      "relations": [
+        "长细比",
+        "计算长度"
+      ],
+      "pitfalls": [
+        "查表时必须用 l0/b（矩形）或 l0/i（任意截面），不能用构件实际长度"
+      ],
+      "examAngle": "查表插值",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "φ 表数值请以现行规范核对；本库例题按 l0/b=8→1.00、10→0.98、12→0.95、14→0.92 线性内插"
+    },
+    {
+      "id": "structural-design-principles-concept-053",
+      "subjectId": "structural-design-principles",
+      "chapter": "6.1",
+      "term": "长细比 λ",
+      "en": "slenderness ratio",
+      "definition": "构件计算长度 l0 与截面回转半径 i（或矩形截面短边 b）之比，λ = l0/i，是稳定问题的控制参数。",
+      "formulaId": "structural-design-principles-formula-026",
+      "symbols": [
+        "λ",
+        "l0",
+        "i"
+      ],
+      "unit": "—",
+      "relations": [
+        "稳定系数",
+        "计算长度"
+      ],
+      "pitfalls": [
+        "与受弯构件的剪跨比 λ 同符号不同义，读题要分清章节"
+      ],
+      "examAngle": "概念辨析 + 查表",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-design-principles-concept-054",
+      "subjectId": "structural-design-principles",
+      "chapter": "6.1",
+      "term": "构件计算长度 l0",
+      "en": "effective length",
+      "definition": "将不同支承条件的构件折算为两端铰支等长构件的长度，由构件实际长度乘计算长度系数得到。",
+      "formulaId": null,
+      "symbols": [
+        "l0"
+      ],
+      "unit": "mm",
+      "relations": [
+        "长细比",
+        "稳定系数",
+        "二阶效应"
+      ],
+      "pitfalls": [
+        "框架柱的 l0 与排架柱取值规则不同，与梁端约束有关"
+      ],
+      "examAngle": "概念题",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "计算长度系数的取值方法请以现行规范为准"
+    },
+    {
+      "id": "structural-design-principles-concept-055",
+      "subjectId": "structural-design-principles",
+      "chapter": "6.1",
+      "term": "螺旋箍筋柱（间接配筋柱）",
+      "en": "spiral-hooped column",
+      "definition": "配置连续螺旋箍筋或焊接环的柱，螺旋筋约束核心混凝土使其处于三向受压，从而显著提高承载力与延性。",
+      "formulaId": "structural-design-principles-formula-032",
+      "symbols": [
+        "Acor",
+        "As0",
+        "dcor",
+        "k"
+      ],
+      "unit": "mm²",
+      "relations": [
+        "轴心受压构件",
+        "局部承压"
+      ],
+      "pitfalls": [
+        "仅当长细比不大（间接钢筋能发挥作用）时才考虑提高；且不得大于同截面普通柱承载力的 1.5 倍"
+      ],
+      "examAngle": "承载力对比计算",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "间接钢筋影响系数 k（常取 2.0）与 1.5 倍上限、适用长细比条件请以现行规范核对"
+    },
+    {
+      "id": "structural-design-principles-concept-056",
+      "subjectId": "structural-design-principles",
+      "chapter": "6.2",
+      "term": "大偏心受压",
+      "en": "large-eccentricity compression",
+      "definition": "ξ ≤ ξb（或 ηe0 ≥ 0.3h0）的偏心受压状态，受拉（或压应力较小侧）钢筋能屈服，破坏形态接近适筋受弯，属延性破坏。",
+      "formulaId": "structural-design-principles-formula-028",
+      "symbols": [
+        "ξ",
+        "ξb",
+        "η",
+        "e0"
+      ],
+      "unit": "—",
+      "relations": [
+        "小偏心受压",
+        "ξb",
+        "Nu-Mu相关曲线"
+      ],
+      "pitfalls": [
+        "大偏心时 σs = fsd；小偏心时 σs 由公式计算，不能一律取 fsd"
+      ],
+      "examAngle": "判别 + 配筋/复核",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-design-principles-concept-057",
+      "subjectId": "structural-design-principles",
+      "chapter": "6.2",
+      "term": "小偏心受压",
+      "en": "small-eccentricity compression",
+      "definition": "ξ > ξb（或 ηe0 < 0.3h0）的偏心受压状态，远离偏心力一侧钢筋未达屈服，破坏由受压区混凝土压碎控制，属脆性破坏。",
+      "formulaId": "structural-design-principles-formula-030",
+      "symbols": [
+        "ξ",
+        "σs",
+        "β"
+      ],
+      "unit": "—",
+      "relations": [
+        "大偏心受压",
+        "二阶效应"
+      ],
+      "pitfalls": [
+        "小偏心需对远离偏心力一侧（As 侧）作反向破坏验算，学生最常漏"
+      ],
+      "examAngle": "判别 + 迭代求解",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "小偏心 σs 表达式各版写法不同（分母 ξb−β 或 β−ξb），请以教材为准，见公式卡 verify"
+    },
+    {
+      "id": "structural-design-principles-concept-058",
+      "subjectId": "structural-design-principles",
+      "chapter": "6.2",
+      "term": "Nu-Mu 相关曲线",
+      "en": "axial force-moment interaction diagram",
+      "definition": "给定截面的极限轴力 Nu 与极限弯矩 Mu 的对应关系曲线，曲线上各点对应不同的受压区高度，是偏心受压的统一描述。",
+      "formulaId": null,
+      "symbols": [
+        "Nu",
+        "Mu"
+      ],
+      "unit": "kN、kN·m",
+      "relations": [
+        "大偏心受压",
+        "小偏心受压",
+        "界限偏心距"
+      ],
+      "pitfalls": [
+        "曲线峰值点即轴心受压承载力；大/小偏心的分界在 ξ = ξb 处"
+      ],
+      "examAngle": "概念与曲线读图",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-design-principles-concept-059",
+      "subjectId": "structural-design-principles",
+      "chapter": "6.3",
+      "term": "二阶效应（p-Δ 与 p-δ）",
+      "en": "second-order effects",
+      "definition": "p-Δ 指结构侧移引起的整体附加效应，p-δ 指构件自身挠曲引起的局部附加效应；在偏心受压中统一用偏心距增大系数 η 体现。",
+      "formulaId": "structural-design-principles-formula-033",
+      "symbols": [
+        "η",
+        "p-Δ",
+        "p-δ"
+      ],
+      "unit": "—",
+      "relations": [
+        "偏心距增大系数",
+        "计算长度"
+      ],
+      "pitfalls": [
+        "现代规范倾向直接按二阶分析计算内力，与 η 法结果不完全相同"
+      ],
+      "examAngle": "概念 + η 计算",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-design-principles-concept-060",
+      "subjectId": "structural-design-principles",
+      "chapter": "6.4",
+      "term": "偏心距增大系数 η",
+      "en": "magnification factor of eccentricity",
+      "definition": "考虑长柱侧向挠曲使偏心距增大的系数，η = 1 + (l0/h)²ζ1ζ2/(1400 e0/h0)，ζ1 反映截面偏心距影响，ζ2 反映长细比影响。",
+      "formulaId": "structural-design-principles-formula-033",
+      "symbols": [
+        "η",
+        "ζ1",
+        "ζ2",
+        "e0"
+      ],
+      "unit": "—",
+      "relations": [
+        "二阶效应",
+        "小偏心受压"
+      ],
+      "pitfalls": [
+        "ζ1 > 1 取 1.0、ζ2 > 1 取 1.0；两端 e0 不同时取较大者并判别"
+      ],
+      "examAngle": "偏心受压计算必算项",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "1400 分母与 ζ1=0.2+2.7e0/h0、ζ2=1.15−0.01l0/h 的表达式请以现行规范与教材核对"
+    },
+    {
+      "id": "structural-design-principles-concept-061",
+      "subjectId": "structural-design-principles",
+      "chapter": "7.1",
+      "term": "轴心受拉构件",
+      "en": "axially loaded tension member",
+      "definition": "拉力作用线与截面重心轴重合的构件，承载力由全部纵向受拉钢筋承担，Nd ≤ fsd As。",
+      "formulaId": "structural-design-principles-formula-034",
+      "symbols": [
+        "Nd",
+        "As",
+        "fsd"
+      ],
+      "unit": "kN",
+      "relations": [
+        "偏心受拉",
+        "裂缝宽度"
+      ],
+      "pitfalls": [
+        "受拉构件承载力由钢筋控制，但裂缝宽度常成为真正的控制条件"
+      ],
+      "examAngle": "配筋计算",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-design-principles-concept-062",
+      "subjectId": "structural-design-principles",
+      "chapter": "7.2",
+      "term": "小偏心受拉",
+      "en": "small-eccentricity tension",
+      "definition": "轴向拉力作用在 As 与 As' 合力点之间（e0 < h/2 − as）的受拉状态，全截面受拉，混凝土不参与工作。",
+      "formulaId": "structural-design-principles-formula-035",
+      "symbols": [
+        "e",
+        "e'",
+        "As",
+        "As'"
+      ],
+      "unit": "mm",
+      "relations": [
+        "大偏心受拉",
+        "轴心受拉构件"
+      ],
+      "pitfalls": [
+        "两侧钢筋分别按各自的内力矩计算，不能套大偏心受压公式"
+      ],
+      "examAngle": "判别 + 两侧配筋",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-design-principles-concept-063",
+      "subjectId": "structural-design-principles",
+      "chapter": "7.2",
+      "term": "大偏心受拉",
+      "en": "large-eccentricity tension",
+      "definition": "轴向拉力作用在 As 与 As' 合力点之外（e0 > h/2 − as）的受拉状态，截面部分受拉部分受压，计算形式与大偏心受压相似。",
+      "formulaId": "structural-design-principles-formula-036",
+      "symbols": [
+        "e",
+        "x",
+        "As'"
+      ],
+      "unit": "mm",
+      "relations": [
+        "小偏心受拉",
+        "大偏心受压"
+      ],
+      "pitfalls": [
+        "判别条件是 e0 与 h/2 − as，而不是 0.3h0"
+      ],
+      "examAngle": "判别",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "大偏心受拉具体的平衡方程请以教材为准"
+    },
+    {
+      "id": "structural-design-principles-concept-064",
+      "subjectId": "structural-design-principles",
+      "chapter": "8.1",
+      "term": "裂缝宽度 ωmax",
+      "en": "maximum crack width",
+      "definition": "按荷载（作用）效应组合计算并考虑长期影响后的构件最大裂缝宽度，需不大于规范规定的限值。",
+      "formulaId": "structural-design-principles-formula-038",
+      "symbols": [
+        "ωmax",
+        "C1",
+        "C2",
+        "C3",
+        "σss",
+        "d",
+        "ρ"
+      ],
+      "unit": "mm",
+      "relations": [
+        "裂缝截面钢筋应力",
+        "标准组合",
+        "环境类别"
+      ],
+      "pitfalls": [
+        "公式中的 d 是钢筋直径而非保护层；ρ 是 As/(b h0) 而非 As/A"
+      ],
+      "examAngle": "验算题",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "C1C2C3 裂缝宽度公式为 JTG 口径；GB 50010 使用 αcr·ψ·σs/Es·(1.9c+0.08deq/ρte) 形式，两者不可混用"
+    },
+    {
+      "id": "structural-design-principles-concept-065",
+      "subjectId": "structural-design-principles",
+      "chapter": "8.1",
+      "term": "裂缝截面钢筋应力 σss",
+      "en": "steel stress at cracked section",
+      "definition": "正常使用阶段按开裂截面计算的受拉钢筋应力，是裂缝宽度公式的核心输入，受弯构件常取 σss = Ms/(0.87 As h0)。",
+      "formulaId": "structural-design-principles-formula-039",
+      "symbols": [
+        "σss",
+        "Ms",
+        "As",
+        "h0"
+      ],
+      "unit": "MPa",
+      "relations": [
+        "裂缝宽度",
+        "钢筋应变不均匀系数"
+      ],
+      "pitfalls": [
+        "必须用标准组合（短期）弯矩 Ms，不能用承载力设计值 Md"
+      ],
+      "examAngle": "裂缝验算第一步",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "0.87 系数与偏心受力构件的 z 表达式请以现行规范为准"
+    },
+    {
+      "id": "structural-design-principles-concept-066",
+      "subjectId": "structural-design-principles",
+      "chapter": "8.2",
+      "term": "短期刚度 Bs",
+      "en": "short-term stiffness",
+      "definition": "构件在短期荷载作用下的截面抗弯刚度，由钢筋与混凝土的贡献及裂缝间钢筋应变不均匀系数 ψ 确定。",
+      "formulaId": "structural-design-principles-formula-041",
+      "symbols": [
+        "Bs",
+        "ψ",
+        "αE",
+        "ρ"
+      ],
+      "unit": "N·mm²",
+      "relations": [
+        "长期刚度",
+        "钢筋应变不均匀系数"
+      ],
+      "pitfalls": [
+        "公路规范与建筑规范的 Bs 表达式不同，甚至公路规范有以开裂弯矩为界的双折线刚度法"
+      ],
+      "examAngle": "刚度计算",
+      "confidence": "low",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "本节 Bs 采用 GB 50010 形式，若作业按公路 JTG 3362 的双折线刚度 B = B0/[(Mcr/Ms)²+(1−(Mcr/Ms)²)B0/Bcr]，请改用该式并核对教材"
+    },
+    {
+      "id": "structural-design-principles-concept-067",
+      "subjectId": "structural-design-principles",
+      "chapter": "8.2",
+      "term": "长期刚度 B",
+      "en": "long-term stiffness",
+      "definition": "考虑混凝土徐变与收缩后，由短期刚度除以长期荷载效应影响系数 θ 得到的刚度，B = Bs/θ，用于长期挠度计算。",
+      "formulaId": "structural-design-principles-formula-042",
+      "symbols": [
+        "B",
+        "Bs",
+        "θ"
+      ],
+      "unit": "N·mm²",
+      "relations": [
+        "短期刚度",
+        "挠度限值"
+      ],
+      "pitfalls": [
+        "θ 与受压钢筋配筋率有关；无受压钢筋时常取 θ = 2.0"
+      ],
+      "examAngle": "挠度验算",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "θ 的取值（2.0 或 2.0−0.4ρ'/ρ）请以教材与现行规范核对"
+    },
+    {
+      "id": "structural-design-principles-concept-068",
+      "subjectId": "structural-design-principles",
+      "chapter": "8.2",
+      "term": "挠度限值",
+      "en": "deflection limit",
+      "definition": "正常使用极限状态下构件最大挠度的容许值，常以计算跨径的分式表示（如梁式桥主梁 l0/300）。",
+      "formulaId": null,
+      "symbols": [
+        "f",
+        "l0"
+      ],
+      "unit": "mm",
+      "relations": [
+        "长期刚度",
+        "正常使用极限状态"
+      ],
+      "pitfalls": [
+        "限值随构件类型与是否有附加载荷而不同，不能一律取 l0/300"
+      ],
+      "examAngle": "验算最后一步",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "具体限值请以现行 JTG 3362/JTG D60 为准"
+    },
+    {
+      "id": "structural-design-principles-concept-069",
+      "subjectId": "structural-design-principles",
+      "chapter": "8.2",
+      "term": "钢筋应变不均匀系数 ψ",
+      "en": "strain non-uniformity coefficient of steel",
+      "definition": "反映裂缝之间受拉钢筋应变小于裂缝截面应变的折减系数，ψ = 1.1 − 0.65 ftk/(ρte σss)，取值在 0.2～1.0 之间。",
+      "formulaId": "structural-design-principles-formula-040",
+      "symbols": [
+        "ψ",
+        "ρte",
+        "σss",
+        "ftk"
+      ],
+      "unit": "—",
+      "relations": [
+        "短期刚度",
+        "裂缝宽度"
+      ],
+      "pitfalls": [
+        "ρte 是 As/Ate（Ate 为有效受拉混凝土面积），不是 As/(b h0)"
+      ],
+      "examAngle": "刚度计算中间量",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "1.1、0.65 系数与上下限 0.2/1.0 请以现行 GB 50010 核对；公路规范表述可能不同"
+    },
+    {
+      "id": "structural-design-principles-concept-070",
+      "subjectId": "structural-design-principles",
+      "chapter": "9.1",
+      "term": "先张法",
+      "en": "pretensioning",
+      "definition": "在浇筑混凝土之前张拉预应力筋、待混凝土达到强度后放张，靠钢筋与混凝土的粘结传递预压应力的工艺。",
+      "formulaId": null,
+      "symbols": [
+        "σcon",
+        "σpe",
+        "ltr"
+      ],
+      "unit": "—",
+      "relations": [
+        "后张法",
+        "预应力传递长度",
+        "换算截面"
+      ],
+      "pitfalls": [
+        "先张法靠粘结传力，端部有预应力传递长度 ltr，该区段预应力不能取满值"
+      ],
+      "examAngle": "工艺与传力机理",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-design-principles-concept-071",
+      "subjectId": "structural-design-principles",
+      "chapter": "9.1",
+      "term": "后张法",
+      "en": "post-tensioning",
+      "definition": "在混凝土硬化后于预留孔道中穿筋张拉并锚固，靠端部锚具传递预压应力，随后压浆形成有粘结体系的工艺。",
+      "formulaId": null,
+      "symbols": [
+        "σcon",
+        "σl1",
+        "σl2"
+      ],
+      "unit": "—",
+      "relations": [
+        "先张法",
+        "局部承压",
+        "净截面"
+      ],
+      "pitfalls": [
+        "后张法存在摩阻损失与锚具变形损失，且施工阶段应按净截面计算"
+      ],
+      "examAngle": "工艺对比与损失计算",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-design-principles-concept-072",
+      "subjectId": "structural-design-principles",
+      "chapter": "9.2",
+      "term": "张拉控制应力 σcon",
+      "en": "control stress for tensioning",
+      "definition": "张拉预应力筋时锚下（先张法为张拉端）达到的最大应力值，是预应力损失的起点，规范规定其上限。",
+      "formulaId": "structural-design-principles-formula-044",
+      "symbols": [
+        "σcon",
+        "fpk"
+      ],
+      "unit": "MPa",
+      "relations": [
+        "有效预应力",
+        "预应力损失"
+      ],
+      "pitfalls": [
+        "钢绞线常取 σcon ≤ 0.75 fpk；精轧螺纹钢筋可更高。取值超限属设计错误"
+      ],
+      "examAngle": "上限复核",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": "σcon 上限（0.75 fpk / 0.90 fpk）请以现行 JTG 3362 核对"
+    },
+    {
+      "id": "structural-design-principles-concept-073",
+      "subjectId": "structural-design-principles",
+      "chapter": "9.3",
+      "term": "换算截面",
+      "en": "transformed (equivalent) section",
+      "definition": "把钢筋（及预应力筋）按其与混凝土的弹性模量比 αEs = Es/Ec、αEp = Ep/Ec 折算成等效混凝土面积后得到的单一材料截面，用于弹性阶段应力与几何特性计算。",
+      "formulaId": "structural-design-principles-formula-052",
+      "symbols": [
+        "αEs",
+        "αEp",
+        "A0",
+        "I0",
+        "W0"
+      ],
+      "unit": "mm²、mm⁴",
+      "relations": [
+        "净截面",
+        "毛截面",
+        "先张法"
+      ],
+      "pitfalls": [
+        "先张法与后张法使用阶段用换算截面；后张法施工阶段（孔道未灌浆）必须用净截面"
+      ],
+      "examAngle": "几何特性计算（A0、y0、I0）",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-design-principles-concept-074",
+      "subjectId": "structural-design-principles",
+      "chapter": "9.3",
+      "term": "净截面",
+      "en": "net section",
+      "definition": "扣除孔道等削弱后的混凝土截面加上普通钢筋的换算面积，但不计入孔道内尚未灌浆的预应力筋，用于后张法施工阶段计算。",
+      "formulaId": "structural-design-principles-formula-053",
+      "symbols": [
+        "An",
+        "In",
+        "Ad"
+      ],
+      "unit": "mm²、mm⁴",
+      "relations": [
+        "换算截面",
+        "毛截面",
+        "后张法"
+      ],
+      "pitfalls": [
+        "毛截面 = 混凝土全截面（不扣孔道、不含钢筋换算）≠ 净截面 ≠ 换算截面，三者不可混用"
+      ],
+      "examAngle": "先张/后张阶段截面选取",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-design-principles-concept-075",
+      "subjectId": "structural-design-principles",
+      "chapter": "9.1",
+      "term": "预应力传递长度 ltr",
+      "en": "transmission length of prestress",
+      "definition": "先张法构件放张后，预应力由钢筋通过粘结传给混凝土所需的端部长度，在该长度内有效预应力由零线性增长至 σpe。",
+      "formulaId": null,
+      "symbols": [
+        "ltr",
+        "d"
+      ],
+      "unit": "mm",
+      "relations": [
+        "先张法",
+        "锚固长度"
+      ],
+      "pitfalls": [
+        "端部锚固区验算与斜截面抗剪计算需考虑传递长度内预应力不足"
+      ],
+      "examAngle": "概念与端部局部验算",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": "ltr 的计算式请以现行 JTG 3362 核对"
+    },
+    {
+      "id": "structural-design-principles-concept-076",
+      "subjectId": "structural-design-principles",
+      "chapter": "10.3",
+      "term": "有效预应力 σpe",
+      "en": "effective prestress",
+      "definition": "扣除相应阶段的全部预应力损失后，预应力筋中实际存在的拉应力，σpe = σcon − σl。",
+      "formulaId": "structural-design-principles-formula-051",
+      "symbols": [
+        "σpe",
+        "σcon",
+        "σl",
+        "σlI",
+        "σlII"
+      ],
+      "unit": "MPa",
+      "relations": [
+        "张拉控制应力",
+        "预应力损失",
+        "换算截面"
+      ],
+      "pitfalls": [
+        "施工阶段与使用阶段的有效预应力不同，应分阶段扣除相应损失"
+      ],
+      "examAngle": "损失汇总的终点",
+      "confidence": "high",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "10",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-design-principles-concept-077",
+      "subjectId": "structural-design-principles",
+      "chapter": "10.3",
+      "term": "预应力损失",
+      "en": "loss of prestress",
+      "definition": "预应力筋张拉后，由于摩阻、锚具变形、分批张拉的弹性压缩、钢筋松弛、混凝土收缩徐变等原因导致的应力降低，按 σl1～σl6 逐项计算后分批组合。",
+      "formulaId": "structural-design-principles-formula-045",
+      "symbols": [
+        "σl1",
+        "σl2",
+        "σl3",
+        "σl4",
+        "σl5",
+        "σl6",
+        "σlI",
+        "σlII"
+      ],
+      "unit": "MPa",
+      "relations": [
+        "张拉控制应力",
+        "有效预应力"
+      ],
+      "pitfalls": [
+        "各编号与顺序在不同规范/教材中不一致，做题前先确认编号定义"
+      ],
+      "examAngle": "逐项计算 + 分批组合",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "10",
+        "page": null
+      },
+      "verify": "本库采用：σl1 摩阻、σl2 锚具变形、σl3 分批张拉、σl4 弹性压缩、σl5 松弛、σl6 收缩徐变；请与本人教材编号核对"
+    },
+    {
+      "id": "structural-design-principles-concept-078",
+      "subjectId": "structural-design-principles",
+      "chapter": "11.1",
+      "term": "消压弯矩 M0",
+      "en": "decompression moment",
+      "definition": "使构件受拉边缘（使用阶段）由预压应力状态恰好抵消到零应力所需的弯矩，M0 = σpc·W0。",
+      "formulaId": "structural-design-principles-formula-055",
+      "symbols": [
+        "M0",
+        "σpc",
+        "W0"
+      ],
+      "unit": "kN·m",
+      "relations": [
+        "开裂弯矩",
+        "换算截面",
+        "有效预应力"
+      ],
+      "pitfalls": [
+        "W0 应取与所验算边缘对应的截面模量（下缘 vs 上缘）"
+      ],
+      "examAngle": "抗裂验算",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "11",
+        "page": null
+      },
+      "verify": "σpc 应扣除第二批损失（σpc,Ⅱ），请以教材定义核对"
+    },
+    {
+      "id": "structural-design-principles-concept-079",
+      "subjectId": "structural-design-principles",
+      "chapter": "11.2",
+      "term": "开裂弯矩 Mcr",
+      "en": "cracking moment",
+      "definition": "构件受拉边缘混凝土达到抗拉强度时的弯矩，预应力构件常取 Mcr = (σpc + ftd)W0，钢筋混凝土构件取 Mcr = γ·ftd·W0（γ 为截面抵抗矩塑性影响系数）。",
+      "formulaId": "structural-design-principles-formula-056",
+      "symbols": [
+        "Mcr",
+        "σpc",
+        "ftd",
+        "W0",
+        "γ"
+      ],
+      "unit": "kN·m",
+      "relations": [
+        "消压弯矩",
+        "抗裂验算",
+        "短期刚度"
+      ],
+      "pitfalls": [
+        "预应力构件与钢筋混凝土构件的 Mcr 表达式不同，混用会得出荒谬结果"
+      ],
+      "examAngle": "抗裂验算与刚度计算",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "11",
+        "page": null
+      },
+      "verify": "是否乘塑性影响系数 γ = 2S0/W0，各版写法不同，请以教材与现行规范核对"
+    },
+    {
+      "id": "structural-design-principles-concept-080",
+      "subjectId": "structural-design-principles",
+      "chapter": "12.3",
+      "term": "局部承压",
+      "en": "local bearing (local compression)",
+      "definition": "构件表面仅在部分面积上承受压力（如后张锚具下、支座处）的受力状态，因周边混凝土的约束作用，局部承压强度高于轴心抗压强度。",
+      "formulaId": "structural-design-principles-formula-058",
+      "symbols": [
+        "Fl",
+        "Aln",
+        "Ab",
+        "βc",
+        "βl"
+      ],
+      "unit": "kN",
+      "relations": [
+        "螺旋箍筋柱",
+        "后张法"
+      ],
+      "pitfalls": [
+        "βl = sqrt(Ab/Al) 中的 Ab 与 Al 必须同心对称，否则取值方法不同"
+      ],
+      "examAngle": "锚下局压验算",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构设计原理",
+        "edition": "第5版",
+        "chapter": "12",
+        "page": null
+      },
+      "verify": "1.35βcβl 形式为 GB 50010 口径；公路 JTG 3362 的局压公式系数不同，请以现行规范核对"
+    }
+  ]
+}

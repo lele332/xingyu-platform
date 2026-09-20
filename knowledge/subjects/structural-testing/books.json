@@ -1,0 +1,328 @@
+{
+  "subjectId": "structural-testing",
+  "items": [
+    {
+      "id": "structural-testing-book-001",
+      "subjectId": "structural-testing",
+      "title": "结构试验与检测",
+      "author": "陈爱军、吴鸣、黄立浦",
+      "publisher": "哈尔滨工程大学出版社",
+      "level": "教材",
+      "why": "用户正在使用的主教材，是本知识库所有条目的第一出处；其章节划分、符号约定与实验安排优先于其他参考书。",
+      "readPlan": "以本书目录为主干建立知识框架；所有公式、符号与规范取值最终以本书和现行规范为准，本知识库中标注 verify 的条目请逐一回到本书核对。",
+      "relatesToChapters": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13"
+      ],
+      "acquireNote": "用户自有教材；作者与版次信息待补全",
+      "confidence": "high",
+      "verify": null,
+      "year": null,
+      "isbn": "978-7-5661-2306-0",
+      "verification": {
+        "status": "confirmed",
+        "source": "哈尔滨工程大学出版社官网图书页 (press.hrbeu.edu.cn)",
+        "checkedAt": "2026-09-15",
+        "note": "哈尔滨工程大学出版社官网图书页：作者陈爱军、吴鸣、黄立浦，ISBN 978-7-5661-2306-0，336 页。"
+      },
+      "edition": null
+    },
+    {
+      "id": "structural-testing-book-002",
+      "subjectId": "structural-testing",
+      "title": "土木工程结构试验",
+      "author": "姚谦峰 等编著",
+      "publisher": "中国建筑工业出版社",
+      "level": "教材",
+      "why": "国内高校使用面广的土木工程结构试验经典教材，体系完整，加载设备、量测技术与静动力试验的讲解比多数教材更细，适合补齐主教材中略写的部分。",
+      "readPlan": "主教材某一章讲得过简时，按章对照阅读；重点看静力加载制度、拟静力试验与模型相似部分的例题。",
+      "relatesToChapters": [
+        "1",
+        "2",
+        "3",
+        "5",
+        "7"
+      ],
+      "acquireNote": "图书馆可借 / 出版社正版渠道",
+      "confidence": "medium",
+      "verify": "合著者\"陈平\"未在书目记录中出现，按版权页核对",
+      "edition": "第 2 版（2008）",
+      "year": 2008,
+      "isbn": "9787112098866",
+      "verification": {
+        "status": "confirmed",
+        "source": "中国图书馆分类法中图分类号查询 (clcindex.com，含 ISBN)；孔夫子旧书网图书条目（含 ISBN / 版次）",
+        "checkedAt": "2026-09-15",
+        "note": "【已补出版社】姚谦峰等编著《土木工程结构试验》第 2 版 中国建筑工业出版社 2008，ISBN 9787112098866。"
+      }
+    },
+    {
+      "id": "structural-testing-book-003",
+      "subjectId": "structural-testing",
+      "title": "土木工程结构试验与检测",
+      "author": "周明华",
+      "publisher": "东南大学出版社",
+      "level": "教材",
+      "why": "书名与主教材高度一致，内容兼顾试验与工程检测两条线，无损检测与桥梁检测部分通常比纯试验教材更实用。",
+      "readPlan": "学第 9~11 章（无损检测、桥梁荷载试验）前先读对应章节，帮助建立工程现场的语境。",
+      "relatesToChapters": [
+        "9",
+        "10",
+        "11"
+      ],
+      "acquireNote": "图书馆可借 / 出版社正版渠道",
+      "confidence": "high",
+      "verify": "第 2 版 ISBN 978-7-5641-2135-8；第 4 版 ISBN 未核实",
+      "edition": "第 2 版（2010）；第 4 版（2017）",
+      "year": 2017,
+      "isbn": "978-7-5641-2135-8",
+      "verification": {
+        "status": "confirmed",
+        "source": "中国图书馆分类法中图分类号查询 (clcindex.com，含 ISBN)；新世纪土木工程专业系列教材书目",
+        "checkedAt": "2026-09-15",
+        "note": "周明华主编，东南大学出版社；第 2 版 2010、第 4 版 2017。"
+      }
+    },
+    {
+      "id": "structural-testing-book-004",
+      "subjectId": "structural-testing",
+      "title": "土木工程结构试验",
+      "author": "王娴明",
+      "publisher": null,
+      "level": "教材",
+      "why": "偏试验室方法学的经典教材，对误差处理、相似理论与试验设计的叙述较为严谨，适合用来补数据处理与相似理论两块短板。",
+      "readPlan": "第 7 章（相似理论）与第 8 章（数据处理）卡壳时对照阅读，尤其适合准备考研或做试验报告。",
+      "relatesToChapters": [
+        "7",
+        "8"
+      ],
+      "acquireNote": "图书馆可借 / 旧书渠道",
+      "confidence": "low",
+      "verify": "书名、作者与出版社请按馆藏目录核对，可能存在多版次",
+      "verification": {
+        "status": "unverified",
+        "source": "本次未检索到可靠在线书目记录",
+        "checkedAt": "2026-09-15",
+        "note": "书名/作者/出版社请按馆藏核对。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "structural-testing-book-005",
+      "subjectId": "structural-testing",
+      "title": "混凝土结构试验方法标准（GB/T 50152）应用指南 / 培训教材",
+      "author": null,
+      "publisher": null,
+      "level": "规范配套",
+      "why": "把标准条文的口径、加载制度与检验判定的来龙去脉讲清楚，是做结构性能检验作业与试验报告时最直接的权威补充。",
+      "readPlan": "做第 5 章作业与承载力检验系数相关题目时查阅；注意先确认所用版本与现行版本是否一致。",
+      "relatesToChapters": [
+        "1",
+        "5"
+      ],
+      "acquireNote": "出版社正版渠道 / 标准管理机构官方出版物",
+      "confidence": "low",
+      "verify": "书名、编者与出版社请核实；优先选用与现行版本配套的最新指南",
+      "verification": {
+        "status": "unverified",
+        "source": "本条为类别占位",
+        "checkedAt": "2026-09-15",
+        "note": "优先选用与现行 GB/T 50152 版本配套的最新指南。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "structural-testing-book-006",
+      "subjectId": "structural-testing",
+      "title": "公路桥梁荷载试验规程（JTG/T J22）释义 / 配套手册",
+      "author": null,
+      "publisher": null,
+      "level": "规范配套",
+      "why": "桥梁静动载试验的加载工况、测点布置、荷载效率系数与评定方法在规程中高度浓缩，配套手册能解释为什么这样规定。",
+      "readPlan": "做第 11 章桥梁荷载试验作业或课程设计时查阅，配合规程原文一起看。",
+      "relatesToChapters": [
+        "11"
+      ],
+      "acquireNote": "出版社正版渠道 / 交通运输部相关出版机构",
+      "confidence": "low",
+      "verify": "书名、编者与出版社请核实；须与现行规程版本配套",
+      "verification": {
+        "status": "unverified",
+        "source": "本条为类别占位",
+        "checkedAt": "2026-09-15",
+        "note": "须与现行规程版本配套；按出版社目录检索具体书名。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "structural-testing-book-007",
+      "subjectId": "structural-testing",
+      "title": "Structural Modeling and Experimental Techniques",
+      "author": "Harris, H. G. & Sabnis, G. M.",
+      "publisher": "CRC Press",
+      "level": "英文经典",
+      "why": "结构模型试验领域的经典英文专著，对相似理论、模型材料、模型设计与制作工艺的讲述远细于中文教材，是做模型试验与读英文文献的入门书。",
+      "readPlan": "学第 7 章（相似理论与模型试验）时挑读相似律与模型材料章节；考研复试或出国前可作为专业英语材料。",
+      "relatesToChapters": [
+        "7"
+      ],
+      "acquireNote": "图书馆外文书库 / 出版社正版渠道",
+      "confidence": "medium",
+      "verify": "版次与 ISBN 按出版社目录核对",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到出版社官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "书名/作者/出版社确认；版次未在线核实。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "structural-testing-book-008",
+      "subjectId": "structural-testing",
+      "title": "Measurement Systems: Application and Design",
+      "author": "Doeblin, E. O.",
+      "publisher": "McGraw-Hill",
+      "level": "英文经典",
+      "why": "测量系统领域的经典教材，系统讲解传感器、信号调理、误差与不确定度，能补足中文结构试验教材在量测原理与误差理论上的不足。",
+      "readPlan": "学第 4 章（量测仪器）与第 8 章（误差与数据处理）时挑读传感器静态/动态特性与误差传递部分。",
+      "relatesToChapters": [
+        "4",
+        "8"
+      ],
+      "acquireNote": "图书馆外文书库 / 出版社正版渠道",
+      "confidence": "medium",
+      "verify": "版次与 ISBN 按出版社目录核对",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到出版社官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "书名/作者/出版社确认；版次未在线核实。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "structural-testing-book-009",
+      "subjectId": "structural-testing",
+      "title": "结构健康监测",
+      "author": null,
+      "publisher": null,
+      "level": "专著/教材",
+      "why": "施工监控与长期监测是本课程最后一章的延伸，中文专著对传感网络、损伤识别与数据预处理的介绍比教材更系统，也利于理解课程与行业前沿的衔接。",
+      "readPlan": "学第 13 章前通读前几章建立整体概念；写课程论文或做大学生创新项目时按专题深读。",
+      "relatesToChapters": [
+        "13"
+      ],
+      "acquireNote": "图书馆可借 / 出版社正版渠道",
+      "confidence": "low",
+      "verify": "具体书名、作者与出版社请按馆藏目录核对（该主题国内有多本同名或近名著作）",
+      "verification": {
+        "status": "unverified",
+        "source": "本条为类别占位",
+        "checkedAt": "2026-09-15",
+        "note": "该主题国内有多本同名/近名著作，按馆藏核对后替换为具体书名。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "structural-testing-book-010",
+      "subjectId": "structural-testing",
+      "title": "桥梁检测与加固（相关教材/专著）",
+      "author": "张建仁 等（相关主题著作）",
+      "publisher": null,
+      "level": "专著/教材",
+      "why": "桥梁检测、评定与加固是道路与桥梁方向最贴近就业的实际业务，与本课程桥梁荷载试验、可靠性鉴定两章直接相关。",
+      "readPlan": "学第 11、12 章时对照阅读桥梁技术状况评定与承载能力评定部分；结合本地桥梁检测实例理解。",
+      "relatesToChapters": [
+        "11",
+        "12"
+      ],
+      "acquireNote": "图书馆可借 / 出版社正版渠道",
+      "confidence": "low",
+      "verify": "书名、作者与出版社请按馆藏目录核对；该主题著作较多，需确认具体版本",
+      "verification": {
+        "status": "unverified",
+        "source": "本次未检索到可靠在线书目记录",
+        "checkedAt": "2026-09-15",
+        "note": "该主题著作较多，需确认具体版本。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "structural-testing-book-011",
+      "subjectId": "structural-testing",
+      "title": "土木工程结构试验与检测技术（朱尔玉 等相关著作）",
+      "author": "朱尔玉 等",
+      "publisher": null,
+      "level": "教材",
+      "why": "结构与桥梁方向的试验检测教材，通常对大型结构现场试验与桥梁检测着墨较多，适合道路桥梁专业学生。",
+      "readPlan": "作为主教材的平行参考，重点比对加载装置与桥梁试验部分的异同。",
+      "relatesToChapters": [
+        "3",
+        "11"
+      ],
+      "acquireNote": "图书馆可借 / 出版社正版渠道",
+      "confidence": "low",
+      "verify": "书名、作者与出版社请按馆藏目录核对",
+      "verification": {
+        "status": "unverified",
+        "source": "本次未检索到可靠在线书目记录",
+        "checkedAt": "2026-09-15",
+        "note": "书名/作者/出版社按馆藏核对。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "structural-testing-book-012",
+      "subjectId": "structural-testing",
+      "title": "误差理论与数据处理（通用教材）",
+      "author": null,
+      "publisher": null,
+      "level": "工具书/教材",
+      "why": "本课程的异常值判别、回归分析、显著性检验本质是数理统计，通用教材能补上格里布斯准则、相关系数检验等教材往往一笔带过的细节与临界值表。",
+      "readPlan": "做第 8 章数据处理作业时按条目查表；把临界值表扫描存档，避免网上随意查表出错。",
+      "relatesToChapters": [
+        "8"
+      ],
+      "acquireNote": "图书馆可借 / 本校测量或力学课程配套教材",
+      "confidence": "low",
+      "verify": "请选择本校使用的版本，书名与作者请按馆藏目录核对",
+      "verification": {
+        "status": "partial",
+        "source": "多所院校教材清单中列有该课程教材",
+        "checkedAt": "2026-09-15",
+        "note": "请选择本校使用版本；书名与作者按馆藏核对。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    }
+  ]
+}

@@ -96,3 +96,20 @@
 - 侧边栏图标使用 18px 显示尺寸，hover/active 只做透明度与极轻微位移；移动端底部导航 19px。
 - 图标主题只保留 `classic`（星屿线性）与 `mono`（单色线稿）；旧 localStorage 值自动回退为 `classic`。
 - 设置页使用真实 SVG 预览；新增图标必须先通过小尺寸可识别、笔画一致、无碎笔、语义清晰的 audit。
+## 15. 2026-09-15 platform optimization addendum
+
+- **Concept:** 星屿是“学习信号台”——今日、课程、笔记与专业知识都用清晰信号表达，不让视觉装饰抢走主线程。
+- **View switching:** `js/app.js::switchView()` adds the scoped `html.xy-switching` state for a short transition. `css/platform-optimization.css` disables backdrop filtering only on the shell and active view during the switch; it does not blanket-rewrite every DOM node.
+- **Notes:** the notes view renders only the active list/cards panel. Notes expose `待整理 / 有疑问 / 待复习` filters when extended fields exist, while legacy notes continue to work.
+- **Course library:** `js/course-kb.js` supplies local SVG concept diagrams and course-specific accent colors for the 9 engineering subjects. The visual label explicitly says these diagrams are learning aids, not textbook originals.
+- **Icon system:** sidebar icons remain a single 24px outline registry in `js/icons.js`; the dashboard, courses, notes, exams, and professional library icons were sharpened semantically.
+- **Data honesty:** no unlicensed textbook images were added. Future visual assets must be user-created, user-provided, or clearly licensed.
+- **Verification:** `npm run check`, JavaScript syntax checks, and `git diff --check` passed on 2026-09-15. Real-browser verification on the local 8620 service confirmed the course-library hero, local diagrams, navigation icons, and the notes/cards lazy-render behavior.
+
+## 16. 2026-09-15 second optimization pass
+
+- **Structured notes:** notes now normalize optional `summary`, `chapter`, `keyPoints`, `formulas`, `pitfalls`, `questions`, `reviewState`, and `reviewDueAt` fields while keeping all legacy notes valid.
+- **Note workflow:** the notes surface includes a learning-status overview, explicit state selection, structured editing fields, and an “AI 整理这篇笔记” action that fills a reviewable draft rather than silently overwriting the note.
+- **AI behavior:** `AI.organizeNote()` returns structured data with a local fallback; users must inspect the draft and press Save.
+- **Lazy modules:** weather, literature, running/coach, and voice scripts no longer evaluate in a post-splash batch. They load only when their view is opened, with stale-view protection if the user navigates away during loading.
+- **Performance intent:** the first view ships the core workspace only; non-core feature JavaScript is deferred until intent.

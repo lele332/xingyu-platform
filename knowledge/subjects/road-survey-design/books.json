@@ -1,0 +1,352 @@
+{
+  "items": [
+    {
+      "id": "road-survey-design-book-001",
+      "subjectId": "road-survey-design",
+      "title": "道路勘测设计",
+      "author": "张雨化",
+      "publisher": "人民交通出版社",
+      "level": "教材",
+      "why": "国内道路工程专业使用面很广的经典教材之一，体系完整、例题与习题丰富，与湖南师范大学出版社修订版可互为对照，尤其适合补齐例题演练。",
+      "readPlan": "预习时对照阅读绪论与平面线形两章；作业卡壳时按章查例题，重点看平曲线要素与竖曲线高程的算例。",
+      "relatesToChapters": [
+        "1",
+        "3",
+        "4",
+        "6"
+      ],
+      "acquireNote": "图书馆可借 / 出版社正版渠道；注意核对版次",
+      "confidence": "high",
+      "verify": "为最早版本，现行教学多用第 4/5 版（见许金良、杨少伟条目）",
+      "edition": "第 1 版（1997）",
+      "year": 1997,
+      "isbn": "7-114-02594-7",
+      "verification": {
+        "status": "confirmed",
+        "source": "该书版权页（ISBN 7-114-02594-7，1997 年 9 月第 1 版）；山东理工大学《道路勘测设计》课程介绍（教材沿革）",
+        "checkedAt": "2026-09-15",
+        "note": "第一版由张雨化教授主编，朱照宏主审，人民交通出版社。"
+      }
+    },
+    {
+      "id": "road-survey-design-book-002",
+      "subjectId": "road-survey-design",
+      "title": "道路勘测设计",
+      "author": "杨少伟",
+      "publisher": "人民交通出版社",
+      "level": "教材",
+      "why": "十一五/十二五规划教材，规范更新较及时，公式表述与现行 JTG 系列吻合度高，是核对公式与限值的优先参考。",
+      "readPlan": "作为「第二本教材」使用：本章听不懂时换这本书的同名章节再读一遍；考前用它核对公式符号与限值口径。",
+      "relatesToChapters": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9"
+      ],
+      "acquireNote": "图书馆可借 / 出版社正版渠道",
+      "confidence": "high",
+      "verify": "本条原写\"第 4 版 杨少伟\"有误——第 4 版主编为许金良；杨少伟主编的是第 2、3 版与第 5 版",
+      "edition": "第 2 版、第 3 版（主编）；第 5 版（与许金良共同主编）",
+      "year": null,
+      "isbn": null,
+      "verification": {
+        "status": "confirmed",
+        "source": "山东理工大学《道路勘测设计》课程介绍（教材沿革）；教材巡展网上行书目",
+        "checkedAt": "2026-09-15",
+        "note": "【已修正版次归属】第 1 版张雨化，第 2、3 版杨少伟，第 4 版许金良（2016-12，ISBN 9787114134487），第 5 版杨少伟、许金良。"
+      }
+    },
+    {
+      "id": "road-survey-design-book-003",
+      "subjectId": "road-survey-design",
+      "title": "道路勘测设计",
+      "author": "许金良",
+      "publisher": "人民交通出版社",
+      "level": "教材",
+      "why": "体系偏重勘测与设计实务的结合，对选线、定线、测设外业的表述较细致，适合作业与实习阶段参考。",
+      "readPlan": "选线与定线章节（第 8～10 章）重点读；做课程设计时按它的流程清单逐项自查。",
+      "relatesToChapters": [
+        "8",
+        "9",
+        "10",
+        "12"
+      ],
+      "acquireNote": "图书馆可借 / 出版社正版渠道",
+      "confidence": "high",
+      "verify": "第 5 版由杨少伟、许金良共同主编，按教师指定版次选",
+      "edition": "第 4 版（2016-12）",
+      "year": 2016,
+      "isbn": "9787114134487",
+      "verification": {
+        "status": "confirmed",
+        "source": "教材巡展网上行书目（含内容简介与 ISBN）",
+        "checkedAt": "2026-09-15",
+        "note": "第 4 版许金良主编，人民交通出版社 2016-12，ISBN 9787114134487，398 页。"
+      }
+    },
+    {
+      "id": "road-survey-design-book-004",
+      "subjectId": "road-survey-design",
+      "title": "道路路线设计",
+      "author": "张廷楷",
+      "publisher": "人民交通出版社",
+      "level": "专著/参考书",
+      "why": "偏重路线设计的原理与工程经验，对平纵横配合、线形质量的评价讲得比教材深，适合在做课程设计时提升「为什么这样布线」的判断力。",
+      "readPlan": "课后拓展：先读线形质量与平纵配合相关章节，再回头改自己的课程设计方案。",
+      "relatesToChapters": [
+        "3",
+        "5",
+        "6",
+        "8",
+        "9"
+      ],
+      "acquireNote": "图书馆可借 / 二手书渠道",
+      "confidence": "low",
+      "verify": "书名与作者请按馆藏或出版社目录核对",
+      "verification": {
+        "status": "partial",
+        "source": "山东理工大学《道路勘测设计》课程介绍（教材沿革）",
+        "checkedAt": "2026-09-15",
+        "note": "山东理工大学课程沿革中确有\"1998 年采用张廷楷主编《道路勘测设计》专科教材\"，但《道路路线设计》这一书名未在线确认。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "road-survey-design-book-005",
+      "subjectId": "road-survey-design",
+      "title": "《公路路线设计规范》宣贯材料 / 实施手册",
+      "author": "规范编制组（中交第一公路勘察设计研究院等）",
+      "publisher": "人民交通出版社",
+      "level": "规范配套",
+      "why": "解释规范条文背后的依据与算例，是理解「限值为什么这么定」的最佳材料，也最能帮助判断教材数据与现行规范的差异。",
+      "readPlan": "遇到与教材不一致的限值时查阅；写课程设计的方案说明书时引用其论证思路。",
+      "relatesToChapters": [
+        "1",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7"
+      ],
+      "acquireNote": "随规范版本配套发行，注意与所用规范版本一致",
+      "confidence": "low",
+      "verify": "书名、编写单位与配套规范版本请按出版社目录核对",
+      "verification": {
+        "status": "unverified",
+        "source": "本次未检索到确定书目",
+        "checkedAt": "2026-09-15",
+        "note": "须按现行 JTG D20 版次在出版社目录检索对应书名。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "road-survey-design-book-006",
+      "subjectId": "road-survey-design",
+      "title": "道路勘测设计课程设计指导书",
+      "author": "各校自编（同名较多）",
+      "publisher": "本校教材科 / 人民交通出版社",
+      "level": "课程设计指导",
+      "why": "直接对应本课程设计环节，给出任务书解读、计算表格模板、出图要求与常见错误，是本校课程设计最有用的实操参考。",
+      "readPlan": "课程设计开始前完整读一遍；做平纵横计算与土石方表时按模板填，避免返工。",
+      "relatesToChapters": [
+        "3",
+        "6",
+        "7",
+        "10",
+        "14"
+      ],
+      "acquireNote": "优先向任课教师或教研室索要本校版本",
+      "confidence": "low",
+      "verify": "本课程设计的指导书以本校（中南林业科技大学）道路与桥梁工程专业教研室发放的版本为准，本条目仅作占位",
+      "verification": {
+        "status": "unverified",
+        "source": "本校自编教材不进入公开书目库",
+        "checkedAt": "2026-09-15",
+        "note": "以中南林业科技大学道路与桥梁工程专业教研室发放的版本为准。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "road-survey-design-book-007",
+      "subjectId": "road-survey-design",
+      "title": "A Policy on Geometric Design of Highways and Streets（Green Book）",
+      "author": "AASHTO",
+      "publisher": "American Association of State Highway and Transportation Officials",
+      "level": "英文经典",
+      "why": "美国公路几何设计的权威文件（绿皮书），视距、超高、竖曲线的设计思想与推导完整，适合作中英文术语对照与拓宽视野。",
+      "readPlan": "只需精读 sight distance、horizontal alignment、vertical alignment 三章；重点是对比中美取值差异，不要照搬限值。",
+      "relatesToChapters": [
+        "1",
+        "3",
+        "4",
+        "6"
+      ],
+      "acquireNote": "学校图书馆外文馆藏 / AASHTO 官方渠道；也可先读公开的章节摘要",
+      "confidence": "medium",
+      "verify": "AASHTO 另有 2019 年第 7 版重印与后续更新，出版年与版次请在 AASHTO 官网确认",
+      "edition": "第 7 版（2018）",
+      "year": 2018,
+      "isbn": null,
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到 AASHTO 官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "书名与出版机构确认（AASHTO 绿皮书），第 7 版为通行最新版，但出版年与 ISBN 未在线核实。"
+      }
+    },
+    {
+      "id": "road-survey-design-book-008",
+      "subjectId": "road-survey-design",
+      "title": "注册土木工程师（道路工程）执业资格考试辅导教材",
+      "author": "全国勘察设计注册工程师管理委员会（组织编写）",
+      "publisher": "人民交通出版社 / 中国建筑工业出版社",
+      "level": "考试辅导",
+      "why": "题型规范、覆盖面广，涵盖路线、路基、交叉、勘测等全部考点，是检验本课程掌握程度与提前了解执业考试的好材料。",
+      "readPlan": "学完一章就做对应章节的选择题与计算题；考前集中做套题。",
+      "relatesToChapters": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "11",
+        "12"
+      ],
+      "acquireNote": "出版社正版渠道 / 图书馆",
+      "confidence": "low",
+      "verify": "考试名称与科目设置近年可能有调整，教材名称与编写单位请核对",
+      "verification": {
+        "status": "partial",
+        "source": "多所院校书单中列有该类教材",
+        "checkedAt": "2026-09-15",
+        "note": "考试名称与科目设置近年有调整，按当年官方清单核对。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "road-survey-design-book-009",
+      "subjectId": "road-survey-design",
+      "title": "道路勘测设计习题集 / 学习指导（配套习题解答类）",
+      "author": "各校自编",
+      "publisher": "人民交通出版社 / 校内印行",
+      "level": "习题集",
+      "why": "本门课的计算题套路性强（平曲线要素、桩号、竖曲线高程、土石方调配），需要足量演算才能形成肌肉记忆。",
+      "readPlan": "每周完成对应章节 10～15 题；错题按「单位错误 / 符号错误 / 概念错误」三类归因整理。",
+      "relatesToChapters": [
+        "3",
+        "4",
+        "5",
+        "6",
+        "7"
+      ],
+      "acquireNote": "优先用任课教师发放的习题集或课件中的例题",
+      "confidence": "low",
+      "verify": "具体书名与编者请按馆藏或教师指定核对；本站未收录任何习题原文",
+      "verification": {
+        "status": "unverified",
+        "source": "各校自编，无统一书目",
+        "checkedAt": "2026-09-15",
+        "note": "按任课教师指定或馆藏核对。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "road-survey-design-book-010",
+      "subjectId": "road-survey-design",
+      "title": " Highway Safety Manual（HSM）",
+      "author": "AASHTO",
+      "publisher": "American Association of State Highway and Transportation Officials",
+      "level": "英文参考",
+      "why": "把几何设计指标与事故率定量联系起来，能帮助理解「为什么夹直线不能太短」「为什么凸形竖曲线要保视距」这类安全问题。",
+      "readPlan": "选读与平曲线半径、视距、路侧安全相关的章节，作为课程设计中方案比选的论证素材。",
+      "relatesToChapters": [
+        "3",
+        "4",
+        "8"
+      ],
+      "acquireNote": "图书馆外文馆藏 / AASHTO 官方渠道",
+      "confidence": "medium",
+      "verify": "AASHTO 已发布 HSM 第 2 版相关材料，版本与出版年请按 AASHTO 官网核对",
+      "edition": "第 1 版（2010）",
+      "year": 2010,
+      "isbn": null,
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到 AASHTO 官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "书名与出版机构确认，版次/出版年未在线核实。"
+      }
+    },
+    {
+      "id": "road-survey-design-book-011",
+      "subjectId": "road-survey-design",
+      "title": "Ruediger Lamm 等著：Highway Design and Traffic Safety Engineering Handbook",
+      "author": "Ruediger Lamm、Basil Psarianos、Theodor Mailaender",
+      "publisher": "McGraw-Hill",
+      "level": "英文经典",
+      "why": "Lamm 团队在「设计一致性 / 运行速度协调性」方面的研究影响深远，是理解现代路线设计从「满足最小指标」走向「线形一致性」的关键读物。",
+      "readPlan": "作为拓展阅读，重点看设计一致性与运行速度评价的思路；本科阶段只需理解概念。",
+      "relatesToChapters": [
+        "1",
+        "3",
+        "8"
+      ],
+      "acquireNote": "图书馆外文馆藏 / 正版电子书渠道",
+      "confidence": "low",
+      "verify": "书名、作者拼写与出版年请核对",
+      "verification": {
+        "status": "unverified",
+        "source": "本次未检索到出版社官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "书名、作者拼写与出版年请按图书馆目录核对。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "road-survey-design-book-012",
+      "subjectId": "road-survey-design",
+      "title": "公路勘测与设计实务（含 GPS-RTK、航测与 BIM 应用）",
+      "author": "行业编写组",
+      "publisher": "人民交通出版社",
+      "level": "工程实务",
+      "why": "教材对现代勘测技术（GPS-RTK、航测、数字地面模型、BIM 正向设计）通常着墨不多，本书可补上这一块，对实习与就业有帮助。",
+      "readPlan": "第 12 章（公路勘测）前后读；实习前重点看 RTK 放样与中桩测量的作业流程与精度要求。",
+      "relatesToChapters": [
+        "10",
+        "12",
+        "14"
+      ],
+      "acquireNote": "出版社正版渠道 / 图书馆",
+      "confidence": "low",
+      "verify": "具体书名与编写单位请按出版社目录核对；本条目为类别占位，未指向某一确定书目",
+      "verification": {
+        "status": "unverified",
+        "source": "本条为类别占位，未指向确定书目",
+        "checkedAt": "2026-09-15",
+        "note": "建议按出版社目录或馆藏替换为具体书名。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    }
+  ]
+}

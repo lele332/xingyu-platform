@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 300" width="660" height="300" role="img" aria-label="桥梁组成：上部结构、支座、下部结构、基础">
+  <title>桥梁四大组成的分工（先记"谁扛、谁传、谁垫、谁托"）</title>
+  <g font-family="system-ui, -apple-system, 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#8a8a8a">
+    <!-- 水面 -->
+    <path d="M40 236 H660" stroke="#4a9eff" stroke-width="1.2" opacity="0.5"/>
+    <text x="46" y="230" fill="#4a9eff" font-size="11">水面</text>
+
+    <!-- 上部结构：桥面 + 主梁 -->
+    <rect x="96" y="96" width="470" height="14" fill="#d8d8d8" opacity="0.16" stroke="#c8c8c8" stroke-width="1.3"/>
+    <rect x="96" y="110" width="470" height="24" fill="#d8d8d8" opacity="0.10" stroke="#c8c8c8" stroke-width="1.3"/>
+    <path d="M96 110 H566" stroke="#c8c8c8" stroke-width="0.8" opacity="0.7"/>
+
+    <!-- 支座（高亮） -->
+    <rect x="200" y="134" width="16" height="10" fill="#ff9f0a" opacity="0.85"/>
+    <rect x="446" y="134" width="16" height="10" fill="#ff9f0a" opacity="0.85"/>
+
+    <!-- 桥墩 -->
+    <path d="M188 144 L188 236 L228 236 L228 144 Z" fill="#d8d8d8" opacity="0.10" stroke="#c8c8c8" stroke-width="1.3"/>
+    <path d="M434 144 L434 236 L474 236 L474 144 Z" fill="#d8d8d8" opacity="0.10" stroke="#c8c8c8" stroke-width="1.3"/>
+
+    <!-- 基础 -->
+    <rect x="164" y="236" width="88" height="16" rx="2" fill="#30d158" opacity="0.18" stroke="#30d158" stroke-width="1.2"/>
+    <rect x="410" y="236" width="88" height="16" rx="2" fill="#30d158" opacity="0.18" stroke="#30d158" stroke-width="1.2"/>
+
+    <!-- 河床 -->
+    <path d="M20 252 H660" stroke="#8a8a8a" stroke-width="1.1"/>
+    <text x="24" y="268" font-size="11">河床 / 地基</text>
+
+    <!-- 标注线 -->
+    <!-- 上部结构 -->
+    <path d="M580 96 V134" stroke="#0a84ff" stroke-width="1.1"/>
+    <path d="M574 96 h6 v38 h-6" fill="none" stroke="#0a84ff" stroke-width="1.1"/>
+    <text x="592" y="106" fill="#0a84ff">上部结构</text>
+    <text x="592" y="122" font-size="11" fill="#0a84ff">桥面系 + 主梁</text>
+    <text x="592" y="136" font-size="11" fill="#0a84ff">「扛住车，再传下去」</text>
+
+    <!-- 支座 -->
+    <path d="M462 139 L530 100" stroke="#ff9f0a" stroke-width="1.1" stroke-dasharray="3 3"/>
+    <text x="534" y="98" fill="#ff9f0a">支座</text>
+    <text x="534" y="112" font-size="11" fill="#ff9f0a">「垫一层」：传力 + 允许变形</text>
+
+    <!-- 下部结构 -->
+    <path d="M480 160 L560 190" stroke="#bf5af2" stroke-width="1.1" stroke-dasharray="3 3"/>
+    <text x="564" y="188" fill="#bf5af2">下部结构</text>
+    <text x="564" y="202" font-size="11" fill="#bf5af2">桥墩 / 桥台</text>
+
+    <!-- 基础 -->
+    <path d="M256 244 L560 224" stroke="#30d158" stroke-width="1.1" stroke-dasharray="3 3"/>
+    <text x="564" y="222" fill="#30d158">基础</text>
+    <text x="564" y="236" font-size="11" fill="#30d158">「托住」：把力交给地基</text>
+
+    <!-- 力的传递路径 -->
+    <g stroke="#8a8a8a" stroke-width="1.3" fill="none" opacity="0.85">
+      <path d="M331 92 V130"/>
+      <path d="M325 126 l6 6 l6 -6"/>
+    </g>
+    <text x="345" y="116" font-size="11">荷载</text>
+
+    <!-- 底部说明 -->
+    <text x="96" y="288" font-size="11.5">记忆链：车轮 → 桥面 → 主梁（受弯）→ 支座 → 墩台（受压）→ 基础 → 地基</text>
+  </g>
+</svg>

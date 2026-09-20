@@ -146,6 +146,74 @@ ${notes.map(n => `《${n.title}》(${n.subject})\n${n.content}`).join("\n\n")}`;
 ${notesText}`;
   }
 
+  async function organizeNote(note) {
+    const source = note || {};
+    const base = {
+      summary: String(source.summary || "").trim(),
+      keyPoints: Array.isArray(source.keyPoints) ? source.keyPoints : [],
+      formulas: Array.isArray(source.formulas) ? source.formulas : [],
+      pitfalls: Array.isArray(source.pitfalls) ? source.pitfalls : [],
+      questions: Array.isArray(source.questions) ? source.questions : [],
+      chapter: String(source.chapter || "").trim(),
+      tags: Array.isArray(source.tags) ? source.tags : []
+    };
+    const fallback = () => {
+      const lines = String(source.content || "").split(/\r?\n/)
+        .map(line => line.replace(/^\s*(?:[-*•]|\d+[.)])\s*/, "").trim())
+        .filter(Boolean);
+      const keyPoints = lines.slice(0, 8);
+      const formulaLines = lines.filter(line => /[=＝]|公式|定理|定律|lim|∑|∫|α|β/.test(line)).slice(0, 6);
+      const questionLines = lines.filter(line => /[?？]|为什么|怎么|如何|区别|条件/.test(line)).slice(0, 5);
+      return {
+        ...base,
+        summary: base.summary || (lines.slice(0, 2).join("；").slice(0, 100) || "待补充摘要"),
+        keyPoints: base.keyPoints.length ? base.keyPoints : keyPoints,
+        formulas: base.formulas.length ? base.formulas : formulaLines,
+        questions: base.questions.length ? base.questions : questionLines,
+        pitfalls: base.pitfalls,
+        reviewState: "ready"
+      };
+    };
+    if (!isConfigured()) return fallback();
+    const prompt = `请把下面这篇学习笔记整理成可直接保存的结构化数据。
+只输出一个 JSON 对象，不要 Markdown，不要解释：
+{
+  "summary":"不超过100字的摘要",
+  "keyPoints":["3-8条关键点"],
+  "formulas":["公式或定理，若没有则为空数组"],
+  "pitfalls":["易错点，若没有则为空数组"],
+  "questions":["仍需复习/追问的问题，若没有则为空数组"],
+  "chapter":"能判断时填写章节，否则为空字符串",
+  "tags":["最多5个主题标签"]
+}
+要求：不编造原文没有的信息；保留专业符号；用中文。
+
+标题：${source.title || ""}
+课程：${source.subject || ""}
+已有标签：${(source.tags || []).join("、")}
+正文：
+${String(source.content || "").slice(0, 12000)}`;
+    try {
+      const result = await chat([{ role: "user", content: prompt }], { temperature: 0.1 });
+      const parsed = extractJSON(result);
+      const value = Array.isArray(parsed) ? parsed[0] : parsed;
+      if (!value || typeof value !== "object") return fallback();
+      const list = key => Array.isArray(value[key]) ? value[key].map(String).map(x => x.trim()).filter(Boolean).slice(0, 12) : [];
+      return {
+        summary: String(value.summary || "").trim().slice(0, 240),
+        keyPoints: list("keyPoints"),
+        formulas: list("formulas"),
+        pitfalls: list("pitfalls"),
+        questions: list("questions"),
+        chapter: String(value.chapter || "").trim().slice(0, 80),
+        tags: list("tags").slice(0, 5),
+        reviewState: "ready"
+      };
+    } catch (e) {
+      return fallback();
+    }
+  }
+
   function parseCardItems(value) {
     const list = Array.isArray(value) ? value : Array.isArray(value?.cards) ? value.cards : [];
     return list
@@ -750,5 +818,5 @@ ${text}`;
     })).filter(n => n.title);
   }
 
-  return { isConfigured, chat, runSkill, ask, cancelCurrent, PRESETS, recognizeScheduleImage, parseScheduleText, parseGradesText, recognizeGradesImage, parseNotesText, recognizeNotesImage };
+  return { isConfigured, chat, runSkill, ask, cancelCurrent, PRESETS, organizeNote, recognizeScheduleImage, parseScheduleText, parseGradesText, recognizeGradesImage, parseNotesText, recognizeNotesImage };
 })();

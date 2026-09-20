@@ -1,8 +1,12 @@
 // 缓存版本：修改 CORE 或缓存策略时必须递增，否则客户端不会更新
-const CACHE = "xingyu-static-20260914-06";
+const CACHE = "xingyu-static-20260919-5";
 
 // 预缓存清单 = index.html 实际加载的资源（2026-08-28 实测校准）
 // 注意：旧清单里的 js/idb.js、js/backup.js、js/app-core.js、js/views-*.js 均不存在
+// 2026-09-19 瘦身：bridgelab/ 子应用的 13 个资源移出预缓存 —— 它们在 SW install 时
+// 逐个 cache.add 会长时间独占 SW 单线程，用户此时点击「桥梁结构实验室」，
+// iframe 导航请求在 SW 事件队列里干等，页面长时间空白 = 「点了按钮没反应」。
+// 子应用资源走下方 fetch 分支的「网络优先 + 运行时缓存」，首次进入时自然入库。
 const CORE = [
   "./",
   "./index.html",
@@ -29,6 +33,9 @@ const CORE = [
   "./assets/js/ScrollTrigger.min.js",
   "./js/ai-context.js",
   "./js/ai.js",
+  "./js/course-kb.js",
+  "./css/course-kb.css",
+  "./css/platform-optimization.css",
   "./js/anim.js",
   "./js/animefx.js",
   "./js/app.js",
@@ -118,18 +125,20 @@ function ensureCharset(response) {
 
 
 self.addEventListener("install", event => {
-  // 逐个 add 而非 addAll：addAll 是原子操作，任一 404 会让整个 install 失败，
-  // 导致 SW 永远不激活、离线能力全盘失效（这正是旧版的问题）。
-  event.waitUntil(
-    caches.open(CACHE)
-      .then(cache => Promise.all(
-        CORE.map(url => cache.add(url).catch(err => {
-          console.warn("[sw] 预缓存跳过:", url, err && err.message);
-          return null;
-        }))
-      ))
-      .then(() => self.skipWaiting())
-  );
+  // 2026-09-19：install 不再等预缓存完成 —— 逐 add 完 60+ 资源会长时间独占 SW
+  // 单线程，期间所有 fetch 事件排队（典型受害场景：用户点「桥梁结构实验室」，
+  // iframe 导航请求被 SW 卡住 → 长时间空白 → 「点了按钮没反应」）。
+  // 预缓存改为后台 best-effort：SW 立即 install + activate 并开始响应 fetch。
+  event.waitUntil(Promise.resolve());
+  self.skipWaiting();
+  caches.open(CACHE)
+    .then(cache => Promise.all(
+      CORE.map(url => cache.add(url).catch(err => {
+        console.warn("[sw] 预缓存跳过:", url, err && err.message);
+        return null;
+      }))
+    ))
+    .catch(() => {});
 });
 
 self.addEventListener("activate", event => {
@@ -179,6 +188,28 @@ self.addEventListener("fetch", event => {
         .catch(() => caches.match(request).then(r => r ? ensureCharset(r) : r))
     );
     return;
+  }
+
+  // ⚠️ 同源 iframe 子应用（bridgelab/、toolknit/、nexus/、prisma/ …）的 index.html
+  // 必须按「自身 URL」缓存。若落进下面的导航分支，会以 "./index.html" 为键写入，
+  // 直接把星屿主页的缓存覆盖掉 —— 表现为主页永远停在旧版、且切进子应用却拿到主页 HTML。
+  // 这里用路径段数判断是否为子目录（"/index.html" 只有一段，为根主页）。
+  {
+    const segs = url.pathname.split("/").filter(Boolean);
+    if (url.pathname.endsWith("/index.html") && segs.length > 1) {
+      event.respondWith(
+        fetch(request)
+          .then((response) => {
+            if (response.ok && shouldCache(url)) {
+              const copy = response.clone();
+              caches.open(CACHE).then((cache) => cache.put(request, ensureCharset(copy)));
+            }
+            return response;
+          })
+          .catch(() => caches.match(request).then((r) => (r ? ensureCharset(r) : r)))
+      );
+      return;
+    }
   }
 
   if (request.mode === "navigate" || url.pathname.endsWith("/index.html")) {

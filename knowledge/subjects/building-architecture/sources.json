@@ -1,0 +1,259 @@
+{
+  "subjectId": "building-architecture",
+  "note": "本文件不是文献全文，而是「去哪儿查、查什么、以谁为准」的索引。论文受版权保护不入库；AI 回答涉及前沿或争议问题时，按这里给出的入口检索，并把来源层级告诉用户。",
+  "updatedAt": "2026-09-15",
+  "items": [
+    {
+      "type": "journal",
+      "name": "建筑学报",
+      "en": "Architectural Journal",
+      "org": "中国建筑学会",
+      "level": "A",
+      "why": "建筑设计与理论的国内顶刊。",
+      "howToUse": "查设计原理与建筑案例。",
+      "access": "知网 / 万方（校内 IP 通常免费）",
+      "confidence": "high",
+      "verify": null,
+      "id": "building-architecture-source-001"
+    },
+    {
+      "type": "journal",
+      "name": "建筑师",
+      "en": "The Architect",
+      "org": "中国建筑工业出版社",
+      "level": "B",
+      "why": "建筑理论与评论，适合深化设计思维。",
+      "howToUse": "写设计说明与理论分析时参考。",
+      "access": "知网 / 万方（校内 IP 通常免费）",
+      "confidence": "high",
+      "verify": null,
+      "id": "building-architecture-source-002"
+    },
+    {
+      "type": "journal",
+      "name": "新建筑",
+      "en": "New Architecture",
+      "org": "华中科技大学",
+      "level": "B",
+      "why": "建筑设计与技术并重，构造与细部讨论多。",
+      "howToUse": "查构造做法与技术处理。",
+      "access": "知网 / 万方（校内 IP 通常免费）",
+      "confidence": "high",
+      "verify": null,
+      "id": "building-architecture-source-003"
+    },
+    {
+      "type": "journal",
+      "name": "建筑科学",
+      "en": "Building Science",
+      "org": "中国建筑科学研究院",
+      "level": "B",
+      "why": "建筑物理、节能与建筑技术的研究。",
+      "howToUse": "查保温、隔热、采光等物理性能。",
+      "access": "知网 / 万方（校内 IP 通常免费）",
+      "confidence": "high",
+      "verify": null,
+      "id": "building-architecture-source-004"
+    },
+    {
+      "type": "journal",
+      "name": "城市规划学刊",
+      "en": "Urban Planning Forum",
+      "org": "同济大学",
+      "level": "B",
+      "why": "场地与总平面设计的理论支撑。",
+      "howToUse": "做场地设计与总平面分析时参考。",
+      "access": "知网 / 万方（校内 IP 通常免费）",
+      "confidence": "high",
+      "verify": null,
+      "id": "building-architecture-source-005"
+    },
+    {
+      "type": "journal",
+      "name": "Building and Environment",
+      "en": "Building and Environment",
+      "org": "Elsevier",
+      "level": "A",
+      "why": "建筑物理环境与性能的国际顶刊。",
+      "howToUse": "查热工、采光、通风的量化研究。",
+      "access": "Web of Science / ScienceDirect / ASCE Library",
+      "confidence": "high",
+      "verify": null,
+      "id": "building-architecture-source-006"
+    },
+    {
+      "type": "journal",
+      "name": "Energy and Buildings",
+      "en": "Energy and Buildings",
+      "org": "Elsevier",
+      "level": "A",
+      "why": "建筑节能与围护结构性能。",
+      "howToUse": "查节能构造与能耗分析。",
+      "access": "Web of Science / ScienceDirect / ASCE Library",
+      "confidence": "high",
+      "verify": null,
+      "id": "building-architecture-source-007"
+    },
+    {
+      "type": "journal",
+      "name": "Automation in Construction",
+      "en": "Automation in Construction",
+      "org": "Elsevier",
+      "level": "A",
+      "why": "数字建造与 BIM 的前沿。",
+      "howToUse": "做 BIM / 数字化设计选题时参考。",
+      "access": "Web of Science / ScienceDirect / ASCE Library",
+      "confidence": "high",
+      "verify": null,
+      "id": "building-architecture-source-008"
+    },
+    {
+      "type": "standard",
+      "name": "GB 50352 民用建筑设计统一标准",
+      "code": "GB 50352",
+      "level": "S",
+      "why": "民用建筑设计的基本规定（原《民用建筑设计通则》并入）。",
+      "howToUse": "课程里所有通用设计规定的源头。",
+      "access": "交通运输标准化信息系统 / 住建部标准发布 / 学校图书馆标准库",
+      "confidence": "high",
+      "verify": "版本年份需核对。",
+      "id": "building-architecture-source-009"
+    },
+    {
+      "type": "standard",
+      "name": "GB 50016 建筑设计防火规范",
+      "code": "GB 50016",
+      "level": "S",
+      "why": "防火分区、安全疏散、消防设施的强制规定。",
+      "howToUse": "凡涉及疏散与防火分区，一律以它为准，不得凭常识判断。",
+      "access": "交通运输标准化信息系统 / 住建部标准发布 / 学校图书馆标准库",
+      "confidence": "high",
+      "verify": "版本年份需核对（常见为 2014 年版及其修订）。",
+      "id": "building-architecture-source-010"
+    },
+    {
+      "type": "standard",
+      "name": "GB 50096 住宅设计规范",
+      "code": "GB 50096",
+      "level": "S",
+      "why": "住宅套型、层高、楼梯、日照等规定。",
+      "howToUse": "住宅设计作业的直接依据。",
+      "access": "交通运输标准化信息系统 / 住建部标准发布 / 学校图书馆标准库",
+      "confidence": "high",
+      "verify": "版本年份需核对。",
+      "id": "building-architecture-source-011"
+    },
+    {
+      "type": "standard",
+      "name": "GB 50176 民用建筑热工设计规范",
+      "code": "GB 50176",
+      "level": "S",
+      "why": "保温、隔热、防潮的设计计算与限值。",
+      "howToUse": "做围护结构热工计算时使用。",
+      "access": "交通运输标准化信息系统 / 住建部标准发布 / 学校图书馆标准库",
+      "confidence": "high",
+      "verify": "版本年份需核对。",
+      "id": "building-architecture-source-012"
+    },
+    {
+      "type": "standard",
+      "name": "GB 50033 建筑采光设计标准",
+      "code": "GB 50033",
+      "level": "S",
+      "why": "采光系数与窗地比的取值依据。",
+      "howToUse": "采光设计题目使用。",
+      "access": "交通运输标准化信息系统 / 住建部标准发布 / 学校图书馆标准库",
+      "confidence": "medium",
+      "verify": "版本年份需核对。",
+      "id": "building-architecture-source-013"
+    },
+    {
+      "type": "database",
+      "name": "中国知网（CNKI）",
+      "level": "D",
+      "why": "中文期刊、学位论文、会议论文最全，课程论文与作业的主要来源。",
+      "howToUse": "用「主题」而不是「篇名」检索；勾选「同义词扩展」；学位论文适合看文献综述章节。",
+      "access": "校园网 / 图书馆入口",
+      "confidence": "high",
+      "verify": null,
+      "id": "building-architecture-source-014"
+    },
+    {
+      "type": "database",
+      "name": "Web of Science / EI Compendex",
+      "level": "D",
+      "why": "外文期刊与会议论文，判断一个方向国际进展如何。",
+      "howToUse": "先看 Review，再看 Article；用「被引频次」排序找经典文献。",
+      "access": "校园网 / 图书馆入口",
+      "confidence": "high",
+      "verify": null,
+      "id": "building-architecture-source-015"
+    },
+    {
+      "type": "database",
+      "name": "标准数据库（交通运输标准化信息系统 / 国家标准全文公开系统）",
+      "level": "D",
+      "why": "规范条文以官方发布为准，教材与二手资料都可能是旧版。",
+      "howToUse": "查现行状态与被替代关系；引用规范必须写清楚版本年份。",
+      "access": "校园网 / 图书馆入口",
+      "confidence": "high",
+      "verify": null,
+      "id": "building-architecture-source-016"
+    },
+    {
+      "type": "org",
+      "name": "住房和城乡建设部 / 国家标准全文公开系统",
+      "level": "O",
+      "why": "强制性条文与现行版本的权威来源。",
+      "howToUse": "引用规范条文前先核对现行有效版本。",
+      "access": "官网公开信息",
+      "confidence": "high",
+      "verify": null,
+      "id": "building-architecture-source-017"
+    },
+    {
+      "type": "org",
+      "name": "中国建筑学会 / 中国建筑科学研究院",
+      "level": "O",
+      "why": "学术与技术指南。",
+      "howToUse": "查行业通行做法。",
+      "access": "官网公开信息",
+      "confidence": "medium",
+      "verify": null,
+      "id": "building-architecture-source-018"
+    },
+    {
+      "type": "method",
+      "name": "建筑设计类检索式模板",
+      "level": "M",
+      "why": "建筑设计问题锁定「部位 + 性能 + 做法」。",
+      "howToUse": "CNKI：（主题=外墙保温 OR 屋面防水 OR 楼梯间 OR 变形缝）AND（主题=构造 OR 设计）AND（年 between 2016,2026）。",
+      "access": "CNKI",
+      "confidence": "high",
+      "verify": null,
+      "id": "building-architecture-source-019"
+    },
+    {
+      "id": "building-architecture-source-020",
+      "name": "判断一篇文献能不能用于作业（三问）",
+      "howToUse": "① 出处：是不是本文件列出的期刊/规范/机构？② 时间：是否近 10 年，或是不是该问题的经典原始文献？③ 可核：结论能不能在教材或现行规范里找到对应？三问答不全就别引用，改用教材口径并注明。"
+    }
+  ],
+  "searchTemplates": [
+    {
+      "id": "tpl-cnki",
+      "name": "CNKI 检索式模板（可直接套用）",
+      "howToUse": "（主题 = 核心概念A）AND（主题 = 核心概念B）AND（年 between 2016,2026）；先按「被引」排序抓综述，再按「发表时间」排序抓最新进展；找到 2-3 篇高质量综述后，顺其参考文献回溯原始文献。"
+    },
+    {
+      "id": "tpl-wos",
+      "name": "Web of Science / Scopus 检索式模板",
+      "howToUse": "TS=(\"concept A\" AND \"concept B\") AND PY=(2016-2026)；文献类型限 Article / Review；语种 English；用「被引频次」找经典，用「最早发表」找首创。"
+    },
+    {
+      "id": "tpl-three-q",
+      "name": "判断一篇文献能不能用于作业（三问）",
+      "howToUse": "① 出处：是不是本文件列出的期刊/规范/机构？② 时间：是否近 10 年，或是不是该问题的经典原始文献？③ 可核：结论能不能在教材或现行规范里找到对应？三问答不全就别引用，改用教材口径并注明。"
+    }
+  ]
+}

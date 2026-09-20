@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 300" width="660" height="300" role="img" aria-label="停车视距构成示意：反应距离、制动距离、安全距离三段，附速度时间图">
+  <title>停车视距 S 停 = 反应距离 + 制动距离 + 安全距离</title>
+  <g font-family="system-ui, -apple-system, 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#8a8a8a">
+    <path d="M100 40 V130 H580" stroke="#c8c8c8" stroke-width="1"/>
+    <text x="72" y="52" font-size="11">v</text>
+    <text x="584" y="134" font-size="11">t</text>
+
+    <rect x="100" y="60" width="140" height="70" fill="#0a84ff" opacity="0.16"/>
+    <path d="M240 60 L500 130 L240 130 Z" fill="#ff9f0a" opacity="0.16"/>
+    <path d="M100 60 H240 L500 130" fill="none" stroke="#0a84ff" stroke-width="2.2"/>
+    <path d="M100 60 H240" stroke="#8a8a8a" stroke-width="0.9" stroke-dasharray="3 3" opacity="0.5"/>
+
+    <text x="170" y="102" text-anchor="middle" fill="#0a84ff">S₁ 反应距离</text>
+    <text x="360" y="112" text-anchor="middle" fill="#ff9f0a">S₂ 制动距离</text>
+    <text x="170" y="152" text-anchor="middle" font-size="11">t₁ 反应时间（感知+判断+踩踏板）</text>
+    <text x="370" y="152" text-anchor="middle" font-size="11">t₂ 制动时间（减速度由摩阻力提供）</text>
+
+    <path d="M100 185 H560" stroke="#c8c8c8" stroke-width="1.2"/>
+    <path d="M100 178 v14 M240 178 v14 M500 178 v14 M560 178 v14" stroke="#c8c8c8" stroke-width="1.2"/>
+    <path d="M100 185 H240" stroke="#0a84ff" stroke-width="3"/>
+    <path d="M240 185 H500" stroke="#ff9f0a" stroke-width="3"/>
+    <path d="M500 185 H560" stroke="#30d158" stroke-width="3"/>
+
+    <text x="170" y="206" text-anchor="middle" font-size="11" fill="#0a84ff">S₁ = v·t₁ / 3.6</text>
+    <text x="370" y="206" text-anchor="middle" font-size="11" fill="#ff9f0a">S₂ = v² / [254(f ± i)]</text>
+    <text x="530" y="206" text-anchor="middle" font-size="11" fill="#30d158">S₃ 安全距离</text>
+
+    <text x="330" y="242" text-anchor="middle" font-size="11" fill="#8a8a8a">S₃ 一般取 5~10 m；f 为纵向摩阻系数，i 为纵坡（上坡取 +、下坡取 −）</text>
+    <text x="330" y="262" text-anchor="middle" font-size="11" fill="#8a8a8a">反应时间 t₁、摩阻系数 f 的取值各规范版本略有差异，作业前须按教师指定的现行 JTG 取值</text>
+    <text x="330" y="284" text-anchor="middle" font-size="11" fill="#8a8a8a">易错：把「停车视距」与「超车视距」「会车视距」混用；会车视距约为停车视距的 2 倍</text>
+  </g>
+</svg>

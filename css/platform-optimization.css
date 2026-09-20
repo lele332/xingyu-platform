@@ -1,0 +1,310 @@
+/* 星屿平台结构优化层（2026-09-15）
+   只做两件事：切换期间保护主线程、把课程库从文字列表提升为工程知识卡片。
+   业务样式仍由 style.css / apple.css / brand-system.css 负责。 */
+
+/* ---------- 轻量视图切换 ---------- */
+html.xy-switching .sidebar,
+html.xy-switching .main,
+html.xy-switching .topbar,
+html.xy-switching .view.active .card,
+html.xy-switching .view.active .hero-card,
+html.xy-switching .view.active .note-card,
+html.xy-switching .view.active .note-row,
+html.xy-switching .view.active .kb-item,
+html.xy-switching .view.active .kb-ch {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+html.xy-switching .view.active {
+  contain: paint;
+}
+
+html.xy-switching .view:not(.active) {
+  content-visibility: hidden;
+}
+
+/* ---------- 专业课程库：课程识别与图文知识层 ---------- */
+.kb-subj {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  min-height: 68px;
+}
+
+.kb-subj-thumb {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
+  color: var(--kb-accent, var(--apple-blue, #5ac8fa));
+  background: color-mix(in srgb, var(--kb-accent, #5ac8fa) 13%, transparent);
+}
+
+.kb-subj-thumb svg,
+.kb-course-visual svg {
+  width: 100%;
+  height: 100%;
+}
+
+.kb-course-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(180px, 260px);
+  gap: 18px;
+  align-items: stretch;
+  padding: 18px;
+  border-radius: 18px;
+  color: var(--ink);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--kb-accent, #5ac8fa) 15%, transparent), transparent 60%),
+    var(--paper-card);
+  border: 1px solid var(--rule);
+}
+
+.kb-course-hero-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+
+.kb-course-hero h3 {
+  margin: 0;
+  font-size: clamp(20px, 2.2vw, 30px);
+  letter-spacing: -.035em;
+}
+
+.kb-course-kicker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  color: var(--ink-3);
+  font-size: 12px;
+}
+
+.kb-course-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.kb-course-stat {
+  min-width: 72px;
+  padding: 8px 10px;
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--kb-accent, #5ac8fa) 10%, transparent);
+}
+
+.kb-course-stat b {
+  display: block;
+  font-size: 17px;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.kb-course-stat span {
+  display: block;
+  margin-top: 3px;
+  color: var(--ink-3);
+  font-size: 11px;
+}
+
+.kb-course-visual {
+  min-height: 164px;
+  overflow: hidden;
+  border-radius: 14px;
+  color: var(--kb-accent, #5ac8fa);
+  background: color-mix(in srgb, var(--kb-accent, #5ac8fa) 9%, var(--paper-card));
+}
+
+.kb-course-visual svg {
+  display: block;
+}
+
+.kb-course-outcomes {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--ink-2);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.kb-course-outcomes li + li { margin-top: 3px; }
+
+.kb-chapter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 10px;
+}
+
+.kb-chapter-card {
+  min-width: 0;
+  padding: 13px;
+  border-radius: 14px;
+  background: var(--paper-card);
+  border: 1px solid var(--rule);
+}
+
+.kb-chapter-card summary {
+  cursor: pointer;
+  list-style: none;
+  font-weight: 700;
+}
+
+.kb-chapter-card summary::-webkit-details-marker { display: none; }
+
+.kb-chapter-card summary::before {
+  content: "＋";
+  display: inline-block;
+  width: 20px;
+  color: var(--kb-accent, var(--apple-blue, #5ac8fa));
+}
+
+.kb-chapter-card[open] summary::before { content: "－"; }
+
+.kb-chapter-meta {
+  margin: 8px 0 0 20px;
+  color: var(--ink-3);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.kb-visual-caption {
+  margin-top: 7px;
+  color: var(--ink-3);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.kb-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.kb-item::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--kb-accent, var(--apple-blue, #5ac8fa));
+  opacity: .72;
+}
+
+.kb-formula {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--kb-accent, #5ac8fa) 8%, var(--paper-card));
+  border-color: color-mix(in srgb, var(--kb-accent, #5ac8fa) 28%, var(--rule));
+  font-size: 15px;
+}
+
+@media (max-width: 700px) {
+  .kb-course-hero { grid-template-columns: 1fr; }
+  .kb-course-visual { min-height: 128px; }
+  .kb-subj { min-height: 58px; }
+}
+
+/* 笔记智能状态：用文字 + 色彩双重表达，不依赖颜色单独传达信息。 */
+.note-state-inbox { color: #ff9f0a; background: color-mix(in srgb, #ff9f0a 12%, transparent); }
+.note-state-question { color: #ff375f; background: color-mix(in srgb, #ff375f 12%, transparent); }
+.note-state-review { color: #64d2ff; background: color-mix(in srgb, #64d2ff 12%, transparent); }
+.note-state-ready { color: #30d158; background: color-mix(in srgb, #30d158 12%, transparent); }
+.nr-side .tag-chip { white-space: nowrap; }
+
+.notes-overview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 14px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--apple-blue, #5ac8fa) 12%, transparent), transparent 62%),
+    var(--paper-card);
+  border: 1px solid var(--rule);
+}
+
+.notes-overview-copy {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.notes-overview-kicker {
+  color: var(--apple-blue, #5ac8fa);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.notes-overview-copy b {
+  color: var(--ink);
+  font-size: 16px;
+}
+
+.notes-overview-copy > span:last-child {
+  overflow: hidden;
+  color: var(--ink-3);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.notes-overview-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.notes-overview-stats span {
+  min-width: 50px;
+  padding: 7px 9px;
+  border-radius: 10px;
+  text-align: center;
+  background: color-mix(in srgb, var(--ink) 5%, transparent);
+}
+
+.notes-overview-stats b,
+.notes-overview-stats small {
+  display: block;
+}
+
+.notes-overview-stats b {
+  color: var(--ink);
+  font-size: 17px;
+  font-variant-numeric: tabular-nums;
+}
+
+.notes-overview-stats small {
+  margin-top: 2px;
+  color: var(--ink-3);
+  font-size: 10px;
+}
+
+.note-structure-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 12px;
+  padding: 12px;
+  margin: 4px 0 12px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--ink) 4%, transparent);
+}
+
+.note-structure-grid .field { margin-bottom: 8px; }
+
+@media (max-width: 640px) {
+  .notes-overview { align-items: flex-start; flex-direction: column; }
+  .notes-overview-stats { width: 100%; }
+  .notes-overview-stats span { flex: 1 1 46px; }
+  .note-structure-grid { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kb-subj, .kb-tab, .kb-item { transition: none !important; }
+}

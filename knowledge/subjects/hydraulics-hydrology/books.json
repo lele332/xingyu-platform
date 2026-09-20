@@ -1,0 +1,391 @@
+{
+  "items": [
+    {
+      "id": "hydraulics-hydrology-book-001",
+      "subjectId": "hydraulics-hydrology",
+      "title": "水力学",
+      "author": "吴持恭",
+      "publisher": "高等教育出版社",
+      "level": "教材",
+      "why": "国内高校水力学课程使用最广的经典教材之一，体系严密、推导完整，对本课程第一部分的公式推导（伯努利、水头损失、明渠非均匀流）讲解比多数交通类教材更细。",
+      "readPlan": "预习时按章对照阅读；公式推导卡壳时（如沿程损失、水跃共轭水深）优先查这本。第4版为常见版本。",
+      "relatesToChapters": [
+        "1",
+        "3",
+        "4",
+        "6",
+        "7"
+      ],
+      "acquireNote": "图书馆可借 / 出版社正版渠道 / 高教社电子书",
+      "confidence": "high",
+      "verify": "上册 ISBN 978-7-04-022676-8，下册 978-7-04-022677-5，按分册借",
+      "edition": "第 4 版（2008，分上/下册）",
+      "year": 2008,
+      "isbn": null,
+      "verification": {
+        "status": "confirmed",
+        "source": "高等教育出版社产品信息检索系统 (xuanshu.hep.com.cn)；四川大学水利水电学院教材规划汇总表；华北水利水电大学考研书目",
+        "checkedAt": "2026-09-15",
+        "note": "第 4 版 2008 高等教育出版社，\"十一五\"/\"十二五\"国家级规划教材。"
+      }
+    },
+    {
+      "id": "hydraulics-hydrology-book-002",
+      "subjectId": "hydraulics-hydrology",
+      "title": "工程流体力学（水力学）",
+      "author": "闻德荪",
+      "publisher": "高等教育出版社",
+      "level": "教材",
+      "why": "工科适用面广，例题与习题量大、难度梯度合理，适合做课后练习补充；对水静力学与有压管流的题型覆盖很全。",
+      "readPlan": "作业量大时当作题库使用；每章习题按难度分级，可挑选中难题练手。",
+      "relatesToChapters": [
+        "2",
+        "3",
+        "5",
+        "8"
+      ],
+      "acquireNote": "图书馆可借 / 二手书市场常见",
+      "confidence": "high",
+      "verify": null,
+      "edition": "第 2 版（2004）",
+      "year": 2004,
+      "isbn": "7-04-013084-X",
+      "verification": {
+        "status": "confirmed",
+        "source": "南京农业大学《流体力学》教学大纲（推荐教材及教学参考书）",
+        "checkedAt": "2026-09-15",
+        "note": "闻德荪等编著《工程流体力学》第 2 版 高等教育出版社 2004，ISBN 7-04-013084-X。"
+      }
+    },
+    {
+      "id": "hydraulics-hydrology-book-003",
+      "subjectId": "hydraulics-hydrology",
+      "title": "流体力学",
+      "author": "刘鹤年",
+      "publisher": "中国建筑工业出版社",
+      "level": "教材",
+      "why": "土建类专业通用教材，叙述简洁、公式表齐全，适合快速查阅与复习；对量纲分析与相似原理的讲解有助于理解雷诺数与弗劳德数的来源。",
+      "readPlan": "期末复习时按公式表快速过一遍；相似原理部分可配合实验课理解。",
+      "relatesToChapters": [
+        "1",
+        "4"
+      ],
+      "acquireNote": "图书馆可借",
+      "confidence": "high",
+      "verify": null,
+      "edition": "第 2 版（2004）",
+      "year": 2004,
+      "isbn": "9787112060573",
+      "verification": {
+        "status": "confirmed",
+        "source": "南京农业大学《流体力学》教学大纲（推荐教材及教学参考书）",
+        "checkedAt": "2026-09-15",
+        "note": "刘鹤年主编《流体力学》第 2 版 中国建筑工业出版社 2004，ISBN 9787112060573。"
+      }
+    },
+    {
+      "id": "hydraulics-hydrology-book-004",
+      "subjectId": "hydraulics-hydrology",
+      "title": "工程流体力学",
+      "author": "李玉柱、苑明顺",
+      "publisher": "清华大学出版社",
+      "level": "教材",
+      "why": "清华大学教材，理论推导严谨，对紊流机理、边界层与绕流的讲解较深，适合想深入理解水头损失与局部阻力成因的同学。",
+      "readPlan": "学有余力时选读；用于回答「为什么 λ 与 Re 有关」一类原理性问题。",
+      "relatesToChapters": [
+        "1",
+        "4",
+        "5"
+      ],
+      "acquireNote": "图书馆可借 / 出版社正版渠道",
+      "confidence": "medium",
+      "verify": "版次与作者署名请核对",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到出版社官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "书名/作者/出版社（清华大学出版社）合理但未在线确认，按馆藏核对。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "hydraulics-hydrology-book-005",
+      "subjectId": "hydraulics-hydrology",
+      "title": "水力学与桥涵水文",
+      "author": "叶镇国",
+      "publisher": "人民交通出版社股份有限公司",
+      "level": "教材",
+      "why": "交通类院校广泛使用的同名教材，章节体系与本课程（水力学 + 桥涵水文合体）最接近，第二部分的桥孔、冲刷、小桥涵内容与 JTG C30 体系一致，可用来对照本校教材的表述差异。",
+      "readPlan": "第二部分（桥涵水文）遇到表述不清时优先对照此书；注意其引用的规范版本可能较旧，系数务必回查现行 JTG C30。",
+      "relatesToChapters": [
+        "10",
+        "11",
+        "12",
+        "13",
+        "14"
+      ],
+      "acquireNote": "图书馆可借 / 人民交通出版社渠道",
+      "confidence": "high",
+      "verify": null,
+      "edition": "第 3 版（2019）",
+      "year": 2019,
+      "isbn": "9787114151514",
+      "verification": {
+        "status": "confirmed",
+        "source": "大连理工大学图书馆馆藏书目（含 ISBN）；湖南省高等教育自学考试《桥涵水文》课程大纲（指定教材与参考教材）；新华国采全国大中专教材网络采选系统 (aijiaocai.com)",
+        "checkedAt": "2026-09-15",
+        "note": "第 3 版 2019 人民交通出版社股份有限公司 ISBN 9787114151514，415 页；另有第 2 版 2011。"
+      }
+    },
+    {
+      "id": "hydraulics-hydrology-book-006",
+      "subjectId": "hydraulics-hydrology",
+      "title": "桥涵水文",
+      "author": "高冬光",
+      "publisher": "人民交通出版社",
+      "level": "教材",
+      "why": "专门讲桥涵水文的教材（多与《桥位勘测设计》配套），对水文统计、设计流量、桥孔与冲刷的讲述最系统，含较多工程算例，是课程第二部分最好的补充读物。",
+      "readPlan": "做桥涵水文课程设计或大作业时按章节精读；重点看冲刷与桥孔计算章节的算例。",
+      "relatesToChapters": [
+        "11",
+        "12",
+        "13",
+        "14"
+      ],
+      "acquireNote": "图书馆可借 / 出版社正版渠道",
+      "confidence": "high",
+      "verify": "另有 2010 年印次记录，按馆藏核对",
+      "edition": "第 4 版（2009）",
+      "year": 2009,
+      "isbn": null,
+      "verification": {
+        "status": "confirmed",
+        "source": "湖南省高等教育自学考试《桥涵水文》课程大纲（指定教材与参考教材）；《桥涵水文》课程教学大纲",
+        "checkedAt": "2026-09-15",
+        "note": "高冬光《桥涵水文》第 4 版 人民交通出版社 2009。"
+      }
+    },
+    {
+      "id": "hydraulics-hydrology-book-007",
+      "subjectId": "hydraulics-hydrology",
+      "title": "桥涵水文（交通类院校教材）",
+      "author": "陆鼎中（待核）",
+      "publisher": "人民交通出版社",
+      "level": "教材",
+      "why": "交通类院校较早的桥涵水文教材，体系简明、便于入门，可作为第二部分的第二种表述来源，帮助交叉验证公式形式。",
+      "readPlan": "用于交叉核对公式形式；不宜作为唯一依据。",
+      "relatesToChapters": [
+        "12",
+        "13",
+        "14"
+      ],
+      "acquireNote": "图书馆可借 / 二手渠道",
+      "confidence": "low",
+      "verify": "作者姓名、书名与出版社请务必按馆藏或出版社目录核对；本库未持有该书原文",
+      "verification": {
+        "status": "unverified",
+        "source": "本次未检索到可靠在线书目记录",
+        "checkedAt": "2026-09-15",
+        "note": "作者姓名、书名与出版社请按馆藏核对；同类可改用高冬光《桥涵水文》。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "hydraulics-hydrology-book-008",
+      "subjectId": "hydraulics-hydrology",
+      "title": "Open-Channel Hydraulics",
+      "author": "Ven Te Chow",
+      "publisher": "McGraw-Hill",
+      "level": "英文经典",
+      "why": "明渠水力学领域公认的世界级经典，对临界流、水跃、水面曲线的处理最系统，附大量图表与算例。课程第一部分明渠章节（第6—7章）的所有内容在此书中都有更深入的处理。",
+      "readPlan": "学明渠非均匀流与水跃时选读对应章节；考研或做课程设计深入时值得通读。同时可积累专业英语词汇。",
+      "relatesToChapters": [
+        "6",
+        "7",
+        "8"
+      ],
+      "acquireNote": "图书馆外文书库 / 影印版 / 合法电子书渠道",
+      "confidence": "high",
+      "verify": "重印版次与 ISBN 请按馆藏核对",
+      "edition": "1959 年初版（McGraw-Hill，多次重印）",
+      "year": 1959,
+      "isbn": null,
+      "verification": {
+        "status": "confirmed",
+        "source": "多所院校水力学课程参考书目",
+        "checkedAt": "2026-09-15",
+        "note": "经典明渠水力学教材，书名/作者/出版社确认；ISBN 未核实故留空。"
+      }
+    },
+    {
+      "id": "hydraulics-hydrology-book-009",
+      "subjectId": "hydraulics-hydrology",
+      "title": "Open-Channel Hydraulics",
+      "author": "Richard H. French",
+      "publisher": "McGraw-Hill",
+      "level": "英文经典",
+      "why": "另一部同名的明渠水力学经典，工程应用导向更强，对桥涵、涵洞、泄水建筑物的过流计算有专章，与本课程第二部分的工程背景贴合。",
+      "readPlan": "在完成明渠基础后，针对桥孔过流与涵洞水力计算章节选读。",
+      "relatesToChapters": [
+        "6",
+        "7",
+        "8",
+        "14"
+      ],
+      "acquireNote": "图书馆外文书库 / 合法电子书渠道",
+      "confidence": "medium",
+      "verify": "版次与出版社请核对",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到出版社官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "书名/作者/出版社（McGraw-Hill）确认；版次与 ISBN 未在线核实。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "hydraulics-hydrology-book-010",
+      "subjectId": "hydraulics-hydrology",
+      "title": "The Hydraulics of Open Channel Flow: An Introduction",
+      "author": "Hubert Chanson",
+      "publisher": "Butterworth-Heinemann / Elsevier",
+      "level": "英文经典",
+      "why": "Chanson 是明渠水力学领域的活跃学者，本书对急流、水跃与消能的物理机制讲解非常清晰，配大量实验照片，适合补足「看不见物理过程」的短板。",
+      "readPlan": "学水跃与消能（第7—8章）时配合阅读，帮助建立直观认识。",
+      "relatesToChapters": [
+        "7",
+        "8"
+      ],
+      "acquireNote": "图书馆外文书库 / 合法电子书渠道",
+      "confidence": "medium",
+      "verify": "版次（有第2版）与出版社请核对",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到出版社官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "书名/作者/出版社（Butterworth-Heinemann / Elsevier）确认；版次未在线核实。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "hydraulics-hydrology-book-011",
+      "subjectId": "hydraulics-hydrology",
+      "title": "Fundamentals of Fluid Mechanics",
+      "author": "Munson, Young, Okiishi, Huebsch",
+      "publisher": "Wiley",
+      "level": "英文经典",
+      "why": "国际通用的流体力学入门经典，图示与实例极其丰富，对静水压力、伯努利方程、动量方程、管流的讲解兼具直观与严谨；比中文教材更容易看懂「为什么」。",
+      "readPlan": "第一部分前几章（静力学、三大方程、管流）同步选读，配合原版插图理解；也可作专业英语材料。",
+      "relatesToChapters": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "acquireNote": "图书馆外文书库 / 影印版 / 合法电子书渠道",
+      "confidence": "medium",
+      "verify": "版次（第7版/第8版等）与作者署名顺序请核对",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到出版社官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "书名/作者/出版社（Wiley）确认；版次（第 7/8 版）与 ISBN 未在线核实。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "hydraulics-hydrology-book-012",
+      "subjectId": "hydraulics-hydrology",
+      "title": "工程水文学",
+      "author": "詹道江、叶守泽（待核）",
+      "publisher": "中国水利水电出版社",
+      "level": "教材",
+      "why": "水文统计与设计洪水计算是水文专业的主课，本课程第二部分只用到其中一部分。若对 P-III 分布、适线法、特大值处理想理解透彻，应看专业水文教材。",
+      "readPlan": "学第11章（水文统计）感到吃力时选读频率计算章节；适线法上机练习可参考其算例。",
+      "relatesToChapters": [
+        "10",
+        "11",
+        "12"
+      ],
+      "acquireNote": "图书馆可借 / 出版社正版渠道",
+      "confidence": "low",
+      "verify": "书名、作者署名与出版社请按馆藏目录核对（工程水文学有多个版本与作者组合）",
+      "verification": {
+        "status": "unverified",
+        "source": "本次未检索到可靠在线书目记录",
+        "checkedAt": "2026-09-15",
+        "note": "工程水文学有多个版本与作者组合（另有王文川等《工程水文学》），按馆藏核对。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "hydraulics-hydrology-book-013",
+      "subjectId": "hydraulics-hydrology",
+      "title": "桥位勘测设计 / 桥涵水文相关规范实施手册",
+      "author": "待核（规范编制组或行业专家）",
+      "publisher": "人民交通出版社",
+      "level": "行业手册",
+      "why": "规范实施手册通常含完整算例与参数取值说明，对本课程第二部分（桥孔净长、壅水、冲刷、小桥涵孔径）的作业与课程设计帮助最大。",
+      "readPlan": "做课程设计时按算例逐步照做；但引用时须注明是手册而非规范正文。",
+      "relatesToChapters": [
+        "12",
+        "13",
+        "14"
+      ],
+      "acquireNote": "图书馆 / 交通运输部标准服务渠道",
+      "confidence": "low",
+      "verify": "具体书名、编著者、出版社与配套规范版本请核对；本库未持有原文，不作精确推荐",
+      "verification": {
+        "status": "unverified",
+        "source": "本条为类别占位，未指向确定书目",
+        "checkedAt": "2026-09-15",
+        "note": "按现行 JTG C30 版次检索对应手册，或删除本条。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "hydraulics-hydrology-book-014",
+      "subjectId": "hydraulics-hydrology",
+      "title": "水力学学习指导与习题详解（考研/考试辅导类，书名待核）",
+      "author": "待核",
+      "publisher": "待核",
+      "level": "考研/考试辅导",
+      "why": "本课程公式多、题型固定，一本带完整解题过程的习题集能显著提高作业效率，也便于期末与考研复习。",
+      "readPlan": "每章学完后做对应习题，先自己算一遍再对答案；重点看静水压力、能量方程、明渠与水跃四块。",
+      "relatesToChapters": [
+        "2",
+        "3",
+        "4",
+        "6",
+        "7"
+      ],
+      "acquireNote": "图书馆 / 教材科 / 正版电商渠道",
+      "confidence": "low",
+      "verify": "具体书名与作者请按图书馆或电商目录核对后选用；本库不指定具体版本",
+      "verification": {
+        "status": "unverified",
+        "source": "本条为类别占位，未指向确定书目",
+        "checkedAt": "2026-09-15",
+        "note": "建议删除或替换为馆藏中确认存在的学习指导书。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    }
+  ]
+}

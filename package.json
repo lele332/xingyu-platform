@@ -3,12 +3,14 @@
   "private": true,
   "version": "2026.8.11-3",
   "scripts": {
-    "test": "python -m unittest tests.test_platform -v",
+    "test": "python -m unittest tests.test_platform tests.test_incremental_save tests.test_voice_text_match tests.test_delta_sync -v",
     "test:ui": "node tests/ui-smoke.js",
     "test:pomo": "node tests/pomo-smoke.js",
     "test:srs": "node tests/srs-smoke.js",
     "test:ai": "node tests/context-budget.test.js",
-    "check": "npm run test:srs && npm run test:ai && npm test && npm run test:quality",
+    "test:sync": "node tests/store-sync.test.js",
+    "test:bridge": "node bridgelab/test-fem.js && node bridgelab/test-frame.js && node bridgelab/test-domain.js && node bridgelab/test-spatial-frame3d.js && node bridgelab/test-timehistory.js && node bridgelab/test-thvs.js && node bridgelab/test-guide.js",
+    "check": "npm run test:srs && npm run test:ai && npm run test:sync && npm run test:bridge && npm test && npm run test:quality",
     "test:quality": "node tests/quality-smoke.js"
   },
   "devDependencies": {

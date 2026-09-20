@@ -1,0 +1,2469 @@
+{
+  "items": [
+    {
+      "id": "building-architecture-concept-001",
+      "subjectId": "building-architecture",
+      "chapter": "1.1",
+      "term": "建筑三要素",
+      "en": "three elements of architecture",
+      "definition": "建筑功能、建筑技术、建筑形象三者构成建筑的基本要素。建筑功能是建造的目的，建筑技术是实现手段，建筑形象是功能与技术在空间与形体上的综合反映；三者辩证统一，通常功能起主导作用，技术对功能起促进或制约作用。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "建筑方针",
+        "建筑设计",
+        "建筑形象"
+      ],
+      "pitfalls": [
+        "把三要素理解为并列的三项内容而非相互制约的整体",
+        "认为建筑形象只是外观装饰，忽视它是功能与技术的必然结果"
+      ],
+      "examAngle": "常考概念辨析与结合实例的论述题",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "我国建筑方针的具体表述各版本教材可能不同（适用、经济、绿色、美观等），请按自己教材原文核对"
+    },
+    {
+      "id": "building-architecture-concept-002",
+      "subjectId": "building-architecture",
+      "chapter": "1.4",
+      "term": "建筑模数",
+      "en": "architectural module",
+      "definition": "为实现建筑构配件与组合件的工业化生产与互换性而选定的统一尺寸协调基准，是建筑设计、构件生产与施工安装共同遵守的尺寸协调制度。",
+      "formulaId": "building-architecture-formula-016",
+      "symbols": [
+        "M"
+      ],
+      "unit": "mm",
+      "relations": [
+        "基本模数",
+        "扩大模数",
+        "分模数",
+        "模数数列",
+        "定位轴线"
+      ],
+      "pitfalls": [
+        "把模数理解成某个具体尺寸而非一套协调制度",
+        "混淆模数值与构件实际尺寸"
+      ],
+      "examAngle": "常与开间进深、构件尺寸选题结合出题",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "模数数列与适用范围请核对 GB/T 50002《建筑模数协调标准》现行版本与教材表述"
+    },
+    {
+      "id": "building-architecture-concept-003",
+      "subjectId": "building-architecture",
+      "chapter": "1.4",
+      "term": "基本模数",
+      "en": "basic module",
+      "definition": "模数协调中最基本的尺寸单位，我国规定基本模数 M = 100 mm。以基本模数为基础派生出扩大模数（3M、6M、12M、15M、30M、60M）与分模数（M/10、M/5、M/2），分别用于不同尺度的构件与构造。",
+      "formulaId": "building-architecture-formula-016",
+      "symbols": [
+        "M"
+      ],
+      "unit": "mm",
+      "relations": [
+        "建筑模数",
+        "扩大模数",
+        "分模数"
+      ],
+      "pitfalls": [
+        "记错 M 的数值（是 100 mm 不是 1000 mm）",
+        "分模数用于缝隙与构造节点，扩大模数用于跨度与柱网，二者适用尺度易混"
+      ],
+      "examAngle": "高频：M 值、扩大模数与分模数的适用对象",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "building-architecture-concept-004",
+      "subjectId": "building-architecture",
+      "chapter": "1.4",
+      "term": "标志尺寸",
+      "en": "nominal size",
+      "definition": "符合模数数列规定、用以标注建筑物定位轴线之间（或定位轴线与构件外边界之间）以及建筑构配件、组合件、制品等界限之间的尺寸。构造尺寸是构件的设计制作尺寸，实际尺寸是构件制作后的实有尺寸；实际尺寸与构造尺寸之差为允许偏差，构造尺寸与标志尺寸之差通常为安装缝隙或连接空间。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "mm",
+      "relations": [
+        "构造尺寸",
+        "实际尺寸",
+        "定位轴线",
+        "模数数列"
+      ],
+      "pitfalls": [
+        "把标志尺寸当成构件实际外轮廓尺寸",
+        "忽略安装缝隙导致构造尺寸与标志尺寸的差值来源说不清"
+      ],
+      "examAngle": "常考三种尺寸的定义与大小关系",
+      "confidence": "medium",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "三种尺寸的定义与差值规定请以教材原文与 GB/T 50002 现行版本核对"
+    },
+    {
+      "id": "building-architecture-concept-005",
+      "subjectId": "building-architecture",
+      "chapter": "1.4",
+      "term": "定位轴线",
+      "en": "setting-out axis / grid line",
+      "definition": "确定建筑物主要承重构件位置与相互关系的基准线，也是施工放线与尺寸标注的基准。平面上通常纵横两组轴线构成轴线网，横向轴线用阿拉伯数字自左向右编号，纵向轴线用大写拉丁字母自下向上编号（I、O、Z 一般不用，以免与 1、0、2 混淆）。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "横向轴线",
+        "纵向轴线",
+        "开间",
+        "进深",
+        "柱网"
+      ],
+      "pitfalls": [
+        "编号方向与字母/数字的选择记反",
+        "分轴线（附加轴线）编号规则易写错"
+      ],
+      "examAngle": "识图与补画轴线编号是必考技能",
+      "confidence": "medium",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "附加轴线（分轴线）编号的写法请核对教材与制图标准"
+    },
+    {
+      "id": "building-architecture-concept-006",
+      "subjectId": "building-architecture",
+      "chapter": "1.4",
+      "term": "横向轴线与纵向轴线",
+      "en": "transverse axis and longitudinal axis",
+      "definition": "横向指建筑物的宽度方向（即进深方向），沿此方向布置的轴线为横向轴线；纵向指建筑物的长度方向（即开间方向），沿此方向布置的轴线为纵向轴线。横向轴线之间的距离决定房间开间，纵向轴线之间的距离决定房间进深。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "定位轴线",
+        "开间",
+        "进深",
+        "横墙",
+        "纵墙"
+      ],
+      "pitfalls": [
+        "把横向理解为长度方向（应为宽度/进深方向）",
+        "横墙是沿横向轴线布置的墙，即沿建筑物宽度方向延伸的墙，容易与横墙承重的说法混淆"
+      ],
+      "examAngle": "高频易错：横向/纵向、开间/进深两组概念的对应",
+      "confidence": "medium",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "教材对横向/纵向的界定口径（按建筑物长短边还是按轴线方向）请以原文为准"
+    },
+    {
+      "id": "building-architecture-concept-007",
+      "subjectId": "building-architecture",
+      "chapter": "1.4",
+      "term": "开间",
+      "en": "bay width",
+      "definition": "建筑物横向相邻两条定位轴线之间的距离，通常指房间的宽度尺寸（面宽方向）。住宅、宿舍、办公楼的开间常取标准值以满足模数与结构经济性。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "mm",
+      "relations": [
+        "进深",
+        "横向轴线",
+        "定位轴线",
+        "柱网"
+      ],
+      "pitfalls": [
+        "把开间说成房间的深度",
+        "开间与进深的取值未满足模数数列"
+      ],
+      "examAngle": "识图读尺寸 + 模数校核",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "building-architecture-concept-008",
+      "subjectId": "building-architecture",
+      "chapter": "1.4",
+      "term": "进深",
+      "en": "depth",
+      "definition": "建筑物纵向相邻两条定位轴线之间的距离，通常指房间的深度尺寸。进深受结构跨度经济性与采光通风（窗地比、房间进深与窗高关系）的双重制约。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "mm",
+      "relations": [
+        "开间",
+        "纵向轴线",
+        "窗地比",
+        "采光"
+      ],
+      "pitfalls": [
+        "与开间混淆",
+        "只按结构跨度定进深而忽视采光通风要求（单侧采光时进深不宜过大）"
+      ],
+      "examAngle": "常与采光要求联合出题",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "单侧采光房间的进深与窗高比例限值请核对教材与采光设计标准"
+    },
+    {
+      "id": "building-architecture-concept-009",
+      "subjectId": "building-architecture",
+      "chapter": "1.2",
+      "term": "耐火等级",
+      "en": "fire resistance rating",
+      "definition": "按建筑物主要构件（墙、柱、梁、楼板、屋顶承重构件、疏散楼梯、吊顶等）的燃烧性能与耐火极限划分的等级，民用建筑分为一至四级，一级最高。耐火等级决定了防火分区面积、疏散距离、构件燃烧性能等一系列设计取值。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "燃烧性能",
+        "耐火极限",
+        "防火分区",
+        "建筑设计防火规范"
+      ],
+      "pitfalls": [
+        "把耐火等级与建筑重要性等级或设计使用年限混为一谈",
+        "忘记一级最高、四级最低的排序方向"
+      ],
+      "examAngle": "耐火等级判定及其对其他防火取值的影响",
+      "confidence": "medium",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "各级构件耐火极限的具体数值与现行划分方式请核对 GB 50016／GB 55037 现行版本"
+    },
+    {
+      "id": "building-architecture-concept-010",
+      "subjectId": "building-architecture",
+      "chapter": "2.1",
+      "term": "建筑面积",
+      "en": "gross floor area",
+      "definition": "建筑物各层水平投影面积之和，由使用面积、辅助面积（交通面积）与结构面积三部分组成。建筑面积是造价、容积率、单方指标等计算的基础。",
+      "formulaId": "building-architecture-formula-011",
+      "symbols": [],
+      "unit": "m2",
+      "relations": [
+        "使用面积",
+        "辅助面积",
+        "结构面积",
+        "使用面积系数",
+        "容积率"
+      ],
+      "pitfalls": [
+        "把建筑面积等同于使用面积",
+        "阳台、地下室、坡屋顶空间等部位的面积计算规则特殊，容易算错"
+      ],
+      "examAngle": "面积构成与系数计算",
+      "confidence": "medium",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": "建筑面积的计算边界（外墙勒脚以上结构外围、阳台半算等）请核对建筑面积计算规范现行版本"
+    },
+    {
+      "id": "building-architecture-concept-011",
+      "subjectId": "building-architecture",
+      "chapter": "2.1",
+      "term": "使用面积",
+      "en": "usable floor area",
+      "definition": "建筑物各层平面中直接为生产或生活使用的净面积之和，等于房间面积减去墙、柱等结构所占面积，即按内墙（或结构）内表面水平投影计算的面积。",
+      "formulaId": "building-architecture-formula-011",
+      "symbols": [],
+      "unit": "m2",
+      "relations": [
+        "建筑面积",
+        "辅助面积",
+        "结构面积",
+        "使用面积系数"
+      ],
+      "pitfalls": [
+        "使用面积与建筑面积的包含关系搞反",
+        "把走道、楼梯等交通面积计入使用面积"
+      ],
+      "examAngle": "使用面积系数计算与方案经济性评价",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "building-architecture-concept-012",
+      "subjectId": "building-architecture",
+      "chapter": "2.1",
+      "term": "使用面积系数",
+      "en": "usable area ratio",
+      "definition": "使用面积与建筑面积之比（K = 使用面积 / 建筑面积），也称平面系数，是衡量平面设计经济性的重要指标。结构面积与交通面积越小，该系数越高。",
+      "formulaId": "building-architecture-formula-010",
+      "symbols": [
+        "K"
+      ],
+      "unit": "—",
+      "relations": [
+        "使用面积",
+        "建筑面积",
+        "结构面积",
+        "经济性"
+      ],
+      "pitfalls": [
+        "把分子分母倒置",
+        "片面追求高系数而牺牲采光通风与使用舒适"
+      ],
+      "examAngle": "计算题 + 方案评价题",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "building-architecture-concept-013",
+      "subjectId": "building-architecture",
+      "chapter": "2.1",
+      "term": "面积定额",
+      "en": "area per occupant standard",
+      "definition": "根据房间使用性质与人体活动所需的空间，规定每个使用者所需的最小（或适宜）使用面积指标，单位通常为 m2/人。房间面积 = 使用人数 × 面积定额，并须用家具布置校核。",
+      "formulaId": "building-architecture-formula-030",
+      "symbols": [],
+      "unit": "m2/人",
+      "relations": [
+        "人体尺度",
+        "家具设备尺寸",
+        "房间面积"
+      ],
+      "pitfalls": [
+        "直接套用定额而不做家具布置校核",
+        "把家具占用面积忽略掉"
+      ],
+      "examAngle": "教室、宿舍、办公室的面积计算与布置",
+      "confidence": "medium",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": "各类房间的面积定额数值请核对教材附表与相应建筑设计规范（如中小学校设计规范）"
+    },
+    {
+      "id": "building-architecture-concept-014",
+      "subjectId": "building-architecture",
+      "chapter": "2.2",
+      "term": "窗地比",
+      "en": "window-to-floor area ratio",
+      "definition": "房间窗洞口（有效采光面积）与房间地面面积之比，是自然采光设计中最常用的概略控制指标。不同使用性质的房间有相应的窗地比要求。",
+      "formulaId": "building-architecture-formula-012",
+      "symbols": [
+        "Ac",
+        "Ad"
+      ],
+      "unit": "—",
+      "relations": [
+        "采光系数",
+        "自然采光",
+        "窗洞口面积",
+        "建筑采光设计标准"
+      ],
+      "pitfalls": [
+        "把窗地比与采光系数等同（窗地比是几何比值，采光系数是照度比值）",
+        "未扣除窗框遮挡而直接用洞口面积"
+      ],
+      "examAngle": "采光校核计算高频",
+      "confidence": "medium",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": "各类型房间的窗地比限值与采光系数标准值请核对 GB 50033 现行版本"
+    },
+    {
+      "id": "building-architecture-concept-015",
+      "subjectId": "building-architecture",
+      "chapter": "2.4",
+      "term": "袋形走道",
+      "en": "dead-end corridor",
+      "definition": "只有一个疏散方向的尽端式走道。因疏散时无第二方向可退，其两侧或尽端的房间疏散距离限值比双向疏散走道更严格，是平面设计与防火校核的重点对象。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "疏散距离",
+        "安全出口",
+        "走道宽度",
+        "防火分区"
+      ],
+      "pitfalls": [
+        "把它当成普通走廊计算疏散距离",
+        "忘记袋形走道两侧的房间门至安全出口的距离限值更严"
+      ],
+      "examAngle": "平面图防火疏散校核必查项",
+      "confidence": "medium",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": "袋形走道的具体疏散距离限值请核对 GB 50016／GB 55037 现行版本"
+    },
+    {
+      "id": "building-architecture-concept-016",
+      "subjectId": "building-architecture",
+      "chapter": "2.4",
+      "term": "走道宽度",
+      "en": "corridor width",
+      "definition": "走道的净宽，按通行人流股数确定，每股人流宽度约 0.55 m 并附加 0～0.15 m 的摆幅，同时须满足防火疏散最小净宽与家具搬运、开启门窗影响的要求。",
+      "formulaId": "building-architecture-formula-028",
+      "symbols": [
+        "B"
+      ],
+      "unit": "m",
+      "relations": [
+        "每股人流",
+        "疏散宽度",
+        "门厅",
+        "交通枢纽"
+      ],
+      "pitfalls": [
+        "只按人流股数算宽而不取防火最小净宽的不利值",
+        "忽略开门、消火栓、暖气片等凸出物占用的净宽"
+      ],
+      "examAngle": "教学楼、宿舍走道宽度计算高频",
+      "confidence": "medium",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": "每股人流宽度取值与各类建筑走道最小净宽请核对教材与现行建筑设计规范"
+    },
+    {
+      "id": "building-architecture-concept-017",
+      "subjectId": "building-architecture",
+      "chapter": "2.5",
+      "term": "功能分区",
+      "en": "functional zoning",
+      "definition": "按房间的使用性质、联系密切程度以及动静、洁污、主次、内外等关系，把建筑内部空间划分为若干相对独立又有机联系的区域，是平面组合设计的第一步，常借助功能关系图（气泡图）分析。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "流线组织",
+        "气泡图",
+        "平面组合",
+        "动静分区"
+      ],
+      "pitfalls": [
+        "只按使用性质分区而忽视流线联系",
+        "把动静、洁污关系处理反（如把厨房与卧室相邻）"
+      ],
+      "examAngle": "课程设计与方案分析题核心",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "building-architecture-concept-018",
+      "subjectId": "building-architecture",
+      "chapter": "2.5",
+      "term": "横墙承重",
+      "en": "transverse wall bearing",
+      "definition": "楼板（或屋面板）支承在横向墙上的承重方案，楼板沿纵向铺设。其特点是横向刚度好、整体性好、适用于宿舍住宅等开间重复的小空间建筑；缺点是纵墙开窗受一定限制。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "纵墙承重",
+        "混合承重",
+        "墙承重结构",
+        "框架结构"
+      ],
+      "pitfalls": [
+        "把横墙承重与纵墙承重的传力方向记反",
+        "认为横墙承重方案下横墙可以随意拆除"
+      ],
+      "examAngle": "传力路径与方案选择",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "building-architecture-concept-019",
+      "subjectId": "building-architecture",
+      "chapter": "2.5",
+      "term": "纵墙承重",
+      "en": "longitudinal wall bearing",
+      "definition": "楼板（或屋面板）支承在纵向墙上的承重方案，楼板沿横向铺设。其特点是室内空间划分灵活、横墙可少设，适用于需要较大空间的建筑；缺点是横向刚度较弱，需靠横墙、圈梁等加强。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "横墙承重",
+        "混合承重",
+        "墙承重结构",
+        "圈梁"
+      ],
+      "pitfalls": [
+        "忽视纵墙承重方案横向刚度不足需加强的措施",
+        "与横墙承重的适用建筑类型混淆"
+      ],
+      "examAngle": "方案比较题",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "building-architecture-concept-020",
+      "subjectId": "building-architecture",
+      "chapter": "2.3",
+      "term": "前室",
+      "en": "ante-room / vestibule",
+      "definition": "设置在卫生间、盥洗室等辅助房间之前、用于遮挡视线与阻隔气味的过渡空间。公共建筑中卫生间不宜直接开向餐厅、教室、卧室等主要使用房间，通常需设前室。防烟楼梯间、消防电梯前室是另一类含义的前室，属防火疏散设施。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "卫生间",
+        "盥洗室",
+        "防烟楼梯间",
+        "消防电梯"
+      ],
+      "pitfalls": [
+        "把卫生间前室与防烟楼梯间前室混为一谈（作用与要求完全不同）",
+        "忽略前室的通风与排水要求"
+      ],
+      "examAngle": "公共卫生间布置题与防火设施辨析",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": "防烟楼梯间前室的面积与前室门要求请核对现行防火规范"
+    },
+    {
+      "id": "building-architecture-concept-021",
+      "subjectId": "building-architecture",
+      "chapter": "3.2",
+      "term": "层高",
+      "en": "storey height",
+      "definition": "该层楼面（或地面）到上一层楼面（或屋面结构面）的垂直距离。层高由净高加上结构层厚度、面层与吊顶（或设备管线）占用高度构成。",
+      "formulaId": "building-architecture-formula-031",
+      "symbols": [
+        "H"
+      ],
+      "unit": "m",
+      "relations": [
+        "净高",
+        "结构层厚度",
+        "梁底标高",
+        "吊顶"
+      ],
+      "pitfalls": [
+        "把层高当作使用者真正感受到的空间高度",
+        "忘记扣除梁高或吊顶厚度导致净高不足"
+      ],
+      "examAngle": "必考：层高与净高的换算与剖面标高标注",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "building-architecture-concept-022",
+      "subjectId": "building-architecture",
+      "chapter": "3.2",
+      "term": "净高",
+      "en": "clear height",
+      "definition": "楼面（或地面）到顶棚（或吊顶下表面、梁底）的垂直距离，即使用者实际感受到的有效空间高度。净高 = 层高 − 结构层厚度 − 面层/吊顶厚度（有梁时还应扣除梁高）。",
+      "formulaId": "building-architecture-formula-031",
+      "symbols": [
+        "h0"
+      ],
+      "unit": "m",
+      "relations": [
+        "层高",
+        "结构层厚度",
+        "梁底标高",
+        "吊顶",
+        "楼梯净高"
+      ],
+      "pitfalls": [
+        "净高与楼梯净高的计算起点不同（楼梯净高按踏步前缘至上方障碍物的垂直距离）",
+        "忽视设备管线占用高度"
+      ],
+      "examAngle": "剖面设计与楼梯设计的高频校核项",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/building-architecture/stair-dimension.svg",
+        "caption": "楼梯踏步尺寸与两处净高的量取位置（自绘示意，垂直净距未按比例）",
+        "readPoints": [
+          "2h + b = 600 ~ 620 mm，是踏步尺寸的基本经验关系",
+          "净高从踏步前缘量到上方结构底，不是从踏面中点量",
+          "梯段净高 ≥ 2200、平台净高 ≥ 2000，两处都要单独核算"
+        ]
+      }
+    },
+    {
+      "id": "building-architecture-concept-023",
+      "subjectId": "building-architecture",
+      "chapter": "3.2",
+      "term": "室内外高差",
+      "en": "level difference between indoor and outdoor",
+      "definition": "室内首层地面标高与室外地坪标高之差，主要作用是防止雨水倒灌并满足防潮要求，通常不小于 0.15 m（具体取值需结合场地排水与无障碍要求）。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "m",
+      "relations": [
+        "标高",
+        "散水",
+        "台阶",
+        "无障碍出入口",
+        "防潮"
+      ],
+      "pitfalls": [
+        "高差过大而未设台阶与无障碍坡道",
+        "把高差写成负值或标注方向搞反"
+      ],
+      "examAngle": "剖面标高标注高频",
+      "confidence": "medium",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "室内外高差的最小取值请核对教材与 GB 50352 现行版本"
+    },
+    {
+      "id": "building-architecture-concept-024",
+      "subjectId": "building-architecture",
+      "chapter": "3.3",
+      "term": "建筑高度",
+      "en": "building height",
+      "definition": "建筑物的竖向尺度指标，但按用途不同其计算起点与终点不同：防火设计用高度、城市规划（日照、航空限高）用高度、结构用高度各有规定，平屋顶与坡屋顶的取值也不同。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "m",
+      "relations": [
+        "层数",
+        "防火间距",
+        "日照间距",
+        "容积率"
+      ],
+      "pitfalls": [
+        "把防火用高度直接用于日照计算或规划设计",
+        "平屋顶建筑是否算至女儿墙顶、局部突出屋面的楼梯间水箱间是否计入，规则各不相同"
+      ],
+      "examAngle": "高度判别（多层/高层）与防火、规划取值",
+      "confidence": "low",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "建筑高度的计算规则（起算点、女儿墙与局部突出物的处理）必须核对 GB 50016／GB 55037 与 GB 50352 现行版本，本条仅为概念提示"
+    },
+    {
+      "id": "building-architecture-concept-025",
+      "subjectId": "building-architecture",
+      "chapter": "3.1",
+      "term": "视线升高差",
+      "en": "sightline rise increment",
+      "definition": "有视线要求的房间（观众厅、阶梯教室、体育馆）中，为不遮挡后排观众视线，后排观众的视线越过前排观众头顶到达设计视点时所需的高差，通常用 C 值表示（常取 0.12 m，即后排比前排高出前排眼睛至头顶的差值）。",
+      "formulaId": "building-architecture-formula-029",
+      "symbols": [
+        "C"
+      ],
+      "unit": "m",
+      "relations": [
+        "设计视点",
+        "排距",
+        "地面坡度",
+        "剖面形状"
+      ],
+      "pitfalls": [
+        "把 C 值与地面起坡的高度混淆",
+        "忽略第一排观众眼睛位置与设计视点的确定"
+      ],
+      "examAngle": "阶梯教室与观众厅的地面坡度计算",
+      "confidence": "medium",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "C 值的常用取值（0.12 m）与设计视点位置的选取规则请核对教材原文"
+    },
+    {
+      "id": "building-architecture-concept-026",
+      "subjectId": "building-architecture",
+      "chapter": "4.1",
+      "term": "比例",
+      "en": "proportion",
+      "definition": "建筑整体与局部、局部与局部之间在长、宽、高尺寸上的数量关系，是几何的、可以用数字衡量的关系，如黄金比、相似形、模数关系等。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "尺度",
+        "模数",
+        "建筑构图"
+      ],
+      "pitfalls": [
+        "与尺度混淆：比例是客观数量关系，尺度是主观大小感受",
+        "只谈比例而忽视人体尺度的参照"
+      ],
+      "examAngle": "高频名词辨析：比例 vs 尺度",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "building-architecture-concept-027",
+      "subjectId": "building-architecture",
+      "chapter": "4.1",
+      "term": "尺度",
+      "en": "scale",
+      "definition": "建筑整体或局部给人的大小感受，是通过与人体尺度或人所熟悉的构件（台阶、栏杆、门窗）相比较而获得的心理量，不是几何量。尺度处理不当会出现“尺度失真”（如把实际很大的建筑做得显小）。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "比例",
+        "人体尺度",
+        "建筑构图"
+      ],
+      "pitfalls": [
+        "把尺度当成尺寸或比例的同义词",
+        "忽略门窗、栏杆等“人体尺度参照物”对尺度感的决定作用"
+      ],
+      "examAngle": "必考辨析题",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "building-architecture-concept-028",
+      "subjectId": "building-architecture",
+      "chapter": "6.1",
+      "term": "基础",
+      "en": "foundation",
+      "definition": "建筑物最下部的承重构件，作用是把上部结构的荷载扩散并传递给地基。基础属于建筑物的组成部分，与地基是完全不同的两个概念。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "地基",
+        "持力层",
+        "基础埋置深度",
+        "刚性基础"
+      ],
+      "pitfalls": [
+        "把基础与地基混用（地基是土层，不是建筑物构件）",
+        "认为基础越深越好"
+      ],
+      "examAngle": "基础概念辨析与埋深确定",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "building-architecture-concept-029",
+      "subjectId": "building-architecture",
+      "chapter": "6.1",
+      "term": "地基",
+      "en": "subgrade / ground",
+      "definition": "承受由基础传来的建筑物荷载的土层或岩层，不属于建筑物的组成部分。应满足承载力、变形（沉降）与稳定性要求。地基分为未经处理即可使用的天然地基与需人工加固处理的人工地基。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "基础",
+        "持力层",
+        "下卧层",
+        "地基承载力",
+        "人工地基"
+      ],
+      "pitfalls": [
+        "把地基当成建筑物的一部分",
+        "只验算承载力而忽略沉降与不均匀沉降控制"
+      ],
+      "examAngle": "概念辨析高频",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "building-architecture-concept-030",
+      "subjectId": "building-architecture",
+      "chapter": "6.1",
+      "term": "持力层",
+      "en": "bearing stratum",
+      "definition": "直接支承基础底面、承受基础传来荷载的土层（岩层）。持力层以下对地基变形有显著影响的土层称为下卧层，其中强度显著低于持力层的称软弱下卧层，需要专门验算。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "地基",
+        "下卧层",
+        "地基承载力",
+        "基础埋置深度"
+      ],
+      "pitfalls": [
+        "把持力层与下卧层的位置关系记反",
+        "做了持力层验算就认为地基没问题，遗漏软弱下卧层验算"
+      ],
+      "examAngle": "工程地质条件下的基础埋深选择",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "building-architecture-concept-031",
+      "subjectId": "building-architecture",
+      "chapter": "6.2",
+      "term": "刚性基础",
+      "en": "rigid foundation",
+      "definition": "由抗压强度高而抗拉、抗剪强度很低的材料（砖、石、素混凝土、灰土、三合土等）建造的基础。由于材料不能承受拉应力，必须通过控制台阶的宽高比使基础内产生的拉应力、剪应力不超过材料的允许值。",
+      "formulaId": "building-architecture-formula-021",
+      "symbols": [
+        "b",
+        "h"
+      ],
+      "unit": "mm",
+      "relations": [
+        "刚性角",
+        "柔性基础",
+        "宽高比",
+        "基础埋置深度"
+      ],
+      "pitfalls": [
+        "把刚性基础等同于素混凝土基础（砖石灰土基础也属刚性基础）",
+        "认为刚性基础可以做得很薄"
+      ],
+      "examAngle": "台阶宽高比校核计算高频",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "各类刚性基础台阶宽高比的允许值随材料与强度等级而异，请核对教材附表与地基基础设计规范"
+    },
+    {
+      "id": "building-architecture-concept-032",
+      "subjectId": "building-architecture",
+      "chapter": "6.2",
+      "term": "刚性角",
+      "en": "rigid angle",
+      "definition": "刚性基础中，自基础底面边缘（或台阶起挑处）引出的压力分布线与铅垂线之间的夹角 α，称为刚性角（压力传递角）。基础每一级台阶的宽高比必须满足 b/h ≤ tanα，使基础处于只受压不受拉（或拉应力不超过允许值）的状态。",
+      "formulaId": "building-architecture-formula-023",
+      "symbols": [
+        "alpha",
+        "b",
+        "h"
+      ],
+      "unit": "—",
+      "relations": [
+        "刚性基础",
+        "宽高比",
+        "柔性基础",
+        "混凝土垫层"
+      ],
+      "pitfalls": [
+        "把刚性角画成与水平线的夹角（应为与铅垂线的夹角）",
+        "宽高比方向写反：应为每级台阶挑出宽度 b 与台阶高度 h 之比"
+      ],
+      "examAngle": "构造大样与计算题必考",
+      "confidence": "medium",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "刚性角（宽高比允许值）的具体数值随材料与砂浆/混凝土强度等级而不同，请核对教材附表；本条仅给出概念与判据形式"
+    },
+    {
+      "id": "building-architecture-concept-033",
+      "subjectId": "building-architecture",
+      "chapter": "6.2",
+      "term": "柔性基础",
+      "en": "flexible / reinforced concrete foundation",
+      "definition": "用钢筋混凝土建造的基础，因配置了钢筋可承受弯矩与拉应力，基础高度不受刚性角限制，可以做得很薄且刚度大、整体性好，适用于荷载较大、地基较差或需要宽基底的情况。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "刚性基础",
+        "刚性角",
+        "独立基础",
+        "筏板基础"
+      ],
+      "pitfalls": [
+        "认为柔性基础不需要控制台阶尺寸（仍需满足抗冲切、抗弯与最小高度）",
+        "忘记混凝土垫层与钢筋保护层厚度"
+      ],
+      "examAngle": "基础选型与构造大样",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "钢筋混凝土基础的最小高度、保护层厚度与垫层做法请核对教材与 GB 50007／GB 55003 现行版本"
+    },
+    {
+      "id": "building-architecture-concept-034",
+      "subjectId": "building-architecture",
+      "chapter": "6.3",
+      "term": "基础埋置深度",
+      "en": "foundation embedment depth",
+      "definition": "由室外设计地面到基础底面的垂直距离。在满足地基承载力、变形与稳定性要求的前提下应尽量浅埋，但须同时考虑冰冻线、地下水位、相邻基础、地基土的湿陷性与膨胀性以及建筑用途等因素。",
+      "formulaId": "building-architecture-formula-022",
+      "symbols": [
+        "d"
+      ],
+      "unit": "m",
+      "relations": [
+        "冰冻线",
+        "地下水位",
+        "相邻基础",
+        "持力层"
+      ],
+      "pitfalls": [
+        "埋深一律取最大安全值而忽视经济性与浅埋原则",
+        "把埋深算到室内地坪而非室外设计地面"
+      ],
+      "examAngle": "工程地质条件下的埋深确定",
+      "confidence": "medium",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "最小埋置深度与冰冻线相关的规定请核对 GB 50007／GB 55003 现行版本与教材"
+    },
+    {
+      "id": "building-architecture-concept-035",
+      "subjectId": "building-architecture",
+      "chapter": "6.3",
+      "term": "冰冻线",
+      "en": "frost penetration line",
+      "definition": "地基土受冻结影响的深度界线（冰冻深度），随地区气候与土质而异。基础底面一般应埋置在冰冻线以下，或采取消除冻胀影响的措施，否则会因土的冻胀融沉导致基础抬起或下沉。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "m",
+      "relations": [
+        "基础埋置深度",
+        "标准冻深",
+        "冻胀",
+        "地基"
+      ],
+      "pitfalls": [
+        "把冰冻线与地下水位线、常年最高水位混为一谈",
+        "认为南方地区完全不必考虑冻深（应按当地标准冻深取值）"
+      ],
+      "examAngle": "埋深计算与地区条件分析",
+      "confidence": "medium",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "标准冻深应按当地实测资料或规范附录查取，请核对教材与地基基础规范现行版本"
+    },
+    {
+      "id": "building-architecture-concept-036",
+      "subjectId": "building-architecture",
+      "chapter": "6.4",
+      "term": "地下室防潮",
+      "en": "damp-proofing of basement",
+      "definition": "当设计最高地下水位低于地下室底板，且无形成上层滞水的可能时，采取的以防止土壤中水分与毛细水侵入为目标的措施，通常采用在墙体与地面中设置防潮层（防水砂浆、卷材等）形成连续的隔水层。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "地下室防水",
+        "防潮层",
+        "毛细水",
+        "设计地下水位"
+      ],
+      "pitfalls": [
+        "把防潮与防水混为一谈（防潮不承受水压，防水要承受水压）",
+        "防潮层未闭合形成连续整体"
+      ],
+      "examAngle": "防潮/防水方案选择判断题",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "building-architecture-concept-037",
+      "subjectId": "building-architecture",
+      "chapter": "6.4",
+      "term": "地下室防水",
+      "en": "basement waterproofing",
+      "definition": "当设计最高地下水位高于地下室底板时，必须采取的措施，通过在底板、侧墙与顶板形成封闭的防水层来抵抗水压力。常用方案为结构自防水（防水混凝土）与材料防水（卷材、涂膜）组合使用，并按防水等级确定做法。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "地下室防潮",
+        "防水混凝土",
+        "防水等级",
+        "施工缝",
+        "穿墙管"
+      ],
+      "pitfalls": [
+        "只在侧墙做防水而忽略底板与顶板形成封闭体系",
+        "忽略施工缝、变形缝、穿墙管等薄弱环节"
+      ],
+      "examAngle": "构造大样与方案选择",
+      "confidence": "medium",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "防水等级划分与做法要求请核对 GB 50108 现行版本"
+    },
+    {
+      "id": "building-architecture-concept-038",
+      "subjectId": "building-architecture",
+      "chapter": "7.1",
+      "term": "承重墙与非承重墙",
+      "en": "bearing wall and non-bearing wall",
+      "definition": "承重墙承受上部楼盖与屋顶传来的荷载并传至基础；非承重墙不承受上部荷载，仅承受自重（自承重墙）或仅起围护分隔作用（填充墙、隔墙、幕墙）。判断标准是传力路径而非墙厚。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "自承重墙",
+        "填充墙",
+        "隔墙",
+        "幕墙",
+        "墙承重结构"
+      ],
+      "pitfalls": [
+        "用墙体厚度判断是否承重",
+        "认为框架结构中的所有墙都可以拆除（电梯井、楼梯间墙、剪力墙不可拆）"
+      ],
+      "examAngle": "结构方案与改造判断",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "building-architecture-concept-039",
+      "subjectId": "building-architecture",
+      "chapter": "7.2",
+      "term": "标准砖",
+      "en": "standard clay brick",
+      "definition": "我国常用的实心黏土砖规格为 240 mm × 115 mm × 53 mm。加上 10 mm 灰缝后，形成 4:2:1（长:宽:厚 ≈ 250:125:62.5）的模数关系，由此派生出 120、180、240、370、490 等常用砖墙厚度数列。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "mm",
+      "relations": [
+        "灰缝",
+        "组砌",
+        "墙厚",
+        "模数"
+      ],
+      "pitfalls": [
+        "把 53 mm 记成 60 mm 导致墙厚推算错误",
+        "墙厚计算时未计入灰缝"
+      ],
+      "examAngle": "由砖尺寸推墙厚、墙厚与模数协调",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "building-architecture-concept-040",
+      "subjectId": "building-architecture",
+      "chapter": "7.2",
+      "term": "组砌",
+      "en": "bond / laying pattern",
+      "definition": "砖块在砌体中的排列方式，基本原则是内外搭接、上下错缝、灰缝饱满（一般 8～12 mm）、横平竖直，避免出现上下皮砖对齐的垂直通缝，以保证砌体的整体性与传力。常见方式有一顺一丁、三顺一丁、梅花丁等。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "标准砖",
+        "灰缝",
+        "通缝",
+        "砌体强度"
+      ],
+      "pitfalls": [
+        "把顺砖与丁砖的方向记反（丁砖是砖长垂直于墙面）",
+        "认为错缝只是美观要求（实际是受力要求）"
+      ],
+      "examAngle": "组砌图示识读与错缝正确性判断",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "building-architecture-concept-041",
+      "subjectId": "building-architecture",
+      "chapter": "7.3",
+      "term": "勒脚",
+      "en": "plinth / base course",
+      "definition": "外墙接近室外地面部分的加厚或加固处理，作用是保护墙根免受外力碰撞、雨水飞溅与地下水侵蚀，并起到立面基座的美化作用。常用做法为水泥砂浆抹面、水刷石、贴面砖或石材砌筑。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "墙身防潮层",
+        "散水",
+        "明沟",
+        "踢脚"
+      ],
+      "pitfalls": [
+        "把勒脚与踢脚混淆：勒脚在室外、踢脚在室内",
+        "把勒脚与散水混淆：散水是地面护坡，勒脚是墙体部位"
+      ],
+      "examAngle": "墙脚构造大样必考",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "勒脚的高度与做法请核对教材构造图"
+    },
+    {
+      "id": "building-architecture-concept-042",
+      "subjectId": "building-architecture",
+      "chapter": "7.3",
+      "term": "墙身防潮层",
+      "en": "damp-proof course (DPC)",
+      "definition": "在墙身中设置的、用于阻止地下水与土壤中的水分沿墙体毛细孔上升的隔水构造层。水平防潮层设在室内地坪附近（通常在地面垫层厚度范围内、室内地面标高以下约 60 mm 处），垂直防潮层设在室内外存在高差或相邻房间地坪标高不同的一侧墙面。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "垂直防潮层",
+        "勒脚",
+        "散水",
+        "毛细水",
+        "地下室防潮"
+      ],
+      "pitfalls": [
+        "只设水平防潮层而漏设垂直防潮层（有室内外高差或地坪不等高时必须有）",
+        "防潮层设在地坪以上而失效",
+        "把防潮层与防水层混用"
+      ],
+      "examAngle": "墙脚构造大样与防潮层位置判定高频",
+      "confidence": "medium",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "水平防潮层的具体设置标高与常用做法请核对教材构造图；不同教材位置表述可能有差异"
+    },
+    {
+      "id": "building-architecture-concept-043",
+      "subjectId": "building-architecture",
+      "chapter": "7.3",
+      "term": "垂直防潮层",
+      "en": "vertical damp-proof course",
+      "definition": "当室内外地坪存在高差，或相邻房间室内地坪不在同一标高、且其间有填土时，在高差处墙面设置的竖向防潮层，与水平防潮层闭合成整体，防止土壤中水分从侧面侵入室内墙体。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "墙身防潮层",
+        "室内外高差",
+        "勒脚",
+        "回填土"
+      ],
+      "pitfalls": [
+        "认为设了水平防潮层就够了，漏设垂直防潮层",
+        "垂直防潮层未与水平防潮层搭接闭合"
+      ],
+      "examAngle": "构造大样题的常见失分点",
+      "confidence": "medium",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "垂直防潮层的设置条件与高度范围请核对教材构造图"
+    },
+    {
+      "id": "building-architecture-concept-044",
+      "subjectId": "building-architecture",
+      "chapter": "7.3",
+      "term": "散水",
+      "en": "apron / splash block",
+      "definition": "沿外墙四周室外地面铺设的、向外倾斜的护坡，作用是把屋面落水与地面雨水迅速排离墙脚，保护基础与墙身。常用混凝土或砖石铺砌，需设置伸缩缝并用防水油膏嵌缝，其外缘应高出室外地坪或设排水明沟。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "明沟",
+        "勒脚",
+        "墙身防潮层",
+        "排水坡度"
+      ],
+      "pitfalls": [
+        "散水宽度小于挑檐挑出长度导致雨水仍冲刷墙脚",
+        "未设伸缩缝导致温度开裂",
+        "把散水与勒脚、明沟的作用混淆"
+      ],
+      "examAngle": "墙脚构造大样",
+      "confidence": "medium",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "散水的宽度与坡度取值请核对教材与 GB 50352 现行版本"
+    },
+    {
+      "id": "building-architecture-concept-045",
+      "subjectId": "building-architecture",
+      "chapter": "7.3",
+      "term": "踢脚",
+      "en": "skirting / base board",
+      "definition": "内墙面与楼地面交接处、在墙下部做的一小段（通常高 100～150 mm）保护构造，作用是遮盖地面与墙面接缝、防止清扫时污染与磕碰墙面，同时收口地面材料。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "墙裙",
+        "勒脚",
+        "楼地面",
+        "内墙装修"
+      ],
+      "pitfalls": [
+        "把踢脚与墙裙混淆（高度不同、作用范围不同）",
+        "把室内踢脚与室外勒脚混淆",
+        "地面为地毯等软质材料时仍在图纸上画出硬质踢脚"
+      ],
+      "examAngle": "高频辨析：踢脚 vs 墙裙 vs 勒脚",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "踢脚高度的常用取值请核对教材构造图"
+    },
+    {
+      "id": "building-architecture-concept-046",
+      "subjectId": "building-architecture",
+      "chapter": "7.3",
+      "term": "墙裙",
+      "en": "dado / wainscot",
+      "definition": "内墙下部较高范围（通常 1.0～1.8 m，特殊场所可更高）设置的保护或装饰面层，作用是在人活动易碰撞、易污染的高度范围内保护墙面并便于清洁，常用于走廊、食堂、实验室、卫生间、幼儿园等。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "踢脚",
+        "内墙装修",
+        "墙面装修"
+      ],
+      "pitfalls": [
+        "把墙裙与踢脚当作同一构造（墙裙高度远大于踢脚）",
+        "把墙裙与外墙勒脚混用"
+      ],
+      "examAngle": "与踢脚、勒脚的三者辨析",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "墙裙高度的常用取值范围请核对教材构造图"
+    },
+    {
+      "id": "building-architecture-concept-047",
+      "subjectId": "building-architecture",
+      "chapter": "7.4",
+      "term": "过梁",
+      "en": "lintel",
+      "definition": "设置在门窗等洞口上方、用以承受洞口上部墙体荷载并将其传递到洞口两侧墙体的横向构件。常用类型有钢筋混凝土过梁、钢筋砖过梁、砖砌平拱过梁与砖砌弧拱过梁，其断面尺寸与支承长度应满足承载与构造要求。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "圈梁",
+        "窗台",
+        "洞口",
+        "支承长度"
+      ],
+      "pitfalls": [
+        "把过梁与圈梁混淆（过梁承洞口上方墙体荷载，圈梁是闭合水平加固构件）",
+        "忽略过梁在墙上的支承长度要求"
+      ],
+      "examAngle": "构造大样与洞口构造识图",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "过梁的支承长度与断面尺寸要求请核对教材与砌体结构设计规范"
+    },
+    {
+      "id": "building-architecture-concept-048",
+      "subjectId": "building-architecture",
+      "chapter": "7.4",
+      "term": "滴水",
+      "en": "drip / drip groove",
+      "definition": "在窗台、挑檐、雨篷、女儿墙压顶等水平构件的下边缘设置的凹槽或凸出的滴水线，作用是阻断雨水沿构件底面与墙面流淌，避免墙面污染与雨水渗入。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "窗台",
+        "挑檐",
+        "雨篷",
+        "泛水"
+      ],
+      "pitfalls": [
+        "只做排水坡度而漏画滴水（雨水会沿底面倒流污染墙面）",
+        "把滴水与泛水混淆：泛水是防水层的上翻收头，滴水是阻断水流的构造措施"
+      ],
+      "examAngle": "构造大样必画要素",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "building-architecture-concept-049",
+      "subjectId": "building-architecture",
+      "chapter": "7.5",
+      "term": "圈梁",
+      "en": "ring beam",
+      "definition": "沿建筑物外墙、内纵墙与主要内横墙设置的连续的闭合水平梁（多为钢筋混凝土），作用是增强建筑物的整体刚度与空间刚度，减少因地基不均匀沉降、温度变化与地震作用引起的墙体开裂。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "构造柱",
+        "过梁",
+        "整体刚度",
+        "抗震设防"
+      ],
+      "pitfalls": [
+        "把圈梁当过梁使用（圈梁可兼作过梁时需另行验算洞口上方荷载）",
+        "忽略圈梁必须闭合连续，遇洞口需补强或绕行"
+      ],
+      "examAngle": "抗震构造措施与设置部位",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "圈梁的设置部位、间距、截面与配筋要求请核对现行抗震规范与砌体结构设计规范"
+    },
+    {
+      "id": "building-architecture-concept-050",
+      "subjectId": "building-architecture",
+      "chapter": "7.5",
+      "term": "构造柱",
+      "en": "tie column / constructional column",
+      "definition": "在砌体房屋墙体的关键部位（外墙转角、内外墙交接处、楼梯间、长墙中部等）设置的、与圈梁共同形成约束骨架的钢筋混凝土竖向构件。施工上必须先砌墙后浇柱，墙体留马牙槎并设水平拉结筋。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "圈梁",
+        "马牙槎",
+        "拉结筋",
+        "抗震设防",
+        "砌体结构"
+      ],
+      "pitfalls": [
+        "把构造柱当作承重柱（构造柱主要起约束与抗剪作用，不是主要竖向承重构件）",
+        "把施工顺序记成先浇柱后砌墙"
+      ],
+      "examAngle": "抗震构造与马牙槎大样",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "构造柱的设置部位、间距与配筋请核对现行抗震规范与砌体结构设计规范"
+    },
+    {
+      "id": "building-architecture-concept-051",
+      "subjectId": "building-architecture",
+      "chapter": "7.6",
+      "term": "隔墙",
+      "en": "partition wall",
+      "definition": "仅用于分隔室内空间、只承受自重的非承重内墙。要求自重轻、厚度薄、隔声与防火性能满足要求、便于拆装与敷设管线。常见有块材隔墙、骨架隔墙（轻钢龙骨+面板）与板材（条板）隔墙。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "非承重墙",
+        "填充墙",
+        "幕墙",
+        "骨架隔墙",
+        "撞击声"
+      ],
+      "pitfalls": [
+        "把隔墙与填充墙混用（隔墙分隔室内空间，填充墙填充框架外围）",
+        "忽视隔墙的隔声与防火要求，只考虑厚度"
+      ],
+      "examAngle": "墙类型辨析",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "building-architecture-concept-052",
+      "subjectId": "building-architecture",
+      "chapter": "7.6",
+      "term": "幕墙",
+      "en": "curtain wall",
+      "definition": "悬挂在主体结构外侧、由面板与支承结构体系组成的轻质外围护墙，不承受主体结构的荷载，仅承受自重、风荷载与地震作用，并能适应主体结构的一定位移。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "非承重墙",
+        "填充墙",
+        "防火封堵",
+        "预埋件",
+        "层间位移"
+      ],
+      "pitfalls": [
+        "把幕墙当成承重墙或填充墙",
+        "忽略层间防火封堵与保温隔断（幕墙火灾蔓延的薄弱环节）"
+      ],
+      "examAngle": "墙类型辨析与幕墙构造要点",
+      "confidence": "medium",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "幕墙的防火封堵、气密水密与热工要求请核对现行幕墙工程技术规范与防火规范"
+    },
+    {
+      "id": "building-architecture-concept-053",
+      "subjectId": "building-architecture",
+      "chapter": "8.1",
+      "term": "楼板层",
+      "en": "floor system",
+      "definition": "沿水平方向分隔建筑空间的承重构件，由面层、结构层（楼板）、顶棚层以及必要的附加层（找平、保温、防水、隔声与管线层）组成。要求具有足够的强度刚度、隔声、防火与防潮防水能力。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "单向板",
+        "双向板",
+        "顶棚",
+        "地层",
+        "撞击声"
+      ],
+      "pitfalls": [
+        "把楼板层等同于结构层（结构层只是其中一层）",
+        "忽略楼板的隔声（尤其撞击声）要求"
+      ],
+      "examAngle": "构造层次排序题",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "building-architecture-concept-054",
+      "subjectId": "building-architecture",
+      "chapter": "8.1",
+      "term": "单向板与双向板",
+      "en": "one-way slab and two-way slab",
+      "definition": "四边支承的矩形板，当长边 l2 与短边 l1 之比大于某一界限时，荷载主要沿短边方向传递，称单向板；比值小于该界限时荷载沿两个方向传递，称双向板。判别界限按教材或规范取 2 或 3，需以本课程要求为准。",
+      "formulaId": null,
+      "symbols": [
+        "l1",
+        "l2"
+      ],
+      "unit": null,
+      "relations": [
+        "楼板层",
+        "主次梁",
+        "井字梁",
+        "受力钢筋"
+      ],
+      "pitfalls": [
+        "判别界限记混（教材与混凝土规范口径可能不同）",
+        "把板的长短边比与受力钢筋方向搞反（单向板受力筋沿短边方向布置）"
+      ],
+      "examAngle": "板类型判别与配筋方向",
+      "confidence": "medium",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "单向板与双向板的判别界限（l2/l1 = 2 还是 3）请核对教材原文与 GB 50010 现行版本"
+    },
+    {
+      "id": "building-architecture-concept-055",
+      "subjectId": "building-architecture",
+      "chapter": "8.3",
+      "term": "撞击声",
+      "en": "impact sound",
+      "definition": "由物体撞击楼板（脚步、拖动家具等）引起楼板振动而向楼下辐射的噪声，与通过空气传播的空气声不同。楼板隔声设计的关键在于控制撞击声，措施包括铺设弹性面层、设置弹性垫层的浮筑楼面与隔声吊顶。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "空气声",
+        "浮筑楼面",
+        "弹性垫层",
+        "隔声吊顶"
+      ],
+      "pitfalls": [
+        "靠增加楼板厚度来改善撞击声（效果甚微，必须靠弹性层或隔声吊顶）",
+        "把空气声隔声措施用于撞击声治理"
+      ],
+      "examAngle": "楼板隔声措施辨析",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "building-architecture-concept-056",
+      "subjectId": "building-architecture",
+      "chapter": "8.3",
+      "term": "浮筑楼面",
+      "en": "floating floor",
+      "definition": "在结构楼板与面层之间铺设弹性垫层（如玻璃棉板、岩棉板、挤塑板、橡胶垫），使面层与结构层之间形成弹性隔离层的楼面做法，是提高楼板撞击声隔声性能的有效措施。施工时应防止面层与墙体刚性连接形成声桥。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "撞击声",
+        "弹性垫层",
+        "隔声吊顶",
+        "声桥"
+      ],
+      "pitfalls": [
+        "弹性垫层与墙体刚性连接形成声桥，使隔声失效",
+        "把找平层或保温层误认为弹性隔声垫层"
+      ],
+      "examAngle": "楼板隔声构造大样",
+      "confidence": "medium",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "浮筑楼面的构造做法与隔声性能指标请核对教材与现行民用建筑隔声设计规范"
+    },
+    {
+      "id": "building-architecture-concept-057",
+      "subjectId": "building-architecture",
+      "chapter": "9.1",
+      "term": "楼梯踏步",
+      "en": "stair step",
+      "definition": "楼梯梯段中供人踩踏的水平部分称踏面（踏步宽度 b），垂直部分称踢面（踏步高度 h）。踏步尺寸应满足人的步距习惯，常用经验关系为 2h + b = 600～620 mm，h 与 b 的取值相互制约。",
+      "formulaId": "building-architecture-formula-003",
+      "symbols": [
+        "h",
+        "b"
+      ],
+      "unit": "mm",
+      "relations": [
+        "梯段",
+        "楼梯坡度",
+        "踢面",
+        "踏面",
+        "防滑条"
+      ],
+      "pitfalls": [
+        "把踏步高度 h 与踏步宽度 b 的常用取值范围记反（h 通常 150～175 mm，b 通常 260～300 mm）",
+        "只满足 2h+b 而忽视同一楼梯内踏步尺寸应一致"
+      ],
+      "examAngle": "楼梯设计计算的第一步，必考",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/building-architecture/stair-dimension.svg",
+        "caption": "楼梯踏步尺寸与两处净高的量取位置（自绘示意，垂直净距未按比例）",
+        "readPoints": [
+          "2h + b = 600 ~ 620 mm，是踏步尺寸的基本经验关系",
+          "净高从踏步前缘量到上方结构底，不是从踏面中点量",
+          "梯段净高 ≥ 2200、平台净高 ≥ 2000，两处都要单独核算"
+        ]
+      }
+    },
+    {
+      "id": "building-architecture-concept-058",
+      "subjectId": "building-architecture",
+      "chapter": "9.1",
+      "term": "楼梯净高",
+      "en": "clear headroom of stair",
+      "definition": "楼梯通行时上部障碍物（平台梁、楼板、梯段底面等）到踏步前缘（或平台面）的垂直距离。通常要求梯段部位的净高不小于 2.2 m，平台及平台过道处的净高不小于 2.0 m。",
+      "formulaId": "building-architecture-formula-007",
+      "symbols": [],
+      "unit": "m",
+      "relations": [
+        "净高",
+        "梯段",
+        "中间平台",
+        "长短跑楼梯",
+        "平台梁"
+      ],
+      "pitfalls": [
+        "把梯段净高与平台净高的限值记反（梯段 2.2 m 更严，平台 2.0 m）",
+        "净高测量起点搞错：应从踏步前缘（踏步与踢面的交线）量至上方障碍物底面"
+      ],
+      "examAngle": "楼梯设计校核的最大失分点",
+      "confidence": "medium",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": "楼梯净高的具体限值（2.2 m / 2.0 m）请核对教材与 GB 50352 现行版本",
+      "figure": {
+        "src": "/knowledge/assets/building-architecture/stair-dimension.svg",
+        "caption": "楼梯踏步尺寸与两处净高的量取位置（自绘示意，垂直净距未按比例）",
+        "readPoints": [
+          "2h + b = 600 ~ 620 mm，是踏步尺寸的基本经验关系",
+          "净高从踏步前缘量到上方结构底，不是从踏面中点量",
+          "梯段净高 ≥ 2200、平台净高 ≥ 2000，两处都要单独核算"
+        ]
+      }
+    },
+    {
+      "id": "building-architecture-concept-059",
+      "subjectId": "building-architecture",
+      "chapter": "9.1",
+      "term": "中间平台",
+      "en": "intermediate landing",
+      "definition": "双跑及多跑楼梯中位于两个梯段之间、供人休息与转换方向的水平部分；与各楼层标高齐平的平台称楼层平台。中间平台宽度一般不小于梯段宽度，以满足通行、休息与家具搬运要求。",
+      "formulaId": "building-architecture-formula-034",
+      "symbols": [],
+      "unit": "m",
+      "relations": [
+        "梯段",
+        "楼层平台",
+        "平台宽度",
+        "长短跑楼梯"
+      ],
+      "pitfalls": [
+        "把中间平台与楼层平台的作用混淆",
+        "平台宽度小于梯段宽度导致通行受阻"
+      ],
+      "examAngle": "楼梯平面与剖面设计",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": "平台最小宽度规定请核对教材与 GB 50352 现行版本"
+    },
+    {
+      "id": "building-architecture-concept-060",
+      "subjectId": "building-architecture",
+      "chapter": "9.2",
+      "term": "长短跑楼梯",
+      "en": "stair with unequal flights",
+      "definition": "双跑楼梯中两个梯段的踏步数不相等（不等跑）的做法。常用于解决底层中间平台下方净高不足的问题：通过增加第一跑踏步数、减少第二跑踏步数，抬高中间平台标高，从而增大平台下的通行净高。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "楼梯净高",
+        "中间平台",
+        "梯段",
+        "双跑楼梯"
+      ],
+      "pitfalls": [
+        "误以为长短跑会改变层高（总踏步数不变，只改变两跑分配）",
+        "只加长第一跑而忘记同步校核第二跑上方的净高"
+      ],
+      "examAngle": "净高不足处理措施，高频简答与设计题",
+      "confidence": "medium",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": "请核对教材中“长短跑”、“降低平台下地坪”、“提高平台”等处理措施的具体图示与适用条件"
+    },
+    {
+      "id": "building-architecture-concept-061",
+      "subjectId": "building-architecture",
+      "chapter": "9.2",
+      "term": "每股人流",
+      "en": "stream of pedestrians",
+      "definition": "疏散与通行宽度计算的基本单位，单股人流的通行宽度约为 0.55 m，考虑人体摆幅通常再附加 0～0.15 m，即每股人流按 0.55～0.70 m 计。走道、楼梯、门的宽度均按人流股数推算。",
+      "formulaId": "building-architecture-formula-006",
+      "symbols": [],
+      "unit": "m",
+      "relations": [
+        "走道宽度",
+        "梯段宽度",
+        "疏散宽度",
+        "百人宽度指标"
+      ],
+      "pitfalls": [
+        "忽略人体摆幅导致净宽偏小",
+        "把每股人流宽度与百人宽度指标混为一谈（后者是每百人所需净宽）"
+      ],
+      "examAngle": "走道与楼梯宽度计算",
+      "confidence": "medium",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": "每股人流宽度 0.55 m 与附加摆幅的取值请核对教材原文"
+    },
+    {
+      "id": "building-architecture-concept-062",
+      "subjectId": "building-architecture",
+      "chapter": "9.3",
+      "term": "封闭楼梯间",
+      "en": "enclosed staircase",
+      "definition": "用耐火建筑构件（墙体、乙级防火门等）与周围空间分隔、能防止烟气与火势进入的楼梯间。适用于一定条件的多层与高层民用建筑，是安全疏散的重要设施。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "防烟楼梯间",
+        "敞开楼梯间",
+        "防火门",
+        "安全出口"
+      ],
+      "pitfalls": [
+        "把封闭楼梯间与防烟楼梯间混为一谈（防烟楼梯间须增设前室或阳台、凹廊等防烟设施）",
+        "忽略封闭楼梯间门的开启方向与乙级防火门要求"
+      ],
+      "examAngle": "疏散楼梯类型判别高频",
+      "confidence": "medium",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": "各类楼梯间的适用建筑范围与构造要求请核对 GB 50016／GB 55037 现行版本"
+    },
+    {
+      "id": "building-architecture-concept-063",
+      "subjectId": "building-architecture",
+      "chapter": "10.1",
+      "term": "平屋顶",
+      "en": "flat roof",
+      "definition": "排水坡度较小的屋顶（常用坡度约 2%～5%），其承重结构为钢筋混凝土板。平屋顶构造层次多、防水与保温要求高，需通过材料找坡或结构找坡形成排水坡度。",
+      "formulaId": "building-architecture-formula-019",
+      "symbols": [
+        "i"
+      ],
+      "unit": "%",
+      "relations": [
+        "坡屋顶",
+        "材料找坡",
+        "结构找坡",
+        "正置式屋面",
+        "倒置式屋面"
+      ],
+      "pitfalls": [
+        "认为平屋顶是水平的（必须有排水坡度）",
+        "把坡度百分比与角度混用"
+      ],
+      "examAngle": "屋面坡度与找坡层厚度计算",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "10",
+        "page": null
+      },
+      "verify": "平屋顶常用坡度取值范围请核对教材与 GB 50345 现行版本",
+      "figure": {
+        "src": "/knowledge/assets/building-architecture/roof-drainage.svg",
+        "caption": "平屋顶有组织排水的组织方式（自绘示意）",
+        "readPoints": [
+          "先定分水线，再定找坡方向与坡度，最后布雨水口",
+          "排水路径要闭合：屋面 → 檐沟 → 雨水口 → 雨水管",
+          "雨水管间距与单管汇水面积限值须按现行屋面技术规范核对"
+        ]
+      }
+    },
+    {
+      "id": "building-architecture-concept-064",
+      "subjectId": "building-architecture",
+      "chapter": "10.1",
+      "term": "材料找坡",
+      "en": "slope formed by lightweight material",
+      "definition": "又称垫置找坡，用轻质材料（如水泥焦渣、陶粒混凝土、加气混凝土碎块等）在结构层上铺设出排水坡度。优点是顶棚平整、室内观感好；缺点是增加屋面荷载，找坡层最厚处需校核荷载与厚度。",
+      "formulaId": "building-architecture-formula-019",
+      "symbols": [
+        "i"
+      ],
+      "unit": null,
+      "relations": [
+        "结构找坡",
+        "平屋顶",
+        "找坡层",
+        "排水坡度"
+      ],
+      "pitfalls": [
+        "找坡层最厚处计算错误（应按排水方向的最大水平长度乘坡度）",
+        "忘记材料找坡增加荷载"
+      ],
+      "examAngle": "找坡层厚度与平均厚度计算",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "10",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/building-architecture/roof-drainage.svg",
+        "caption": "平屋顶有组织排水的组织方式（自绘示意）",
+        "readPoints": [
+          "先定分水线，再定找坡方向与坡度，最后布雨水口",
+          "排水路径要闭合：屋面 → 檐沟 → 雨水口 → 雨水管",
+          "雨水管间距与单管汇水面积限值须按现行屋面技术规范核对"
+        ]
+      }
+    },
+    {
+      "id": "building-architecture-concept-065",
+      "subjectId": "building-architecture",
+      "chapter": "10.1",
+      "term": "结构找坡",
+      "en": "slope formed by structural member",
+      "definition": "又称搁置找坡，把屋面板或支承结构按所需坡度倾斜搁置（如倾斜的梁、桁架或墙）形成排水坡度。优点是不增加额外荷载、节省材料；缺点是顶棚随之倾斜，室内空间观感受影响。",
+      "formulaId": "building-architecture-formula-019",
+      "symbols": [
+        "i"
+      ],
+      "unit": null,
+      "relations": [
+        "材料找坡",
+        "平屋顶",
+        "坡屋顶",
+        "排水坡度"
+      ],
+      "pitfalls": [
+        "认为结构找坡后顶棚仍是水平的",
+        "与材料找坡的适用条件判断错误（大跨度或荷载受限时优先结构找坡）"
+      ],
+      "examAngle": "找坡方式比较与选择",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "10",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/building-architecture/roof-drainage.svg",
+        "caption": "平屋顶有组织排水的组织方式（自绘示意）",
+        "readPoints": [
+          "先定分水线，再定找坡方向与坡度，最后布雨水口",
+          "排水路径要闭合：屋面 → 檐沟 → 雨水口 → 雨水管",
+          "雨水管间距与单管汇水面积限值须按现行屋面技术规范核对"
+        ]
+      }
+    },
+    {
+      "id": "building-architecture-concept-066",
+      "subjectId": "building-architecture",
+      "chapter": "10.2",
+      "term": "分水线",
+      "en": "ridge line / watershed line",
+      "definition": "屋面上把雨水向不同方向分流的界线，即相邻两个排水区（汇水区）的分界。分水线通常设在相邻雨水口（或檐沟）的中线位置，其两侧分别向各自的雨水口找坡排水。分水线是屋顶排水平面图必须表达的内容。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "汇水区",
+        "雨水口",
+        "排水坡度",
+        "檐沟",
+        "屋脊"
+      ],
+      "pitfalls": [
+        "把分水线画成排水方向（分水线是分界，水流自分水线向两侧流）",
+        "分水线位置未取相邻雨水口中线导致汇水不均"
+      ],
+      "examAngle": "屋顶排水平面图绘制，必考",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "10",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "building-architecture-concept-067",
+      "subjectId": "building-architecture",
+      "chapter": "10.3",
+      "term": "正置式屋面",
+      "en": "conventional (warm deck) roof",
+      "definition": "保温层设在防水层之下的平屋顶构造方式。典型层次自下而上为：结构层→找坡层→找平层→隔汽层→保温层→找平层→防水层→保护层。因防水层直接暴露在大气中，受温度与紫外线作用易老化，但维修时无需掀开保温层。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "倒置式屋面",
+        "隔汽层",
+        "保温层",
+        "防水层",
+        "找平层"
+      ],
+      "pitfalls": [
+        "把保温层与防水层的上下关系记反",
+        "漏设隔汽层导致保温层受潮结露"
+      ],
+      "examAngle": "构造层次排序与正置/倒置比较，高频",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "10",
+        "page": null
+      },
+      "verify": "构造层次名称与顺序请核对教材构造图，不同教材层次划分可能略有差异"
+    },
+    {
+      "id": "building-architecture-concept-068",
+      "subjectId": "building-architecture",
+      "chapter": "10.3",
+      "term": "倒置式屋面",
+      "en": "inverted (protected membrane) roof",
+      "definition": "保温层设在防水层之上的平屋顶构造方式。典型层次自下而上为：结构层→找坡层→找平层→防水层→保温层→保护层（压重层）。保温层对防水层起保护作用，防水层温差小、不易老化，但保温材料必须采用吸水率低、耐冻融的憎水材料（常用挤塑聚苯板 XPS），且维修时需先掀开保温层。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "正置式屋面",
+        "保温层",
+        "防水层",
+        "保护层",
+        "XPS"
+      ],
+      "pitfalls": [
+        "在倒置式屋面上使用吸水率高的保温材料（如普通岩棉、膨胀珍珠岩）",
+        "认为倒置式屋面仍需设隔汽层（一般做法不同，请核对教材）",
+        "忘记保温层上需设压重保护层防止保温层上浮或移位"
+      ],
+      "examAngle": "与正置式屋面的对比，高频",
+      "confidence": "medium",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "10",
+        "page": null
+      },
+      "verify": "倒置式屋面是否设隔汽层、保温材料要求与构造层次请核对教材与 GB 50345 现行版本"
+    },
+    {
+      "id": "building-architecture-concept-069",
+      "subjectId": "building-architecture",
+      "chapter": "10.3",
+      "term": "泛水",
+      "en": "flashing / upturned waterproofing",
+      "definition": "屋面防水层与垂直面（女儿墙、烟囱、出屋面管道、变形缝墙、山墙等）交接处的防水构造。做法是把屋面卷材（或涂膜）沿垂直面上翻一定高度，转角处做成圆弧或钝角并加铺附加层，上端收头用压条、凹槽或密封材料固定密封。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "收头",
+        "附加层",
+        "女儿墙",
+        "滴水",
+        "变形缝"
+      ],
+      "pitfalls": [
+        "只把卷材铺到转角而不上翻，或上翻高度不足",
+        "转角未做圆弧/钝角导致卷材折裂",
+        "把泛水与滴水、分格缝的作用混淆"
+      ],
+      "examAngle": "屋面构造大样必考，也是屋面渗漏的主要部位",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "10",
+        "page": null
+      },
+      "verify": "泛水的上翻高度（常取不小于 250 mm 一类的构造尺寸）请核对教材构造图与 GB 50345 现行版本"
+    },
+    {
+      "id": "building-architecture-concept-070",
+      "subjectId": "building-architecture",
+      "chapter": "10.3",
+      "term": "分格缝",
+      "en": "dividing joint / control joint",
+      "definition": "刚性防水屋面（或大面积找平层、保护层、刚性面层）中人为设置的、把整体分割成若干小块以适应温度变形与收缩变形的缝。应设在变形敏感部位（屋面板支承端、屋面转折处、与立墙交接处等），缝内嵌填密封材料。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "刚性防水屋面",
+        "变形缝",
+        "伸缩缝",
+        "密封材料"
+      ],
+      "pitfalls": [
+        "把分格缝与变形缝（伸缩缝、沉降缝、防震缝）混淆：分格缝只是面层/防水层上的分缝，不贯通结构",
+        "分格缝位置设在板跨中部而非支承端"
+      ],
+      "examAngle": "刚性防水屋面构造，高频",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "10",
+        "page": null
+      },
+      "verify": "分格缝的间距与缝宽取值请核对教材与 GB 50345 现行版本"
+    },
+    {
+      "id": "building-architecture-concept-071",
+      "subjectId": "building-architecture",
+      "chapter": "10.5",
+      "term": "隔汽层",
+      "en": "vapour barrier",
+      "definition": "在保温层的高温侧（室内一侧）设置的、阻止室内水蒸气进入保温层而在其中结露的构造层。常用材料为防水卷材、涂膜或隔汽膜。正置式屋面中隔汽层设在保温层之下。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "保温层",
+        "结露",
+        "正置式屋面",
+        "倒置式屋面",
+        "找平层"
+      ],
+      "pitfalls": [
+        "把隔汽层设在保温层的低温侧（应设在高温侧，即室内一侧）",
+        "认为隔汽层与防水层可以互相替代（作用方向不同）"
+      ],
+      "examAngle": "屋面构造层次与设置位置",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "10",
+        "page": null
+      },
+      "verify": "倒置式屋面是否设置隔汽层请核对教材与 GB 50345 现行版本"
+    },
+    {
+      "id": "building-architecture-concept-072",
+      "subjectId": "building-architecture",
+      "chapter": "12.1",
+      "term": "伸缩缝",
+      "en": "expansion joint / temperature joint",
+      "definition": "为减小温度变化引起的构件热胀冷缩对房屋的破坏，沿建筑物长度方向设置的竖向缝隙。伸缩缝从基础顶面以上将墙体、楼板、屋顶全部断开，基础因地下温度变化小一般可不断开；缝宽通常较小。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "mm",
+      "relations": [
+        "沉降缝",
+        "防震缝",
+        "温度区段",
+        "变形缝"
+      ],
+      "pitfalls": [
+        "认为伸缩缝也要断开基础（这是沉降缝的做法）",
+        "伸缩缝间距超限未设缝",
+        "把伸缩缝与分格缝混淆"
+      ],
+      "examAngle": "三种变形缝比较表，必考",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "12",
+        "page": null
+      },
+      "verify": "伸缩缝的最大间距与缝宽取值请核对教材与 GB 50010／GB 50003 现行版本"
+    },
+    {
+      "id": "building-architecture-concept-073",
+      "subjectId": "building-architecture",
+      "chapter": "12.2",
+      "term": "沉降缝",
+      "en": "settlement joint",
+      "definition": "为防止因地基不均匀沉降、上部荷载或结构型式差异、分期建造等原因引起的房屋开裂破坏而设置的竖向缝隙。沉降缝必须从基础底面开始将建筑物（含基础）全部断开，使两侧成为各自独立的沉降单元。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "伸缩缝",
+        "防震缝",
+        "不均匀沉降",
+        "地基处理"
+      ],
+      "pitfalls": [
+        "认为沉降缝与伸缩缝一样可以不设至基础（沉降缝必须全断开）",
+        "在应设沉降缝的部位仅按伸缩缝处理"
+      ],
+      "examAngle": "三种变形缝比较表，必考；设置部位判断",
+      "confidence": "high",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "12",
+        "page": null
+      },
+      "verify": "沉降缝的宽度取值与设置部位规定请核对教材与地基基础规范现行版本"
+    },
+    {
+      "id": "building-architecture-concept-074",
+      "subjectId": "building-architecture",
+      "chapter": "12.3",
+      "term": "防震缝",
+      "en": "seismic joint",
+      "definition": "为减轻或防止相邻结构在地震作用下因振动特性不同而相互碰撞而设置的竖向缝隙。防震缝应沿建筑全高设置，缝两侧应形成各自独立的抗震单元，缝宽须满足两侧结构在地震作用下的最大水平位移之和的要求，随建筑高度与设防烈度增大而增大。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "mm",
+      "relations": [
+        "伸缩缝",
+        "沉降缝",
+        "抗震单元",
+        "设防烈度",
+        "盖缝板"
+      ],
+      "pitfalls": [
+        "防震缝宽度不足导致地震时两侧碰撞",
+        "缝内填塞硬物限制自由变形",
+        "三种缝合并设置时未按最严格要求取值"
+      ],
+      "examAngle": "三种变形缝比较表与缝宽估算",
+      "confidence": "medium",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "12",
+        "page": null
+      },
+      "verify": "防震缝宽度的计算方法与最小宽度规定请核对教材与 GB 50011／GB 55002 现行版本"
+    },
+    {
+      "id": "building-architecture-concept-075",
+      "subjectId": "building-architecture",
+      "chapter": "14.1",
+      "term": "防火分区",
+      "en": "fire compartment",
+      "definition": "在建筑内部采用防火墙、楼板、防火门、防火卷帘、防火窗等防火分隔物分隔，能在一定时间内把火势控制在局部范围内的防火单元。每个防火分区的最大允许建筑面积随建筑耐火等级、层数与高度、是否设置自动灭火系统等而变化。",
+      "formulaId": "building-architecture-formula-009",
+      "symbols": [],
+      "unit": "m2",
+      "relations": [
+        "防烟分区",
+        "防火墙",
+        "防火门",
+        "耐火等级",
+        "自动灭火系统"
+      ],
+      "pitfalls": [
+        "把防火分区与防烟分区混为一谈（前者控火，后者控烟，划分方式与面积规定均不同）",
+        "设自动灭火系统后未按规定的倍数调整面积",
+        "中庭、自动扶梯开口、管道井处未做水平或竖向防火分隔"
+      ],
+      "examAngle": "防火校核计算，高频",
+      "confidence": "low",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "14",
+        "page": null
+      },
+      "verify": "防火分区最大允许建筑面积的具体数值及自动灭火系统的调整倍数必须核对 GB 50016／GB 55037 现行版本，本条仅为概念"
+    },
+    {
+      "id": "building-architecture-concept-076",
+      "subjectId": "building-architecture",
+      "chapter": "14.1",
+      "term": "防烟分区",
+      "en": "smoke control zone",
+      "definition": "在防火分区内部采用挡烟垂壁、隔墙或从顶棚下突出不小于规定高度的梁等设施划分的、用于把火灾烟气控制在局部范围内并利于排除的分区。防烟分区不得跨越防火分区。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "m2",
+      "relations": [
+        "防火分区",
+        "挡烟垂壁",
+        "排烟设施",
+        "储烟仓"
+      ],
+      "pitfalls": [
+        "防烟分区跨越防火分区",
+        "把挡烟垂壁与防火墙的作用混为一谈"
+      ],
+      "examAngle": "与防火分区的对比辨析",
+      "confidence": "low",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "14",
+        "page": null
+      },
+      "verify": "防烟分区的面积限值与挡烟设施最小高度请核对现行防排烟与防火规范"
+    },
+    {
+      "id": "building-architecture-concept-077",
+      "subjectId": "building-architecture",
+      "chapter": "14.2",
+      "term": "百人宽度指标",
+      "en": "required width per 100 persons",
+      "definition": "安全疏散设计中规定的每百人所需的最小疏散净宽度（m/百人）。疏散总净宽度 = 疏散人数 / 100 × 百人宽度指标，其值随建筑类型、层数、耐火等级与疏散部位（门、走道、楼梯）而不同，计算时取最不利部位校核。",
+      "formulaId": "building-architecture-formula-017",
+      "symbols": [
+        "b"
+      ],
+      "unit": "m/百人",
+      "relations": [
+        "疏散宽度",
+        "疏散距离",
+        "安全出口",
+        "每股人流"
+      ],
+      "pitfalls": [
+        "疏散人数取错（应按设计容纳人数或面积定额计算的最不利值）",
+        "把百人指标与每股人流宽度混用",
+        "只对楼梯校核而忽略门与走道的宽度校核"
+      ],
+      "examAngle": "疏散宽度计算，高频",
+      "confidence": "medium",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "14",
+        "page": null
+      },
+      "verify": "百人宽度指标的具体数值必须核对 GB 50016／GB 55037 现行版本，本条只给计算方法"
+    },
+    {
+      "id": "building-architecture-concept-078",
+      "subjectId": "building-architecture",
+      "chapter": "14.3",
+      "term": "无障碍坡道",
+      "en": "accessible ramp",
+      "definition": "供轮椅使用者与行动不便者通行的、以坡度代替台阶的通道设施。坡道坡度是核心控制指标，坡度越缓越安全但占地越大；规范对不同坡度下的最大高度与最大水平长度有明确限值，并规定坡道两侧设扶手、起终点与中间休息平台处设水平休息段、表面平整防滑。",
+      "formulaId": "building-architecture-formula-026",
+      "symbols": [
+        "i"
+      ],
+      "unit": "—",
+      "relations": [
+        "缘石坡道",
+        "无障碍出入口",
+        "扶手",
+        "休息平台",
+        "盲道"
+      ],
+      "pitfalls": [
+        "把坡道坡度写成百分比后与 1:12 一类比例表示法混用",
+        "忽略坡道起终点的水平休息段与扶手",
+        "用坡道代替台阶时未同步校核最大提升高度与水平长度"
+      ],
+      "examAngle": "无障碍设计校核，本章重点",
+      "confidence": "low",
+      "cite": {
+        "book": "房屋建筑学",
+        "edition": "第6版",
+        "chapter": "14",
+        "page": null
+      },
+      "verify": "无障碍坡道各坡度下的最大高度与水平长度限值、扶手与休息平台要求必须核对 GB 50763 现行版本，本条仅为概念提示"
+    }
+  ]
+}

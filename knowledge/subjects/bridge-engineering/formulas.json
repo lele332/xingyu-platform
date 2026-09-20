@@ -1,0 +1,3831 @@
+{
+  "items": [
+    {
+      "id": "bridge-engineering-formula-001",
+      "subjectId": "bridge-engineering",
+      "chapter": "1.1",
+      "name": "净跨径 l0",
+      "expr": "l0 = l_clear",
+      "latex": "l_0 = l_{\\text{clear}}",
+      "vars": [
+        {
+          "sym": "l0",
+          "name": "净跨径",
+          "unit": "m",
+          "note": "设计洪水位上相邻两墩（台）内缘之间的水平净距"
+        },
+        {
+          "sym": "l_clear",
+          "name": "相邻墩台内缘净距",
+          "unit": "m",
+          "note": "对梁桥取墩（台）身内缘之间距离"
+        }
+      ],
+      "conditions": [
+        "以设计洪水位（或通航水位）对应的水位线量取",
+        "设支座时通常指墩台身内缘净距，不含支座"
+      ],
+      "derivationHint": "概念定义式，无推导；关键是分清「内缘」还是「中心线」。",
+      "typicalUse": "跨径分类、桥下净空校核的第一步",
+      "pitfalls": [
+        "与计算跨径混淆：净跨径不含支座与墩台，计算跨径取支座中心线"
+      ],
+      "standardRef": [
+        "JTG D60"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "术语定义与量取位置请以教材第1章名词术语表及 JTG D60 术语章核对",
+      "figure": {
+        "src": "/knowledge/assets/bridge-engineering/span-definitions.svg",
+        "caption": "同一座桥，四种\"跨径\"量法各不相同",
+        "readPoints": [
+          "橙线 l₀（净跨径）：两侧桥台前缘之间的净距，量的是\"水面上的空当\"。",
+          "蓝线 l（计算跨径）：两个支座中心线之间的距离，结构计算就用它。",
+          "绿线 Lb（标准跨径）：墩台中线之间，只在桥梁分类、跨径分级时用。",
+          "紫线 L（桥梁全长）：两端桥台尾端之间，是\"整座桥有多长\"。",
+          "数量级关系：L > Lb > l₀ > l（一般情况），别把 l 和 l₀ 混用。"
+        ]
+      }
+    },
+    {
+      "id": "bridge-engineering-formula-002",
+      "subjectId": "bridge-engineering",
+      "chapter": "1.1",
+      "name": "计算跨径 l",
+      "expr": "l = L_beam - 2 * d_bearing",
+      "latex": "l = L_{\\text{beam}} - 2 d_{b}",
+      "vars": [
+        {
+          "sym": "l",
+          "name": "计算跨径",
+          "unit": "m",
+          "note": "相邻两支座中心线之间的水平距离，结构内力计算用"
+        },
+        {
+          "sym": "L_beam",
+          "name": "梁（或拱圈）全长",
+          "unit": "m",
+          "note": "预制梁的标准梁长"
+        },
+        {
+          "sym": "d_bearing",
+          "name": "支座中心线至梁端距离",
+          "unit": "m",
+          "note": "预制梁常取 0.20~0.30 m"
+        }
+      ],
+      "conditions": [
+        "简支与 continuous 体系均按支座中心距取",
+        "拱桥取两拱脚截面重心之间的水平距离"
+      ],
+      "derivationHint": "由几何关系直接得到：梁长减去两端支座中心到梁端的距离。",
+      "typicalUse": "内力、影响线、挠度、预拱度所有结构计算一律用计算跨径",
+      "pitfalls": [
+        "误把标准跨径当计算跨径代入内力公式，误差可达 3%~5%",
+        "有坡桥或斜桥时取水平投影长度"
+      ],
+      "standardRef": [
+        "JTG D60"
+      ],
+      "confidence": "high",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/bridge-engineering/span-definitions.svg",
+        "caption": "同一座桥，四种\"跨径\"量法各不相同",
+        "readPoints": [
+          "橙线 l₀（净跨径）：两侧桥台前缘之间的净距，量的是\"水面上的空当\"。",
+          "蓝线 l（计算跨径）：两个支座中心线之间的距离，结构计算就用它。",
+          "绿线 Lb（标准跨径）：墩台中线之间，只在桥梁分类、跨径分级时用。",
+          "紫线 L（桥梁全长）：两端桥台尾端之间，是\"整座桥有多长\"。",
+          "数量级关系：L > Lb > l₀ > l（一般情况），别把 l 和 l₀ 混用。"
+        ]
+      }
+    },
+    {
+      "id": "bridge-engineering-formula-003",
+      "subjectId": "bridge-engineering",
+      "chapter": "1.1",
+      "name": "标准跨径与总跨径",
+      "expr": "sum_l0 = n * l_standard",
+      "latex": "\\sum l_0 = n \\, l_{\\text{std}}",
+      "vars": [
+        {
+          "sym": "l_standard",
+          "name": "标准跨径",
+          "unit": "m",
+          "note": "梁桥取墩中线之间距离；拱桥取净跨径；取标准系列值（10/13/16/20/25/30/35/40...）"
+        },
+        {
+          "sym": "sum_l0",
+          "name": "总跨径（多孔跨径总长）",
+          "unit": "m",
+          "note": "各孔标准跨径之和；桥梁规模分级指标之一"
+        },
+        {
+          "sym": "n",
+          "name": "孔数",
+          "unit": "—",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "等跨布置时可直接相乘；不等跨时逐孔相加",
+        "梁桥与拱桥的标准跨径取法不同，务必分清"
+      ],
+      "derivationHint": "定义式，注意梁桥用墩中线距、拱桥用净跨径。",
+      "typicalUse": "桥梁规模等级判定、方案比选",
+      "pitfalls": [
+        "拱桥标准跨径取净跨径而非墩中线距，混用会导致分级错一档",
+        "总跨径不等于桥梁全长"
+      ],
+      "standardRef": [
+        "JTG D60",
+        "JTG B01"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "标准跨径的取值口径（墩中线距 vs 净跨径）与标准跨径系列值请核对教材与 JTG D60 表",
+      "figure": {
+        "src": "/knowledge/assets/bridge-engineering/span-definitions.svg",
+        "caption": "同一座桥，四种\"跨径\"量法各不相同",
+        "readPoints": [
+          "橙线 l₀（净跨径）：两侧桥台前缘之间的净距，量的是\"水面上的空当\"。",
+          "蓝线 l（计算跨径）：两个支座中心线之间的距离，结构计算就用它。",
+          "绿线 Lb（标准跨径）：墩台中线之间，只在桥梁分类、跨径分级时用。",
+          "紫线 L（桥梁全长）：两端桥台尾端之间，是\"整座桥有多长\"。",
+          "数量级关系：L > Lb > l₀ > l（一般情况），别把 l 和 l₀ 混用。"
+        ]
+      }
+    },
+    {
+      "id": "bridge-engineering-formula-004",
+      "subjectId": "bridge-engineering",
+      "chapter": "1.1",
+      "name": "桥梁全长 L",
+      "expr": "L = sum_l0 + 2 * d_abut",
+      "latex": "L = \\sum l_0 + 2 d_{a}",
+      "vars": [
+        {
+          "sym": "L",
+          "name": "桥梁全长",
+          "unit": "m",
+          "note": "两桥台侧墙或八字墙尾端之间的距离（有桥台时）"
+        },
+        {
+          "sym": "sum_l0",
+          "name": "总跨径",
+          "unit": "m",
+          "note": null
+        },
+        {
+          "sym": "d_abut",
+          "name": "单侧桥台（含翼墙）沿桥纵向长度",
+          "unit": "m",
+          "note": "无桥台时取桥台侧墙尾端至第一墩中线的距离"
+        }
+      ],
+      "conditions": [
+        "仅在两端设桥台时有此定义",
+        "无桥台的桥梁（如高架）改用桥梁总长 = 两端伸缩缝之间距离"
+      ],
+      "derivationHint": "定义式；桥梁全长 ⊇ 总跨径。",
+      "typicalUse": "工程量统计、桥梁规模描述、伸缩量与支座位移计算时的联长取值",
+      "pitfalls": [
+        "把桥梁全长当作总跨径用于等级判定",
+        "忽略桥台长度导致反算跨径偏大"
+      ],
+      "standardRef": [
+        "JTG D60"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "无桥台时的替代定义请核对教材表述"
+    },
+    {
+      "id": "bridge-engineering-formula-005",
+      "subjectId": "bridge-engineering",
+      "chapter": "1.1",
+      "name": "桥梁高度、桥下净空与建筑高度的关系",
+      "expr": "H_bridge = H_clear + h_struct + h_deck",
+      "latex": "H_{\\text{bridge}} = H_{\\text{clear}} + h_{\\text{struct}} + h_{\\text{deck}}",
+      "vars": [
+        {
+          "sym": "H_bridge",
+          "name": "桥梁高度",
+          "unit": "m",
+          "note": "桥面（或轨底）至低水位/桥下路面的高差"
+        },
+        {
+          "sym": "H_clear",
+          "name": "桥下净空",
+          "unit": "m",
+          "note": "设计洪水位或通航水位以上至上部结构底缘的净距"
+        },
+        {
+          "sym": "h_struct",
+          "name": "建筑高度",
+          "unit": "m",
+          "note": "上部结构底缘至桥面顶面的高度，决定桥面标高"
+        },
+        {
+          "sym": "h_deck",
+          "name": "桥面铺装与横坡引起的附加高度",
+          "unit": "m",
+          "note": "可取铺装厚 + 横坡高差"
+        }
+      ],
+      "conditions": [
+        "桥下为通航河道时按通航净空控制；非通航按设计洪水位控制",
+        "建筑高度越小越有利于降低桥面标高与引道填土"
+      ],
+      "derivationHint": "竖向尺寸链叠加：桥面标高 = 水位 + 净空 + 建筑高度 + 铺装。",
+      "typicalUse": "总体设计中推求桥面最低标高",
+      "pitfalls": [
+        "漏算桥面横坡引起的顶面抬高",
+        "把建筑高度与梁高混为一谈（建筑高度含铺装与横坡）"
+      ],
+      "standardRef": [
+        "JTG D60",
+        "JTG B01"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "三项术语的定义边界请按教材第1章插图核对"
+    },
+    {
+      "id": "bridge-engineering-formula-006",
+      "subjectId": "bridge-engineering",
+      "chapter": "1.2",
+      "name": "桥梁规模分级（双指标取高）",
+      "expr": "grade = max(grade(sum_l0), grade(lk))",
+      "latex": "G = \\max\\{\\,G(\\sum l_0),\\; G(l_k)\\,\\}",
+      "vars": [
+        {
+          "sym": "sum_l0",
+          "name": "多孔跨径总长",
+          "unit": "m",
+          "note": "分级主指标之一"
+        },
+        {
+          "sym": "lk",
+          "name": "单孔跨径",
+          "unit": "m",
+          "note": "标准跨径；另一分级指标"
+        },
+        {
+          "sym": "grade",
+          "name": "规模等级",
+          "unit": "—",
+          "note": "特大桥/大桥/中桥/小桥/涵洞"
+        }
+      ],
+      "conditions": [
+        "两个指标分别定级后取较高级别",
+        "梁桥的多孔跨径总长按标准跨径之和，拱桥按净跨径之和"
+      ],
+      "derivationHint": "无数值推导；属规范规定的分类规则。",
+      "typicalUse": "给定跨径资料判定桥梁规模，选择设计安全等级与重要性系数",
+      "pitfalls": [
+        "只用一个指标定级",
+        "边界值（如总长恰好 100 m）归属错档",
+        "混淆标准跨径与净跨径导致指标取错"
+      ],
+      "standardRef": [
+        "JTG D60"
+      ],
+      "confidence": "low",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "分级界限数值（1000/150/100/40/30/20/8/5）必须以 JTG D60 现行版本分级表为准，教材与旧版可能不同；本条 confidence 标 low"
+    },
+    {
+      "id": "bridge-engineering-formula-007",
+      "subjectId": "bridge-engineering",
+      "chapter": "2.2",
+      "name": "桥孔净长估算",
+      "expr": "Lj = Qp / (v_allow * h_avg)",
+      "latex": "L_j = \\dfrac{Q_p}{v_{\\text{allow}} \\, h_{\\text{avg}}}",
+      "vars": [
+        {
+          "sym": "Lj",
+          "name": "桥孔净长",
+          "unit": "m",
+          "note": "扣除桥墩、桥台阻水宽度后的过水净宽"
+        },
+        {
+          "sym": "Qp",
+          "name": "设计流量",
+          "unit": "m³/s",
+          "note": "由水文计算确定，属桥涵水文课程"
+        },
+        {
+          "sym": "v_allow",
+          "name": "允许（不冲刷）流速",
+          "unit": "m/s",
+          "note": "按河床土质与加固情况取值"
+        },
+        {
+          "sym": "h_avg",
+          "name": "设计水位下桥孔平均水深",
+          "unit": "m",
+          "note": "按断面面积除以净宽迭代确定"
+        }
+      ],
+      "conditions": [
+        "需与冲刷系数、壅水高度联合迭代",
+        "实际孔径布置还要满足通航、排冰与施工要求"
+      ],
+      "derivationHint": "由连续方程 Q = v·A，A = Lj·h_avg 反解。",
+      "typicalUse": "课程设计与桥梁总体设计初步确定孔数",
+      "pitfalls": [
+        "未计入桥墩阻水面积，导致净长不足",
+        "平均水深与净长互相依赖需迭代，不能直接一次算出",
+        "忽略冲刷后断面扩大的有利影响"
+      ],
+      "standardRef": [
+        "JTG C30"
+      ],
+      "confidence": "low",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": "本式为教学用简化连续方程；教材可能采用含冲刷系数 P 与压缩系数 μ 的桥孔净长公式，务必核对原书公式形式与系数取值"
+    },
+    {
+      "id": "bridge-engineering-formula-008",
+      "subjectId": "bridge-engineering",
+      "chapter": "2.2",
+      "name": "桥前壅水高度（简述）",
+      "expr": "dz = eta * (v^2 - v0^2) / (2 * g)",
+      "latex": "\\Delta z = \\eta \\, \\dfrac{v^2 - v_0^2}{2g}",
+      "vars": [
+        {
+          "sym": "dz",
+          "name": "桥前壅水高度",
+          "unit": "m",
+          "note": "桥位上游水面抬高值"
+        },
+        {
+          "sym": "eta",
+          "name": "壅水系数",
+          "unit": "—",
+          "note": "与桥孔压缩程度、河床糙率有关，需查规范取值"
+        },
+        {
+          "sym": "v",
+          "name": "桥下（压缩后）平均流速",
+          "unit": "m/s",
+          "note": null
+        },
+        {
+          "sym": "v0",
+          "name": "天然河道平均流速",
+          "unit": "m/s",
+          "note": null
+        },
+        {
+          "sym": "g",
+          "name": "重力加速度",
+          "unit": "m/s²",
+          "note": "9.81"
+        }
+      ],
+      "conditions": [
+        "适用于缓流河段、桥孔压缩引起的壅水估算",
+        "壅水值计入桥下净空与桥面标高"
+      ],
+      "derivationHint": "由伯努利方程的流速水头差乘经验系数得到。",
+      "typicalUse": "桥面标高推求、淹没范围评估",
+      "pitfalls": [
+        "系数 η 取值无把握时需查规范而非套用",
+        "急流河段不适用"
+      ],
+      "standardRef": [
+        "JTG C30"
+      ],
+      "confidence": "low",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": "壅水公式形式与系数 η 的取值表请以《桥涵水文》教材及 JTG C30 现行版为准，本条仅为概念性提示，confidence 标 low"
+    },
+    {
+      "id": "bridge-engineering-formula-009",
+      "subjectId": "bridge-engineering",
+      "chapter": "2.3",
+      "name": "桥面最低标高",
+      "expr": "H_deck = H_water + H_clear + h_struct + h_deck_slope",
+      "latex": "H_{\\text{deck}} = H_{w} + H_{c} + h_{\\text{str}} + h_{\\text{slope}}",
+      "vars": [
+        {
+          "sym": "H_deck",
+          "name": "桥面最低标高",
+          "unit": "m",
+          "note": "一般取桥面中心线处铺装顶面高程"
+        },
+        {
+          "sym": "H_water",
+          "name": "计算水位",
+          "unit": "m",
+          "note": "设计洪水位或设计通航水位，取两者控制值，并计入壅水与浪高"
+        },
+        {
+          "sym": "H_clear",
+          "name": "桥下净空安全值",
+          "unit": "m",
+          "note": "按通航等级与规范规定取值"
+        },
+        {
+          "sym": "h_struct",
+          "name": "建筑高度",
+          "unit": "m",
+          "note": "上部结构底缘至桥面顶"
+        },
+        {
+          "sym": "h_deck_slope",
+          "name": "横坡与铺装附加高度",
+          "unit": "m",
+          "note": "双向横坡时取半幅横坡高差"
+        }
+      ],
+      "conditions": [
+        "通航河流同时满足通航净空与防洪净空，取控制值",
+        "有流冰、漂流物时另加安全值"
+      ],
+      "derivationHint": "竖向尺寸链：水面 → 净空 → 结构底 → 桥面顶。",
+      "typicalUse": "课程设计必算项，决定引道长度与造价",
+      "pitfalls": [
+        "忘计壅水与浪高",
+        "横坡使桥面两侧标高不同，需明确取哪一侧",
+        "纵坡与竖曲线使各点标高沿桥变化"
+      ],
+      "standardRef": [
+        "JTG D60",
+        "JTG B01"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": "桥下净空安全值的具体数值（通航与非通航）请查 JTG D60 现行版条文"
+    },
+    {
+      "id": "bridge-engineering-formula-010",
+      "subjectId": "bridge-engineering",
+      "chapter": "3.1",
+      "name": "作用代表值",
+      "expr": "S_rep = psi * S_k",
+      "latex": "S_{\\text{rep}} = \\psi \\, S_k",
+      "vars": [
+        {
+          "sym": "S_rep",
+          "name": "作用代表值",
+          "unit": "与作用同",
+          "note": null
+        },
+        {
+          "sym": "S_k",
+          "name": "作用标准值",
+          "unit": "与作用同",
+          "note": "基本代表值"
+        },
+        {
+          "sym": "psi",
+          "name": "代表值系数",
+          "unit": "—",
+          "note": "组合值 ψc、频遇值 ψf、准永久值 ψq"
+        }
+      ],
+      "conditions": [
+        "永久作用只用标准值",
+        "同一可变作用的系数大小关系：标准值 1.0 ≥ ψf ≥ ψc ≥ ψq"
+      ],
+      "derivationHint": "定义式。",
+      "typicalUse": "作用效应组合前先确定每个作用的代表值",
+      "pitfalls": [
+        "把组合值系数当成频遇值系数使用",
+        "认为所有可变作用的 ψ 相同"
+      ],
+      "standardRef": [
+        "JTG D60"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "ψc、ψf、ψq 的具体数值表请查 JTG D60 现行版"
+    },
+    {
+      "id": "bridge-engineering-formula-011",
+      "subjectId": "bridge-engineering",
+      "chapter": "3.3",
+      "name": "车道荷载效应（均布 + 集中）",
+      "expr": "S_lane = qk * Omega + Pk * y_max",
+      "latex": "S_{\\text{lane}} = q_k \\, \\Omega + P_k \\, y_{\\max}",
+      "vars": [
+        {
+          "sym": "S_lane",
+          "name": "一个车道荷载产生的效应",
+          "unit": "kN·m 或 kN",
+          "note": "整体计算用的等代荷载效应"
+        },
+        {
+          "sym": "qk",
+          "name": "车道荷载均布荷载",
+          "unit": "kN/m",
+          "note": "公路-I 级常取 10.5 kN/m，需核对规范"
+        },
+        {
+          "sym": "Omega",
+          "name": "影响线面积",
+          "unit": "m 或 m²",
+          "note": "同号区面积，弯矩为 m²、剪力为 m"
+        },
+        {
+          "sym": "Pk",
+          "name": "车道荷载集中荷载",
+          "unit": "kN",
+          "note": "按计算跨径内插；剪力计算时一个车道只取一个 Pk"
+        },
+        {
+          "sym": "y_max",
+          "name": "影响线最大竖标",
+          "unit": "m 或 —",
+          "note": "Pk 布置在竖标最大处"
+        }
+      ],
+      "conditions": [
+        "车道荷载用于整体计算；车辆荷载用于局部加载、涵洞、桥台土压力",
+        "Pk 只作用在影响线同号区，且每车道一个"
+      ],
+      "derivationHint": "影响线加载：均布荷载乘面积、集中荷载乘竖标，两者线性叠加。",
+      "typicalUse": "主梁内力计算的活载源头项",
+      "pitfalls": [
+        "求剪力时把 Pk 乘了两次",
+        "均布荷载布满正号区而非全跨",
+        "车道荷载与车辆荷载混用"
+      ],
+      "standardRef": [
+        "JTG D60"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "qk = 10.5 kN/m 与 Pk 的分段取值必须以 JTG D60 现行版为准"
+    },
+    {
+      "id": "bridge-engineering-formula-012",
+      "subjectId": "bridge-engineering",
+      "chapter": "3.3",
+      "name": "公路-I 级集中荷载 Pk 内插",
+      "expr": "Pk = 180 + (360 - 180) * (l0 - 5) / (50 - 5)",
+      "latex": "P_k = 180 + (360-180)\\dfrac{l_0-5}{50-5}",
+      "vars": [
+        {
+          "sym": "Pk",
+          "name": "集中荷载",
+          "unit": "kN",
+          "note": "计算剪力效应时，一个车道取一个 Pk"
+        },
+        {
+          "sym": "l0",
+          "name": "计算跨径",
+          "unit": "m",
+          "note": "5 m < l0 < 50 m 时线性内插"
+        }
+      ],
+      "conditions": [
+        "l0 ≤ 5 m 时 Pk = 180 kN",
+        "l0 ≥ 50 m 时 Pk = 360 kN",
+        "中间线性内插"
+      ],
+      "derivationHint": "规范要求的两点线性插值。",
+      "typicalUse": "每道活载内力题的第一步",
+      "pitfalls": [
+        "用标准跨径代替计算跨径内插",
+        "剪力计算时把 Pk 按跨数重复计入"
+      ],
+      "standardRef": [
+        "JTG D60"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "180/360 kN 两个端点值与 5~50 m 的内插区间，以及计算剪力时 Pk 的取法，请以 JTG D60 现行版核对"
+    },
+    {
+      "id": "bridge-engineering-formula-013",
+      "subjectId": "bridge-engineering",
+      "chapter": "3.3",
+      "name": "公路-II 级车道荷载",
+      "expr": "qk_II = 0.75 * qk_I; Pk_II = 0.75 * Pk_I",
+      "latex": "q_{k,\\text{II}} = 0.75\\, q_{k,\\text{I}},\\quad P_{k,\\text{II}} = 0.75\\,P_{k,\\text{I}}",
+      "vars": [
+        {
+          "sym": "qk_II",
+          "name": "公路-II 级均布荷载",
+          "unit": "kN/m",
+          "note": null
+        },
+        {
+          "sym": "qk_I",
+          "name": "公路-I 级均布荷载",
+          "unit": "kN/m",
+          "note": null
+        },
+        {
+          "sym": "Pk_II",
+          "name": "公路-II 级集中荷载",
+          "unit": "kN",
+          "note": null
+        },
+        {
+          "sym": "Pk_I",
+          "name": "公路-I 级集中荷载",
+          "unit": "kN",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "公路-II 级为公路-I 级的 0.75 倍（车道荷载部分）",
+        "按道路等级与设计交通量选用荷载等级"
+      ],
+      "derivationHint": "规范规定的换算系数。",
+      "typicalUse": "低等级公路桥梁的活载取值",
+      "pitfalls": [
+        "车辆荷载与车道荷载的折减关系不同",
+        "把 0.75 同时用于冲击系数"
+      ],
+      "standardRef": [
+        "JTG D60"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "0.75 系数与公路-II 级的适用条件请核对 JTG D60 现行版"
+    },
+    {
+      "id": "bridge-engineering-formula-014",
+      "subjectId": "bridge-engineering",
+      "chapter": "3.3",
+      "name": "汽车冲击系数 μ（按结构基频）",
+      "expr": "mu = 0.1767 * ln(f) - 0.0157",
+      "latex": "\\mu = 0.1767 \\ln f - 0.0157",
+      "vars": [
+        {
+          "sym": "mu",
+          "name": "冲击系数",
+          "unit": "—",
+          "note": "冲击增大效应 (1+μ)"
+        },
+        {
+          "sym": "f",
+          "name": "结构基频",
+          "unit": "Hz",
+          "note": "简支梁可用 f = (pi/(2*l^2))*sqrt(E*I/m) 估算"
+        }
+      ],
+      "conditions": [
+        "1.5 Hz ≤ f ≤ 14 Hz 时按上式",
+        "f < 1.5 Hz 取 μ = 0.05",
+        "f > 14 Hz 取 μ = 0.45",
+        "需按规范规定的适用结构类型与跨度范围使用"
+      ],
+      "derivationHint": "由规范给出的基频相关经验拟合式。",
+      "typicalUse": "活载内力与疲劳验算前的放大系数",
+      "pitfalls": [
+        "基频算错（单位、截面刚度取毛截面还是开裂截面）",
+        "把 (1+μ) 只乘集中荷载不乘均布荷载",
+        "支座、墩台基础计算时不计冲击"
+      ],
+      "standardRef": [
+        "JTG D60"
+      ],
+      "confidence": "low",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "0.1767 / 0.0157 两个系数、分界频率 1.5 与 14 Hz、上下限 0.05/0.45 均为强版本依赖参数，必须查 JTG D60 现行版条文；本条 confidence 标 low"
+    },
+    {
+      "id": "bridge-engineering-formula-015",
+      "subjectId": "bridge-engineering",
+      "chapter": "3.3",
+      "name": "多车道横向折减",
+      "expr": "S_Q = xi * sum(m_i * S_lane)",
+      "latex": "S_Q = \\xi \\sum_i m_i S_{\\text{lane}}",
+      "vars": [
+        {
+          "sym": "xi",
+          "name": "多车道横向折减系数",
+          "unit": "—",
+          "note": "2 车道 1.0；3 车道约 0.78；4 车道约 0.67；需查规范"
+        },
+        {
+          "sym": "m_i",
+          "name": "第 i 号主梁横向分布系数",
+          "unit": "—",
+          "note": "已含车道数效应，全部主梁的 m 之和 = 车道数（未折减时）"
+        },
+        {
+          "sym": "S_lane",
+          "name": "单车道荷载效应",
+          "unit": "kN·m 或 kN",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "仅在多车道同时满载时折减",
+        "大跨径另有纵向折减，两者不同"
+      ],
+      "derivationHint": "统计意义上多车道同时出现最大荷载的概率折减。",
+      "typicalUse": "双车道以上桥梁的活载计算",
+      "pitfalls": [
+        "横向折减与纵向折减混用",
+        "折减后再乘以车道数导致重复"
+      ],
+      "standardRef": [
+        "JTG D60"
+      ],
+      "confidence": "low",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "各车道数对应的折减系数具体数值必须以 JTG D60 现行版表格为准"
+    },
+    {
+      "id": "bridge-engineering-formula-016",
+      "subjectId": "bridge-engineering",
+      "chapter": "3.3",
+      "name": "汽车制动力",
+      "expr": "F_b = min(0.10 * W_lane, 165)",
+      "latex": "F_b = \\min(0.10\\,W_{\\text{lane}},\\; 165\\ \\text{kN})",
+      "vars": [
+        {
+          "sym": "F_b",
+          "name": "制动力标准值",
+          "unit": "kN",
+          "note": "作用在桥面以上 1.2 m 处，同向车道不叠加"
+        },
+        {
+          "sym": "W_lane",
+          "name": "加载车道上车辆荷载总重",
+          "unit": "kN",
+          "note": "公路-I 级按车道荷载在加载长度上的总重计算"
+        }
+      ],
+      "conditions": [
+        "同向行驶车道制动力不叠加",
+        "需按规范规定的最小值校核",
+        "方向沿行车方向，作用于墩台与支座"
+      ],
+      "derivationHint": "规范规定的经验比例加限值。",
+      "typicalUse": "墩台水平力、支座与伸缩缝位移计算",
+      "pitfalls": [
+        "忘记最小值校核",
+        "把制动力与支座摩阻力同时计入水平力分配"
+      ],
+      "standardRef": [
+        "JTG D60"
+      ],
+      "confidence": "low",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "0.10 的比例、165 kN 的限值、最小值规定与作用点高度 1.2 m 全部需以 JTG D60 现行版核对"
+    },
+    {
+      "id": "bridge-engineering-formula-017",
+      "subjectId": "bridge-engineering",
+      "chapter": "3.4",
+      "name": "温度位移与伸缩量",
+      "expr": "dL = alpha * dT * L + eps_cs * L + d_b",
+      "latex": "\\Delta L = \\alpha \\Delta T L + \\varepsilon_{cs} L + \\Delta_b",
+      "vars": [
+        {
+          "sym": "dL",
+          "name": "伸缩量",
+          "unit": "m",
+          "note": "取伸长与缩短两个方向的控制值"
+        },
+        {
+          "sym": "alpha",
+          "name": "线膨胀系数",
+          "unit": "1/℃",
+          "note": "混凝土约 1.0e-5，钢约 1.2e-5"
+        },
+        {
+          "sym": "dT",
+          "name": "有效温差",
+          "unit": "℃",
+          "note": "安装温度与最高/最低设计温度之差"
+        },
+        {
+          "sym": "L",
+          "name": "伸缩装置之间的联长",
+          "unit": "m",
+          "note": "不是单孔跨径，也不是桥梁全长"
+        },
+        {
+          "sym": "eps_cs",
+          "name": "收缩徐变等效应变",
+          "unit": "—",
+          "note": "常折算为当量降温（混凝土约 15~20 ℃当量）"
+        },
+        {
+          "sym": "d_b",
+          "name": "制动力与活载引起的附加位移",
+          "unit": "m",
+          "note": "含梁端转角与施工误差"
+        }
+      ],
+      "conditions": [
+        "安装温度需在设计中明确，伸缩装置按安装温度预调",
+        "计入富裕量后再选型号"
+      ],
+      "derivationHint": "各项位移线性叠加；收缩徐变折算为当量温降。",
+      "typicalUse": "伸缩缝选型、支座位移验算",
+      "pitfalls": [
+        "用错联长（单孔跨径 vs 一联总长）",
+        "只算升温不算降温",
+        "忽略安装温度修正"
+      ],
+      "standardRef": [
+        "JTG D60"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "收缩徐变当量温降的取值、富裕量规定请查 JTG D60 现行版与支座/伸缩装置产品标准"
+    },
+    {
+      "id": "bridge-engineering-formula-018",
+      "subjectId": "bridge-engineering",
+      "chapter": "3.5",
+      "name": "承载能力极限状态基本组合",
+      "expr": "S_ud = g0 * (sum(gG_i * S_Gik) + gQ1 * S_Q1k + sum(psic_j * gQ_j * S_Qjk))",
+      "latex": "S_{ud} = \\gamma_0\\!\\left(\\sum_i \\gamma_{Gi}S_{Gik} + \\gamma_{Q1}S_{Q1k} + \\sum_j \\psi_{cj}\\gamma_{Qj}S_{Qjk}\\right)",
+      "vars": [
+        {
+          "sym": "S_ud",
+          "name": "基本组合效应设计值",
+          "unit": "kN·m 或 kN",
+          "note": null
+        },
+        {
+          "sym": "g0",
+          "name": "结构重要性系数",
+          "unit": "—",
+          "note": "安全等级一/二/三级分别约 1.1/1.0/0.9"
+        },
+        {
+          "sym": "gG_i",
+          "name": "永久作用分项系数",
+          "unit": "—",
+          "note": "不利取 1.2，有利取 1.0"
+        },
+        {
+          "sym": "S_Gik",
+          "name": "第 i 个永久作用标准值效应",
+          "unit": "kN·m 或 kN",
+          "note": null
+        },
+        {
+          "sym": "gQ1",
+          "name": "主导可变作用分项系数",
+          "unit": "—",
+          "note": "汽车荷载（含冲击力）常取 1.4"
+        },
+        {
+          "sym": "S_Q1k",
+          "name": "主导可变作用标准值效应",
+          "unit": "kN·m 或 kN",
+          "note": "汽车效应含冲击，即 (1+μ) 倍"
+        },
+        {
+          "sym": "psic_j",
+          "name": "其他可变作用组合值系数",
+          "unit": "—",
+          "note": "人群常取 0.75，需查规范"
+        },
+        {
+          "sym": "gQ_j",
+          "name": "其他可变作用分项系数",
+          "unit": "—",
+          "note": "常取 1.4"
+        }
+      ],
+      "conditions": [
+        "永久作用效应不利时 γG 取大值，有利时取小值（甚至 <1）",
+        "汽车荷载含冲击力；人群荷载不含冲击",
+        "一个可变作用作为主导，其余用组合值"
+      ],
+      "derivationHint": "分项系数极限状态设计法：标准值 × 分项系数 × 组合系数，再乘重要性系数。",
+      "typicalUse": "全书最高频计算：承载力配筋的控制效应",
+      "pitfalls": [
+        "人群、温度等次可变作用漏乘 ψc",
+        "汽车效应重复计入冲击或漏计冲击",
+        "把标准组合当成基本组合用于配筋"
+      ],
+      "standardRef": [
+        "JTG D60"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "γ0、γG、γQ、ψc 的具体数值与「有利/不利」取值规则请查 JTG D60 现行版"
+    },
+    {
+      "id": "bridge-engineering-formula-019",
+      "subjectId": "bridge-engineering",
+      "chapter": "3.5",
+      "name": "正常使用极限状态标准组合",
+      "expr": "S_sd = sum(S_Gik) + S_Q1k + sum(psic_j * S_Qjk)",
+      "latex": "S_{sd} = \\sum_i S_{Gik} + S_{Q1k} + \\sum_j \\psi_{cj} S_{Qjk}",
+      "vars": [
+        {
+          "sym": "S_sd",
+          "name": "标准组合效应",
+          "unit": "kN·m 或 kN",
+          "note": "用于抗裂、应力与部分变形验算"
+        },
+        {
+          "sym": "S_Gik",
+          "name": "永久作用标准值效应",
+          "unit": "kN·m 或 kN",
+          "note": "不乘分项系数"
+        },
+        {
+          "sym": "S_Q1k",
+          "name": "主导可变作用标准值效应",
+          "unit": "kN·m 或 kN",
+          "note": "汽车效应常不计冲击"
+        },
+        {
+          "sym": "psic_j",
+          "name": "其他可变作用组合值系数",
+          "unit": "—",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "正常使用极限状态不乘 γ0 与分项系数",
+        "汽车荷载是否计入冲击按规范与该验算项目确定"
+      ],
+      "derivationHint": "标准值直接叠加，仅次可变作用乘组合值系数。",
+      "typicalUse": "预应力混凝土抗裂验算、钢筋混凝土裂缝宽度验算",
+      "pitfalls": [
+        "误乘分项系数",
+        "与频遇组合、准永久组合混用"
+      ],
+      "standardRef": [
+        "JTG D60",
+        "JTG 3362"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "标准组合的具体构成（是否含 ψc、汽车是否计冲击）请按 JTG D60 现行版核对"
+    },
+    {
+      "id": "bridge-engineering-formula-020",
+      "subjectId": "bridge-engineering",
+      "chapter": "3.5",
+      "name": "正常使用频遇组合",
+      "expr": "S_fd = sum(S_Gik) + psif1 * S_Q1k + sum(psiq_j * S_Qjk)",
+      "latex": "S_{fd} = \\sum_i S_{Gik} + \\psi_{f1}S_{Q1k} + \\sum_j \\psi_{qj}S_{Qjk}",
+      "vars": [
+        {
+          "sym": "S_fd",
+          "name": "频遇组合效应",
+          "unit": "kN·m 或 kN",
+          "note": null
+        },
+        {
+          "sym": "psif1",
+          "name": "主导可变作用频遇值系数",
+          "unit": "—",
+          "note": "汽车常取 0.7，需查规范"
+        },
+        {
+          "sym": "psiq_j",
+          "name": "其他可变作用准永久值系数",
+          "unit": "—",
+          "note": "人群常取 0.4"
+        },
+        {
+          "sym": "S_Gik",
+          "name": "永久作用标准值效应",
+          "unit": "kN·m 或 kN",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "反映短暂状态，频遇值用于主导可变作用",
+        "其余可变作用用准永久值"
+      ],
+      "derivationHint": "代表值体系：主导用频遇值，其余用准永久值。",
+      "typicalUse": "部分变形与应力验算",
+      "pitfalls": [
+        "把 ψf 与 ψc 弄反（一般 ψf ≤ 1，ψc ≤ 1，数值接近但用途不同）",
+        "混淆频遇组合与准永久组合的适用验算项目"
+      ],
+      "standardRef": [
+        "JTG D60"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "ψf、ψq 数值及频遇组合的适用项目请查 JTG D60 现行版"
+    },
+    {
+      "id": "bridge-engineering-formula-021",
+      "subjectId": "bridge-engineering",
+      "chapter": "3.5",
+      "name": "正常使用准永久组合",
+      "expr": "S_qd = sum(S_Gik) + sum(psiq_j * S_Qjk)",
+      "latex": "S_{qd} = \\sum_i S_{Gik} + \\sum_j \\psi_{qj} S_{Qjk}",
+      "vars": [
+        {
+          "sym": "S_qd",
+          "name": "准永久组合效应",
+          "unit": "kN·m 或 kN",
+          "note": "长期效应，用于徐变、长期挠度"
+        },
+        {
+          "sym": "psiq_j",
+          "name": "第 j 个可变作用准永久值系数",
+          "unit": "—",
+          "note": "汽车常取 0.4，人群常取 0.4"
+        },
+        {
+          "sym": "S_Gik",
+          "name": "永久作用标准值效应",
+          "unit": "kN·m 或 kN",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "所有可变作用（含主导）一律乘准永久值系数",
+        "用于长期效应与徐变相关验算"
+      ],
+      "derivationHint": "长期效应组合：全部可变作用按准永久值。",
+      "typicalUse": "长期挠度、预应力长期损失、徐变次内力",
+      "pitfalls": [
+        "主导可变作用仍用标准值（应乘 ψq）",
+        "与频遇组合对调"
+      ],
+      "standardRef": [
+        "JTG D60"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "ψq 数值请查 JTG D60 现行版"
+    },
+    {
+      "id": "bridge-engineering-formula-022",
+      "subjectId": "bridge-engineering",
+      "chapter": "6.1",
+      "name": "车轮荷载压力面（经铺装扩散）",
+      "expr": "a1 = a2 + 2 * H; b1 = b2 + 2 * H",
+      "latex": "a_1 = a_2 + 2H,\\quad b_1 = b_2 + 2H",
+      "vars": [
+        {
+          "sym": "a1",
+          "name": "沿行车方向的压力面边长",
+          "unit": "m",
+          "note": null
+        },
+        {
+          "sym": "b1",
+          "name": "垂直行车方向的压力面边长",
+          "unit": "m",
+          "note": null
+        },
+        {
+          "sym": "a2",
+          "name": "车轮沿行车方向着地长度",
+          "unit": "m",
+          "note": "常取 0.20 m"
+        },
+        {
+          "sym": "b2",
+          "name": "车轮垂直行车方向着地宽度",
+          "unit": "m",
+          "note": "常取 0.60 m（后轮）"
+        },
+        {
+          "sym": "H",
+          "name": "桥面铺装层厚度",
+          "unit": "m",
+          "note": "按 45° 扩散假定"
+        }
+      ],
+      "conditions": [
+        "假定荷载经铺装按 45° 扩散到板顶",
+        "钢筋混凝土板顶面为计算面"
+      ],
+      "derivationHint": "每侧各外扩一个铺装厚度 H。",
+      "typicalUse": "桥面板有效分布宽度计算的前置步骤",
+      "pitfalls": [
+        "漏乘系数 2",
+        "把铺装厚度当作板的厚度"
+      ],
+      "standardRef": [
+        "JTG 3362"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "0.20 m / 0.60 m 的着地尺寸与 45° 扩散假定请查 JTG D60 车辆荷载图式与 JTG 3362 桥面板条文"
+    },
+    {
+      "id": "bridge-engineering-formula-023",
+      "subjectId": "bridge-engineering",
+      "chapter": "6.1",
+      "name": "单向板车轮有效分布宽度（荷载在跨中）",
+      "expr": "a = max(a1 + l_b / 3, 2 * l_b / 3)",
+      "latex": "a = \\max\\left(a_1 + \\frac{l_b}{3},\\; \\frac{2l_b}{3}\\right)",
+      "vars": [
+        {
+          "sym": "a",
+          "name": "有效分布宽度",
+          "unit": "m",
+          "note": "沿桥纵向的分布宽度，用于把轮重摊到单位板宽"
+        },
+        {
+          "sym": "a1",
+          "name": "压力面沿行车方向边长",
+          "unit": "m",
+          "note": "= a2 + 2H"
+        },
+        {
+          "sym": "l_b",
+          "name": "板的计算跨径",
+          "unit": "m",
+          "note": "单向板取主梁肋间净距加板厚或取支承中距"
+        }
+      ],
+      "conditions": [
+        "车轮作用在板跨中部",
+        "相邻车轮分布宽度重叠时应合并计算",
+        "取两个值中的较大者"
+      ],
+      "derivationHint": "经验扩散规则：在压力面基础上向两侧各扩散 l/3，并设 2l/3 下限。",
+      "typicalUse": "行车道板弯矩计算",
+      "pitfalls": [
+        "忘记取 max 下限",
+        "两个车轮重叠时未合并成一个分布宽度",
+        "把 l_b 取成主梁间距而非板的计算跨径"
+      ],
+      "standardRef": [
+        "JTG 3362"
+      ],
+      "confidence": "low",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "有效分布宽度的公式形式（是否含 l/3、2l/3 下限、重叠合并规则）请按教材与 JTG 3362 现行版核对，各版本差异较大，confidence 标 low"
+    },
+    {
+      "id": "bridge-engineering-formula-024",
+      "subjectId": "bridge-engineering",
+      "chapter": "6.1",
+      "name": "单向板车轮有效分布宽度（荷载在支承处）",
+      "expr": "a_sup = a1 + t",
+      "latex": "a_{\\text{sup}} = a_1 + t",
+      "vars": [
+        {
+          "sym": "a_sup",
+          "name": "支承处有效分布宽度",
+          "unit": "m",
+          "note": null
+        },
+        {
+          "sym": "a1",
+          "name": "压力面边长",
+          "unit": "m",
+          "note": "= a2 + 2H"
+        },
+        {
+          "sym": "t",
+          "name": "板厚",
+          "unit": "m",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "车轮靠近支承边缘时",
+        "分布宽度不得超出板的实际范围"
+      ],
+      "derivationHint": "支承处扩散空间小，只加一个板厚。",
+      "typicalUse": "板支点剪力与负弯矩计算",
+      "pitfalls": [
+        "跨中与支点用同一个 a",
+        "板厚与铺装厚度混淆"
+      ],
+      "standardRef": [
+        "JTG 3362"
+      ],
+      "confidence": "low",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "支承处分布宽度的表达式请核对教材与 JTG 3362 现行版"
+    },
+    {
+      "id": "bridge-engineering-formula-025",
+      "subjectId": "bridge-engineering",
+      "chapter": "6.1",
+      "name": "悬臂板车轮有效分布宽度",
+      "expr": "a = b1 + 2 * b_p",
+      "latex": "a = b_1 + 2 b'",
+      "vars": [
+        {
+          "sym": "a",
+          "name": "悬臂板有效分布宽度",
+          "unit": "m",
+          "note": "沿悬臂根部纵向的分布宽度"
+        },
+        {
+          "sym": "b1",
+          "name": "压力面垂直于悬臂方向的边长",
+          "unit": "m",
+          "note": "= b2 + 2H"
+        },
+        {
+          "sym": "b_p",
+          "name": "压力面近根部边缘至悬臂根部的距离",
+          "unit": "m",
+          "note": "车轮越靠外，b' 越大，a 越大"
+        }
+      ],
+      "conditions": [
+        "车轮布置在悬臂板上",
+        "车轮边缘不得超出悬臂端（工程上应留安全距离）",
+        "相邻车轮分布宽度重叠时合并"
+      ],
+      "derivationHint": "自压力面向悬臂根部方向按 1:1（约 45°）两侧扩散。",
+      "typicalUse": "人行道挑臂、边梁悬臂翼板根部配筋",
+      "pitfalls": [
+        "把 b' 取成压力面中心到根部的距离",
+        "忘记乘 2",
+        "车轮放在悬臂端外侧导致分布宽度被截断"
+      ],
+      "standardRef": [
+        "JTG 3362"
+      ],
+      "confidence": "low",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "b' 的定义（压力面边缘还是中心到根部）以及 1:1 扩散比例请按教材插图与 JTG 3362 核对，confidence 标 low"
+    },
+    {
+      "id": "bridge-engineering-formula-026",
+      "subjectId": "bridge-engineering",
+      "chapter": "6.1",
+      "name": "悬臂板根部弯矩（每米板宽）",
+      "expr": "M = -(P_w / a) * l1",
+      "latex": "M = -\\dfrac{P_w}{a}\\, l_1",
+      "vars": [
+        {
+          "sym": "M",
+          "name": "悬臂根部弯矩（每米板宽）",
+          "unit": "kN·m/m",
+          "note": "负号表示板上缘受拉"
+        },
+        {
+          "sym": "P_w",
+          "name": "单个车轮轮重（含冲击时应乘 (1+μ)）",
+          "unit": "kN",
+          "note": "后轴重的一半"
+        },
+        {
+          "sym": "a",
+          "name": "有效分布宽度",
+          "unit": "m",
+          "note": null
+        },
+        {
+          "sym": "l1",
+          "name": "车轮合力至悬臂根部的距离",
+          "unit": "m",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "按单位宽度板条计算",
+        "恒载弯矩另行叠加",
+        "人群荷载按同样方法叠加"
+      ],
+      "derivationHint": "轮重摊到宽度 a 上得线荷载 P_w/a，悬臂弯矩 = 线荷载 × 力臂。",
+      "typicalUse": "悬臂板配筋",
+      "pitfalls": [
+        "用轴重代替轮重",
+        "漏计冲击系数",
+        "恒载与活载弯矩未叠加"
+      ],
+      "standardRef": [
+        "JTG 3362"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "是否计入冲击、轮重取值请按教材例题口径核对"
+    },
+    {
+      "id": "bridge-engineering-formula-027",
+      "subjectId": "bridge-engineering",
+      "chapter": "6.2",
+      "name": "每片主梁恒载集度",
+      "expr": "g = g_beam + g_diaphragm + g_deck / n + g_curb",
+      "latex": "g = g_{\\text{beam}} + g_{\\text{dia}} + \\frac{g_{\\text{deck}}}{n} + g_{\\text{curb}}",
+      "vars": [
+        {
+          "sym": "g",
+          "name": "每片主梁恒载集度",
+          "unit": "kN/m",
+          "note": null
+        },
+        {
+          "sym": "g_beam",
+          "name": "主梁自重",
+          "unit": "kN/m",
+          "note": "= A × γc，A 为截面面积"
+        },
+        {
+          "sym": "g_diaphragm",
+          "name": "横隔梁分摊",
+          "unit": "kN/m",
+          "note": "该片梁分担的横隔梁总重除以计算跨径"
+        },
+        {
+          "sym": "g_deck",
+          "name": "桥面系（铺装、人行道等）总集度",
+          "unit": "kN/m",
+          "note": "按横向均分或按边梁多分"
+        },
+        {
+          "sym": "n",
+          "name": "主梁片数",
+          "unit": "—",
+          "note": null
+        },
+        {
+          "sym": "g_curb",
+          "name": "该片梁直接承担的护栏与人行道重量",
+          "unit": "kN/m",
+          "note": "边梁专属，中梁为 0"
+        }
+      ],
+      "conditions": [
+        "边梁与中梁一般分别计算",
+        "人行道与护栏通常由边梁承担（简化）",
+        "横隔梁按片数均分或按位置分摊"
+      ],
+      "derivationHint": "把全桥恒载沿纵向化成集度，再按横向分配到各主梁。",
+      "typicalUse": "恒载内力计算第一步，最易出错",
+      "pitfalls": [
+        "把护栏人行道平均分给所有主梁",
+        "横隔梁重量未折算成集度（应除以跨径）",
+        "边梁与中梁取同一集度"
+      ],
+      "standardRef": [
+        "JTG D60"
+      ],
+      "confidence": "high",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "bridge-engineering-formula-028",
+      "subjectId": "bridge-engineering",
+      "chapter": "6.2",
+      "name": "简支梁恒载跨中弯矩",
+      "expr": "M_G = g * l^2 / 8",
+      "latex": "M_G = \\dfrac{g l^2}{8}",
+      "vars": [
+        {
+          "sym": "M_G",
+          "name": "恒载跨中弯矩",
+          "unit": "kN·m",
+          "note": null
+        },
+        {
+          "sym": "g",
+          "name": "每片主梁恒载集度",
+          "unit": "kN/m",
+          "note": null
+        },
+        {
+          "sym": "l",
+          "name": "计算跨径",
+          "unit": "m",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "等截面简支梁、恒载沿跨均布",
+        "变截面或集中恒载需另行积分"
+      ],
+      "derivationHint": "简支梁均布荷载 M_max = q l²/8。",
+      "typicalUse": "恒载内力与包络图",
+      "pitfalls": [
+        "用标准跨径代替计算跨径",
+        "把全桥恒载集度当成单片梁集度"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "bridge-engineering-formula-029",
+      "subjectId": "bridge-engineering",
+      "chapter": "6.2",
+      "name": "简支梁恒载支点剪力",
+      "expr": "Q_G = g * l / 2",
+      "latex": "Q_G = \\dfrac{g l}{2}",
+      "vars": [
+        {
+          "sym": "Q_G",
+          "name": "恒载支点剪力",
+          "unit": "kN",
+          "note": null
+        },
+        {
+          "sym": "g",
+          "name": "每片主梁恒载集度",
+          "unit": "kN/m",
+          "note": null
+        },
+        {
+          "sym": "l",
+          "name": "计算跨径",
+          "unit": "m",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "等截面简支梁、恒载沿跨均布",
+        "支座以外的悬臂恒载需另加"
+      ],
+      "derivationHint": "简支梁支反力 = q l/2。",
+      "typicalUse": "支座选型、抗剪验算",
+      "pitfalls": [
+        "计算支点剪力时误取净跨径处的剪力（应取支座中心处）",
+        "漏加梁端恒载"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "bridge-engineering-formula-030",
+      "subjectId": "bridge-engineering",
+      "chapter": "6.3",
+      "name": "荷载横向分布系数定义",
+      "expr": "m_i = R_i / P_total_lane",
+      "latex": "m_i = \\dfrac{R_i}{P_{\\text{lane}}}",
+      "vars": [
+        {
+          "sym": "m_i",
+          "name": "第 i 号主梁的横向分布系数",
+          "unit": "—",
+          "note": "以「一个车道荷载值」为基准归一"
+        },
+        {
+          "sym": "R_i",
+          "name": "该片主梁分担的荷载",
+          "unit": "kN",
+          "note": null
+        },
+        {
+          "sym": "P_total_lane",
+          "name": "一个车道的荷载值",
+          "unit": "kN",
+          "note": "用于归一化的基准"
+        }
+      ],
+      "conditions": [
+        "全部主梁 m 之和 = 车道数（未计横向折减）",
+        "汽车与人群分别求 m",
+        "同一片梁沿跨不同位置 m 不同"
+      ],
+      "derivationHint": "把空间问题降为平面问题：先用横向分布把荷载分到单片梁，再按平面梁计算。",
+      "typicalUse": "活载内力计算的核心参数",
+      "pitfalls": [
+        "归一化基准搞错，导致全部主梁 m 之和不等于车道数",
+        "把杠杆法结果与偏心压力法结果混用于同一截面"
+      ],
+      "standardRef": [
+        "JTG D60"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "m 的归一化定义（按车道还是按车辆）请按教材例题口径核对，这是最容易失分的地方"
+    },
+    {
+      "id": "bridge-engineering-formula-031",
+      "subjectId": "bridge-engineering",
+      "chapter": "6.3",
+      "name": "杠杆法（支点横向分布）",
+      "expr": "eta_i = (a_j - x) / (a_j - a_i)",
+      "latex": "\\eta_i = \\dfrac{a_j - x}{a_j - a_i}",
+      "vars": [
+        {
+          "sym": "eta_i",
+          "name": "i 号主梁影响线在 x 处的竖标",
+          "unit": "—",
+          "note": null
+        },
+        {
+          "sym": "x",
+          "name": "荷载横向坐标",
+          "unit": "m",
+          "note": "以桥梁中心线为原点"
+        },
+        {
+          "sym": "a_i",
+          "name": "i 号主梁轴线横坐标",
+          "unit": "m",
+          "note": null
+        },
+        {
+          "sym": "a_j",
+          "name": "相邻主梁轴线横坐标",
+          "unit": "m",
+          "note": "荷载位于 i、j 两梁之间"
+        }
+      ],
+      "conditions": [
+        "适用于支点截面、无中间横隔梁或横向联系很弱的梁",
+        "把横梁视为支承在各主梁上的简支（带悬臂）梁",
+        "荷载在边梁外侧时竖标取 1（部分教材按杠杆放大取 >1）"
+      ],
+      "derivationHint": "对刚性横梁取矩，求各主梁支点反力。",
+      "typicalUse": "求支点处 m0",
+      "pitfalls": [
+        "在跨中用杠杆法（错误）",
+        "边梁外侧悬臂段是否放大 η 未与教材口径统一",
+        "车辆横向位置未做最不利布置"
+      ],
+      "standardRef": [
+        "JTG D60"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "边梁悬臂端 η > 1 的杠杆放大是否在教材中采用，需核对教材例题",
+      "figure": {
+        "src": "/knowledge/assets/bridge-engineering/lever-method.svg",
+        "caption": "杠杆法：把桥面板当成一根撬棍",
+        "readPoints": [
+          "把桥面板视作简支在两片主梁上的梁，车轮压在哪，就按力臂反比分给两片梁。",
+          "R₁ = P(b−e)/b，R₂ = P·e/b——离荷载近的那片梁分得多。",
+          "只适用于靠近支点、或横向联系很弱（无横隔梁）的情况。",
+          "算边梁的横向分布系数时，杠杆法通常是控制值。"
+        ]
+      }
+    },
+    {
+      "id": "bridge-engineering-formula-032",
+      "subjectId": "bridge-engineering",
+      "chapter": "6.3",
+      "name": "偏心压力法（刚性横梁法）主梁反力",
+      "expr": "R_i = (1 / n) * P + (P * e * a_i) / sum(a_j^2)",
+      "latex": "R_i = \\frac{1}{n}P \\pm \\frac{P e a_i}{\\sum a_j^2}",
+      "vars": [
+        {
+          "sym": "R_i",
+          "name": "第 i 号主梁分担的荷载",
+          "unit": "kN",
+          "note": null
+        },
+        {
+          "sym": "P",
+          "name": "作用于横断面的荷载合力",
+          "unit": "kN",
+          "note": null
+        },
+        {
+          "sym": "n",
+          "name": "主梁片数",
+          "unit": "—",
+          "note": null
+        },
+        {
+          "sym": "e",
+          "name": "荷载合力偏心距",
+          "unit": "m",
+          "note": "与 a_i 同侧取正，使该侧主梁增大"
+        },
+        {
+          "sym": "a_i",
+          "name": "第 i 号主梁至桥梁中心线的距离",
+          "unit": "m",
+          "note": null
+        },
+        {
+          "sym": "sum(a_j^2)",
+          "name": "各主梁距离平方和",
+          "unit": "m²",
+          "note": "5 片梁间距 2.4 m 时为 57.6 m²"
+        }
+      ],
+      "conditions": [
+        "横梁刚度视为无穷大（刚性横梁假定）",
+        "有可靠横向联结与足够数量的中横隔梁",
+        "宽跨比 B/l ≤ 0.5 时精度较好",
+        "忽略主梁抗扭刚度（未修正时）"
+      ],
+      "derivationHint": "刚性横梁假定下，各主梁挠度呈线性分布，反力按线性分布反解；由竖向平衡与力矩平衡两式得到。",
+      "typicalUse": "跨中横向分布系数 mc 的主力方法",
+      "pitfalls": [
+        "符号取错（±）",
+        "忽略抗扭修正时宽桥误差大",
+        "把 a_i 取成梁间距而非到中心线的距离",
+        "边梁影响线出现负竖标时的处理未说明"
+      ],
+      "standardRef": [
+        "JTG D60"
+      ],
+      "confidence": "high",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "教材是否给出考虑主梁抗扭刚度的修正偏心压力法（Guyon-Massonnet 修正），需核对",
+      "figure": {
+        "src": "/knowledge/assets/bridge-engineering/eccentric-pressure.svg",
+        "caption": "偏心压力法：各片主梁按直线分配",
+        "readPoints": [
+          "核心假定：横隔梁刚度无穷大，横截面变形后仍是一条直线。",
+          "Rᵢ = P/n ± P·e·aᵢ / Σaᵢ²，偏心一侧取\"+\"，另一侧取\"−\"。",
+          "距离中心越远的梁，分得越多（本例 5 号梁 0.36，1 号梁只剩 0.04）。",
+          "适用条件：有横隔梁、且宽跨比 < 0.5 的窄桥。",
+          "自检：各片梁的系数之和必须等于荷载总数（1.0）。"
+        ]
+      }
+    },
+    {
+      "id": "bridge-engineering-formula-033",
+      "subjectId": "bridge-engineering",
+      "chapter": "6.3",
+      "name": "偏心压力法横向分布影响线竖标",
+      "expr": "eta_ij = 1 / n + (a_i * a_j) / sum(a_j^2)",
+      "latex": "\\eta_{ij} = \\frac{1}{n} + \\frac{a_i a_j}{\\sum a_j^2}",
+      "vars": [
+        {
+          "sym": "eta_ij",
+          "name": "荷载作用在 j 号梁轴线时 i 号梁的影响线竖标",
+          "unit": "—",
+          "note": null
+        },
+        {
+          "sym": "a_i",
+          "name": "i 号梁至中心线距离",
+          "unit": "m",
+          "note": null
+        },
+        {
+          "sym": "a_j",
+          "name": "j 号梁（荷载位置）至中心线距离",
+          "unit": "m",
+          "note": null
+        },
+        {
+          "sym": "n",
+          "name": "主梁片数",
+          "unit": "—",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "任意横向位置 x 处可推广为 η_i(x) = 1/n + a_i·x/Σa²",
+        "同一荷载位置下所有主梁竖标之和为 1"
+      ],
+      "derivationHint": "由 R_i 公式令 P=1、e=a_j 得到。",
+      "typicalUse": "画影响线→按车轮位置求竖标→求和得 m",
+      "pitfalls": [
+        "影响线竖标之和不为 1（计算错误）",
+        "直接用梁轴线竖标代替实际车轮位置竖标"
+      ],
+      "standardRef": [
+        "JTG D60"
+      ],
+      "confidence": "high",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/bridge-engineering/eccentric-pressure.svg",
+        "caption": "偏心压力法：各片主梁按直线分配",
+        "readPoints": [
+          "核心假定：横隔梁刚度无穷大，横截面变形后仍是一条直线。",
+          "Rᵢ = P/n ± P·e·aᵢ / Σaᵢ²，偏心一侧取\"+\"，另一侧取\"−\"。",
+          "距离中心越远的梁，分得越多（本例 5 号梁 0.36，1 号梁只剩 0.04）。",
+          "适用条件：有横隔梁、且宽跨比 < 0.5 的窄桥。",
+          "自检：各片梁的系数之和必须等于荷载总数（1.0）。"
+        ]
+      }
+    },
+    {
+      "id": "bridge-engineering-formula-034",
+      "subjectId": "bridge-engineering",
+      "chapter": "6.3",
+      "name": "偏心压力法适用条件（宽跨比判别）",
+      "expr": "B / l <= 0.5",
+      "latex": "\\frac{B}{l} \\le 0.5",
+      "vars": [
+        {
+          "sym": "B",
+          "name": "桥面全宽（或主梁横向布置宽度）",
+          "unit": "m",
+          "note": null
+        },
+        {
+          "sym": "l",
+          "name": "计算跨径",
+          "unit": "m",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "同时要求设有中横隔梁且横向联结可靠",
+        "宽跨比 > 0.5 时宜改用比拟正交异性板法（G-M 法）或铰接板法",
+        "教材例题常在 0.5 附近仍使用偏心压力法，属教学简化"
+      ],
+      "derivationHint": "宽跨比小意味着横向刚度相对很大，刚性横梁假定成立。",
+      "typicalUse": "做题第一步：先判方法再算",
+      "pitfalls": [
+        "不判宽跨比就套偏心压力法",
+        "把桥面净宽当全宽"
+      ],
+      "standardRef": [
+        "JTG D60"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "0.5 的判别界限与 B 的取法（全宽还是主梁宽度）请核对教材表述"
+    },
+    {
+      "id": "bridge-engineering-formula-035",
+      "subjectId": "bridge-engineering",
+      "chapter": "6.3",
+      "name": "铰接板（梁）法适用条件",
+      "expr": "m_i = eta_i(P)",
+      "latex": "m_i = \\eta_i(P)",
+      "vars": [
+        {
+          "sym": "m_i",
+          "name": "第 i 块板的横向分布系数",
+          "unit": "—",
+          "note": null
+        },
+        {
+          "sym": "eta_i",
+          "name": "铰接板法影响线竖标",
+          "unit": "—",
+          "note": "由刚度参数 γ 查表得到"
+        }
+      ],
+      "conditions": [
+        "适用于装配式板桥、铰接 T 梁等铰缝只传递竖向剪力的结构",
+        "需按刚度参数 γ（与抗扭刚度、跨径、板宽有关）查影响线竖标表",
+        "板数较多时手算繁，通常查教材附录表"
+      ],
+      "derivationHint": "以铰缝剪力为基本未知量，由相邻板在铰缝处的竖向变形协调建立方程组。",
+      "typicalUse": "空心板桥、铰接空心板桥的横向分布计算",
+      "pitfalls": [
+        "把铰接板法用于刚性横梁体系",
+        "γ 参数算错导致查表取错",
+        "忽略板数对竖标的影响"
+      ],
+      "standardRef": [
+        "JTG 3362"
+      ],
+      "confidence": "low",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "刚度参数 γ 的定义式与影响线竖标表均需查教材附录，本条无法给出数值，confidence 标 low"
+    },
+    {
+      "id": "bridge-engineering-formula-036",
+      "subjectId": "bridge-engineering",
+      "chapter": "6.3",
+      "name": "比拟正交异性板法（G-M 法）适用条件",
+      "expr": "K = sqrt(Dx / Dy)",
+      "latex": "K = \\sqrt{D_x/D_y}",
+      "vars": [
+        {
+          "sym": "K",
+          "name": "正交异性板刚度参数",
+          "unit": "—",
+          "note": "用于查 G-M 影响面表"
+        },
+        {
+          "sym": "Dx",
+          "name": "纵向（桥轴向）抗弯刚度",
+          "unit": "kN·m²/m",
+          "note": null
+        },
+        {
+          "sym": "Dy",
+          "name": "横向抗弯刚度",
+          "unit": "kN·m²/m",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "适用于宽桥、箱梁桥等横向刚度不可忽略的结构",
+        "把主梁与横梁体系比拟为一块正交异性板",
+        "需查 G-M 法影响面表（K 值与 α 参数）"
+      ],
+      "derivationHint": "把离散梁格等效为连续的正交异性板，用弹性力学薄板理论求解影响面。",
+      "typicalUse": "宽跨比 > 0.5 或箱梁桥的横向分布",
+      "pitfalls": [
+        "把 Dx、Dy 取反",
+        "混淆 G-M 法与偏心压力法的适用边界",
+        "查表参数插值错误"
+      ],
+      "standardRef": [
+        "JTG 3362"
+      ],
+      "confidence": "low",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "G-M 法的参数定义（K、α、θ）与影响面图表必须查教材附录或《公路桥涵设计手册》，本条只给出思路，confidence 标 low"
+    },
+    {
+      "id": "bridge-engineering-formula-037",
+      "subjectId": "bridge-engineering",
+      "chapter": "6.3",
+      "name": "横向分布系数沿桥跨变化",
+      "expr": "m(x) = m0 + (mc - m0) * x / a_t",
+      "latex": "m(x) = m_0 + (m_c - m_0)\\frac{x}{a_t}",
+      "vars": [
+        {
+          "sym": "m(x)",
+          "name": "距支点 x 处的横向分布系数",
+          "unit": "—",
+          "note": null
+        },
+        {
+          "sym": "m0",
+          "name": "支点处横向分布系数",
+          "unit": "—",
+          "note": "杠杆法求得"
+        },
+        {
+          "sym": "mc",
+          "name": "跨中横向分布系数",
+          "unit": "—",
+          "note": "偏心压力法或 G-M 法求得"
+        },
+        {
+          "sym": "a_t",
+          "name": "过渡段长度",
+          "unit": "m",
+          "note": "无中间横隔梁时常取 l/4；有横隔梁时取支点至第一道中横隔梁"
+        },
+        {
+          "sym": "x",
+          "name": "距支点的距离",
+          "unit": "m",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "x ≥ a_t 时取 m(x) = mc",
+        "求弯矩时一般取 mc；求支点剪力时集中荷载取 m0、均布荷载取 mc（教材常用简化）",
+        "精确做法是对影响线分段加权积分"
+      ],
+      "derivationHint": "横向刚性随距支点距离减弱，故从 m0 过渡到 mc。",
+      "typicalUse": "支点剪力、l/4 内力计算",
+      "pitfalls": [
+        "过渡段长度取错",
+        "支点剪力一律用 mc（偏于不安全或保守方向需判断）",
+        "把 m0 用于跨中弯矩"
+      ],
+      "standardRef": [
+        "JTG D60"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "过渡段长度取法、支点剪力中 m 的取法（集中/均布分项取不同值）请按教材例题口径核对"
+    },
+    {
+      "id": "bridge-engineering-formula-038",
+      "subjectId": "bridge-engineering",
+      "chapter": "6.4",
+      "name": "跨中弯矩影响线面积与最大竖标",
+      "expr": "Omega = l^2 / 8; y_max = l / 4",
+      "latex": "\\Omega = \\frac{l^2}{8},\\quad y_{\\max} = \\frac{l}{4}",
+      "vars": [
+        {
+          "sym": "Omega",
+          "name": "跨中弯矩影响线面积",
+          "unit": "m²",
+          "note": "三角形：底 l、高 l/4"
+        },
+        {
+          "sym": "y_max",
+          "name": "影响线最大竖标",
+          "unit": "m",
+          "note": "位于跨中"
+        },
+        {
+          "sym": "l",
+          "name": "计算跨径",
+          "unit": "m",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "简支梁跨中截面",
+        "均布荷载布满全跨，集中荷载置于跨中"
+      ],
+      "derivationHint": "三角形面积 = 底 × 高 / 2。",
+      "typicalUse": "跨中活载弯矩",
+      "pitfalls": [
+        "面积与竖标单位混淆（面积是 m² 用于弯矩、m 用于剪力）",
+        "把 l²/8 当作剪力影响线面积"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/bridge-engineering/influence-line.svg",
+        "caption": "影响线：先画形状，再决定荷载摆在哪",
+        "readPoints": [
+          "简支梁某截面的弯矩影响线是一个三角形，顶点正对该截面。",
+          "顶点竖标 η = a·b / l，集中荷载压在顶点时该截面内力最大。",
+          "求什么量就画什么量的影响线：求剪力时形状完全不同，不要套用。",
+          "多个车轮时，把重轮放在顶点附近、按影响线面积折算等效荷载。"
+        ]
+      }
+    },
+    {
+      "id": "bridge-engineering-formula-039",
+      "subjectId": "bridge-engineering",
+      "chapter": "6.4",
+      "name": "支点剪力影响线面积",
+      "expr": "Omega_Q = l / 2",
+      "latex": "\\Omega_Q = \\frac{l}{2}",
+      "vars": [
+        {
+          "sym": "Omega_Q",
+          "name": "支点剪力影响线面积",
+          "unit": "m",
+          "note": "三角形：底 l、高 1.0"
+        },
+        {
+          "sym": "l",
+          "name": "计算跨径",
+          "unit": "m",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "简支梁支点截面，竖标 1.0 位于该支点",
+        "Pk 布置在该支点时竖标取 1.0"
+      ],
+      "derivationHint": "三角形面积 = l × 1.0 / 2。",
+      "typicalUse": "支点活载剪力",
+      "pitfalls": [
+        "取用净跨径处的剪力而非支座中心处",
+        "把竖标 1.0 位置放错到另一支点"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/bridge-engineering/influence-line.svg",
+        "caption": "影响线：先画形状，再决定荷载摆在哪",
+        "readPoints": [
+          "简支梁某截面的弯矩影响线是一个三角形，顶点正对该截面。",
+          "顶点竖标 η = a·b / l，集中荷载压在顶点时该截面内力最大。",
+          "求什么量就画什么量的影响线：求剪力时形状完全不同，不要套用。",
+          "多个车轮时，把重轮放在顶点附近、按影响线面积折算等效荷载。"
+        ]
+      }
+    },
+    {
+      "id": "bridge-engineering-formula-040",
+      "subjectId": "bridge-engineering",
+      "chapter": "6.4",
+      "name": "主梁活载内力通式",
+      "expr": "S_Q = (1 + mu) * xi * m * (qk * Omega + Pk * y_max)",
+      "latex": "S_Q = (1+\\mu)\\,\\xi\\, m\\,(q_k\\Omega + P_k y_{\\max})",
+      "vars": [
+        {
+          "sym": "S_Q",
+          "name": "单片主梁汽车荷载内力",
+          "unit": "kN·m 或 kN",
+          "note": null
+        },
+        {
+          "sym": "mu",
+          "name": "冲击系数",
+          "unit": "—",
+          "note": null
+        },
+        {
+          "sym": "xi",
+          "name": "多车道横向折减系数",
+          "unit": "—",
+          "note": null
+        },
+        {
+          "sym": "m",
+          "name": "横向分布系数",
+          "unit": "—",
+          "note": "全部主梁之和等于车道数"
+        },
+        {
+          "sym": "qk",
+          "name": "车道均布荷载",
+          "unit": "kN/m",
+          "note": null
+        },
+        {
+          "sym": "Omega",
+          "name": "影响线面积",
+          "unit": "m² 或 m",
+          "note": null
+        },
+        {
+          "sym": "Pk",
+          "name": "车道集中荷载",
+          "unit": "kN",
+          "note": null
+        },
+        {
+          "sym": "y_max",
+          "name": "影响线最大竖标",
+          "unit": "m 或 —",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "均布荷载布满影响线同号区",
+        "Pk 置于竖标最大处",
+        "人群荷载另算且不计冲击"
+      ],
+      "derivationHint": "影响线加载 + 冲击 + 折减 + 横向分布四个修正依次相乘。",
+      "typicalUse": "全书活载内力计算的总公式",
+      "pitfalls": [
+        "漏乘 (1+μ) 或重复乘",
+        "横向折减与横向分布系数重复计入车道数",
+        "人群荷载误乘冲击"
+      ],
+      "standardRef": [
+        "JTG D60"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "公式形式与系数取值以教材例题与 JTG D60 现行版为准"
+    },
+    {
+      "id": "bridge-engineering-formula-041",
+      "subjectId": "bridge-engineering",
+      "chapter": "6.4",
+      "name": "支点剪力（考虑横向分布沿跨变化）",
+      "expr": "Q0 = (1 + mu) * xi * (mc * qk * l / 2 + m0 * Pk * 1.0)",
+      "latex": "Q_0 = (1+\\mu)\\xi\\left(m_c q_k \\frac{l}{2} + m_0 P_k\\right)",
+      "vars": [
+        {
+          "sym": "Q0",
+          "name": "支点活载剪力",
+          "unit": "kN",
+          "note": null
+        },
+        {
+          "sym": "mc",
+          "name": "跨中横向分布系数",
+          "unit": "—",
+          "note": "用于沿跨满布的均布荷载"
+        },
+        {
+          "sym": "m0",
+          "name": "支点横向分布系数",
+          "unit": "—",
+          "note": "用于作用在支点处的 Pk"
+        },
+        {
+          "sym": "qk",
+          "name": "车道均布荷载",
+          "unit": "kN/m",
+          "note": null
+        },
+        {
+          "sym": "Pk",
+          "name": "车道集中荷载",
+          "unit": "kN",
+          "note": null
+        },
+        {
+          "sym": "l",
+          "name": "计算跨径",
+          "unit": "m",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "Pk 置于该支点，影响线竖标 1.0",
+        "均布荷载布满正号区（全跨）",
+        "教材常用简化：均布用 mc、集中用 m0"
+      ],
+      "derivationHint": "把均布荷载与集中荷载分别按各自的横向分布系数加载后求和。",
+      "typicalUse": "支点剪力与支座验算",
+      "pitfalls": [
+        "两项都用 mc（忽略支点区段刚度差异）",
+        "Pk 布置在跨中求支点剪力",
+        "均布荷载未布满全跨"
+      ],
+      "standardRef": [
+        "JTG D60"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "均布项取 mc、集中项取 m0 的简化是否为本教材口径需核对；更精确做法需对影响线分段积分"
+    },
+    {
+      "id": "bridge-engineering-formula-042",
+      "subjectId": "bridge-engineering",
+      "chapter": "6.4",
+      "name": "内力包络图",
+      "expr": "S_env(x) = S_G(x) + max(S_Q(x))",
+      "latex": "S_{\\text{env}}(x) = S_G(x) + \\max S_Q(x)",
+      "vars": [
+        {
+          "sym": "S_env",
+          "name": "包络图纵坐标",
+          "unit": "kN·m 或 kN",
+          "note": "各截面可能出现的内力上（下）限连线"
+        },
+        {
+          "sym": "S_G",
+          "name": "恒载内力",
+          "unit": "kN·m 或 kN",
+          "note": "沿跨固定分布"
+        },
+        {
+          "sym": "max(S_Q)",
+          "name": "活载最大（或最小）内力",
+          "unit": "kN·m 或 kN",
+          "note": "按最不利布载逐截面求出后连线"
+        }
+      ],
+      "conditions": [
+        "恒载内力图 + 活载内力上下限",
+        "超静定结构还要叠加次内力",
+        "需分别绘制弯矩包络图与剪力包络图"
+      ],
+      "derivationHint": "逐个截面求活载最不利值，与恒载叠加后连成曲线。",
+      "typicalUse": "确定配筋控制截面与预应力束布置",
+      "pitfalls": [
+        "只算跨中一点就配筋",
+        "把支座中心处的剪力误用于斜截面验算（应取距支座 h/2 处或按规范）",
+        "忽略负剪力包络"
+      ],
+      "standardRef": [
+        "JTG 3362"
+      ],
+      "confidence": "high",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "bridge-engineering-formula-043",
+      "subjectId": "bridge-engineering",
+      "chapter": "6.6",
+      "name": "简支梁跨中挠度（均布与集中荷载）",
+      "expr": "f_mid = 5 * q * l^4 / (384 * E * I) + P * l^3 / (48 * E * I)",
+      "latex": "f = \\frac{5 q l^4}{384 E I} + \\frac{P l^3}{48 E I}",
+      "vars": [
+        {
+          "sym": "f_mid",
+          "name": "跨中挠度",
+          "unit": "m",
+          "note": "向下为正"
+        },
+        {
+          "sym": "q",
+          "name": "均布荷载集度",
+          "unit": "kN/m",
+          "note": null
+        },
+        {
+          "sym": "P",
+          "name": "跨中集中荷载",
+          "unit": "kN",
+          "note": null
+        },
+        {
+          "sym": "E",
+          "name": "弹性模量",
+          "unit": "kN/m²",
+          "note": null
+        },
+        {
+          "sym": "I",
+          "name": "截面惯性矩",
+          "unit": "m⁴",
+          "note": "预应力梁常按毛截面或换算截面取"
+        },
+        {
+          "sym": "l",
+          "name": "计算跨径",
+          "unit": "m",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "等截面简支梁、弹性工作阶段",
+        "长期挠度需考虑混凝土徐变增大系数",
+        "刚度取值需与规范一致"
+      ],
+      "derivationHint": "材料力学标准结果，由单位荷载法或积分法得到。",
+      "typicalUse": "挠度验算与预拱度计算",
+      "pitfalls": [
+        "用开裂截面刚度而规范允许毛截面（或反之）",
+        "单位不统一（E 用 GPa、I 用 cm⁴）",
+        "忽略徐变长期增大系数"
+      ],
+      "standardRef": [
+        "JTG 3362"
+      ],
+      "confidence": "high",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "长期挠度增大系数的取值请查 JTG 3362"
+    },
+    {
+      "id": "bridge-engineering-formula-044",
+      "subjectId": "bridge-engineering",
+      "chapter": "6.6",
+      "name": "主梁挠度限值",
+      "expr": "f_allow = l / 600",
+      "latex": "f_{\\text{allow}} = \\frac{l}{600}",
+      "vars": [
+        {
+          "sym": "f_allow",
+          "name": "跨中挠度限值",
+          "unit": "m",
+          "note": "活载（不计冲击）产生的挠度控制"
+        },
+        {
+          "sym": "l",
+          "name": "计算跨径",
+          "unit": "m",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "悬臂端另取 l1/300（l1 为悬臂长度）",
+        "限值对象为可变作用频遇值产生的挠度"
+      ],
+      "derivationHint": "规范给定的使用性限值。",
+      "typicalUse": "正常使用极限状态变形验算",
+      "pitfalls": [
+        "用含冲击的活载挠度去比限值",
+        "把总挠度（恒+活）与限值比较"
+      ],
+      "standardRef": [
+        "JTG 3362",
+        "JTG D60"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "l/600 与 l1/300 的限值、验算对象是活载频遇值还是标准值，请查 JTG 3362 现行版"
+    },
+    {
+      "id": "bridge-engineering-formula-045",
+      "subjectId": "bridge-engineering",
+      "chapter": "6.6",
+      "name": "预拱度设置判别",
+      "expr": "f_g + f_q > l / 1600",
+      "latex": "f_g + f_q > \\frac{l}{1600}",
+      "vars": [
+        {
+          "sym": "f_g",
+          "name": "恒载（结构重力）产生的挠度",
+          "unit": "m",
+          "note": null
+        },
+        {
+          "sym": "f_q",
+          "name": "可变作用频遇值产生的挠度（不计冲击）",
+          "unit": "m",
+          "note": null
+        },
+        {
+          "sym": "l",
+          "name": "计算跨径",
+          "unit": "m",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "超过限值时必须设置预拱度",
+        "预拱度按恒载 + 1/2 活载频遇值挠度设置",
+        "预拱度曲线取二次抛物线（与恒载挠度曲线形状相近）"
+      ],
+      "derivationHint": "规范规定的使用性控制指标。",
+      "typicalUse": "判断是否设预拱度",
+      "pitfalls": [
+        "用含冲击的活载挠度判断",
+        "把 l/1600 记成 l/600 或 l/800"
+      ],
+      "standardRef": [
+        "JTG 3362"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "l/1600 的判别界限与活载取频遇值（不计冲击）的口径请查 JTG 3362 现行版"
+    },
+    {
+      "id": "bridge-engineering-formula-046",
+      "subjectId": "bridge-engineering",
+      "chapter": "6.6",
+      "name": "预拱度数值与曲线",
+      "expr": "f_pre = -(f_g + 0.5 * f_q); y(x) = -4 * f_pre_abs * x * (l - x) / l^2",
+      "latex": "f_{\\text{pre}} = -\\left(f_g + \\frac{1}{2}f_q\\right),\\quad y(x) = \\frac{4|f_{\\text{pre}}| x (l-x)}{l^2}",
+      "vars": [
+        {
+          "sym": "f_pre",
+          "name": "跨中预拱度（向上为正时取负号表示与挠度反向）",
+          "unit": "m",
+          "note": "施工时按此值向上起拱"
+        },
+        {
+          "sym": "f_g",
+          "name": "恒载挠度",
+          "unit": "m",
+          "note": null
+        },
+        {
+          "sym": "f_q",
+          "name": "活载频遇值挠度（不计冲击）",
+          "unit": "m",
+          "note": null
+        },
+        {
+          "sym": "y(x)",
+          "name": "距左支点 x 处的预拱度纵坐标",
+          "unit": "m",
+          "note": "向上"
+        },
+        {
+          "sym": "l",
+          "name": "计算跨径",
+          "unit": "m",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "仅在判别式成立时设置",
+        "按二次抛物线沿跨设置，两端为零",
+        "预应力梁的预拱度还需考虑预应力反拱"
+      ],
+      "derivationHint": "预拱度取恒载挠度 + 一半活载挠度，形状取与挠度曲线同形的抛物线。",
+      "typicalUse": "施工放样与成桥线形控制",
+      "pitfalls": [
+        "预拱度与恒载反拱（预应力）符号搞反导致重复设置",
+        "把 1/2 系数记成 1 或 1/3",
+        "抛物线跨中值不等于 4|f|x(l-x)/l² 的峰值"
+      ],
+      "standardRef": [
+        "JTG 3362"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "1/2 活载系数、是否扣除预应力反拱请查 JTG 3362 与教材表述"
+    },
+    {
+      "id": "bridge-engineering-formula-047",
+      "subjectId": "bridge-engineering",
+      "chapter": "7.4",
+      "name": "预应力主内力",
+      "expr": "M1 = Np * e",
+      "latex": "M_1 = N_p \\, e",
+      "vars": [
+        {
+          "sym": "M1",
+          "name": "预加力产生的主内力（截面弯矩）",
+          "unit": "kN·m",
+          "note": "静定结构中即全部预应力弯矩"
+        },
+        {
+          "sym": "Np",
+          "name": "预加力（扣除相应损失后）",
+          "unit": "kN",
+          "note": null
+        },
+        {
+          "sym": "e",
+          "name": "预加力合力作用点至截面重心轴的距离",
+          "unit": "m",
+          "note": "在重心轴以下时使梁产生向上反拱"
+        }
+      ],
+      "conditions": [
+        "静定结构中不产生次内力",
+        "超静定结构中总预应力弯矩 M = M1 + M2（M2 为次内力）"
+      ],
+      "derivationHint": "预加力对截面重心的力矩。",
+      "typicalUse": "连续梁、连续刚构的预应力效应分析",
+      "pitfalls": [
+        "在超静定结构中把 M1 当成总弯矩（漏掉次内力 M2）",
+        "使用未扣除损失的张拉力"
+      ],
+      "standardRef": [
+        "JTG 3362"
+      ],
+      "confidence": "high",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "bridge-engineering-formula-048",
+      "subjectId": "bridge-engineering",
+      "chapter": "7.4",
+      "name": "混凝土收缩徐变次内力（概念式）",
+      "expr": "M2_c = M_elastic * (1 - exp(-phi))",
+      "latex": "M_{2,c} = M_{\\text{el}}\\left(1-e^{-\\phi}\\right)",
+      "vars": [
+        {
+          "sym": "M2_c",
+          "name": "徐变引起的次内力重分布量",
+          "unit": "kN·m",
+          "note": "概念式，实际应按龄期调整的有效模量法或逐步计算"
+        },
+        {
+          "sym": "M_elastic",
+          "name": "弹性计算的初内力",
+          "unit": "kN·m",
+          "note": null
+        },
+        {
+          "sym": "phi",
+          "name": "徐变系数",
+          "unit": "—",
+          "note": "由加载龄期、环境湿度、构件厚度等确定"
+        }
+      ],
+      "conditions": [
+        "仅在超静定结构中产生次内力；静定结构只增大变形不产生次内力",
+        "体系转换后的恒载内力会随时间重分布（支点负弯矩向跨中转移）",
+        "徐变系数需按规范取值"
+      ],
+      "derivationHint": "超静定结构变形受约束，随时间发展的自由徐变变形被约束，从而产生内力重分布。",
+      "typicalUse": "先简支后连续、悬臂施工合龙后的长期效应分析",
+      "pitfalls": [
+        "认为静定结构也有徐变次内力",
+        "忽略体系转换时混凝土龄期（先期荷载的老混凝土徐变小）",
+        "把徐变系数当作常数"
+      ],
+      "standardRef": [
+        "JTG 3362"
+      ],
+      "confidence": "low",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "本条为概念性表达式，教材可能采用龄期调整有效模量法（AAEM）或徐变换算截面法；徐变系数取值必须查 JTG 3362 现行版附录，confidence 标 low"
+    },
+    {
+      "id": "bridge-engineering-formula-049",
+      "subjectId": "bridge-engineering",
+      "chapter": "8.2",
+      "name": "板式橡胶支座平均压应力（平面尺寸）",
+      "expr": "A = R / sig_c",
+      "latex": "A = \\dfrac{R}{\\sigma_c}",
+      "vars": [
+        {
+          "sym": "A",
+          "name": "支座平面面积",
+          "unit": "m²",
+          "note": null
+        },
+        {
+          "sym": "R",
+          "name": "支点反力标准值（恒载 + 活载，活载含冲击）",
+          "unit": "kN",
+          "note": null
+        },
+        {
+          "sym": "sig_c",
+          "name": "平均压应力限值",
+          "unit": "kN/m²",
+          "note": "常用约 10 MPa（10000 kN/m²），需查规范"
+        }
+      ],
+      "conditions": [
+        "按使用阶段的标准值组合验算",
+        "尚需验算支座形状系数、加劲钢板厚度与抗滑稳定"
+      ],
+      "derivationHint": "由压应力限值反算所需承压面积。",
+      "typicalUse": "支座选型第一步",
+      "pitfalls": [
+        "用设计值而不是标准值选型",
+        "平均压应力限值记错单位（MPa → kN/m²）",
+        "漏算活载冲击"
+      ],
+      "standardRef": [
+        "JT/T 4"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "平均压应力限值 10 MPa 与活载是否计冲击请查支座产品标准（JT/T 4 等）现行版"
+    },
+    {
+      "id": "bridge-engineering-formula-050",
+      "subjectId": "bridge-engineering",
+      "chapter": "8.2",
+      "name": "板式橡胶支座橡胶层总厚度",
+      "expr": "t_e >= dL / tan_alpha_allow",
+      "latex": "t_e \\ge \\dfrac{\\Delta L}{\\tan\\alpha_{\\text{allow}}}",
+      "vars": [
+        {
+          "sym": "t_e",
+          "name": "橡胶层总厚度",
+          "unit": "m",
+          "note": "各橡胶片厚度之和，不含加劲钢板"
+        },
+        {
+          "sym": "dL",
+          "name": "支座承担的水平位移量",
+          "unit": "m",
+          "note": "温度、收缩徐变、制动力等引起的位移"
+        },
+        {
+          "sym": "tan_alpha_allow",
+          "name": "容许剪切角正切",
+          "unit": "—",
+          "note": "常取 0.7，对应 t_e ≥ 1.43 ΔL，需查规范"
+        }
+      ],
+      "conditions": [
+        "同时需验算支座总厚度与平面尺寸的稳定关系（不宜过厚）",
+        "位移量应与联长、温差匹配"
+      ],
+      "derivationHint": "剪切变形 ΔL = t_e·tanα，由 tanα ≤ [tanα] 反解。",
+      "typicalUse": "确定橡胶层厚度与层数",
+      "pitfalls": [
+        "把总厚度当成橡胶层厚度（含钢板）",
+        "位移量漏算收缩徐变",
+        "容许剪切角取值错误"
+      ],
+      "standardRef": [
+        "JT/T 4"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "容许剪切角正切（0.7 或 0.5）及稳定厚度限值请查支座标准现行版"
+    },
+    {
+      "id": "bridge-engineering-formula-051",
+      "subjectId": "bridge-engineering",
+      "chapter": "8.2",
+      "name": "板式橡胶支座抗滑稳定",
+      "expr": "mu_f * R >= 1.4 * H_h",
+      "latex": "\\mu_f R \\ge 1.4\\, H_h",
+      "vars": [
+        {
+          "sym": "mu_f",
+          "name": "支座与接触面的摩擦系数",
+          "unit": "—",
+          "note": "与钢板或混凝土接触，常取约 0.3，需查规范"
+        },
+        {
+          "sym": "R",
+          "name": "支座竖向反力",
+          "unit": "kN",
+          "note": null
+        },
+        {
+          "sym": "H_h",
+          "name": "作用在支座上的水平力",
+          "unit": "kN",
+          "note": "制动力、风力等"
+        },
+        {
+          "sym": "1.4",
+          "name": "抗滑稳定安全系数要求",
+          "unit": "—",
+          "note": "系数值需按规范核对"
+        }
+      ],
+      "conditions": [
+        "水平力按支座刚度在各墩台间分配后取值",
+        "不计入支座剪切变形提供的有利弹性恢复力时需谨慎"
+      ],
+      "derivationHint": "摩擦力 ≥ 安全系数 × 水平力。",
+      "typicalUse": "支座验算第三项",
+      "pitfalls": [
+        "把支座摩阻力与抗滑验算重复考虑",
+        "摩擦系数取值与实际接触面不符",
+        "水平力未按刚度分配"
+      ],
+      "standardRef": [
+        "JT/T 4"
+      ],
+      "confidence": "low",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "摩擦系数取值、安全系数 1.4 及是否含地震工况请查支座标准与 JTG D60 现行版，confidence 标 low"
+    },
+    {
+      "id": "bridge-engineering-formula-052",
+      "subjectId": "bridge-engineering",
+      "chapter": "8.3",
+      "name": "墩顶抗推刚度（悬臂墩）",
+      "expr": "k = 3 * E * I / h^3",
+      "latex": "k = \\dfrac{3 E I}{h^3}",
+      "vars": [
+        {
+          "sym": "k",
+          "name": "墩顶抗推刚度",
+          "unit": "kN/m",
+          "note": "墩顶产生单位水平位移所需的水平力"
+        },
+        {
+          "sym": "E",
+          "name": "墩身材料弹性模量",
+          "unit": "kN/m²",
+          "note": null
+        },
+        {
+          "sym": "I",
+          "name": "墩身截面惯性矩（顺桥向或横桥向）",
+          "unit": "m⁴",
+          "note": null
+        },
+        {
+          "sym": "h",
+          "name": "墩高（基础顶面至墩顶）",
+          "unit": "m",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "墩底固结、墩顶自由的悬臂墩",
+        "需考虑支座刚度与上部结构联成一体的串联效应",
+        "桩基础应计入基础柔度"
+      ],
+      "derivationHint": "悬臂梁端部水平刚度。",
+      "typicalUse": "水平力在各墩台间分配",
+      "pitfalls": [
+        "用错方向惯性矩",
+        "忽略支座串联刚度",
+        "把墩高取成地面以上高度而忽略桩基柔度"
+      ],
+      "standardRef": [
+        "JTG 3363"
+      ],
+      "confidence": "high",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "bridge-engineering-formula-053",
+      "subjectId": "bridge-engineering",
+      "chapter": "8.3",
+      "name": "水平力按刚度分配",
+      "expr": "H_i = H_total * k_i / sum(k_j)",
+      "latex": "H_i = H_{\\text{tot}}\\dfrac{k_i}{\\sum k_j}",
+      "vars": [
+        {
+          "sym": "H_i",
+          "name": "第 i 个墩台分担的水平力",
+          "unit": "kN",
+          "note": null
+        },
+        {
+          "sym": "H_total",
+          "name": "总水平力（制动力、风力等）",
+          "unit": "kN",
+          "note": null
+        },
+        {
+          "sym": "k_i",
+          "name": "第 i 个墩顶抗推刚度（含支座串联刚度）",
+          "unit": "kN/m",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "上部结构在水平力作用下近似刚体平移",
+        "固定支座所在墩承担主要水平力，活动支座按摩阻力传力",
+        "需考虑伸缩缝的分联"
+      ],
+      "derivationHint": "变形协调：各墩顶位移相同，刚度大者分担多。",
+      "typicalUse": "制动力、风力在下部结构间的分配",
+      "pitfalls": [
+        "未区分固定支座与活动支座墩",
+        "把各联（伸缩缝分段）混在一起分配",
+        "支座刚度与墩刚度串联时直接用墩刚度"
+      ],
+      "standardRef": [
+        "JTG D60"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "固定/活动支座传力假定与分配原则请核对教材与 JTG D60"
+    },
+    {
+      "id": "bridge-engineering-formula-054",
+      "subjectId": "bridge-engineering",
+      "chapter": "8.4",
+      "name": "台后主动土压力",
+      "expr": "Ea = 0.5 * gamma * H^2 * Ka",
+      "latex": "E_a = \\dfrac{1}{2}\\gamma H^2 K_a",
+      "vars": [
+        {
+          "sym": "Ea",
+          "name": "主动土压力合力",
+          "unit": "kN/m",
+          "note": "沿桥台每延米"
+        },
+        {
+          "sym": "gamma",
+          "name": "台后填土重度",
+          "unit": "kN/m³",
+          "note": null
+        },
+        {
+          "sym": "H",
+          "name": "计算土层高度",
+          "unit": "m",
+          "note": null
+        },
+        {
+          "sym": "Ka",
+          "name": "主动土压力系数",
+          "unit": "—",
+          "note": "按 Rankine 或库仑理论计算"
+        }
+      ],
+      "conditions": [
+        "台后填土达到主动极限平衡状态",
+        "有车辆荷载时换算为等代土层厚度或附加土压力",
+        "浸水时取浮重度并加水压力"
+      ],
+      "derivationHint": "土压力强度沿深度线性分布，合力为三角形面积。",
+      "typicalUse": "桥台抗滑抗倾覆验算的输入",
+      "pitfalls": [
+        "用静止土压力系数",
+        "未计入台后活载引起的附加土压力",
+        "浸水土压力未分算"
+      ],
+      "standardRef": [
+        "JTG 3363"
+      ],
+      "confidence": "high",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "bridge-engineering-formula-055",
+      "subjectId": "bridge-engineering",
+      "chapter": "8.4",
+      "name": "桥台抗滑动稳定",
+      "expr": "Kc = mu_s * sum(N) / sum(H)",
+      "latex": "K_c = \\dfrac{\\mu_s \\sum N}{\\sum H}",
+      "vars": [
+        {
+          "sym": "Kc",
+          "name": "抗滑动稳定系数",
+          "unit": "—",
+          "note": "需不小于规范规定值（常见 1.3）"
+        },
+        {
+          "sym": "mu_s",
+          "name": "基底摩擦系数",
+          "unit": "—",
+          "note": "按地基土类别取值"
+        },
+        {
+          "sym": "sum(N)",
+          "name": "竖向力总和（抗滑力）",
+          "unit": "kN",
+          "note": null
+        },
+        {
+          "sym": "sum(H)",
+          "name": "水平力总和（滑动推力）",
+          "unit": "kN",
+          "note": "含土压力、制动力、摩阻力等"
+        }
+      ],
+      "conditions": [
+        "按最不利组合验算",
+        "计入浮力时应扣除相应竖向力",
+        "可计入台前被动土压力（需保守）"
+      ],
+      "derivationHint": "抗滑力（摩擦）/ 滑动推力。",
+      "typicalUse": "桥台与桥墩稳定性验算（期末大题常考）",
+      "pitfalls": [
+        "把水平力符号搞错（有利还是不利）",
+        "摩擦系数取错",
+        "忘记最不利组合（如台后无活载 vs 有活载分别验算）"
+      ],
+      "standardRef": [
+        "JTG 3363"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "抗滑动稳定系数限值（1.3 / 1.2 等）与荷载组合口径请查 JTG 3363 现行版"
+    },
+    {
+      "id": "bridge-engineering-formula-056",
+      "subjectId": "bridge-engineering",
+      "chapter": "8.4",
+      "name": "桥台抗倾覆稳定",
+      "expr": "K0 = sum(M_stab) / sum(M_over)",
+      "latex": "K_0 = \\dfrac{\\sum M_{\\text{stab}}}{\\sum M_{\\text{over}}}",
+      "vars": [
+        {
+          "sym": "K0",
+          "name": "抗倾覆稳定系数",
+          "unit": "—",
+          "note": "需不小于规范规定值（常见 1.5）"
+        },
+        {
+          "sym": "sum(M_stab)",
+          "name": "稳定力矩之和",
+          "unit": "kN·m",
+          "note": "对倾覆棱体趾部取矩"
+        },
+        {
+          "sym": "sum(M_over)",
+          "name": "倾覆力矩之和",
+          "unit": "kN·m",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "取最不利倾覆棱体（一般为基底前趾）",
+        "与抗滑动验算配套进行",
+        "计入浮力的不利影响"
+      ],
+      "derivationHint": "稳定力矩 / 倾覆力矩。",
+      "typicalUse": "桥台稳定性验算",
+      "pitfalls": [
+        "取矩点选错",
+        "把有利力矩计入分母",
+        "与抗倾覆验算的荷载组合不一致"
+      ],
+      "standardRef": [
+        "JTG 3363"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "抗倾覆稳定系数限值请查 JTG 3363 现行版"
+    },
+    {
+      "id": "bridge-engineering-formula-057",
+      "subjectId": "bridge-engineering",
+      "chapter": "8.5",
+      "name": "单桩轴向受压承载力",
+      "expr": "Ra = u * sum(qsik * li) + Ap * qpk",
+      "latex": "R_a = u \\sum q_{sik} l_i + A_p q_{pk}",
+      "vars": [
+        {
+          "sym": "Ra",
+          "name": "单桩轴向受压承载力特征值",
+          "unit": "kN",
+          "note": null
+        },
+        {
+          "sym": "u",
+          "name": "桩身周长",
+          "unit": "m",
+          "note": null
+        },
+        {
+          "sym": "qsik",
+          "name": "第 i 层土的侧阻力特征值",
+          "unit": "kPa",
+          "note": "按桩型与土类查表"
+        },
+        {
+          "sym": "li",
+          "name": "第 i 层土中桩长",
+          "unit": "m",
+          "note": "冲刷线以下、且不计软弱与液化层"
+        },
+        {
+          "sym": "Ap",
+          "name": "桩端截面积",
+          "unit": "m²",
+          "note": null
+        },
+        {
+          "sym": "qpk",
+          "name": "桩端阻力特征值",
+          "unit": "kPa",
+          "note": "按土类与入土深度查表"
+        }
+      ],
+      "conditions": [
+        "冲刷线以上的土层不计侧阻",
+        "需按规范进行群桩效应与负摩阻力修正",
+        "应进行静载试验校核"
+      ],
+      "derivationHint": "侧阻 + 端阻两部分叠加。",
+      "typicalUse": "桩基础设计",
+      "pitfalls": [
+        "把冲刷线以上土层计入侧阻",
+        "特征值与设计值（极限值）混用",
+        "忽略负摩阻力"
+      ],
+      "standardRef": [
+        "JTG 3363"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "承载力是「特征值」还是「极限标准值」、安全系数取法请查 JTG 3363 现行版"
+    },
+    {
+      "id": "bridge-engineering-formula-058",
+      "subjectId": "bridge-engineering",
+      "chapter": "9.2",
+      "name": "悬链线拱轴方程",
+      "expr": "y1 = f * (cosh(k * xi) - 1) / (m - 1); k = ln(m + sqrt(m^2 - 1))",
+      "latex": "y_1 = \\frac{f}{\\,m-1\\,}(\\cosh k\\xi - 1),\\quad k = \\ln\\!\\left(m+\\sqrt{m^2-1}\\right)",
+      "vars": [
+        {
+          "sym": "y1",
+          "name": "自拱顶向下的拱轴纵坐标",
+          "unit": "m",
+          "note": "拱顶处 y1 = 0，拱脚处 y1 = f"
+        },
+        {
+          "sym": "f",
+          "name": "计算矢高",
+          "unit": "m",
+          "note": null
+        },
+        {
+          "sym": "m",
+          "name": "拱轴系数",
+          "unit": "—",
+          "note": "m = cosh(k)，越大表示恒载越向拱脚集中"
+        },
+        {
+          "sym": "xi",
+          "name": "无量纲横坐标",
+          "unit": "—",
+          "note": "ξ = 2x/l，拱顶 ξ = 0，拱脚 ξ = ±1"
+        },
+        {
+          "sym": "k",
+          "name": "悬链线参数",
+          "unit": "—",
+          "note": "反双曲余弦 k = arccosh(m)"
+        }
+      ],
+      "conditions": [
+        "m = 1 退化为二次抛物线",
+        "适用于恒载集度由拱顶向拱脚增大的拱（实腹式、空腹式）",
+        "拱轴与恒载压力线重合时拱圈只受轴力"
+      ],
+      "derivationHint": "由恒载集度 g_x = g_d + γ·y1 的微分方程解得。",
+      "typicalUse": "拱轴线坐标计算、拱轴系数确定",
+      "pitfalls": [
+        "把 ξ 取成 x/l 而非 2x/l",
+        "m 与 k 的换算记错",
+        "把 y1（自拱顶向下）与 y（自起拱线向上）混用"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "bridge-engineering-formula-059",
+      "subjectId": "bridge-engineering",
+      "chapter": "9.2",
+      "name": "抛物线拱轴方程（恒载沿水平均布）",
+      "expr": "y = 4 * f * x * (l - x) / l^2",
+      "latex": "y = \\frac{4 f x (l-x)}{l^2}",
+      "vars": [
+        {
+          "sym": "y",
+          "name": "自起拱线向上的拱轴纵坐标",
+          "unit": "m",
+          "note": "跨中 y = f"
+        },
+        {
+          "sym": "f",
+          "name": "计算矢高",
+          "unit": "m",
+          "note": null
+        },
+        {
+          "sym": "x",
+          "name": "自左拱脚起算的水平坐标",
+          "unit": "m",
+          "note": null
+        },
+        {
+          "sym": "l",
+          "name": "计算跨径",
+          "unit": "m",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "恒载沿水平投影均布时为合理拱轴线",
+        "等价于悬链线 m = 1 的情形"
+      ],
+      "derivationHint": "均布荷载下简支梁弯矩图为抛物线，压力线即抛物线。",
+      "typicalUse": "实腹式小跨拱、桁架拱、部分钢管混凝土拱的拱轴线",
+      "pitfalls": [
+        "坐标原点搞错（左拱脚 vs 跨中）",
+        "与悬链线公式混用"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "bridge-engineering-formula-060",
+      "subjectId": "bridge-engineering",
+      "chapter": "9.2",
+      "name": "五点重合法确定拱轴系数",
+      "expr": "1 - (cosh(k / 2) - 1) / (m - 1) = M0_l4 / M0_mid",
+      "latex": "1 - \\frac{\\cosh(k/2)-1}{m-1} = \\frac{M^0_{l/4}}{M^0_{l/2}}",
+      "vars": [
+        {
+          "sym": "m",
+          "name": "待求拱轴系数",
+          "unit": "—",
+          "note": "需迭代求解"
+        },
+        {
+          "sym": "k",
+          "name": "悬链线参数",
+          "unit": "—",
+          "note": "k = arccosh(m)"
+        },
+        {
+          "sym": "M0_l4",
+          "name": "恒载在相应简支梁 l/4 截面的弯矩",
+          "unit": "kN·m",
+          "note": null
+        },
+        {
+          "sym": "M0_mid",
+          "name": "恒载在相应简支梁跨中截面的弯矩",
+          "unit": "kN·m",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "五点指拱顶、两个 l/4 点、两个拱脚，共五点与恒载压力线重合",
+        "比值 ≤ 0.75 时无悬链线解（应改用抛物线或倒悬链线）",
+        "比值越接近 1，m 越大"
+      ],
+      "derivationHint": "由 l/4 点重合条件 y(l/4) = M⁰(l/4)/H，且 f = M⁰(l/2)/H，两式相除得比值条件。",
+      "typicalUse": "空腹式拱桥拱轴系数求解，拱桥最典型计算题",
+      "pitfalls": [
+        "把 M⁰(l/4)/M⁰(l/2) 的分子分母对调",
+        "l/4 截面取成距拱顶 l/4（应为距拱脚 l/4）",
+        "未迭代直接取 m = 比值倒数"
+      ],
+      "standardRef": [],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": "五点重合的具体等价条件（是否用 y(l/4)/f = M⁰(l/4)/M⁰(l/2)）请核对教材推导与配套表格（教材常附 m 与 y(l/4)/f 的对照表）"
+    },
+    {
+      "id": "bridge-engineering-formula-061",
+      "subjectId": "bridge-engineering",
+      "chapter": "9.2",
+      "name": "实腹式拱拱轴系数",
+      "expr": "m = g_j / g_d",
+      "latex": "m = \\dfrac{g_j}{g_d}",
+      "vars": [
+        {
+          "sym": "m",
+          "name": "拱轴系数",
+          "unit": "—",
+          "note": null
+        },
+        {
+          "sym": "g_j",
+          "name": "拱脚处恒载集度（沿水平投影）",
+          "unit": "kN/m",
+          "note": "含拱圈自重与拱上填料"
+        },
+        {
+          "sym": "g_d",
+          "name": "拱顶处恒载集度（沿水平投影）",
+          "unit": "kN/m",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "适用于实腹式拱（恒载集度由拱顶向拱脚连续增大）",
+        "空腹式拱不能用此式，应采用五点重合法",
+        "集度均按水平投影长度计"
+      ],
+      "derivationHint": "实腹式拱恒载集度 g_x = g_d + γ·y1，代入悬链线微分方程即得 m = g_j/g_d。",
+      "typicalUse": "实腹式拱桥拱轴线设计",
+      "pitfalls": [
+        "用于空腹式拱（错）",
+        "集度未折算到水平投影",
+        "把拱圈厚度沿弧长直接代入（应按 cos φ 修正）"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "bridge-engineering-formula-062",
+      "subjectId": "bridge-engineering",
+      "chapter": "9.4",
+      "name": "拱的水平推力",
+      "expr": "H = M0_mid / f",
+      "latex": "H = \\dfrac{M^0_{l/2}}{f}",
+      "vars": [
+        {
+          "sym": "H",
+          "name": "水平推力",
+          "unit": "kN",
+          "note": "拱脚处水平反力"
+        },
+        {
+          "sym": "M0_mid",
+          "name": "相应简支梁跨中恒载弯矩",
+          "unit": "kN·m",
+          "note": "同跨径、同荷载的简支梁"
+        },
+        {
+          "sym": "f",
+          "name": "计算矢高",
+          "unit": "m",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "拱轴线与恒载压力线重合时（理想拱轴线）",
+        "三铰拱可直接由拱顶弯矩为零得到",
+        "无铰拱、两铰拱需用力法求解（考虑弹性压缩）"
+      ],
+      "derivationHint": "由拱顶截面弯矩为零：M⁰ − H·f = 0。",
+      "typicalUse": "拱桥内力计算第一步",
+      "pitfalls": [
+        "用于活载（活载作用位置不同，H 也不同）",
+        "忽略弹性压缩使 H 减小",
+        "把矢高取成净矢高而非计算矢高"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "bridge-engineering-formula-063",
+      "subjectId": "bridge-engineering",
+      "chapter": "9.4",
+      "name": "拱圈截面弯矩",
+      "expr": "M = M0 - H * y",
+      "latex": "M = M^0 - H y",
+      "vars": [
+        {
+          "sym": "M",
+          "name": "拱圈截面弯矩",
+          "unit": "kN·m",
+          "note": "压力线与拱轴线重合时为 0"
+        },
+        {
+          "sym": "M0",
+          "name": "相应简支梁同一截面的弯矩",
+          "unit": "kN·m",
+          "note": null
+        },
+        {
+          "sym": "H",
+          "name": "水平推力",
+          "unit": "kN",
+          "note": null
+        },
+        {
+          "sym": "y",
+          "name": "拱轴线自起拱线起算的高度",
+          "unit": "m",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "压力线与拱轴线重合时 M ≡ 0，拱圈只受轴力",
+        "偏离量 Δy 时 M = H·Δy（符号随偏离方向）",
+        "需叠加温度、收缩徐变、活载、弹性压缩的附加内力"
+      ],
+      "derivationHint": "拱的截面弯矩 = 梁式弯矩 − 推力弯矩。",
+      "typicalUse": "拱圈截面验算与最不利截面判断",
+      "pitfalls": [
+        "y 的起算基线搞错",
+        "只算恒载不计活载与温度的附加弯矩",
+        "忽略弹性压缩引起的 M"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "bridge-engineering-formula-064",
+      "subjectId": "bridge-engineering",
+      "chapter": "9.4",
+      "name": "拱圈轴力与剪力",
+      "expr": "N = H * cos(phi) + V * sin(phi); Q = V * cos(phi) - H * sin(phi)",
+      "latex": "N = H\\cos\\varphi + V\\sin\\varphi,\\quad Q = V\\cos\\varphi - H\\sin\\varphi",
+      "vars": [
+        {
+          "sym": "N",
+          "name": "截面轴力（压力）",
+          "unit": "kN",
+          "note": null
+        },
+        {
+          "sym": "Q",
+          "name": "截面剪力",
+          "unit": "kN",
+          "note": "理想拱轴线恒载下为 0"
+        },
+        {
+          "sym": "H",
+          "name": "水平推力",
+          "unit": "kN",
+          "note": null
+        },
+        {
+          "sym": "V",
+          "name": "相应简支梁该截面的竖向剪力",
+          "unit": "kN",
+          "note": null
+        },
+        {
+          "sym": "phi",
+          "name": "拱轴切线与水平线的夹角",
+          "unit": "rad",
+          "note": "抛物线拱拱脚 tanφ = 4f/l"
+        }
+      ],
+      "conditions": [
+        "拱顶 φ = 0，故 N_拱顶 = H",
+        "抛物线拱拱脚 tanφ = 4f/l",
+        "需叠加活载、温度等附加内力"
+      ],
+      "derivationHint": "把 (H, V) 投影到截面的法向与切向。",
+      "typicalUse": "拱圈强度与稳定验算",
+      "pitfalls": [
+        "φ 取成弧度/角度混用",
+        "拱顶处误把 N 取成 V",
+        "忽略活载使 H 变化"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "bridge-engineering-formula-065",
+      "subjectId": "bridge-engineering",
+      "chapter": "10.2",
+      "name": "斜拉索等效弹性模量（Ernst 公式）",
+      "expr": "E_eq = E / (1 + gamma^2 * Lh^2 * E / (12 * sig^3))",
+      "latex": "E_{\\text{eq}} = \\frac{E}{1 + \\dfrac{\\gamma^2 L_h^2 E}{12\\sigma^3}}",
+      "vars": [
+        {
+          "sym": "E_eq",
+          "name": "考虑垂度效应的等效弹性模量",
+          "unit": "kN/m²",
+          "note": null
+        },
+        {
+          "sym": "E",
+          "name": "钢丝弹性模量",
+          "unit": "kN/m²",
+          "note": "常取 1.95e8 kN/m²（195 GPa）"
+        },
+        {
+          "sym": "gamma",
+          "name": "斜拉索钢材重度",
+          "unit": "kN/m³",
+          "note": "常取 78.5 kN/m³"
+        },
+        {
+          "sym": "Lh",
+          "name": "斜拉索水平投影长度",
+          "unit": "m",
+          "note": null
+        },
+        {
+          "sym": "sig",
+          "name": "索的拉应力",
+          "unit": "kN/m²",
+          "note": "单位必须与 E 一致"
+        }
+      ],
+      "conditions": [
+        "索自重引起的垂度不可忽略时（长索）",
+        "应力越大、跨径越小，折减越小",
+        "单位必须统一（建议全部用 kN、m）"
+      ],
+      "derivationHint": "把抛物线形索的几何非线性（垂度）折算成切线模量的降低。",
+      "typicalUse": "斜拉桥整体计算前修正索刚度",
+      "pitfalls": [
+        "单位不统一（MPa 与 kN/m² 混用）导致结果差 10³ 倍",
+        "用索长代替水平投影长度",
+        "把重度取成 78.5 kN/m³ 却按 kg/m³ 计算"
+      ],
+      "standardRef": [],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "10",
+        "page": null
+      },
+      "verify": "Ernst 公式中分母 12 与应力幂次 3 的写法请核对教材（部分教材用索的单位长度重量与索力表示，形式不同但等价）"
+    },
+    {
+      "id": "bridge-engineering-formula-066",
+      "subjectId": "bridge-engineering",
+      "chapter": "10.3",
+      "name": "斜拉索恒载索力估算（节段重量法）",
+      "expr": "T = G / sin(alpha); alpha = atan(h_v / L_h)",
+      "latex": "T = \\dfrac{G}{\\sin\\alpha},\\quad \\alpha = \\arctan\\dfrac{h_v}{L_h}",
+      "vars": [
+        {
+          "sym": "T",
+          "name": "单根斜拉索恒载索力",
+          "unit": "kN",
+          "note": null
+        },
+        {
+          "sym": "G",
+          "name": "该索分担的梁段重力",
+          "unit": "kN",
+          "note": "双索面时取梁段总重的一半"
+        },
+        {
+          "sym": "alpha",
+          "name": "索与水平面的夹角",
+          "unit": "rad",
+          "note": null
+        },
+        {
+          "sym": "h_v",
+          "name": "塔上锚点高出梁面的高度",
+          "unit": "m",
+          "note": null
+        },
+        {
+          "sym": "L_h",
+          "name": "索的水平投影长度（梁上锚点至塔中心线）",
+          "unit": "m",
+          "note": null
+        }
+      ],
+      "conditions": [
+        "粗略估算：假定梁段重力全部由该索的竖向分力承担",
+        "忽略主梁刚度与邻近索的共同作用",
+        "精确索力需用刚性支承连续梁法、影响矩阵法等优化确定"
+      ],
+      "derivationHint": "竖向平衡：T·sinα = G。",
+      "typicalUse": "斜拉桥概念设计、索截面初估",
+      "pitfalls": [
+        "双索面时未除以 2",
+        "把索长当作水平投影长度算角度",
+        "把估算值当成成桥索力用于施工控制"
+      ],
+      "standardRef": [],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "10",
+        "page": null
+      },
+      "verify": "本式为教学用粗略估算，教材可能强调它只在方案阶段使用"
+    },
+    {
+      "id": "bridge-engineering-formula-067",
+      "subjectId": "bridge-engineering",
+      "chapter": "11.2",
+      "name": "悬索桥主缆水平力",
+      "expr": "H = q * l^2 / (8 * f)",
+      "latex": "H = \\dfrac{q l^2}{8 f}",
+      "vars": [
+        {
+          "sym": "H",
+          "name": "主缆水平力（全桥或单缆，取决于 q 的取值）",
+          "unit": "kN",
+          "note": "q 取全桥恒载时为全桥总水平力"
+        },
+        {
+          "sym": "q",
+          "name": "沿水平投影的恒载集度",
+          "unit": "kN/m",
+          "note": null
+        },
+        {
+          "sym": "l",
+          "name": "主跨跨径",
+          "unit": "m",
+          "note": null
+        },
+        {
+          "sym": "f",
+          "name": "主缆垂度",
+          "unit": "m",
+          "note": "垂跨比常取 1/9 ~ 1/12"
+        }
+      ],
+      "conditions": [
+        "恒载沿水平投影均布时主缆为抛物线",
+        "垂跨比越小水平力越大（代价是塔与锚碇受力大）",
+        "单缆时应取该缆分担的 q"
+      ],
+      "derivationHint": "由主缆任一截面弯矩为零：M⁰ = H·f，其中 M⁰ = q l²/8。",
+      "typicalUse": "悬索桥方案设计的主缆力估算",
+      "pitfalls": [
+        "q 取全桥还是单缆未统一",
+        "把垂度 f 当成矢跨比数值",
+        "忽略加劲梁与吊索自重"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "11",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "bridge-engineering-formula-068",
+      "subjectId": "bridge-engineering",
+      "chapter": "11.2",
+      "name": "主缆最大张力与截面积",
+      "expr": "T_max = H * sqrt(1 + (4 * f / l)^2); A_c = T_max / sig_allow",
+      "latex": "T_{\\max} = H\\sqrt{1+\\left(\\dfrac{4f}{l}\\right)^2},\\quad A_c = \\dfrac{T_{\\max}}{\\sigma_{\\text{allow}}}",
+      "vars": [
+        {
+          "sym": "T_max",
+          "name": "主缆最大张力（塔顶处）",
+          "unit": "kN",
+          "note": null
+        },
+        {
+          "sym": "H",
+          "name": "主缆水平力",
+          "unit": "kN",
+          "note": null
+        },
+        {
+          "sym": "f",
+          "name": "主缆垂度",
+          "unit": "m",
+          "note": null
+        },
+        {
+          "sym": "l",
+          "name": "主跨跨径",
+          "unit": "m",
+          "note": null
+        },
+        {
+          "sym": "A_c",
+          "name": "主缆所需截面积",
+          "unit": "m²",
+          "note": null
+        },
+        {
+          "sym": "sig_allow",
+          "name": "钢丝容许应力",
+          "unit": "kN/m²",
+          "note": "由标准强度除以安全系数得到"
+        }
+      ],
+      "conditions": [
+        "最大张力出现在塔顶（斜率最大处）",
+        "还需计入活载、温度与主缆自重引起的附加力",
+        "安全系数按规范取值"
+      ],
+      "derivationHint": "塔顶竖向分力 V = q l/2，T = √(H² + V²)。",
+      "typicalUse": "主缆截面初估",
+      "pitfalls": [
+        "把最大张力位置记成跨中（跨中张力 = H，最小）",
+        "容许应力未除以安全系数",
+        "忽略主缆自重引起的垂度变化"
+      ],
+      "standardRef": [],
+      "confidence": "medium",
+      "cite": {
+        "book": "桥梁工程",
+        "edition": "第6版",
+        "chapter": "11",
+        "page": null
+      },
+      "verify": "主缆安全系数与钢丝标准强度的常用取值请核对教材与相关规范"
+    }
+  ]
+}

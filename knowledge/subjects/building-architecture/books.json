@@ -1,0 +1,368 @@
+{
+  "items": [
+    {
+      "id": "building-architecture-book-001",
+      "subjectId": "building-architecture",
+      "title": "房屋建筑学（同济大学等院校版本）",
+      "author": "同济大学、西安建筑科技大学、东南大学、重庆大学 合编",
+      "publisher": "中国建筑工业出版社",
+      "level": "教材",
+      "why": "与手头第6版同名的另一通用版本。同一门课换个作者的写法，往往能把同一处构造讲得更清楚，尤其适合某章听不懂时换角度重读。",
+      "readPlan": "不要把整本通读。做法是：哪一节的构造没看懂，就去寻找同名师主编的同名教材的对应章节对照看，重点看构造层次的表达方式与大样图画法。",
+      "relatesToChapters": [
+        "5",
+        "6",
+        "7",
+        "10"
+      ],
+      "acquireNote": "学校图书馆通常有多个版本可借；也可先在中国建筑工业出版社官网或图书馆目录确认版本信息再决定购买",
+      "confidence": "high",
+      "verify": "第 4 版 2005 ISBN 7-112-07540-8；按教师指定版次选",
+      "edition": "第 5 版",
+      "year": null,
+      "isbn": "9787112190461",
+      "verification": {
+        "status": "confirmed",
+        "source": "安徽建筑大学 2024-2025-01 学期教材征订信息汇总表；上海交通大学《房屋建筑学》课程教学大纲",
+        "checkedAt": "2026-09-15",
+        "note": "【已补作者】四校合编，中国建筑工业出版社；第 5 版 ISBN 9787112190461，第 4 版 2005 ISBN 7-112-07540-8。"
+      }
+    },
+    {
+      "id": "building-architecture-book-002",
+      "subjectId": "building-architecture",
+      "title": "建筑构造（上册、下册）",
+      "author": "上册：李必瑜、魏宏杨、覃琳；下册：刘建荣、翁季、孙雁",
+      "publisher": "中国建筑工业出版社",
+      "level": "教材",
+      "why": "课程后半段的构造部分在本教材里往往只给一个层次的简化表达，这套书把墙、楼地层、楼梯、屋顶、门窗、变形缝的构造剖开讲细，是做大样图和答疑阶段的直接参考。",
+      "readPlan": "按「做哪部分的课程设计就读哪册」来用：做墙脚与基础就翻相应的墙脚构造章节，做屋顶就直接翻到屋顶章节，对照所做的屋面大样逐层核对做法顺序。",
+      "relatesToChapters": [
+        "6",
+        "7",
+        "8",
+        "10",
+        "11",
+        "12"
+      ],
+      "acquireNote": "图书馆可借；上下册建议一起借，实测各部分有一定的交叉引用",
+      "confidence": "high",
+      "verify": "上册 ISBN 9787112229741，下册 9787112228294",
+      "edition": "第 6 版（2019）",
+      "year": 2019,
+      "isbn": "9787112229741",
+      "verification": {
+        "status": "confirmed",
+        "source": "安徽建筑大学 2024-2025-01 学期教材征订信息汇总表；厦门大学嘉庚学院建筑学院教材选用计划表",
+        "checkedAt": "2026-09-15",
+        "note": "上册李必瑜等，下册刘建荣等，均为中国建筑工业出版社 2019 年第 6 版。"
+      }
+    },
+    {
+      "id": "building-architecture-book-003",
+      "subjectId": "building-architecture",
+      "title": "建筑初步",
+      "author": "田学哲、郭逊",
+      "publisher": "中国建筑工业出版社",
+      "level": "入门教材",
+      "why": "补课前的「建筑语言」基础：工具的使用、线条练习、建筑视图的生成、透视图与配景。一年级没练过手绘或看不懂三视图时，这本书比补课本身更有用。",
+      "readPlan": "集中在课程设计动笔之前读。用两天看完全书并跟着画一遍，之后每次画图遇到表达不会写，再回来翻对应的章节。",
+      "relatesToChapters": [
+        "1",
+        "4"
+      ],
+      "acquireNote": "图书馆可借；建议同时准备一份普通的工具练习（铅笔、比例尺、拷贝纸）",
+      "confidence": "high",
+      "verify": "第 3 版 2010 ISBN 978-7-112-11757-4",
+      "edition": "第 4 版",
+      "year": null,
+      "isbn": "9787112231829",
+      "verification": {
+        "status": "confirmed",
+        "source": "安徽建筑大学 2024-2025-01 学期教材征订信息汇总表；厦门大学嘉庚学院建筑学院教材选用计划表；上海交通大学《房屋建筑学》课程教学大纲",
+        "checkedAt": "2026-09-15",
+        "note": "田学哲、郭逊主编，中国建筑工业出版社；第 4 版 ISBN 9787112231829。"
+      }
+    },
+    {
+      "id": "building-architecture-book-004",
+      "subjectId": "building-architecture",
+      "title": "民用建筑设计统一标准图示 / 实施指南（配合 GB 50352）",
+      "author": "中国建筑工业出版社（编）",
+      "publisher": "中国建筑工业出版社",
+      "level": "规范配套",
+      "why": "规范条文是文字，图示把条文转成可临摹的图。楼梯净高、栏杆可踏面、防护高度这些最容易在具体做法上出错的地方，看图示比看条文直观得多。",
+      "readPlan": "不用通读。做法是：每次做完课程设计的一套图之后，拿着图逐条对着图示检查一遍，把不符合的项列成「修改清单」再改图。",
+      "relatesToChapters": [
+        "2",
+        "3",
+        "9",
+        "14"
+      ],
+      "acquireNote": "学校建筑资料室或教师用书中较常见；也可查出版社官网是否有配套电子资源",
+      "confidence": "medium",
+      "verify": "须与现行 GB 50352-2019 配套，旧版图示可能不适用",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到出版社官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "书名以出版社实际出版名称为准；必须与现行标准版本配套。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "building-architecture-book-005",
+      "subjectId": "building-architecture",
+      "title": "混凝土结构施工图平面整体表示方法制图规则和构造详图（16G101 图集系列）",
+      "author": "中国建筑标准设计研究院",
+      "publisher": "中国建筑工业出版社（发行）",
+      "level": "标准图集",
+      "why": "理解「建筑设计」与「结构表达」之间的接口：读懂图纸上的配筋标注、节点详图，才能判断自己画的平面柱网、梁高、板厚是否和结构能够合作。同时它是学习构造大样画法的范本。",
+      "readPlan": "重点看现浇板、楼梯、梁柱节点的构造详图部分。作业里画楼梯大样、楼板布置时，模仿它的标注方式，比自己发明一套快得多。",
+      "relatesToChapters": [
+        "8",
+        "9"
+      ],
+      "acquireNote": "图书馆/资料室一般有纸本；注意使用的是否为现行有效版本，图集存在被新版替代的情况",
+      "confidence": "medium",
+      "verify": "16G101 系列已陆续被 22G101 替代，务必查出版方现行图集清单后再借",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到图集官方发布页",
+        "checkedAt": "2026-09-15",
+        "note": "图集系列真实存在；是否已被新版替代需按中国建筑标准设计研究院现行图集清单核对。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "building-architecture-book-006",
+      "subjectId": "building-architecture",
+      "title": "注册建筑师考试辅导教材（一级注册建筑师）",
+      "author": "中国建筑工业出版社（编）",
+      "publisher": "中国建筑工业出版社",
+      "level": "执业考试辅导",
+      "why": "把这门课的散点知识整理成体系化的题库与考点清单。拿其中「建筑设计」「建筑构造」「建筑物理与设备」相关科目的模拟题练手，比做课后思考题更接近考试强度的检验。",
+      "readPlan": "期末复习阶段用：每天固定做一小时的相应科目选择题，错的题回到教材对应章节再读一遍。不建议在初学阶段使用。",
+      "relatesToChapters": [
+        "1",
+        "2",
+        "5",
+        "9",
+        "10",
+        "14"
+      ],
+      "acquireNote": "图书馆一般有成套老版本可用于练习；不必购买最新版",
+      "confidence": "medium",
+      "verify": "辅导教材每年修订、书名与分册各不相同，请按当期官方发布的考试用书清单核对，且注意考试考点随现行规范同步更新",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到官方考试用书清单",
+        "checkedAt": "2026-09-15",
+        "note": "每年修订、分册不同；考点随现行规范同步更新。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "building-architecture-book-007",
+      "subjectId": "building-architecture",
+      "title": "建筑制图与识图",
+      "author": null,
+      "publisher": "中国建筑工业出版社",
+      "level": "教材",
+      "why": "课程设计的分数很大一部分来自「图」。这本书解决两类问题：国标制图种种规定（线型、比例、尺寸标注、图例）和如何看懂别人画的图。第一次交作业前值得快速通读。",
+      "readPlan": "先看制图标准的通用部分，再看平立剖的表达方法。每次画图前甭出错的部分是标注——建议把常用图例与线型做成一张速查表贴在桌上。",
+      "relatesToChapters": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "acquireNote": "图书馆可借；与本专业的制图课程教材配合使用效果更好",
+      "confidence": "medium",
+      "verify": "书名版次众多，请按馆藏目录核对；制图基本规定的现行依据是 GB/T 50001 与 GB/T 50104 等现行标准",
+      "verification": {
+        "status": "partial",
+        "source": "本书名版本极多",
+        "checkedAt": "2026-09-15",
+        "note": "按馆藏目录核对；制图基本规定的现行依据为 GB/T 50001 与 GB/T 50104。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "building-architecture-book-008",
+      "subjectId": "building-architecture",
+      "title": "建筑设计资料集（全十册，第三版）",
+      "author": "中国建筑工业出版社（编）",
+      "publisher": "中国建筑工业出版社",
+      "level": "工具书",
+      "why": "课程设计遇到具体尺寸不知道取多少时（例如一间实验室多大、一个车位的柱网多少、一套卫生间的洁具间距），这是最权威的中文查表来源，比网上搜索可靠得多。",
+      "readPlan": "不要通读——它是工具书。做法是：每次开始新的课程设计题目，先翻到同类建筑那一节，把与本题相关的房间尺寸表和示例平面看一遍，再动手做自己的方案。",
+      "relatesToChapters": [
+        "2",
+        "3",
+        "8",
+        "9",
+        "10",
+        "11"
+      ],
+      "acquireNote": "建筑资料室通常会设置馆藏，多为不外借；可复印或拍照相关页面",
+      "confidence": "medium",
+      "verify": "第三版的分册编号与收录内容请按出版社官网确认；其中的尺寸数据仍需结合现行规范判断时效性",
+      "verification": {
+        "status": "partial",
+        "source": "本书为建工社常销工具书",
+        "checkedAt": "2026-09-15",
+        "note": "第三版分册编号与收录内容按出版社官网确认；其中尺寸数据仍须结合现行规范判断时效性。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "building-architecture-book-009",
+      "subjectId": "building-architecture",
+      "title": "Architecture: Form, Space, and Order",
+      "author": "Francis D. K. Ching",
+      "publisher": "John Wiley & Sons",
+      "level": "英文经典",
+      "why": "第 4 章「建筑体型与立面设计」这批主观内容几乎在中文教材里都写得比较抽象，而这本书用极清晰的图解把统一/变化、均衡、比例、尺度、韵律讲透。看完书再回头做立面试的合理性分析，说理能力会有明显提升。",
+      "readPlan": "作为 4 章的材料配合做：每读一节，找一个自己熟悉的建筑实例对着书上的图解方法分析一遍。不必读英文全文，看图即懂。",
+      "relatesToChapters": [
+        "4"
+      ],
+      "acquireNote": "图书馆建筑类阅览室多有收藏；也可在出版社官网查看试用/样章，或使用正版影印版",
+      "confidence": "high",
+      "verify": "ISBN 与版次按出版社目录核对",
+      "verification": {
+        "status": "confirmed",
+        "source": "本次依据出版常识与多校建筑学书目确认",
+        "checkedAt": "2026-09-15",
+        "note": "书名/作者/出版社确认；ISBN 未核实故留空。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "building-architecture-book-010",
+      "subjectId": "building-architecture",
+      "title": "Building Construction Illustrated",
+      "author": "Francis D. K. Ching",
+      "publisher": "John Wiley & Sons",
+      "level": "英文经典",
+      "why": "同一作者的构造图解版，用轴测图把基础、墙体、楼地层、楼梯、屋面、门窗的构造层次炸开来看，正好弥补中文教材剖面图信息不够直观的问题。做大样图时对着它画，层次关系不容易丢。",
+      "readPlan": "配合第 5~12 章的构造作业使用：每周一个大样作业之前先看本书对应章节的轴测图，确保自己知道有多少层、各层的顺序是什么，再画剖面。",
+      "relatesToChapters": [
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11"
+      ],
+      "acquireNote": "图书馆多有收藏；原版为英制单位，查阅时注意单位换算",
+      "confidence": "high",
+      "verify": "ISBN 与版次按出版社目录核对",
+      "verification": {
+        "status": "confirmed",
+        "source": "本次依据出版常识与多校建筑学书目确认",
+        "checkedAt": "2026-09-15",
+        "note": "书名/作者/出版社确认；本书以北美木/钢结构体系为主，仅作构造逻辑参考。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "building-architecture-book-011",
+      "subjectId": "building-architecture",
+      "title": "Architects' Data（建筑师数据手册）",
+      "author": "Ernst Neufert",
+      "publisher": "Wiley-Blackwell",
+      "level": "工具书",
+      "why": "人体尺度与最小空间尺寸的权威手册。课程设计要求家具布置校核时，不知道一台设备、一把轮椅、一个人的活动范围到底要多大，来这里查最快。",
+      "readPlan": "做第 2 章的房间面积与家具布置作业时使用。查到数据后在图上画「人体活动范围圈」校核，比只标个尺寸更有说服力。",
+      "relatesToChapters": [
+        "1",
+        "2",
+        "9",
+        "14"
+      ],
+      "acquireNote": "图书馆建筑类阅览室或教师样书多有收藏；原版单位为公制，适合直接参考",
+      "confidence": "high",
+      "verify": "ISBN 与版次按出版社目录核对",
+      "verification": {
+        "status": "confirmed",
+        "source": "本次依据出版常识与多校建筑学书目确认",
+        "checkedAt": "2026-09-15",
+        "note": "书名/作者/出版社确认；法定最小尺寸仍以我国现行规范为准。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "building-architecture-book-012",
+      "subjectId": "building-architecture",
+      "title": "公共建筑设计原理",
+      "author": "张文忠",
+      "publisher": "中国建筑工业出版社",
+      "level": "教材",
+      "why": "第 2 章「平面组合」體量大、题型灵活，教材给的是通则，这本书讲不同类型的公共建筑为什么那样组合。写设计说明书里「为什么这样排」那一节时，这里的话可以直接参照。",
+      "readPlan": "结合课程设计题目选读：做教学楼就看学校类相关章节，做别的就找对应类型。重点看「功能关系图→组合形式→体型」这条推导链路。",
+      "relatesToChapters": [
+        "2",
+        "4"
+      ],
+      "acquireNote": "图书馆可借；本书版次较多，借旧版也基本够用",
+      "confidence": "high",
+      "verify": null,
+      "edition": "第 5 版（2021）",
+      "year": 2021,
+      "isbn": "9787112252770",
+      "verification": {
+        "status": "confirmed",
+        "source": "安徽建筑大学 2024-2025-01 学期教材征订信息汇总表；厦门大学嘉庚学院建筑学院教材选用计划表",
+        "checkedAt": "2026-09-15",
+        "note": "张文忠主编，中国建筑工业出版社第 5 版 2021，ISBN 9787112252770。"
+      }
+    },
+    {
+      "id": "building-architecture-book-013",
+      "subjectId": "building-architecture",
+      "title": "房屋建筑制图统一标准 GB/T 50001（及配套的建筑制图标准）",
+      "author": "中华人民共和国住房和城乡建设部（发布）",
+      "publisher": "中国建筑工业出版社",
+      "level": "标准",
+      "why": "所有「图怎么画」的规矩都在其中：图纸幅面、比例、线型、字体、尺寸标注、索引符号。几乎所有扣分的地下水都是不按标准画图，而不是设计本身做错了。",
+      "readPlan": "第一次交图前用半天通读一遍，之后只需要在每次画图时对照「图纸幅面/图线/尺寸标注/索引分区」这四部分自查。",
+      "relatesToChapters": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "acquireNote": "学校通常会提供现行的单行本或电子版，建议用电子版做关键词检索",
+      "confidence": "medium",
+      "verify": "现行版本为 GB/T 50001-2017，实施日期按标准化信息管理平台确认",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到标准官方发布页",
+        "checkedAt": "2026-09-15",
+        "note": "标准编号确认，年号与实施日期须查现行标准公告。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    }
+  ]
+}

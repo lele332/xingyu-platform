@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 280" width="660" height="280" role="img" aria-label="桥梁跨径定义示意：净跨径、计算跨径、标准跨径、桥梁全长">
+  <title>跨径的四种算法（最易混的一组概念）</title>
+  <g font-family="system-ui, -apple-system, 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#8a8a8a">
+    <!-- 水面 -->
+    <path d="M0 214 H660" stroke="#4a9eff" stroke-width="1.2" opacity="0.55"/>
+    <path d="M0 214 h18 l6 -5 l6 5 h18 l6 -5 l6 5 h18 l6 -5 l6 5 h18 l6 -5 l6 5 h18"
+          transform="translate(540 6)" fill="none" stroke="#4a9eff" stroke-width="1" opacity="0.5"/>
+    <text x="8" y="208" fill="#4a9eff" font-size="11.5">设计洪水位</text>
+
+    <!-- 主梁 -->
+    <rect x="96" y="128" width="470" height="20" fill="#d8d8d8" opacity="0.14" stroke="#c8c8c8" stroke-width="1.4"/>
+    <!-- 桥面线 -->
+    <path d="M96 124 H566" stroke="#c8c8c8" stroke-width="1"/>
+
+    <!-- 左桥台 -->
+    <path d="M96 148 L96 246 L58 246 L58 214 Z" fill="#d8d8d8" opacity="0.12" stroke="#c8c8c8" stroke-width="1.4"/>
+    <!-- 右桥台 -->
+    <path d="M566 148 L566 246 L604 246 L604 214 Z" fill="#d8d8d8" opacity="0.12" stroke="#c8c8c8" stroke-width="1.4"/>
+
+    <!-- 支座 -->
+    <rect x="126" y="148" width="18" height="9" fill="#0a84ff" opacity="0.7"/>
+    <rect x="518" y="148" width="18" height="9" fill="#0a84ff" opacity="0.7"/>
+
+    <!-- 台前缘线（净跨径起止） -->
+    <path d="M96 148 V258" stroke="#8a8a8a" stroke-width="0.9" stroke-dasharray="3 3" opacity="0.6"/>
+    <path d="M566 148 V258" stroke="#8a8a8a" stroke-width="0.9" stroke-dasharray="3 3" opacity="0.6"/>
+
+    <!-- ① 净跨径 l0：台前缘 ~ 台前缘，画在 y=258 -->
+    <path d="M96 258 H566" stroke="#ff9f0a" stroke-width="1.3"/>
+    <path d="M96 254 v8 M566 254 v8" stroke="#ff9f0a" stroke-width="1.3"/>
+    <text x="331" y="274" text-anchor="middle" fill="#ff9f0a">净跨径 l₀（两桥台前缘之间的净距）</text>
+
+    <!-- ② 计算跨径 l：支座中心 ~ 支座中心，y=186 -->
+    <path d="M135 186 H527" stroke="#0a84ff" stroke-width="1.3"/>
+    <path d="M135 182 v8 M527 182 v8" stroke="#0a84ff" stroke-width="1.3"/>
+    <path d="M135 157 v21 M527 157 v21" stroke="#0a84ff" stroke-width="0.9" stroke-dasharray="3 3" opacity="0.7"/>
+    <text x="331" y="180" text-anchor="middle" fill="#0a84ff">计算跨径 l（两支座中心线之间）</text>
+
+    <!-- ③ 标准跨径 Lb：桥台中线 ~ 桥台中线，y=102 -->
+    <path d="M77 102 H585" stroke="#30d158" stroke-width="1.3"/>
+    <path d="M77 98 v8 M585 98 v8" stroke="#30d158" stroke-width="1.3"/>
+    <path d="M77 102 V148 M585 102 V148" stroke="#30d158" stroke-width="0.9" stroke-dasharray="3 3" opacity="0.7"/>
+    <text x="331" y="96" text-anchor="middle" fill="#30d158">标准跨径 Lb（墩台中线之间，用于跨径分级）</text>
+
+    <!-- ④ 桥梁全长 L：桥台尾端 ~ 尾端，y=76 -->
+    <path d="M58 76 H604" stroke="#bf5af2" stroke-width="1.3"/>
+    <path d="M58 72 v8 M604 72 v8" stroke="#bf5af2" stroke-width="1.3"/>
+    <path d="M58 76 V246 M604 76 V246" stroke="#bf5af2" stroke-width="0.9" stroke-dasharray="3 3" opacity="0.7"/>
+    <text x="331" y="70" text-anchor="middle" fill="#bf5af2">桥梁全长 L（两端桥台尾端之间）</text>
+
+    <!-- 构件名 -->
+    <text x="96" y="120" font-size="11.5">主梁（上部结构）</text>
+    <text x="60" y="266" font-size="11.5">桥台</text>
+    <text x="556" y="266" font-size="11.5">桥台</text>
+    <text x="150" y="164" font-size="11" fill="#0a84ff">支座</text>
+  </g>
+</svg>

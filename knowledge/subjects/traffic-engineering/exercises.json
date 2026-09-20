@@ -1,0 +1,1045 @@
+{
+  "items": [
+    {
+      "id": "traffic-engineering-exercise-001",
+      "subjectId": "traffic-engineering",
+      "chapter": "4.5",
+      "title": "由流量与区间平均车速求密度、车头时距与车头间距",
+      "kind": "计算题",
+      "difficulty": "easy",
+      "frequency": "高频",
+      "stem": "某单向单车道路段观测得交通量 Q = 1200 veh/h，区间平均车速 Vs = 60 km/h。求该状态下的交通密度 K、平均车头时距 ht 与平均车头间距 hs，并校核三参数是否自洽。",
+      "given": [["Q", "1200 veh/h"], ["Vs", "60 km/h"]],
+      "goal": "K、ht、hs",
+      "approachSteps": [
+        "确认 Q 是单向单车道流量（若题给双向总量，先除 2 再除车道数）",
+        "由定义式 K = Q / V 求密度，注意 V 必须是区间平均车速",
+        "由 ht = 3600 / Q 求平均车头时距，单位秒",
+        "由 hs = V × ht / 3.6 求平均车头间距，其中 3.6 是 km/h 转 m/s 的换算",
+        "用 K = 1000 / hs 反算密度校核，两法结果应一致"
+      ],
+      "keyFormulas": ["traffic-engineering-formula-001", "traffic-engineering-formula-002", "traffic-engineering-formula-003", "traffic-engineering-formula-004"],
+      "answer": "K = 20.0 veh/km；ht = 3.00 s；hs = 50.0 m；校核 K = 1000/50 = 20.0 veh/km，一致。",
+      "answerPolicy": "默认只给到思路与关键式；用户要求「给答案」时再展示",
+      "selfCheck": [
+        "K = 1200/60 = 20 veh/km 量级合理（自由流到稳定流之间）",
+        "hs = 60×3/3.6 = 50 m，约 12 个车身长，符合 60 km/h 的车距直觉",
+        "若漏掉 3.6 会得到 180 m，明显偏大，应立即发现"
+      ],
+      "commonErrors": [
+        "把双向交通量直接代入 ht = 3600/Q，得到的时距只有真实值的一半",
+        "hs 计算漏掉 /3.6 的量纲换算",
+        "用时间平均车速代替区间平均车速代入 Q = K·V"
+      ],
+      "confidence": "high",
+      "cite": { "book": "交通工程总论", "edition": "第5版", "publisher": "人民交通出版社", "chapter": "4", "page": null },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-exercise-002",
+      "subjectId": "traffic-engineering",
+      "chapter": "4.4",
+      "title": "时间平均车速与区间平均车速的对比及 Wardrop 校核",
+      "kind": "计算题",
+      "difficulty": "medium",
+      "frequency": "高频",
+      "stem": "在长 0.6 km 的路段上观测 5 辆车，各车通过该路段的行程时间（s）依次为 30、60、40、55、35。求：(1) 区间平均车速 Vs；(2) 各车地点车速与时间平均车速 Vt；(3) 用 Wardrop 关系式 Vt = Vs + s²/Vs 校核，并说明 Vt 与 Vs 的大小关系。",
+      "given": [["L", "0.6 km"], ["n", "5 辆"], ["t", "30, 60, 40, 55, 35 s"]],
+      "goal": "Vs、Vt、s²、Wardrop 校核",
+      "approachSteps": [
+        "总行程时间 Σt = 220 s = 220/3600 h",
+        "区间平均车速用总里程除总时间：Vs = n·L / Σt（小时制）",
+        "各车地点车速 vi = L / ti，注意 ti 先换成小时",
+        "时间平均车速 Vt 是 vi 的算术平均",
+        "算车速方差 s² = Σ(vi − Vt)²/n，代入 Wardrop 式 Vt' = Vs + s²/Vs 与实测 Vt 对比"
+      ],
+      "keyFormulas": ["traffic-engineering-formula-005", "traffic-engineering-formula-006", "traffic-engineering-formula-007"],
+      "answer": "Vs = 49.09 km/h；vi = 72.0、36.0、54.0、39.27、61.71 km/h；Vt = 52.60 km/h；s² = 182.91 (km/h)²；Wardrop 校核 Vt' = 49.09 + 182.91/49.09 = 52.82 km/h，与实测 52.60 km/h 相差约 0.4%，符合关系。Vt > Vs。",
+      "answerPolicy": "默认只给到思路与关键式；用户要求「给答案」时再展示",
+      "selfCheck": [
+        "Vs 用 5×0.6/(220/3600) = 3/0.061111 = 49.09，不是对 vi 取平均",
+        "Vt = (72+36+54+39.27+61.71)/5 = 52.60，确实大于 Vs",
+        "Vt − Vs = 3.51 km/h = s²/Vs = 182.91/49.09 = 3.73，两者接近，说明 Wardrop 式成立"
+      ],
+      "commonErrors": [
+        "把 Vs 当成各车地点车速的算术平均（那是 Vt）",
+        "对行程时间取平均后再换算速度，混淆了算术平均与调和平均",
+        "认为 Vt 与 Vs 相等：只有所有车速完全相同时才相等"
+      ],
+      "confidence": "medium",
+      "cite": { "book": "交通工程总论", "edition": "第5版", "publisher": "人民交通出版社", "chapter": "4", "page": null },
+      "verify": "Wardrop 式 Vt = Vs + s²/Vs 与经验式 Vt ≈ 1.085·Vs 的适用条件不同：本题中 Vt/Vs = 1.071，接近但不等同于 1.085。经验系数 1.085 是大量观测的平均值，不能用于逐题精确换算，请以教材表述为准。"
+    },
+    {
+      "id": "traffic-engineering-exercise-003",
+      "subjectId": "traffic-engineering",
+      "chapter": "4.2",
+      "title": "高峰小时系数 PHF 与高峰流率",
+      "kind": "计算题",
+      "difficulty": "easy",
+      "frequency": "高频",
+      "stem": "某断面高峰小时（17:00—18:00）内 4 个 15 min 时段的交通量依次为 520、610、580、500 veh。求高峰小时交通量、高峰小时系数 PHF 与 15 min 高峰流率。",
+      "given": [["q15", "520, 610, 580, 500 veh/15min"]],
+      "goal": "Q_h、PHF、高峰流率",
+      "approachSteps": [
+        "高峰小时交通量 Q_h 是 4 个 15 min 计数之和",
+        "取 4 个时段中的最大值 q15max（不是平均值）",
+        "代入 PHF = Q_h / (4 × q15max)",
+        "高峰流率 = 4 × q15max = Q_h / PHF，用于后续通行能力分析"
+      ],
+      "keyFormulas": ["traffic-engineering-formula-009"],
+      "answer": "Q_h = 2210 veh/h；q15max = 610 veh/15min；PHF = 2210/(4×610) = 0.906；15 min 高峰流率 = 2440 veh/h。",
+      "answerPolicy": "默认只给到思路与关键式；用户要求「给答案」时再展示",
+      "selfCheck": [
+        "PHF 必须落在 0 < PHF ≤ 1，若 > 1 说明分母用错了",
+        "高峰流率 2440 > 小时交通量 2210，方向正确（流率≥交通量）",
+        "PHF = 0.906 表明小时内分布较均匀"
+      ],
+      "commonErrors": [
+        "分母误用 4×平均值，会得到 PHF = 1.000，得分点全丢",
+        "把 15 min 计数当成小时流率直接用于 V/C 计算（少乘 4）",
+        "把 q15max 写成 610 veh/h（单位错误，应为 veh/15min）"
+      ],
+      "confidence": "high",
+      "cite": { "book": "交通工程总论", "edition": "第5版", "publisher": "人民交通出版社", "chapter": "4", "page": null },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-exercise-004",
+      "subjectId": "traffic-engineering",
+      "chapter": "4.2",
+      "title": "由 AADT 推求设计小时交通量并确定单向车道数",
+      "kind": "计算题",
+      "difficulty": "medium",
+      "frequency": "高频",
+      "stem": "某新建公路预测年平均日交通量 AADT = 24000 veh/d（双向），设计小时交通量系数 K = 0.11，方向分布系数 D = 0.60。若单向每车道设计通行能力取 1300 veh/h，求设计小时交通量 DHV 及所需单向车道数。",
+      "given": [["AADT", "24000 veh/d"], ["K", "0.11"], ["D", "0.60"], ["C_单车道设计", "1300 veh/h/ln"]],
+      "goal": "DHV 与单向车道数",
+      "approachSteps": [
+        "确认 AADT 是双向总量，DHV 是单向值，二者之间必须乘 D",
+        "代入 DHV = AADT × K × D",
+        "车道数 n = DHV / 单车道设计通行能力",
+        "向上取整，并按双向对称布置给出总车道数"
+      ],
+      "keyFormulas": ["traffic-engineering-formula-011"],
+      "answer": "DHV = 24000 × 0.11 × 0.60 = 1584 veh/h（单向）；n = 1584/1300 = 1.22，向上取整为单向 2 车道，即双向 4 车道。",
+      "answerPolicy": "默认只给到思路与关键式；用户要求「给答案」时再展示",
+      "selfCheck": [
+        "若漏乘 D 会得到 2640 veh/h，车道数变成 3，明显偏离",
+        "DHV 与单向设计通行能力同量纲（veh/h），可直接相除",
+        "1.22 取整为 2 而不是 1，因为单向 1 车道不满足通行能力"
+      ],
+      "commonErrors": [
+        "漏乘方向分布系数 D，把双向 AADT 乘 K 当作单向 DHV",
+        "车道数四舍五入成 1 而不是向上取整",
+        "K、D 用百分数（11、60）代入而不是小数"
+      ],
+      "confidence": "medium",
+      "cite": { "book": "交通工程总论", "edition": "第5版", "publisher": "人民交通出版社", "chapter": "4", "page": null },
+      "verify": "K 与 D 的典型取值范围（K 约 0.08~0.15，D 约 0.5~0.7）以及单车道设计通行能力 1300 veh/h 这一取值仅为示例口径，请按教材与现行标准核对。"
+    },
+    {
+      "id": "traffic-engineering-exercise-005",
+      "subjectId": "traffic-engineering",
+      "chapter": "4.3",
+      "title": "方向分布系数与单向设计小时交通量",
+      "kind": "计算题",
+      "difficulty": "easy",
+      "frequency": "中频",
+      "stem": "某道路高峰小时双向合计交通量为 4200 veh/h，其中主要方向为 2650 veh/h。求方向分布系数 D；若该路 AADT = 18000 veh/d、K = 0.10，求主要方向的设计小时交通量。",
+      "given": [["Qtotal", "4200 veh/h"], ["Qmain", "2650 veh/h"], ["AADT", "18000 veh/d"], ["K", "0.10"]],
+      "goal": "D 与主要方向 DHV",
+      "approachSteps": [
+        "方向分布系数 D = 主要方向交通量 / 双向合计交通量",
+        "检查 D 是否落在 0.5~0.7，若 < 0.5 说明取错了方向",
+        "代入 DHV = AADT × K × D 得主要方向设计小时交通量"
+      ],
+      "keyFormulas": ["traffic-engineering-formula-012", "traffic-engineering-formula-011"],
+      "answer": "D = 2650/4200 = 0.631；DHV = 18000 × 0.10 × 0.631 = 1136 veh/h（主要方向）。",
+      "answerPolicy": "默认只给到思路与关键式；用户要求「给答案」时再展示",
+      "selfCheck": [
+        "D = 0.631 落在 0.5~0.7 区间，量级合理",
+        "另一方向交通量 4200 − 2650 = 1550 veh/h，与 2650 之和为 4200",
+        "DHV = 1136 明显小于双向 AADT 乘 K 的 1800，符合单向口径"
+      ],
+      "commonErrors": [
+        "用较轻方向（1550/4200 = 0.369）作为 D",
+        "把双向合计交通量当作单向直接代入 DHV 公式",
+        "忘记 D 是无量纲小数"
+      ],
+      "confidence": "high",
+      "cite": { "book": "交通工程总论", "edition": "第5版", "publisher": "人民交通出版社", "chapter": "4", "page": null },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-exercise-006",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.2",
+      "title": "格林希尔茨模型求最大流量、最佳密度与最佳车速",
+      "kind": "计算题",
+      "difficulty": "easy",
+      "frequency": "高频",
+      "stem": "某路段车速—密度关系符合格林希尔茨线性模型，自由流速度 Vf = 80 km/h，阻塞密度 Kj = 125 veh/km。求：(1) 最大流量 Qmax、临界密度 Km 与临界速度 Vm；(2) 当密度 K = 40 veh/km 时的车速与流量。",
+      "given": [["Vf", "80 km/h"], ["Kj", "125 veh/km"], ["K", "40 veh/km"]],
+      "goal": "Qmax、Km、Vm、V(40)、Q(40)",
+      "approachSteps": [
+        "写出 V = Vf(1 − K/Kj) 与 Q = Vf·K(1 − K/Kj)",
+        "对 Q(K) 求导令为零得 Km = Kj/2，Vm = Vf/2",
+        "Qmax = Vf·Kj/4（注意是 /4，不是 /e）",
+        "把 K = 40 代入 V(K) 与 Q(K) 两式"
+      ],
+      "keyFormulas": ["traffic-engineering-formula-013", "traffic-engineering-formula-014", "traffic-engineering-formula-015", "traffic-engineering-formula-016"],
+      "answer": "Km = 62.5 veh/km；Vm = 40.0 km/h；Qmax = 80×125/4 = 2500 veh/h；当 K = 40 veh/km 时 V = 80×(1 − 40/125) = 54.4 km/h，Q = 40×54.4 = 2176 veh/h。",
+      "answerPolicy": "默认只给到思路与关键式；用户要求「给答案」时再展示",
+      "selfCheck": [
+        "Qmax = Vf·Kj/4 = 2500，也可由 Qmax = Km × Vm = 62.5 × 40 = 2500 校核，一致",
+        "K = 40 < Km = 62.5，处于流量—密度曲线上升段，V = 54.4 > Vm = 40，方向正确",
+        "Q(40) = 2176 < Qmax = 2500，合理"
+      ],
+      "commonErrors": [
+        "把 Qmax 写成 Vf·Kj/2（漏掉二次曲线的 1/4 因子）",
+        "把线性模型的 Km = Kj/2 与对数模型的 Km = Kj/e 混用",
+        "用时间平均车速作为 Vf 代入"
+      ],
+      "confidence": "high",
+      "cite": { "book": "交通工程总论", "edition": "第5版", "publisher": "人民交通出版社", "chapter": "5", "page": null },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-exercise-007",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.2",
+      "title": "由两组观测状态反推格林希尔茨模型参数",
+      "kind": "计算题",
+      "difficulty": "medium",
+      "frequency": "高频",
+      "stem": "某路段两次观测结果为：状态一 Q1 = 1000 veh/h、V1 = 50 km/h；状态二 Q2 = 1200 veh/h、V2 = 40 km/h。假定符合格林希尔茨线性模型，求阻塞密度 Kj、自由流速度 Vf 及该路段最大流量 Qmax。",
+      "given": [["Q1", "1000 veh/h"], ["V1", "50 km/h"], ["Q2", "1200 veh/h"], ["V2", "40 km/h"]],
+      "goal": "Kj、Vf、Qmax",
+      "approachSteps": [
+        "先由 K = Q/V 把两组观测化成 (K, V)：K1 = 20、K2 = 30 veh/km",
+        "列两个方程：V1 = Vf(1 − K1/Kj)，V2 = Vf(1 − K2/Kj)",
+        "两式相除消去 Vf，解出 Kj = (V1·K2 − V2·K1)/(V1 − V2)",
+        "回代求 Vf = V1/(1 − K1/Kj)",
+        "Qmax = Vf·Kj/4"
+      ],
+      "keyFormulas": ["traffic-engineering-formula-001", "traffic-engineering-formula-013", "traffic-engineering-formula-015", "traffic-engineering-formula-016"],
+      "answer": "K1 = 20、K2 = 30 veh/km；Kj = (50×30 − 40×20)/(50 − 40) = 70 veh/km；Vf = 50/(1 − 20/70) = 70.0 km/h；Qmax = 70×70/4 = 1225 veh/h（此时 Km = 35 veh/km、Vm = 35 km/h）。",
+      "answerPolicy": "默认只给到思路与关键式；用户要求「给答案」时再展示",
+      "selfCheck": [
+        "回代检验：Vf(1 − 20/70) = 70×0.7143 = 50.0 ✓；Vf(1 − 30/70) = 70×0.5714 = 40.0 ✓",
+        "K1 = 20 < Km = 35 < K2 = 30？不成立，K2 = 30 仍在 Km 左侧，两组观测都处于曲线上升段，故 Q2 > Q1 合理",
+        "Qmax = 1225 > Q2 = 1200，说明状态二已接近但未达通行能力"
+      ],
+      "commonErrors": [
+        "忘记先把 (Q, V) 换算成 (K, V) 就直接拟合",
+        "解方程组时把 Kj 与 Vf 的位置弄反，或代数运算符号出错",
+        "得出 Kj < 观测密度（说明方程组列错，应重算）"
+      ],
+      "confidence": "high",
+      "cite": { "book": "交通工程总论", "edition": "第5版", "publisher": "人民交通出版社", "chapter": "5", "page": null },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-exercise-008",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.2",
+      "title": "格林伯格对数模型求最大流量与临界密度",
+      "kind": "计算题",
+      "difficulty": "medium",
+      "frequency": "中频",
+      "stem": "某拥挤路段符合格林伯格对数模型 V = Vm·ln(Kj/K)，已知 Vm = 32 km/h、阻塞密度 Kj = 140 veh/km。求：(1) 临界密度 Km 与最大流量 Qmax；(2) 当密度 K = 40 veh/km 时的车速。",
+      "given": [["Vm", "32 km/h"], ["Kj", "140 veh/km"], ["K", "40 veh/km"]],
+      "goal": "Km、Qmax、V(40)",
+      "approachSteps": [
+        "记住对数模型的临界密度为 Km = Kj/e（不是 Kj/2）",
+        "Qmax = Vm·Kj/e，e ≈ 2.71828",
+        "把 K = 40 代入 V = Vm·ln(Kj/K) 求车速",
+        "校核：V(Km) = Vm·ln(Kj/(Kj/e)) = Vm，与参数含义一致"
+      ],
+      "keyFormulas": ["traffic-engineering-formula-017", "traffic-engineering-formula-018"],
+      "answer": "Km = 140/2.71828 = 51.50 veh/km；Qmax = 32×140/2.71828 = 1648 veh/h；K = 40 veh/km 时 V = 32×ln(140/40) = 32×1.25276 = 40.09 km/h。",
+      "answerPolicy": "默认只给到思路与关键式；用户要求「给答案」时再展示",
+      "selfCheck": [
+        "校核 V(Km) = 32×ln(140/51.50) = 32×ln(2.71828) = 32.0 km/h = Vm ✓",
+        "Qmax = Km × Vm = 51.50 × 32 = 1648，与公式结果一致",
+        "K = 40 < Km，V = 40.09 > Vm，处于曲线上升段，合理"
+      ],
+      "commonErrors": [
+        "用 Kj/2 作为对数模型的临界密度",
+        "把 Qmax 写成 Vm·Kj/4（那是线性模型）",
+        "混淆 Vm 在两模型中的含义：对数模型中 Vm 是模型参数"
+      ],
+      "confidence": "high",
+      "cite": { "book": "交通工程总论", "edition": "第5版", "publisher": "人民交通出版社", "chapter": "5", "page": null },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-exercise-009",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.2",
+      "title": "安德伍德指数模型求最大流量并与另两模型比较",
+      "kind": "计算题",
+      "difficulty": "medium",
+      "frequency": "中频",
+      "stem": "某路段符合安德伍德指数模型 V = Vf·exp(−K/Km)，自由流速度 Vf = 90 km/h，模型参数 Km = 45 veh/km。求：(1) 最大流量 Qmax 与最大流量处的车速；(2) 当 K = 20 veh/km 时的车速与流量。",
+      "given": [["Vf", "90 km/h"], ["Km", "45 veh/km"], ["K", "20 veh/km"]],
+      "goal": "Qmax、V(Km)、V(20)、Q(20)",
+      "approachSteps": [
+        "指数模型中 Km 既是模型参数，也恰为最大流量处的密度",
+        "Qmax = Vf·Km/e，V(Km) = Vf·exp(−1) = Vf/e",
+        "把 K = 20 代入 V = Vf·exp(−K/Km)",
+        "Q(20) = K × V(20)"
+      ],
+      "keyFormulas": ["traffic-engineering-formula-019", "traffic-engineering-formula-020"],
+      "answer": "Qmax = 90×45/2.71828 = 1490 veh/h；V(Km) = 90/e = 33.11 km/h；K = 20 veh/km 时 V = 90×exp(−20/45) = 57.71 km/h，Q = 20×57.71 = 1154 veh/h。",
+      "answerPolicy": "默认只给到思路与关键式；用户要求「给答案」时再展示",
+      "selfCheck": [
+        "Qmax = Km × V(Km) = 45 × 33.11 = 1490，与公式一致",
+        "K = 20 < Km = 45，V = 57.71 > 33.11，处于上升段",
+        "指数模型 K→∞ 时 V→0 但恒不为负，这是它区别于线性模型的边界行为"
+      ],
+      "commonErrors": [
+        "把指数模型的 Qmax 写成 Vf·Km/4",
+        "把 Km 当作导出量去求，而忽略了它在指数模型中是给定参数",
+        "exp(−K/Km) 误写成 exp(−Km/K)"
+      ],
+      "confidence": "high",
+      "cite": { "book": "交通工程总论", "edition": "第5版", "publisher": "人民交通出版社", "chapter": "5", "page": null },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-exercise-010",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.3",
+      "title": "泊松分布求到达车辆数的概率",
+      "kind": "计算题",
+      "difficulty": "easy",
+      "frequency": "高频",
+      "stem": "某单向车流交通量 Q = 480 veh/h，假定车辆到达服从泊松分布。求 30 s 计数间隔内：(1) 无车到达的概率 P(0)；(2) 恰有 3 辆车到达的概率 P(3)；(3) 到达 2 辆及以上车的概率 P(k ≥ 2)。",
+      "given": [["Q", "480 veh/h"], ["t", "30 s"]],
+      "goal": "P(0)、P(3)、P(k≥2)",
+      "approachSteps": [
+        "先算计数间隔内的平均到达车辆数 m = Q·t/3600，t 必须用秒",
+        "代入 P(k) = mᵏ·e^(−m)/k!",
+        "P(0) = e^(−m)",
+        "P(k ≥ 2) = 1 − P(0) − P(1)，用对立事件比逐项相加更快",
+        "检查各概率之和：P(0)+P(1)+P(2)+P(3) 应小于 1"
+      ],
+      "keyFormulas": ["traffic-engineering-formula-021", "traffic-engineering-formula-022"],
+      "answer": "m = 480×30/3600 = 4.0 辆；P(0) = e^(−4) = 0.0183；P(3) = 4³·e^(−4)/3! = 0.1954；P(k ≥ 2) = 1 − 0.0183 − 0.0733 = 0.9084。",
+      "answerPolicy": "默认只给到思路与关键式；用户要求「给答案」时再展示",
+      "selfCheck": [
+        "m = 4 是无量纲期望计数，不是流量",
+        "前四项概率 0.0183+0.0733+0.1465+0.1954 = 0.4335，加后续项趋近 1，合理",
+        "泊松分布方差等于均值，若实测方差明显大于 4 则应改用负二项分布"
+      ],
+      "commonErrors": [
+        "t 用分钟代入 m = Q·t/3600，导致 m 小 60 倍",
+        "P(k ≥ 2) 只算 P(2) 而漏掉 k > 2 的项",
+        "阶乘计算错误（3! = 6 写成 3）"
+      ],
+      "confidence": "high",
+      "cite": { "book": "交通工程总论", "edition": "第5版", "publisher": "人民交通出版社", "chapter": "5", "page": null },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-exercise-011",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.3",
+      "title": "负指数分布与行人过街可接受间隙",
+      "kind": "计算题",
+      "difficulty": "medium",
+      "frequency": "高频",
+      "stem": "某路段单向交通量 Q = 600 veh/h，车头时距服从负指数分布。求：(1) 车头时距大于等于 5 s 的概率；(2) 若行人过街所需的可接受间隙为 6 s，求 1 min 内可供行人穿越的间隙个数的期望值。",
+      "given": [["Q", "600 veh/h"], ["t", "5 s / 6 s"], ["观测时段", "60 s"]],
+      "goal": "P(h≥5)、P(h≥6)、期望间隙个数",
+      "approachSteps": [
+        "负指数分布：P(h ≥ t) = exp(−Q·t/3600)，t 用秒",
+        "代入 t = 5 s 得 P(h ≥ 5)",
+        "代入 t = 6 s 得单个间隙可穿越的概率",
+        "1 min 内的间隙总数 = Q × 60/3600 = 10 个",
+        "期望可穿越间隙个数 = 间隙总数 × P(h ≥ 6)"
+      ],
+      "keyFormulas": ["traffic-engineering-formula-023"],
+      "answer": "P(h ≥ 5) = exp(−600×5/3600) = exp(−0.8333) = 0.4346；P(h ≥ 6) = exp(−1.0) = 0.3679；1 min 内间隙总数 = 600×60/3600 = 10 个，期望可穿越间隙个数 = 10×0.3679 = 3.68 ≈ 3.7 个。",
+      "answerPolicy": "默认只给到思路与关键式；用户要求「给答案」时再展示",
+      "selfCheck": [
+        "P(h ≥ 5) = 0.4346 < 1 且 > 0，量级合理",
+        "平均车头时距 ht = 3600/600 = 6 s，故 P(h ≥ 6) = e^(−1) = 0.3679 是负指数的固有性质，可直接记忆",
+        "期望个数 3.68 小于间隙总数 10，符合直觉"
+      ],
+      "commonErrors": [
+        "把 P(h ≥ t) 与 P(h < t) 弄反，写成 1 − exp(...)",
+        "忘记把'概率'乘以间隙总数来求'个数'",
+        "Q 用双向总量代入"
+      ],
+      "confidence": "high",
+      "cite": { "book": "交通工程总论", "edition": "第5版", "publisher": "人民交通出版社", "chapter": "5", "page": null },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-exercise-012",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.3",
+      "title": "移位负指数分布与普通负指数的对比",
+      "kind": "计算题",
+      "difficulty": "medium",
+      "frequency": "中频",
+      "stem": "某单向车流 Q = 900 veh/h，车头时距服从移位负指数分布，最小车头时距 τ = 1.2 s。求车头时距大于等于 5 s 的概率，并与不考虑最小车头时距的普通负指数分布结果对比，说明差异原因。",
+      "given": [["Q", "900 veh/h"], ["tau", "1.2 s"], ["t", "5 s"]],
+      "goal": "P(h≥5) 的两种结果及对比",
+      "approachSteps": [
+        "确认 t = 5 s > τ = 1.2 s，可代入移位负指数式",
+        "移位式：P(h ≥ t) = exp[−Q(t − τ)/3600]",
+        "普通式：P(h ≥ t) = exp(−Q·t/3600)",
+        "比较两者：移位后有效等待时间缩短为 t − τ，故概率更大"
+      ],
+      "keyFormulas": ["traffic-engineering-formula-024", "traffic-engineering-formula-023"],
+      "answer": "移位负指数：P(h ≥ 5) = exp[−900×(5 − 1.2)/3600] = exp(−0.95) = 0.3867；普通负指数：exp(−900×5/3600) = exp(−1.25) = 0.2865。移位后概率提高约 0.100（10 个百分点）。",
+      "answerPolicy": "默认只给到思路与关键式；用户要求「给答案」时再展示",
+      "selfCheck": [
+        "t > τ，若 t < τ 则概率恒为 1，不应代入公式",
+        "移位结果 0.3867 > 普通结果 0.2865，方向正确",
+        "平均车头时距 3600/900 = 4 s > τ = 1.2 s，参数组合自洽"
+      ],
+      "commonErrors": [
+        "把 (t − τ) 写成 (t + τ)，概率反而变小",
+        "t < τ 时仍代入公式得到大于 1 的概率",
+        "τ 用分钟或毫秒代入"
+      ],
+      "confidence": "high",
+      "cite": { "book": "交通工程总论", "edition": "第5版", "publisher": "人民交通出版社", "chapter": "5", "page": null },
+      "verify": "最小车头时距 τ 的取值（本例 1.2 s）为常用量级示例，请按教材核对推荐值。"
+    },
+    {
+      "id": "traffic-engineering-exercise-013",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.4",
+      "title": "M/M/1 收费站全套排队指标",
+      "kind": "计算题",
+      "difficulty": "medium",
+      "frequency": "高频",
+      "stem": "某高速公路收费站设 1 条收费通道，车辆到达为泊松流，平均到达率 λ = 400 veh/h，服务时间服从负指数分布，服务率 μ = 500 veh/h。求系统利用率 ρ、平均排队长度 Lq、系统内平均车辆数 L、平均排队等待时间 Wq 与平均逗留时间 W。",
+      "given": [["lambda", "400 veh/h"], ["mu", "500 veh/h"]],
+      "goal": "ρ、Lq、L、Wq、W",
+      "approachSteps": [
+        "先算 ρ = λ/μ，确认 ρ < 1 才能用 M/M/1 稳态公式",
+        "Lq = ρ²/(1 − ρ)（不含正在缴费的车）",
+        "L = ρ/(1 − ρ)（含正在缴费的车）",
+        "Wq = ρ/(μ − λ)，W = 1/(μ − λ)，结果单位是小时，乘 3600 化为秒",
+        "用 Little 定律 L = λ·W 校核"
+      ],
+      "keyFormulas": ["traffic-engineering-formula-025", "traffic-engineering-formula-026", "traffic-engineering-formula-027", "traffic-engineering-formula-028", "traffic-engineering-formula-029", "traffic-engineering-formula-030"],
+      "answer": "ρ = 0.80；Lq = 0.64/0.20 = 3.20 veh；L = 0.80/0.20 = 4.00 veh；W = 1/(500−400) = 0.0100 h = 36.0 s；Wq = 0.80/100 = 0.0080 h = 28.8 s。校核 L = λ·W = 400×0.01 = 4.00 ✓。",
+      "answerPolicy": "默认只给到思路与关键式；用户要求「给答案」时再展示",
+      "selfCheck": [
+        "ρ = 0.8 < 1，稳态解存在；若 λ ≥ μ 则排队无限增长，公式不可用",
+        "W − Wq = 36.0 − 28.8 = 7.2 s = 1/μ = 3600/500 = 7.2 s ✓",
+        "Little 校核 Lq = λ·Wq = 400×0.008 = 3.2 ✓"
+      ],
+      "commonErrors": [
+        "把 W、Wq 的小时结果直接当成秒（差 3600 倍）",
+        "把 L 与 Lq 弄反（L 含在服务的车，恒大于 Lq）",
+        "ρ ≥ 1 时仍套公式得到负数或无穷大却不自知"
+      ],
+      "confidence": "high",
+      "cite": { "book": "交通工程总论", "edition": "第5版", "publisher": "人民交通出版社", "chapter": "5", "page": null },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-exercise-014",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.4",
+      "title": "M/M/1 交叉口进口道排队与长排队概率",
+      "kind": "计算题",
+      "difficulty": "medium",
+      "frequency": "中频",
+      "stem": "某交叉口进口道按 M/M/1 系统近似，到达率 λ = 720 veh/h，通行能力（服务率）μ = 900 veh/h。求平均排队长度 Lq、平均排队等待时间 Wq、平均逗留时间 W，以及系统内车辆数不少于 5 辆的概率。",
+      "given": [["lambda", "720 veh/h"], ["mu", "900 veh/h"]],
+      "goal": "Lq、Wq、W、P(n≥5)",
+      "approachSteps": [
+        "算 ρ = λ/μ 并确认 < 1",
+        "Lq = ρ²/(1 − ρ)，Wq = ρ/(μ − λ)，W = 1/(μ − λ)",
+        "M/M/1 中 P(n ≥ k) = ρ^k，故 P(n ≥ 5) = ρ⁵",
+        "时间结果由小时换算为秒"
+      ],
+      "keyFormulas": ["traffic-engineering-formula-027", "traffic-engineering-formula-028", "traffic-engineering-formula-029", "traffic-engineering-formula-031"],
+      "answer": "ρ = 0.80；Lq = 3.20 veh；Wq = 0.80/180 = 0.004444 h = 16.0 s；W = 1/180 = 0.005556 h = 20.0 s；P(n ≥ 5) = 0.8⁵ = 0.3277。",
+      "answerPolicy": "默认只给到思路与关键式；用户要求「给答案」时再展示",
+      "selfCheck": [
+        "W − Wq = 20.0 − 16.0 = 4.0 s = 3600/900 = 4.0 s ✓",
+        "P(n ≥ 5) = 0.3277 < P(n ≥ 1) = 0.8，随 k 增大而减小，合理",
+        "排队长度 3.2 辆，若进口道仅有很短的展宽段则需警惕溢出"
+      ],
+      "commonErrors": [
+        "把 P(n ≥ 5) 算成 1 − ρ⁵ 或 (1−ρ)ρ⁵（后者是恰好 5 辆的概率 P(n=5)）",
+        "W 与 Wq 混淆，漏减服务时间",
+        "ρ 用 λ/(μ−λ) 之类的错误形式"
+      ],
+      "confidence": "high",
+      "cite": { "book": "交通工程总论", "edition": "第5版", "publisher": "人民交通出版社", "chapter": "5", "page": null },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-exercise-015",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.4",
+      "title": "M/M/1 排队等待时间超过给定值的概率",
+      "kind": "计算题",
+      "difficulty": "medium",
+      "frequency": "中频",
+      "stem": "某服务设施按 M/M/1 分析，到达率 λ = 300 veh/h，服务率 μ = 400 veh/h。求一辆车排队等待时间超过 30 s 的概率。",
+      "given": [["lambda", "300 veh/h"], ["mu", "400 veh/h"], ["t", "30 s"]],
+      "goal": "P(Wq > 30 s)",
+      "approachSteps": [
+        "算 ρ = λ/μ 与 (μ − λ)",
+        "把阈值 t = 30 s 换算为小时（与 μ、λ 的单位一致）",
+        "代入 P(Wq > t) = ρ·exp[−(μ − λ)·t]",
+        "检验结果落在 0~1，且应小于 ρ"
+      ],
+      "keyFormulas": ["traffic-engineering-formula-032", "traffic-engineering-formula-025"],
+      "answer": "ρ = 0.75；(μ − λ) = 100 veh/h；t = 30/3600 = 0.008333 h；P(Wq > 30 s) = 0.75×exp(−100×0.008333) = 0.75×0.4346 = 0.3259。",
+      "answerPolicy": "默认只给到思路与关键式；用户要求「给答案」时再展示",
+      "selfCheck": [
+        "结果 0.3259 < ρ = 0.75，符合 P(Wq > 0) = ρ 的边界性质",
+        "若忘记把 30 s 换成小时，指数项会变成 exp(−3000) ≈ 0，结果荒谬",
+        "平均排队等待时间 Wq = 0.75/100 = 0.0075 h = 27 s，30 s 略大于均值，概率 0.33 合理"
+      ],
+      "commonErrors": [
+        "时间单位未换算（秒直接代入以 veh/h 为单位的 μ、λ）",
+        "漏乘前置因子 ρ，只算 exp 项",
+        "把它当成 P(W > t)（含服务时间），两者不同"
+      ],
+      "confidence": "high",
+      "cite": { "book": "交通工程总论", "edition": "第5版", "publisher": "人民交通出版社", "chapter": "5", "page": null },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-exercise-016",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.6",
+      "title": "由两状态流量密度求交通波波速",
+      "kind": "计算题",
+      "difficulty": "medium",
+      "frequency": "高频",
+      "stem": "某路段上游状态一：Q1 = 1200 veh/h、K1 = 20 veh/km；下游因瓶颈转为状态二：Q2 = 800 veh/h、K2 = 50 veh/km。求两状态的分界波速，并判断波向哪个方向传播。",
+      "given": [["Q1", "1200 veh/h"], ["K1", "20 veh/km"], ["Q2", "800 veh/h"], ["K2", "50 veh/km"]],
+      "goal": "uw 与传播方向",
+      "approachSteps": [
+        "先算两状态的区间平均车速 V1 = Q1/K1、V2 = Q2/K2，确认状态二更拥挤",
+        "代入波速式 uw = (Q2 − Q1)/(K2 − K1)",
+        "注意分子分母的次序：状态 2 减状态 1，两者要对应",
+        "由符号判断方向：uw > 0 顺车流向下游，uw < 0 逆车流向上游"
+      ],
+      "keyFormulas": ["traffic-engineering-formula-035"],
+      "answer": "V1 = 60 km/h，V2 = 16 km/h；uw = (800 − 1200)/(50 − 20) = −13.33 km/h。波速为负，说明分界面逆车流方向（向上游）传播，即拥堵向上游蔓延。",
+      "answerPolicy": "默认只给到思路与关键式；用户要求「给答案」时再展示",
+      "selfCheck": [
+        "分母 K2 − K1 = 30 > 0；分子 Q2 − Q1 = −400 < 0，故波速为负，符号自洽",
+        "波速 13.33 km/h 量级远小于车速 60 km/h，符合'波速不等于车速'的常识",
+        "下游变拥挤 → 界面向上游推进，物理直觉与符号一致"
+      ],
+      "commonErrors": [
+        "分子分母次序不对应（如 Q2 − Q1 配 K1 − K2），符号完全反掉",
+        "把波速当成车流速度来解释",
+        "忘记说明传播方向，只给数值"
+      ],
+      "confidence": "high",
+      "cite": { "book": "交通工程总论", "edition": "第5版", "publisher": "人民交通出版社", "chapter": "5", "page": null },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-exercise-017",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.6",
+      "title": "停车波波速与红灯期间排队长度",
+      "kind": "计算题",
+      "difficulty": "medium",
+      "frequency": "高频",
+      "stem": "某进口道上游车流 Q1 = 900 veh/h、K1 = 15 veh/km，红灯期间车流在停车线处转为阻塞状态，阻塞密度 Kj = 110 veh/km。红灯时长 40 s。求停车波波速、红灯结束时的排队长度与排队车辆数。",
+      "given": [["Q1", "900 veh/h"], ["K1", "15 veh/km"], ["Kj", "110 veh/km"], ["Tr", "40 s"]],
+      "goal": "uw_stop、排队长度、排队车辆数",
+      "approachSteps": [
+        "停车波是行驶状态（Q1, K1）转入阻塞状态（Q = 0, K = Kj）的界面波",
+        "uw_stop = −Q1/(Kj − K1)，结果为负表示向上游传播",
+        "排队长度 L = |uw_stop| × Tr，注意 km/h × s 必须除以 3600 才得 km",
+        "排队车辆数既可用 (Kj − K1)×L，也可用 Q1×Tr/3600 计算，两者应相等",
+        "用两种算法互校是本题最好的自检手段"
+      ],
+      "keyFormulas": ["traffic-engineering-formula-036", "traffic-engineering-formula-038"],
+      "answer": "uw_stop = −900/(110 − 15) = −9.474 km/h（向上游传播）；排队长度 L = 9.474×40/3600 = 0.1053 km = 105.3 m；排队车辆数 = (110 − 15)×0.1053 = 10.0 辆，与红灯期间到达数 900×40/3600 = 10.0 辆一致。",
+      "answerPolicy": "默认只给到思路与关键式；用户要求「给答案」时再展示",
+      "selfCheck": [
+        "排队长度 105 m 除以每车约 10.5 m（含间距，对应 Kj = 110 veh/km 时 1000/110 = 9.1 m）约 11 辆，与 10 辆同量级",
+        "两种算法（波速法与到达率法）给出相同的 10.0 辆，说明计算自洽",
+        "排队长度 105 m 在常见进口道展宽段长度内，未溢出"
+      ],
+      "commonErrors": [
+        "用 |uw|×Tr/60 计算，量纲错误会得到 6.3 km 的荒谬结果；正确做法是除以 3600",
+        "丢掉负号后把传播方向说成向下游",
+        "把 Kj 与 K1 的差当成排队车辆数而忘记乘长度"
+      ],
+      "confidence": "medium",
+      "cite": { "book": "交通工程总论", "edition": "第5版", "publisher": "人民交通出版社", "chapter": "5", "page": null },
+      "verify": "本卡排队长度按 L(km) = |uw|(km/h) × T(s) / 3600 计算。若教材（或知识库既有公式卡 traffic-engineering-formula-038）采用其他时间单位约定（如 uw 以 km/min 计、除以 60），请以教材写法为准，本结果需按教材换算口径复核。"
+    },
+    {
+      "id": "traffic-engineering-exercise-018",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.6",
+      "title": "启动波波速与排队车队消散时间",
+      "kind": "计算题",
+      "difficulty": "medium",
+      "frequency": "中频",
+      "stem": "绿灯启亮后排队车队开始放行，放行状态 Q2 = 1400 veh/h、K2 = 25 veh/km，阻塞密度 Kj = 110 veh/km。求启动波波速与方向；若红灯结束时排有 12 辆车，上游持续到达率 900 veh/h，求车队消散所需时间。",
+      "given": [["Q2", "1400 veh/h"], ["K2", "25 veh/km"], ["Kj", "110 veh/km"], ["N", "12 辆"], ["到达率", "900 veh/h"]],
+      "goal": "uw_start、传播方向、消散时间",
+      "approachSteps": [
+        "启动波是阻塞状态（K = Kj）转入放行状态（Q2, K2）的界面波",
+        "uw_start = Q2/(K2 − Kj)，因 K2 < Kj 分母为负，波速为负即向上游传播",
+        "消散时间不是用波速算的，而是排队车辆数除以净消散率：t = N/(离去率 − 到达率)",
+        "结果由小时换算为秒"
+      ],
+      "keyFormulas": ["traffic-engineering-formula-037"],
+      "answer": "uw_start = 1400/(25 − 110) = −16.47 km/h，负号表示启动波向上游（排队队尾方向）传播；消散时间 t = 12/(1400 − 900) = 0.0240 h = 86.4 s。",
+      "answerPolicy": "默认只给到思路与关键式；用户要求「给答案」时再展示",
+      "selfCheck": [
+        "净消散率 1400 − 900 = 500 veh/h > 0，车队确实会消散；若 ≤ 0 则排队持续增长",
+        "12 辆 ÷ 500 veh/h = 0.024 h = 86.4 s，量级合理",
+        "uw_start = −16.47 km/h 的绝对值大于车流速度 Q2/K2 = 56 km/h？不成立：|uw| = 16.47 < 56，波速小于车速，合理"
+      ],
+      "commonErrors": [
+        "分母写成 (Kj − K2) 得到正波速，方向判反",
+        "用 N/离去率（而非净消散率）算消散时间，忽略了边到达边消散",
+        "用波速去除排队长度来求消散时间，两个概念不同"
+      ],
+      "confidence": "medium",
+      "cite": { "book": "交通工程总论", "edition": "第5版", "publisher": "人民交通出版社", "chapter": "5", "page": null },
+      "verify": "启动波公式的符号约定（分母为 K2 − Kj 还是 Kj − K2）各教材写法不一，请以手中教材为准；波速的绝对值与方向结论不受约定影响。"
+    },
+    {
+      "id": "traffic-engineering-exercise-019",
+      "subjectId": "traffic-engineering",
+      "chapter": "6.3",
+      "title": "高速公路基本路段通行能力与 LOS 判定（含重型车折算）",
+      "kind": "计算题",
+      "difficulty": "hard",
+      "frequency": "高频",
+      "stem": "某高速公路基本路段单向 3 车道，高峰小时交通量 3600 veh/h，PHF = 0.90；交通组成中大型车比例 PT = 0.15（ET = 2.5）、特大型车 PR = 0.03（ER = 1.5）；fp = 1.0。已知每车道基本通行能力 C0 = 2200 pcu/h/ln，实测平均行程车速 95 km/h。求重型车修正系数 fHV、当量小客车高峰流率 vp、V/C 与密度，并据此讨论服务水平。",
+      "given": [["V", "3600 veh/h"], ["N", "3 车道"], ["PHF", "0.90"], ["PT", "0.15"], ["ET", "2.5"], ["PR", "0.03"], ["ER", "1.5"], ["fp", "1.0"], ["C0", "2200 pcu/h/ln"], ["平均车速", "95 km/h"]],
+      "goal": "fHV、vp、V/C、密度、LOS 讨论",
+      "approachSteps": [
+        "先算重型车修正系数 fHV = 1/[1 + PT(ET − 1) + PR(ER − 1)]，比例必须用小数",
+        "把小时交通量折算为当量小客车流率 vp = V/(PHF × N × fHV × fp)",
+        "V/C = vp / C0",
+        "密度 = vp / 平均行程车速（注意用区间平均车速）",
+        "用密度（或 V/C）对照所用方法手册的 LOS 阈值判级"
+      ],
+      "keyFormulas": ["traffic-engineering-formula-040", "traffic-engineering-formula-041", "traffic-engineering-formula-042", "traffic-engineering-formula-039"],
+      "answer": "fHV = 1/[1 + 0.15×1.5 + 0.03×0.5] = 1/1.240 = 0.806；vp = 3600/(0.90×3×0.806×1.0) = 1653 pcu/h/ln；V/C = 1653/2200 = 0.752；密度 = 1653/95 = 17.4 pcu/km/ln。按 HCM 基本路段以密度分级的阈值（约 11 / 18 / 26 / 35 / 45 pcu/km/ln 为 A~F 分界，须核对），17.4 落在 11~18 区间，判为 LOS B。",
+      "answerPolicy": "默认只给到思路与关键式；用户要求「给答案」时再展示",
+      "selfCheck": [
+        "fHV = 0.806 < 1，重型车越多系数越小，方向正确",
+        "vp = 1653 > 小时交通量/车道数 = 1200，因含 PHF 与车型折算，方向正确",
+        "V/C = 0.752 < 1，未过饱和，可用稳态方法判级",
+        "密度 17.4 与 V/C 0.752 两个指标给出的拥挤程度描述应互相印证"
+      ],
+      "commonErrors": [
+        "PT、PR 用百分数（15、3）代入，fHV 会小到荒谬",
+        "漏除 PHF 或漏除车道数 N",
+        "用时间平均车速求密度，导致密度偏大、LOS 判低一级"
+      ],
+      "confidence": "low",
+      "cite": { "book": "交通工程总论", "edition": "第5版", "publisher": "人民交通出版社", "chapter": "6", "page": null },
+      "verify": "本题的 LOS 阈值（11/18/26/35/45 pcu/km/ln）为 HCM 常见量级记忆值，强依赖版本；国内规范与教材的密度分级阈值可能不同。C0 = 2200 pcu/h/ln 亦为示例取值。判级结论必须按教师指定的教材/规范重算，本卡结论仅示范计算流程。"
+    },
+    {
+      "id": "traffic-engineering-exercise-020",
+      "subjectId": "traffic-engineering",
+      "chapter": "6.1",
+      "title": "三级通行能力的连乘计算",
+      "kind": "计算题",
+      "difficulty": "easy",
+      "frequency": "高频",
+      "stem": "已知某路段每车道基本通行能力 C0 = 2200 pcu/h/ln，车道宽与净空修正系数 fw = 0.95，重型车修正系数 fHV = 0.82，驾驶员群体系数 fp = 1.0。若设计要求的服务水平对应 V/C = 0.85，求可能通行能力与设计通行能力，并说明三者大小关系。",
+      "given": [["C0", "2200 pcu/h/ln"], ["fw", "0.95"], ["fHV", "0.82"], ["fp", "1.0"], ["(V/C)设计", "0.85"]],
+      "goal": "可能通行能力、设计通行能力、排序",
+      "approachSteps": [
+        "基本通行能力是理想条件下的上限，记为 C0",
+        "可能通行能力 = C0 × fw × fHV × fp（连乘各修正系数）",
+        "设计通行能力 = 可能通行能力 × 设计 (V/C)",
+        "排序记忆：基本 > 可能 > 设计"
+      ],
+      "keyFormulas": ["traffic-engineering-formula-039", "traffic-engineering-formula-043", "traffic-engineering-formula-042"],
+      "answer": "可能通行能力 = 2200 × 0.95 × 0.82 × 1.0 = 1713.8 ≈ 1714 pcu/h/ln；设计通行能力 = 1714 × 0.85 = 1456.7 ≈ 1457 pcu/h/ln。大小关系：基本通行能力 2200 > 可能通行能力 1714 > 设计通行能力 1457。",
+      "answerPolicy": "默认只给到思路与关键式；用户要求「给答案」时再展示",
+      "selfCheck": [
+        "三个系数均 ≤ 1，故连乘结果必然小于 C0",
+        "设计值 1457 < 可能值 1714，比值恰为 0.85，与给定 V/C 一致",
+        "若某修正系数 > 1（如个别车道宽修正），需确认该体系是否允许"
+      ],
+      "commonErrors": [
+        "把三级通行能力的排序记反",
+        "漏乘某个修正系数",
+        "把设计 V/C 当成修正系数乘到基本通行能力上而跳过可能通行能力这一级"
+      ],
+      "confidence": "medium",
+      "cite": { "book": "交通工程总论", "edition": "第5版", "publisher": "人民交通出版社", "chapter": "6", "page": null },
+      "verify": "修正系数的项目组成（fw/fHV/fp 是否还有其他项）与设计 V/C = 0.85 的取值请按教材与现行规范核对。"
+    },
+    {
+      "id": "traffic-engineering-exercise-021",
+      "subjectId": "traffic-engineering",
+      "chapter": "11.2",
+      "title": "Webster 两相位信号配时",
+      "kind": "计算题",
+      "difficulty": "medium",
+      "frequency": "高频",
+      "stem": "某十字交叉口采用两相位定时控制。临界车道组流量与饱和流率分别为：相位一 q1 = 600 veh/h、S1 = 1800 veh/h；相位二 q2 = 450 veh/h、S2 = 1800 veh/h。每相位起动损失 3 s，绿灯间隔时间合计 4 s。求各相位流量比、临界流量比 Y、每周期总损失时间 L、Webster 最佳周期 C0、总有效绿灯与两相位有效绿灯时间。",
+      "given": [["q1", "600 veh/h"], ["S1", "1800 veh/h"], ["q2", "450 veh/h"], ["S2", "1800 veh/h"], ["l", "3 s/相位"], ["ΣI", "4 s"]],
+      "goal": "y1、y2、Y、L、C0、ge、g1、g2",
+      "approachSteps": [
+        "算各相位临界车道组流量比 y = q/S",
+        "Y = Σy（每相位只取其最大的那个车道组，不能全加）",
+        "每周期总损失时间 L = n×l + ΣI",
+        "Webster 最佳周期 C0 = (1.5L + 5)/(1 − Y)",
+        "总有效绿灯 ge = C0 − L，再按 gi = (yi/Y)×ge 分配"
+      ],
+      "keyFormulas": ["traffic-engineering-formula-047", "traffic-engineering-formula-048", "traffic-engineering-formula-049", "traffic-engineering-formula-050", "traffic-engineering-formula-051", "traffic-engineering-formula-052", "traffic-engineering-formula-053"],
+      "answer": "y1 = 0.3333、y2 = 0.2500、Y = 0.5833；L = 2×3 + 4 = 10 s；C0 = (1.5×10 + 5)/(1 − 0.5833) = 20/0.41667 = 48.0 s；ge = 38.0 s；g1 = (0.3333/0.5833)×38 = 21.7 s，g2 = (0.2500/0.5833)×38 = 16.3 s。绿信比 λ1 = 21.7/48 = 0.452、λ2 = 16.3/48 = 0.339。",
+      "answerPolicy": "默认只给到思路与关键式；用户要求「给答案」时再展示",
+      "selfCheck": [
+        "g1 + g2 = 38.0 = ge ✓",
+        "Σλ + L/C = 0.452 + 0.339 + 10/48 = 0.452+0.339+0.208 = 0.999 ≈ 1 ✓",
+        "Y = 0.583 < 1，未过饱和，Webster 公式适用",
+        "C0 = 48 s 落在常见单点周期 40~120 s 区间的下限，与交叉口负荷较轻相符"
+      ],
+      "commonErrors": [
+        "把所有车道组的 y 全部相加（而非每相位取最大）",
+        "L 只算起动损失或只算绿灯间隔",
+        "Webster 公式系数记错（如写成 (1.5L+5.5) 或 (1.5L+5)/(1−Y)²）"
+      ],
+      "confidence": "medium",
+      "cite": { "book": "交通工程总论", "edition": "第5版", "publisher": "人民交通出版社", "chapter": "11", "page": null },
+      "verify": "Webster 周期公式 C0 = (1.5L + 5)/(1 − Y) 的系数 1.5 与 5 存在版本差异（另有 1.5L+5.5 等写法），请以手中教材为准后重算。有效绿灯到显示绿灯的换算约定亦需按教材确认。"
+    },
+    {
+      "id": "traffic-engineering-exercise-022",
+      "subjectId": "traffic-engineering",
+      "chapter": "11.2",
+      "title": "Webster 三相位配时与饱和度校核",
+      "kind": "计算题",
+      "difficulty": "hard",
+      "frequency": "高频",
+      "stem": "某交叉口采用三相位定时控制，各相位临界车道组为：相位一 q1 = 520 veh/h、S1 = 1800 veh/h；相位二 q2 = 380 veh/h、S2 = 1800 veh/h；相位三（左转保护）q3 = 300 veh/h、S3 = 1700 veh/h。每相位起动损失 3 s，绿灯间隔合计 6 s。求 Y、L、最佳周期 C0、总有效绿灯 ge、各相位有效绿灯及对应饱和度。",
+      "given": [["q1", "520"], ["S1", "1800"], ["q2", "380"], ["S2", "1800"], ["q3", "300"], ["S3", "1700"], ["l", "3 s/相位"], ["ΣI", "6 s"]],
+      "goal": "Y、L、C0、ge、g1~g3、x1~x3",
+      "approachSteps": [
+        "算三相位流量比 y1、y2、y3 并求和得 Y",
+        "L = 3×3 + 6 = 15 s",
+        "C0 = (1.5L + 5)/(1 − Y)",
+        "ge = C0 − L，按 gi = (yi/Y)×ge 分配",
+        "饱和度 xi = qi/(Si × λi)，其中 λi = gi/C0",
+        "注意 Webster 按 y 等比例分配绿灯会使各相位饱和度趋于一致，这是很好的校核特征"
+      ],
+      "keyFormulas": ["traffic-engineering-formula-047", "traffic-engineering-formula-048", "traffic-engineering-formula-049", "traffic-engineering-formula-050", "traffic-engineering-formula-051", "traffic-engineering-formula-052", "traffic-engineering-formula-053", "traffic-engineering-formula-054"],
+      "answer": "y1 = 0.2889、y2 = 0.2111、y3 = 0.1765，Y = 0.6765；L = 15 s；C0 = (1.5×15 + 5)/(1 − 0.6765) = 27.5/0.32353 = 85.0 s；ge = 70.0 s；g1 = 29.9 s、g2 = 21.8 s、g3 = 18.3 s（合计 70.0 s ✓）；λ1 = 0.352、λ2 = 0.257、λ3 = 0.215；x1 = 520/(1800×0.352) = 0.821，x2 = 0.821，x3 = 300/(1700×0.215) = 0.821。",
+      "answerPolicy": "默认只给到思路与关键式；用户要求「给答案」时再展示",
+      "selfCheck": [
+        "g1 + g2 + g3 = 29.9 + 21.8 + 18.3 = 70.0 = ge ✓",
+        "三个相位饱和度同为 0.821，正是按流量比等比例分配绿灯的必然结果，是强校核信号",
+        "x = 0.821 < 1，未过饱和；若某相位 x > 1 说明该相位需要更长绿灯或增加车道",
+        "Σλ + L/C = 0.352+0.257+0.215+15/85 = 0.824+0.176 = 1.000 ✓"
+      ],
+      "commonErrors": [
+        "把三个 y 相加时用了错误的饱和流率（如第三相位也用 1800）",
+        "饱和度用 qi/Si（漏除绿信比 λi）",
+        "ge 分配时用了显示绿灯而不是有效绿灯"
+      ],
+      "confidence": "medium",
+      "cite": { "book": "交通工程总论", "edition": "第5版", "publisher": "人民交通出版社", "chapter": "11", "page": null },
+      "verify": "Webster 周期公式系数（1.5 与 5）与绿时分配原则存在版本差异，请按教材核对；本卡按 C0=(1.5L+5)/(1−Y) 计算。"
+    },
+    {
+      "id": "traffic-engineering-exercise-023",
+      "subjectId": "traffic-engineering",
+      "chapter": "11.3",
+      "title": "Webster 延误计算（均匀延误 + 随机延误）",
+      "kind": "计算题",
+      "difficulty": "medium",
+      "frequency": "高频",
+      "stem": "某信号交叉口周期 C = 80 s，某进口道有效绿灯 g = 32 s，饱和流率 S = 1800 veh/h，到达流量 q = 600 veh/h。求该进口道饱和度 x、均匀延误 d1、随机延误 d2 与总车均延误 d，并说明延误量级对应的服务水平。",
+      "given": [["C", "80 s"], ["g", "32 s"], ["S", "1800 veh/h"], ["q", "600 veh/h"]],
+      "goal": "x、d1、d2、d、LOS 讨论",
+      "approachSteps": [
+        "绿信比 λ = g/C",
+        "饱和度 x = q/(S×λ)，注意分母含绿信比",
+        "均匀延误 d1 = C(1 − λ)²/[2(1 − λx)]，单位秒",
+        "随机延误 d2 = x²/[2q(1 − x)]，此处的 q 必须用 veh/s 代入",
+        "总延误 d = d1 + d2"
+      ],
+      "keyFormulas": ["traffic-engineering-formula-053", "traffic-engineering-formula-054", "traffic-engineering-formula-055", "traffic-engineering-formula-056", "traffic-engineering-formula-057"],
+      "answer": "λ = 32/80 = 0.400；x = 600/(1800×0.4) = 0.8333；d1 = 80×(1−0.4)²/[2×(1 − 0.4×0.8333)] = 28.8/1.3333 = 21.6 s；q = 600/3600 = 0.1667 veh/s，d2 = 0.8333²/[2×0.1667×(1 − 0.8333)] = 0.6944/0.05556 = 12.5 s；d = 21.6 + 12.5 = 34.1 s/veh，按 HCM 控制延误阈值（20~35 s 为 C 级，须核对）判为 LOS C。",
+      "answerPolicy": "默认只给到思路与关键式；用户要求「给答案」时再展示",
+      "selfCheck": [
+        "x = 0.833 < 1，未过饱和，公式可用",
+        "d1 = 21.6 s 小于半个红灯时长（0.5×48 = 24 s），量级合理",
+        "d2/d1 = 0.58，随机延误占比随 x 增大而增大，x = 0.83 时占三分之一左右合理",
+        "若 d2 算出 0.0035 s（小 3600 倍），说明 q 忘了换成 veh/s"
+      ],
+      "commonErrors": [
+        "d2 中 q 用 veh/h 代入（结果小 3600 倍或大 3600 倍，取决于用法）",
+        "分母 (1 − λx) 写成 (1 − x)，会低估延误",
+        "把 C 用分钟或 g 用绿信比代入 d1"
+      ],
+      "confidence": "medium",
+      "cite": { "book": "交通工程总论", "edition": "第5版", "publisher": "人民交通出版社", "chapter": "11", "page": null },
+      "verify": "Webster 延误式的具体形式与系数（分母是 2(1−λx) 还是 2(1−x)、d2 的 q 单位约定）各版本有差异；HCM 控制延误的 LOS 阈值亦强依赖版本。请按教材与现行 HCM 核对后再判级。"
+    },
+    {
+      "id": "traffic-engineering-exercise-024",
+      "subjectId": "traffic-engineering",
+      "chapter": "12.1",
+      "title": "三种事故率的计算",
+      "kind": "计算题",
+      "difficulty": "medium",
+      "frequency": "高频",
+      "stem": "某路段长 8 km，AADT = 15000 veh/d，一年内发生事故 42 次。该地区机动车保有量 6.0 万辆，人口 45 万人。求亿车公里事故率、万车事故率与 10 万人口事故率，并说明三者的适用场景。",
+      "given": [["L", "8 km"], ["AADT", "15000 veh/d"], ["A", "42 次/年"], ["机动车保有量", "6.0 万辆"], ["人口", "45 万人"]],
+      "goal": "R1、R2、R3 及适用说明",
+      "approachSteps": [
+        "先算年车辆行驶里程 VMT = AADT × L × 365",
+        "亿车公里事故率 R1 = A × 10⁸ / VMT",
+        "万车事故率 R2 = A × 10⁴ / 机动车保有量",
+        "10 万人口事故率 R3 = A × 10⁵ / 人口",
+        "说明：R1 用于路段/设施间比较，R2 用于区域机动化安全水平，R3 用于居民风险水平"
+      ],
+      "keyFormulas": ["traffic-engineering-formula-069", "traffic-engineering-formula-068", "traffic-engineering-formula-070"],
+      "answer": "VMT = 15000 × 8 × 365 = 4.38×10⁷ veh·km/年；R1 = 42×10⁸/4.38×10⁷ = 95.9 次/亿车公里；R2 = 42×10⁴/6.0×10⁴ = 7.0 次/万车；R3 = 42×10⁵/4.5×10⁵ = 9.33 次/10 万人。",
+      "answerPolicy": "默认只给到思路与关键式；用户要求「给答案」时再展示",
+      "selfCheck": [
+        "VMT 必须含 AADT、长度、365 三项，缺一即错",
+        "三个指标的量级分别为 10²、10⁰、10¹，符合常见统计口径",
+        "R1 属于路段级指标，R2/R3 属于区域级指标，不要混用比较"
+      ],
+      "commonErrors": [
+        "VMT 忘记乘 365（用日交通量当年交通量）",
+        "10⁸、10⁴、10⁵ 三个数量级用错（尤其把'亿'写成 10⁹）",
+        "人口用'万人'（45）直接代入 10⁵ 的公式"
+      ],
+      "confidence": "high",
+      "cite": { "book": "交通工程总论", "edition": "第5版", "publisher": "人民交通出版社", "chapter": "12", "page": null },
+      "verify": "第三种事故率以'10 万人口'还是'万人'为基准，请按教材核对（本卡按 10 万人口、10⁵ 计算）。"
+    },
+    {
+      "id": "traffic-engineering-exercise-025",
+      "subjectId": "traffic-engineering",
+      "chapter": "12.1",
+      "title": "用事故率法鉴别事故多发点并排序",
+      "kind": "计算题",
+      "difficulty": "medium",
+      "frequency": "中频",
+      "stem": "三条路段资料如下：A 路段 AADT = 12000 veh/d、长 6 km、年事故 30 次；B 路段 AADT = 20000 veh/d、长 4 km、年事故 38 次；C 路段 AADT = 8000 veh/d、长 10 km、年事故 22 次。若区域平均事故率为 90 次/亿车公里，试计算各路段事故率并按安全水平排序，指出哪些应优先列入事故多发点改造清单。",
+      "given": [["A", "12000 veh/d, 6 km, 30 次"], ["B", "20000 veh/d, 4 km, 38 次"], ["C", "8000 veh/d, 10 km, 22 次"], ["区域均值", "90 次/亿车公里"]],
+      "goal": "各路段事故率、排序、多发点判定",
+      "approachSteps": [
+        "逐条算 VMT = AADT × L × 365",
+        "逐条算 R = 事故数 × 10⁸ / VMT",
+        "与区域均值 90 比较，超过者列入候选",
+        "指出绝对事故数与事故率排序的差异及其原因"
+      ],
+      "keyFormulas": ["traffic-engineering-formula-069", "traffic-engineering-formula-068"],
+      "answer": "A：VMT = 2.628×10⁷，R = 114.2 次/亿车公里；B：VMT = 2.920×10⁷，R = 130.1；C：VMT = 2.920×10⁷，R = 75.3。事故率排序 B(130.1) > A(114.2) > C(75.3)。B、A 高于区域均值 90，应优先列入改造清单；C 低于均值。注意绝对事故数排序为 B(38) > A(30) > C(22)，与事故率排序一致，但 A 与 B 的差距由 8 次缩小到 15.9 次/亿车公里，说明 A 的暴露量更小、单位风险更高。",
+      "answerPolicy": "默认只给到思路与关键式；用户要求「给答案」时再展示",
+      "selfCheck": [
+        "B 与 C 的 VMT 恰好相同（均为 2.92×10⁷），故事故率之比等于事故数之比 38:22 = 1.727，130.1/75.3 = 1.728 ✓",
+        "三条路段的 VMT 量级相近（2.6~2.9×10⁷），比较才有意义",
+        "若某路段长度极短，事故率会因样本量小而极不稳定，实务中须结合事故数综合判断"
+      ],
+      "commonErrors": [
+        "直接用绝对事故数排序而忽略暴露量",
+        "三条路段混用不同的 VMT 时间跨度（如某条漏乘 365）",
+        "认为低于均值就一定安全（还需看事故严重程度与事故类型）"
+      ],
+      "confidence": "high",
+      "cite": { "book": "交通工程总论", "edition": "第5版", "publisher": "人民交通出版社", "chapter": "12", "page": null },
+      "verify": "事故多发点的判定除事故率法外还有事故数/率综合法、临界比率法、质量控制图法等，判据请按教材核对。"
+    },
+    {
+      "id": "traffic-engineering-exercise-026",
+      "subjectId": "traffic-engineering",
+      "chapter": "7.3",
+      "title": "单约束重力模型求出行分布量",
+      "kind": "计算题",
+      "difficulty": "medium",
+      "frequency": "高频",
+      "stem": "小区 1 的发生量 P1 = 3000 人次，小区 2、3 的吸引量分别为 A2 = 2000、A3 = 2500 人次，小区间出行时间 t12 = 10 min、t13 = 20 min，阻抗函数取 f(tij) = tij²。试用单约束重力模型求 T12 与 T13。",
+      "given": [["P1", "3000 人次"], ["A2", "2000 人次"], ["A3", "2500 人次"], ["t12", "10 min"], ["t13", "20 min"], ["f(t)", "t²"]],
+      "goal": "T12、T13",
+      "approachSteps": [
+        "确认模型形式：Tij = K·Pi·Aj/f(tij)（阻抗在分母）",
+        "分别算未归一化的分子 w12 = P1·A2/t12²、w13 = P1·A3/t13²",
+        "由发生约束 Σj T1j = P1 定出 K = P1/(w12 + w13)",
+        "回代得 T12 = K·w12、T13 = K·w13，并校核两者之和等于 P1"
+      ],
+      "keyFormulas": ["traffic-engineering-formula-060"],
+      "answer": "w12 = 3000×2000/100 = 60000；w13 = 3000×2500/400 = 18750；K = 3000/(60000 + 18750) = 0.038095；T12 = 0.038095×60000 = 2285.7 人次；T13 = 0.038095×18750 = 714.3 人次。校核 2285.7 + 714.3 = 3000 = P1 ✓。",
+      "answerPolicy": "默认只给到思路与关键式；用户要求「给答案」时再展示",
+      "selfCheck": [
+        "T12 + T13 = 3000，恰好等于发生量 P1，约束满足",
+        "t12 = 10 < t13 = 20，故 T12 > T13，阻抗越大分布量越小，方向正确",
+        "引力项比 A2:A3 = 2000:2500 = 0.8，阻抗项比 (t13/t12)² = 4，综合比 0.8/4 = 0.2 = T12/T13 的倒数 714.3/2285.7 = 0.3125？检查：T12/T13 = 60000/18750 = 3.2，与 (A2/A3)×(t13/t12)² = 0.8×4 = 3.2 ✓"
+      ],
+      "commonErrors": [
+        "把阻抗函数放到分子（Tij ∝ f(tij)），分布量随距离增大而增大，方向荒谬",
+        "忘记用约束条件定 K，直接把 w12、w13 当作分布量",
+        "阻抗函数用 t 而不是 t²，或幂次代错"
+      ],
+      "confidence": "medium",
+      "cite": { "book": "交通工程总论", "edition": "第5版", "publisher": "人民交通出版社", "chapter": "7", "page": null },
+      "verify": "教材中阻抗函数的形式（幂函数 t^(-n)、指数 exp(−βt)、Gamma 函数 t^a·exp(−βt)）及其在模型中的位置请核对原书；本卡按 Tij = K·Pi·Aj/tij² 计算。"
+    },
+    {
+      "id": "traffic-engineering-exercise-027",
+      "subjectId": "traffic-engineering",
+      "chapter": "7.4",
+      "title": "二元 Logit 方式划分与公交改善敏感性",
+      "kind": "计算题",
+      "difficulty": "medium",
+      "frequency": "高频",
+      "stem": "效用函数取 V = −0.05·T − 0.02·C（T 为出行时间 min，C 为费用 元）。小汽车 T = 20 min、C = 8 元；公交 T = 32 min、C = 2 元。求两种方式的概率；若公交提速使出行时间降为 25 min，重算分担率并计算公交分担率的变化。",
+      "given": [["V", "−0.05T − 0.02C"], ["小汽车", "T=20, C=8"], ["公交（原）", "T=32, C=2"], ["公交（改善后）", "T=25, C=2"]],
+      "goal": "P_car、P_bus 及改善后的变化",
+      "approachSteps": [
+        "分别代入效用函数求 V_car、V_bus",
+        "二元 Logit：P1 = 1/[1 + exp(V2 − V1)]，也可用 exp(V1)/[exp(V1)+exp(V2)]",
+        "两种算法互校",
+        "公交改善后重算 V_bus 与分担率",
+        "比较公交分担率变化（百分点）"
+      ],
+      "keyFormulas": ["traffic-engineering-formula-063", "traffic-engineering-formula-062"],
+      "answer": "V_car = −0.05×20 − 0.02×8 = −1.16；V_bus = −0.05×32 − 0.02×2 = −1.64；P_car = 1/[1 + exp(−1.64 + 1.16)] = 1/(1 + e^(−0.48)) = 0.6177，P_bus = 0.3823。改善后 V_bus = −0.05×25 − 0.02×2 = −1.29，P_car = e^(−1.16)/[e^(−1.16) + e^(−1.29)] = 0.3135/0.5888 = 0.5325，P_bus = 0.4675；公交分担率提高 8.52 个百分点。",
+      "answerPolicy": "默认只给到思路与关键式；用户要求「给答案」时再展示",
+      "selfCheck": [
+        "两种算法（差值式与比值式）都给出 0.6177，互相印证",
+        "效用值同为负且可加常数：若两效用同时加 1，概率不变",
+        "公交时间缩短 7 min 使分担率从 38.2% 升到 46.8%，敏感度合理",
+        "P_car + P_bus = 1，无遗漏方式"
+      ],
+      "commonErrors": [
+        "效用参数符号写正（时间越长效用越高），分担率趋势完全反掉",
+        "exp(V2 − V1) 的次序弄反",
+        "改善后忘记同时更新两种方式的概率（只算公交）"
+      ],
+      "confidence": "high",
+      "cite": { "book": "交通工程总论", "edition": "第5版", "publisher": "人民交通出版社", "chapter": "7", "page": null },
+      "verify": "效用函数参数（−0.05、−0.02）为示例取值，实际须由调查数据标定。"
+    },
+    {
+      "id": "traffic-engineering-exercise-028",
+      "subjectId": "traffic-engineering",
+      "chapter": "7.4",
+      "title": "多项 Logit 三方式分担率",
+      "kind": "计算题",
+      "difficulty": "medium",
+      "frequency": "中频",
+      "stem": "效用函数 V = ASC − 0.04·T − 0.01·C。三种方式参数：小汽车 ASC = 0、T = 20、C = 8；公交 ASC = −0.5、T = 32、C = 2；慢行 ASC = −0.3、T = 45、C = 0。求三种方式的分担率。",
+      "given": [["V", "ASC − 0.04T − 0.01C"], ["小汽车", "ASC=0, T=20, C=8"], ["公交", "ASC=−0.5, T=32, C=2"], ["慢行", "ASC=−0.3, T=45, C=0"]],
+      "goal": "P_car、P_bus、P_bike",
+      "approachSteps": [
+        "逐项代入求三个效用值（ASC 是方式常数，反映未观测的偏好）",
+        "算 exp(Vi) 并求和得分母",
+        "Pi = exp(Vi)/Σexp(Vj)",
+        "校核三分担率之和为 1"
+      ],
+      "keyFormulas": ["traffic-engineering-formula-062"],
+      "answer": "V_car = −0.88、V_bus = −1.80、V_bike = −2.10；exp 值分别为 0.4148、0.1653、0.1225，合计 0.7026；P_car = 0.5904、P_bus = 0.2353、P_bike = 0.1743。校核：三者之和 = 1.000 ✓。",
+      "answerPolicy": "默认只给到思路与关键式；用户要求「给答案」时再展示",
+      "selfCheck": [
+        "三分担率之和恰为 1",
+        "效用最高的小汽车分担率最高（0.59），排序与效用排序一致",
+        "若三个效用同时加同一常数，各 exp 值同比例放大但概率不变，可作验证"
+      ],
+      "commonErrors": [
+        "漏掉方式常数 ASC",
+        "分母只加两种方式（与二元 Logit 混淆）",
+        "效用值相差很大时直接手算 exp 溢出/舍入误差（应先提取最大值再归一化）"
+      ],
+      "confidence": "high",
+      "cite": { "book": "交通工程总论", "edition": "第5版", "publisher": "人民交通出版社", "chapter": "7", "page": null },
+      "verify": "ASC 与参数为示例取值；多项 Logit 的 IIA 特性在公交与慢行高度可替代时可能失真，实务中需改用 Nested Logit。"
+    },
+    {
+      "id": "traffic-engineering-exercise-029",
+      "subjectId": "traffic-engineering",
+      "chapter": "7.5",
+      "title": "两路径网络的用户均衡与系统最优对比",
+      "kind": "计算题",
+      "difficulty": "hard",
+      "frequency": "高频",
+      "stem": "OD 间有两条路径，阻抗函数 t1 = 10 + 0.01·q1、t2 = 15 + 0.005·q2（t 单位 min，q 单位 veh/h），总需求 q = 1500 veh/h。求：(1) 用户均衡（UE）解及各路径行程时间、系统总出行时间；(2) 系统最优（SO）解及系统总出行时间；(3) 二者的差值与相对差。",
+      "given": [["t1", "10 + 0.01q1"], ["t2", "15 + 0.005q2"], ["q", "1500 veh/h"]],
+      "goal": "UE 解、SO 解、总出行时间与差值",
+      "approachSteps": [
+        "UE 条件：被使用的路径行程时间相等，t1(q1) = t2(q2)，且 q1 + q2 = q",
+        "解一元一次方程得 UE 的 q1、q2 与共同行程时间",
+        "系统总出行时间 Z = q1·t1 + q2·t2",
+        "SO 条件：边际阻抗相等，MC1 = MC2，其中 MCi = d(qi·ti)/dqi",
+        "MC1 = 10 + 0.02q1，MC2 = 15 + 0.01q2，联立 q1 + q2 = q 求解",
+        "比较两种状态的总出行时间"
+      ],
+      "keyFormulas": ["traffic-engineering-formula-064", "traffic-engineering-formula-065"],
+      "answer": "UE：由 10 + 0.01q1 = 15 + 0.005(1500 − q1) 得 0.015q1 = 12.5，q1 = 833.3、q2 = 666.7 veh/h，t1 = t2 = 18.33 min，Z_UE = 1500×18.33 = 27500 veh·min。SO：由 10 + 0.02q1 = 15 + 0.01(1500 − q1) 得 0.03q1 = 20，q1 = 666.7、q2 = 833.3 veh/h，t1 = 16.67、t2 = 19.17 min，Z_SO = 666.7×16.67 + 833.3×19.17 = 27083 veh·min。差值 = 416.7 veh·min，相对差 1.54%。",
+      "answerPolicy": "默认只给到思路与关键式；用户要求「给答案」时再展示",
+      "selfCheck": [
+        "UE 下 t1 = t2 = 18.33，相等 ✓；SO 下 MC1 = 10 + 0.02×666.7 = 23.33，MC2 = 15 + 0.01×833.3 = 23.33，相等 ✓",
+        "Z_SO = 27083 < Z_UE = 27500，系统最优总时间更小，符合原理",
+        "SO 下两路径行程时间不相等（16.67 ≠ 19.17），这正是 SO 与 UE 的区别",
+        "q1 + q2 = 1500 在两种状态下都成立"
+      ],
+      "commonErrors": [
+        "求 SO 时仍用 t1 = t2（那是 UE 条件），这是最高频错误",
+        "边际阻抗忘记乘 2（MC = t + q·dt/dq，线性阻抗下系数翻倍）",
+        "把总出行时间算成 q×t_max 或 (t1+t2)/2×q"
+      ],
+      "confidence": "high",
+      "cite": { "book": "交通工程总论", "edition": "第5版", "publisher": "人民交通出版社", "chapter": "7", "page": null },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-exercise-030",
+      "subjectId": "traffic-engineering",
+      "chapter": "9.2",
+      "title": "停车泊位需求与周转率计算",
+      "kind": "计算题",
+      "difficulty": "medium",
+      "frequency": "中频",
+      "stem": "某商业区路外停车场调查时段为 8 h（9:00—17:00），期间累计停放车次 520 车次，平均停放时间 65 min。若要求泊位利用率控制在 0.85，求所需泊位数与该时段的停车周转率。",
+      "given": [["调查时段 Tstudy", "8 h"], ["累计停放车次 Qp", "520 车次"], ["平均停放时间 tavg", "65 min"], ["目标利用率 eta", "0.85"]],
+      "goal": "泊位数 N 与周转率",
+      "approachSteps": [
+        "统一时间单位：tavg = 65/60 = 1.0833 h，与 Tstudy = 8 h 一致",
+        "代入 N = Qp × tavg /(Tstudy × eta)",
+        "周转率 = Tstudy / tavg（同一时段内每泊位平均使用次数）",
+        "校核：N × 周转率 ≈ 累计停放车次/利用率"
+      ],
+      "keyFormulas": ["traffic-engineering-formula-067", "traffic-engineering-formula-066"],
+      "answer": "tavg = 65/60 = 1.0833 h；N = 520×1.0833/(8×0.85) = 563.3/6.8 = 82.8，取 83 个泊位；周转率 = 8/1.0833 = 7.38 次/(泊位·时段)。校核：83×7.38 = 613 车次容量 > 520 车次需求，且 520/613 = 0.848 ≈ 目标利用率 0.85 ✓。",
+      "answerPolicy": "默认只给到思路与关键式；用户要求「给答案」时再展示",
+      "selfCheck": [
+        "若忘记把 65 min 换成小时，N 会小 60 倍，明显荒谬",
+        "周转率 7.38 次/泊位 在商业区属偏高水平，与 65 min 的平均停放时间一致",
+        "利用率校核回到 0.85，说明泊位规模与需求匹配"
+      ],
+      "commonErrors": [
+        "平均停放时间用分钟而调查时段用小时，单位不统一",
+        "把周转率当成利用率（周转率是次数，利用率是时间占比）",
+        "泊位数向下取整（应向上取整）"
+      ],
+      "confidence": "high",
+      "cite": { "book": "交通工程总论", "edition": "第5版", "publisher": "人民交通出版社", "chapter": "9", "page": null },
+      "verify": "停车生成率模型与泊位需求式的具体形式（是否含高峰系数、共享折减）请按教材核对。"
+    }
+  ]
+}

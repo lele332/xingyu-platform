@@ -1,0 +1,1218 @@
+{
+  "subjectId": "structural-testing",
+  "items": [
+    {
+      "id": "structural-testing-formula-001",
+      "subjectId": "structural-testing",
+      "chapter": "4.1",
+      "name": "电阻应变片工作原理",
+      "expr": "dR/R = K*eps",
+      "latex": "\\frac{\\Delta R}{R} = K \\varepsilon",
+      "vars": [
+        { "sym": "R", "name": "应变片初始电阻", "unit": "Ω", "note": "常用 120 Ω 或 350 Ω" },
+        { "sym": "dR", "name": "电阻变化量", "unit": "Ω", "note": "由电桥转换成电压测量" },
+        { "sym": "K", "name": "灵敏系数（应变片系数）", "unit": "—", "note": "厂家标定值，金属箔式约 2" },
+        { "sym": "eps", "name": "沿敏感栅方向的线应变", "unit": "—", "note": "拉为正，常用微应变 με = 1e-6" }
+      ],
+      "conditions": ["应变在应变片线性范围内", "敏感栅方向与待测应变方向一致", "温度恒定或已做温度补偿"],
+      "derivationHint": "由敏感栅的几何变形（长度增加、截面减小）与电阻率变化共同导致电阻改变，比例系数由标定给出，即 K。",
+      "typicalUse": "由测得的电阻相对变化反算应变：eps = dR/(K*R)。",
+      "pitfalls": [
+        "K 是标定值而非理论值，不能由 1+2μ 推算；不同批次应变片 K 不同",
+        "eps 是无量纲量，计算时常用 με（微应变）表示，代入前须乘 1e-6",
+        "应变片测的是栅长范围内的平均应变，应力集中区应选小栅长"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "4", "page": null },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-formula-002",
+      "subjectId": "structural-testing",
+      "chapter": "4.1",
+      "name": "单向应力状态由应变求应力",
+      "expr": "sigma = E*eps",
+      "latex": "\\sigma = E \\varepsilon",
+      "vars": [
+        { "sym": "sigma", "name": "正应力", "unit": "MPa", "note": "拉为正" },
+        { "sym": "E", "name": "弹性模量", "unit": "MPa", "note": "钢材约 2.06e5 MPa，混凝土按实测试块取值" },
+        { "sym": "eps", "name": "线应变", "unit": "—", "note": "实测应变，已扣除温度等非受力成分" }
+      ],
+      "conditions": ["单向受力（或已知主应力方向且只有该方向有应力）", "材料处于线弹性范围"],
+      "derivationHint": "胡克定律的直接形式。",
+      "typicalUse": "轴向拉压试件、梁纯弯段沿轴方向应变片换算应力。",
+      "pitfalls": [
+        "平面应力或复杂应力状态下不能直接用，须先由应变花求主应变再按平面应力公式换算",
+        "混凝土弹模随应力水平与龄期变化，用设计值换算会带来系统偏差"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "4", "page": null },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-formula-003",
+      "subjectId": "structural-testing",
+      "chapter": "4.2",
+      "name": "单臂（1/4 桥）电桥输出电压",
+      "expr": "Uo = (Ui/4)*(dR/R)",
+      "latex": "U_o = \\frac{U_i}{4}\\frac{\\Delta R}{R}",
+      "vars": [
+        { "sym": "Uo", "name": "电桥输出电压", "unit": "V", "note": "通常为毫伏级，需放大或由应变仪读取" },
+        { "sym": "Ui", "name": "供桥（桥压）电压", "unit": "V", "note": "应变仪常取 2~10 V" },
+        { "sym": "dR/R", "name": "桥臂电阻相对变化", "unit": "—", "note": "等于 K*eps" }
+      ],
+      "conditions": ["四臂初始电阻相等的等臂电桥", "只有一个桥臂为工作片（其余为固定电阻或补偿片）", "小信号线性近似 dR << R"],
+      "derivationHint": "由惠斯通电桥输出电压公式对单臂电阻求导线性化得到，系数 1/4 来源于四臂分压。",
+      "typicalUse": "估算应变仪输入端信号幅值，判断分辨率与信噪比是否足够。",
+      "pitfalls": [
+        "供桥电压不稳会按比例进入测量结果，需用稳压桥压",
+        "长导线电阻串入桥臂会衰减信号并使温度补偿失效，应采用三线制"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "4", "page": null },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-formula-004",
+      "subjectId": "structural-testing",
+      "chapter": "4.2",
+      "name": "惠斯通电桥输出一般式",
+      "expr": "Uo = (Ui/4)*(dR1/R1 - dR2/R2 + dR3/R3 - dR4/R4)",
+      "latex": "U_o = \\frac{U_i}{4}\\left(\\frac{\\Delta R_1}{R_1} - \\frac{\\Delta R_2}{R_2} + \\frac{\\Delta R_3}{R_3} - \\frac{\\Delta R_4}{R_4}\\right)",
+      "vars": [
+        { "sym": "Uo", "name": "电桥输出电压", "unit": "V", "note": "相邻桥臂符号相反，相对桥臂符号相同" },
+        { "sym": "Ui", "name": "供桥电压", "unit": "V", "note": "" },
+        { "sym": "dRi/Ri", "name": "第 i 臂电阻相对变化", "unit": "—", "note": "等于 K*eps_i，未贴片臂取 0" }
+      ],
+      "conditions": ["等臂电桥（四臂初始电阻相等）", "小信号线性近似", "各臂温度一致（或已补偿）"],
+      "derivationHint": "对惠斯通电桥输出 Uo = Ui*(R1R3 − R2R4)/((R1+R2)(R3+R4)) 取全微分并线性化。",
+      "typicalUse": "设计组桥方案：判断哪些分量相加、哪些相减，从而实现温度补偿或分离弯曲/轴向分量。",
+      "pitfalls": [
+        "相邻臂相减、相对臂相加，符号记反会使有用信号被抵消",
+        "受拉与受压应变片必须放在符号相反的桥臂上才能叠加"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "4", "page": null },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-formula-005",
+      "subjectId": "structural-testing",
+      "chapter": "4.2",
+      "name": "桥路读数换算（桥路系数）",
+      "expr": "eps = eps_r/n",
+      "latex": "\\varepsilon = \\frac{\\varepsilon_r}{n}",
+      "vars": [
+        { "sym": "eps", "name": "测点实际应变", "unit": "—", "note": "单点应变" },
+        { "sym": "eps_r", "name": "应变仪读数（显示应变）", "unit": "—", "note": "仪器按 K 换算后直接显示的应变值" },
+        { "sym": "n", "name": "桥路系数", "unit": "—", "note": "1/4 桥 n=1；半桥 n=2；全桥 n=4" }
+      ],
+      "conditions": ["仪器已按应变片灵敏系数 K 设置或自动换算", "同一桥路内各工作片应变绝对值相同（或按设计关系叠加）"],
+      "derivationHint": "多个工作片接入不同桥臂时输出按桥路系数成倍增加，故实际应变等于读数除以放大倍数。",
+      "typicalUse": "把静态应变仪的读数换算成测点真实应变。",
+      "pitfalls": [
+        "部分教材与仪器把 n 定义为灵敏度提高倍数以外的口径，换算方向可能是 ε = n·ε_r，必须先确认所用教材约定",
+        "半桥中一片工作片、一片补偿片时，补偿片不受力，此时 n=1 而非 2",
+        "两片工作片一片受拉一片受压（绝对值相等）时半桥 n=2"
+      ],
+      "standardRef": [],
+      "confidence": "medium",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "4", "page": null },
+      "verify": "桥路系数 n 的定义与换算公式方向请按所用教材与静态应变仪说明书核对"
+    },
+    {
+      "id": "structural-testing-formula-006",
+      "subjectId": "structural-testing",
+      "chapter": "4.1",
+      "name": "应变片热输出（温度虚假应变）",
+      "expr": "eps_T = (alpha/K + (beta_s - beta_g))*dT",
+      "latex": "\\varepsilon_T = \\left(\\frac{\\alpha}{K} + \\beta_s - \\beta_g\\right)\\Delta T",
+      "vars": [
+        { "sym": "eps_T", "name": "热输出（虚假应变）", "unit": "—", "note": "温度变化引起的非受力应变读数" },
+        { "sym": "alpha", "name": "敏感栅材料电阻温度系数", "unit": "1/℃", "note": "康铜等材料的典型值由厂家给出" },
+        { "sym": "K", "name": "应变片灵敏系数", "unit": "—", "note": "常用约 2" },
+        { "sym": "beta_s", "name": "试件材料线膨胀系数", "unit": "1/℃", "note": "钢约 12e-6，混凝土约 10e-6" },
+        { "sym": "beta_g", "name": "敏感栅材料线膨胀系数", "unit": "1/℃", "note": "由厂家给出" },
+        { "sym": "dT", "name": "温度变化量", "unit": "℃", "note": "相对贴片（或调零）时的温度" }
+      ],
+      "conditions": ["应变片已粘贴在试件上并随试件共同变形", "温度在测量期间发生变化", "小温差线性近似"],
+      "derivationHint": "电阻随温度变化产生 α·ΔT 的相对变化，折算成应变为 α·ΔT/K；同时栅材与试件自由膨胀差 (β_s−β_g)·ΔT 使栅丝受力，两项叠加。",
+      "typicalUse": "估算长时间试验或室外试验中温度引起的虚假应变，判断是否需要温度补偿。",
+      "pitfalls": [
+        "α、β 的具体数值必须查应变片厂家资料，不能凭记忆套用",
+        "热输出是系统误差，必须用补偿片法、自补偿应变片或桥路补偿消除，不能靠重复测量消除"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "4", "page": null },
+      "verify": "教材中热输出公式的写法与符号约定请核对；α、β 数值查应变片说明书"
+    },
+    {
+      "id": "structural-testing-formula-007",
+      "subjectId": "structural-testing",
+      "chapter": "4.1",
+      "name": "温度补偿后的真实应变",
+      "expr": "eps = eps_m - eps_T",
+      "latex": "\\varepsilon = \\varepsilon_m - \\varepsilon_T",
+      "vars": [
+        { "sym": "eps", "name": "扣除温度效应后的受力应变", "unit": "—", "note": "用于后续应力换算" },
+        { "sym": "eps_m", "name": "应变仪实测总应变读数", "unit": "—", "note": "已按桥路系数换算" },
+        { "sym": "eps_T", "name": "热输出（虚假应变）", "unit": "—", "note": "由温度补偿片实测得到，或按热输出公式估算" }
+      ],
+      "conditions": ["补偿片与工作片同材料、同温度场且不受力", "补偿片与工作片接在相邻桥臂（半桥）以实现自动相减"],
+      "derivationHint": "半桥相邻臂相减，工作片读数中同时含受力应变与热输出，补偿片只含热输出，二者相减即得受力应变。",
+      "typicalUse": "长期监测与室外试验中剔除温度影响。",
+      "pitfalls": [
+        "补偿片所处温度场必须与工作片一致，否则补偿不完全甚至引入新误差",
+        "采用自补偿应变片或全桥时已自动抵消温度，不要重复扣除"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "4", "page": null },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-formula-008",
+      "subjectId": "structural-testing",
+      "chapter": "2.3",
+      "name": "三向（0°/45°/90°）应变花主应变",
+      "expr": "eps_12 = (eps0 + eps90)/2 + (1/sqrt(2))*sqrt((eps0 - eps45)^2 + (eps45 - eps90)^2)",
+      "latex": "\\varepsilon_{1,2} = \\frac{\\varepsilon_{0}+\\varepsilon_{90}}{2} \\pm \\frac{1}{\\sqrt{2}}\\sqrt{(\\varepsilon_{0}-\\varepsilon_{45})^2+(\\varepsilon_{45}-\\varepsilon_{90})^2}",
+      "vars": [
+        { "sym": "eps_12", "name": "主应变 ε1、ε2", "unit": "—", "note": "取 + 号为较大主应变 ε1" },
+        { "sym": "eps0", "name": "0° 方向（基准方向）线应变", "unit": "—", "note": "三个方向必须为 0°/45°/90°" },
+        { "sym": "eps45", "name": "45° 方向线应变", "unit": "—", "note": "" },
+        { "sym": "eps90", "name": "90° 方向线应变", "unit": "—", "note": "" }
+      ],
+      "conditions": ["应变花三片按 0°/45°/90° 布置（直角应变花）", "测点处于平面应力状态", "材料连续、小变形"],
+      "derivationHint": "由应变转换公式 ε_θ = (εx+εy)/2 + (εx−εy)/2·cos2θ + (γxy/2)·sin2θ，代入 θ=0°、45°、90° 解出 εx、εy、γxy，再代入主应变公式。",
+      "typicalUse": "主应力方向未知的测点（如梁的剪弯段、板壳）求主应变。",
+      "pitfalls": [
+        "公式只对 0°/45°/90° 直角应变花成立；0°/60°/120° 等边应变花必须换用另一组公式",
+        "三个应变必须同号约定（拉为正）且已扣除温度影响",
+        "粘贴角度误差直接进入主方向与主应变结果，粘贴时须用定位模板"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "2", "page": null },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-formula-009",
+      "subjectId": "structural-testing",
+      "chapter": "2.3",
+      "name": "应变花主方向",
+      "expr": "tan(2*theta) = (2*eps45 - eps0 - eps90)/(eps0 - eps90)",
+      "latex": "\\tan 2\\theta = \\frac{2\\varepsilon_{45}-\\varepsilon_{0}-\\varepsilon_{90}}{\\varepsilon_{0}-\\varepsilon_{90}}",
+      "vars": [
+        { "sym": "theta", "name": "主方向（ε1 方向）与 0° 基准方向夹角", "unit": "rad", "note": "需按分子分母符号判定所在象限" },
+        { "sym": "eps0", "name": "0° 方向线应变", "unit": "—", "note": "" },
+        { "sym": "eps45", "name": "45° 方向线应变", "unit": "—", "note": "" },
+        { "sym": "eps90", "name": "90° 方向线应变", "unit": "—", "note": "" }
+      ],
+      "conditions": ["同 formula-008 的直角应变花", "eps0 ≠ eps90（分母不为零）"],
+      "derivationHint": "由应变莫尔圆或应变转换公式取极值得 tan2θ = γxy/(εx−εy)，再代入三向应变花反解出的 γxy 与 εx−εy。",
+      "typicalUse": "确定主应力方向，据此判断裂缝开展方向与受力机理。",
+      "pitfalls": [
+        "atan 返回值在 −90°~90°，必须按分子分母正负确定 2θ 的象限，否则主方向会差 90°",
+        "分母 eps0−eps90 接近 0 时结果极不稳定，此时主方向约 45°，应改用莫尔圆判断"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "2", "page": null },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-formula-010",
+      "subjectId": "structural-testing",
+      "chapter": "2.3",
+      "name": "平面应力状态下由主应变求主应力 σ1",
+      "expr": "sigma1 = E/(1 - mu^2)*(eps1 + mu*eps2)",
+      "latex": "\\sigma_1 = \\frac{E}{1-\\mu^2}\\left(\\varepsilon_1 + \\mu\\varepsilon_2\\right)",
+      "vars": [
+        { "sym": "sigma1", "name": "较大主应力", "unit": "MPa", "note": "拉为正" },
+        { "sym": "E", "name": "弹性模量", "unit": "MPa", "note": "按实测试块取值" },
+        { "sym": "mu", "name": "泊松比", "unit": "—", "note": "钢材约 0.3，混凝土约 0.2" },
+        { "sym": "eps1", "name": "较大主应变", "unit": "—", "note": "由应变花求得" },
+        { "sym": "eps2", "name": "较小主应变", "unit": "—", "note": "由应变花求得" }
+      ],
+      "conditions": ["平面应力状态（厚度方向应力为零）", "材料线弹性、各向同性"],
+      "derivationHint": "由广义胡克定律 ε1 = (σ1 − μσ2)/E、ε2 = (σ2 − μσ1)/E 联立解出 σ1、σ2。",
+      "typicalUse": "由应变花数据求测点主应力，与理论计算值比较求应变校验系数。",
+      "pitfalls": [
+        "分母是 1−μ² 而不是 1−μ，写错会差约 30%",
+        "混凝土开裂后不再满足各向同性线弹性假设，公式失效",
+        "若测点处于平面应变状态（很厚构件）不能套用此式"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "2", "page": null },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-formula-011",
+      "subjectId": "structural-testing",
+      "chapter": "2.3",
+      "name": "平面应力状态下由主应变求主应力 σ2",
+      "expr": "sigma2 = E/(1 - mu^2)*(eps2 + mu*eps1)",
+      "latex": "\\sigma_2 = \\frac{E}{1-\\mu^2}\\left(\\varepsilon_2 + \\mu\\varepsilon_1\\right)",
+      "vars": [
+        { "sym": "sigma2", "name": "较小主应力", "unit": "MPa", "note": "可为压应力" },
+        { "sym": "E", "name": "弹性模量", "unit": "MPa", "note": "" },
+        { "sym": "mu", "name": "泊松比", "unit": "—", "note": "" },
+        { "sym": "eps1", "name": "较大主应变", "unit": "—", "note": "" },
+        { "sym": "eps2", "name": "较小主应变", "unit": "—", "note": "" }
+      ],
+      "conditions": ["同 formula-010"],
+      "derivationHint": "与 σ1 同理，由广义胡克定律联立解得。",
+      "typicalUse": "求测点双向应力状态，判断主拉应力是否超过材料抗拉强度。",
+      "pitfalls": ["与 σ1 公式中 μ 乘的应变不同，不要把两式写混", "得到负值说明该方向受压，报告中应注明符号约定"],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "2", "page": null },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-formula-012",
+      "subjectId": "structural-testing",
+      "chapter": "5.3",
+      "name": "校验系数（静载试验）",
+      "expr": "eta = S_m/S_c",
+      "latex": "\\eta = \\frac{S_m}{S_c}",
+      "vars": [
+        { "sym": "eta", "name": "校验系数", "unit": "—", "note": "分挠度校验系数 η_f 与应变校验系数 η_ε" },
+        { "sym": "S_m", "name": "试验荷载下的实测值", "unit": "mm 或 με", "note": "挠度或应变，须扣除支座沉降与温度影响" },
+        { "sym": "S_c", "name": "同一试验荷载下的理论计算值", "unit": "mm 或 με", "note": "按实测材料强度与实际截面尺寸计算" }
+      ],
+      "conditions": ["试验荷载与理论计算的荷载完全一致", "理论模型与实测边界条件一致", "材料处于弹性阶段（正常使用状态试验）"],
+      "derivationHint": "实测值与理论值之比直接反映理论假定与实际结构之间的差异程度。",
+      "typicalUse": "评定结构实际刚度/受力性能是否满足理论预期，是静载试验报告的核心指标。",
+      "pitfalls": [
+        "理论值必须用实测材料强度与实际尺寸计算，用设计取值会使 η 失真",
+        "η > 1 说明实际响应大于理论值（实际刚度偏低）；η < 1 通常说明实际刚度优于理论，或存在未计入的约束（如栏杆、桥面铺装共同作用）",
+        "评定合格区间须按现行标准确定，不同结构类型取值不同"
+      ],
+      "standardRef": ["GB/T 50152", "JTG/T J21"],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "5", "page": null },
+      "verify": "各类结构校验系数的正常范围与限值请按 GB/T 50152、JTG/T J21 现行版本核对"
+    },
+    {
+      "id": "structural-testing-formula-013",
+      "subjectId": "structural-testing",
+      "chapter": "5.3",
+      "name": "相对残余变形（残余变形率）",
+      "expr": "S_p/S_t*100",
+      "latex": "\\frac{\\Delta_p}{\\Delta_t}\\times 100\\%",
+      "vars": [
+        { "sym": "S_p", "name": "卸载后的残余变形", "unit": "mm 或 με", "note": "卸载至零并待变形稳定后读取" },
+        { "sym": "S_t", "name": "加载至该级时的总变形", "unit": "mm 或 με", "note": "含弹性与塑性两部分" }
+      ],
+      "conditions": ["卸载完全并等待足够时间使弹性恢复充分", "残余变形与总变形取同一测点、同一方向"],
+      "derivationHint": "卸载后不可恢复的变形占总变形的比例，反映结构在试验荷载下是否进入非线性或产生损伤。",
+      "typicalUse": "静载试验评定：残余变形率过大说明结构已出现不可恢复损伤。",
+      "pitfalls": [
+        "卸载后读数过早会高估残余变形（弹性恢复尚未完成），须等读数稳定",
+        "支座与装置的残余位移会污染结果，必须用独立基准量测",
+        "限值须按现行标准查用，不同结构类型差别很大"
+      ],
+      "standardRef": ["GB/T 50152", "JTG/T J21"],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "5", "page": null },
+      "verify": "相对残余变形的限值（如 20%、25% 等）请按现行标准核对，不要凭印象套用"
+    },
+    {
+      "id": "structural-testing-formula-014",
+      "subjectId": "structural-testing",
+      "chapter": "3.1",
+      "name": "液压千斤顶（作动器）出力",
+      "expr": "F = p*A",
+      "latex": "F = p A",
+      "vars": [
+        { "sym": "F", "name": "千斤顶输出力", "unit": "N", "note": "实际出力应取标定曲线值" },
+        { "sym": "p", "name": "油缸油压（油压表读数）", "unit": "MPa", "note": "1 MPa = 1 N/mm²" },
+        { "sym": "A", "name": "活塞有效承压面积", "unit": "mm²", "note": "按缸径扣除活塞杆面积（有杆腔）" }
+      ],
+      "conditions": ["忽略活塞与缸壁的摩阻力（或已由标定扣除）", "油压表读数处于有效量程内"],
+      "derivationHint": "压力乘面积即得合力。",
+      "typicalUse": "由油压表读数估算加载力，为力传感器选型与加载分级提供依据。",
+      "pitfalls": [
+        "实际出力因摩阻力小于理论值，正式试验必须用标定过的力传感器或标定曲线",
+        "双作用缸有杆腔与无杆腔的有效面积不同，用错会差一个活塞杆面积",
+        "单位换算：A 用 mm²、p 用 MPa 时 F 的单位为 N"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "3", "page": null },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-formula-015",
+      "subjectId": "structural-testing",
+      "chapter": "6.2",
+      "name": "单自由度体系固有频率",
+      "expr": "f = (1/(2*pi))*sqrt(k/m)",
+      "latex": "f = \\frac{1}{2\\pi}\\sqrt{\\frac{k}{m}}",
+      "vars": [
+        { "sym": "f", "name": "无阻尼固有频率", "unit": "Hz", "note": "周期 T = 1/f" },
+        { "sym": "k", "name": "体系等效刚度", "unit": "N/m", "note": "由结构刚度或静载试验柔度反算" },
+        { "sym": "m", "name": "体系等效质量", "unit": "kg", "note": "集中质量或等效参振质量" }
+      ],
+      "conditions": ["简化为单自由度体系", "线弹性、小阻尼", "刚度与质量不随时间变化"],
+      "derivationHint": "由运动方程 m·x'' + k·x = 0 得自振圆频率 ω = sqrt(k/m)，f = ω/(2π)。",
+      "typicalUse": "估算结构基频，判断与车辆、人行、机械激振频率是否接近而可能共振；验算实测频率量级。",
+      "pitfalls": [
+        "单位必须统一：k 用 N/m、m 用 kg 时才有 f 单位为 Hz",
+        "实际结构为多自由度，此式只给出第一阶的粗略估计或等效单自由度结果",
+        "温度降低使刚度升高，实测频率会随之上升，比较时须注明温度"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "6", "page": null },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-formula-016",
+      "subjectId": "structural-testing",
+      "chapter": "6.3",
+      "name": "对数衰减法求阻尼比",
+      "expr": "zeta = (1/(2*pi*n))*ln(A1/A_n1)",
+      "latex": "\\zeta = \\frac{1}{2\\pi n}\\ln\\frac{A_1}{A_{1+n}}",
+      "vars": [
+        { "sym": "zeta", "name": "阻尼比", "unit": "—", "note": "常用百分数表示" },
+        { "sym": "A1", "name": "第 1 个峰值幅值", "unit": "mm 或 m/s²", "note": "取同向相邻峰值" },
+        { "sym": "A_n1", "name": "其后第 n 个同向峰值幅值", "unit": "mm 或 m/s²", "note": "即 A_{1+n}" },
+        { "sym": "n", "name": "两峰值之间的周期数", "unit": "—", "note": "不是峰值的序号差减一以外的定义，须数清" }
+      ],
+      "conditions": ["单自由度或小阻尼近似成立", "自由振动衰减曲线，取同向（每隔一个）峰值", "幅值不含趋势项，必要时先做基线修正"],
+      "derivationHint": "相邻同向峰值比的自然对数即一个周期的对数衰减率 δ，n 个周期后 δ = (1/n)·ln(A1/A_{1+n})，且 δ ≈ 2πζ。",
+      "typicalUse": "由自由振动衰减（初位移法、跳车后衰减、锤击后衰减）曲线求阻尼比。",
+      "pitfalls": [
+        "n 是周期数不是峰值个数；若取第 1 与第 6 个同向峰值，则 n=5",
+        "小阻尼近似 δ≈2πζ 在 ζ 较大时误差增大，应改用精确式（见 formula-017）",
+        "衰减曲线含零漂或趋势项时幅值读数失真，需先去趋势"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "6", "page": null },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-formula-017",
+      "subjectId": "structural-testing",
+      "chapter": "6.3",
+      "name": "对数衰减率与精确阻尼比",
+      "expr": "zeta = delta/sqrt(4*pi^2 + delta^2)",
+      "latex": "\\zeta = \\frac{\\delta}{\\sqrt{4\\pi^2+\\delta^2}}",
+      "vars": [
+        { "sym": "zeta", "name": "阻尼比", "unit": "—", "note": "精确解" },
+        { "sym": "delta", "name": "对数衰减率", "unit": "—", "note": "delta = (1/n)*ln(A1/A_{1+n}) = 2*pi*zeta (小阻尼近似)" }
+      ],
+      "conditions": ["单自由度体系自由振动", "ζ < 1（欠阻尼）"],
+      "derivationHint": "由 δ = 2πζ/sqrt(1−ζ²) 反解得到。",
+      "typicalUse": "阻尼较大或对精度要求较高时替代 δ/(2π) 近似式。",
+      "pitfalls": ["ζ 较小时两式差别可忽略；ζ>0.1 时应使用精确式", "不要把 δ 与 ζ 混为同一量"],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "6", "page": null },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-formula-018",
+      "subjectId": "structural-testing",
+      "chapter": "6.3",
+      "name": "动力放大系数（幅频响应）",
+      "expr": "beta = 1/sqrt((1 - r^2)^2 + (2*zeta*r)^2)",
+      "latex": "\\beta = \\frac{1}{\\sqrt{(1-r^2)^2+(2\\zeta r)^2}}",
+      "vars": [
+        { "sym": "beta", "name": "动力放大系数", "unit": "—", "note": "动位移幅值/同幅静荷载静位移" },
+        { "sym": "r", "name": "频率比 ω/ω_n", "unit": "—", "note": "无量纲" },
+        { "sym": "zeta", "name": "阻尼比", "unit": "—", "note": "" }
+      ],
+      "conditions": ["单自由度体系", "简谐稳态受迫振动（瞬态已衰减）", "线弹性"],
+      "derivationHint": "由运动方程 m·x'' + c·x' + k·x = P0·sin(ωt) 的稳态解幅值与静位移 P0/k 之比得到。",
+      "typicalUse": "评估共振风险与动力放大程度；由实测动位移反推等效静位移。",
+      "pitfalls": [
+        "β 是幅值比；冲击系数 μ 定义为 (ymax−yst)/yst，两者数值相差 1，不要混用",
+        "r 接近 1 时 β 对 ζ 极敏感，ζ 的小误差会导致 β 大幅变化",
+        "共振时 β_max ≈ 1/(2ζ)，此时公式对模型误差最敏感"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "6", "page": null },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-formula-019",
+      "subjectId": "structural-testing",
+      "chapter": "6.3",
+      "name": "冲击系数（动力增量）",
+      "expr": "mu = (y_max - y_st)/y_st",
+      "latex": "\\mu = \\frac{y_{\\max}-y_{st}}{y_{st}}",
+      "vars": [
+        { "sym": "mu", "name": "冲击系数", "unit": "—", "note": "有的资料记为 1+μ 的形式，须看清定义" },
+        { "sym": "y_max", "name": "移动荷载通过时的最大动响应", "unit": "mm", "note": "取动挠度（或动应变）时程的最大值" },
+        { "sym": "y_st", "name": "同一荷载静止作用时的静响应", "unit": "mm", "note": "由低速跑车或静载试验得到" }
+      ],
+      "conditions": ["同一测点、同一响应量（挠度或应变）", "静响应由同一车辆静止（或极低速）加载获得"],
+      "derivationHint": "以静响应为基准归一化动力增量。",
+      "typicalUse": "桥梁动载试验中评定车辆动力作用，与规范理论值比较。",
+      "pitfalls": [
+        "有些规范与教材把冲击系数定义为 ymax/yst（即 1+μ），做题前必须确认定义口径",
+        "冲击系数随车速、桥面平整度与车辆悬挂特性变化，实测离散性大",
+        "静响应若取自理论计算而非实测，会混入理论模型误差"
+      ],
+      "standardRef": ["JTG/T J21"],
+      "confidence": "medium",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "6", "page": null },
+      "verify": "冲击系数的定义（是否含 1）与规范理论计算公式请按教材及现行公路桥涵设计通用规范核对"
+    },
+    {
+      "id": "structural-testing-formula-020",
+      "subjectId": "structural-testing",
+      "chapter": "5.2",
+      "name": "位移延性系数",
+      "expr": "mu_D = Delta_u/Delta_y",
+      "latex": "\\mu_\\Delta = \\frac{\\Delta_u}{\\Delta_y}",
+      "vars": [
+        { "sym": "mu_D", "name": "位移延性系数", "unit": "—", "note": "值越大延性越好" },
+        { "sym": "Delta_u", "name": "极限（或破坏）位移", "unit": "mm", "note": "口径须明确：极限荷载对应位移或承载力下降后的位移" },
+        { "sym": "Delta_y", "name": "屈服位移", "unit": "mm", "note": "由骨架曲线按等面积法等方法确定" }
+      ],
+      "conditions": ["由骨架曲线确定 Δy 与 Δu", "拟静力（低周反复）加载或单调加载试验"],
+      "derivationHint": "以屈服位移为基准归一化极限变形能力。",
+      "typicalUse": "评价构件与结构的抗震变形能力，是拟静力试验报告的核心指标。",
+      "pitfalls": [
+        "Δu 的取值口径不同（极限荷载对应位移 vs 承载力降至 85% 时的位移）结果差别很大，必须注明",
+        "钢筋混凝土无明显屈服点，Δy 的确定方法（等面积法、几何作图法）影响结果",
+        "单调加载得到的延性系数通常高于反复加载结果"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "5", "page": null },
+      "verify": "Δu 的取值口径请按教材与相关试验方法标准核对"
+    },
+    {
+      "id": "structural-testing-formula-021",
+      "subjectId": "structural-testing",
+      "chapter": "5.3",
+      "name": "承载力检验系数",
+      "expr": "gamma_u = Q_u/Q_d",
+      "latex": "\\gamma_u = \\frac{Q_u}{Q_d}",
+      "vars": [
+        { "sym": "gamma_u", "name": "承载力检验系数", "unit": "—", "note": "与规范允许值 [γu] 比较判定是否合格" },
+        { "sym": "Q_u", "name": "试件实测破坏（或极限）荷载", "unit": "kN", "note": "含试件自重与加载设备重量时应计入" },
+        { "sym": "Q_d", "name": "承载力检验荷载（设计要求应达到的检验荷载）", "unit": "kN", "note": "口径随标准不同，见 verify" }
+      ],
+      "conditions": ["分级加载至破坏或达到检验荷载", "按标准规定的持荷与观测要求执行"],
+      "derivationHint": "实测承载力与设计要求的检验承载力之比，用于合格判定。",
+      "typicalUse": "预制构件结构性能检验（承载力项）的判定指标。",
+      "pitfalls": [
+        "Q_d 的口径在不同标准中不同：有的取荷载效应组合设计值对应的检验荷载，有的取使用状态短期荷载检验值，混用会得出相反结论",
+        "Q_u 是否计入试件自重与加载设备重量必须明确",
+        "允许值 [γu] 与承载力、挠度、裂缝三项检验的合格判据须按现行标准查用，不要凭记忆"
+      ],
+      "standardRef": ["GB/T 50152"],
+      "confidence": "low",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "5", "page": null },
+      "verify": "γu 的定义式、Q_d 的取值口径与允许值 [γu] 必须按 GB/T 50152 现行版本核对；不同教材与不同年代标准写法差异很大"
+    },
+    {
+      "id": "structural-testing-formula-022",
+      "subjectId": "structural-testing",
+      "chapter": "4.3",
+      "name": "支座沉降的跨中挠度修正",
+      "expr": "f = f_r - (d_A + d_B)/2",
+      "latex": "f = f_r - \\frac{\\delta_A+\\delta_B}{2}",
+      "vars": [
+        { "sym": "f", "name": "修正后的跨中真实挠度", "unit": "mm", "note": "不含支座沉降" },
+        { "sym": "f_r", "name": "跨中实测读数（相对地面基准）", "unit": "mm", "note": "含两端支座沉降引起的刚体位移" },
+        { "sym": "d_A", "name": "A 端支座沉降量", "unit": "mm", "note": "向下为正" },
+        { "sym": "d_B", "name": "B 端支座沉降量", "unit": "mm", "note": "向下为正" }
+      ],
+      "conditions": ["支座沉降沿梁长为线性插值（刚体转动）", "沉降量远小于跨径", "两端沉降均向下（异号时按符号代入）"],
+      "derivationHint": "两端支座沉降使梁发生刚体转动，跨中处的刚体位移为两端沉降的算术平均。",
+      "typicalUse": "简支梁静载试验中把由地面基准测得的挠度修正为相对于支座的真实挠度。",
+      "pitfalls": [
+        "更可靠的做法是直接把位移计装在独立于试件的基准梁上并支承在支座附近，从源头避免沉降影响",
+        "沉降符号必须统一（一般向下为正），异号时直接代数相加",
+        "只修正挠度，不修正支座附近测点的相对变形"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "4", "page": null },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-formula-023",
+      "subjectId": "structural-testing",
+      "chapter": "11.2",
+      "name": "桥梁静载试验荷载效率系数",
+      "expr": "eta_q = S_t/(S*(1 + mu))",
+      "latex": "\\eta_q = \\frac{S_t}{S(1+\\mu)}",
+      "vars": [
+        { "sym": "eta_q", "name": "荷载效率系数", "unit": "—", "note": "合理区间须查现行规程" },
+        { "sym": "S_t", "name": "试验荷载作用下控制截面的计算效应", "unit": "kN·m 或 kN", "note": "按实际加载车重与位置计算" },
+        { "sym": "S", "name": "设计标准活载作用下同一截面的效应（不计冲击）", "unit": "kN·m 或 kN", "note": "按影响线加载求得" },
+        { "sym": "mu", "name": "冲击系数", "unit": "—", "note": "按规范取值或实测" }
+      ],
+      "conditions": ["控制截面与控制内力相同", "试验荷载按影响线最不利布置", "采用同一套内力计算方法"],
+      "derivationHint": "试验荷载效应与设计要求（含动力放大）效应之比，衡量试验荷载能否代表设计荷载。",
+      "typicalUse": "桥梁静载试验方案审查：判断加载车数量与布置是否达到检验目的。",
+      "pitfalls": [
+        "分母是否计入冲击系数、用标准值还是设计值，各规程与教材写法不一致，必须按现行规程确认",
+        "合理区间（常见说法 0.85~1.05 附近）须查现行规程，考试时不要凭印象写死",
+        "ηq 过大可能损伤结构，过小则检验结论说服力不足"
+      ],
+      "standardRef": ["JTG/T J21", "JTG/T J22"],
+      "confidence": "low",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "11", "page": null },
+      "verify": "ηq 的定义式与合理区间必须按 JTG/T J21、JTG/T J22 现行版本核对，不同版本规定不同"
+    },
+    {
+      "id": "structural-testing-formula-024",
+      "subjectId": "structural-testing",
+      "chapter": "6.4",
+      "name": "模态置信准则 MAC",
+      "expr": "MAC = (phi_a^T*phi_b)^2/((phi_a^T*phi_a)*(phi_b^T*phi_b))",
+      "latex": "\\mathrm{MAC} = \\frac{(\\boldsymbol{\\phi}_a^{\\mathrm{T}}\\boldsymbol{\\phi}_b)^2}{(\\boldsymbol{\\phi}_a^{\\mathrm{T}}\\boldsymbol{\\phi}_a)(\\boldsymbol{\\phi}_b^{\\mathrm{T}}\\boldsymbol{\\phi}_b)}",
+      "vars": [
+        { "sym": "MAC", "name": "模态置信准则", "unit": "—", "note": "0~1，越接近 1 越相关" },
+        { "sym": "phi_a", "name": "振型向量 a", "unit": "—", "note": "如实测振型" },
+        { "sym": "phi_b", "name": "振型向量 b", "unit": "—", "note": "如有限元计算振型" }
+      ],
+      "conditions": ["两向量维数相同且自由度一一对应", "同一阶模态或待比较的两阶模态"],
+      "derivationHint": "本质是两向量夹角余弦的平方。",
+      "typicalUse": "判断实测振型与有限元振型是否对应同一阶；检验模态参数识别结果的可靠性。",
+      "pitfalls": [
+        "MAC 对幅值不敏感，只反映方向一致性；不同阶的振型 MAC 应接近 0",
+        "有限元自由度数远大于实测点数，必须先提取对应测点自由度或做插值，否则维数不匹配",
+        "MAC 高不等于频率吻合，频率与振型要分别校核"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "6", "page": null },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-formula-025",
+      "subjectId": "structural-testing",
+      "chapter": "7.2",
+      "name": "相似常数定义",
+      "expr": "C_X = X_p/X_m",
+      "latex": "C_X = \\frac{X_p}{X_m}",
+      "vars": [
+        { "sym": "C_X", "name": "物理量 X 的相似常数", "unit": "—", "note": "本书约定为原型/模型" },
+        { "sym": "X_p", "name": "原型物理量", "unit": "随量而定", "note": "" },
+        { "sym": "X_m", "name": "模型物理量", "unit": "随量而定", "note": "" }
+      ],
+      "conditions": ["原型与模型相似", "同名物理量、同单位相比"],
+      "derivationHint": "相似常数是相似第一定理的定量表达：相似现象对应量成比例。",
+      "typicalUse": "由模型实测结果换算到原型：X_p = C_X·X_m。",
+      "pitfalls": [
+        "必须先约定方向是原型/模型还是模型/原型，方向搞反会使荷载换算差 C_l² 甚至 C_l³ 量级",
+        "几何相似常数 C_l = L_p/L_m，缩尺模型 C_l > 1"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "7", "page": null },
+      "verify": "教材中相似常数是否采用原型/模型约定请核对"
+    },
+    {
+      "id": "structural-testing-formula-026",
+      "subjectId": "structural-testing",
+      "chapter": "7.1",
+      "name": " Buckingham π 定理",
+      "expr": "N_pi = n - k",
+      "latex": "N_{\\pi} = n - k",
+      "vars": [
+        { "sym": "N_pi", "name": "独立的无量纲 π 项个数", "unit": "—", "note": "" },
+        { "sym": "n", "name": "问题中涉及的物理量总个数", "unit": "—", "note": "含因变量" },
+        { "sym": "k", "name": "独立基本量纲个数", "unit": "—", "note": "力学问题在质量—长度—时间体系中通常 k=3" }
+      ],
+      "conditions": ["各物理量的量纲已知且相互独立关系清楚", "量纲矩阵秩为 k"],
+      "derivationHint": "选取 k 个量纲独立的重复变量，与其余 n−k 个量分别组合成无量纲 π 项，原函数关系可写成 π_1 = Φ(π_2, …, π_{n−k})。",
+      "typicalUse": "在无法写出控制方程时，用量纲分析导出模型试验的相似判据。",
+      "pitfalls": [
+        "k 不是基本量纲的总数而是量纲矩阵的秩，漏选独立变量会导致 π 项个数错误",
+        "重复变量必须量纲独立且包含全部基本量纲",
+        "π 项不唯一，不同组合只要求相互独立且完备"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "7", "page": null },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-formula-027",
+      "subjectId": "structural-testing",
+      "chapter": "7.2",
+      "name": "重力相似条件（弗劳德相似）",
+      "expr": "C_sigma = C_l*C_rho",
+      "latex": "C_\\sigma = C_l C_\\rho",
+      "vars": [
+        { "sym": "C_sigma", "name": "应力相似常数", "unit": "—", "note": "" },
+        { "sym": "C_l", "name": "几何相似常数", "unit": "—", "note": "L_p/L_m" },
+        { "sym": "C_rho", "name": "材料密度相似常数", "unit": "—", "note": "ρ_p/ρ_m" }
+      ],
+      "conditions": ["重力为控制性作用（如振动台试验、大跨结构、坝体）", "重力加速度相同 C_g = 1"],
+      "derivationHint": "由应力相似与自重应力 ρ·g·L 成比例得到：σ ∝ ρ·g·L，故 C_σ = C_ρ·C_g·C_l。",
+      "typicalUse": "地震模拟振动台模型试验确定人工配重（人工质量模拟）。",
+      "pitfalls": [
+        "若模型材料与原型相同（C_ρ=1），则要求 C_σ = C_l，与弹性相似 C_σ = C_E·C_ε 通常冲突",
+        "实际常靠在模型上附加配重满足密度相似，即所谓人工质量模拟",
+        "同时满足弹性力相似与重力相似往往不可能，应说明哪些判据被放弃"
+      ],
+      "standardRef": [],
+      "confidence": "medium",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "7", "page": null },
+      "verify": "教材中重力相似条件的表达形式与是否引入 C_g 请核对"
+    },
+    {
+      "id": "structural-testing-formula-028",
+      "subjectId": "structural-testing",
+      "chapter": "7.2",
+      "name": "应力相似条件（弹性力相似）",
+      "expr": "C_sigma = C_E*C_eps",
+      "latex": "C_\\sigma = C_E C_\\varepsilon",
+      "vars": [
+        { "sym": "C_sigma", "name": "应力相似常数", "unit": "—", "note": "" },
+        { "sym": "C_E", "name": "弹性模量相似常数", "unit": "—", "note": "E_p/E_m" },
+        { "sym": "C_eps", "name": "应变相似常数", "unit": "—", "note": "常取 1 使模型与原型应变相同" }
+      ],
+      "conditions": ["材料处于线弹性范围", "应力—应变关系由胡克定律描述"],
+      "derivationHint": "由 σ = E·ε 直接写出相似变换。",
+      "typicalUse": "静力弹性模型试验的应力换算。",
+      "pitfalls": ["C_ε = 1 与 C_σ = C_E 等价，此时模型应力按弹模比换算；若模型材料与原型相同则 C_σ = 1，模型与原型应力相等"],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "7", "page": null },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-formula-029",
+      "subjectId": "structural-testing",
+      "chapter": "7.2",
+      "name": "集中力相似常数",
+      "expr": "C_P = C_sigma*C_l^2",
+      "latex": "C_P = C_\\sigma C_l^2",
+      "vars": [
+        { "sym": "C_P", "name": "集中力相似常数", "unit": "—", "note": "P_p/P_m" },
+        { "sym": "C_sigma", "name": "应力相似常数", "unit": "—", "note": "由 C_E·C_ε 确定" },
+        { "sym": "C_l", "name": "几何相似常数", "unit": "—", "note": "L_p/L_m" }
+      ],
+      "conditions": ["力相似面积按 C_l² 缩放", "材料与荷载相似条件已满足"],
+      "derivationHint": "P = σ·A，面积相似常数为 C_l²。",
+      "typicalUse": "由原型设计荷载推算模型应施加的荷载。",
+      "pitfalls": [
+        "均布线荷载的相似常数是 C_q = C_σ·C_l，比集中力少一次方，不要混用",
+        "弯矩相似常数为 C_M = C_P·C_l = C_σ·C_l³",
+        "若模型材料与原型相同且要求应变相同，则 C_σ=1，C_P = C_l²"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "7", "page": null },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-formula-030",
+      "subjectId": "structural-testing",
+      "chapter": "7.2",
+      "name": "挠度（位移）相似常数",
+      "expr": "C_f = C_eps*C_l",
+      "latex": "C_f = C_\\varepsilon C_l",
+      "vars": [
+        { "sym": "C_f", "name": "位移（挠度）相似常数", "unit": "—", "note": "f_p/f_m" },
+        { "sym": "C_eps", "name": "应变相似常数", "unit": "—", "note": "常取 1" },
+        { "sym": "C_l", "name": "几何相似常数", "unit": "—", "note": "" }
+      ],
+      "conditions": ["几何相似且应变场相似", "小变形"],
+      "derivationHint": "位移 ∝ 应变 × 特征长度，故相似常数相乘。",
+      "typicalUse": "由模型实测挠度换算原型挠度：f_p = C_f·f_m。",
+      "pitfalls": ["应变相似 C_ε=1 时 C_f = C_l，即挠度按几何比放大；若 C_ε≠1 则必须乘上应变比"],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "7", "page": null },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-formula-031",
+      "subjectId": "structural-testing",
+      "chapter": "4.5",
+      "name": "采样定理（奈奎斯特条件）",
+      "expr": "f_s > 2*f_max",
+      "latex": "f_s > 2 f_{\\max}",
+      "vars": [
+        { "sym": "f_s", "name": "采样频率", "unit": "Hz", "note": "每秒采样点数" },
+        { "sym": "f_max", "name": "信号中需要保留的最高频率分量", "unit": "Hz", "note": "工程上还需配合抗混叠滤波" }
+      ],
+      "conditions": ["信号带宽有限", "采样前已用抗混叠低通滤波器限制带宽"],
+      "derivationHint": "采样使频谱周期延拓，为不产生混叠需采样频率大于信号最高频率的 2 倍。",
+      "typicalUse": "确定动态采集的采样频率；判断已有数据是否存在混叠。",
+      "pitfalls": [
+        "工程上常取 5~10 倍而非仅仅 2 倍，以保留波形细节并提高模态识别精度",
+        "只在采样后做数字滤波不能消除已经发生的混叠，必须在采集前端加模拟抗混叠滤波",
+        "采样时长决定频率分辨率 Δf = 1/T，与采样频率是两个独立参数"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "4", "page": null },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-formula-032",
+      "subjectId": "structural-testing",
+      "chapter": "8.1",
+      "name": "变异系数",
+      "expr": "CV = s/x_bar",
+      "latex": "C_v = \\frac{s}{\\bar{x}}",
+      "vars": [
+        { "sym": "CV", "name": "变异系数", "unit": "—", "note": "常以百分数表示" },
+        { "sym": "s", "name": "样本标准差", "unit": "同 x", "note": "" },
+        { "sym": "x_bar", "name": "样本算术平均值", "unit": "同 x", "note": "" }
+      ],
+      "conditions": ["样本量足够（工程上通常 n ≥ 5）", "均值不为零"],
+      "derivationHint": "标准差除以均值实现无量纲化，便于比较不同水平数据的离散程度。",
+      "typicalUse": "比较不同测点、不同构件或不同批次检测数据的离散性；混凝土强度检测中评定均匀性。",
+      "pitfalls": ["均值接近零时变异系数会趋于无穷大，失去意义", "样本量很小时 s 本身不稳定，CV 也不可靠"],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "8", "page": null },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-formula-033",
+      "subjectId": "structural-testing",
+      "chapter": "8.1",
+      "name": "3σ（拉依达）异常值判别准则",
+      "expr": "abs(x_i - x_bar) > 3*s",
+      "latex": "|x_i - \\bar{x}| > 3s \\Rightarrow \\text{判为异常值}",
+      "vars": [
+        { "sym": "x_i", "name": "第 i 个观测值", "unit": "同 x", "note": "" },
+        { "sym": "x_bar", "name": "样本均值（含可疑值）", "unit": "同 x", "note": "" },
+        { "sym": "s", "name": "样本标准差（含可疑值）", "unit": "同 x", "note": "" }
+      ],
+      "conditions": ["观测值近似服从正态分布", "样本量足够大（工程上 n > 10 才有效）"],
+      "derivationHint": "正态分布下 |x−μ| > 3σ 的概率约 0.27%，属小概率事件，据此判为粗大误差。",
+      "typicalUse": "试验数据预处理中剔除明显的读数错误。",
+      "pitfalls": [
+        "小样本下 3σ 准则几乎必然失效：|xi−x̄|/s 的最大可能值为 (n−1)/√n，n=10 时仅约 2.85 < 3，不可能剔出任何点",
+        "样本量较小时应改用格拉布斯准则或肖维勒准则，其临界值随 n 变化，须查表",
+        "剔除后必须重新计算均值与标准差，且剔除点数不宜过多"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "8", "page": null },
+      "verify": "格拉布斯、肖维勒准则的临界值表请按教材或数理统计附表核对"
+    },
+    {
+      "id": "structural-testing-formula-034",
+      "subjectId": "structural-testing",
+      "chapter": "8.1",
+      "name": "样本标准差",
+      "expr": "s = sqrt(sum((x_i - x_bar)^2)/(n - 1))",
+      "latex": "s = \\sqrt{\\frac{\\sum_{i=1}^{n}(x_i-\\bar{x})^2}{n-1}}",
+      "vars": [
+        { "sym": "s", "name": "样本标准差", "unit": "同 x", "note": "除以 n−1 才是总体标准差的无偏估计" },
+        { "sym": "x_i", "name": "第 i 个观测值", "unit": "同 x", "note": "" },
+        { "sym": "x_bar", "name": "样本均值", "unit": "同 x", "note": "" },
+        { "sym": "n", "name": "样本容量", "unit": "—", "note": "" }
+      ],
+      "conditions": ["样本独立同分布", "n ≥ 2"],
+      "derivationHint": "贝塞尔校正：用样本均值代替总体均值会损失一个自由度，故除以 n−1。",
+      "typicalUse": "评价重复测量数据的离散程度，是误差分析与强度推定的基础。",
+      "pitfalls": ["除以 n 会低估总体标准差，n 小时偏差明显", "存在异常值时标准差会被显著放大，应先做异常值判别"],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "8", "page": null },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-formula-035",
+      "subjectId": "structural-testing",
+      "chapter": "8.2",
+      "name": "相关系数",
+      "expr": "r = S_xy/sqrt(S_xx*S_yy)",
+      "latex": "r = \\frac{S_{xy}}{\\sqrt{S_{xx}S_{yy}}}",
+      "vars": [
+        { "sym": "r", "name": "相关系数", "unit": "—", "note": "−1 ≤ r ≤ 1" },
+        { "sym": "S_xy", "name": "x 与 y 的离差乘积和", "unit": "—", "note": "S_xy = Σ(xi−x̄)(yi−ȳ)" },
+        { "sym": "S_xx", "name": "x 的离差平方和", "unit": "—", "note": "S_xx = Σ(xi−x̄)²" },
+        { "sym": "S_yy", "name": "y 的离差平方和", "unit": "—", "note": "S_yy = Σ(yi−ȳ)²" }
+      ],
+      "conditions": ["两变量之间存在线性关系", "样本量 n ≥ 3", "数据点对独立"],
+      "derivationHint": "协方差除以两变量标准差的乘积实现无量纲化。",
+      "typicalUse": "判断荷载—挠度、荷载—应变等标定数据线性关系的强弱；检验回归是否有效。",
+      "pitfalls": [
+        "r 只度量线性相关，非线性强相关时 r 可能不大",
+        "样本量很小时 r 易偶然接近 1，必须结合样本量做显著性检验（查临界值表）",
+        "高相关不等于因果关系"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "8", "page": null },
+      "verify": "相关系数显著性检验的临界值请按教材附表或数理统计表核对"
+    },
+    {
+      "id": "structural-testing-formula-036",
+      "subjectId": "structural-testing",
+      "chapter": "8.2",
+      "name": "一元线性回归最小二乘估计",
+      "expr": "b = S_xy/S_xx, a = y_bar - b*x_bar",
+      "latex": "b = \\frac{S_{xy}}{S_{xx}},\\quad a = \\bar{y} - b\\bar{x}",
+      "vars": [
+        { "sym": "b", "name": "回归直线斜率", "unit": "y 单位/x 单位", "note": "如挠度/荷载，mm/kN" },
+        { "sym": "a", "name": "回归直线截距", "unit": "y 单位", "note": "理想情况下接近零，非零说明有零点残差" },
+        { "sym": "S_xy", "name": "离差乘积和", "unit": "—", "note": "" },
+        { "sym": "S_xx", "name": "x 的离差平方和", "unit": "—", "note": "" },
+        { "sym": "x_bar", "name": "x 的样本均值", "unit": "同 x", "note": "" },
+        { "sym": "y_bar", "name": "y 的样本均值", "unit": "同 y", "note": "" }
+      ],
+      "conditions": ["自变量 x 的观测无误差或误差远小于 y", "残差独立同方差、近似正态", "S_xx ≠ 0"],
+      "derivationHint": "对残差平方和 Q = Σ(yi − a − b·xi)² 分别对 a、b 求偏导并令其为零。",
+      "typicalUse": "由荷载—挠度（或荷载—应变）标定数据求线性关系，用于反算刚度或预测新荷载下的响应。",
+      "pitfalls": [
+        "回归结果只在自变量的观测区间内有效，外推风险大",
+        "截距 a 明显不为零时，应检查仪器零点、支座间隙或支座沉降等系统因素",
+        "存在异常点时最小二乘结果会被显著拉偏，应先剔除异常值"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "8", "page": null },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-formula-037",
+      "subjectId": "structural-testing",
+      "chapter": "9.1",
+      "name": "回弹法测强曲线（幂函数—碳化修正形式）",
+      "expr": "f_cu = A*R^B*10^(-C*d_m)",
+      "latex": "f_{cu} = A\\,R^{B}\\,10^{-C d_m}",
+      "vars": [
+        { "sym": "f_cu", "name": "测区混凝土抗压强度换算值", "unit": "MPa", "note": "由测区回弹值与碳化深度换算" },
+        { "sym": "A", "name": "曲线系数", "unit": "—", "note": "由统一/地区/专用曲线给出，须查标准" },
+        { "sym": "B", "name": "回弹值指数", "unit": "—", "note": "" },
+        { "sym": "C", "name": "碳化深度衰减系数", "unit": "1/mm", "note": "" },
+        { "sym": "R", "name": "测区平均回弹值", "unit": "—", "note": "已做角度与浇筑面修正" },
+        { "sym": "d_m", "name": "测区平均碳化深度", "unit": "mm", "note": "由酚酞法测得" }
+      ],
+      "conditions": ["混凝土为普通混凝土（特种混凝土需专用曲线）", "回弹仪已率定且在检定有效期内", "测区表面干燥、平整、无饰面层", "适用龄期与碳化深度范围符合曲线规定"],
+      "derivationHint": "由大量同条件试块的回弹值、碳化深度与抗压强度试验数据回归得到。",
+      "typicalUse": "由现场回弹与碳化深度推定各测区混凝土强度换算值。",
+      "pitfalls": [
+        "A、B、C 的具体数值必须按 JGJ/T 23 现行版本（或地区曲线、专用曲线）查用，严禁凭记忆套用",
+        "统一曲线精度最低，优先使用专用曲线或钻芯校准后的曲线",
+        "回弹值必须先做测试角度修正与浇筑面修正，再代入曲线",
+        "碳化深度超过曲线适用范围时，推定结果不可靠"
+      ],
+      "standardRef": ["JGJ/T 23", "GB/T 50784"],
+      "confidence": "low",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "9", "page": null },
+      "verify": "测强曲线的函数形式与各系数必须逐项按 JGJ/T 23 现行版本核对；本条只给出通用结构，不代表任何具体数值"
+    },
+    {
+      "id": "structural-testing-formula-038",
+      "subjectId": "structural-testing",
+      "chapter": "9.3",
+      "name": "钻芯法芯样强度换算",
+      "expr": "f_cu = f_cor*eta",
+      "latex": "f_{cu} = f_{cor}\\,\\eta",
+      "vars": [
+        { "sym": "f_cu", "name": "结构混凝土强度换算值", "unit": "MPa", "note": "" },
+        { "sym": "f_cor", "name": "芯样试件抗压强度实测值", "unit": "MPa", "note": "按芯样实际尺寸计算" },
+        { "sym": "eta", "name": "芯样强度修正系数", "unit": "—", "note": "与高径比、芯样直径、钻取方向、含水状态有关，须查标准" }
+      ],
+      "conditions": ["芯样直径、高径比、端面加工符合标准规定", "芯样无裂缝、无钢筋干扰"],
+      "derivationHint": "芯样强度与标准立方体（或圆柱体）试块强度之间存在尺寸与形状效应，用修正系数联系。",
+      "typicalUse": "以钻芯结果校准回弹、超声等无损方法的推定强度。",
+      "pitfalls": [
+        "修正系数取值必须按现行标准查表，不同标准（芯样直径 100 mm 与 70 mm 等）规定不同",
+        "芯样含水状态对强度影响显著（饱水强度通常低于干燥强度），试验条件须与标准一致",
+        "钻芯位置应避开主筋与受力关键区，且数量有限，代表性须论证"
+      ],
+      "standardRef": ["CECS 03", "GB/T 50784"],
+      "confidence": "medium",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "9", "page": null },
+      "verify": "芯样修正系数的具体取值与芯样尺寸要求请按 CECS 03 / GB/T 50784 现行版本核对"
+    },
+    {
+      "id": "structural-testing-formula-039",
+      "subjectId": "structural-testing",
+      "chapter": "9.1",
+      "name": "混凝土强度推定值（具有保证率的统计下限）",
+      "expr": "f_cu_e = m_f - 1.645*s_f",
+      "latex": "f_{cu,e} = m_f - 1.645\\,s_f",
+      "vars": [
+        { "sym": "f_cu_e", "name": "混凝土强度推定值", "unit": "MPa", "note": "对应约 95% 保证率的下限" },
+        { "sym": "m_f", "name": "各测区强度换算值的均值", "unit": "MPa", "note": "" },
+        { "sym": "s_f", "name": "各测区强度换算值的标准差", "unit": "MPa", "note": "" }
+      ],
+      "conditions": ["测区数量满足标准规定的最少数量", "各测区强度换算值近似正态分布", "用于单个构件（或批量）推定，具体口径见标准"],
+      "derivationHint": "按正态分布取 5% 分位数：均值减 1.645 倍标准差对应 95% 保证率。",
+      "typicalUse": "回弹法、超声回弹综合法检测报告中给出构件混凝土强度的代表值。",
+      "pitfalls": [
+        "系数 1.645 对应 95% 保证率，其他保证率（如 90%）系数不同，须按现行标准取用",
+        "推定值是统计下限，不是强度平均值，不要用于直接替代立方体抗压强度平均值",
+        "测区数不足时不能按批推定，只能按单个构件处理，且结果离散性大",
+        "异常值未剔除会显著放大 s_f 从而压低推定值"
+      ],
+      "standardRef": ["JGJ/T 23", "CECS 02"],
+      "confidence": "medium",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "9", "page": null },
+      "verify": "推定值公式的系数与适用条件（测区数、单个构件/批量）请按 JGJ/T 23 现行版本核对"
+    },
+    {
+      "id": "structural-testing-formula-040",
+      "subjectId": "structural-testing",
+      "chapter": "9.2",
+      "name": "超声声速",
+      "expr": "v = L/t",
+      "latex": "v = \\frac{L}{t}",
+      "vars": [
+        { "sym": "v", "name": "超声脉冲在混凝土中的传播速度", "unit": "km/s", "note": "正常混凝土常在 4.0~4.8 km/s 附近，须结合配合比判断" },
+        { "sym": "L", "name": "两换能器之间的测距", "unit": "mm", "note": "对测时取内边缘间距，须精确量测" },
+        { "sym": "t", "name": "声时（扣除仪器与耦合零读数）", "unit": "μs", "note": "须扣除 t0 系统零声时" }
+      ],
+      "conditions": ["换能器与混凝土耦合良好", "声时已扣除系统零读数 t0", "测距测量精确到 mm"],
+      "derivationHint": "速度 = 距离/时间。",
+      "typicalUse": "评定混凝土密实性与匀质性；检测内部缺陷；与回弹值组合推定强度。",
+      "pitfalls": [
+        "未扣除仪器与耦合层的零声时 t0 会使声速系统性偏低",
+        "声波沿钢筋传播更快，测线应尽量避开主筋或与钢筋方向垂直",
+        "含水率高、骨料品种与龄期都会显著影响声速，应建立本工程的基准值"
+      ],
+      "standardRef": ["CECS 21", "CECS 02"],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "9", "page": null },
+      "verify": "声时测读与零声时校正的具体做法请按 CECS 21 / CECS 02 现行版本核对"
+    },
+    {
+      "id": "structural-testing-formula-041",
+      "subjectId": "structural-testing",
+      "chapter": "10.1",
+      "name": "声速降低率（缺陷判别）",
+      "expr": "(v_0 - v)/v_0*100",
+      "latex": "\\frac{v_0 - v}{v_0}\\times 100\\%",
+      "vars": [
+        { "sym": "v_0", "name": "正常部位（或统计基准）的声速", "unit": "km/s", "note": "由同条件完好部位多点统计得到" },
+        { "sym": "v", "name": "可疑测点声速", "unit": "km/s", "note": "" }
+      ],
+      "conditions": ["可疑测点与正常部位同材料、同配合比、同龄期", "测距相同或已归一化为声速"],
+      "derivationHint": "以正常部位声速为基准的相对偏差。",
+      "typicalUse": "超声法检测混凝土内部缺陷的初步判别（须与波幅、波形综合判断）。",
+      "pitfalls": [
+        "单纯声速判据易受含水率、测距与钢筋影响，应结合波幅衰减与波形畸变综合判定",
+        "临界值（多大的降低率判为缺陷）须按 CECS 21 的统计判别方法（如 PSD 法）确定，不要自定阈值",
+        "测距不同时应比较声速而不是声时"
+      ],
+      "standardRef": ["CECS 21"],
+      "confidence": "medium",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "10", "page": null },
+      "verify": "缺陷判别的临界值取法与 PSD 判据请按 CECS 21 现行版本核对"
+    },
+    {
+      "id": "structural-testing-formula-042",
+      "subjectId": "structural-testing",
+      "chapter": "11.3",
+      "name": "索力频率法（张紧弦公式）",
+      "expr": "T = 4*m*L^2*f_n^2/n^2",
+      "latex": "T = \\frac{4mL^2 f_n^2}{n^2}",
+      "vars": [
+        { "sym": "T", "name": "索力（索的轴向拉力）", "unit": "N", "note": "" },
+        { "sym": "m", "name": "索的单位长度质量", "unit": "kg/m", "note": "含防护层与缠包" },
+        { "sym": "L", "name": "索的计算长度（两端锚固点间距的有效振动长度）", "unit": "m", "note": "取法须与标定或实测一致" },
+        { "sym": "f_n", "name": "第 n 阶实测自振频率", "unit": "Hz", "note": "" },
+        { "sym": "n", "name": "振动阶次", "unit": "—", "note": "先用 f_n/n 是否近似常数判断阶次" }
+      ],
+      "conditions": ["索的垂度很小，可视为张紧弦", "索的抗弯刚度影响可忽略", "两端边界可视为铰支（或已做边界修正）"],
+      "derivationHint": "张紧弦横向振动方程 EI 忽略、垂度忽略时，第 n 阶频率 f_n = (n/(2L))·sqrt(T/m)，反解得本式。",
+      "typicalUse": "斜拉桥、悬索桥与吊杆、系杆的索力测试。",
+      "pitfalls": [
+        "计算长度 L 的取法（锚固点中心距、减振器位置、等效长度）直接二次方影响结果，必须统一口径并说明",
+        "长索垂度显著，须做垂度修正；短索抗弯刚度显著，须做刚度修正",
+        "边界条件（锚固端转动约束、减振器）会使实测频率偏离理想弦，必要时用已标定的索做对比修正",
+        "必须先用 f_n/n 是否近似为常数判断 n，误判阶次会使索力差 n² 倍"
+      ],
+      "standardRef": ["JTG/T J21"],
+      "confidence": "medium",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "11", "page": null },
+      "verify": "计算长度取值、垂度与抗弯刚度修正的实用公式请按教材与桥梁检测相关规程核对"
+    },
+    {
+      "id": "structural-testing-formula-043",
+      "subjectId": "structural-testing",
+      "chapter": "6.2",
+      "name": "有阻尼固有频率与无阻尼固有频率",
+      "expr": "f_d = f_n*sqrt(1 - zeta^2)",
+      "latex": "f_d = f_n\\sqrt{1-\\zeta^2}",
+      "vars": [
+        { "sym": "f_d", "name": "有阻尼固有频率（实测频率）", "unit": "Hz", "note": "实测得到的是 f_d" },
+        { "sym": "f_n", "name": "无阻尼固有频率", "unit": "Hz", "note": "理论计算通常给出 f_n" },
+        { "sym": "zeta", "name": "阻尼比", "unit": "—", "note": "" }
+      ],
+      "conditions": ["单自由度或小阻尼，ζ < 1"],
+      "derivationHint": "由欠阻尼自由振动解 x = A·e^(−ζω_n t)·sin(ω_d t) 中 ω_d = ω_n·sqrt(1−ζ²)。",
+      "typicalUse": "把实测频率换算为可与理论计算比较的无阻尼频率。",
+      "pitfalls": ["ζ 很小时（工程结构常 0.01~0.05）两者差别极小，但高精度比较时仍需换算", "不要用 f_d 直接代入需要 f_n 的公式"],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "6", "page": null },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-formula-044",
+      "subjectId": "structural-testing",
+      "chapter": "13.1",
+      "name": "悬臂浇筑立模标高",
+      "expr": "H_lm = H_d + f_c + f_g + f_t",
+      "latex": "H_{lm} = H_d + f_c + f_g + f_t",
+      "vars": [
+        { "sym": "H_lm", "name": "立模标高", "unit": "m", "note": "模板就位时应设置的标高" },
+        { "sym": "H_d", "name": "设计成桥标高", "unit": "m", "note": "" },
+        { "sym": "f_c", "name": "预拱度（含恒载、活载、收缩徐变等预抬高量）", "unit": "m", "note": "向上为正" },
+        { "sym": "f_g", "name": "挂篮（或支架）弹性变形修正量", "unit": "m", "note": "挂篮下挠时为正（需抬高）" },
+        { "sym": "f_t", "name": "温度修正量", "unit": "m", "note": "按实测温度与合龙工况确定，符号须统一约定" }
+      ],
+      "conditions": ["各修正量均按抬高为正统一约定", "预拱度按施工阶段的倒拆分析或正装计算给出", "温度修正对应实际量测时的温度场"],
+      "derivationHint": "成桥标高 = 立模标高 − 挂篮变形 − 后期变形（收缩徐变、二期恒载、活载等），故立模标高 = 设计标高 + 各项预抬高。",
+      "typicalUse": "大跨连续梁、连续刚构与斜拉桥悬臂施工的线形控制。",
+      "pitfalls": [
+        "各修正量的正负号最容易出错，计算前必须统一规定以抬高为正",
+        "实际工程中修正项更多（二期恒载、支座压缩、墩身压缩、体系转换等），本式为简化形式",
+        "温度修正必须对应实测温度与合龙工况，季节温差与日照温差应分别考虑"
+      ],
+      "standardRef": [],
+      "confidence": "medium",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "13", "page": null },
+      "verify": "立模标高的具体组成项与符号约定请按教材及具体桥梁施工监控实施细则核对"
+    },
+    {
+      "id": "structural-testing-formula-045",
+      "subjectId": "structural-testing",
+      "chapter": "5.1",
+      "name": "简支梁跨中集中荷载挠度",
+      "expr": "f = P*L^3/(48*E*I)",
+      "latex": "f = \\frac{PL^3}{48EI}",
+      "vars": [
+        { "sym": "f", "name": "跨中挠度", "unit": "mm", "note": "向下为正" },
+        { "sym": "P", "name": "跨中集中荷载", "unit": "N", "note": "若含分配梁与垫板自重应计入" },
+        { "sym": "L", "name": "计算跨径", "unit": "mm", "note": "支座中心间距" },
+        { "sym": "E", "name": "弹性模量", "unit": "MPa", "note": "N/mm²，按实测试块取值" },
+        { "sym": "I", "name": "截面惯性矩", "unit": "mm^4", "note": "矩形截面 I = b*h^3/12" }
+      ],
+      "conditions": ["等截面简支梁", "荷载作用于跨中", "材料线弹性、小变形", "忽略剪切变形（细长梁）"],
+      "derivationHint": "由单位荷载法（或积分法）对弯矩图二次积分得跨中挠度。",
+      "typicalUse": "静载试验中计算挠度理论值，与实测值比较求挠度校验系数。",
+      "pitfalls": [
+        "单位必须统一为 N 与 mm，混用 kN 与 m 会差 10^6 量级",
+        "理论值要用实测弹模与实际截面尺寸，用设计值会使校验系数失真",
+        "跨高比较小时剪切变形不可忽略，理论挠度会偏小",
+        "支座沉降、加载装置变形必须从实测值中扣除后再比较"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "5", "page": null },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-formula-046",
+      "subjectId": "structural-testing",
+      "chapter": "5.1",
+      "name": "弯曲正应力与截面抵抗矩",
+      "expr": "sigma = M/W",
+      "latex": "\\sigma = \\frac{M}{W}",
+      "vars": [
+        { "sym": "sigma", "name": "截面边缘弯曲正应力", "unit": "MPa", "note": "拉为正" },
+        { "sym": "M", "name": "截面弯矩", "unit": "N·mm", "note": "" },
+        { "sym": "W", "name": "截面抵抗矩（截面模量）", "unit": "mm³", "note": "矩形 W = b*h^2/6 = I/(h/2)" }
+      ],
+      "conditions": ["平截面假定成立", "材料线弹性", "等截面直梁纯弯或近似纯弯"],
+      "derivationHint": "σ = M·y/I，取 y = h/2 得 σ = M/W。",
+      "typicalUse": "由理论弯矩计算应变理论值，与实测应变比较求应变校验系数。",
+      "pitfalls": [
+        "应变理论值 = σ/E，注意 E 用实测值",
+        "钢筋混凝土须用换算截面或按开裂状态分别计算，开裂前后刚度差别很大",
+        "测点不在截面边缘时应力按线性分布折减"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "5", "page": null },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-formula-047",
+      "subjectId": "structural-testing",
+      "chapter": "2.2",
+      "name": "两点对称（三分点）加载的跨中弯矩",
+      "expr": "M = (P/2)*a",
+      "latex": "M = \\frac{P}{2}a",
+      "vars": [
+        { "sym": "M", "name": "两加载点之间（纯弯段）的弯矩", "unit": "N·mm", "note": "纯弯段内为常值" },
+        { "sym": "P", "name": "千斤顶总出力", "unit": "N", "note": "经分配梁等分为两个 P/2" },
+        { "sym": "a", "name": "加载点至近端支座的距离", "unit": "mm", "note": "三分点加载时 a = L/3" }
+      ],
+      "conditions": ["分配梁使两个加载点力值相等", "加载点对称布置", "忽略分配梁自重或已计入"],
+      "derivationHint": "支座反力各为 P/2，纯弯段内剪力为零，弯矩恒为 (P/2)·a。",
+      "typicalUse": "用分配梁实现等效加载图式，检验控制截面弯矩是否达到设计值。",
+      "pitfalls": [
+        "只保证跨中弯矩等效而忽略剪力分布差异，可能改变破坏形态",
+        "分配梁刚度不足或支点摩阻会导致两加载点力值不等，实际弯矩小于理论值",
+        "P 应以力传感器实测值为准，不能只用油压表读数"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "2", "page": null },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-formula-048",
+      "subjectId": "structural-testing",
+      "chapter": "10.2",
+      "name": "冲击回波法测板厚",
+      "expr": "h = C_p/(2*f_T)",
+      "latex": "h = \\frac{C_p}{2 f_T}",
+      "vars": [
+        { "sym": "h", "name": "板（或壁厚）厚度", "unit": "m", "note": "或缺陷埋深" },
+        { "sym": "C_p", "name": "混凝土中 P 波波速", "unit": "m/s", "note": "须实测标定，通常需已知厚度处反算或超声实测" },
+        { "sym": "f_T", "name": "频谱中的厚度频率峰值", "unit": "Hz", "note": "冲击回波频谱主峰" }
+      ],
+      "conditions": ["构件可近似为板/墙，底面反射信号清晰", "P 波波速已知且沿厚度均匀", "冲击点与接收点间距足够小"],
+      "derivationHint": "应力波在上下表面间往返一次的路径为 2h，对应周期 1/f_T，故 2h = C_p/f_T。",
+      "typicalUse": "楼板、隧道衬砌、墙体的厚度检测与内部空洞、脱空的深度判定。",
+      "pitfalls": [
+        "波速 C_p 必须实测标定（可用已知厚度处反算或用超声法测得），用经验值会带来 5%~10% 以上误差",
+        "薄板或强配筋构件中频谱复杂，主峰识别依赖经验，应多点验证",
+        "与超声法、雷达法相比，冲击回波为单面测试，适合只有一侧可及的构件"
+      ],
+      "standardRef": [],
+      "confidence": "medium",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "10", "page": null },
+      "verify": "冲击回波法的波速取值与厚度频率识别方法请按教材与相关检测规程核对"
+    },
+    {
+      "id": "structural-testing-formula-049",
+      "subjectId": "structural-testing",
+      "chapter": "8.1",
+      "name": "算术平均值",
+      "expr": "x_bar = sum(x_i)/n",
+      "latex": "\\bar{x} = \\frac{1}{n}\\sum_{i=1}^{n}x_i",
+      "vars": [
+        { "sym": "x_bar", "name": "样本算术平均值", "unit": "同 x", "note": "随机误差均值为零时的最佳估计" },
+        { "sym": "x_i", "name": "第 i 个观测值", "unit": "同 x", "note": "已剔除粗大误差" },
+        { "sym": "n", "name": "观测次数", "unit": "—", "note": "" }
+      ],
+      "conditions": ["等精度独立观测", "已剔除粗大误差并修正系统误差"],
+      "derivationHint": "多次等精度观测的算术平均值是真值的最小二乘估计。",
+      "typicalUse": "重复读数取平均以削弱随机误差；作为回归与强度推定的基础统计量。",
+      "pitfalls": ["平均只能削弱随机误差，不能消除系统误差（如未标定的仪器偏差、温度影响）", "存在粗大误差时必须先剔除，否则均值被显著拉偏"],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": { "book": "结构试验与检测", "edition": null, "publisher": "哈尔滨工程大学出版社", "chapter": "8", "page": null },
+      "verify": null
+    }
+  ]
+}

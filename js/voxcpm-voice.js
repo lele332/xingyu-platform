@@ -170,9 +170,17 @@
   }
 
   /* ---------- VoxCPM 服务检测（经星屿同源代理） ---------- */
-  async function checkVoxService() {
+  async function checkVoxService(startIfNeeded) {
     try {
       const direct = location.protocol === "file:" || location.hostname === "";
+      if (startIfNeeded && !direct) {
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 45000);
+        try {
+          const started = await fetch("/api/voice/start", { method: "POST", signal: ctrl.signal });
+          if (!started.ok) return false;
+        } finally { clearTimeout(timer); }
+      }
       const url = direct
         ? (getSettings().voxUrl || DEFAULT_VOX_URL).replace(/\/$/, "") + "/healthz"
         : location.origin + "/vox-proxy/__vox_health__";
@@ -572,11 +580,12 @@
       return direct ? "http://127.0.0.1:8000/xingyu" : (location.origin + "/vox-proxy/xingyu");
     }
 
-    async function loadLibVoices() {
+    async function loadLibVoices(startIfNeeded) {
       const box = $("#voxLibList");
       if (!box) return;
       box.innerHTML = '<span class="vox-lib-empty">加载中…</span>';
       try {
+        if (startIfNeeded && !(await checkVoxService(true))) throw new Error("语音服务未就绪，请稍后重试");
         const r = await fetch(libEndpoint() + "/voices", { cache: "no-store" });
         if (!r.ok) throw new Error("HTTP " + r.status);
         const j = await r.json();
@@ -646,7 +655,7 @@
           else if (mode === "lib") cloneStatus.textContent = "🎚️ 我的音色：选中一个已保存音色，输入文本即可合成，无需再上传音频。";
           else cloneStatus.textContent = "🎙️ 新文本克隆：上传 2~4 秒干净音频，再填写下方要合成的新文本。音频越长，模型越容易复述原话。";
         }
-        if (isLib) loadLibVoices();
+        if (isLib) loadLibVoices(true);
       };
     });
 
@@ -768,9 +777,9 @@
         const control = mode === "design" ? designDesc : "";
         const finalText = control ? "(" + control + ")" + text : text;
         if (cloneStatus) cloneStatus.textContent = "正在检测 AMD VoxCPM 推理服务…";
-        checkVoxService().then(function (online) {
+        checkVoxService(true).then(function (online) {
           if (!online) {
-            if (cloneStatus) cloneStatus.textContent = "⚠ 本地 VoxCPM 推理服务未就绪（8000 适配层或 8001 AMD 推理层未启动）。请关闭星屿后重新双击桌面「星屿」；我也会自动拉起这两层服务。";
+            if (cloneStatus) cloneStatus.textContent = "⚠ 语音服务启动尚未就绪，请稍后再次点击合成；若持续失败，请检查本机模型和语音服务日志。";
             toast("本地 VoxCPM 推理服务未就绪", "err");
             if (svcBadge) { svcBadge.dataset.state = "off"; svcBadge.textContent = "推理服务未就绪"; }
             resetButton();

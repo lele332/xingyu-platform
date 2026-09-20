@@ -1,0 +1,294 @@
+{
+  "subjectId": "engineering-economics",
+  "note": "本文件不是文献全文，而是「去哪儿查、查什么、以谁为准」的索引。论文受版权保护不入库；AI 回答涉及前沿或争议问题时，按这里给出的入口检索，并把来源层级告诉用户。",
+  "updatedAt": "2026-09-15",
+  "items": [
+    {
+      "type": "journal",
+      "name": "建筑经济",
+      "en": "Construction Economy",
+      "org": "中国建筑学会 / 中国建筑设计研究院",
+      "level": "B",
+      "why": "工程经济与建筑经济管理的专门期刊，项目评价、造价、投融资类文章集中，和本课程贴合度最高。",
+      "howToUse": "按「经济评价 / 全生命周期成本 / 方案比选」检索；适合找课程论文的本土案例。",
+      "access": "知网 / 万方（校内 IP 通常免费）",
+      "confidence": "high",
+      "verify": null,
+      "id": "engineering-economics-source-001"
+    },
+    {
+      "type": "journal",
+      "name": "工程管理学报",
+      "en": "Journal of Engineering Management",
+      "org": "哈尔滨工业大学 / 中国建筑学会",
+      "level": "B",
+      "why": "工程管理与工程经济交叉，实证类论文多，适合找「某类项目经济评价」的成体系写法。",
+      "howToUse": "优先看实证与案例研究，能直接借它的分析框架。",
+      "access": "知网 / 万方（校内 IP 通常免费）",
+      "confidence": "high",
+      "verify": null,
+      "id": "engineering-economics-source-002"
+    },
+    {
+      "type": "journal",
+      "name": "土木工程与管理学报",
+      "en": "Journal of Civil Engineering and Management",
+      "org": "华中科技大学",
+      "level": "B",
+      "why": "土木背景下的管理与经济分析，桥梁/道路项目的经济评价案例多。",
+      "howToUse": "按项目类型（公路、桥梁、市政）检索，能拿到本专业的真实算例。",
+      "access": "知网 / 万方（校内 IP 通常免费）",
+      "confidence": "high",
+      "verify": null,
+      "id": "engineering-economics-source-003"
+    },
+    {
+      "type": "journal",
+      "name": "技术经济",
+      "en": "Journal of Technical Economics",
+      "org": "中国技术经济学会",
+      "level": "B",
+      "why": "技术经济评价方法学本身（指标体系、敏感性分析、不确定性分析）。",
+      "howToUse": "想搞懂「为什么这么算」而不是「算出来是多少」时看它。",
+      "access": "知网 / 万方（校内 IP 通常免费）",
+      "confidence": "high",
+      "verify": null,
+      "id": "engineering-economics-source-004"
+    },
+    {
+      "type": "journal",
+      "name": "中国软科学",
+      "en": "China Soft Science",
+      "org": "中国软科学研究会",
+      "level": "A",
+      "why": "公共项目决策、政策评估，适合做宏观层面的论证支撑。",
+      "howToUse": "课程论文要拔高到政策/决策层面时引用，专业课作业不必。",
+      "access": "知网 / 万方（校内 IP 通常免费）",
+      "confidence": "high",
+      "verify": null,
+      "id": "engineering-economics-source-005"
+    },
+    {
+      "type": "journal",
+      "name": "Journal of Construction Engineering and Management",
+      "en": "Journal of Construction Engineering and Management",
+      "org": "ASCE",
+      "level": "A",
+      "why": "国际工程管理顶刊，成本、进度、风险、全生命周期分析的方法学最成体系。",
+      "howToUse": "写英文文献综述时的主力来源；注意中美造价体系不同，方法可学、参数不可直接套。",
+      "access": "Web of Science / ScienceDirect / ASCE Library",
+      "confidence": "high",
+      "verify": null,
+      "id": "engineering-economics-source-006"
+    },
+    {
+      "type": "journal",
+      "name": "International Journal of Project Management",
+      "en": "International Journal of Project Management",
+      "org": "Elsevier / APM / IPMA",
+      "level": "A",
+      "why": "项目层面的经济与决策研究，投资决策、实物期权、风险分析常见。",
+      "howToUse": "查「不确定条件下的投资决策」这类进阶问题。",
+      "access": "Web of Science / ScienceDirect / ASCE Library",
+      "confidence": "high",
+      "verify": null,
+      "id": "engineering-economics-source-007"
+    },
+    {
+      "type": "journal",
+      "name": "Automation in Construction",
+      "en": "Automation in Construction",
+      "org": "Elsevier",
+      "level": "A",
+      "why": "BIM、数字建造与成本/进度集成管理的前沿，适合大创选题。",
+      "howToUse": "想做「技术 + 经济」交叉题目时找灵感。",
+      "access": "Web of Science / ScienceDirect / ASCE Library",
+      "confidence": "high",
+      "verify": null,
+      "id": "engineering-economics-source-008"
+    },
+    {
+      "type": "journal",
+      "name": "Engineering, Construction and Architectural Management",
+      "en": "Engineering, Construction and Architectural Management",
+      "org": "Emerald",
+      "level": "B",
+      "why": "工程经济与项目管理的实务研究，案例丰富。",
+      "howToUse": "找具体项目的经济性分析框架。",
+      "access": "Web of Science / ScienceDirect / ASCE Library",
+      "confidence": "high",
+      "verify": null,
+      "id": "engineering-economics-source-009"
+    },
+    {
+      "type": "standard",
+      "name": "《建设项目经济评价方法与参数》（第三版） 国家发展改革委、建设部发布",
+      "code": "《建设项目经济评价方法与参数》（第三版）",
+      "level": "S",
+      "why": "国内项目经济评价的权威依据，基准收益率、评价参数、报表格式的来源。",
+      "howToUse": "作业里凡是问「参数取多少、报表怎么编」，先查它；引用时写明「第X版」。",
+      "access": "交通运输标准化信息系统 / 住建部标准发布 / 学校图书馆标准库",
+      "confidence": "high",
+      "verify": "版本以现行发布为准（第三版为通行版本，出版社为中国计划出版社）；教师若指定其他版本，以教师要求为准。",
+      "id": "engineering-economics-source-010"
+    },
+    {
+      "type": "standard",
+      "name": "《公路建设项目经济评价方法与参数》 交通运输部发布",
+      "code": "《公路建设项目经济评价方法与参数》",
+      "level": "S",
+      "why": "公路项目专门的评价口径，与《建设项目经济评价方法与参数》配套使用。",
+      "howToUse": "做道桥类项目的经济评价作业时优先用它，而不是泛用的建设部口径。",
+      "access": "交通运输标准化信息系统 / 住建部标准发布 / 学校图书馆标准库",
+      "confidence": "medium",
+      "verify": "版本与发布年份需核对现行文件。",
+      "id": "engineering-economics-source-011"
+    },
+    {
+      "type": "standard",
+      "name": "《市政公用设施建设项目经济评价方法与参数》 住房城乡建设部发布",
+      "code": "《市政公用设施建设项目经济评价方法与参数》",
+      "level": "S",
+      "why": "市政类项目（道路、桥梁、给排水）的经济评价口径。",
+      "howToUse": "城镇基础设施类项目作业适用。",
+      "access": "交通运输标准化信息系统 / 住建部标准发布 / 学校图书馆标准库",
+      "confidence": "medium",
+      "verify": "版本与发布年份需核对现行文件。",
+      "id": "engineering-economics-source-012"
+    },
+    {
+      "type": "standard",
+      "name": "ISO 15686-5 Buildings and constructed assets — Service life planning — Part 5: Life-cycle costing",
+      "code": "ISO 15686-5",
+      "level": "S",
+      "why": "全生命周期成本（LCC）计算的国际标准框架。",
+      "howToUse": "写 LCC 相关作业时，用它说明你采用的分析边界与成本科目划分。",
+      "access": "交通运输标准化信息系统 / 住建部标准发布 / 学校图书馆标准库",
+      "confidence": "medium",
+      "verify": "标准分部分逐年更新，引用时核对现行版。",
+      "id": "engineering-economics-source-013"
+    },
+    {
+      "type": "standard",
+      "name": "AACE International Recommended Practices AACE International（国际成本工程协会）",
+      "code": "AACE International Recommended Practices",
+      "level": "S",
+      "why": "成本估算与风险分析的国际通行做法（含估算分级、 contingency 确定）。",
+      "howToUse": "涉及「估算精度等级、预备费怎么取」时参考；注意它是推荐做法，不是中国规范。",
+      "access": "交通运输标准化信息系统 / 住建部标准发布 / 学校图书馆标准库",
+      "confidence": "medium",
+      "verify": "制度性差异大：直接套用会与国内计价体系冲突，只可借鉴思路。",
+      "id": "engineering-economics-source-014"
+    },
+    {
+      "type": "database",
+      "name": "中国知网（CNKI）",
+      "level": "D",
+      "why": "中文期刊、学位论文、会议论文最全，课程论文与作业的主要来源。",
+      "howToUse": "用「主题」而不是「篇名」检索；勾选「同义词扩展」；学位论文适合看文献综述章节。",
+      "access": "校园网 / 图书馆入口",
+      "confidence": "high",
+      "verify": null,
+      "id": "engineering-economics-source-015"
+    },
+    {
+      "type": "database",
+      "name": "Web of Science / EI Compendex",
+      "level": "D",
+      "why": "外文期刊与会议论文，判断一个方向国际进展如何。",
+      "howToUse": "先看 Review，再看 Article；用「被引频次」排序找经典文献。",
+      "access": "校园网 / 图书馆入口",
+      "confidence": "high",
+      "verify": null,
+      "id": "engineering-economics-source-016"
+    },
+    {
+      "type": "database",
+      "name": "国家统计局 / 财政部 / 税务总局官网",
+      "level": "D",
+      "why": "宏观参数（价格指数、税率、折旧政策）的唯一权威来源。",
+      "howToUse": "涉及税率、折现率、物价指数时一律查官方，不要用二手资料的数字。",
+      "access": "校园网 / 图书馆入口",
+      "confidence": "high",
+      "verify": null,
+      "id": "engineering-economics-source-017"
+    },
+    {
+      "type": "org",
+      "name": "国家发展和改革委员会 / 财政部",
+      "level": "O",
+      "why": "投资项目管理、财税政策的发布口径。",
+      "howToUse": "查现行政策文件；政策类内容必须标「以现行政策为准」。",
+      "access": "官网公开信息",
+      "confidence": "high",
+      "verify": null,
+      "id": "engineering-economics-source-018"
+    },
+    {
+      "type": "org",
+      "name": "中国建设工程造价管理协会",
+      "level": "O",
+      "why": "造价与工程经济的行业口径与继续教育材料。",
+      "howToUse": "查行业通行的计价与评价做法。",
+      "access": "官网公开信息",
+      "confidence": "medium",
+      "verify": null,
+      "id": "engineering-economics-source-019"
+    },
+    {
+      "type": "org",
+      "name": "中国技术经济学会 / 中国建筑学会建筑经济分会",
+      "level": "O",
+      "why": "学术共同体的会议与综述。",
+      "howToUse": "找课程论文选题与前沿综述。",
+      "access": "官网公开信息",
+      "confidence": "medium",
+      "verify": null,
+      "id": "engineering-economics-source-020"
+    },
+    {
+      "type": "method",
+      "name": "工程经济类检索式模板（可直接套用）",
+      "level": "M",
+      "why": "工程经济的问题通常带「方法 + 对象」，检索式要同时锁定两者。",
+      "howToUse": "CNKI：（主题=净现值 OR 内部收益率 OR 投资回收期）AND（主题=公路 OR 桥梁 OR 市政）AND（年 between 2016,2026）；先按被引排序抓综述。WoS：TS=(\"life-cycle cost\" OR \"net present value\") AND (\"highway\" OR \"bridge\") AND PY=(2016-2026)。",
+      "access": "CNKI / WoS",
+      "confidence": "high",
+      "verify": null,
+      "id": "engineering-economics-source-021"
+    },
+    {
+      "type": "method",
+      "name": "参数类内容的三问（税、率、价）",
+      "level": "M",
+      "why": "工程经济最容易错的是参数：税率、折现率、价格水平一变，结论全变。",
+      "howToUse": "① 时点：这个税率/指数是哪一年的？② 口径：税前还是税后、名义还是实际？③ 出处：官方文件还是教材举例？三问答不全就写「参数需按现行政策与教师要求核对」。",
+      "access": "—",
+      "confidence": "high",
+      "verify": null,
+      "id": "engineering-economics-source-022"
+    },
+    {
+      "id": "engineering-economics-source-023",
+      "name": "判断一篇文献能不能用于作业（三问）",
+      "howToUse": "① 出处：是不是本文件列出的期刊/规范/机构？② 时间：是否近 10 年，或是不是该问题的经典原始文献？③ 可核：结论能不能在教材或现行规范里找到对应？三问答不全就别引用，改用教材口径并注明。"
+    }
+  ],
+  "searchTemplates": [
+    {
+      "id": "tpl-cnki",
+      "name": "CNKI 检索式模板（可直接套用）",
+      "howToUse": "（主题 = 核心概念A）AND（主题 = 核心概念B）AND（年 between 2016,2026）；先按「被引」排序抓综述，再按「发表时间」排序抓最新进展；找到 2-3 篇高质量综述后，顺其参考文献回溯原始文献。"
+    },
+    {
+      "id": "tpl-wos",
+      "name": "Web of Science / Scopus 检索式模板",
+      "howToUse": "TS=(\"concept A\" AND \"concept B\") AND PY=(2016-2026)；文献类型限 Article / Review；语种 English；用「被引频次」找经典，用「最早发表」找首创。"
+    },
+    {
+      "id": "tpl-three-q",
+      "name": "判断一篇文献能不能用于作业（三问）",
+      "howToUse": "① 出处：是不是本文件列出的期刊/规范/机构？② 时间：是否近 10 年，或是不是该问题的经典原始文献？③ 可核：结论能不能在教材或现行规范里找到对应？三问答不全就别引用，改用教材口径并注明。"
+    }
+  ]
+}

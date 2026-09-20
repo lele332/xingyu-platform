@@ -147,7 +147,14 @@
 
   var frames = 0, secStart = performance.now();
   function loop(now) {
-    if (window.__splashCovered || document.hidden) { frames = 0; secStart = now; requestAnimationFrame(loop); return; }
+    // 隐藏标签页不需要每帧采样；继续 RAF 会让后台窗口长期保持唤醒。
+    if (document.hidden) {
+      frames = 0;
+      secStart = now;
+      setTimeout(function () { requestAnimationFrame(loop); }, 1000);
+      return;
+    }
+    if (window.__splashCovered) { frames = 0; secStart = now; requestAnimationFrame(loop); return; }
     frames++;
     if (now - secStart >= 1000) {
       var fps = Math.round(frames * 1000 / (now - secStart));

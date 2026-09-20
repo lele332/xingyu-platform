@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 290" width="660" height="290" role="img" aria-label="剪跨比对斜截面破坏形态的影响：斜压破坏、剪压破坏、斜拉破坏三种形态对照">
+  <title>剪跨比 λ = a/h₀ 决定的三种斜截面破坏形态</title>
+  <g font-family="system-ui, -apple-system, 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#8a8a8a">
+    <rect x="20" y="96" width="180" height="40" fill="#d8d8d8" opacity="0.12" stroke="#c8c8c8" stroke-width="1.4"/>
+    <path d="M40 158 L50 140 L60 158 Z" fill="#c8c8c8" opacity="0.5"/>
+    <path d="M160 158 L170 140 L180 158 Z" fill="#c8c8c8" opacity="0.5"/>
+    <path d="M75 60 V90" stroke="#ff9f0a" stroke-width="1.6"/>
+    <path d="M75 96 l-5 -9 h10 Z" fill="#ff9f0a"/>
+    <text x="82" y="70" font-size="11" fill="#ff9f0a">P</text>
+    <path d="M62 128 L88 104 M72 132 L98 108 M82 136 L108 112" stroke="#ff9f0a" stroke-width="1.1" opacity="0.8"/>
+    <path d="M50 176 H75" stroke="#0a84ff" stroke-width="1.1"/>
+    <path d="M50 171 v10 M75 171 v10" stroke="#0a84ff" stroke-width="1.1"/>
+    <text x="62" y="192" text-anchor="middle" font-size="11" fill="#0a84ff">a</text>
+    <text x="110" y="38" text-anchor="middle" fill="#ff9f0a">λ &lt; 1　斜压破坏</text>
+    <text x="110" y="216" text-anchor="middle" font-size="11">箍筋还没屈服，混凝土先被斜向压碎</text>
+    <text x="110" y="234" text-anchor="middle" font-size="11" fill="#ff9f0a">多配箍筋无用，须加大截面或提高混凝土强度</text>
+
+    <rect x="240" y="96" width="180" height="40" fill="#d8d8d8" opacity="0.12" stroke="#c8c8c8" stroke-width="1.4"/>
+    <path d="M260 158 L270 140 L280 158 Z" fill="#c8c8c8" opacity="0.5"/>
+    <path d="M380 158 L390 140 L400 158 Z" fill="#c8c8c8" opacity="0.5"/>
+    <path d="M305 60 V90" stroke="#30d158" stroke-width="1.6"/>
+    <path d="M305 96 l-5 -9 h10 Z" fill="#30d158"/>
+    <text x="312" y="70" font-size="11" fill="#30d158">P</text>
+    <path d="M275 136 L325 100" stroke="#30d158" stroke-width="1.6"/>
+    <path d="M270 176 H305" stroke="#0a84ff" stroke-width="1.1"/>
+    <path d="M270 171 v10 M305 171 v10" stroke="#0a84ff" stroke-width="1.1"/>
+    <text x="288" y="192" text-anchor="middle" font-size="11" fill="#0a84ff">a</text>
+    <text x="330" y="38" text-anchor="middle" fill="#30d158">1 ≤ λ ≤ 3　剪压破坏</text>
+    <text x="330" y="216" text-anchor="middle" font-size="11">箍筋先屈服，随后剪压区混凝土压碎</text>
+    <text x="330" y="234" text-anchor="middle" font-size="11" fill="#30d158">抗剪承载力公式针对的正是这一形态</text>
+
+    <rect x="460" y="96" width="180" height="40" fill="#d8d8d8" opacity="0.12" stroke="#c8c8c8" stroke-width="1.4"/>
+    <path d="M480 158 L490 140 L500 158 Z" fill="#c8c8c8" opacity="0.5"/>
+    <path d="M600 158 L610 140 L620 158 Z" fill="#c8c8c8" opacity="0.5"/>
+    <path d="M545 60 V90" stroke="#bf5af2" stroke-width="1.6"/>
+    <path d="M545 96 l-5 -9 h10 Z" fill="#bf5af2"/>
+    <text x="552" y="70" font-size="11" fill="#bf5af2">P</text>
+    <path d="M492 136 L540 98" stroke="#bf5af2" stroke-width="1.6"/>
+    <path d="M490 176 H545" stroke="#0a84ff" stroke-width="1.1"/>
+    <path d="M490 171 v10 M545 171 v10" stroke="#0a84ff" stroke-width="1.1"/>
+    <text x="518" y="192" text-anchor="middle" font-size="11" fill="#0a84ff">a</text>
+    <text x="550" y="38" text-anchor="middle" fill="#bf5af2">λ &gt; 3　斜拉破坏</text>
+    <text x="550" y="216" text-anchor="middle" font-size="11">斜裂缝一出现就贯通，箍筋随即拉断</text>
+    <text x="550" y="234" text-anchor="middle" font-size="11" fill="#bf5af2">脆性，靠最小配箍率与构造措施防止</text>
+
+    <text x="330" y="262" text-anchor="middle" font-size="11" fill="#8a8a8a">λ = a / h₀：a 为集中荷载作用点至支座边缘的距离，h₀ 为截面有效高度</text>
+    <text x="330" y="280" text-anchor="middle" font-size="11" fill="#8a8a8a">易错：均布荷载梁用「跨高比」判断；集中荷载梁才算剪跨比，两者别混着用</text>
+  </g>
+</svg>

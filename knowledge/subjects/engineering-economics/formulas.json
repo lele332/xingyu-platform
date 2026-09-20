@@ -1,0 +1,3933 @@
+{
+  "items": [
+    {
+      "id": "engineering-economics-formula-001",
+      "subjectId": "engineering-economics",
+      "chapter": "2.4",
+      "name": "一次支付终值（复利本利和）",
+      "expr": "F = P * (1 + i)^n",
+      "latex": "F=P(1+i)^{n}",
+      "vars": [
+        {
+          "sym": "F",
+          "name": "终值（本利和）",
+          "unit": "元/万元",
+          "note": "第 n 期末一次支付或回收的金额"
+        },
+        {
+          "sym": "P",
+          "name": "现值（本金）",
+          "unit": "元/万元",
+          "note": "发生在第 0 点（第 1 期初）"
+        },
+        {
+          "sym": "i",
+          "name": "利率（折现率）",
+          "unit": "—",
+          "note": "必须与 n 的时间单位一致，用小数代入，如 8% 写作 0.08"
+        },
+        {
+          "sym": "n",
+          "name": "计息期数",
+          "unit": "期",
+          "note": "通常为年"
+        }
+      ],
+      "conditions": [
+        "复利计息（利息并入下期本金）",
+        "利率在各期保持不变",
+        "现金流量时点约定为期末"
+      ],
+      "derivationHint": "第1期末 F1=P(1+i)，第2期末 F2=P(1+i)(1+i)=P(1+i)^2，递推 n 期即得。",
+      "typicalUse": "一次支付终值系数 (F/P,i,n)：已知本金求若干年后的本利和；是全部六组公式的母式",
+      "pitfalls": [
+        "不能与单利 F=P*(1+i*n) 混用，工程经济学一律用复利",
+        "i 用百分数直接代入会放大 100 倍",
+        "年利率必须配年数，月利率必须配月数"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/engineering-economics/equivalence.svg",
+        "caption": "P、F、A 三者等值换算：同一笔钱的三种说法（示意关系图）",
+        "readPoints": [
+          "记住一句：三个顶点说的是同一个现金流，只是把钱放在不同时间点上看。",
+          "横向是「一次支付」：整笔钱往前挪（折现）或往后挪（求终值）。",
+          "两条斜边是「等额系列」：把整笔钱摊到每年（资金回收），或把每年攒起来（年金终值）。",
+          "系数里的 n 一定是「期数」，A 的第一笔在第 1 年年末，不在第 0 年。",
+          "系数表一般只给 i 和 n 的整数格，中间值要内插，考试通常会给表。"
+        ]
+      }
+    },
+    {
+      "id": "engineering-economics-formula-002",
+      "subjectId": "engineering-economics",
+      "chapter": "2.4",
+      "name": "一次支付现值（折现）",
+      "expr": "P = F * (1 + i)^(-n)",
+      "latex": "P=F(1+i)^{-n}=F\\frac{1}{(1+i)^{n}}",
+      "vars": [
+        {
+          "sym": "P",
+          "name": "现值",
+          "unit": "元/万元",
+          "note": "折算到第 0 点的价值"
+        },
+        {
+          "sym": "F",
+          "name": "终值",
+          "unit": "元/万元",
+          "note": "第 n 期末的金额"
+        },
+        {
+          "sym": "i",
+          "name": "折现率",
+          "unit": "—",
+          "note": "通常取基准收益率 ic"
+        },
+        {
+          "sym": "n",
+          "name": "期数",
+          "unit": "期",
+          "note": "折算的期数"
+        }
+      ],
+      "conditions": [
+        "复利折现",
+        "i 与 n 单位一致"
+      ],
+      "derivationHint": "由一次支付终值式两边同除 (1+i)^n 得到，是终值公式的逆运算。",
+      "typicalUse": "一次支付现值系数 (P/F,i,n)：已知未来一笔钱求现在值多少钱；是 NPV 计算的基本砖块",
+      "pitfalls": [
+        "折现率越高、期数越长，现值越小",
+        "不要把 P/F 与 F/P 的系数表查反"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/engineering-economics/equivalence.svg",
+        "caption": "P、F、A 三者等值换算：同一笔钱的三种说法（示意关系图）",
+        "readPoints": [
+          "记住一句：三个顶点说的是同一个现金流，只是把钱放在不同时间点上看。",
+          "横向是「一次支付」：整笔钱往前挪（折现）或往后挪（求终值）。",
+          "两条斜边是「等额系列」：把整笔钱摊到每年（资金回收），或把每年攒起来（年金终值）。",
+          "系数里的 n 一定是「期数」，A 的第一笔在第 1 年年末，不在第 0 年。",
+          "系数表一般只给 i 和 n 的整数格，中间值要内插，考试通常会给表。"
+        ]
+      }
+    },
+    {
+      "id": "engineering-economics-formula-003",
+      "subjectId": "engineering-economics",
+      "chapter": "2.4",
+      "name": "等额系列终值（年金终值）",
+      "expr": "F = A * ((1 + i)^n - 1) / i",
+      "latex": "F=A\\frac{(1+i)^{n}-1}{i}",
+      "vars": [
+        {
+          "sym": "F",
+          "name": "终值",
+          "unit": "元/万元",
+          "note": "第 n 期末的本利和"
+        },
+        {
+          "sym": "A",
+          "name": "年金（等额系列）",
+          "unit": "元/万元·期",
+          "note": "每期期末等额发生的现金流"
+        },
+        {
+          "sym": "i",
+          "name": "利率",
+          "unit": "—",
+          "note": "与计息期一致"
+        },
+        {
+          "sym": "n",
+          "name": "期数",
+          "unit": "期",
+          "note": "年金发生的次数"
+        }
+      ],
+      "conditions": [
+        "等额、连续、发生在每期期末（普通年金）",
+        "i 与支付期一致",
+        "最后一笔 A 发生在第 n 期末"
+      ],
+      "derivationHint": "把每笔 A 用 F/P 折算到第 n 期末后求和：F=A[1+(1+i)+...+(1+i)^(n-1)]，等比级数求和即得。",
+      "typicalUse": "等额系列终值系数 (F/A,i,n)：等额存款、等额提存的累积本利和",
+      "pitfalls": [
+        "若年金发生在期初，结果需再乘 (1+i)",
+        "结果应略大于 A*n，可作为数量级校验",
+        "与等额系列现值公式 (P/A) 不要互串"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/engineering-economics/equivalence.svg",
+        "caption": "P、F、A 三者等值换算：同一笔钱的三种说法（示意关系图）",
+        "readPoints": [
+          "记住一句：三个顶点说的是同一个现金流，只是把钱放在不同时间点上看。",
+          "横向是「一次支付」：整笔钱往前挪（折现）或往后挪（求终值）。",
+          "两条斜边是「等额系列」：把整笔钱摊到每年（资金回收），或把每年攒起来（年金终值）。",
+          "系数里的 n 一定是「期数」，A 的第一笔在第 1 年年末，不在第 0 年。",
+          "系数表一般只给 i 和 n 的整数格，中间值要内插，考试通常会给表。"
+        ]
+      }
+    },
+    {
+      "id": "engineering-economics-formula-004",
+      "subjectId": "engineering-economics",
+      "chapter": "2.4",
+      "name": "等额系列偿债基金",
+      "expr": "A = F * i / ((1 + i)^n - 1)",
+      "latex": "A=F\\frac{i}{(1+i)^{n}-1}",
+      "vars": [
+        {
+          "sym": "A",
+          "name": "每期末等额存入额",
+          "unit": "元/万元·期",
+          "note": "为在未来凑齐 F 而每期需存的金额"
+        },
+        {
+          "sym": "F",
+          "name": "目标终值",
+          "unit": "元/万元",
+          "note": "第 n 期末需积累的资金"
+        },
+        {
+          "sym": "i",
+          "name": "利率",
+          "unit": "—",
+          "note": "与计息期一致"
+        },
+        {
+          "sym": "n",
+          "name": "期数",
+          "unit": "期",
+          "note": "存款次数"
+        }
+      ],
+      "conditions": [
+        "已知未来需要的资金总额，反求每期等额存入额",
+        "年末（期末）等额存入"
+      ],
+      "derivationHint": "由等额系列终值式解出 A，偿债基金系数 (A/F,i,n) 是 (F/A,i,n) 的倒数。",
+      "typicalUse": "偿债基金系数 (A/F,i,n)：设备到期更新、债务到期偿还的等额提存计划",
+      "pitfalls": [
+        "A 小于 F/n（因为有利息滚存），若算得比 F/n 大说明代错了公式",
+        "与资金回收系数 (A/P) 的区别在于已知的是 F 还是 P"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-005",
+      "subjectId": "engineering-economics",
+      "chapter": "2.4",
+      "name": "等额系列现值（年金现值）",
+      "expr": "P = A * ((1 + i)^n - 1) / (i * (1 + i)^n)",
+      "latex": "P=A\\frac{(1+i)^{n}-1}{i(1+i)^{n}}",
+      "vars": [
+        {
+          "sym": "P",
+          "name": "现值",
+          "unit": "元/万元",
+          "note": "折算到第 0 点"
+        },
+        {
+          "sym": "A",
+          "name": "年金",
+          "unit": "元/万元·期",
+          "note": "每期末等额现金流，第 1 笔在第 1 期末"
+        },
+        {
+          "sym": "i",
+          "name": "折现率",
+          "unit": "—",
+          "note": "与计息期一致"
+        },
+        {
+          "sym": "n",
+          "name": "期数",
+          "unit": "期",
+          "note": "年金发生次数"
+        }
+      ],
+      "conditions": [
+        "普通年金（期末发生）",
+        "等额连续 n 期",
+        "P 发生在第 1 笔 A 的前一期"
+      ],
+      "derivationHint": "把每笔 A 用 P/F 折现后求和（等比级数求和），或由 F/A 再乘 P/F 得到。",
+      "typicalUse": "等额系列现值系数 (P/A,i,n)：把等额年收益折算成现值，是 NPV 计算最常用的公式",
+      "pitfalls": [
+        "第一笔 A 在第 1 年末，若第一笔在第 0 点（期初）应改为 P=A+A*((1+i)^(n-1)-1)/(i*(1+i)^(n-1))",
+        "递延年金要先乘 P/F 平移（见组合现金流）",
+        "P 一定小于 A*n"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/engineering-economics/equivalence.svg",
+        "caption": "P、F、A 三者等值换算：同一笔钱的三种说法（示意关系图）",
+        "readPoints": [
+          "记住一句：三个顶点说的是同一个现金流，只是把钱放在不同时间点上看。",
+          "横向是「一次支付」：整笔钱往前挪（折现）或往后挪（求终值）。",
+          "两条斜边是「等额系列」：把整笔钱摊到每年（资金回收），或把每年攒起来（年金终值）。",
+          "系数里的 n 一定是「期数」，A 的第一笔在第 1 年年末，不在第 0 年。",
+          "系数表一般只给 i 和 n 的整数格，中间值要内插，考试通常会给表。"
+        ]
+      }
+    },
+    {
+      "id": "engineering-economics-formula-006",
+      "subjectId": "engineering-economics",
+      "chapter": "2.4",
+      "name": "等额系列资金回收",
+      "expr": "A = P * i * (1 + i)^n / ((1 + i)^n - 1)",
+      "latex": "A=P\\frac{i(1+i)^{n}}{(1+i)^{n}-1}",
+      "vars": [
+        {
+          "sym": "A",
+          "name": "每期末等额回收（偿还）额",
+          "unit": "元/万元·期",
+          "note": "等额还本付息的每期还款额"
+        },
+        {
+          "sym": "P",
+          "name": "现值（借款本金）",
+          "unit": "元/万元",
+          "note": "第 0 点借入的资金"
+        },
+        {
+          "sym": "i",
+          "name": "利率",
+          "unit": "—",
+          "note": "与计息期一致"
+        },
+        {
+          "sym": "n",
+          "name": "期数",
+          "unit": "期",
+          "note": "还款次数"
+        }
+      ],
+      "conditions": [
+        "已知现值（借款额）反求每期等额偿还额",
+        "等额还本付息，期末还款"
+      ],
+      "derivationHint": "由等额系列现值式解出 A，资金回收系数 (A/P,i,n) 是 (P/A,i,n) 的倒数。",
+      "typicalUse": "资金回收系数 (A/P,i,n)：贷款等额还本付息、投资回收的年金化（NPV→NAV）",
+      "pitfalls": [
+        "A 一定大于 P/n（含利息），这是快速校验手段",
+        "每期还款中利息递减、本金递增，不能按 P/n 计算本金",
+        "若要求“期末一次还本、每年付息”，则不能用本式"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/engineering-economics/equivalence.svg",
+        "caption": "P、F、A 三者等值换算：同一笔钱的三种说法（示意关系图）",
+        "readPoints": [
+          "记住一句：三个顶点说的是同一个现金流，只是把钱放在不同时间点上看。",
+          "横向是「一次支付」：整笔钱往前挪（折现）或往后挪（求终值）。",
+          "两条斜边是「等额系列」：把整笔钱摊到每年（资金回收），或把每年攒起来（年金终值）。",
+          "系数里的 n 一定是「期数」，A 的第一笔在第 1 年年末，不在第 0 年。",
+          "系数表一般只给 i 和 n 的整数格，中间值要内插，考试通常会给表。"
+        ]
+      }
+    },
+    {
+      "id": "engineering-economics-formula-007",
+      "subjectId": "engineering-economics",
+      "chapter": "2.5",
+      "name": "等差系列现值（梯度系列）",
+      "expr": "P = G * ((1 + i)^n - i * n - 1) / (i^2 * (1 + i)^n)",
+      "latex": "P=G\\frac{(1+i)^{n}-in-1}{i^{2}(1+i)^{n}}=\\frac{G}{i}\\left[\\frac{(1+i)^{n}-1}{i(1+i)^{n}}-\\frac{n}{(1+i)^{n}}\\right]",
+      "vars": [
+        {
+          "sym": "P",
+          "name": "等差部分的现值",
+          "unit": "元/万元",
+          "note": "仅梯度部分，不含基础年金"
+        },
+        {
+          "sym": "G",
+          "name": "等差（梯度）额",
+          "unit": "元/万元·期",
+          "note": "每期递增的金额"
+        },
+        {
+          "sym": "i",
+          "name": "折现率",
+          "unit": "—",
+          "note": "与计息期一致"
+        },
+        {
+          "sym": "n",
+          "name": "期数",
+          "unit": "期",
+          "note": "现金流的期数"
+        }
+      ],
+      "conditions": [
+        "标准梯度系列：第 1 期末为 0，第 2 期末为 G，第 3 期末为 2G，……第 n 期末为 (n-1)G",
+        "i>0"
+      ],
+      "derivationHint": "对 Σ(t-1)G(1+i)^(-t) 求导型求和：令 S=Σt(1+i)^(-t)，用错位相减得 S=[(1+i)^n-in-1]/[i^2(1+i)^n]。",
+      "typicalUse": "等差系列现值系数 (P/G,i,n)：维修费逐年递增、能耗逐年上升、产量爬坡等现金流",
+      "pitfalls": [
+        "标准式的第一笔 G 在第 2 年末；若系列为“第1年末 A、以后每年多 G”，必须拆成 A*(P/A) + G*(P/G)",
+        "递减等差令 G 取负即可",
+        "i 很小时分子接近 0，数值计算注意有效位"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-008",
+      "subjectId": "engineering-economics",
+      "chapter": "2.5",
+      "name": "等差系列等额年值",
+      "expr": "A = G * (1 / i - n / ((1 + i)^n - 1))",
+      "latex": "A=G\\left(\\frac{1}{i}-\\frac{n}{(1+i)^{n}-1}\\right)",
+      "vars": [
+        {
+          "sym": "A",
+          "name": "等差部分折算的等额年值",
+          "unit": "元/万元·期",
+          "note": "把梯度现金流年金化"
+        },
+        {
+          "sym": "G",
+          "name": "等差（梯度）额",
+          "unit": "元/万元·期",
+          "note": "每期递增额"
+        },
+        {
+          "sym": "i",
+          "name": "折现率",
+          "unit": "—",
+          "note": "与计息期一致"
+        },
+        {
+          "sym": "n",
+          "name": "期数",
+          "unit": "期",
+          "note": "现金流期数"
+        }
+      ],
+      "conditions": [
+        "标准梯度系列（首笔 G 在第 2 期末）",
+        "i>0"
+      ],
+      "derivationHint": "由等差现值 P 再乘资金回收系数 (A/P,i,n) 化简得到。",
+      "typicalUse": "等差系列年值系数 (A/G,i,n)：把递增维修费折算成年平均费用，便于与年值指标比较",
+      "pitfalls": [
+        "不要与 (A/P) 混淆：(A/G) 的输入是 G 不是 P",
+        "n=1 时 A=0（因为第 1 期末还没有梯度发生）"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-009",
+      "subjectId": "engineering-economics",
+      "chapter": "2.5",
+      "name": "等比（几何增长）系列现值",
+      "expr": "P = A1 * (1 - ((1 + g) / (1 + i))^n) / (i - g)",
+      "latex": "P=A_{1}\\frac{1-\\left(\\frac{1+g}{1+i}\\right)^{n}}{i-g}\\quad(i\\neq g)",
+      "vars": [
+        {
+          "sym": "P",
+          "name": "现值",
+          "unit": "元/万元",
+          "note": "折算到第 0 点"
+        },
+        {
+          "sym": "A1",
+          "name": "第 1 期末现金流",
+          "unit": "元/万元",
+          "note": "基期金额"
+        },
+        {
+          "sym": "g",
+          "name": "年增长率",
+          "unit": "—",
+          "note": "用小数代入，可为负"
+        },
+        {
+          "sym": "i",
+          "name": "折现率",
+          "unit": "—",
+          "note": "用小数代入"
+        },
+        {
+          "sym": "n",
+          "name": "期数",
+          "unit": "期",
+          "note": "现金流次数"
+        }
+      ],
+      "conditions": [
+        "i≠g；当 i=g 时退化为 P=A1*n/(1+i)",
+        "各期现金流按固定比率 g 递增（或递减）"
+      ],
+      "derivationHint": "现金流 A1(1+g)^(t-1)，逐项折现后为等比级数，比值为 (1+g)/(1+i)。",
+      "typicalUse": "考虑年增长率的收益折算、交通量增长带来的效益折算",
+      "pitfalls": [
+        "i=g 时公式分母为 0，必须换用退化式",
+        "g 是实际增长率还是含通胀的名义增长率要与 i 保持一致口径",
+        "出现 i<g 时 P 会很大，注意现实意义"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-010",
+      "subjectId": "engineering-economics",
+      "chapter": "2.3",
+      "name": "名义利率与计息期利率",
+      "expr": "i_period = r / m",
+      "latex": "i_{period}=\\frac{r}{m}",
+      "vars": [
+        {
+          "sym": "i_period",
+          "name": "计息期利率",
+          "unit": "—",
+          "note": "每个计息期的实际利率"
+        },
+        {
+          "sym": "r",
+          "name": "名义利率（年名义利率）",
+          "unit": "—",
+          "note": "公开的年利率，如 12% 写作 0.12"
+        },
+        {
+          "sym": "m",
+          "name": "年计息次数",
+          "unit": "次/年",
+          "note": "按年 1、按季 4、按月 12、按日 365"
+        }
+      ],
+      "conditions": [
+        "名义利率按年给出且年内等额计息 m 次"
+      ],
+      "derivationHint": "名义利率定义为计息期利率乘以年计息次数，即 r=m*i_period。",
+      "typicalUse": "把名义利率化到计息期，是后续一切换算的前置步骤",
+      "pitfalls": [
+        "r/m 只是计息期利率，不是年有效利率，不能直接按年数代入 (1+i)^n",
+        "“年利率 12%，按月计息”里的 12% 是 r 不是 i"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-011",
+      "subjectId": "engineering-economics",
+      "chapter": "2.3",
+      "name": "年有效利率",
+      "expr": "ieff = (1 + r / m)^m - 1",
+      "latex": "i_{eff}=\\left(1+\\frac{r}{m}\\right)^{m}-1",
+      "vars": [
+        {
+          "sym": "ieff",
+          "name": "年有效利率",
+          "unit": "—",
+          "note": "资金一年实际增值比率"
+        },
+        {
+          "sym": "r",
+          "name": "年名义利率",
+          "unit": "—",
+          "note": "用小数代入"
+        },
+        {
+          "sym": "m",
+          "name": "年计息次数",
+          "unit": "次/年",
+          "note": "按月计息取 12"
+        }
+      ],
+      "conditions": [
+        "复利计息",
+        "年内各计息期利率相同"
+      ],
+      "derivationHint": "本金 1 元按 r/m 计息 m 次，年末为 (1+r/m)^m，减本金即为有效利率。",
+      "typicalUse": "比较不同计息方式贷款的优劣；把名义利率换成实际年率再代入 NPV 等公式",
+      "pitfalls": [
+        "m>1 时 ieff 恒大于 r，m=1 时二者相等",
+        "计息期与支付期不一致时应先算“支付期有效利率”而非年有效利率",
+        "月供类题目用月利率、按月数，比换算年有效利率更不易错"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-012",
+      "subjectId": "engineering-economics",
+      "chapter": "2.3",
+      "name": "连续复利有效利率",
+      "expr": "ieff = exp(r) - 1",
+      "latex": "i_{eff}=e^{r}-1=\\lim_{m\\to\\infty}\\left(1+\\frac{r}{m}\\right)^{m}-1",
+      "vars": [
+        {
+          "sym": "ieff",
+          "name": "年有效利率",
+          "unit": "—",
+          "note": "连续计息下的极限值"
+        },
+        {
+          "sym": "r",
+          "name": "年名义利率",
+          "unit": "—",
+          "note": "用小数代入"
+        }
+      ],
+      "conditions": [
+        "计息次数趋于无穷（连续复利）"
+      ],
+      "derivationHint": "对 (1+r/m)^m-1 取 m→∞ 的极限，用 lim(1+x/k)^k=e^x。",
+      "typicalUse": "理论分析与部分教材例题；工程实际较少使用",
+      "pitfalls": [
+        "连续复利是理想化模型，合同通常不会约定",
+        "与离散复利结果差别不大但不可混用"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-013",
+      "subjectId": "engineering-economics",
+      "chapter": "9.1",
+      "name": "剔除通货膨胀后的实际利率",
+      "expr": "ir = (in - f) / (1 + f)",
+      "latex": "i_{r}=\\frac{i_{n}-f}{1+f}",
+      "vars": [
+        {
+          "sym": "ir",
+          "name": "实际利率",
+          "unit": "—",
+          "note": "剔除通胀后的增值率"
+        },
+        {
+          "sym": "in",
+          "name": "名义利率",
+          "unit": "—",
+          "note": "含通胀的市场利率"
+        },
+        {
+          "sym": "f",
+          "name": "通货膨胀率",
+          "unit": "—",
+          "note": "用小数代入"
+        }
+      ],
+      "conditions": [
+        "名义利率含通胀、现金流按名义价（时价）计"
+      ],
+      "derivationHint": "由 (1+in)=(1+ir)(1+f) 解出 ir。",
+      "typicalUse": "财务评价中处理通货膨胀：要么名义现金流配名义折现率，要么实价现金流配实际折现率，二者不可混用",
+      "pitfalls": [
+        "近似式 ir≈in-f 在 f 较大时误差明显",
+        "名义现金流配实际折现率（或反之）是财务评价最常见的系统性错误"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": "教材中通货膨胀处理章节的符号（in/ir/f 或 i/i'/f）请按原书核对"
+    },
+    {
+      "id": "engineering-economics-formula-014",
+      "subjectId": "engineering-economics",
+      "chapter": "3.2",
+      "name": "净现值 NPV",
+      "expr": "NPV = sum_(t=0..n) ((CI_t - CO_t) * (1 + ic)^(-t))",
+      "latex": "NPV=\\sum_{t=0}^{n}(CI-CO)_{t}(1+i_{c})^{-t}",
+      "vars": [
+        {
+          "sym": "NPV",
+          "name": "净现值",
+          "unit": "元/万元",
+          "note": "NPV≥0 方案可行"
+        },
+        {
+          "sym": "CI_t",
+          "name": "第 t 年现金流入",
+          "unit": "元/万元",
+          "note": "营业收入、回收余值、回收流动资金、补贴等"
+        },
+        {
+          "sym": "CO_t",
+          "name": "第 t 年现金流出",
+          "unit": "元/万元",
+          "note": "建设投资、经营成本、税金、流动资金等"
+        },
+        {
+          "sym": "ic",
+          "name": "基准收益率",
+          "unit": "—",
+          "note": "行业基准收益率或资本成本"
+        },
+        {
+          "sym": "n",
+          "name": "计算期",
+          "unit": "年",
+          "note": "建设期+运营期"
+        }
+      ],
+      "conditions": [
+        "现金流量折现到第 0 点（第 1 年初）",
+        "各年现金流发生时点按年末约定",
+        "ic 在计算期内不变"
+      ],
+      "derivationHint": "逐年净现金流乘一次支付现值系数 (P/F,ic,t) 后求和。",
+      "typicalUse": "单方案可行性判断与同寿命互斥方案择优（NPV 大者优）",
+      "pitfalls": [
+        "建设期投资在 t=0 时不折现，t=1 才开始折现，别多乘一次 (1+ic)^(-1)",
+        "回收固定资产余值与流动资金必须在计算期末计入",
+        "NPV 是绝对量，不能用于比较投资规模悬殊方案的“效率”"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/engineering-economics/npv-irr.svg",
+        "caption": "NPV 随折现率下降，与横轴交点即 IRR（示意图）",
+        "readPoints": [
+          "曲线是单调下降的：折现率越高，未来收益折到现在越不值钱，NPV 越小。",
+          "橙色点就是 IRR——NPV 恰好等于 0 的那个折现率。",
+          "紫色虚线是基准收益率 i₀；只要 IRR 在它右边，NPV(i₀) 就大于 0，项目可行。",
+          "判据是「IRR ≥ i₀」，不是「IRR 越大越好」——互斥方案比选要用 ΔIRR。",
+          "非常规投资（现金流变号多次）可能没有 IRR 或有多个，这时只能靠 NPV。"
+        ]
+      }
+    },
+    {
+      "id": "engineering-economics-formula-015",
+      "subjectId": "engineering-economics",
+      "chapter": "3.2",
+      "name": "净年值 NAV",
+      "expr": "NAV = NPV * ic * (1 + ic)^n / ((1 + ic)^n - 1)",
+      "latex": "NAV=NPV\\cdot(A/P,i_{c},n)=NPV\\frac{i_{c}(1+i_{c})^{n}}{(1+i_{c})^{n}-1}",
+      "vars": [
+        {
+          "sym": "NAV",
+          "name": "净年值",
+          "unit": "元/万元·年",
+          "note": "NAV≥0 可行；多方案取大者"
+        },
+        {
+          "sym": "NPV",
+          "name": "净现值",
+          "unit": "元/万元",
+          "note": "同一方案的净现值"
+        },
+        {
+          "sym": "ic",
+          "name": "基准收益率",
+          "unit": "—",
+          "note": "用小数代入"
+        },
+        {
+          "sym": "n",
+          "name": "计算期",
+          "unit": "年",
+          "note": "方案寿命"
+        }
+      ],
+      "conditions": [
+        "方案在计算期结束时可重复实施（重复更新假设）",
+        "各方案寿命可以不同"
+      ],
+      "derivationHint": "把净现值用资金回收系数 (A/P,ic,n) 等额分摊到各年。",
+      "typicalUse": "寿命期不等互斥方案比选的首选方法；年度化效益比较",
+      "pitfalls": [
+        "寿命不等时不能直接比 NPV，必须年金化",
+        "各方案要用各自的寿命 n 分别年金化，不能共用一个 n",
+        "重复更新假设不成立（如技术进步快）时应改用研究期法"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-016",
+      "subjectId": "engineering-economics",
+      "chapter": "3.2",
+      "name": "净终值 NFV",
+      "expr": "NFV = NPV * (1 + ic)^n",
+      "latex": "NFV=NPV(1+i_{c})^{n}",
+      "vars": [
+        {
+          "sym": "NFV",
+          "name": "净终值",
+          "unit": "元/万元",
+          "note": "折算到计算期末"
+        },
+        {
+          "sym": "NPV",
+          "name": "净现值",
+          "unit": "元/万元",
+          "note": "同一方案"
+        },
+        {
+          "sym": "ic",
+          "name": "基准收益率",
+          "unit": "—",
+          "note": "用小数代入"
+        },
+        {
+          "sym": "n",
+          "name": "计算期",
+          "unit": "年",
+          "note": "方案寿命"
+        }
+      ],
+      "conditions": [
+        "与 NPV、NAV 三者可行性结论完全等价"
+      ],
+      "derivationHint": "把净现值用一次支付终值系数 (F/P,ic,n) 折算到期末。",
+      "typicalUse": "需要把结果表达为期末资金余量时（如偿债基金、期末资金平衡）",
+      "pitfalls": [
+        "NFV 与 NPV 只差一个 F/P 因子，不可直接比较不同寿命方案的 NFV",
+        "NFV≥0 与 NPV≥0 等价"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-017",
+      "subjectId": "engineering-economics",
+      "chapter": "3.4",
+      "name": "净现值率 NPVR",
+      "expr": "NPVR = NPV / Ip",
+      "latex": "NPVR=\\frac{NPV}{I_{p}}",
+      "vars": [
+        {
+          "sym": "NPVR",
+          "name": "净现值率",
+          "unit": "—",
+          "note": "单位投资现值创造的净现值"
+        },
+        {
+          "sym": "NPV",
+          "name": "净现值",
+          "unit": "元/万元",
+          "note": "项目净现值"
+        },
+        {
+          "sym": "Ip",
+          "name": "投资现值",
+          "unit": "元/万元",
+          "note": "全部投资（含建设投资、流动资金）的现值之和"
+        }
+      ],
+      "conditions": [
+        "动态效率型辅助指标",
+        "Ip>0"
+      ],
+      "derivationHint": "由 NPV 除以投资现值，衡量投资效率。",
+      "typicalUse": "投资额不同的方案效率比较、资金受限时的辅助排序",
+      "pitfalls": [
+        "资金约束下按 NPVR 排序未必得到 NPV 最大的组合，应枚举组合",
+        "NPVR 不是独立的择优准则，需与 NPV 配合使用"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-018",
+      "subjectId": "engineering-economics",
+      "chapter": "3.3",
+      "name": "内部收益率 IRR 定义式",
+      "expr": "0 = sum_(t=0..n) ((CI_t - CO_t) * (1 + IRR)^(-t))",
+      "latex": "\\sum_{t=0}^{n}(CI-CO)_{t}(1+IRR)^{-t}=0",
+      "vars": [
+        {
+          "sym": "IRR",
+          "name": "内部收益率",
+          "unit": "—",
+          "note": "IRR≥ic 项目可行"
+        },
+        {
+          "sym": "CI_t",
+          "name": "第 t 年现金流入",
+          "unit": "元/万元",
+          "note": "同 NPV"
+        },
+        {
+          "sym": "CO_t",
+          "name": "第 t 年现金流出",
+          "unit": "元/万元",
+          "note": "同 NPV"
+        },
+        {
+          "sym": "n",
+          "name": "计算期",
+          "unit": "年",
+          "note": "方案寿命"
+        }
+      ],
+      "conditions": [
+        "常规投资（符号只变一次）下正实根唯一",
+        "非常规投资可能多解或无实根",
+        "通常需用试算内插或数值法求解"
+      ],
+      "derivationHint": "令 NPV(i)=0，即资金流入现值等于流出现值时项目收支平衡，此时的折现率就是项目自身的收益率。",
+      "typicalUse": "判断单方案可行性、表达项目的抗风险能力（可承受的最高贷款利率）",
+      "pitfalls": [
+        "IRR 隐含“各年净收益按 IRR 再投资”的假设，通常高估",
+        "互斥方案不能直接比 IRR 大小，必须做差额分析",
+        "非常规投资要用笛卡儿符号法则先判根的个数",
+        "IRR 可能存在复数根，此时 NPV 恒不为 0"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/engineering-economics/npv-irr.svg",
+        "caption": "NPV 随折现率下降，与横轴交点即 IRR（示意图）",
+        "readPoints": [
+          "曲线是单调下降的：折现率越高，未来收益折到现在越不值钱，NPV 越小。",
+          "橙色点就是 IRR——NPV 恰好等于 0 的那个折现率。",
+          "紫色虚线是基准收益率 i₀；只要 IRR 在它右边，NPV(i₀) 就大于 0，项目可行。",
+          "判据是「IRR ≥ i₀」，不是「IRR 越大越好」——互斥方案比选要用 ΔIRR。",
+          "非常规投资（现金流变号多次）可能没有 IRR 或有多个，这时只能靠 NPV。"
+        ]
+      }
+    },
+    {
+      "id": "engineering-economics-formula-019",
+      "subjectId": "engineering-economics",
+      "chapter": "3.3",
+      "name": "IRR 线性内插（试算法）",
+      "expr": "IRR = i1 + NPV1 * (i2 - i1) / (NPV1 - NPV2)",
+      "latex": "IRR\\approx i_{1}+\\frac{NPV_{1}}{NPV_{1}-NPV_{2}}(i_{2}-i_{1})",
+      "vars": [
+        {
+          "sym": "i1",
+          "name": "低试算折现率",
+          "unit": "—",
+          "note": "使 NPV1>0"
+        },
+        {
+          "sym": "i2",
+          "name": "高试算折现率",
+          "unit": "—",
+          "note": "使 NPV2<0"
+        },
+        {
+          "sym": "NPV1",
+          "name": "i1 对应的净现值",
+          "unit": "元/万元",
+          "note": "应为正"
+        },
+        {
+          "sym": "NPV2",
+          "name": "i2 对应的净现值",
+          "unit": "元/万元",
+          "note": "应为负"
+        }
+      ],
+      "conditions": [
+        "NPV1 与 NPV2 异号",
+        "为保证精度，两个试算点间距不宜过大（通常不超过 2%~5%）"
+      ],
+      "derivationHint": "NPV(i) 曲线在区间内近似为直线，用两点式求零点（相似三角形）。",
+      "typicalUse": "手算求 IRR 的标准做法（考试必考）",
+      "pitfalls": [
+        "两试算点相距太远会因 NPV 曲线的非线性产生明显误差（真实 IRR 通常略低于插值结果）",
+        "NPV1、NPV2 必须异号，否则区间内无根",
+        "注意 NPV2 是负数，分母实为 NPV1+|NPV2|"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/engineering-economics/npv-irr.svg",
+        "caption": "NPV 随折现率下降，与横轴交点即 IRR（示意图）",
+        "readPoints": [
+          "曲线是单调下降的：折现率越高，未来收益折到现在越不值钱，NPV 越小。",
+          "橙色点就是 IRR——NPV 恰好等于 0 的那个折现率。",
+          "紫色虚线是基准收益率 i₀；只要 IRR 在它右边，NPV(i₀) 就大于 0，项目可行。",
+          "判据是「IRR ≥ i₀」，不是「IRR 越大越好」——互斥方案比选要用 ΔIRR。",
+          "非常规投资（现金流变号多次）可能没有 IRR 或有多个，这时只能靠 NPV。"
+        ]
+      }
+    },
+    {
+      "id": "engineering-economics-formula-020",
+      "subjectId": "engineering-economics",
+      "chapter": "3.4",
+      "name": "外部收益率 ERR 定义式",
+      "expr": "sum_(t=0..n) (K_t * (1 + ERR)^(n - t)) = sum_(t=0..n) (R_t * (1 + ic)^(n - t))",
+      "latex": "\\sum_{t=0}^{n}K_{t}(1+ERR)^{n-t}=\\sum_{t=0}^{n}R_{t}(1+i_{c})^{n-t}",
+      "vars": [
+        {
+          "sym": "ERR",
+          "name": "外部收益率",
+          "unit": "—",
+          "note": "ERR≥ic 方案可行"
+        },
+        {
+          "sym": "K_t",
+          "name": "第 t 年净现金流出（投资）",
+          "unit": "元/万元",
+          "note": "取绝对值"
+        },
+        {
+          "sym": "R_t",
+          "name": "第 t 年净现金流入（收益）",
+          "unit": "元/万元",
+          "note": "取正值"
+        },
+        {
+          "sym": "ic",
+          "name": "基准收益率（再投资收益率）",
+          "unit": "—",
+          "note": "本式假设收益按 ic 再投资"
+        },
+        {
+          "sym": "n",
+          "name": "计算期",
+          "unit": "年",
+          "note": "方案寿命"
+        }
+      ],
+      "conditions": [
+        "把投资按 ERR 折算到期末、把收益按 ic 折算到期末",
+        "适用于非常规投资或有多个 IRR 解的情形"
+      ],
+      "derivationHint": "把“投资终值化”与“收益再投资终值化”放在同一时点（期末）相等，方程中只出现一次 ERR 的高次项，故解唯一。",
+      "typicalUse": "非常规投资项目的收益率评价；规避 IRR 多解问题",
+      "pitfalls": [
+        "不同教材把再投资收益率取 ic 还是取 ERR 的设定不同，结果不同，必须按所用教材",
+        "若某年既有流入又有流出，应先按年取净额再分流/流出",
+        "与 IRR 数值不同，不可混称"
+      ],
+      "standardRef": [],
+      "confidence": "medium",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "ERR 定义中再投资收益率取 ic 还是 ERR、以及是否含残值，请以原书公式为准核对"
+    },
+    {
+      "id": "engineering-economics-formula-021",
+      "subjectId": "engineering-economics",
+      "chapter": "4.2",
+      "name": "差额内部收益率 ΔIRR",
+      "expr": "0 = sum_(t=0..n) ((dCI_t - dCO_t) * (1 + dIRR)^(-t))",
+      "latex": "\\sum_{t=0}^{n}(\\Delta CI-\\Delta CO)_{t}(1+\\Delta IRR)^{-t}=0",
+      "vars": [
+        {
+          "sym": "dIRR",
+          "name": "差额内部收益率",
+          "unit": "—",
+          "note": "ΔIRR≥ic 时投资大的方案优"
+        },
+        {
+          "sym": "dCI_t",
+          "name": "第 t 年两方案现金流入之差",
+          "unit": "元/万元",
+          "note": "大投资方案减小投资方案"
+        },
+        {
+          "sym": "dCO_t",
+          "name": "第 t 年两方案现金流出之差",
+          "unit": "元/万元",
+          "note": "大投资方案减小投资方案"
+        },
+        {
+          "sym": "ic",
+          "name": "基准收益率",
+          "unit": "—",
+          "note": "判断门槛"
+        }
+      ],
+      "conditions": [
+        "两方案寿命相同",
+        "两方案自身均可行（NPV≥0 或 IRR≥ic）",
+        "差额现金流必须按“投资从小到大”逐对构造"
+      ],
+      "derivationHint": "令两方案净现值相等：NPV_大 - NPV_小 = 0，即差额现金流的净现值为零。",
+      "typicalUse": "互斥方案择优的标准方法；判断追加投资是否值得",
+      "pitfalls": [
+        "不能跨级比较投资规模悬殊的方案，必须相邻逐对比较",
+        "先判可行性再择优，两顺序不可颠倒",
+        "ΔIRR 与 IRR 是两个不同概念，ΔIRR 不是两方案 IRR 之差",
+        "差额现金流可能全部同号，此时无 ΔIRR，直接比 NPV"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/engineering-economics/npv-irr.svg",
+        "caption": "NPV 随折现率下降，与横轴交点即 IRR（示意图）",
+        "readPoints": [
+          "曲线是单调下降的：折现率越高，未来收益折到现在越不值钱，NPV 越小。",
+          "橙色点就是 IRR——NPV 恰好等于 0 的那个折现率。",
+          "紫色虚线是基准收益率 i₀；只要 IRR 在它右边，NPV(i₀) 就大于 0，项目可行。",
+          "判据是「IRR ≥ i₀」，不是「IRR 越大越好」——互斥方案比选要用 ΔIRR。",
+          "非常规投资（现金流变号多次）可能没有 IRR 或有多个，这时只能靠 NPV。"
+        ]
+      }
+    },
+    {
+      "id": "engineering-economics-formula-022",
+      "subjectId": "engineering-economics",
+      "chapter": "3.5",
+      "name": "静态投资回收期",
+      "expr": "Pt = T - 1 + abs(Ccum_(T-1)) / NCF_T",
+      "latex": "P_{t}=T-1+\\frac{\\left|\\sum_{t=0}^{T-1}(CI-CO)_{t}\\right|}{(CI-CO)_{T}}",
+      "vars": [
+        {
+          "sym": "Pt",
+          "name": "静态投资回收期",
+          "unit": "年",
+          "note": "Pt≤Pc（基准回收期）可行"
+        },
+        {
+          "sym": "T",
+          "name": "累计净现金流量首次为正的年份",
+          "unit": "年",
+          "note": "按累计净现金流表确定"
+        },
+        {
+          "sym": "Ccum_(T-1)",
+          "name": "第 T-1 年末累计净现金流量",
+          "unit": "元/万元",
+          "note": "此时应为负值"
+        },
+        {
+          "sym": "NCF_T",
+          "name": "第 T 年净现金流量",
+          "unit": "元/万元",
+          "note": "应为正值"
+        }
+      ],
+      "conditions": [
+        "不考虑资金时间价值",
+        "各年现金流按年末约定",
+        "项目在计算期内能收回投资"
+      ],
+      "derivationHint": "在累计净现金流量由负转正的区间内线性插值。",
+      "typicalUse": "粗略判断资金回收速度与风险；作为辅助指标",
+      "pitfalls": [
+        "起算点含不含建设期要按题意统一（多数教材从建设期第 1 年初起算）",
+        "忽略回收期之后的收益，不能单独作为择优依据",
+        "分母是第 T 年的净现金流（未折现）"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "回收期起算点（是否含建设期）与基准回收期取值请以教材例题为准",
+      "figure": {
+        "src": "/knowledge/assets/engineering-economics/payback-period.svg",
+        "caption": "累计净现金流由负转正的那一年就是投资回收期（示意图）",
+        "readPoints": [
+          "折线起点在零轴下方，那一段就是还没收回的投资。",
+          "折线穿过零轴的位置就是回收期；穿得越早，资金被压的时间越短。",
+          "静态回收期不折现，动态回收期要折现，动态的一定不短于静态的。",
+          "回收期只回答「多久回本」，不回答「总共赚多少」，不能单独用于方案比选。",
+          "教材上的分年公式是插值近似，前提是年内现金流均匀发生。"
+        ]
+      }
+    },
+    {
+      "id": "engineering-economics-formula-023",
+      "subjectId": "engineering-economics",
+      "chapter": "3.5",
+      "name": "动态投资回收期",
+      "expr": "Pt' = T - 1 + abs(PVcum_(T-1)) / PV_T",
+      "latex": "P_{t}'=T-1+\\frac{\\left|\\sum_{t=0}^{T-1}(CI-CO)_{t}(1+i_{c})^{-t}\\right|}{(CI-CO)_{T}(1+i_{c})^{-T}}",
+      "vars": [
+        {
+          "sym": "Pt'",
+          "name": "动态投资回收期",
+          "unit": "年",
+          "note": "Pt'≤n（计算期）方可行"
+        },
+        {
+          "sym": "T",
+          "name": "累计净现金流量现值首次为正的年份",
+          "unit": "年",
+          "note": "按累计现值表确定"
+        },
+        {
+          "sym": "PVcum_(T-1)",
+          "name": "第 T-1 年末累计净现金流现值",
+          "unit": "元/万元",
+          "note": "应为负值"
+        },
+        {
+          "sym": "PV_T",
+          "name": "第 T 年净现金流现值",
+          "unit": "元/万元",
+          "note": "应为正值"
+        },
+        {
+          "sym": "ic",
+          "name": "基准收益率",
+          "unit": "—",
+          "note": "用小数代入"
+        }
+      ],
+      "conditions": [
+        "考虑资金时间价值",
+        "ic 在计算期内不变"
+      ],
+      "derivationHint": "同静态法，只是把每一年的净现金流先折现再累计。",
+      "typicalUse": "财务评价中的正式回收期指标（融资前）",
+      "pitfalls": [
+        "插值分母必须用“当年净现金流的现值”而非当年净现金流",
+        "动态回收期恒不小于静态回收期（正现金流情形下）",
+        "若计算期末累计现值仍为负，则项目不可行且回收期不存在"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/engineering-economics/payback-period.svg",
+        "caption": "累计净现金流由负转正的那一年就是投资回收期（示意图）",
+        "readPoints": [
+          "折线起点在零轴下方，那一段就是还没收回的投资。",
+          "折线穿过零轴的位置就是回收期；穿得越早，资金被压的时间越短。",
+          "静态回收期不折现，动态回收期要折现，动态的一定不短于静态的。",
+          "回收期只回答「多久回本」，不回答「总共赚多少」，不能单独用于方案比选。",
+          "教材上的分年公式是插值近似，前提是年内现金流均匀发生。"
+        ]
+      }
+    },
+    {
+      "id": "engineering-economics-formula-024",
+      "subjectId": "engineering-economics",
+      "chapter": "3.4",
+      "name": "总投资收益率 ROI",
+      "expr": "ROI = EBIT / TI * 100",
+      "latex": "ROI=\\frac{EBIT}{TI}\\times 100\\%",
+      "vars": [
+        {
+          "sym": "ROI",
+          "name": "总投资收益率",
+          "unit": "%",
+          "note": "高于行业基准收益率参考值可行"
+        },
+        {
+          "sym": "EBIT",
+          "name": "年息税前利润（或运营期年平均息税前利润）",
+          "unit": "元/万元",
+          "note": "利润总额+计入总成本费用的利息支出"
+        },
+        {
+          "sym": "TI",
+          "name": "项目总投资",
+          "unit": "元/万元",
+          "note": "建设投资+建设期利息+流动资金"
+        }
+      ],
+      "conditions": [
+        "静态指标，按正常年份或运营期平均值计算",
+        "项目已具备正常生产年份数据"
+      ],
+      "derivationHint": "息税前利润除以全部投资，反映全部投资的获利水平。",
+      "typicalUse": "融资前盈利能力判断的辅助指标",
+      "pitfalls": [
+        "分子是息税前利润（不扣利息），与 ROE 的净利润口径不同",
+        "正常年份难以确定时用达产期平均，须注明",
+        "分母含建设期利息，别只写建设投资"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": "总投资是否含建设期利息、分子取正常年份还是平均值，请按《建设项目经济评价方法与参数》现行版本核对"
+    },
+    {
+      "id": "engineering-economics-formula-025",
+      "subjectId": "engineering-economics",
+      "chapter": "3.4",
+      "name": "项目资本金净利润率 ROE",
+      "expr": "ROE = NP / EC * 100",
+      "latex": "ROE=\\frac{NP}{EC}\\times 100\\%",
+      "vars": [
+        {
+          "sym": "ROE",
+          "name": "资本金净利润率",
+          "unit": "%",
+          "note": "反映出资人获利水平"
+        },
+        {
+          "sym": "NP",
+          "name": "年净利润（或运营期年平均净利润）",
+          "unit": "元/万元",
+          "note": "利润总额-所得税"
+        },
+        {
+          "sym": "EC",
+          "name": "项目资本金",
+          "unit": "元/万元",
+          "note": "权益出资，不含债务资金"
+        }
+      ],
+      "conditions": [
+        "融资后（资本金现金流量）分析指标",
+        "按正常年份或运营期平均计算"
+      ],
+      "derivationHint": "净利润除以权益出资，即会计口径的净资产收益率在投资项目上的应用。",
+      "typicalUse": "融资后盈利能力的核心静态指标",
+      "pitfalls": [
+        "分母是资本金不是总投资",
+        "分子已扣利息与所得税，故数值可能低于 ROI，二者不可直接比大小"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-026",
+      "subjectId": "engineering-economics",
+      "chapter": "3.6",
+      "name": "效益费用比 BCR（现值口径）",
+      "expr": "BCR = sum_(t=0..n) (B_t * (1 + ic)^(-t)) / sum_(t=0..n) (C_t * (1 + ic)^(-t))",
+      "latex": "BCR=\\frac{\\sum_{t=0}^{n}B_{t}(1+i_{c})^{-t}}{\\sum_{t=0}^{n}C_{t}(1+i_{c})^{-t}}",
+      "vars": [
+        {
+          "sym": "BCR",
+          "name": "效益费用比",
+          "unit": "—",
+          "note": "BCR≥1 可行"
+        },
+        {
+          "sym": "B_t",
+          "name": "第 t 年效益（现金流入侧）",
+          "unit": "元/万元",
+          "note": "直接效益，公共项目含用户效益节约"
+        },
+        {
+          "sym": "C_t",
+          "name": "第 t 年费用（现金流出侧）",
+          "unit": "元/万元",
+          "note": "投资+运营维护费"
+        },
+        {
+          "sym": "ic",
+          "name": "基准收益率",
+          "unit": "—",
+          "note": "用小数代入"
+        }
+      ],
+      "conditions": [
+        "效益与费用分别折现到同一时点",
+        "口径须在方案间保持一致"
+      ],
+      "derivationHint": "效益现值与费用现值之比，等价于 1+NPV/C_pv（残值按费用减项处理时）。",
+      "typicalUse": "公路、市政等公共项目评价的常用指标",
+      "pitfalls": [
+        "残值归属（算效益还是冲减费用）不同教材口径不同，BCR 数值会变，必须写清",
+        "互斥方案必须比较增量效益费用比，不能单比各自 BCR",
+        "负效益（如环境损失）是计入费用还是冲减效益，口径要先定"
+      ],
+      "standardRef": [],
+      "confidence": "medium",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "原书 BCR 分子分母的具体构成（是否含残值、间接效益）请以例题为准核对"
+    },
+    {
+      "id": "engineering-economics-formula-027",
+      "subjectId": "engineering-economics",
+      "chapter": "3.6",
+      "name": "效益费用比 BCR（年值口径）",
+      "expr": "BCR = AB / AC",
+      "latex": "BCR=\\frac{AB}{AC}=\\frac{BCR_{PV}}{\\text{同寿命比}}",
+      "vars": [
+        {
+          "sym": "AB",
+          "name": "等额年效益",
+          "unit": "元/万元·年",
+          "note": "效益现值年金化"
+        },
+        {
+          "sym": "AC",
+          "name": "等额年费用",
+          "unit": "元/万元·年",
+          "note": "费用现值年金化"
+        }
+      ],
+      "conditions": [
+        "效益、费用年金化时使用同一分析期与同一折现率",
+        "与现值口径在单方案上结论等价"
+      ],
+      "derivationHint": "把效益现值与费用现值分别乘资金回收系数 (A/P,ic,n)，比值不变。",
+      "typicalUse": "寿命不等方案的 BCR 比较；与 NAV 配套使用",
+      "pitfalls": [
+        "两方案寿命不同时，年金化必须用各自寿命",
+        "与现值口径数值不同（除非同寿命），报告时须注明口径"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-028",
+      "subjectId": "engineering-economics",
+      "chapter": "4.3",
+      "name": "净年值展开式（投资—年收益—残值）",
+      "expr": "NAV = -K * (i * (1 + i)^n / ((1 + i)^n - 1)) + R + S * (i / ((1 + i)^n - 1))",
+      "latex": "NAV=-K(A/P,i,n)+R+S(A/F,i,n)",
+      "vars": [
+        {
+          "sym": "NAV",
+          "name": "净年值",
+          "unit": "元/万元·年",
+          "note": "取大者优"
+        },
+        {
+          "sym": "K",
+          "name": "期初投资",
+          "unit": "元/万元",
+          "note": "第 0 点的投资"
+        },
+        {
+          "sym": "R",
+          "name": "年净收益（年收入-年经营成本）",
+          "unit": "元/万元·年",
+          "note": "等额年金形式"
+        },
+        {
+          "sym": "S",
+          "name": "期末残值（余值）",
+          "unit": "元/万元",
+          "note": "计算期末回收"
+        },
+        {
+          "sym": "i",
+          "name": "基准收益率",
+          "unit": "—",
+          "note": "用小数代入"
+        },
+        {
+          "sym": "n",
+          "name": "计算期",
+          "unit": "年",
+          "note": "方案寿命"
+        }
+      ],
+      "conditions": [
+        "期初一次投资、每年等额净收益、期末残值",
+        "各年现金流按年末约定"
+      ],
+      "derivationHint": "投资用资金回收系数年金化（负值），年收益直接计入，残值用偿债基金系数年金化（正值）。",
+      "typicalUse": "设备选型、寿命不等方案比选；直接列式比先算 NPV 更快",
+      "pitfalls": [
+        "残值用 A/F 系数而不是 A/P 系数",
+        "若残值同时包含流动资金回收，应并入 S 或单列",
+        "年收益若逐年不等就不能直接套用"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-029",
+      "subjectId": "engineering-economics",
+      "chapter": "4.3",
+      "name": "最小公倍数法（共同分析期）",
+      "expr": "NPV_L = NAV * ((1 + ic)^L - 1) / (ic * (1 + ic)^L)",
+      "latex": "NPV_{L}=NAV\\cdot(P/A,i_{c},L)=NAV\\frac{(1+i_{c})^{L}-1}{i_{c}(1+i_{c})^{L}}",
+      "vars": [
+        {
+          "sym": "NPV_L",
+          "name": "共同分析期 L 内的净现值",
+          "unit": "元/万元",
+          "note": "取大者优"
+        },
+        {
+          "sym": "NAV",
+          "name": "方案自身寿命内的净年值",
+          "unit": "元/万元·年",
+          "note": "先用各自寿命算出"
+        },
+        {
+          "sym": "L",
+          "name": "各方案寿命的最小公倍数",
+          "unit": "年",
+          "note": "共同分析期"
+        },
+        {
+          "sym": "ic",
+          "name": "基准收益率",
+          "unit": "—",
+          "note": "用小数代入"
+        }
+      ],
+      "conditions": [
+        "各方案可重复实施且现金流不变（重复更新假设）",
+        "分析期取各寿命的最小公倍数"
+      ],
+      "derivationHint": "在共同分析期内把方案复制若干次，其 NPV 等于自身 NAV 乘以 (P/A,ic,L)。",
+      "typicalUse": "寿命期不等互斥方案的经典解法之一（结论与 NAV 法一致）",
+      "pitfalls": [
+        "重复更新假设不成立（技术进步快、设备不可复制）时该方法失效",
+        "寿命互质时 L 很大、计算繁琐，应改用 NAV 法或研究期法",
+        "不能直接比较各自寿命内的 NPV"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-030",
+      "subjectId": "engineering-economics",
+      "chapter": "4.4",
+      "name": "费用现值 PC",
+      "expr": "PC = sum_(t=0..n) (CO_t * (1 + ic)^(-t)) - S * (1 + ic)^(-n)",
+      "latex": "PC=\\sum_{t=0}^{n}CO_{t}(1+i_{c})^{-t}-S(1+i_{c})^{-n}",
+      "vars": [
+        {
+          "sym": "PC",
+          "name": "费用现值",
+          "unit": "元/万元",
+          "note": "取小者优"
+        },
+        {
+          "sym": "CO_t",
+          "name": "第 t 年费用现金流",
+          "unit": "元/万元",
+          "note": "投资、运营维护费等"
+        },
+        {
+          "sym": "S",
+          "name": "期末残值",
+          "unit": "元/万元",
+          "note": "作为费用减项"
+        },
+        {
+          "sym": "ic",
+          "name": "基准收益率",
+          "unit": "—",
+          "note": "用小数代入"
+        },
+        {
+          "sym": "n",
+          "name": "计算期",
+          "unit": "年",
+          "note": "方案寿命"
+        }
+      ],
+      "conditions": [
+        "各方案产出（效益）相同或效益难以货币化",
+        "各方案寿命相同"
+      ],
+      "derivationHint": "把全部费用现金流折现并扣除残值现值。",
+      "typicalUse": "公益项目、路面结构、设备选型的方案比选",
+      "pitfalls": [
+        "寿命不同时不能用 PC，必须用 AC",
+        "残值是费用减项，符号别弄反",
+        "必须先确认各方案产出相同，否则应用 NPV"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-031",
+      "subjectId": "engineering-economics",
+      "chapter": "4.4",
+      "name": "费用年值 AC",
+      "expr": "AC = PC * ic * (1 + ic)^n / ((1 + ic)^n - 1)",
+      "latex": "AC=PC\\cdot(A/P,i_{c},n)=PC\\frac{i_{c}(1+i_{c})^{n}}{(1+i_{c})^{n}-1}",
+      "vars": [
+        {
+          "sym": "AC",
+          "name": "费用年值（年成本）",
+          "unit": "元/万元·年",
+          "note": "取小者优"
+        },
+        {
+          "sym": "PC",
+          "name": "费用现值",
+          "unit": "元/万元",
+          "note": "同一方案"
+        },
+        {
+          "sym": "ic",
+          "name": "基准收益率",
+          "unit": "—",
+          "note": "用小数代入"
+        },
+        {
+          "sym": "n",
+          "name": "计算期",
+          "unit": "年",
+          "note": "方案寿命"
+        }
+      ],
+      "conditions": [
+        "各方案产出相同或效益难以货币化",
+        "允许方案寿命不同（用各自寿命年金化）"
+      ],
+      "derivationHint": "把费用现值用资金回收系数年金化。",
+      "typicalUse": "收益相同的寿命不等方案比选；设备更新与选型",
+      "pitfalls": [
+        "各方案要用各自寿命 n 年金化",
+        "若存在期末残值，年金化时可用偿债基金系数把残值年金化后扣减",
+        "AC 最小准则只在产出相同时成立"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-032",
+      "subjectId": "engineering-economics",
+      "chapter": "4.5",
+      "name": "资金约束下独立方案组合择优",
+      "expr": "max sum_j (NPV_j * x_j) ; s.t. sum_j (I_j * x_j) <= Imax ; x_j in {0,1}",
+      "latex": "\\max\\sum_{j}NPV_{j}x_{j},\\quad \\text{s.t. }\\sum_{j}I_{j}x_{j}\\leq I_{max},\\ x_{j}\\in\\{0,1\\}",
+      "vars": [
+        {
+          "sym": "NPV_j",
+          "name": "第 j 个方案的净现值",
+          "unit": "元/万元",
+          "note": "已按同一 ic 计算"
+        },
+        {
+          "sym": "I_j",
+          "name": "第 j 个方案的投资",
+          "unit": "元/万元",
+          "note": "约束占用的资金"
+        },
+        {
+          "sym": "x_j",
+          "name": "0-1 选择变量",
+          "unit": "—",
+          "note": "1 表示选中，0 表示不选"
+        },
+        {
+          "sym": "Imax",
+          "name": "资金限额",
+          "unit": "元/万元",
+          "note": "可用资金上限"
+        }
+      ],
+      "conditions": [
+        "方案相互独立",
+        "资金约束只发生在投资期（不考虑分期约束）",
+        "方案不可部分采纳"
+      ],
+      "derivationHint": "把 m 个独立方案的所有组合（2^m 个）化为互斥方案，剔除超预算组合后取 NPV 之和最大者。",
+      "typicalUse": "有资金限额时的独立方案群投资决策",
+      "pitfalls": [
+        "按净现值率 NPVR 排序贪心选择未必最优，必须枚举组合（或用 0-1 规划）",
+        "别漏掉“不投资”与“多个方案组合”的情形",
+        "方案间若存在互斥/依存关系，应先处理关系再枚举"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-033",
+      "subjectId": "engineering-economics",
+      "chapter": "5.2",
+      "name": "盈亏平衡产量",
+      "expr": "Q_BEP = F / (p - v - t)",
+      "latex": "Q_{BEP}=\\frac{F}{p-v-t}",
+      "vars": [
+        {
+          "sym": "Q_BEP",
+          "name": "盈亏平衡产量（销量）",
+          "unit": "件/单位",
+          "note": "利润为零时的产量"
+        },
+        {
+          "sym": "F",
+          "name": "年固定成本总额",
+          "unit": "元/万元",
+          "note": "不随产量变动的成本"
+        },
+        {
+          "sym": "p",
+          "name": "单位产品售价",
+          "unit": "元/件",
+          "note": "不含增值税或为含税价时须与 t 口径一致"
+        },
+        {
+          "sym": "v",
+          "name": "单位产品可变成本",
+          "unit": "元/件",
+          "note": "随产量正比例变动"
+        },
+        {
+          "sym": "t",
+          "name": "单位产品税金及附加",
+          "unit": "元/件",
+          "note": "常易漏项"
+        }
+      ],
+      "conditions": [
+        "线性盈亏平衡：售价、单位可变成本在计算范围内不变",
+        "产销量一致（生产量=销售量）",
+        "固定成本与可变成本已正确分解"
+      ],
+      "derivationHint": "令利润 π = pQ - vQ - tQ - F = 0，解出 Q。",
+      "typicalUse": "判断项目抗风险能力；与敏感性分析、决策树配套",
+      "pitfalls": [
+        "分母漏扣单位税金及附加 t 是最常见错误",
+        "p 与 v 的含税/不含税口径必须一致",
+        "多品种产品需换算为单一代表产品或按销售额加权",
+        "BEP 越低越安全，不要反着理解"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/engineering-economics/break-even.svg",
+        "caption": "盈亏平衡：收入线追上总成本线的交点（线性假定下的示意图）",
+        "readPoints": [
+          "水平虚线是固定成本 C_f：不生产也要花的钱。",
+          "红斜线是总成本：固定成本 + 单位可变成本 × 产量，起点在 C_f。",
+          "绿斜线是销售收入：单价 × 产量，起点在原点。",
+          "两线交点即 BEP：左边亏损、右边盈利；交点越靠左越抗风险。",
+          "线性假定只在相关产量区间成立：产量大幅变化时单价与单位成本都会变。"
+        ]
+      }
+    },
+    {
+      "id": "engineering-economics-formula-034",
+      "subjectId": "engineering-economics",
+      "chapter": "5.2",
+      "name": "盈亏平衡生产能力利用率",
+      "expr": "E_BEP = Q_BEP / Qd * 100",
+      "latex": "E_{BEP}=\\frac{Q_{BEP}}{Q_{d}}\\times 100\\%",
+      "vars": [
+        {
+          "sym": "E_BEP",
+          "name": "盈亏平衡生产能力利用率",
+          "unit": "%",
+          "note": "越低越安全"
+        },
+        {
+          "sym": "Q_BEP",
+          "name": "盈亏平衡产量",
+          "unit": "件/单位",
+          "note": "见盈亏平衡产量公式"
+        },
+        {
+          "sym": "Qd",
+          "name": "设计产量（正常年产量）",
+          "unit": "件/单位",
+          "note": "项目的设计/额定能力"
+        }
+      ],
+      "conditions": [
+        "设计产量已知",
+        "与盈亏平衡产量共用同一线性假定"
+      ],
+      "derivationHint": "盈亏平衡产量占设计能力的百分比。",
+      "typicalUse": "表达项目抗风险能力的常用形式（教材常以 70% 作为经验参考界限）",
+      "pitfalls": [
+        "分母是设计产量而非实际产量",
+        "“低于 70% 较安全”只是经验说法，不是规范强制值",
+        "若设计产量分期达产，应说明所取年份"
+      ],
+      "standardRef": [],
+      "confidence": "medium",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": "教材中关于 E_BEP 的经验安全阈值数值请以原书为准",
+      "figure": {
+        "src": "/knowledge/assets/engineering-economics/break-even.svg",
+        "caption": "盈亏平衡：收入线追上总成本线的交点（线性假定下的示意图）",
+        "readPoints": [
+          "水平虚线是固定成本 C_f：不生产也要花的钱。",
+          "红斜线是总成本：固定成本 + 单位可变成本 × 产量，起点在 C_f。",
+          "绿斜线是销售收入：单价 × 产量，起点在原点。",
+          "两线交点即 BEP：左边亏损、右边盈利；交点越靠左越抗风险。",
+          "线性假定只在相关产量区间成立：产量大幅变化时单价与单位成本都会变。"
+        ]
+      }
+    },
+    {
+      "id": "engineering-economics-formula-035",
+      "subjectId": "engineering-economics",
+      "chapter": "5.2",
+      "name": "盈亏平衡售价与盈亏平衡单位可变成本（反求式）",
+      "expr": "p_BEP = F / Qd + v + t ; v_BEP = p - t - F / Qd",
+      "latex": "p_{BEP}=\\frac{F}{Q_{d}}+v+t,\\qquad v_{BEP}=p-t-\\frac{F}{Q_{d}}",
+      "vars": [
+        {
+          "sym": "p_BEP",
+          "name": "盈亏平衡售价",
+          "unit": "元/件",
+          "note": "按设计产量计算的最低售价"
+        },
+        {
+          "sym": "v_BEP",
+          "name": "盈亏平衡单位可变成本",
+          "unit": "元/件",
+          "note": "允许的最高单位可变成本"
+        },
+        {
+          "sym": "F",
+          "name": "年固定成本总额",
+          "unit": "元/万元",
+          "note": "同 Q_BEP"
+        },
+        {
+          "sym": "Qd",
+          "name": "设计产量",
+          "unit": "件/单位",
+          "note": "同 E_BEP"
+        },
+        {
+          "sym": "v",
+          "name": "单位可变成本",
+          "unit": "元/件",
+          "note": "已知值"
+        },
+        {
+          "sym": "t",
+          "name": "单位税金及附加",
+          "unit": "元/件",
+          "note": "已知值"
+        }
+      ],
+      "conditions": [
+        "以设计产量 Qd 为基准产量反求临界值",
+        "其余参数固定在基准值"
+      ],
+      "derivationHint": "由 π=pQd-vQd-tQd-F=0，分别解出 p 或 v。",
+      "typicalUse": "回答“售价最低能降到多少”“单位成本最高能涨到多少”",
+      "pitfalls": [
+        "反求时必须固定产量为设计产量，若用实际产量结论会不同",
+        "p_BEP 与 v_BEP 是两个不同临界值，不要混用",
+        "若售价含税，反求后要说明含税口径"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-036",
+      "subjectId": "engineering-economics",
+      "chapter": "5.2",
+      "name": "实现目标利润所需产量",
+      "expr": "Q = (F + pi) / (p - v - t)",
+      "latex": "Q=\\frac{F+\\pi}{p-v-t}",
+      "vars": [
+        {
+          "sym": "Q",
+          "name": "实现目标利润所需产量",
+          "unit": "件/单位",
+          "note": "目标产量"
+        },
+        {
+          "sym": "pi",
+          "name": "目标年利润",
+          "unit": "元/万元",
+          "note": "税前利润目标"
+        },
+        {
+          "sym": "F",
+          "name": "年固定成本总额",
+          "unit": "元/万元",
+          "note": "同 Q_BEP"
+        },
+        {
+          "sym": "p",
+          "name": "单位售价",
+          "unit": "元/件",
+          "note": "同 Q_BEP"
+        },
+        {
+          "sym": "v",
+          "name": "单位可变成本",
+          "unit": "元/件",
+          "note": "同 Q_BEP"
+        },
+        {
+          "sym": "t",
+          "name": "单位税金及附加",
+          "unit": "元/件",
+          "note": "同 Q_BEP"
+        }
+      ],
+      "conditions": [
+        "线性盈亏平衡假定",
+        "目标利润为税前利润；若给的是净利润需先除以 (1-T) 还原为税前"
+      ],
+      "derivationHint": "令 pQ-vQ-tQ-F=π，解出 Q。",
+      "typicalUse": "目标利润规划、经营计划编制",
+      "pitfalls": [
+        "目标利润若给的是净利润必须先还原为税前利润",
+        "结果超过设计产量说明目标不可行",
+        "与盈亏平衡点的关系是：目标利润为零时即退化为 Q_BEP"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-037",
+      "subjectId": "engineering-economics",
+      "chapter": "5.3",
+      "name": "敏感度系数 SAF",
+      "expr": "SAF = ((A1 - A0) / A0) / ((F1 - F0) / F0)",
+      "latex": "SAF=\\frac{\\Delta A/A}{\\Delta F/F}=\\frac{(A_{1}-A_{0})/A_{0}}{(F_{1}-F_{0})/F_{0}}",
+      "vars": [
+        {
+          "sym": "SAF",
+          "name": "敏感度系数",
+          "unit": "—",
+          "note": "|SAF| 越大越敏感"
+        },
+        {
+          "sym": "A0",
+          "name": "因素变动前的指标值（基准 NPV 等）",
+          "unit": "同指标",
+          "note": "不为 0"
+        },
+        {
+          "sym": "A1",
+          "name": "因素变动后的指标值",
+          "unit": "同指标",
+          "note": "同一指标口径"
+        },
+        {
+          "sym": "F0",
+          "name": "不确定因素的基准值",
+          "unit": "同因素",
+          "note": "如基准投资、基准年收益"
+        },
+        {
+          "sym": "F1",
+          "name": "不确定因素变动后的值",
+          "unit": "同因素",
+          "note": "如 ±10% 后的值"
+        }
+      ],
+      "conditions": [
+        "单因素分析：只变动一个因素，其余固定在基准值",
+        "A0≠0"
+      ],
+      "derivationHint": "指标变化率与因素变化率之比，即两点间的弹性。",
+      "typicalUse": "识别敏感因素并排序（教材常用 ±10%、±20% 列表）",
+      "pitfalls": [
+        "部分教材把敏感度系数写作 SAF=ΔA/ΔF（绝对量口径），数值与量纲都不同，务必按教材",
+        "SAF 为负表示因素与指标反向变动（如投资增加 NPV 减少）",
+        "比较不同因素的敏感度必须在同一变动幅度下计算",
+        "指标基准值为 0 时相对量口径失效"
+      ],
+      "standardRef": [],
+      "confidence": "medium",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": "本教材 SAF 采用相对量口径 (ΔA/A)/(ΔF/F) 还是绝对量口径 ΔA/ΔF，请以原书公式为准；作业按教师要求口径作答"
+    },
+    {
+      "id": "engineering-economics-formula-038",
+      "subjectId": "engineering-economics",
+      "chapter": "5.3",
+      "name": "敏感性临界值（年净收益临界值）",
+      "expr": "A_crit = I * ic * (1 + ic)^n / ((1 + ic)^n - 1)",
+      "latex": "A_{crit}=I\\cdot(A/P,i_{c},n)=I\\frac{i_{c}(1+i_{c})^{n}}{(1+i_{c})^{n}-1}",
+      "vars": [
+        {
+          "sym": "A_crit",
+          "name": "年净收益临界值",
+          "unit": "元/万元·年",
+          "note": "低于此值 NPV<0"
+        },
+        {
+          "sym": "I",
+          "name": "期初投资",
+          "unit": "元/万元",
+          "note": "固定不变"
+        },
+        {
+          "sym": "ic",
+          "name": "基准收益率",
+          "unit": "—",
+          "note": "用小数代入"
+        },
+        {
+          "sym": "n",
+          "name": "计算期",
+          "unit": "年",
+          "note": "固定不变"
+        }
+      ],
+      "conditions": [
+        "期初一次投资、每年等额净收益、无残值的简化模型",
+        "令 NPV=0 反解"
+      ],
+      "derivationHint": "令 -I+A(P/A,ic,n)=0，解出 A=I/(P/A,ic,n)=I(A/P,ic,n)。",
+      "typicalUse": "回答“年收益最多能降多少、投资最多能涨多少、工期最多能拖多久”",
+      "pitfalls": [
+        "含残值或不等额现金流时不能直接套用，应重新列 NPV=0 方程",
+        "寿命作为不确定因素时需用试算插值（P/A 无解析反解）",
+        "临界值处其他因素必须固定在基准值"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-039",
+      "subjectId": "engineering-economics",
+      "chapter": "5.3",
+      "name": "双因素敏感性临界线",
+      "expr": "0 = -I + A * ((1 + ic)^n - 1) / (ic * (1 + ic)^n)",
+      "latex": "-I+A\\frac{(1+i_{c})^{n}-1}{i_{c}(1+i_{c})^{n}}=0",
+      "vars": [
+        {
+          "sym": "I",
+          "name": "投资（可变因素一）",
+          "unit": "元/万元",
+          "note": "可随幅度变动"
+        },
+        {
+          "sym": "A",
+          "name": "年净收益（可变因素二）",
+          "unit": "元/万元·年",
+          "note": "可随幅度变动"
+        },
+        {
+          "sym": "ic",
+          "name": "基准收益率",
+          "unit": "—",
+          "note": "固定"
+        },
+        {
+          "sym": "n",
+          "name": "计算期",
+          "unit": "年",
+          "note": "固定"
+        }
+      ],
+      "conditions": [
+        "两个因素同时变动、其余固定",
+        "模型为等额年金形式"
+      ],
+      "derivationHint": "在 I-A 平面上令 NPV=0 得到一条直线，直线两侧分别对应可行与不可行区域。",
+      "typicalUse": "多因素敏感性分析的图解表示（临界线/敏感面）",
+      "pitfalls": [
+        "三因素及以上无法用直线表示，需用敏感面或情景分析",
+        "多因素同时变动的组合概率在单因素分析中并未考虑"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-040",
+      "subjectId": "engineering-economics",
+      "chapter": "5.4",
+      "name": "期望值",
+      "expr": "E = sum_i (p_i * x_i)",
+      "latex": "E(X)=\\sum_{i}p_{i}x_{i}",
+      "vars": [
+        {
+          "sym": "E",
+          "name": "期望值",
+          "unit": "同 x_i",
+          "note": "概率加权平均"
+        },
+        {
+          "sym": "p_i",
+          "name": "第 i 种状态的概率",
+          "unit": "—",
+          "note": "Σp_i=1"
+        },
+        {
+          "sym": "x_i",
+          "name": "第 i 种状态下的指标值",
+          "unit": "同指标",
+          "note": "如该情景下的 NPV"
+        }
+      ],
+      "conditions": [
+        "各状态互斥且穷尽，概率之和为 1",
+        "决策者风险中性"
+      ],
+      "derivationHint": "各可能取值与其概率乘积之和。",
+      "typicalUse": "概率分析、决策树计算的第一步",
+      "pitfalls": [
+        "概率之和必须等于 1，漏掉一个情景结论就错",
+        "期望值最大不等于风险最小，须与标准差/离散系数配合",
+        "一次性不可逆投资不宜单用期望值准则"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-041",
+      "subjectId": "engineering-economics",
+      "chapter": "5.4",
+      "name": "方差与标准差",
+      "expr": "sigma = sqrt(sum_i (p_i * (x_i - E)^2))",
+      "latex": "\\sigma=\\sqrt{\\sum_{i}p_{i}(x_{i}-E)^{2}}",
+      "vars": [
+        {
+          "sym": "sigma",
+          "name": "标准差",
+          "unit": "同 x_i",
+          "note": "衡量绝对离散程度"
+        },
+        {
+          "sym": "p_i",
+          "name": "第 i 种状态的概率",
+          "unit": "—",
+          "note": "Σp_i=1"
+        },
+        {
+          "sym": "x_i",
+          "name": "第 i 种状态下的指标值",
+          "unit": "同指标",
+          "note": "如该情景下的 NPV"
+        },
+        {
+          "sym": "E",
+          "name": "期望值",
+          "unit": "同 x_i",
+          "note": "先按期望值公式算出"
+        }
+      ],
+      "conditions": [
+        "各状态互斥且穷尽"
+      ],
+      "derivationHint": "离差平方的概率加权平均再开方。",
+      "typicalUse": "衡量项目风险的绝对大小",
+      "pitfalls": [
+        "标准差是绝对量，比较投资规模悬殊的项目时要用离散系数",
+        "别把概率之和不为 1 的数据代入",
+        "计算时先算 E 再算离差，顺序不能颠倒"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-042",
+      "subjectId": "engineering-economics",
+      "chapter": "5.4",
+      "name": "离散系数（变异系数）",
+      "expr": "V = sigma / E",
+      "latex": "V=\\frac{\\sigma}{E(X)}",
+      "vars": [
+        {
+          "sym": "V",
+          "name": "离散系数",
+          "unit": "—",
+          "note": "越大风险越高（单位收益承担的风险）"
+        },
+        {
+          "sym": "sigma",
+          "name": "标准差",
+          "unit": "同指标",
+          "note": "绝对风险"
+        },
+        {
+          "sym": "E",
+          "name": "期望值",
+          "unit": "同指标",
+          "note": "必须为正，否则失去意义"
+        }
+      ],
+      "conditions": [
+        "E>0（否则该指标无意义）",
+        "用于规模不同方案的相对风险比较"
+      ],
+      "derivationHint": "标准差除以期望值，消除量纲与规模影响。",
+      "typicalUse": "比较不同规模、不同期望收益方案的风险水平",
+      "pitfalls": [
+        "E≤0 时离散系数失效甚至反号，不能直接比较",
+        "离散系数大不代表项目不可行，只代表不确定性相对更大"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-043",
+      "subjectId": "engineering-economics",
+      "chapter": "5.5",
+      "name": "决策树期望净现值",
+      "expr": "E_NPV = sum_i (p_i * NPV_i)",
+      "latex": "E[NPV]=\\sum_{i}p_{i}NPV_{i}",
+      "vars": [
+        {
+          "sym": "E_NPV",
+          "name": "期望净现值",
+          "unit": "元/万元",
+          "note": "决策点取最大者"
+        },
+        {
+          "sym": "p_i",
+          "name": "该机会点下第 i 分支的概率",
+          "unit": "—",
+          "note": "同一机会点各分支概率之和为 1"
+        },
+        {
+          "sym": "NPV_i",
+          "name": "第 i 分支的净现值",
+          "unit": "元/万元",
+          "note": "含该分支全部后续现金流"
+        }
+      ],
+      "conditions": [
+        "各机会点分支互斥且穷尽",
+        "多级决策必须从右向左逆序求解"
+      ],
+      "derivationHint": "在机会点求期望值，在决策点取最优分支（剪枝），逐级向前推进。",
+      "typicalUse": "多阶段风险决策（如先建小厂再视市场扩建）",
+      "pitfalls": [
+        "必须先算末端再向前，不能先算平均再决策",
+        "后续阶段的投资必须计入该分支现金流，容易漏项",
+        "同一机会点的概率之和必须为 1",
+        "剪枝时保留的是期望值最大的分支，不是概率最大的分支"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-044",
+      "subjectId": "engineering-economics",
+      "chapter": "5.5",
+      "name": "后悔值（遗憾值）",
+      "expr": "R_ij = max_k (V_kj) - V_ij",
+      "latex": "R_{ij}=\\max_{k}V_{kj}-V_{ij}",
+      "vars": [
+        {
+          "sym": "R_ij",
+          "name": "方案 i 在状态 j 下的后悔值",
+          "unit": "元/万元",
+          "note": "越小越好"
+        },
+        {
+          "sym": "V_ij",
+          "name": "方案 i 在状态 j 下的收益",
+          "unit": "元/万元",
+          "note": "收益矩阵元素"
+        },
+        {
+          "sym": "max_k (V_kj)",
+          "name": "同一状态 j 下各方案的最大收益",
+          "unit": "元/万元",
+          "note": "该状态的最优值"
+        }
+      ],
+      "conditions": [
+        "不确定型决策（各状态概率未知）",
+        "收益矩阵已知"
+      ],
+      "derivationHint": "在同一自然状态下横向比较，用最优收益减去本方案收益；再取各方案最大后悔值中的最小者。",
+      "typicalUse": "最小最大后悔值准则（Savage 准则）",
+      "pitfalls": [
+        "后悔值必须按“同一状态横向”计算，不能按同一方案纵向算",
+        "与期望值准则适用条件不同：一个用于概率未知，一个用于概率已知",
+        "后悔值非负，最优方案在某状态下的后悔值为 0"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-045",
+      "subjectId": "engineering-economics",
+      "chapter": "6.2",
+      "name": "直线法（平均年限法）折旧",
+      "expr": "D = (K0 - S) / N ; r = (1 - S / K0) / N * 100",
+      "latex": "D=\\frac{K_{0}-S}{N},\\quad r=\\frac{1-S/K_{0}}{N}\\times 100\\%",
+      "vars": [
+        {
+          "sym": "D",
+          "name": "年折旧额",
+          "unit": "元/万元·年",
+          "note": "各年相等"
+        },
+        {
+          "sym": "K0",
+          "name": "固定资产原值",
+          "unit": "元/万元",
+          "note": "含建设期利息、使资产达到可使用状态的支出"
+        },
+        {
+          "sym": "S",
+          "name": "预计净残值",
+          "unit": "元/万元",
+          "note": "残值减清理费用后的净额"
+        },
+        {
+          "sym": "N",
+          "name": "折旧年限",
+          "unit": "年",
+          "note": "税法有最低年限规定"
+        },
+        {
+          "sym": "r",
+          "name": "年折旧率",
+          "unit": "%",
+          "note": "净残值率口径"
+        }
+      ],
+      "conditions": [
+        "各年使用强度大致相同",
+        "资产在使用寿命内均匀损耗"
+      ],
+      "derivationHint": "应计折旧总额（原值-净残值）在折旧年限内平均分摊。",
+      "typicalUse": "最常用的折旧方法；财务评价与会计处理的默认方法",
+      "pitfalls": [
+        "净残值是残值减清理费用，不要直接用残值率乘原值后忘记清理费",
+        "折旧不是现金流出，但影响所得税（税盾）",
+        "当月增加固定资产次月计提折旧的会计惯例与工程经济按年计算不同，题目通常按年计"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "现行税法关于固定资产最低折旧年限与预计净残值率的规定请按最新税法核对"
+    },
+    {
+      "id": "engineering-economics-formula-046",
+      "subjectId": "engineering-economics",
+      "chapter": "6.2",
+      "name": "工作量法折旧",
+      "expr": "D_t = (K0 - S) * q_t / Q",
+      "latex": "D_{t}=\\frac{(K_{0}-S)q_{t}}{Q}",
+      "vars": [
+        {
+          "sym": "D_t",
+          "name": "第 t 期折旧额",
+          "unit": "元/万元",
+          "note": "随工作量变动"
+        },
+        {
+          "sym": "K0",
+          "name": "固定资产原值",
+          "unit": "元/万元",
+          "note": "同直线法"
+        },
+        {
+          "sym": "S",
+          "name": "预计净残值",
+          "unit": "元/万元",
+          "note": "同直线法"
+        },
+        {
+          "sym": "q_t",
+          "name": "第 t 期实际工作量",
+          "unit": "台班/行驶里程/产量",
+          "note": "按资产类型选择计量单位"
+        },
+        {
+          "sym": "Q",
+          "name": "预计总工作量（耐用总工作量）",
+          "unit": "台班/公里/件",
+          "note": "整个寿命期内的总工作量"
+        }
+      ],
+      "conditions": [
+        "资产损耗主要取决于使用强度（如施工机械、运输车辆）",
+        "总工作量可以可靠估计"
+      ],
+      "derivationHint": "单位工作量折旧额乘以当期实际工作量。",
+      "typicalUse": "施工机械、运输设备、矿山设备按台班或行驶里程计提折旧",
+      "pitfalls": [
+        "工作量单位必须与总工作量口径一致",
+        "若某期未使用则当期折旧为 0",
+        "总工作量估计偏差会导致折旧提前或滞后提完"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-047",
+      "subjectId": "engineering-economics",
+      "chapter": "6.2",
+      "name": "双倍余额递减法折旧",
+      "expr": "D_t = (2 / N) * BV_(t-1) ; 最后两年 D_t = (BV_(t-1) - S) / 2",
+      "latex": "D_{t}=\\frac{2}{N}BV_{t-1},\\quad \\text{最后两年 }D_{t}=\\frac{BV_{t-1}-S}{2}",
+      "vars": [
+        {
+          "sym": "D_t",
+          "name": "第 t 年折旧额",
+          "unit": "元/万元·年",
+          "note": "前期多后期少"
+        },
+        {
+          "sym": "BV_(t-1)",
+          "name": "第 t-1 年末账面净值",
+          "unit": "元/万元",
+          "note": "为原值减累计折旧，前期不扣残值"
+        },
+        {
+          "sym": "N",
+          "name": "折旧年限",
+          "unit": "年",
+          "note": "年折旧率=2/N"
+        },
+        {
+          "sym": "S",
+          "name": "预计净残值",
+          "unit": "元/万元",
+          "note": "仅在最后两年转换时用到"
+        }
+      ],
+      "conditions": [
+        "加速折旧法，前期不扣除残值",
+        "通常在到期前两年改用直线法摊完剩余应折旧额"
+      ],
+      "derivationHint": "以直线法折旧率的两倍乘以期初账面净值；因净值递减，折旧额逐年减少。",
+      "typicalUse": "技术进步快、损耗前期大的设备；利用税盾推迟纳税",
+      "pitfalls": [
+        "折旧基数是账面净值而不是（原值-残值）",
+        "最后两年必须改直线，否则账面价值会低于残值",
+        "年折旧率=2/N 与残值无关",
+        "账面净值不等于（原值-残值）的余额，别提前扣残值"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "“最后两年改直线法”的具体年份（N-1 与 N 年）请按原书例题核对"
+    },
+    {
+      "id": "engineering-economics-formula-048",
+      "subjectId": "engineering-economics",
+      "chapter": "6.2",
+      "name": "年数总和法折旧",
+      "expr": "D_t = (N - t + 1) / (N * (N + 1) / 2) * (K0 - S)",
+      "latex": "D_{t}=\\frac{N-t+1}{N(N+1)/2}(K_{0}-S)",
+      "vars": [
+        {
+          "sym": "D_t",
+          "name": "第 t 年折旧额",
+          "unit": "元/万元·年",
+          "note": "逐年递减"
+        },
+        {
+          "sym": "N",
+          "name": "折旧年限",
+          "unit": "年",
+          "note": "年数总和=N(N+1)/2"
+        },
+        {
+          "sym": "t",
+          "name": "第几个折旧年度",
+          "unit": "年",
+          "note": "从 1 开始"
+        },
+        {
+          "sym": "K0",
+          "name": "固定资产原值",
+          "unit": "元/万元",
+          "note": "同直线法"
+        },
+        {
+          "sym": "S",
+          "name": "预计净残值",
+          "unit": "元/万元",
+          "note": "折旧基数需扣除"
+        }
+      ],
+      "conditions": [
+        "加速折旧法",
+        "折旧基数固定为（原值-净残值）"
+      ],
+      "derivationHint": "折旧率分子为第 t 年尚可使用年数 N-t+1，分母为年数总和 N(N+1)/2。",
+      "typicalUse": "与双倍余额递减法并列的加速折旧法，计算更简单",
+      "pitfalls": [
+        "分子是“剩余年数”N-t+1，不是已用年数 t",
+        "折旧基数是（原值-残值），与双倍余额递减法不同",
+        "各年折旧率之和为 1，可用来验算"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-049",
+      "subjectId": "engineering-economics",
+      "chapter": "6.3",
+      "name": "低劣化数值法（设备经济寿命）",
+      "expr": "N0 = sqrt(2 * (K0 - KL) / lambda)",
+      "latex": "N_{0}=\\sqrt{\\frac{2(K_{0}-K_{L})}{\\lambda}}",
+      "vars": [
+        {
+          "sym": "N0",
+          "name": "设备经济寿命",
+          "unit": "年",
+          "note": "通常需取整后与相邻年份比较"
+        },
+        {
+          "sym": "K0",
+          "name": "设备原始价值（购置费）",
+          "unit": "元/万元",
+          "note": "设备购置安装完成后的原值"
+        },
+        {
+          "sym": "KL",
+          "name": "设备报废时的残值",
+          "unit": "元/万元",
+          "note": "第 N 年末的残值，简化中常视为常数"
+        },
+        {
+          "sym": "lambda",
+          "name": "年低劣化值",
+          "unit": "元/万元·年",
+          "note": "使用费逐年增加的等额增量"
+        }
+      ],
+      "conditions": [
+        "设备年使用费逐年等额递增 λ",
+        "不考虑资金时间价值（静态法）",
+        "残值在使用期内近似不变"
+      ],
+      "derivationHint": "年平均总费用 C(N)=(K0-KL)/N+λ(N-1)/2，令 dC/dN=0 得 N0=sqrt(2(K0-KL)/λ)。",
+      "typicalUse": "确定设备经济寿命与最佳更新时机",
+      "pitfalls": [
+        "N0 通常不是整数，必须比较相邻整数年的年平均费用后再定",
+        "该法未考虑资金时间价值，动态法结果一般偏大",
+        "不同教材低劣化项写作 λ(N-1)/2 或 λ(N+1)/2，取整结论一般不受影响",
+        "K0 与 λ 单位必须一致（同为元或同为万元）"
+      ],
+      "standardRef": [],
+      "confidence": "medium",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "年平均总费用公式中低劣化项的具体写法请以原书为准；N0 公式本身不受影响"
+    },
+    {
+      "id": "engineering-economics-formula-050",
+      "subjectId": "engineering-economics",
+      "chapter": "6.3",
+      "name": "低劣化法年平均总费用",
+      "expr": "C_N = (K0 - KL) / N + lambda * (N - 1) / 2",
+      "latex": "C_{N}=\\frac{K_{0}-K_{L}}{N}+\\frac{\\lambda (N-1)}{2}",
+      "vars": [
+        {
+          "sym": "C_N",
+          "name": "使用 N 年时的年平均总费用",
+          "unit": "元/万元·年",
+          "note": "取最小者对应的 N 为经济寿命"
+        },
+        {
+          "sym": "K0",
+          "name": "设备原值",
+          "unit": "元/万元",
+          "note": "同 N0 公式"
+        },
+        {
+          "sym": "KL",
+          "name": "残值",
+          "unit": "元/万元",
+          "note": "同 N0 公式"
+        },
+        {
+          "sym": "lambda",
+          "name": "年低劣化值",
+          "unit": "元/万元·年",
+          "note": "使用费年递增额"
+        },
+        {
+          "sym": "N",
+          "name": "使用年限",
+          "unit": "年",
+          "note": "待比较的整数年数"
+        }
+      ],
+      "conditions": [
+        "静态法（不考虑资金时间价值）",
+        "使用费逐年等差递增"
+      ],
+      "derivationHint": "年投资分摊额 + 年平均低劣化（使用费）增量。",
+      "typicalUse": "对 N0 取整后列表比较相邻年份，确定最终经济寿命",
+      "pitfalls": [
+        "只算折旧分摊会漏掉逐年上升的运行维护费",
+        "不同教材用 λN/2 或 λ(N+1)/2，比较年份时结论一般一致但数值不同",
+        "未考虑资金时间价值，只适用于粗略估算"
+      ],
+      "standardRef": [],
+      "confidence": "medium",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "低劣化项是 λ(N-1)/2 还是 λ(N+1)/2，请以原书公式核对"
+    },
+    {
+      "id": "engineering-economics-formula-051",
+      "subjectId": "engineering-economics",
+      "chapter": "6.3",
+      "name": "考虑资金时间价值的年平均费用（动态经济寿命）",
+      "expr": "AC(N) = (K0 - KL * (1 + i)^(-N) + sum_(t=1..N) (C_t * (1 + i)^(-t))) * i * (1 + i)^N / ((1 + i)^N - 1)",
+      "latex": "AC(N)=\\left[K_{0}-K_{L}(P/F,i,N)+\\sum_{t=1}^{N}C_{t}(P/F,i,t)\\right](A/P,i,N)",
+      "vars": [
+        {
+          "sym": "AC(N)",
+          "name": "使用 N 年的年平均费用",
+          "unit": "元/万元·年",
+          "note": "取最小者对应的 N"
+        },
+        {
+          "sym": "K0",
+          "name": "设备原值",
+          "unit": "元/万元",
+          "note": "第 0 点支出"
+        },
+        {
+          "sym": "KL",
+          "name": "第 N 年末残值",
+          "unit": "元/万元",
+          "note": "随 N 变化，作为费用减项"
+        },
+        {
+          "sym": "C_t",
+          "name": "第 t 年运行维护费",
+          "unit": "元/万元",
+          "note": "可含低劣化递增 C1+(t-1)λ"
+        },
+        {
+          "sym": "i",
+          "name": "基准收益率",
+          "unit": "—",
+          "note": "用小数代入"
+        },
+        {
+          "sym": "N",
+          "name": "使用年限",
+          "unit": "年",
+          "note": "逐一年份试算"
+        }
+      ],
+      "conditions": [
+        "考虑资金时间价值",
+        "残值随使用年限变化",
+        "运行维护费可逐年不等"
+      ],
+      "derivationHint": "把设备投资、各年运行费折现并扣除残值现值得到费用现值，再乘资金回收系数年金化。",
+      "typicalUse": "精确确定设备经济寿命（动态法），与低劣化数值法互为校验",
+      "pitfalls": [
+        "残值随 N 变化，不能当成常数固定在 K0-KL",
+        "动态法得到的经济寿命通常大于低劣化数值法结果",
+        "设备不可重复购置时应结合研究期法处理"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-052",
+      "subjectId": "engineering-economics",
+      "chapter": "9.2",
+      "name": "税后净现金流量（折旧抵税）",
+      "expr": "NCF = (R - C - D) * (1 - T) + D",
+      "latex": "NCF=(R-C-D)(1-T)+D=\\text{净利润}+D",
+      "vars": [
+        {
+          "sym": "NCF",
+          "name": "税后净现金流量",
+          "unit": "元/万元",
+          "note": "进入项目投资现金流量表"
+        },
+        {
+          "sym": "R",
+          "name": "年营业收入",
+          "unit": "元/万元",
+          "note": "不含增值税或按不含税口径"
+        },
+        {
+          "sym": "C",
+          "name": "年经营成本（不含折旧）",
+          "unit": "元/万元",
+          "note": "付现成本"
+        },
+        {
+          "sym": "D",
+          "name": "年折旧额",
+          "unit": "元/万元",
+          "note": "非付现但可抵税"
+        },
+        {
+          "sym": "T",
+          "name": "所得税税率",
+          "unit": "—",
+          "note": "用小数代入，如 25% 写作 0.25"
+        }
+      ],
+      "conditions": [
+        "简化模型：不考虑摊销、利息、流动资金回收",
+        "折旧可全额税前扣除"
+      ],
+      "derivationHint": "所得税=(R-C-D)T，净利润=(R-C-D)(1-T)，净现金流=净利润+折旧（加回非付现项）。",
+      "typicalUse": "计算项目税后现金流进而求 NPV；说明加速折旧的税盾价值",
+      "pitfalls": [
+        "折旧本身不是现金流出，但通过减税增加现金流，两者不可混为一谈",
+        "融资前分析不计利息，融资后分析要扣利息并加回借款",
+        "期末回收固定资产余值与流动资金要计入最后一年的现金流",
+        "若有摊销、利息，需相应扩展为 NCF=(R-C-D-Am-I)(1-T)+D+Am+I"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": "教材中税后现金流量的完整展开式（含摊销、利息、流动资金）请以现金流量表格式为准"
+    },
+    {
+      "id": "engineering-economics-formula-053",
+      "subjectId": "engineering-economics",
+      "chapter": "6.4",
+      "name": "设备更新比选：旧设备费用年值（机会成本口径）",
+      "expr": "AC_old = MV * i * (1 + i)^n / ((1 + i)^n - 1) + OC - S * i / ((1 + i)^n - 1)",
+      "latex": "AC_{old}=MV(A/P,i,n)+OC-S(A/F,i,n)",
+      "vars": [
+        {
+          "sym": "AC_old",
+          "name": "旧设备继续使用 n 年的费用年值",
+          "unit": "元/万元·年",
+          "note": "取小者优"
+        },
+        {
+          "sym": "MV",
+          "name": "旧设备当前市场价值",
+          "unit": "元/万元",
+          "note": "作为机会成本计入，不是账面价值"
+        },
+        {
+          "sym": "OC",
+          "name": "年运营费",
+          "unit": "元/万元·年",
+          "note": "付现运营成本"
+        },
+        {
+          "sym": "S",
+          "name": "n 年后残值",
+          "unit": "元/万元",
+          "note": "费用减项"
+        },
+        {
+          "sym": "i",
+          "name": "基准收益率",
+          "unit": "—",
+          "note": "用小数代入"
+        },
+        {
+          "sym": "n",
+          "name": "尚可使用年限",
+          "unit": "年",
+          "note": "旧设备剩余寿命"
+        }
+      ],
+      "conditions": [
+        "旧设备可继续使用且产出与新设备相同",
+        "用费用年值比较（产出相同）"
+      ],
+      "derivationHint": "旧设备继续使用相当于“现在放弃变卖收入 MV”，故把 MV 作为期初现金流出作机会成本处理。",
+      "typicalUse": "判断是否立即更新设备（与新设备费用年值 AC_new 比较）",
+      "pitfalls": [
+        "必须用当前市场价值 MV 而不是账面价值，账面价值与市价之差是沉没成本",
+        "已计提折旧、已付大修费都是沉没成本，不应进入比较",
+        "旧设备处置的账面损益会影响所得税，严格分析时应计入税的影响",
+        "两方案寿命不同时只能用年值比较"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-054",
+      "subjectId": "engineering-economics",
+      "chapter": "7.1",
+      "name": "价值工程基本关系式",
+      "expr": "V = F / C",
+      "latex": "V=\\frac{F}{C}",
+      "vars": [
+        {
+          "sym": "V",
+          "name": "价值",
+          "unit": "—",
+          "note": "V 越大越好"
+        },
+        {
+          "sym": "F",
+          "name": "功能（必要功能的量化或评分）",
+          "unit": "—",
+          "note": "可用功能系数表示"
+        },
+        {
+          "sym": "C",
+          "name": "寿命周期成本",
+          "unit": "元/万元",
+          "note": "建造成本+使用成本，不是单纯造价"
+        }
+      ],
+      "conditions": [
+        "功能可以量化或评分",
+        "成本为寿命周期成本"
+      ],
+      "derivationHint": "价值定义为功能与实现该功能所耗费的寿命周期成本之比。",
+      "typicalUse": "价值工程的出发点；提高价值有五条途径（F↑/C↓、F↑/C→、F↑↑/C↑、F→/C↓、F↓/C↓↓）",
+      "pitfalls": [
+        "C 是寿命周期成本而非制造/建造成本，只降造价可能抬高使用成本",
+        "不是所有功能都值得保留，必要功能是前提",
+        "VE 的对象是功能而不是产品实体"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-055",
+      "subjectId": "engineering-economics",
+      "chapter": "7.4",
+      "name": "功能系数（功能重要性系数）",
+      "expr": "Fi = f_i / sum_k (f_k)",
+      "latex": "F_{i}=\\frac{f_{i}}{\\sum_{k}f_{k}}",
+      "vars": [
+        {
+          "sym": "Fi",
+          "name": "第 i 个对象的功能系数",
+          "unit": "—",
+          "note": "各对象之和为 1"
+        },
+        {
+          "sym": "f_i",
+          "name": "第 i 个对象的功能得分",
+          "unit": "分",
+          "note": "由 FD 法、0-4 评分法或 DARE 法得到"
+        },
+        {
+          "sym": "sum_k (f_k)",
+          "name": "全部对象功能得分之和",
+          "unit": "分",
+          "note": "0-1 法下应等于 C(n,2)"
+        }
+      ],
+      "conditions": [
+        "同一对象集合、同一评分方法",
+        "各功能得分非负"
+      ],
+      "derivationHint": "某对象功能得分占总功能得分的比重。",
+      "typicalUse": "价值工程功能评价第一步",
+      "pitfalls": [
+        "0-1 评分法出现 0 分时需做“各加 1”修正，否则功能系数为 0 无法算价值系数",
+        "0-1 法总分应等于 n(n-1)/2，可作为验算手段",
+        "必须采用同一评分口径（0-1、0-4、DARE 不可混用）"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-056",
+      "subjectId": "engineering-economics",
+      "chapter": "7.4",
+      "name": "成本系数",
+      "expr": "Ci = c_i / sum_k (c_k)",
+      "latex": "C_{i}=\\frac{c_{i}}{\\sum_{k}c_{k}}",
+      "vars": [
+        {
+          "sym": "Ci",
+          "name": "第 i 个对象的成本系数",
+          "unit": "—",
+          "note": "各对象之和为 1"
+        },
+        {
+          "sym": "c_i",
+          "name": "第 i 个对象的现实成本",
+          "unit": "元/万元",
+          "note": "用统一口径的成本数据"
+        },
+        {
+          "sym": "sum_k (c_k)",
+          "name": "全部对象成本之和",
+          "unit": "元/万元",
+          "note": "总成本"
+        }
+      ],
+      "conditions": [
+        "成本口径与功能对象划分一一对应",
+        "同一价格水平"
+      ],
+      "derivationHint": "某对象成本占总成本的比重。",
+      "typicalUse": "与功能系数配对计算价值系数",
+      "pitfalls": [
+        "对象划分边界必须与功能评分对象一致，否则系数无意义",
+        "成本数据应为同一时点价格",
+        "若用目标成本而非现实成本，含义变为目标成本系数"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-057",
+      "subjectId": "engineering-economics",
+      "chapter": "7.4",
+      "name": "价值系数",
+      "expr": "VI = Fi / Ci",
+      "latex": "VI=\\frac{F_{i}}{C_{i}}",
+      "vars": [
+        {
+          "sym": "VI",
+          "name": "价值系数",
+          "unit": "—",
+          "note": "≈1 合理；<1 优先改进；>1 需核查"
+        },
+        {
+          "sym": "Fi",
+          "name": "功能系数",
+          "unit": "—",
+          "note": "见功能系数公式"
+        },
+        {
+          "sym": "Ci",
+          "name": "成本系数",
+          "unit": "—",
+          "note": "见成本系数公式，须大于 0"
+        }
+      ],
+      "conditions": [
+        "Ci>0",
+        "功能系数与成本系数针对同一对象集合"
+      ],
+      "derivationHint": "功能系数与成本系数之比。",
+      "typicalUse": "确定价值工程的改进对象与优先顺序",
+      "pitfalls": [
+        "VI>1 不一定是好事，可能是成本投入不足导致功能不达标",
+        "VI 显著小于 1 说明成本占比高于功能占比，是主要改进对象",
+        "只按 VI 排序会忽略成本绝对量大的对象，可配合最合适区域法"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-058",
+      "subjectId": "engineering-economics",
+      "chapter": "7.4",
+      "name": "最合适区域法（田中法）边界曲线",
+      "expr": "y1 = sqrt(x^2 + 2 * b) ; y2 = sqrt(x^2 - 2 * b)",
+      "latex": "y_{1}=\\sqrt{x^{2}+2b},\\qquad y_{2}=\\sqrt{x^{2}-2b}",
+      "vars": [
+        {
+          "sym": "x",
+          "name": "成本系数 Ci",
+          "unit": "—",
+          "note": "横轴"
+        },
+        {
+          "sym": "y",
+          "name": "功能系数 Fi",
+          "unit": "—",
+          "note": "纵轴"
+        },
+        {
+          "sym": "b",
+          "name": "区域参数",
+          "unit": "—",
+          "note": "由教材或分析者给定，b 越大区域越宽"
+        }
+      ],
+      "conditions": [
+        "图上对象点落在两条曲线之间的区域视为“合适”",
+        "需满足 x^2≥2b（下边界才有实数解）"
+      ],
+      "derivationHint": "以 VI=1（y=x）为中心线，把“偏离程度”按 (y^2-x^2) 度量并限制在 ±2b 之内。",
+      "typicalUse": "兼顾成本量级地选择 VE 对象（VI 法只反映比值，本方法反映绝对偏离）",
+      "pitfalls": [
+        "不同教材给出的边界方程形式与参数 b 的取法可能不同",
+        "当 x 很小时下边界无实数解，此时以中心线为界",
+        "与 VI 法结论可能不一致，需说明采用哪种方法"
+      ],
+      "standardRef": [],
+      "confidence": "low",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "最合适区域法的边界曲线方程与参数 b 的定义务必按原书核对；本条目为通用形式，confidence 标 low"
+    },
+    {
+      "id": "engineering-economics-formula-059",
+      "subjectId": "engineering-economics",
+      "chapter": "7.4",
+      "name": "功能目标成本与成本降低期望值",
+      "expr": "dC_i = Ct * Fi - Ci_abs",
+      "latex": "\\Delta C_{i}=C_{t}F_{i}-C_{i}",
+      "vars": [
+        {
+          "sym": "dC_i",
+          "name": "第 i 个对象的成本降低期望值",
+          "unit": "元/万元",
+          "note": "负值表示应降低成本，正值表示可增加投入"
+        },
+        {
+          "sym": "Ct",
+          "name": "目标总成本",
+          "unit": "元/万元",
+          "note": "经 VE 论证后确定的总目标成本"
+        },
+        {
+          "sym": "Fi",
+          "name": "功能系数",
+          "unit": "—",
+          "note": "按功能重要度分配目标成本"
+        },
+        {
+          "sym": "Ci_abs",
+          "name": "第 i 个对象的现实成本",
+          "unit": "元/万元",
+          "note": "与目标成本对比的基准"
+        }
+      ],
+      "conditions": [
+        "目标总成本已确定",
+        "按功能系数分配目标成本"
+      ],
+      "derivationHint": "目标成本 = 目标总成本×功能系数；降低期望值 = 目标成本 - 现实成本。",
+      "typicalUse": "确定各对象的成本改进幅度（VE 的量化输出）",
+      "pitfalls": [
+        "目标总成本 Ct 需另行论证，不能直接用现实成本总和",
+        "功能系数为 0 的对象会被分配 0 目标成本，需做特殊处理",
+        "与现实成本之和可能有差额，需说明是否再平衡"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-060",
+      "subjectId": "engineering-economics",
+      "chapter": "9.2",
+      "name": "经营成本",
+      "expr": "OC = TC - D - Am - I",
+      "latex": "OC=TC-D-Am-I",
+      "vars": [
+        {
+          "sym": "OC",
+          "name": "经营成本",
+          "unit": "元/万元·年",
+          "note": "现金流量表中的付现成本"
+        },
+        {
+          "sym": "TC",
+          "name": "总成本费用",
+          "unit": "元/万元·年",
+          "note": "会计口径成本"
+        },
+        {
+          "sym": "D",
+          "name": "折旧费",
+          "unit": "元/万元·年",
+          "note": "非付现成本"
+        },
+        {
+          "sym": "Am",
+          "name": "摊销费",
+          "unit": "元/万元·年",
+          "note": "无形资产与其他资产摊销"
+        },
+        {
+          "sym": "I",
+          "name": "利息支出",
+          "unit": "元/万元·年",
+          "note": "融资后分析时才扣除"
+        }
+      ],
+      "conditions": [
+        "用于编制项目投资现金流量表",
+        "融资前分析时总成本中不含利息，利息项自然为 0"
+      ],
+      "derivationHint": "从总成本费用中扣除全部非付现项目与融资性支出。",
+      "typicalUse": "财务评价计算现金流出时的核心项",
+      "pitfalls": [
+        "折旧、摊销、利息都不是经营成本的组成部分",
+        "维简费、修理费若已资本化需按实际付现口径调整",
+        "融资前与融资后口径要区分，否则现金流会重复扣利息或漏扣"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-061",
+      "subjectId": "engineering-economics",
+      "chapter": "9.2",
+      "name": "利润总额",
+      "expr": "TP = R - TC - Tax_add + Sub",
+      "latex": "TP=R-TC-T_{add}+Sub",
+      "vars": [
+        {
+          "sym": "TP",
+          "name": "利润总额（税前利润）",
+          "unit": "元/万元·年",
+          "note": "所得税计算基数（再作纳税调整）"
+        },
+        {
+          "sym": "R",
+          "name": "营业收入",
+          "unit": "元/万元·年",
+          "note": "不含增值税销项或为不含税收入"
+        },
+        {
+          "sym": "TC",
+          "name": "总成本费用",
+          "unit": "元/万元·年",
+          "note": "含折旧、摊销、利息"
+        },
+        {
+          "sym": "Tax_add",
+          "name": "税金及附加",
+          "unit": "元/万元·年",
+          "note": "城建税、教育费附加等，不含增值税与所得税"
+        },
+        {
+          "sym": "Sub",
+          "name": "补贴收入",
+          "unit": "元/万元·年",
+          "note": "无补贴时为 0"
+        }
+      ],
+      "conditions": [
+        "按会计口径计算",
+        "增值税为价外税，不计入税金及附加"
+      ],
+      "derivationHint": "收入减成本费用减税金及附加，加补贴收入。",
+      "typicalUse": "利润与利润分配表编制、计算 ROI 与所得税",
+      "pitfalls": [
+        "增值税是价外税，不能计入税金及附加",
+        "所得税不在利润总额中扣除",
+        "存在以前年度亏损时可依法弥补，应纳税所得额≠利润总额"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": "现行报表格式下“其他收益”“资产处置收益”等科目的列示位置请按最新会计准则核对"
+    },
+    {
+      "id": "engineering-economics-formula-062",
+      "subjectId": "engineering-economics",
+      "chapter": "9.2",
+      "name": "所得税与净利润",
+      "expr": "NP = TP * (1 - T)",
+      "latex": "NP=TP(1-T)=TP-TP\\cdot T",
+      "vars": [
+        {
+          "sym": "NP",
+          "name": "净利润（税后利润）",
+          "unit": "元/万元·年",
+          "note": "ROE 的分子"
+        },
+        {
+          "sym": "TP",
+          "name": "应纳税所得额（简化取利润总额）",
+          "unit": "元/万元·年",
+          "note": "严格计算需作纳税调整并弥补亏损"
+        },
+        {
+          "sym": "T",
+          "name": "企业所得税税率",
+          "unit": "—",
+          "note": "现行一般税率请按最新税法核对"
+        }
+      ],
+      "conditions": [
+        "简化模型：应纳税所得额取利润总额",
+        "无以前年度亏损、无纳税调整事项"
+      ],
+      "derivationHint": "所得税=应纳税所得额×税率，净利润=利润总额-所得税。",
+      "typicalUse": "计算净利润、ROE 与资本金现金流量",
+      "pitfalls": [
+        "存在五年内可弥补亏损时应先弥补再计税",
+        "有免税收入、加计扣除时需作纳税调整",
+        "税率随政策调整（小微企业、高新技术等优惠税率），沿用旧值会算错"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": "现行企业所得税税率与优惠政策请以最新税法为准，本条目不提供具体税率数值"
+    },
+    {
+      "id": "engineering-economics-formula-063",
+      "subjectId": "engineering-economics",
+      "chapter": "8.4",
+      "name": "建设期利息（年中计息假定）",
+      "expr": "I_y = (B_(y-1) + L_y / 2) * i",
+      "latex": "I_{y}=\\left(B_{y-1}+\\frac{L_{y}}{2}\\right)i",
+      "vars": [
+        {
+          "sym": "I_y",
+          "name": "第 y 年建设期利息",
+          "unit": "元/万元",
+          "note": "计入固定资产原值"
+        },
+        {
+          "sym": "B_(y-1)",
+          "name": "第 y-1 年末累计借款本息",
+          "unit": "元/万元",
+          "note": "含以前年度资本化的利息"
+        },
+        {
+          "sym": "L_y",
+          "name": "第 y 年新增借款额",
+          "unit": "元/万元",
+          "note": "假定年内均衡发放，故按半年计息"
+        },
+        {
+          "sym": "i",
+          "name": "借款年利率",
+          "unit": "—",
+          "note": "用小数代入"
+        }
+      ],
+      "conditions": [
+        "借款在年内均衡发放",
+        "建设期只计息不付息（利息资本化）",
+        "年利率不变"
+      ],
+      "derivationHint": "当年新增借款平均占用半年，以前年度累计借款占用全年，分别计息后相加。",
+      "typicalUse": "投资估算与总投资计算；建设期利息构成固定资产原值",
+      "pitfalls": [
+        "当年借款必须按半年计息，按全年计息会高估利息",
+        "建设期利息要转入本金下年继续计息（复利）",
+        "若建设期内用自有资金付息，则不资本化，处理方式不同",
+        "投产后的利息计入财务费用不计入建设投资"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "建设期利息的计息假定与是否复利，请按教材和《建设项目经济评价方法与参数》现行版本核对"
+    },
+    {
+      "id": "engineering-economics-formula-064",
+      "subjectId": "engineering-economics",
+      "chapter": "9.5",
+      "name": "偿债备付率 DSCR",
+      "expr": "DSCR = (EBITDA - Tax) / PD",
+      "latex": "DSCR=\\frac{EBITDA-T_{ax}}{PD}",
+      "vars": [
+        {
+          "sym": "DSCR",
+          "name": "偿债备付率",
+          "unit": "—",
+          "note": "一般不应低于 1.3（经验值，非强制）"
+        },
+        {
+          "sym": "EBITDA",
+          "name": "息税前利润加折旧摊销",
+          "unit": "元/万元·年",
+          "note": "可用于还本付息的资金来源"
+        },
+        {
+          "sym": "Tax",
+          "name": "企业所得税",
+          "unit": "元/万元·年",
+          "note": "需先扣所得税再还债"
+        },
+        {
+          "sym": "PD",
+          "name": "当期应还本付息额",
+          "unit": "元/万元·年",
+          "note": "本金+利息"
+        }
+      ],
+      "conditions": [
+        "按年计算，运营期各年",
+        "还本资金来源为折旧摊销与税后利润"
+      ],
+      "derivationHint": "可用于还本付息的资金（EBITDA-所得税）除以当期应还本付息额。",
+      "typicalUse": "偿债能力分析的核心指标",
+      "pitfalls": [
+        "分子中已含折旧摊销（非付现但可用来还本），别漏加",
+        "分母是还本+付息，不是只付息",
+        "1.3 只是经验参考值，不同行业与贷款机构要求不同"
+      ],
+      "standardRef": [],
+      "confidence": "medium",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": "DSCR 的分子构成与最低要求值请按《建设项目经济评价方法与参数》现行版本核对"
+    },
+    {
+      "id": "engineering-economics-formula-065",
+      "subjectId": "engineering-economics",
+      "chapter": "12.2",
+      "name": "债务资本成本（税后）",
+      "expr": "kd_at = kd * (1 - T)",
+      "latex": "k_{d,after}=k_{d}(1-T)",
+      "vars": [
+        {
+          "sym": "kd_at",
+          "name": "税后债务资本成本",
+          "unit": "—",
+          "note": "计入 WACC 的债务成本"
+        },
+        {
+          "sym": "kd",
+          "name": "税前债务成本（借款利率或债券到期收益率）",
+          "unit": "—",
+          "note": "由贷款合同或市场利率确定"
+        },
+        {
+          "sym": "T",
+          "name": "企业所得税税率",
+          "unit": "—",
+          "note": "用小数代入"
+        }
+      ],
+      "conditions": [
+        "利息支出可税前扣除",
+        "企业有足够应纳税所得额抵扣利息"
+      ],
+      "derivationHint": "利息抵税使实际负担的债务成本降低为 kd(1-T)。",
+      "typicalUse": "计算加权平均资本成本时债务部分的成本",
+      "pitfalls": [
+        "忘记乘 (1-T) 会高估资本成本",
+        "若企业亏损无法享受税盾，则不应作税后调整",
+        "筹资费用（手续费）严格来说应计入债务成本"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "12",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-066",
+      "subjectId": "engineering-economics",
+      "chapter": "12.2",
+      "name": "权益资本成本（CAPM）",
+      "expr": "ke = Rf + beta * (Rm - Rf)",
+      "latex": "k_{e}=R_{f}+\\beta(R_{m}-R_{f})",
+      "vars": [
+        {
+          "sym": "ke",
+          "name": "权益资本成本",
+          "unit": "—",
+          "note": "股东要求的必要报酬率"
+        },
+        {
+          "sym": "Rf",
+          "name": "无风险收益率",
+          "unit": "—",
+          "note": "通常取长期国债收益率"
+        },
+        {
+          "sym": "beta",
+          "name": "贝塔系数",
+          "unit": "—",
+          "note": "衡量系统性风险"
+        },
+        {
+          "sym": "Rm",
+          "name": "市场平均收益率",
+          "unit": "—",
+          "note": "市场组合期望收益"
+        }
+      ],
+      "conditions": [
+        "资本市场有效",
+        "β 可由历史数据或行业可比公司估计"
+      ],
+      "derivationHint": "必要报酬率 = 无风险收益率 + 风险溢价，风险溢价 = β×市场风险溢价。",
+      "typicalUse": "估计权益资本成本进而计算 WACC",
+      "pitfalls": [
+        "Rf、Rm 的取值口径（名义/实际、期限）必须一致",
+        "β 取值随行业与杠杆不同，需作卸载/加载杠杆调整",
+        "也可用股利增长模型 ke=D1/P0+g 作为替代方法"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "12",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-067",
+      "subjectId": "engineering-economics",
+      "chapter": "12.2",
+      "name": "加权平均资本成本 WACC",
+      "expr": "WACC = wd * kd * (1 - T) + we * ke",
+      "latex": "WACC=w_{d}k_{d}(1-T)+w_{e}k_{e}",
+      "vars": [
+        {
+          "sym": "WACC",
+          "name": "加权平均资本成本",
+          "unit": "—",
+          "note": "常作为项目基准收益率的下限"
+        },
+        {
+          "sym": "wd",
+          "name": "债务资金权重",
+          "unit": "—",
+          "note": "按市场价值计，wd+we=1"
+        },
+        {
+          "sym": "we",
+          "name": "权益资金权重",
+          "unit": "—",
+          "note": "按市场价值计"
+        },
+        {
+          "sym": "kd",
+          "name": "税前债务成本",
+          "unit": "—",
+          "note": "贷款利率或债券收益率"
+        },
+        {
+          "sym": "ke",
+          "name": "权益资本成本",
+          "unit": "—",
+          "note": "见 CAPM 公式"
+        },
+        {
+          "sym": "T",
+          "name": "企业所得税税率",
+          "unit": "—",
+          "note": "用小数代入"
+        }
+      ],
+      "conditions": [
+        "资本结构保持稳定",
+        "项目风险与企业现有业务相近",
+        "权重按市场价值而非账面价值"
+      ],
+      "derivationHint": "各类资本成本按其在资本结构中的比重加权平均，债务部分作税后调整。",
+      "typicalUse": "确定基准收益率、对项目现金流折现评价",
+      "pitfalls": [
+        "债务成本必须作税后调整",
+        "权重之和必须为 1",
+        "项目风险与企业整体不同时不能直接套用企业 WACC",
+        "权重按账面价值会扭曲结果（尤其是权益市值波动大时）"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "12",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-068",
+      "subjectId": "engineering-economics",
+      "chapter": "12.4",
+      "name": "全寿命周期费用现值 LCC",
+      "expr": "LCC = K0 + sum_(t=1..n) ((OM_t + RE_t) * (1 + i)^(-t)) - S * (1 + i)^(-n)",
+      "latex": "LCC=K_{0}+\\sum_{t=1}^{n}(OM_{t}+RE_{t})(1+i)^{-t}-S(1+i)^{-n}",
+      "vars": [
+        {
+          "sym": "LCC",
+          "name": "寿命周期费用现值",
+          "unit": "元/万元",
+          "note": "取小者优"
+        },
+        {
+          "sym": "K0",
+          "name": "初期建设（购置）投资",
+          "unit": "元/万元",
+          "note": "第 0 点支出"
+        },
+        {
+          "sym": "OM_t",
+          "name": "第 t 年运营维护费",
+          "unit": "元/万元",
+          "note": "含能耗、日常养护、管理费"
+        },
+        {
+          "sym": "RE_t",
+          "name": "第 t 年维修更新（替换）费",
+          "unit": "元/万元",
+          "note": "大修、中修、构件更换"
+        },
+        {
+          "sym": "S",
+          "name": "分析期末残值",
+          "unit": "元/万元",
+          "note": "费用减项"
+        },
+        {
+          "sym": "i",
+          "name": "折现率",
+          "unit": "—",
+          "note": "用小数代入"
+        },
+        {
+          "sym": "n",
+          "name": "分析期",
+          "unit": "年",
+          "note": "各方案必须统一"
+        }
+      ],
+      "conditions": [
+        "各方案分析期与折现率统一",
+        "产出（服务水平）相同或已单独处理用户费用"
+      ],
+      "derivationHint": "把全寿命周期内所有费用折现到基年，扣除期末残值现值。",
+      "typicalUse": "路面结构、桥梁构件、设备选型的全寿命周期比选（道桥专业重点）",
+      "pitfalls": [
+        "只比初期造价会得出错误结论（低价高维护方案往往更贵）",
+        "用户费用（延误、油耗、事故）是否计入需在方案中统一口径",
+        "分析期不同时必须年金化为 EUAC 再比较",
+        "残值在寿命不等时应按剩余寿命折算"
+      ],
+      "standardRef": [],
+      "confidence": "high",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "12",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "engineering-economics-formula-069",
+      "subjectId": "engineering-economics",
+      "chapter": "10.4",
+      "name": "经济净现值 ENPV 与经济内部收益率 EIRR",
+      "expr": "ENPV = sum_(t=0..n) ((B_t - C_t) * (1 + is)^(-t)) ; EIRR: ENPV = 0",
+      "latex": "ENPV=\\sum_{t=0}^{n}(B-C)_{t}(1+i_{s})^{-t},\\quad \\sum_{t=0}^{n}(B-C)_{t}(1+EIRR)^{-t}=0",
+      "vars": [
+        {
+          "sym": "ENPV",
+          "name": "经济净现值",
+          "unit": "元/万元",
+          "note": "ENPV≥0 项目对国民经济有净贡献"
+        },
+        {
+          "sym": "EIRR",
+          "name": "经济内部收益率",
+          "unit": "—",
+          "note": "EIRR≥is 可行"
+        },
+        {
+          "sym": "B_t",
+          "name": "第 t 年经济效益（影子价格口径）",
+          "unit": "元/万元",
+          "note": "含间接效益"
+        },
+        {
+          "sym": "C_t",
+          "name": "第 t 年经济费用（影子价格口径）",
+          "unit": "元/万元",
+          "note": "剔除转移支付"
+        },
+        {
+          "sym": "is",
+          "name": "社会折现率",
+          "unit": "—",
+          "note": "由国家级参数文件发布，需查最新值"
+        }
+      ],
+      "conditions": [
+        "费用效益已用影子价格、影子汇率、影子工资调整",
+        "已剔除税金、补贴、国内借款利息等转移支付",
+        "社会折现率取现行发布值"
+      ],
+      "derivationHint": "把财务评价的现金流按影子价格体系换算后，用社会折现率折现。",
+      "typicalUse": "基础设施、公共项目的国民经济评价",
+      "pitfalls": [
+        "社会折现率必须查现行文件，不得凭记忆取值",
+        "财务评价不可行不等于国民经济不可行，两者结论可能冲突",
+        "影子汇率换算系数、影子工资等参数同为社会发布参数，不得自造"
+      ],
+      "standardRef": [
+        "建设项目经济评价方法与参数（第三版）",
+        "建设项目经济评价参数"
+      ],
+      "confidence": "medium",
+      "cite": {
+        "book": "工程经济学",
+        "edition": "第5版",
+        "chapter": "10",
+        "page": null
+      },
+      "verify": "社会折现率、影子汇率换算系数等参数必须查现行发布的《建设项目经济评价参数》，本条目不提供数值"
+    }
+  ]
+}

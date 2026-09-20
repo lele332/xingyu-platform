@@ -1,0 +1,2386 @@
+{
+  "items": [
+    {
+      "id": "road-survey-design-concept-001",
+      "subjectId": "road-survey-design",
+      "chapter": "1.2",
+      "term": "设计速度",
+      "en": "design speed",
+      "definition": "在气候与交通条件良好、路面平整情况下，具有一定技术水平的驾驶员在公路受限制部分能安全舒适行驶的最大速度，是公路几何设计的控制性指标，单位 km/h。",
+      "formulaId": null,
+      "symbols": [
+        "V",
+        "v"
+      ],
+      "unit": "km/h",
+      "relations": [
+        "运行速度",
+        "平均速度",
+        "公路技术等级"
+      ],
+      "pitfalls": [
+        "设计速度不是限速值，也不是车辆实际平均速度；同一条路不同路段可取不同设计速度，但需设过渡段",
+        "不要把设计速度直接当成 μ、i 计算中的行驶速度代入而不加说明，教材例题常直接令 v=V"
+      ],
+      "examAngle": "名词解释；判断某等级公路的设计速度取值",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "各等级公路对应的设计速度档位（120/100/80/60/40/30/20）以 JTG B01 现行版表为准"
+    },
+    {
+      "id": "road-survey-design-concept-002",
+      "subjectId": "road-survey-design",
+      "chapter": "1.2",
+      "term": "运行速度",
+      "en": "operating speed",
+      "definition": "实际交通流中，在自由流状态下驾驶员实际采用的速度，通常用第 85 百分位车速表示；用于检验设计速度与实际行驶速度的一致性。",
+      "formulaId": null,
+      "symbols": [
+        "V85"
+      ],
+      "unit": "km/h",
+      "relations": [
+        "设计速度",
+        "平均速度",
+        "V/C 比"
+      ],
+      "pitfalls": [
+        "运行速度常大于设计速度，故需做运行速度协调性检验（相邻路段 V85 差值不宜过大）",
+        "与第 15 百分位车速的区别：低百分位车速用于最小限速与爬坡车道判别"
+      ],
+      "examAngle": "与设计速度、平均速度三者辨析",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "V85 的定义与运行速度检验的容许差值按 JTG D20 / JTG B01 现行版核对"
+    },
+    {
+      "id": "road-survey-design-concept-003",
+      "subjectId": "road-survey-design",
+      "chapter": "1.2",
+      "term": "平均速度（行程速度 / 技术速度）",
+      "en": "average travel speed",
+      "definition": "车辆通过某路段的总里程除以总行程时间（含停歇为行程速度，不含为技术速度）所得速度，是评价路段服务水平和通行效率的实际指标。",
+      "formulaId": null,
+      "symbols": [
+        "V均"
+      ],
+      "unit": "km/h",
+      "relations": [
+        "设计速度",
+        "运行速度"
+      ],
+      "pitfalls": [
+        "平均速度随交通量增大而下降，设计速度是固定值；服务水平评价用平均速度而非设计速度"
+      ],
+      "examAngle": "三速度概念辨析选择题",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "教材中「平均技术速度」的定义口径与是否含停歇时间"
+    },
+    {
+      "id": "road-survey-design-concept-004",
+      "subjectId": "road-survey-design",
+      "chapter": "1.2",
+      "term": "公路技术等级",
+      "en": "highway class / functional classification",
+      "definition": "按公路的使用任务、功能和适应的交通量，将公路划分为高速公路、一级、二级、三级、四级共五个技术等级，每一等级对应设计速度、车道数、路基宽度等成套技术指标。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "—",
+      "relations": [
+        "设计速度",
+        "设计交通量",
+        "行政等级"
+      ],
+      "pitfalls": [
+        "技术等级（高速/一/二/三/四）与行政等级（国道/省道/县道/乡道/村道）是两套体系，不可混淆",
+        "等级由「使用任务+功能+设计交通量」综合确定，不是单看交通量"
+      ],
+      "examAngle": "给 AADT 与设计速度判断技术等级",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "各级公路适应的年平均日交通量界限值必须按 JTG B01 现行版核对，本条目不填具体数值"
+    },
+    {
+      "id": "road-survey-design-concept-005",
+      "subjectId": "road-survey-design",
+      "chapter": "1.2",
+      "term": "高速公路与一级公路",
+      "en": "freeway and first-class highway",
+      "definition": "高速公路为专供汽车分向、分车道行驶并应全部控制出入的多车道公路；一级公路为供汽车分向、分车道行驶，可根据需要部分控制出入的多车道公路。二者均设中央分隔带。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "—",
+      "relations": [
+        "公路技术等级",
+        "中间带",
+        "立体交叉"
+      ],
+      "pitfalls": [
+        "一级公路不等于高速公路：一级公路允许平面交叉与部分非机动车（按规范条件）",
+        "是否「控制出入」是二者的关键分界"
+      ],
+      "examAngle": "高速公路与一级公路的判别",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "一级公路关于非机动车、平面交叉的规定以 JTG B01 现行版表述为准"
+    },
+    {
+      "id": "road-survey-design-concept-006",
+      "subjectId": "road-survey-design",
+      "chapter": "1.2",
+      "term": "二、三、四级公路",
+      "en": "second / third / fourth class highway",
+      "definition": "二级公路为供汽车行驶的双车道公路；三级公路为主要供汽车行驶的双车道公路；四级公路为主要供汽车行驶的双车道或单车道公路。三者一般均为双车道、无中央分隔带。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "—",
+      "relations": [
+        "公路技术等级",
+        "设计速度"
+      ],
+      "pitfalls": [
+        "三级与四级的差别主要在适应交通量与线形指标，四级公路可设单车道并设错车道",
+        "三级公路设计速度档（40/30/20 等）与二级（80/60）不要混填"
+      ],
+      "examAngle": "低等级公路的特征与设计速度",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "各级公路设计速度档位与设计交通量界限按 JTG B01 现行版核对"
+    },
+    {
+      "id": "road-survey-design-concept-007",
+      "subjectId": "road-survey-design",
+      "chapter": "1.3",
+      "term": "设计车辆",
+      "en": "design vehicle",
+      "definition": "公路几何设计所采用的有代表性的车辆类型及其外廓尺寸（总长、总宽、总高、轴距、前悬、后悬、最小转弯半径），我国规范通常取小客车、载重汽车、铰接车（鞍式列车）作为设计车辆。",
+      "formulaId": null,
+      "symbols": [
+        "A"
+      ],
+      "unit": "m",
+      "relations": [
+        "加宽值",
+        "设计速度",
+        "交叉口转弯半径"
+      ],
+      "pitfalls": [
+        "加宽公式中的 A 一般指设计车辆的轴距（或轴距加前悬，按教材口径），不是车宽",
+        "不同等级公路采用的主导设计车辆不同，交叉半径与加宽取值也不同"
+      ],
+      "examAngle": "设计车辆的三种类型及其控制作用",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "三种设计车辆的具体外廓尺寸表值按 JTG B01 现行版核对"
+    },
+    {
+      "id": "road-survey-design-concept-008",
+      "subjectId": "road-survey-design",
+      "chapter": "1.3",
+      "term": "年平均日交通量 AADT",
+      "en": "annual average daily traffic",
+      "definition": "一年中观测的交通量总和除以一年的总天数得到的日平均交通量，单位 veh/d（辆/日），是确定公路等级与车道数的基本依据。",
+      "formulaId": null,
+      "symbols": [
+        "AADT"
+      ],
+      "unit": "veh/d",
+      "relations": [
+        "设计小时交通量",
+        "设计交通量"
+      ],
+      "pitfalls": [
+        "AADT 为双向合计值，换算单向需乘方向不均匀系数",
+        "预测年限（设计年限末）的 AADT 才用于定级，不是当前观测值"
+      ],
+      "examAngle": "由 AADT 推算 DHV",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "road-survey-design-concept-009",
+      "subjectId": "road-survey-design",
+      "chapter": "1.3",
+      "term": "设计小时交通量 DHV",
+      "en": "design hourly volume",
+      "definition": "作为道路设计依据的小时交通量，通常取一年中排序第 30 位小时交通量（30HV），计算式 DHV = AADT × K × D，其中 K 为设计小时交通量系数，D 为方向不均匀系数。",
+      "formulaId": "road-survey-design-formula-052",
+      "symbols": [
+        "DHV",
+        "K",
+        "D"
+      ],
+      "unit": "veh/h",
+      "relations": [
+        "年平均日交通量",
+        "设计通行能力",
+        "方向不均匀系数"
+      ],
+      "pitfalls": [
+        "乘了 D 之后得到的是单向值，与单车道设计通行能力比较；若不乘 D 则为双向值，比较对象要一致",
+        "K 值随地区与公路类型变化，不要死记某一数值"
+      ],
+      "examAngle": "计算题：给 AADT、K、D 求 DHV 并校核车道数",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "K 与 D 的取值区间以及第 30 位小时的规定按教材与 JTG B01 核对"
+    },
+    {
+      "id": "road-survey-design-concept-010",
+      "subjectId": "road-survey-design",
+      "chapter": "1.3",
+      "term": "通行能力（可能通行能力与设计通行能力）",
+      "en": "capacity (possible / design capacity)",
+      "definition": "可能通行能力是在理想道路与交通条件下、单位时间内通过某断面的最大标准车辆数；设计通行能力是对应某一服务水平、在实际条件下可接受的通行能力，等于可能通行能力乘以各修正系数与服务水平系数。",
+      "formulaId": null,
+      "symbols": [
+        "N可",
+        "N设"
+      ],
+      "unit": "pcu/h",
+      "relations": [
+        "服务水平",
+        "设计小时交通量",
+        "V/C 比"
+      ],
+      "pitfalls": [
+        "单位常用 pcu/h（当量小客车），与 veh/h 混用前必须做车型换算",
+        "设计通行能力一定小于可能通行能力"
+      ],
+      "examAngle": "二者区别与换算",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "各级公路单车道可能通行能力与修正系数取值按 JTG B01 / 通行能力手册现行版核对"
+    },
+    {
+      "id": "road-survey-design-concept-011",
+      "subjectId": "road-survey-design",
+      "chapter": "1.3",
+      "term": "服务水平",
+      "en": "level of service",
+      "definition": "衡量道路使用者感受的运行质量指标，我国公路通常分六级（或四级，按规范版本）服务水平，以 V/C 比、平均速度、密度、自由度等参数表征。",
+      "formulaId": null,
+      "symbols": [
+        "LOS"
+      ],
+      "unit": "—",
+      "relations": [
+        "通行能力",
+        "V/C 比",
+        "设计速度"
+      ],
+      "pitfalls": [
+        "服务水平分级数因规范版本而异（四级制与六级制），做题前先确认教师指定版本",
+        "服务水平不是安全指标，是舒适与便利程度指标"
+      ],
+      "examAngle": "服务水平分级依据与 V/C 的含义",
+      "confidence": "low",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "服务水平分几级、各级 V/C 阈值，强烈依赖 JTG B01 版本与教材，务必核对"
+    },
+    {
+      "id": "road-survey-design-concept-012",
+      "subjectId": "road-survey-design",
+      "chapter": "1.3",
+      "term": "V/C 比",
+      "en": "volume to capacity ratio",
+      "definition": "交通量 V 与通行能力 C 的比值，是划分服务水平的核心指标；比值越接近 1 越拥堵。",
+      "formulaId": null,
+      "symbols": [
+        "V/C"
+      ],
+      "unit": "—",
+      "relations": [
+        "服务水平",
+        "设计通行能力"
+      ],
+      "pitfalls": [
+        "V 与 C 必须用同一单位（pcu/h）与同一方向（单向/双向）比较"
+      ],
+      "examAngle": "由 V/C 判断服务水平等级",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "各级 V/C 阈值按现行规范核对"
+    },
+    {
+      "id": "road-survey-design-concept-013",
+      "subjectId": "road-survey-design",
+      "chapter": "2.1",
+      "term": "牵引平衡方程",
+      "en": "tractive balance equation",
+      "definition": "汽车行驶时发动机产生的驱动力与各项行驶阻力之间的平衡关系，是汽车行驶理论的基本方程，用于求解平衡速度、爬坡能力等。",
+      "formulaId": "road-survey-design-formula-048",
+      "symbols": [
+        "T",
+        "Rf",
+        "Ri",
+        "Rw",
+        "Rj"
+      ],
+      "unit": "N 或 kN",
+      "relations": [
+        "动力因数",
+        "道路阻力系数",
+        "滚动阻力系数"
+      ],
+      "pitfalls": [
+        "加速时惯性阻力取正、减速取负；等速行驶时为零",
+        "坡度阻力近似为 G·i（i 为小数），注意与百分比坡度换算"
+      ],
+      "examAngle": "写出并解释牵引平衡方程各项",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "road-survey-design-concept-014",
+      "subjectId": "road-survey-design",
+      "chapter": "2.1",
+      "term": "道路阻力系数",
+      "en": "road resistance coefficient",
+      "definition": "滚动阻力系数 f 与道路纵坡 i 之和，记为 ψ = f + i，表示单位车重所受到的道路阻力，是判别汽车能否在该坡道上等速行驶的关键量。",
+      "formulaId": "road-survey-design-formula-049",
+      "symbols": [
+        "psi",
+        "f",
+        "i"
+      ],
+      "unit": "—",
+      "relations": [
+        "滚动阻力系数",
+        "动力因数"
+      ],
+      "pitfalls": [
+        "上坡时 i 为正、下坡时为负，ψ 可能变负（此时需要制动而非牵引）",
+        "f 随路面类型与车速变化，不是常数"
+      ],
+      "examAngle": "由 ψ 与 D 判别能否上坡",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "road-survey-design-concept-015",
+      "subjectId": "road-survey-design",
+      "chapter": "2.2",
+      "term": "动力因数",
+      "en": "dynamic factor",
+      "definition": "扣除空气阻力后的单位车重剩余驱动力，D = (T − W)/G，是评价汽车动力性能的无量纲指标，可直接与道路阻力系数 ψ 比较。",
+      "formulaId": "road-survey-design-formula-047",
+      "symbols": [
+        "D",
+        "T",
+        "W",
+        "G"
+      ],
+      "unit": "—",
+      "relations": [
+        "道路阻力系数",
+        "动力特性图",
+        "爬坡度"
+      ],
+      "pitfalls": [
+        "有的教材把空气阻力并入 D 之外单独处理，代入前应确认 D 的定义是否含空气阻力",
+        "D 与 ψ 比较时才成立等速条件；D > ψ 时汽车加速"
+      ],
+      "examAngle": "计算 D 并求最大爬坡度",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": "教材中 D 的定义是否包含空气阻力 W，需核对"
+    },
+    {
+      "id": "road-survey-design-concept-016",
+      "subjectId": "road-survey-design",
+      "chapter": "2.2",
+      "term": "动力特性图",
+      "en": "dynamic performance chart",
+      "definition": "以速度 v 为横坐标、动力因数 D 为纵坐标，按各档位绘制的曲线图，用于求解各档位下的最高速度、临界速度、爬坡能力与加速能力。",
+      "formulaId": null,
+      "symbols": [
+        "D",
+        "v"
+      ],
+      "unit": "—",
+      "relations": [
+        "动力因数",
+        "临界速度"
+      ],
+      "pitfalls": [
+        "读图时必须注意纵轴是 D 还是驱动力 T",
+        "相邻档位曲线交点对应换档的最佳时机"
+      ],
+      "examAngle": "由动力特性图求最大爬坡度与平衡速度",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "road-survey-design-concept-017",
+      "subjectId": "road-survey-design",
+      "chapter": "2.3",
+      "term": "爬坡度",
+      "en": "gradeability",
+      "definition": "汽车在某一档位、某一速度下所能克服的最大道路纵坡，由动力因数与滚动阻力系数之差确定，i = D − f（等速爬坡时）。",
+      "formulaId": "road-survey-design-formula-050",
+      "symbols": [
+        "i",
+        "D",
+        "f"
+      ],
+      "unit": "%",
+      "relations": [
+        "动力因数",
+        "最大纵坡"
+      ],
+      "pitfalls": [
+        "爬坡度是车辆性能，最大纵坡是规范限值，两者不是一回事",
+        "求「最大爬坡度」应取最低档、且注意是否要求等速"
+      ],
+      "examAngle": "由 D 与 f 求最大爬坡度并对照规范最大纵坡",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "road-survey-design-concept-018",
+      "subjectId": "road-survey-design",
+      "chapter": "2.4",
+      "term": "制动距离",
+      "en": "braking distance",
+      "definition": "驾驶员踩下制动踏板至车辆完全停止所行驶的距离，与初速度平方成正比、与附着系数及坡度有关，是停车视距的主要组成部分。",
+      "formulaId": "road-survey-design-formula-051",
+      "symbols": [
+        "S制",
+        "v",
+        "phi",
+        "i"
+      ],
+      "unit": "m",
+      "relations": [
+        "停车视距",
+        "附着系数",
+        "反应距离"
+      ],
+      "pitfalls": [
+        "上坡制动距离短、下坡长；公式分母中 i 上坡取正、下坡取负",
+        "不要漏掉反应距离，停车视距 = 反应距离 + 制动距离（+安全距离）"
+      ],
+      "examAngle": "制动距离计算",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": "反应时间 t 的取值（1.2 s / 2.5 s）与是否另加安全距离按教材口径核对",
+      "figure": {
+        "src": "/knowledge/assets/road-survey-design/stopping-sight-distance.svg",
+        "caption": "停车视距的三段构成与速度—时间图（自绘示意）",
+        "readPoints": [
+          "S₁ 与车速一次方成正比，S₂ 与车速平方成正比，高速时制动段占大头",
+          "S₂ 分母里的 (f ± i)：上坡取 +（有利）、下坡取 −（不利）",
+          "会车视距约为停车视距的 2 倍，超车视距另算，三者别混用"
+        ]
+      }
+    },
+    {
+      "id": "road-survey-design-concept-019",
+      "subjectId": "road-survey-design",
+      "chapter": "3.3",
+      "term": "横向力系数",
+      "en": "lateral force coefficient",
+      "definition": "车辆在弯道上行驶时单位车重所受到的横向力，μ = v²/(127R) − i，反映乘客的不舒适程度与车辆横向滑移的风险，是确定平曲线最小半径与超高值的核心参数。",
+      "formulaId": "road-survey-design-formula-027",
+      "symbols": [
+        "mu",
+        "v",
+        "R",
+        "i"
+      ],
+      "unit": "—",
+      "relations": [
+        "超高横坡度",
+        "最小平曲线半径"
+      ],
+      "pitfalls": [
+        "v 单位为 km/h、R 单位为 m 时系数才是 127（由 1/(3.6²·g) 推得）",
+        "μ 取值越大越不舒适，规范按设计速度给出上限"
+      ],
+      "examAngle": "由 v、R、i 反算 μ 并评价舒适性",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "μ 的设计允许值（如 0.05～0.20 各档）按 JTG D20 现行版核对"
+    },
+    {
+      "id": "road-survey-design-concept-020",
+      "subjectId": "road-survey-design",
+      "chapter": "4.3",
+      "term": "超高（超高横坡度）",
+      "en": "superelevation",
+      "definition": "为抵消车辆在弯道上所受离心力，将弯道外侧路面抬高形成单向横坡的做法，其横坡度称超高横坡度 i超，一般取 2%～10%（积雪冰冻地区有折减）。",
+      "formulaId": null,
+      "symbols": [
+        "i超",
+        "ic"
+      ],
+      "unit": "%",
+      "relations": [
+        "横向力系数",
+        "路拱横坡",
+        "超高缓和段"
+      ],
+      "pitfalls": [
+        "超高最大值受路面类型、气候（冰冻积雪）与低速停车条件限制",
+        "合成坡度检核时超高与纵坡要平方和开方，不是简单相加"
+      ],
+      "examAngle": "超高值计算与超高缓和段长度",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": "各设计速度下超高最大值与积雪冰冻地区折减按 JTG D20 现行版核对",
+      "figure": {
+        "src": "/knowledge/assets/road-survey-design/superelevation-transition.svg",
+        "caption": "绕中线旋转法的超高过渡三阶段（自绘示意）",
+        "readPoints": [
+          "中线是旋转轴，三个阶段里中线高程始终不变",
+          "内侧抬高与外侧下降同步进行，内侧先被抬平（临界断面）",
+          "全超高阶段是单向坡 i_b，排水方向转为向内侧"
+        ]
+      }
+    },
+    {
+      "id": "road-survey-design-concept-021",
+      "subjectId": "road-survey-design",
+      "chapter": "4.3",
+      "term": "超高缓和段",
+      "en": "superelevation runoff length",
+      "definition": "从直线段的双向路拱横坡过渡到圆曲线全超高单向横坡所需的路段长度，Lc = B·Δi/p，其中 Δi 为横坡变化量、p 为超高渐变率。",
+      "formulaId": "road-survey-design-formula-013",
+      "symbols": [
+        "Lc",
+        "B",
+        "delta_i",
+        "p"
+      ],
+      "unit": "m",
+      "relations": [
+        "超高渐变率",
+        "缓和曲线",
+        "路拱横坡"
+      ],
+      "pitfalls": [
+        "B 应取旋转轴至路面边缘的宽度（绕中线旋转时取半幅路宽），不是整个路基宽度",
+        "超高缓和段一般与缓和曲线等长，不等长时取两者大值并复核渐变率"
+      ],
+      "examAngle": "超高缓和段长度计算与渐变率检核",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": "超高渐变率 p 的取值（1/330～1/150 区间及按设计速度分档）按 JTG D20 现行版核对",
+      "figure": {
+        "src": "/knowledge/assets/road-survey-design/superelevation-transition.svg",
+        "caption": "绕中线旋转法的超高过渡三阶段（自绘示意）",
+        "readPoints": [
+          "中线是旋转轴，三个阶段里中线高程始终不变",
+          "内侧抬高与外侧下降同步进行，内侧先被抬平（临界断面）",
+          "全超高阶段是单向坡 i_b，排水方向转为向内侧"
+        ]
+      }
+    },
+    {
+      "id": "road-survey-design-concept-022",
+      "subjectId": "road-survey-design",
+      "chapter": "4.3",
+      "term": "超高渐变率",
+      "en": "rate of superelevation change",
+      "definition": "超高横坡由零变化到全超高过程中，路面外侧边缘相对旋转轴的纵坡变化率，通常表示为 1/n 的形式，其值越大（n 越小）表示过渡越急促。",
+      "formulaId": "road-survey-design-formula-014",
+      "symbols": [
+        "p"
+      ],
+      "unit": "—",
+      "relations": [
+        "超高缓和段",
+        "超高横坡度"
+      ],
+      "pitfalls": [
+        "「渐变率 1/175」中的 175 是分母，易被误读成 0.0057 之外的值",
+        "渐变率过大会导致路面扭曲与行车摇摆，规范给出上限"
+      ],
+      "examAngle": "由 Lc、B、Δi 反算渐变率并检核",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": "p 的分档取值与「不设缓和曲线时的渐变率」规定按现行规范核对",
+      "figure": {
+        "src": "/knowledge/assets/road-survey-design/superelevation-transition.svg",
+        "caption": "绕中线旋转法的超高过渡三阶段（自绘示意）",
+        "readPoints": [
+          "中线是旋转轴，三个阶段里中线高程始终不变",
+          "内侧抬高与外侧下降同步进行，内侧先被抬平（临界断面）",
+          "全超高阶段是单向坡 i_b，排水方向转为向内侧"
+        ]
+      }
+    },
+    {
+      "id": "road-survey-design-concept-023",
+      "subjectId": "road-survey-design",
+      "chapter": "4.3",
+      "term": "超高旋转轴",
+      "en": "axis of superelevation rotation",
+      "definition": "超高过渡时路面绕之旋转的轴线，常见有绕路面中线旋转、绕路面内边缘旋转、绕中央分隔带边缘旋转三种方式。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "—",
+      "relations": [
+        "超高值",
+        "超高缓和段"
+      ],
+      "pitfalls": [
+        "绕中线旋转时外侧抬高 b(i超 + i拱)、内侧降低 b(i超 − i拱)；绕内边缘旋转时内侧不动、外侧抬高全值",
+        "计算超高值时先确定旋转轴，否则结果完全错误"
+      ],
+      "examAngle": "超高值（外侧抬高/内侧降低）计算",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": "各种旋转方式的适用条件（新建/改建、有无中间带）按教材与 JTG D20 核对"
+    },
+    {
+      "id": "road-survey-design-concept-024",
+      "subjectId": "road-survey-design",
+      "chapter": "7.1",
+      "term": "路拱横坡",
+      "en": "crown cross slope",
+      "definition": "为便于路面排水，路面向两侧倾斜形成的双向横坡，一般取 1.5%～2.0%（沥青混凝土路面）或 2%～3%（水泥混凝土路面、低级路面）。",
+      "formulaId": null,
+      "symbols": [
+        "i拱",
+        "ig"
+      ],
+      "unit": "%",
+      "relations": [
+        "超高横坡度",
+        "超高缓和段"
+      ],
+      "pitfalls": [
+        "路拱是双向的，超高是单向的；超高计算中 Δi = i超 + i拱（内侧需从负拱翻正）",
+        "路拱过大会导致车辆跑偏与轮胎偏磨"
+      ],
+      "examAngle": "超高变化量 Δi 的正确取值",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "不同路面类型路拱坡度取值按教材与 JTG D20 核对"
+    },
+    {
+      "id": "road-survey-design-concept-025",
+      "subjectId": "road-survey-design",
+      "chapter": "3.3",
+      "term": "停车视距",
+      "en": "stopping sight distance",
+      "definition": "驾驶员自看到前方障碍物起至安全停车所需的最短距离，由反应距离、制动距离和（按教材口径）安全距离三部分组成，是最基本的视距指标。",
+      "formulaId": "road-survey-design-formula-025",
+      "symbols": [
+        "S停",
+        "v",
+        "t",
+        "phi",
+        "i"
+      ],
+      "unit": "m",
+      "relations": [
+        "会车视距",
+        "超车视距",
+        "制动距离"
+      ],
+      "pitfalls": [
+        "下坡时 i 取负使分母变小、视距变长，最不利纵坡为下坡",
+        "公式中 v 若为 km/h 则反应距离为 v·t/3.6"
+      ],
+      "examAngle": "停车视距计算与规范值对照",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "反应时间 t 与是否加安全距离，以及各设计速度的停车视距表值按 JTG B01 现行版核对",
+      "figure": {
+        "src": "/knowledge/assets/road-survey-design/stopping-sight-distance.svg",
+        "caption": "停车视距的三段构成与速度—时间图（自绘示意）",
+        "readPoints": [
+          "S₁ 与车速一次方成正比，S₂ 与车速平方成正比，高速时制动段占大头",
+          "S₂ 分母里的 (f ± i)：上坡取 +（有利）、下坡取 −（不利）",
+          "会车视距约为停车视距的 2 倍，超车视距另算，三者别混用"
+        ]
+      }
+    },
+    {
+      "id": "road-survey-design-concept-026",
+      "subjectId": "road-survey-design",
+      "chapter": "3.3",
+      "term": "会车视距",
+      "en": "intermediate sight distance",
+      "definition": "双向行驶车辆在同一车道上相遇时，双方驾驶员均能看清对方并安全停车所需的最短距离，约为停车视距的 2 倍。",
+      "formulaId": null,
+      "symbols": [
+        "S会"
+      ],
+      "unit": "m",
+      "relations": [
+        "停车视距",
+        "超车视距"
+      ],
+      "pitfalls": [
+        "会车视距只在双车道公路（无分隔）上要求，高速公路与一级公路分车道行驶不需检核",
+        "「约 2 倍停车视距」是工程近似，考试以规范表值为准"
+      ],
+      "examAngle": "会车视距与停车视距的数量关系",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "会车视距是否严格等于 2 倍停车视距，按教材表述核对",
+      "figure": {
+        "src": "/knowledge/assets/road-survey-design/stopping-sight-distance.svg",
+        "caption": "停车视距的三段构成与速度—时间图（自绘示意）",
+        "readPoints": [
+          "S₁ 与车速一次方成正比，S₂ 与车速平方成正比，高速时制动段占大头",
+          "S₂ 分母里的 (f ± i)：上坡取 +（有利）、下坡取 −（不利）",
+          "会车视距约为停车视距的 2 倍，超车视距另算，三者别混用"
+        ]
+      }
+    },
+    {
+      "id": "road-survey-design-concept-027",
+      "subjectId": "road-survey-design",
+      "chapter": "3.3",
+      "term": "超车视距",
+      "en": "passing sight distance",
+      "definition": "在双车道公路上后车超越前车并完成回位全过程所需的安全视距，由加速行驶距离、在对向车道上行驶距离、安全距离和对向车行驶距离四部分组成，远大于停车视距。",
+      "formulaId": null,
+      "symbols": [
+        "S超"
+      ],
+      "unit": "m",
+      "relations": [
+        "停车视距",
+        "会车视距"
+      ],
+      "pitfalls": [
+        "只在双车道公路上要求；高速公路、一级公路不存在超车视距问题",
+        "四项构成容易漏项，尤其是「对向车行驶距离」"
+      ],
+      "examAngle": "超车视距的构成与四段含义",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "超车视距的分解公式与表值按 JTG B01 现行版核对"
+    },
+    {
+      "id": "road-survey-design-concept-028",
+      "subjectId": "road-survey-design",
+      "chapter": "4.5",
+      "term": "横净距",
+      "en": "lateral clearance for sight distance",
+      "definition": "在弯道上为保证视距，需要清除内侧障碍物的横向宽度，即视距包络线至行车轨迹线的横向距离，可按 h = R(1 − cos(28.65·S/R)) 估算。",
+      "formulaId": "road-survey-design-formula-034",
+      "symbols": [
+        "h",
+        "R",
+        "S"
+      ],
+      "unit": "m",
+      "relations": [
+        "停车视距",
+        "视距台"
+      ],
+      "pitfalls": [
+        "R 应取内侧车道（最不利）的半径，不是路基中线半径",
+        "公式中 28.65 是由弧度换算角度产生的系数（= 90/π），cos 的自变量是角度"
+      ],
+      "examAngle": "弯道内侧建筑物/边坡是否侵入视距的检核",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": "横净距公式形式（是否含车道宽修正）按教材核对"
+    },
+    {
+      "id": "road-survey-design-concept-029",
+      "subjectId": "road-survey-design",
+      "chapter": "3.2",
+      "term": "圆曲线几何要素（T、L、E、J）",
+      "en": "circular curve elements",
+      "definition": "描述圆曲线的四个基本量：切线长 T、曲线长 L、外距 E、超距（校正值）J；其中 J = 2T − L 用于桩号闭合校核。",
+      "formulaId": "road-survey-design-formula-001",
+      "symbols": [
+        "T",
+        "L",
+        "E",
+        "J",
+        "R",
+        "alpha"
+      ],
+      "unit": "m",
+      "relations": [
+        "交点",
+        "转角",
+        "桩号"
+      ],
+      "pitfalls": [
+        "α 必须用角度制代入 L = πRα/180；若用弧度则 L = Rα",
+        "E 是 JD 到曲线中点的距离，不是到 QZ 的"
+      ],
+      "examAngle": "给 JD、α、R 求四要素并推算主点桩号",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/road-survey-design/horizontal-alignment.svg",
+        "caption": "平面线形五主点与三个要素（自绘示意，非教材原图）",
+        "readPoints": [
+          "五个主点顺序固定：ZH → HY → QZ → YH → HZ，逐桩推算时桩号必须连续",
+          "T 切线长、E 外距都从交点 JD 起算；T 量水平距离，E 量竖直距离",
+          "两端各插一段缓和曲线 Ls，中间才是半径 R 的圆曲线"
+        ]
+      }
+    },
+    {
+      "id": "road-survey-design-concept-030",
+      "subjectId": "road-survey-design",
+      "chapter": "3.2",
+      "term": "主点桩号（ZY/QZ/YZ）",
+      "en": "curve main points",
+      "definition": "圆曲线三个关键控制点的桩号：直圆点 ZY（起点）、曲中点 QZ、圆直点 YZ（终点），由 JD 桩号与曲线要素推算。",
+      "formulaId": "road-survey-design-formula-005",
+      "symbols": [
+        "ZY",
+        "QZ",
+        "YZ",
+        "JD"
+      ],
+      "unit": "—",
+      "relations": [
+        "圆曲线几何要素",
+        "桩号",
+        "超距"
+      ],
+      "pitfalls": [
+        "桩号是「K 公里 + 米」的断链式记法，加减时不能当普通小数直接运算",
+        "必须用 JD = QZ + J/2 闭合校核，只剩一次除法错误会全线偏移"
+      ],
+      "examAngle": "桩号推算与闭合校核",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/road-survey-design/horizontal-alignment.svg",
+        "caption": "平面线形五主点与三个要素（自绘示意，非教材原图）",
+        "readPoints": [
+          "五个主点顺序固定：ZH → HY → QZ → YH → HZ，逐桩推算时桩号必须连续",
+          "T 切线长、E 外距都从交点 JD 起算；T 量水平距离，E 量竖直距离",
+          "两端各插一段缓和曲线 Ls，中间才是半径 R 的圆曲线"
+        ]
+      }
+    },
+    {
+      "id": "road-survey-design-concept-031",
+      "subjectId": "road-survey-design",
+      "chapter": "3.3",
+      "term": "最小平曲线半径",
+      "en": "minimum horizontal curve radius",
+      "definition": "在给定设计速度下，按横向力系数与超高横坡度的限值反算出的圆曲线半径下限，Rmin = V²/[127(μ + i)]，规范另给出极限最小、一般最小与不设超高最小三档。",
+      "formulaId": "road-survey-design-formula-028",
+      "symbols": [
+        "Rmin",
+        "V",
+        "mu",
+        "i"
+      ],
+      "unit": "m",
+      "relations": [
+        "横向力系数",
+        "超高横坡度",
+        "极限最小半径"
+      ],
+      "pitfalls": [
+        "三档半径含义不同：极限（不得已时用）、一般（推荐用）、不设超高（可省超高）",
+        "计算值只是理论下限，最终取值必须查规范表取整数"
+      ],
+      "examAngle": "计算 Rmin 并与规范值比较",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "三档最小半径的具体表值必须按 JTG D20 现行版核对"
+    },
+    {
+      "id": "road-survey-design-concept-032",
+      "subjectId": "road-survey-design",
+      "chapter": "3.3",
+      "term": "不设超高最小半径",
+      "en": "minimum radius without superelevation",
+      "definition": "当平曲线半径足够大、靠双向路拱（反向横坡）即可抵消离心力时可不设超高的半径界限，通常按 μ 取小值并把 i 取为路拱坡度反算。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "m",
+      "relations": [
+        "最小平曲线半径",
+        "路拱横坡"
+      ],
+      "pitfalls": [
+        "「不设超高」不等于「不设缓和曲线」，两者界限不同",
+        "不设超高时仍可能有加宽需求（小半径时）"
+      ],
+      "examAngle": "判断某半径是否需设超高",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "不设超高最小半径表值按 JTG D20 现行版核对"
+    },
+    {
+      "id": "road-survey-design-concept-033",
+      "subjectId": "road-survey-design",
+      "chapter": "4.1",
+      "term": "缓和曲线",
+      "en": "transition curve / spiral",
+      "definition": "设置在直线与圆曲线之间（或两圆曲线之间）曲率连续变化的过渡曲线，作用是使曲率、超高、加宽三者平滑过渡，我国公路普遍采用回旋线。",
+      "formulaId": "road-survey-design-formula-015",
+      "symbols": [
+        "Ls",
+        "A",
+        "R"
+      ],
+      "unit": "m",
+      "relations": [
+        "回旋线",
+        "缓和曲线参数",
+        "超高缓和段",
+        "加宽缓和段"
+      ],
+      "pitfalls": [
+        "缓和曲线不是圆弧，其上的「半径」逐点变化，回旋线终点半径才等于 R",
+        "缓和曲线长度过短会导致离心加速度变化率超标（行车被甩）"
+      ],
+      "examAngle": "缓和曲线三作用与回旋线方程",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/road-survey-design/horizontal-alignment.svg",
+        "caption": "平面线形五主点与三个要素（自绘示意，非教材原图）",
+        "readPoints": [
+          "五个主点顺序固定：ZH → HY → QZ → YH → HZ，逐桩推算时桩号必须连续",
+          "T 切线长、E 外距都从交点 JD 起算；T 量水平距离，E 量竖直距离",
+          "两端各插一段缓和曲线 Ls，中间才是半径 R 的圆曲线"
+        ]
+      }
+    },
+    {
+      "id": "road-survey-design-concept-034",
+      "subjectId": "road-survey-design",
+      "chapter": "4.1",
+      "term": "回旋线",
+      "en": "clothoid",
+      "definition": "曲率半径与曲线长度成反比的曲线，基本方程 R·l = A²（A 为回旋线参数），在回旋线终点有 R·Ls = A²。",
+      "formulaId": "road-survey-design-formula-015",
+      "symbols": [
+        "R",
+        "l",
+        "A"
+      ],
+      "unit": "m",
+      "relations": [
+        "缓和曲线",
+        "缓和曲线参数"
+      ],
+      "pitfalls": [
+        "R·Ls = A² 中 Ls 是回旋线全长，不是圆曲线长",
+        "A 是长度量纲（m），不是无量纲参数"
+      ],
+      "examAngle": "由 R 与 Ls 求 A 并检核取值范围",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "road-survey-design-concept-035",
+      "subjectId": "road-survey-design",
+      "chapter": "4.1",
+      "term": "缓和曲线参数 A",
+      "en": "spiral parameter",
+      "definition": "回旋线的基本参数，A = √(R·Ls)，综合反映缓和曲线的曲率变化缓急程度；教材常要求 A 满足一定范围（如 R/3 ≤ A ≤ R 或按离心加速度变化率控制的最小 A）。",
+      "formulaId": "road-survey-design-formula-015",
+      "symbols": [
+        "A"
+      ],
+      "unit": "m",
+      "relations": [
+        "回旋线",
+        "缓和曲线",
+        "离心加速度变化率"
+      ],
+      "pitfalls": [
+        "A 过大 → 缓和曲线过长；A 过小 → 离心力变化过快",
+        "「A 的取值范围」说法在不同教材/规范中不一致，务必按指定版本"
+      ],
+      "examAngle": "计算 A 并判断 Hs 是否合适",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": "A 的合理区间（R/3～R 或 R/9～R）以教材与 JTG D20 现行版表述为准"
+    },
+    {
+      "id": "road-survey-design-concept-036",
+      "subjectId": "road-survey-design",
+      "chapter": "4.2",
+      "term": "内移值 p 与切线增值 q",
+      "en": "shift and tangent increment",
+      "definition": "设置缓和曲线后，原圆曲线相对切线向内平移的距离 p 和切线向外增长的长度 q，是带缓和曲线平曲线要素计算的核心中间量。",
+      "formulaId": "road-survey-design-formula-017",
+      "symbols": [
+        "p",
+        "q",
+        "Ls",
+        "R"
+      ],
+      "unit": "m",
+      "relations": [
+        "缓和曲线",
+        "切线角"
+      ],
+      "pitfalls": [
+        "p 与超高渐变率 p 是同字母不同含义，极易混淆，书写时建议分别记作 p移 与 p渐",
+        "近似式 p ≈ Ls²/(24R) 只在 Ls/R 较小时成立"
+      ],
+      "examAngle": "带缓和曲线的切线长计算 Th = (R + p)tan(α/2) + q",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "road-survey-design-concept-037",
+      "subjectId": "road-survey-design",
+      "chapter": "4.2",
+      "term": "缓和曲线切线角",
+      "en": "spiral tangent angle",
+      "definition": "缓和曲线终点（HY 或 YH 点）处切线与原直线（或原圆曲线切线）的夹角 β0，回旋线有 β0 = Ls/(2R)（弧度）。",
+      "formulaId": "road-survey-design-formula-016",
+      "symbols": [
+        "beta0"
+      ],
+      "unit": "rad 或 °",
+      "relations": [
+        "缓和曲线",
+        "内移值 p"
+      ],
+      "pitfalls": [
+        "β0 是弧度值，与 α（角度）相加前必须统一单位",
+        "回旋线上任一点的切线角 β = l²/(2RLs)，不是线性关系"
+      ],
+      "examAngle": "β0 与圆曲线剩余转角 α − 2β0 的计算",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "road-survey-design-concept-038",
+      "subjectId": "road-survey-design",
+      "chapter": "4.2",
+      "term": "带缓和曲线的主点（ZH/HY/QZ/YH/HZ）",
+      "en": "spiral curve main points",
+      "definition": "设置缓和曲线后的五个主点：直缓点 ZH、缓圆点 HY、曲中点 QZ、圆缓点 YH、缓直点 HZ，替代无缓和曲线时的 ZY/QZ/YZ。",
+      "formulaId": "road-survey-design-formula-023",
+      "symbols": [
+        "ZH",
+        "HY",
+        "QZ",
+        "YH",
+        "HZ"
+      ],
+      "unit": "—",
+      "relations": [
+        "缓和曲线",
+        "主点桩号"
+      ],
+      "pitfalls": [
+        "QZ 是整条曲线（含两段缓和曲线）的中点，不是圆曲线段的中点",
+        "YH 到 HZ 的长度是 Ls，不是 Ls/2"
+      ],
+      "examAngle": "五个主点桩号推算",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "road-survey-design-concept-039",
+      "subjectId": "road-survey-design",
+      "chapter": "3.4",
+      "term": "复曲线",
+      "en": "compound curve",
+      "definition": "由两个或两个以上不同半径的同向圆曲线（可含缓和曲线）直接相连组成的曲线，用于地形受限或需要适应不同曲率要求的路段。",
+      "formulaId": null,
+      "symbols": [
+        "R1",
+        "R2"
+      ],
+      "unit": "m",
+      "relations": [
+        "同向曲线",
+        "虚交点",
+        "反曲线"
+      ],
+      "pitfalls": [
+        "复曲线两圆半径之比不宜过大（规范常规定 R大/R小 上限，低速路放宽）",
+        "复曲线不能直接相接，通常需设中间缓和曲线（除允许直接衔接的情形）"
+      ],
+      "examAngle": "复曲线要素与中间缓和曲线的处理",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "复曲线半径比限值、是否必须设中间缓和曲线，按 JTG D20 现行版核对"
+    },
+    {
+      "id": "road-survey-design-concept-040",
+      "subjectId": "road-survey-design",
+      "chapter": "3.4",
+      "term": "同向曲线与反向曲线",
+      "en": "same-direction and reverse curves",
+      "definition": "转向相同的相邻两曲线为同向曲线，转向相反的相邻两曲线为反向曲线；规范对两者之间的夹直线长度有不同要求（同向要求更长）。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "—",
+      "relations": [
+        "夹直线",
+        "复曲线"
+      ],
+      "pitfalls": [
+        "同向曲线间夹直线过短会形成「断背曲线」，视觉上像急弯，最危险",
+        "同向曲线若满足一定条件可合并为复曲线，此时不受夹直线限制"
+      ],
+      "examAngle": "夹直线长度检核",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "road-survey-design-concept-041",
+      "subjectId": "road-survey-design",
+      "chapter": "3.4",
+      "term": "夹直线最小长度",
+      "en": "minimum length of intermediate straight",
+      "definition": "相邻两平曲线之间保留的直线段的最小长度，通常按设计速度的行程时间控制（同向曲线约 6V 米、反向曲线约 2V 米，V 以 km/h 计）。",
+      "formulaId": "road-survey-design-formula-032",
+      "symbols": [
+        "L夹"
+      ],
+      "unit": "m",
+      "relations": [
+        "同向曲线与反向曲线",
+        "设计速度"
+      ],
+      "pitfalls": [
+        "6V 与 2V 中的 V 单位为 km/h，结果是米（因 3.6 s 的行程换算）",
+        "同向与反向的倍数值（6 与 2）是常用口径，具体数值随规范版本变化"
+      ],
+      "examAngle": "判断夹直线是否满足要求并给出改建建议",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "6V / 2V 的系数与是否分「一般值/最小值」按 JTG D20 现行版核对"
+    },
+    {
+      "id": "road-survey-design-concept-042",
+      "subjectId": "road-survey-design",
+      "chapter": "3.4",
+      "term": "虚交点",
+      "en": "imaginary / inaccessible intersection point",
+      "definition": "当交点 JD 落在河流、建筑物或陡崖等无法设站的位置时，在其相邻两导线边（或其延长线）上设置辅助点，通过解三角形确定 JD 位置与转角的方法。",
+      "formulaId": null,
+      "symbols": [
+        "A",
+        "B",
+        "c"
+      ],
+      "unit": "m",
+      "relations": [
+        "交点",
+        "导线测量",
+        "复曲线"
+      ],
+      "pitfalls": [
+        "辅助点形成的三角形内角与路线转角的关系容易搞反，应先画出草图再列式",
+        "解出的 JD 桩号需用两侧分别推算并相互校核"
+      ],
+      "examAngle": "虚交点基线解算",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "教材采用的虚交点解法（两点法/三点法/圆外基线法）与公式表达"
+    },
+    {
+      "id": "road-survey-design-concept-043",
+      "subjectId": "road-survey-design",
+      "chapter": "4.4",
+      "term": "加宽值",
+      "en": "widening on curve",
+      "definition": "汽车在弯道上因后轮轨迹内移且车身占据宽度大于直线段所需的路面加宽量，双车道公路的加宽值可按 b = N·A²/R + 0.05·V/√R 类经验式估算（A 为设计车辆轴距、N 为车道数），最终以规范表值为准。",
+      "formulaId": "road-survey-design-formula-023",
+      "symbols": [
+        "b",
+        "N",
+        "A",
+        "R",
+        "V"
+      ],
+      "unit": "m",
+      "relations": [
+        "设计车辆",
+        "加宽缓和段",
+        "平曲线半径"
+      ],
+      "pitfalls": [
+        "公式中的 A 是轴距不是加宽值本身，第一项是几何加宽、第二项是车速引起的摆动加宽",
+        "双车道公路全加宽值应分配到内外两幅，一般内侧加宽较多",
+        "经验式结果必须与规范加宽表对照取整，不能直接用于施工图"
+      ],
+      "examAngle": "加宽值计算与查表对照",
+      "confidence": "low",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": "加宽经验式的具体形式与系数 0.05 的来历，必须核对教材；实际取值一律按 JTG D20 加宽表"
+    },
+    {
+      "id": "road-survey-design-concept-044",
+      "subjectId": "road-survey-design",
+      "chapter": "4.4",
+      "term": "加宽缓和段",
+      "en": "widening transition",
+      "definition": "从直线段的标准路宽过渡到圆曲线全加宽所需的路段长度，一般与缓和曲线（或超高缓和段）等长，且按渐变率控制不宜过短。",
+      "formulaId": "road-survey-design-formula-024",
+      "symbols": [
+        "Lj",
+        "b"
+      ],
+      "unit": "m",
+      "relations": [
+        "加宽值",
+        "缓和曲线"
+      ],
+      "pitfalls": [
+        "加宽过渡可采用直线比例或高次抛物线形式，前者在起终点有折角",
+        "不设缓和曲线与超高时仍需设加宽缓和段"
+      ],
+      "examAngle": "加宽缓和段长度与渐变方式",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": "加宽渐变率与最小加宽缓和段长度按 JTG D20 现行版核对"
+    },
+    {
+      "id": "road-survey-design-concept-045",
+      "subjectId": "road-survey-design",
+      "chapter": "5.1",
+      "term": "最大纵坡",
+      "en": "maximum longitudinal gradient",
+      "definition": "各级公路允许采用的最大纵坡值，按设计速度分档，综合考虑汽车爬坡能力、行车安全、工程数量与运营费用确定。",
+      "formulaId": null,
+      "symbols": [
+        "imax"
+      ],
+      "unit": "%",
+      "relations": [
+        "纵坡",
+        "平均纵坡",
+        "爬坡度"
+      ],
+      "pitfalls": [
+        "高原地区、积雪冰冻地区、改建困难路段有折减或增大规定",
+        "桥上、隧道内、交叉口范围内的纵坡另有专门限制"
+      ],
+      "examAngle": "给设计速度判断最大纵坡取值",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": "各设计速度最大纵坡表值必须按 JTG B01 / JTG D20 现行版核对"
+    },
+    {
+      "id": "road-survey-design-concept-046",
+      "subjectId": "road-survey-design",
+      "chapter": "5.1",
+      "term": "最小纵坡",
+      "en": "minimum longitudinal gradient",
+      "definition": "为保证边沟排水与路面排水而规定的纵坡下限，通常不小于 0.3%（干旱少雨或特殊路面可适当减小），避免出现反坡或零坡积水。",
+      "formulaId": null,
+      "symbols": [
+        "imin"
+      ],
+      "unit": "%",
+      "relations": [
+        "最大纵坡",
+        "边沟"
+      ],
+      "pitfalls": [
+        "最小纵坡是排水要求，与「最小坡长」是两回事",
+        "设超高的弯道若纵坡过小，会形成排水不畅的扭曲面（合成坡度过小）"
+      ],
+      "examAngle": "最小纵坡的作用与取值",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": "最小纵坡 0.3% 与特殊情况放宽的规定按现行规范核对"
+    },
+    {
+      "id": "road-survey-design-concept-047",
+      "subjectId": "road-survey-design",
+      "chapter": "5.3",
+      "term": "平均纵坡",
+      "en": "average gradient",
+      "definition": "一定长度路段两端点高差与该路段实际长度之比，用于越岭线、长陡坡段的整体控制，是展线长度的决定性指标。",
+      "formulaId": "road-survey-design-formula-044",
+      "symbols": [
+        "ip",
+        "delta_H",
+        "L"
+      ],
+      "unit": "%",
+      "relations": [
+        "最大纵坡",
+        "展线",
+        "相对高差"
+      ],
+      "pitfalls": [
+        "平均纵坡不是各坡段纵坡的算术平均，必须用总高差/总长度",
+        "高差要用起终点实测高程之差，不是逐段坡度累加的名义值"
+      ],
+      "examAngle": "由相对高差与控制平均纵坡反算展线长度",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": "平均纵坡的控制值（如越岭段 5.5%）与相对高差分档按 JTG D20 现行版核对"
+    },
+    {
+      "id": "road-survey-design-concept-048",
+      "subjectId": "road-survey-design",
+      "chapter": "5.2",
+      "term": "坡长限制与缓和坡段",
+      "en": "grade length limitation and relief grade",
+      "definition": "为防止汽车在长陡坡上速度过分下降（上坡）或制动器过热（下坡），规范对陡坡的最大长度加以限制；超过限制时应在中间设置坡度较缓（一般不大于 3%）的缓和坡段。",
+      "formulaId": null,
+      "symbols": [
+        "Lmax",
+        "i"
+      ],
+      "unit": "m",
+      "relations": [
+        "最大纵坡",
+        "平均纵坡",
+        "最小坡长"
+      ],
+      "pitfalls": [
+        "缓和坡段长度不得小于最小坡长",
+        "坡长限制按纵坡值与设计速度查表，不是统一常数"
+      ],
+      "examAngle": "坡长超限检核与缓和坡段设置",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": "各纵坡对应的最大坡长表、缓和坡段的坡度上限（3%）与最小长度按 JTG D20 现行版核对"
+    },
+    {
+      "id": "road-survey-design-concept-049",
+      "subjectId": "road-survey-design",
+      "chapter": "5.3",
+      "term": "合成坡度",
+      "en": "resultant gradient",
+      "definition": "路线纵坡与超高（或路拱）横坡的矢量合成坡度，i合 = √(i纵² + i横²)，用于检查弯道排水与行车稳定性。",
+      "formulaId": "road-survey-design-formula-042",
+      "symbols": [
+        "i合",
+        "i纵",
+        "i横"
+      ],
+      "unit": "%",
+      "relations": [
+        "超高横坡度",
+        "最大纵坡"
+      ],
+      "pitfalls": [
+        "不能直接相加，必须平方和开方",
+        "合成坡度还有最小值要求（避免排水不畅），不只查上限"
+      ],
+      "examAngle": "合成坡度检核",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": "合成坡度的最大、最小限值与积雪地区的折减按 JTG D20 现行版核对"
+    },
+    {
+      "id": "road-survey-design-concept-050",
+      "subjectId": "road-survey-design",
+      "chapter": "6.1",
+      "term": "竖曲线",
+      "en": "vertical curve",
+      "definition": "在纵断面两个相邻坡段的变坡点处设置的竖向曲线（我国采用二次抛物线），用以缓和纵向冲击、保证视距与线形平顺，分凸形与凹形。",
+      "formulaId": "road-survey-design-formula-035",
+      "symbols": [
+        "R",
+        "L",
+        "T",
+        "E",
+        "omega"
+      ],
+      "unit": "m",
+      "relations": [
+        "变坡点",
+        "凸形竖曲线",
+        "凹形竖曲线",
+        "坡度代数差"
+      ],
+      "pitfalls": [
+        "竖曲线「半径」是二次抛物线在顶点处的曲率半径，不是圆弧半径，但小坡度下可近似按圆处理",
+        "竖曲线与平曲线应尽量重合（平包竖），避免错开形成扭曲"
+      ],
+      "examAngle": "竖曲线要素计算",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/road-survey-design/vertical-curve.svg",
+        "caption": "凸形竖曲线与 T、E、改正值 y（自绘示意）",
+        "readPoints": [
+          "设计标高 = 切线标高 − y（凸曲线向下改正），凹曲线才用 + y",
+          "ω = i₂ − i₁，凸形 ω < 0、凹形 ω > 0，符号决定改正方向",
+          "T 是水平距离、E 是竖直距离，不要把 E 当成斜距"
+        ]
+      }
+    },
+    {
+      "id": "road-survey-design-concept-051",
+      "subjectId": "road-survey-design",
+      "chapter": "6.2",
+      "term": "凸形竖曲线",
+      "en": "crest vertical curve",
+      "definition": "设置在纵断面上凸起的变坡点处的竖曲线，其主要控制条件是行车视距（其次是线形平顺），受目高与物高限制。",
+      "formulaId": "road-survey-design-formula-039",
+      "symbols": [
+        "R凸",
+        "S",
+        "h1",
+        "h2"
+      ],
+      "unit": "m",
+      "relations": [
+        "竖曲线",
+        "停车视距",
+        "目高",
+        "物高"
+      ],
+      "pitfalls": [
+        "凸形竖曲线在变坡点处设计高程 = 纵坡线高程 − E（减号）",
+        "视距条件分 S ≤ L 与 S > L 两种情形，公式不同，必须先判断"
+      ],
+      "examAngle": "凸形竖曲线最小半径计算",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "目高 1.2 m、物高 0.1 m 的取值按教材与现行规范核对",
+      "figure": {
+        "src": "/knowledge/assets/road-survey-design/vertical-curve.svg",
+        "caption": "凸形竖曲线与 T、E、改正值 y（自绘示意）",
+        "readPoints": [
+          "设计标高 = 切线标高 − y（凸曲线向下改正），凹曲线才用 + y",
+          "ω = i₂ − i₁，凸形 ω < 0、凹形 ω > 0，符号决定改正方向",
+          "T 是水平距离、E 是竖直距离，不要把 E 当成斜距"
+        ]
+      }
+    },
+    {
+      "id": "road-survey-design-concept-052",
+      "subjectId": "road-survey-design",
+      "chapter": "6.2",
+      "term": "凹形竖曲线",
+      "en": "sag vertical curve",
+      "definition": "设置在纵断面下凹的变坡点处的竖曲线，其控制条件为夜间前灯照射距离、离心力（离心加速度变化率）突变引起的不适以及跨线桥下视距。",
+      "formulaId": "road-survey-design-formula-040",
+      "symbols": [
+        "R凹",
+        "S",
+        "h0"
+      ],
+      "unit": "m",
+      "relations": [
+        "竖曲线",
+        "停车视距",
+        "离心加速度变化率"
+      ],
+      "pitfalls": [
+        "凹形竖曲线在变坡点处设计高程 = 纵坡线高程 + E（加号）",
+        "凹形不控制白天行车视距（视线通透），不要误用凸形公式",
+        "夜间灯光公式的常数项（如 1.5 与 S 的系数）在不同教材版本写法不同"
+      ],
+      "examAngle": "凹形竖曲线最小半径按灯光与离心条件分别计算取大值",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "车灯高度 0.75 m、照射角 1° 及公式形式 R = S²/(1.5 + 0.0349S)（部分教材写作 1.5 + 0.005S）必须核对教材与 JTG D20",
+      "figure": {
+        "src": "/knowledge/assets/road-survey-design/vertical-curve.svg",
+        "caption": "凸形竖曲线与 T、E、改正值 y（自绘示意）",
+        "readPoints": [
+          "设计标高 = 切线标高 − y（凸曲线向下改正），凹曲线才用 + y",
+          "ω = i₂ − i₁，凸形 ω < 0、凹形 ω > 0，符号决定改正方向",
+          "T 是水平距离、E 是竖直距离，不要把 E 当成斜距"
+        ]
+      }
+    },
+    {
+      "id": "road-survey-design-concept-053",
+      "subjectId": "road-survey-design",
+      "chapter": "6.1",
+      "term": "坡度代数差",
+      "en": "algebraic difference of grades",
+      "definition": "竖曲线前后两纵坡的代数差 ω = i2 − i1，其绝对值决定竖曲线的曲率与外距，是竖曲线要素计算的基本输入。",
+      "formulaId": "road-survey-design-formula-036",
+      "symbols": [
+        "omega",
+        "i1",
+        "i2"
+      ],
+      "unit": "—",
+      "relations": [
+        "竖曲线",
+        "变坡点"
+      ],
+      "pitfalls": [
+        "必须带符号相减（上坡为正、下坡为负），凸形 ω < 0、凹形 ω > 0",
+        "用绝对值参与长度计算，但用符号判断凹凸类型"
+      ],
+      "examAngle": "判断竖曲线凹凸并计算 L、T、E",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "road-survey-design-concept-054",
+      "subjectId": "road-survey-design",
+      "chapter": "6.3",
+      "term": "竖曲线改正值",
+      "en": "vertical curve correction",
+      "definition": "竖曲线范围内任一点的设计高程与纵坡线高程之差，y = x²/(2R)，凸形减去、凹形加上；x 为该点至竖曲线起点（或终点）的距离。",
+      "formulaId": "road-survey-design-formula-037",
+      "symbols": [
+        "y",
+        "x",
+        "R"
+      ],
+      "unit": "m",
+      "relations": [
+        "竖曲线",
+        "设计高程",
+        "纵坡线高程"
+      ],
+      "pitfalls": [
+        "x 必须从竖曲线起（终）点量起，不能从变坡点量起（变坡点处 x = T，y = E）",
+        "超出竖曲线范围后不再改正，否则高程连续不上"
+      ],
+      "examAngle": "逐桩设计高程计算",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "road-survey-design-concept-055",
+      "subjectId": "road-survey-design",
+      "chapter": "7.1",
+      "term": "路基宽度",
+      "en": "subgrade width",
+      "definition": "路基顶面两边缘之间的总宽度，由行车道、硬路肩、土路肩（高速公路与一级公路还包括中间带）等各组成部分宽度之和确定。",
+      "formulaId": "road-survey-design-formula-053",
+      "symbols": [
+        "B"
+      ],
+      "unit": "m",
+      "relations": [
+        "行车道宽度",
+        "路肩",
+        "中间带"
+      ],
+      "pitfalls": [
+        "路基宽度 ≠ 路面宽度，土路肩也算在内",
+        "弯道加宽值是否计入路基宽度取决于设计习惯与规范表述，需核对"
+      ],
+      "examAngle": "给定等级与速度确定路基宽度并列出组成",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "各等级公路车道宽（3.75 / 3.5 / 3.25 / 3.0 m）与路基宽度表值按 JTG B01 现行版核对"
+    },
+    {
+      "id": "road-survey-design-concept-056",
+      "subjectId": "road-survey-design",
+      "chapter": "7.1",
+      "term": "路肩（硬路肩与土路肩）",
+      "en": "shoulder (hard / earth)",
+      "definition": "行车道外缘至路基边缘的部分，铺装面层的称硬路肩（可临时停车、供非机动车使用），未铺装的称土路肩，主要作用是保护路面、临时停车与提供侧向余宽。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "m",
+      "relations": [
+        "路基宽度",
+        "行车道宽度"
+      ],
+      "pitfalls": [
+        "硬路肩一般与行车道同横坡，土路肩横坡可略大以利排水",
+        "隧道、桥梁段的路肩宽度规定不同"
+      ],
+      "examAngle": "路肩的作用与宽度取值",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "硬路肩宽度一般值与最小值按 JTG B01 / JTG D20 现行版核对"
+    },
+    {
+      "id": "road-survey-design-concept-057",
+      "subjectId": "road-survey-design",
+      "chapter": "7.2",
+      "term": "边坡坡度",
+      "en": "side slope",
+      "definition": "路基填方或挖方边坡的倾斜程度，通常表示为 1:m（竖向:水平）或百分比，按填料性质、土质、边坡高度与地质条件确定。",
+      "formulaId": null,
+      "symbols": [
+        "m"
+      ],
+      "unit": "—",
+      "relations": [
+        "边沟",
+        "路基临界高度"
+      ],
+      "pitfalls": [
+        "1:1.5 表示高 1、水平 1.5，坡度越缓 m 越大，不要反读",
+        "高边坡需要分级设置并设平台，不是一直放坡到底"
+      ],
+      "examAngle": "边坡坡率选用",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "填方/挖方边坡坡率表与分级高度按 JTG D30 现行版核对"
+    },
+    {
+      "id": "road-survey-design-concept-058",
+      "subjectId": "road-survey-design",
+      "chapter": "7.2",
+      "term": "边沟",
+      "en": "side ditch",
+      "definition": "设置在挖方路基外侧或低填方路基两侧的纵向排水沟，用以汇集并排除路基范围内的地表水，断面常为梯形或矩形，纵坡一般不小于 0.3%～0.5%。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "m",
+      "relations": [
+        "截水沟",
+        "排水沟",
+        "最小纵坡"
+      ],
+      "pitfalls": [
+        "边沟纵坡与路线纵坡一致，若路线为平坡或反坡须专门设计",
+        "边沟与截水沟、排水沟在平面上要形成完整系统，不能断头"
+      ],
+      "examAngle": "边沟断面与纵坡要求",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "边沟尺寸与最小纵坡按 JTG D30 / JTG/T D33 现行版核对"
+    },
+    {
+      "id": "road-survey-design-concept-059",
+      "subjectId": "road-survey-design",
+      "chapter": "7.2",
+      "term": "路基临界高度",
+      "en": "critical height of subgrade",
+      "definition": "路基在某一湿度状态下，使上部土层处于干燥、中湿或潮湿状态的临界填土高度，是判断路基干湿类型、确定路基是否需要特殊处治的依据。",
+      "formulaId": null,
+      "symbols": [
+        "H1",
+        "H2",
+        "H3"
+      ],
+      "unit": "m",
+      "relations": [
+        "路基干湿类型",
+        "最小填土高度"
+      ],
+      "pitfalls": [
+        "H1、H2、H3 三个临界高度分别对应干燥/中湿/潮湿的分界，容易记混",
+        "临界高度受地下水位、地表积水与土质共同影响，不是定值"
+      ],
+      "examAngle": "由路基高度与地下水位判断干湿类型",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "H1/H2/H3 的定义顺序与判断方法按教材表述核对"
+    },
+    {
+      "id": "road-survey-design-concept-060",
+      "subjectId": "road-survey-design",
+      "chapter": "7.4",
+      "term": "平均断面法",
+      "en": "average end area method",
+      "definition": "计算相邻两横断面之间土石方体积的近似方法，假定两断面间的体积等于两端面面积的平均值乘以间距，V = (A1 + A2)/2 · L。",
+      "formulaId": "road-survey-design-formula-054",
+      "symbols": [
+        "V",
+        "A1",
+        "A2",
+        "L"
+      ],
+      "unit": "m³",
+      "relations": [
+        "棱台公式",
+        "松方系数"
+      ],
+      "pitfalls": [
+        "两断面面积相差悬殊时误差大，应改用棱台公式或加密断面",
+        "桩号间距要用实际距离，弯道处不能用中心桩号差直接当作长度（可近似）"
+      ],
+      "examAngle": "土石方体积计算",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "road-survey-design-concept-061",
+      "subjectId": "road-survey-design",
+      "chapter": "7.4",
+      "term": "棱台公式（土方体积修正）",
+      "en": "prismoidal formula",
+      "definition": "把相邻两断面间的土体视为棱台计算体积的精确式，V = L/3 · (A1 + A2 + √(A1·A2))，其结果不大于平均断面法，两者之差即为校正值。",
+      "formulaId": "road-survey-design-formula-055",
+      "symbols": [
+        "V",
+        "A1",
+        "A2",
+        "L"
+      ],
+      "unit": "m³",
+      "relations": [
+        "平均断面法"
+      ],
+      "pitfalls": [
+        "仅当两断面形状相似时才是「精确」的，实际仍为近似",
+        "当 A1 或 A2 为 0（填挖交界）时公式退化为锥形体积"
+      ],
+      "examAngle": "两种方法的比较与校正值计算",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "road-survey-design-concept-062",
+      "subjectId": "road-survey-design",
+      "chapter": "7.4",
+      "term": "松方系数与压实方",
+      "en": "swell factor and compacted volume",
+      "definition": "土体开挖后体积膨胀的倍数称松方系数（>1），填筑压实后体积缩小的程度称压实系数（<1）；调配时必须在天然方、松方、压实方之间换算。",
+      "formulaId": "road-survey-design-formula-056",
+      "symbols": [
+        "Ks",
+        "Kc"
+      ],
+      "unit": "—",
+      "relations": [
+        "平均断面法",
+        "借方",
+        "废方"
+      ],
+      "pitfalls": [
+        "挖方按天然方计、运输按松方计、填方按压实方计，三者混用是作业最常见错误",
+        "石方的松方系数与土方差别很大，不可套用同一系数"
+      ],
+      "examAngle": "天然方→松方→压实方换算",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "各类土石的松方系数与压实系数按定额或教材表核对"
+    },
+    {
+      "id": "road-survey-design-concept-063",
+      "subjectId": "road-survey-design",
+      "chapter": "7.4",
+      "term": "经济运距",
+      "en": "economic haul distance",
+      "definition": "纵向调运土方在经济上优于就近借方的最大运距，超过该距离时应改为借方。常用 L经 = L免 + a/b，其中 L免 为免费运距、a 为借方单价、b 为单位体积单位距离的运价。",
+      "formulaId": "road-survey-design-formula-058",
+      "symbols": [
+        "L经",
+        "L免",
+        "a",
+        "b"
+      ],
+      "unit": "km 或 m",
+      "relations": [
+        "免费运距",
+        "平均运距",
+        "借方"
+      ],
+      "pitfalls": [
+        "单位必须统一：a 用元/m³、b 用元/(m³·km) 时 L 为 km",
+        "免费运距与单价随地区定额变化，题目未给时不能默认某一数值"
+      ],
+      "examAngle": "经济运距计算并判断该调运还是借方",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "经济运距的定义式与免费运距的取值口径按教材与定额核对"
+    },
+    {
+      "id": "road-survey-design-concept-064",
+      "subjectId": "road-survey-design",
+      "chapter": "7.4",
+      "term": "免费运距与平均运距",
+      "en": "free haul distance and average haul distance",
+      "definition": "免费运距是在定额计价中不予另行计费的短距离运输（只计装卸、不计运费）；平均运距是实际调运的加权平均运距，等于总运量除以总调运方量。",
+      "formulaId": "road-survey-design-formula-059",
+      "symbols": [
+        "L免",
+        "L平"
+      ],
+      "unit": "m",
+      "relations": [
+        "经济运距",
+        "运量"
+      ],
+      "pitfalls": [
+        "计算运费时应扣除免费运距，只对超出部分计价",
+        "平均运距要用运量加权，不能对各段运距简单算术平均"
+      ],
+      "examAngle": "总运量与平均运距计算",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "免费运距的数值（20 m / 50 m 等）按定额与教材核对"
+    },
+    {
+      "id": "road-survey-design-concept-065",
+      "subjectId": "road-survey-design",
+      "chapter": "7.4",
+      "term": "运量与土石方调配",
+      "en": "haul volume and earthwork allocation",
+      "definition": "运量 = 调运土石方体积 × 运距（单位 m³·m 或 m³·km）；土石方调配是在满足填挖平衡、运距经济的前提下，确定各段土方的来源与去向，常用累计曲线法（土方积距图）求解。",
+      "formulaId": "road-survey-design-formula-057",
+      "symbols": [
+        "Q",
+        "V",
+        "L"
+      ],
+      "unit": "m³·m",
+      "relations": [
+        "平均运距",
+        "借方",
+        "废方"
+      ],
+      "pitfalls": [
+        "累计曲线出现正负交替意味着存在反向（回头）运输，应调整调配方案",
+        "不同土质（石方、淤泥、种植土）不能互相调配"
+      ],
+      "examAngle": "编制调配方案并计算总运量",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "road-survey-design-concept-066",
+      "subjectId": "road-survey-design",
+      "chapter": "9.2",
+      "term": "越岭线与垭口",
+      "en": "ridge-crossing line and mountain pass",
+      "definition": "越岭线是翻越山岭分水岭的路线；垭口是山脊上相对低洼、可通行的鞍部，是越岭线的控制点，需从标高、位置、地质、两侧展线条件四方面比选。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "—",
+      "relations": [
+        "展线",
+        "相对高差",
+        "过岭标高"
+      ],
+      "pitfalls": [
+        "不是越低越好：垭口低但两侧展线困难时反而不利",
+        "垭口处往往地质破碎、易有病害，须做地质比选"
+      ],
+      "examAngle": "垭口选择原则与越岭线方案比选",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "road-survey-design-concept-067",
+      "subjectId": "road-survey-design",
+      "chapter": "9.2",
+      "term": "展线与回头曲线",
+      "en": "development line and hairpin curve",
+      "definition": "展线是在有限水平距离内为克服高差而人为延长路线长度的做法（自然展线、回头展线、螺旋展线）；回头曲线是在同一坡面上反复折返、转角接近或大于 180° 的小半径曲线。",
+      "formulaId": null,
+      "symbols": [
+        "K展"
+      ],
+      "unit": "—",
+      "relations": [
+        "越岭线",
+        "平均纵坡",
+        "相对高差"
+      ],
+      "pitfalls": [
+        "回头曲线半径小、视距差、易积雪，是越岭线的薄弱环节，应尽量减少",
+        "展线系数 = 实际路线长度 / 起终点直线距离，越接近 1 越顺直"
+      ],
+      "examAngle": "由相对高差与控制平均纵坡反算所需展线长度",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": "回头曲线的最小半径、最大纵坡折减等限值按 JTG D20 现行版核对"
+    },
+    {
+      "id": "road-survey-design-concept-068",
+      "subjectId": "road-survey-design",
+      "chapter": "9.3",
+      "term": "沿溪线选址要点",
+      "en": "valley line location",
+      "definition": "沿河谷布设的路线，其选址要点包括：河谷选择（地质好、纵坡缓、洪水小）、岸侧比选（阳坡/阴坡、地质、支沟、村镇）、线位高度（高于设计洪水位并留安全高度）。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "—",
+      "relations": [
+        "越岭线",
+        "设计水位",
+        "路基临界高度"
+      ],
+      "pitfalls": [
+        "沿溪线最大的隐患是水毁：冲刷、淘空、掩埋，须有防护工程配套",
+        "线位不宜过低（水毁）也不宜过高（展线长、边坡高、造价高）"
+      ],
+      "examAngle": "沿溪线岸侧比选理由",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "road-survey-design-concept-069",
+      "subjectId": "road-survey-design",
+      "chapter": "9.3",
+      "term": "山脊线",
+      "en": "ridge line",
+      "definition": "布设在山脊或分水岭顶部的路线，具有排水好、地质条件较好的优点，但存在线位高、与展线矛盾、取水困难、冬季积雪结冰严重等缺点，一般仅在特定条件下采用。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "—",
+      "relations": [
+        "越岭线",
+        "沿溪线"
+      ],
+      "pitfalls": [
+        "山脊线不等于越岭线：越岭线要翻过垭口，山脊线是沿脊顶走",
+        "分水岭两侧需分别展线，接线的纵坡往往很陡"
+      ],
+      "examAngle": "三种山区线型（越岭/沿溪/山脊）的适用条件比较",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "road-survey-design-concept-070",
+      "subjectId": "road-survey-design",
+      "chapter": "10.1",
+      "term": "纸上定线与导向线",
+      "en": "paper location and guide line",
+      "definition": "纸上定线是在大比例尺地形图上先定出路线的平面与纵断面；导向线是按要求的平均纵坡在图上放出的具有均匀坡度的折线，经修正后作为平面定线的依据。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "—",
+      "relations": [
+        "选线",
+        "实地放线",
+        "平均纵坡"
+      ],
+      "pitfalls": [
+        "导向线只反映纵坡要求，还需结合平面障碍修正为「修正导向线」",
+        "纸上定线精度受地形图比例尺与等高距限制"
+      ],
+      "examAngle": "纸上定线步骤与导向线概念",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "10",
+        "page": null
+      },
+      "verify": "均坡线、导向线、修正导向线的三级递进定义按教材表述核对"
+    },
+    {
+      "id": "road-survey-design-concept-071",
+      "subjectId": "road-survey-design",
+      "chapter": "10.3",
+      "term": "中桩敷设与断链",
+      "en": "center stake setting and chain breakage",
+      "definition": "中桩敷设是把路线中线的位置按桩号测设到实地；断链是因改线、局部调整或测量错误导致路线里程不连续的现象，需用断链桩标注长链或短链。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "m",
+      "relations": [
+        "导线测量",
+        "桩号",
+        "实地放线"
+      ],
+      "pitfalls": [
+        "断链分「长链」（新里程大于原里程）与「短链」，处理不当会使全线桩号与高程混乱",
+        "敷设曲线常用切线支距法、偏角法、坐标法，坐标法在现代测量中最通用"
+      ],
+      "examAngle": "断链的处理与含义",
+      "confidence": "medium",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "10",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "road-survey-design-concept-072",
+      "subjectId": "road-survey-design",
+      "chapter": "12.2",
+      "term": "导线测量与中桩敷设",
+      "en": "traverse survey and centerline staking",
+      "definition": "导线测量是通过测量相邻导线点间的边长与转折角（或与已知点的连测）推算各点平面坐标的控制测量方法；中桩敷设是在控制点基础上按桩号测设路线中线点，二者共同构成公路勘测的平面骨架。",
+      "formulaId": "road-survey-design-formula-061",
+      "symbols": [
+        "X",
+        "Y",
+        "beta"
+      ],
+      "unit": "m",
+      "relations": [
+        "初测",
+        "定测",
+        "GPS-RTK"
+      ],
+      "pitfalls": [
+        "方位角计算要注意象限（用 atan2 并按 (Δx, Δy) 顺序），测量坐标系 x 为北、y 为东，与数学坐标相反",
+        "导线闭合差超限必须重测，不能强行平差"
+      ],
+      "examAngle": "由两点坐标反算方位角与距离并推算转角",
+      "confidence": "high",
+      "cite": {
+        "book": "道路勘测设计",
+        "edition": "修订版",
+        "chapter": "12",
+        "page": null
+      },
+      "verify": null
+    }
+  ]
+}

@@ -1,0 +1,246 @@
+{
+  "subjectId": "structural-design-principles",
+  "note": "本文件不是文献全文，而是「去哪儿查、查什么、以谁为准」的索引。论文受版权保护不入库；AI 回答涉及前沿或争议问题时，按这里给出的入口检索，并把来源层级告诉用户。",
+  "updatedAt": "2026-09-15",
+  "items": [
+    {
+      "type": "journal",
+      "name": "土木工程学报",
+      "en": "China Civil Engineering Journal",
+      "org": "中国土木工程学会",
+      "level": "A",
+      "why": "结构设计理论与试验研究的主阵地。",
+      "howToUse": "按「承载力 / 裂缝 / 疲劳 / 耐久性」检索。",
+      "access": "知网 / 万方（校内 IP 通常免费）",
+      "confidence": "high",
+      "verify": null,
+      "id": "structural-design-principles-source-001"
+    },
+    {
+      "type": "journal",
+      "name": "建筑结构学报",
+      "en": "Journal of Building Structures",
+      "org": "中国建筑学会",
+      "level": "A",
+      "why": "构件与结构体系性能研究，试验与理论并重。",
+      "howToUse": "查构件受力机理与设计方法讨论。",
+      "access": "知网 / 万方（校内 IP 通常免费）",
+      "confidence": "high",
+      "verify": null,
+      "id": "structural-design-principles-source-002"
+    },
+    {
+      "type": "journal",
+      "name": "工程力学",
+      "en": "Engineering Mechanics",
+      "org": "中国力学学会",
+      "level": "A",
+      "why": "力学分析与计算方法，公式推导的严谨来源。",
+      "howToUse": "想搞懂公式怎么来的时看它。",
+      "access": "知网 / 万方（校内 IP 通常免费）",
+      "confidence": "high",
+      "verify": null,
+      "id": "structural-design-principles-source-003"
+    },
+    {
+      "type": "journal",
+      "name": "结构工程师",
+      "en": "Structural Engineers",
+      "org": "同济大学",
+      "level": "B",
+      "why": "设计实务与工程案例分析。",
+      "howToUse": "找设计中的实际问题与处理办法。",
+      "access": "知网 / 万方（校内 IP 通常免费）",
+      "confidence": "high",
+      "verify": null,
+      "id": "structural-design-principles-source-004"
+    },
+    {
+      "type": "journal",
+      "name": "Engineering Structures",
+      "en": "Engineering Structures",
+      "org": "Elsevier",
+      "level": "A",
+      "why": "结构工程国际主流期刊，涵盖混凝土、钢、组合结构。",
+      "howToUse": "写英文综述主力来源。",
+      "access": "Web of Science / ScienceDirect / ASCE Library",
+      "confidence": "high",
+      "verify": null,
+      "id": "structural-design-principles-source-005"
+    },
+    {
+      "type": "journal",
+      "name": "Journal of Structural Engineering",
+      "en": "Journal of Structural Engineering",
+      "org": "ASCE",
+      "level": "A",
+      "why": "结构工程经典期刊，设计规范的理论背景常出于此。",
+      "howToUse": "查设计方法的研究依据。",
+      "access": "Web of Science / ScienceDirect / ASCE Library",
+      "confidence": "high",
+      "verify": null,
+      "id": "structural-design-principles-source-006"
+    },
+    {
+      "type": "journal",
+      "name": "Magazine of Concrete Research",
+      "en": "Magazine of Concrete Research",
+      "org": "ICE Publishing",
+      "level": "B",
+      "why": "混凝土材料与构件性能的专门期刊。",
+      "howToUse": "查混凝土本构与长期性能。",
+      "access": "Web of Science / ScienceDirect / ASCE Library",
+      "confidence": "high",
+      "verify": null,
+      "id": "structural-design-principles-source-007"
+    },
+    {
+      "type": "standard",
+      "name": "JTG 3362 公路钢筋混凝土及预应力混凝土桥涵设计规范",
+      "code": "JTG 3362",
+      "level": "S",
+      "why": "道桥方向结构设计的核心规范（原 JTG D62）。",
+      "howToUse": "道桥类构件验算一律以它为准，编号已由 D62 改为 3362。",
+      "access": "交通运输标准化信息系统 / 住建部标准发布 / 学校图书馆标准库",
+      "confidence": "high",
+      "verify": "编号变更：JTG D62-2004 → JTG 3362-2018，引用时写明年份。",
+      "id": "structural-design-principles-source-008"
+    },
+    {
+      "type": "standard",
+      "name": "JTG 3363 公路桥涵地基与基础设计规范",
+      "code": "JTG 3363",
+      "level": "S",
+      "why": "基础与地基验算的依据（原 JTG D63）。",
+      "howToUse": "下部结构计算使用。",
+      "access": "交通运输标准化信息系统 / 住建部标准发布 / 学校图书馆标准库",
+      "confidence": "high",
+      "verify": "编号变更：JTG D63-2007 → JTG 3363-2019。",
+      "id": "structural-design-principles-source-009"
+    },
+    {
+      "type": "standard",
+      "name": "JTG D64 公路钢结构桥梁设计规范",
+      "code": "JTG D64",
+      "level": "S",
+      "why": "钢桥构件与连接的验算规定。",
+      "howToUse": "钢桥类题目使用。",
+      "access": "交通运输标准化信息系统 / 住建部标准发布 / 学校图书馆标准库",
+      "confidence": "high",
+      "verify": "版本年份需核对。",
+      "id": "structural-design-principles-source-010"
+    },
+    {
+      "type": "standard",
+      "name": "GB 50010 混凝土结构设计规范",
+      "code": "GB 50010",
+      "level": "S",
+      "why": "建筑结构体系的混凝土设计依据，与公路体系（JTG）安全度设置不同。",
+      "howToUse": "建筑类题目用它；严禁与 JTG 3362 混用符号与分项系数。",
+      "access": "交通运输标准化信息系统 / 住建部标准发布 / 学校图书馆标准库",
+      "confidence": "high",
+      "verify": "版本年份需核对（常见为 2010 年版及其修改），教师指定版本优先。",
+      "id": "structural-design-principles-source-011"
+    },
+    {
+      "type": "standard",
+      "name": "GB 50017 钢结构设计标准",
+      "code": "GB 50017",
+      "level": "S",
+      "why": "建筑钢结构设计依据（原《钢结构设计规范》）。",
+      "howToUse": "建筑钢结构题目使用。",
+      "access": "交通运输标准化信息系统 / 住建部标准发布 / 学校图书馆标准库",
+      "confidence": "high",
+      "verify": "版本年份需核对（常见为 2017 年版）。",
+      "id": "structural-design-principles-source-012"
+    },
+    {
+      "type": "database",
+      "name": "中国知网（CNKI）",
+      "level": "D",
+      "why": "中文期刊、学位论文、会议论文最全，课程论文与作业的主要来源。",
+      "howToUse": "用「主题」而不是「篇名」检索；勾选「同义词扩展」；学位论文适合看文献综述章节。",
+      "access": "校园网 / 图书馆入口",
+      "confidence": "high",
+      "verify": null,
+      "id": "structural-design-principles-source-013"
+    },
+    {
+      "type": "database",
+      "name": "Web of Science / EI Compendex",
+      "level": "D",
+      "why": "外文期刊与会议论文，判断一个方向国际进展如何。",
+      "howToUse": "先看 Review，再看 Article；用「被引频次」排序找经典文献。",
+      "access": "校园网 / 图书馆入口",
+      "confidence": "high",
+      "verify": null,
+      "id": "structural-design-principles-source-014"
+    },
+    {
+      "type": "database",
+      "name": "标准数据库（交通运输标准化信息系统 / 国家标准全文公开系统）",
+      "level": "D",
+      "why": "规范条文以官方发布为准，教材与二手资料都可能是旧版。",
+      "howToUse": "查现行状态与被替代关系；引用规范必须写清楚版本年份。",
+      "access": "校园网 / 图书馆入口",
+      "confidence": "high",
+      "verify": null,
+      "id": "structural-design-principles-source-015"
+    },
+    {
+      "type": "org",
+      "name": "交通运输部 / 住房和城乡建设部标准主管部门",
+      "level": "O",
+      "why": "规范现行版本与替代关系的权威来源。",
+      "howToUse": "引用规范前核对版本号。",
+      "access": "官网公开信息",
+      "confidence": "high",
+      "verify": null,
+      "id": "structural-design-principles-source-016"
+    },
+    {
+      "type": "org",
+      "name": "中国工程建设标准化协会（CECS）",
+      "level": "O",
+      "why": "团体标准与新技术应用导则。",
+      "howToUse": "查新技术规程。",
+      "access": "官网公开信息",
+      "confidence": "medium",
+      "verify": null,
+      "id": "structural-design-principles-source-017"
+    },
+    {
+      "type": "method",
+      "name": "结构设计类检索式模板",
+      "level": "M",
+      "why": "结构设计问题锁定「构件 + 受力 + 极限状态」。",
+      "howToUse": "CNKI：（主题=受弯 OR 受剪 OR 偏心受压 OR 预应力损失）AND（主题=承载力 OR 裂缝 OR 挠度）AND（年 between 2016,2026）。",
+      "access": "CNKI",
+      "confidence": "high",
+      "verify": null,
+      "id": "structural-design-principles-source-018"
+    },
+    {
+      "id": "structural-design-principles-source-019",
+      "name": "判断一篇文献能不能用于作业（三问）",
+      "howToUse": "① 出处：是不是本文件列出的期刊/规范/机构？② 时间：是否近 10 年，或是不是该问题的经典原始文献？③ 可核：结论能不能在教材或现行规范里找到对应？三问答不全就别引用，改用教材口径并注明。"
+    }
+  ],
+  "searchTemplates": [
+    {
+      "id": "tpl-cnki",
+      "name": "CNKI 检索式模板（可直接套用）",
+      "howToUse": "（主题 = 核心概念A）AND（主题 = 核心概念B）AND（年 between 2016,2026）；先按「被引」排序抓综述，再按「发表时间」排序抓最新进展；找到 2-3 篇高质量综述后，顺其参考文献回溯原始文献。"
+    },
+    {
+      "id": "tpl-wos",
+      "name": "Web of Science / Scopus 检索式模板",
+      "howToUse": "TS=(\"concept A\" AND \"concept B\") AND PY=(2016-2026)；文献类型限 Article / Review；语种 English；用「被引频次」找经典，用「最早发表」找首创。"
+    },
+    {
+      "id": "tpl-three-q",
+      "name": "判断一篇文献能不能用于作业（三问）",
+      "howToUse": "① 出处：是不是本文件列出的期刊/规范/机构？② 时间：是否近 10 年，或是不是该问题的经典原始文献？③ 可核：结论能不能在教材或现行规范里找到对应？三问答不全就别引用，改用教材口径并注明。"
+    }
+  ]
+}

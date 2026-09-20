@@ -4,7 +4,7 @@
 const Store = (() => {
   const KEY = "xingyu_platform_v1";
   const CORRUPT_KEY_PREFIX = KEY + "_corrupt_";
-  const SCHEMA_VERSION = 3;
+  const SCHEMA_VERSION = 4;
 
   const defaults = () => {
     const d = {
@@ -63,6 +63,26 @@ const Store = (() => {
     return value && typeof value === "object" && !Array.isArray(value);
   }
 
+  function normalizeNote(note) {
+    const n = isRecord(note) ? note : {};
+    const list = value => Array.isArray(value)
+      ? value.map(item => String(item || "").trim()).filter(Boolean)
+      : [];
+    return Object.assign({}, n, {
+      title: String(n.title || "").trim(),
+      subject: String(n.subject || "").trim(),
+      chapter: String(n.chapter || "").trim(),
+      tags: list(n.tags),
+      keyPoints: list(n.keyPoints),
+      formulas: list(n.formulas),
+      pitfalls: list(n.pitfalls),
+      questions: list(n.questions),
+      summary: String(n.summary || "").trim(),
+      reviewState: String(n.reviewState || "").trim(),
+      reviewDueAt: n.reviewDueAt || ""
+    });
+  }
+
   function normalizeData(parsed) {
     if (!isRecord(parsed)) throw new Error("数据格式不正确");
     const base = defaults();
@@ -75,7 +95,7 @@ const Store = (() => {
     });
     normalized.courses = normalized.courses.filter(isRecord);
     normalized.tasks = normalized.tasks.filter(isRecord);
-    normalized.notes = normalized.notes.filter(isRecord);
+    normalized.notes = normalized.notes.filter(isRecord).map(normalizeNote);
     normalized.cards = normalized.cards.filter(isRecord);
     normalized.pomodoros = normalized.pomodoros.filter(isRecord);
     normalized.grades = normalized.grades.filter(isRecord);
@@ -98,6 +118,7 @@ const Store = (() => {
   const SERVER_SYNC_ENABLED = location.protocol === "http:" || location.protocol === "https:";
   const LOCAL_STATE_ENABLED = SERVER_SYNC_ENABLED;
   const SYNC_CURSOR_KEY = "xingyu_server_sync_cursor";
+  const DELTA_CURSOR_KEY = "xingyu_server_delta_cursor_v1";
   const DEVICE_ID_KEY = "xingyu_device_id";
   let stateSaveTimer = 0;
   let stateSaveInFlight = false;
@@ -108,6 +129,30 @@ const Store = (() => {
   let syncPushing = false;
   let syncPushQueued = false;
   let syncPullTimer = 0;
+  let bootstrapEtag = "";
+  let localRevision = 0;
+  let acknowledgedRevision = 0;
+  let retryDelay = 1000;
+
+  function hasPendingChanges() { return localRevision > acknowledgedRevision; }
+
+  async function syncFetch(url, options) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 15000);
+    try { return await fetch(url, Object.assign({}, options, { signal: controller.signal })); }
+    finally { clearTimeout(timer); }
+  }
+
+  function scheduleSyncRetry() {
+    if (!hasPendingChanges()) return;
+    clearTimeout(stateSaveTimer);
+    stateSaveTimer = setTimeout(() => { void saveStateToServer(); }, retryDelay);
+    retryDelay = Math.min(retryDelay * 2, 30000);
+  }
+
+  function serverTime(value) {
+    return typeof value === "number" ? value : (Date.parse(value || "") || 0);
+  }
 
   function canUseLocalStateServer() { return SERVER_SYNC_ENABLED; }
 
@@ -117,19 +162,21 @@ const Store = (() => {
   let localDirtyAt = 0;
 
   function buildStateEnvelope(stamp) {
-    return JSON.stringify({
-      data: JSON.parse(exportAll({ includeSecrets: true })),
-      updatedAt: stamp || Date.now()
-    });
+    // Avoid pretty stringify -> parse -> stringify of the entire notebook.
+    const snapshot = Object.assign({}, data);
+    snapshot.pomodoros = getPomodoroArchive().concat(snapshot.pomodoros || []);
+    return JSON.stringify({ data: snapshot, updatedAt: stamp || Date.now() });
   }
 
   async function saveStateToServer() {
     if (!canUseLocalStateServer()) return;
-    if (stateSaveInFlight) { stateSaveQueued = true; return; }
+    if (stateSaveInFlight || syncPushing) { stateSaveQueued = true; return; }
+    if (!hasPendingChanges()) return;
     stateSaveInFlight = true;
     const stamp = Date.now();
+    const revision = localRevision;
     try {
-      const response = await fetch("/api/state", {
+      const response = await syncFetch("/api/state", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: buildStateEnvelope(stamp)
@@ -137,11 +184,21 @@ const Store = (() => {
       if (!response.ok) throw new Error("state save failed: " + response.status);
       // 推送成功后必须推进本地游标：否则下一次 12s 轮询会认为"服务端更新"，
       // 把这份内容相同、时间戳更新的快照导回来，用户期间的改动就被静默回滚。
-      writeSyncCursor(stamp);
+      const payload = await response.json();
+      writeSyncCursor(serverTime(payload.serverUpdatedAt) || stamp);
+      writeDeltaCursor(payload.serverUpdatedAt || new Date(stamp).toISOString());
+      acknowledgedRevision = Math.max(acknowledgedRevision, revision);
+      retryDelay = 1000;
+      bootstrapEtag = "";
     } catch (error) {
       console.warn("[星屿] 实时状态保存失败", error);
+      scheduleSyncRetry();
     } finally {
       stateSaveInFlight = false;
+      if (syncPushQueued) {
+        syncPushQueued = false;
+        setTimeout(() => { void pushCurrentSnapshot(false); }, 200);
+      }
       if (stateSaveQueued) {
         stateSaveQueued = false;
         setTimeout(() => { void saveStateToServer(); }, 200);
@@ -157,6 +214,7 @@ const Store = (() => {
 
   function flushServerStateSave() {
     if (!canUseLocalStateServer() || !syncReady || suppressServerSync) return;
+    if (!hasPendingChanges()) return;
     clearTimeout(stateSaveTimer);
     try {
       navigator.sendBeacon("/api/state", new Blob([buildStateEnvelope()], { type: "application/json" }));
@@ -191,12 +249,53 @@ const Store = (() => {
     } catch (e) {}
   }
 
+  function readDeltaCursor() {
+    try { return localStorage.getItem(DELTA_CURSOR_KEY) || ""; } catch (e) { return ""; }
+  }
+  function writeDeltaCursor(value) {
+    try { if (value) localStorage.setItem(DELTA_CURSOR_KEY, String(value)); } catch (e) {}
+  }
+  function applyServerChanges(changes) {
+    if (!Array.isArray(changes)) return;
+    changes.forEach(change => {
+      const entity = change && change.entity;
+      if (!entity) return;
+      if (entity === "profile" || entity === "settings") {
+        if (isRecord(change.item)) data[entity] = Object.assign({}, data[entity], change.item);
+        return;
+      }
+      if (!ARRAY_KEYS.includes(entity) || !Array.isArray(data[entity])) return;
+      const list = data[entity];
+      const index = list.findIndex(item => String(item.id) === String(change.id));
+      if (change.deletedAt) { if (index >= 0) list.splice(index, 1); }
+      else if (isRecord(change.item)) { if (index >= 0) list[index] = change.item; else list.push(change.item); }
+    });
+    try { storageSet(KEY, JSON.stringify(data)); } catch (e) {}
+    try { window.dispatchEvent(new CustomEvent("xingyu:server-synced", { detail: { delta: true } })); } catch (e) {}
+  }
+  async function pullServerDelta() {
+    if (!canUseLocalStateServer() || suppressServerSync || syncPushing || stateSaveInFlight || syncPulling) return false;
+    const since = readDeltaCursor();
+    if (!since || hasPendingChanges()) return false;
+    syncPulling = true;
+    try {
+      const response = await syncFetch("/api/data/changes?since=" + encodeURIComponent(since), { cache: "no-store" });
+      if (!response.ok) throw new Error("delta sync failed: " + response.status);
+      const payload = await response.json();
+      if (!hasPendingChanges()) applyServerChanges(payload.changes);
+      const latest = payload.updatedAt || (payload.changes || []).reduce((max, change) => change.updatedAt > max ? change.updatedAt : max, since);
+      writeDeltaCursor(latest);
+      return true;
+    } catch (error) { console.warn("[星屿] 增量同步失败", error); return false; }
+    finally { syncPulling = false; }
+  }
   async function pushCurrentSnapshot(force = false) {
     if (!canUseLocalStateServer() || !syncReady || suppressServerSync) return false;
-    if (syncPushing) { syncPushQueued = true; return false; }
+    if (syncPushing || stateSaveInFlight) { syncPushQueued = true; return false; }
     syncPushing = true;
+    const revision = localRevision;
     try {
-      const response = await fetch("/api/sync/push", {
+      const response = await syncFetch("/api/sync/push", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: buildStateEnvelope()
@@ -205,13 +304,22 @@ const Store = (() => {
       const payload = await response.json();
       const serverStamp = payload && payload.serverUpdatedAt ? new Date(payload.serverUpdatedAt).getTime() : payload.updatedAt;
       if (serverStamp) writeSyncCursor(serverStamp);
+      writeDeltaCursor(payload.serverUpdatedAt || new Date(serverStamp || Date.now()).toISOString());
+      acknowledgedRevision = Math.max(acknowledgedRevision, revision);
+      bootstrapEtag = "";
+      retryDelay = 1000;
       return true;
     } catch (error) {
       console.warn("[星屿] 服务器同步推送失败", error);
+      scheduleSyncRetry();
       if (force) window.dispatchEvent(new CustomEvent("xingyu:sync-error", { detail: { message: "数据同步失败" } }));
       return false;
     } finally {
       syncPushing = false;
+      if (stateSaveQueued) {
+        stateSaveQueued = false;
+        scheduleSyncRetry();
+      }
       if (syncPushQueued) {
         syncPushQueued = false;
         setTimeout(() => { void pushCurrentSnapshot(false); }, 200);
@@ -220,18 +328,26 @@ const Store = (() => {
   }
 
   async function pullServerSnapshot(force = false) {
-    if (!canUseLocalStateServer() || suppressServerSync || syncPushing) return false;
+    if (!canUseLocalStateServer() || suppressServerSync || syncPushing || stateSaveInFlight) return false;
+    if (!force && hasPendingChanges()) return false;
     if (syncPulling) return false;
     syncPulling = true;
+    const revisionAtStart = localRevision;
     try {
-      const response = await fetch("/api/data/bootstrap", { cache: "no-store" });
+      const headers = {};
+      if (bootstrapEtag) headers["If-None-Match"] = bootstrapEtag;
+      const response = await syncFetch("/api/data/bootstrap", { cache: "no-store", headers });
+      if (response.status === 304) return true;
       if (!response.ok) throw new Error("sync pull failed: " + response.status);
       const snapshot = await response.json();
-      const stamp = Number(snapshot.serverUpdatedAt ? new Date(snapshot.serverUpdatedAt).getTime() : (snapshot.updatedAt || 0));
+      // An edit made while fetch was in flight must not be replaced by its response.
+      if (localRevision !== revisionAtStart) return false;
+      const stamp = serverTime(snapshot.serverUpdatedAt || snapshot.updatedAt);
+      const etag = response.headers && response.headers.get("ETag");
       const cursor = readSyncCursor();
       // 本地刚改过（含推送防抖窗口内）→ 先别拉，保住用户刚保存的改动
       if (!force && localDirtyAt && (Date.now() - localDirtyAt) < 3000) return false;
-      if (!force && stamp && stamp <= cursor) return true;
+      if (!force && !etag && stamp && stamp <= cursor) return true;
       if (!snapshot.hasData) return false;
       suppressServerSync = true;
       const previousError = lastError;
@@ -239,8 +355,11 @@ const Store = (() => {
       suppressServerSync = false;
       lastError = previousError;
       if (!ok) throw new Error("server snapshot import failed");
+      acknowledgedRevision = localRevision;
+      bootstrapEtag = etag || "";
       clearTimeout(stateSaveTimer);
       writeSyncCursor(stamp || Date.now());
+      writeDeltaCursor(snapshot.updatedAt || new Date(stamp || Date.now()).toISOString());
       try { window.dispatchEvent(new CustomEvent("xingyu:server-synced", { detail: { at: stamp } })); } catch (e) {}
       return true;
     } catch (error) {
@@ -255,7 +374,10 @@ const Store = (() => {
   function startServerSyncPolling() {
     if (!canUseLocalStateServer()) return;
     clearTimeout(syncPullTimer);
-    syncPullTimer = setInterval(() => { void pullServerSnapshot(false); }, 12000);
+    syncPullTimer = setInterval(async () => {
+      const pulled = await pullServerDelta();
+      if (!pulled) void pullServerSnapshot(false);
+    }, 12000);
   }
 
   async function initializeServerSync() {
@@ -344,7 +466,10 @@ const Store = (() => {
       ok = storageSet(KEY, JSON.stringify(data));
     }
     // 本地刚写过：记下脏时间戳，供服务端拉取判断"别把新改动覆盖掉"
-    localDirtyAt = Date.now();
+    if (!suppressServerSync) {
+      localDirtyAt = Date.now();
+      localRevision++;
+    }
     // 调用方大多忽略返回值（19 处裸调用），这里主动派发事件让 UI 提示，
     // 否则 localStorage 写满时数据静默丢失，用户完全无感知。
     if (!ok) notifyStorageFailure();
@@ -451,6 +576,7 @@ const Store = (() => {
     if (!ARRAY_KEYS.includes(key) || !isRecord(item)) return null;
     if (!Array.isArray(data[key])) data[key] = [];
     if (!item.id) item.id = uid();
+    if (key === "notes") item = normalizeNote(item);
     data[key].push(item);
     save();
     return item;
@@ -460,7 +586,7 @@ const Store = (() => {
     if (!Array.isArray(data[key])) data[key] = [];
     const existingIds = new Set(data[key].map(x => x && x.id));
     const rows = items.filter(isRecord).map(item => {
-      const row = { ...item };
+      const row = key === "notes" ? normalizeNote(item) : { ...item };
       if (!row.id || existingIds.has(row.id)) row.id = uid();
       existingIds.add(row.id);
       return row;
@@ -475,7 +601,9 @@ const Store = (() => {
     if (!ARRAY_KEYS.includes(key) || !isRecord(patch)) return null;
     const idx = data[key].findIndex(x => x.id === id);
     if (idx > -1) {
-      data[key][idx] = Object.assign({}, data[key][idx], patch);
+      data[key][idx] = key === "notes"
+        ? normalizeNote(Object.assign({}, data[key][idx], patch))
+        : Object.assign({}, data[key][idx], patch);
       save();
       return data[key][idx];
     }
@@ -503,7 +631,9 @@ const Store = (() => {
   }
   function replaceAll(key, items) {
     if (!ARRAY_KEYS.includes(key)) return;
-    data[key] = Array.isArray(items) ? items.filter(isRecord) : [];
+    data[key] = Array.isArray(items)
+      ? (key === "notes" ? items.filter(isRecord).map(normalizeNote) : items.filter(isRecord))
+      : [];
     save();
   }
 
@@ -616,7 +746,9 @@ const Store = (() => {
 
   // 2026-09-03 修复：此前 initializeServerSync 在 IIFE 外被调用，
   // 每次页面加载都抛 "initializeServerSync is not defined"。移回作用域内。
-  void initializeServerSync();
+  // Store.load() runs immediately below the IIFE. Start the first pull after it,
+  // so seeding/loading is not mistaken for an edit made during that request.
+  Promise.resolve().then(() => initializeServerSync());
 
   return { load, save, onSave, onDelete, uid, getAll, add, addMany, update, remove, replaceAll,
            getProfile, setProfile, getSettings, setSettings, getCourseName,
@@ -626,5 +758,3 @@ const Store = (() => {
 })();
 
 Store.load();
-
-

@@ -1,0 +1,1126 @@
+{
+  "items": [
+    {
+      "id": "building-architecture-formula-001",
+      "subjectId": "building-architecture",
+      "chapter": "3.3",
+      "name": "日照间距的几何算式",
+      "expr": "D = H / tan(h)",
+      "latex": "D = \\dfrac{H}{\\tan h}",
+      "vars": [
+        { "sym": "D", "name": "日照间距", "unit": "m", "note": "遮挡建筑与被遮挡建筑之间的水平净距，或遮挡物至被遮挡窗台计算点的水平距离" },
+        { "sym": "H", "name": "计算高度差", "unit": "m", "note": "遮挡建筑计算点高度与被遮挡建筑底层窗台（或计算基准）高度的差值，城市居住区取值方法另有规定" },
+        { "sym": "h", "name": "太阳高度角", "unit": "°", "note": "取当地日照标准日、有效日照时间带内的太阳高度角，中国多数城市以大寒日或冬至日为准" }
+      ],
+      "conditions": [
+        "把遮挡建筑简化为一堵垂直于地面的墙、忽略太阳方位角影响时的最简模型",
+        "正南—北向行列式布置，且主要采光面朝向夏季风向与日照方位",
+        "当太阳方位角不为 0（被遮挡建筑不在正南方向）时，须改用考虑方位角的日照棒影图或软件计算"
+      ],
+      "derivationHint": "由直角三角形得出：tg h = H/D，故 D = H/tg h。h 越小所需间距越大，这是冬季日照最紧张的原因。",
+      "typicalUse": "总平面行列式住宅的日照间距初估；建筑高度与层数受限于日照条件时的反算",
+      "pitfalls": [
+        "H 不一定是建筑总高：多数规定从第几层窗台或底层窗台起算，直接用总高会偏大",
+        "h 应是有效日照时间带内最难满足的高度角，而非正午最大值",
+        "忽略了方位角与建筑自身进深，实际多栋排列时往往还要叠加侧向间距要求"
+      ],
+      "standardRef": ["GB 50180", "GB 50352"],
+      "confidence": "medium",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "3", "page": null },
+      "verify": "城市日照标准日用大寒日还是冬至日、有效日照时间带、高度差的起算位置（是否含女儿墙、是否为相对高差）以及最低日照时数，均以当地规划部门执行口径和现行 GB 50180 为准，不要用本条直接报数"
+    },
+    {
+      "id": "building-architecture-formula-002",
+      "subjectId": "building-architecture",
+      "chapter": "3.3",
+      "name": "日照间距系数法",
+      "expr": "D = L * H",
+      "latex": "D = L \\cdot H",
+      "vars": [
+        { "sym": "D", "name": "日照间距", "unit": "m", "note": "两栋建筑之间满足日照标准所需的水平距离" },
+        { "sym": "L", "name": "日照间距系数", "unit": "—", "note": "由当地纬度、日照标准日与科研院所测定的太阳位置换算得到，各省各市取值不同" },
+        { "sym": "H", "name": "遮挡建筑计算高度", "unit": "m", "note": "按当地规定的起算方式确定，通常与檐口或女儿墙高度有关而非绝对总高" }
+      ],
+      "conditions": [
+        "当地已公布统一的日照间距系数表（多数地区规划设计管理采用此法）",
+        "住宅平行布置、朝向接近正南，且多数城市对住宅日照有强制性规定"
+      ],
+      "derivationHint": "相当于把每天的太阳位置包络线换算为一个与高度成正比的等效系数 L，L≈1/tan h 的有效值，是公式 001 的工程化表达。",
+      "typicalUse": "居住区总平面布置时快速排布住宅行列的数量与间距；判断给定地块能排几排楼",
+      "pitfalls": [
+        "L 地区差异极大（大致在 1.0～2.0 甚至更宽范围内浮动），绝不可跨城市套用",
+        "L 常与方位偏角修正系数配套使用，正南以外的朝向需修正",
+        "公共建筑（教学楼、托幼、医院）的日照规定与住宅不同，不能一律套住宅系数"
+      ],
+      "standardRef": ["GB 50180"],
+      "confidence": "medium",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "3", "page": null },
+      "verify": "L 的具体数值必须查项目所在地规划技术规定或现行 GB 50180 的地方实施细则，本条不给具体数字"
+    },
+    {
+      "id": "building-architecture-formula-003",
+      "subjectId": "building-architecture",
+      "chapter": "3.3",
+      "name": "正午太阳高度角",
+      "expr": "h = 90 - phi + delta",
+      "latex": "h = 90^\\circ - \\varphi + \\delta",
+      "vars": [
+        { "sym": "h", "name": "正午太阳高度角", "unit": "°", "note": "当地真太阳时正午时的太阳高度角，是一天中太阳最高的时刻" },
+        { "sym": "phi", "name": "地理纬度", "unit": "°", "note": "北半球取正值，如北京约 39.9°" },
+        { "sym": "delta", "name": "太阳赤纬", "unit": "°", "note": "随日期变化的太阳直射点纬度，冬至日约 -23.4°，二分日为 0°，夏至日约 +23.4°" }
+      ],
+      "conditions": [
+        "只适用于真太阳时正午（太阳过天子午圈）这一瞬间",
+        "忽略大气折射与地形高差修正"
+      ],
+      "derivationHint": "天球几何关系：正午时太阳高度角 h = 90° − |φ − δ|，北回归线以北地区冬至日 δ<φ，故 h = 90° − φ + δ。",
+      "typicalUse": "手算日照间距的第一步——先求出当地冬至日/大寒日正午太阳高度角，再代入 D = H/tan h",
+      "pitfalls": [
+        "这是正午值，若日照标准要求的是连续若干个有效小时（通常是时段），直接用正午角会把间距算小",
+        "赤纬 δ 随年份略有变化、且日历日期近似（如把大寒日近似为 1 月 20 日）会带来偏差",
+        "北回归线以南的地区不能直接用该简化式，需取绝对值形式"
+      ],
+      "standardRef": ["GB 50180"],
+      "confidence": "medium",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "3", "page": null },
+      "verify": "赤纬的具体日期值、是否考虑时差与大气折射修正，请对照教材附录或建筑设计资料集核对"
+    },
+    {
+      "id": "building-architecture-formula-004",
+      "subjectId": "building-architecture",
+      "chapter": "9.1",
+      "name": "楼梯踏步经验公式",
+      "expr": "2 * h + b = 600 ~ 620",
+      "latex": "2h + b \\approx 600 \\sim 620 \\ \\mathrm{mm}",
+      "vars": [
+        { "sym": "h", "name": "踏步高度（踢面高）", "unit": "mm", "note": "相邻两个踏步面的垂直距离；住宅常取 150～175，公共建筑常取 140～160" },
+        { "sym": "b", "name": "踏步宽度（踏面宽）", "unit": "mm", "note": "踏步的水平投影进深；室内楼梯常取 260～320" }
+      ],
+      "conditions": [
+        "以成年人平均步距（约 600～620 mm）为依据的经验关系，适用于一般民用建筑室内主要楼梯",
+        "坡度范围内（约 20°～45°）才适用；专用疏散梯、检修爬梯、室外大台阶不套此式"
+      ],
+      "derivationHint": "人在平地上行走一步的水平步长约等于 2h+b，把上下楼梯的能耗折算后得到这一经验恒等式。",
+      "typicalUse": "楼梯设计的第一步：先定 h（或先定 b），用该式反算另一个尺寸",
+      "pitfalls": [
+        "600～620 是成年人步距，托幼、小学、老人院等建筑应取更小值（步距更短）",
+        "它是经验范围不是等式约束，最终仍须校核梯段净高、梯段长度与楼梯间开间进深",
+        "单位必须是 mm；若用 m 则应为 2h+b≈0.60～0.62 m"
+      ],
+      "standardRef": ["GB 50352"],
+      "confidence": "medium",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "9", "page": null },
+      "verify": "教材采用 600~620 还是 600~630、以及各类建筑踏步 h/b 的限值区间，请对照课本与现行 GB 50352 核对"
+    },
+    {
+      "id": "building-architecture-formula-005",
+      "subjectId": "building-architecture",
+      "chapter": "9.2",
+      "name": "楼梯踏步数的确定",
+      "expr": "n = round(H / h0)",
+      "latex": "n = \\left[ \\dfrac{H}{h_0} \\right]",
+      "vars": [
+        { "sym": "n", "name": "踏步数", "unit": "个", "note": "取整后的整数，即本级梯段所包含的踢面（踏步）数量" },
+        { "sym": "H", "name": "层高（或一个完整的提升高度）", "unit": "mm", "note": "该梯段需要跨越的垂直高度；双跑平行梯则取 H/2 作为每跑高度" },
+        { "sym": "h0", "name": "初选踏步高度", "unit": "mm", "note": "按建筑类型在常用区间内先假定一个值，再反算修正" }
+      ],
+      "conditions": [
+        "必须先定结构层高 H，且 H 已包含楼板厚度（即楼面到楼面）",
+        "每个梯段的踏步数一般不宜超过 18 级、也不宜少于 3 级（总跨稳性与疲劳）"
+      ],
+      "derivationHint": "踏步数 = 需跨越的总高度 ÷ 每一踏步能抬升的高度，相除后必须取整（四舍五入或按需调整）。",
+      "typicalUse": "给定层高反算楼梯：H → n → 实际 h → b → 梯段长 L，这是课程设计的标准流程",
+      "pitfalls": [
+        "双跑平行楼梯应先用 H/2 作为每跑高度再算每跑踏步数，直接用 H 会把 n 算成两倍",
+        "n 取整后必须回头修正 h，不能继续用初选 h0",
+        "两跑踏步数不等时要写成 n1、n2（长短跑），这是解决净高不足的常用手法"
+      ],
+      "standardRef": ["GB 50352"],
+      "confidence": "high",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "9", "page": null },
+      "verify": "每跑最多/最少踏步数的规定（常见的 3 级与 18 级）请核对现行 GB 50352，不同建筑类型可能另有要求"
+    },
+    {
+      "id": "building-architecture-formula-006",
+      "subjectId": "building-architecture",
+      "chapter": "9.2",
+      "name": "踏步高度取整后的反算",
+      "expr": "h = H / n",
+      "latex": "h = \\dfrac{H}{n}",
+      "vars": [
+        { "sym": "h", "name": "实际踏步高度", "unit": "mm", "note": "取整修正后的最终取值，通常在 140～180 之间，宜取整到 5 mm" },
+        { "sym": "H", "name": "提升高度", "unit": "mm", "note": "该梯段跨越的高度；双跑时为层高的一半（不等跑时分别取 H1、H2）" },
+        { "sym": "n", "name": "取整后的踏步数", "unit": "个", "note": "由初选值反算并取整确定" }
+      ],
+      "conditions": [
+        "n 已由公式 005 确定为正整数",
+        "反算所得 h 仍须落在该类建筑踏步高度的允许区间内，否则要调整 n 重算"
+      ],
+      "derivationHint": "n·h 必须精确等于 H，否则楼层标高会出错；因此 h 通常是带有小数的值，施工图上要标注精确标高复核。",
+      "typicalUse": "确定最终踏步高；再由 2h+b=600~620 求踏步宽 b",
+      "pitfalls": [
+        "h 一般不需要是整数，强行四舍五入到整数会造成累计标高误差（n×误差 = 楼层误差）",
+        "若 h 超出允许区间，说明层高与该楼梯形式不匹配，应换形式（如改三跑）或调整层高"
+      ],
+      "standardRef": ["GB 50352"],
+      "confidence": "high",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "9", "page": null },
+      "verify": null
+    },
+    {
+      "id": "building-architecture-formula-007",
+      "subjectId": "building-architecture",
+      "chapter": "9.2",
+      "name": "梯段水平投影长度",
+      "expr": "L = (n - 1) * b",
+      "latex": "L = (n-1)\\,b",
+      "vars": [
+        { "sym": "L", "name": "梯段水平投影长度", "unit": "mm", "note": "第一个踏步前缘到最后一个踏步前缘的水平距离，用于校核楼梯间进深" },
+        { "sym": "n", "name": "该梯段的踏步数", "unit": "个", "note": "等于该跑的踏面数" },
+        { "sym": "b", "name": "踏步宽度", "unit": "mm", "note": "由 2h+b 反算得到" }
+      ],
+      "conditions": [
+        "适用于直线段踏步等宽布置的常规梯段",
+        "n 为该跑本身的踏步数（双跑时取一半）"
+      ],
+      "derivationHint": "n 个踏步产生 n 个踢面，但只产生 n−1 个踏面：最上面一级与楼层平台面重合，故水平投影为 (n−1)·b。",
+      "typicalUse": "校核楼梯间进深是否能容纳梯段长度与两端平台宽度；布置平面图时定位中间平台",
+      "pitfalls": [
+        "最常见的错误是写成 n×b：把楼层平台面当成第 n+1 个踏面，会把 L 算大一个 b",
+        "若踏步做防滑突出（挑出踏唇），需按实际取净宽还是模数宽区分",
+        "弧形踏步、螺旋梯不能用该式，须按离散踏面分别计算"
+      ],
+      "standardRef": ["GB 50352"],
+      "confidence": "high",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "9", "page": null },
+      "verify": null
+    },
+    {
+      "id": "building-architecture-formula-008",
+      "subjectId": "building-architecture",
+      "chapter": "9.2",
+      "name": "梯段的垂直提升高度",
+      "expr": "Hs = n * h",
+      "latex": "H_s = n \\, h",
+      "vars": [
+        { "sym": "Hs", "name": "梯段提升高度", "unit": "mm", "note": "该跑从下端平台面到上端平台面的垂直高差" },
+        { "sym": "n", "name": "踏步数", "unit": "个", "note": "等于该跑的踢面数" },
+        { "sym": "h", "name": "踏步高度", "unit": "mm", "note": "由 H/n 反算得到" }
+      ],
+      "conditions": [
+        "等跑双跑楼梯时 Hs = 层高 H ÷ 2",
+        "不等跑（长短跑）时 Hs1 + Hs2 = 层高 H"
+      ],
+      "derivationHint": "n 个踏步对应 n 个踢面，故提升高度为 n 与 h 之积。",
+      "typicalUse": "画剖面图时给每一跑标注起止标高；校核中间平台标高是否正确",
+      "pitfalls": [
+        "与踏面数混淆：垂直方向用 n 个，水平方向用 n−1 个，这是楼梯计算的核心不对称点",
+        "中间平台的结构板厚会影响平台标高画法（建筑标高与结构标高差一个面层厚度）"
+      ],
+      "standardRef": ["GB 50352"],
+      "confidence": "high",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "9", "page": null },
+      "verify": null
+    },
+    {
+      "id": "building-architecture-formula-009",
+      "subjectId": "building-architecture",
+      "chapter": "9.1",
+      "name": "楼梯坡度",
+      "expr": "alpha = atan(h / b)",
+      "latex": "\\alpha = \\arctan \\dfrac{h}{b}",
+      "vars": [
+        { "sym": "alpha", "name": "楼梯坡度角", "unit": "°", "note": "常用范围约 20°～45°，一般认为 30° 上下较舒适" },
+        { "sym": "h", "name": "踏步高度", "unit": "mm", "note": "踢面高" },
+        { "sym": "b", "name": "踏步宽度", "unit": "mm", "note": "踏面宽" }
+      ],
+      "conditions": [
+        "踏步等尺寸、直线梯段",
+        "坡道（无踏步）不适用该式，应直接用 i = h/L 的百分比表示"
+      ],
+      "derivationHint": "每一踏步构成一个直角三角形，坡度角为其斜边与水平的夹角。",
+      "typicalUse": "判断楼梯是否过陡/过缓；与电梯、自动扶梯的倾角做对比选型",
+      "pitfalls": [
+        "坡度大于 45° 已属爬梯，不能作为日常疏散楼梯使用",
+        "坡度与踏步经验式是同一个约束的两种表达，不必分别强制满足"
+      ],
+      "standardRef": ["GB 50352"],
+      "confidence": "medium",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "9", "page": null },
+      "verify": "各类楼梯坡度与踏步尺寸的限值是 20°~45° 还是其他区间，请按现行 GB 50352 核对"
+    },
+    {
+      "id": "building-architecture-formula-010",
+      "subjectId": "building-architecture",
+      "chapter": "9.2",
+      "name": "双跑平行楼梯的进深校核",
+      "expr": "Lin_net = D1 + L + D2",
+      "latex": "L_{in,net} = D_1 + L + D_2",
+      "vars": [
+        { "sym": "Lin_net", "name": "楼梯间净进深", "unit": "mm", "note": "两侧承重墙内表面之间的距离 = 定位轴线进深 − 两侧墙厚（或为一侧的墙厚一半等，按轴线定位关系）" },
+        { "sym": "D1", "name": "楼层平台（楼层缓步）净宽", "unit": "mm", "note": "一般不小于梯段净宽 B，且须满足最小净宽规定" },
+        { "sym": "L", "name": "梯段水平投影长度", "unit": "mm", "note": "=(n−1)·b" },
+        { "sym": "D2", "name": "中间平台净宽", "unit": "mm", "note": "同样一般不小于 B" }
+      ],
+      "conditions": [
+        "双跑平行楼梯（最常用形式），两段梯段平行且中间设休息平台",
+        "墙体厚度、轴线定位关系（偏心/居中）需按结构图确定"
+      ],
+      "derivationHint": "沿行走方向把楼梯间内的一段可布置长度做加法：进平台 + 一跑投影 + 中平台（第二跑与第一跑在同一投影位置上，不再额外占用进深）。",
+      "typicalUse": "已知层高与初选踏步尺寸，反算楼梯间需要多大进深；或已知进深校核能否排下",
+      "pitfalls": [
+        "第二跑与第一跑在平面上不同进出方向，长度不叠加，重复叠加是最典型错误",
+        "忘了扣墙厚：定位轴线尺寸是轴线到轴线，能布置的是净尺寸",
+        "平台宽度还要同时满足搬运家具与消防疏散的最小净宽要求"
+      ],
+      "standardRef": ["GB 50352", "GB 50016"],
+      "confidence": "medium",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "9", "page": null },
+      "verify": "平台净宽最小值（是否必须 ≥ 梯段净宽、是否另有绝对下限）请按现行 GB 50352 与 GB 50016 核对"
+    },
+    {
+      "id": "building-architecture-formula-011",
+      "subjectId": "building-architecture",
+      "chapter": "9.2",
+      "name": "双跑平行楼梯的开间校核",
+      "expr": "Win_net = 2 * B + c",
+      "latex": "W_{in,net} = 2B + c",
+      "vars": [
+        { "sym": "Win_net", "name": "楼梯间净开间", "unit": "mm", "note": "两侧墙内表面之间的距离；应取模数尺寸（如 2400、2700、3000 等）" },
+        { "sym": "B", "name": "梯段净宽", "unit": "mm", "note": "按人流股数或疏散宽度计算得到的净宽，两侧若有扶手需计入扶手占用" },
+        { "sym": "c", "name": "梯井宽度", "unit": "mm", "note": "两梯段之间的空隙，住宅常取较小值或不设；托幼建筑受安全限制另有规定" }
+      ],
+      "conditions": [
+        "双跑平行楼梯，两段梯段等宽并排布置",
+        "楼梯间采用砖混结构时，开间宜符合模数与板跨的经济尺寸"
+      ],
+      "derivationHint": "横向（开间）方向上布：一跑梯段 + 梯井 + 另一跑梯段，再加两侧扶手/粉刷占用。",
+      "typicalUse": "由每股人流推算梯段净宽后，反算楼梯间开间；或给定开间反算能做多宽的梯段",
+      "pitfalls": [
+        "梯井宽度不是随意的：过大会浪费面积且有儿童坠落的隐患，过小影响扶手安装",
+        "净宽 B 与定位轴线尺寸之间还差一圈抹灰层厚度（通常每侧 10~20 mm 量级）",
+        "疏散楼梯净宽要按建筑设计防火规范的最小值再校核一次"
+      ],
+      "standardRef": ["GB 50352", "GB 50016"],
+      "confidence": "medium",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "9", "page": null },
+      "verify": "梯井宽度的构造取值与托幼等特殊建筑的限制，请核对现行 GB 50352、GB 50016 与相关专用建筑设计规范"
+    },
+    {
+      "id": "building-architecture-formula-012",
+      "subjectId": "building-architecture",
+      "chapter": "9.2",
+      "name": "按人流股数确定梯段净宽",
+      "expr": "B = m * (550 + a)",
+      "latex": "B = m\\,(550 + a)",
+      "vars": [
+        { "sym": "B", "name": "梯段净宽（或走道净宽）", "unit": "mm", "note": "墙面到扶手中心线（或到另一墙面）的净通行宽度" },
+        { "sym": "m", "name": "人流股数", "unit": "股", "note": "按预计同时通行人数与每股通行能力估算，常取 2、3、4 股" },
+        { "sym": "550", "name": "单人通行宽度", "unit": "mm", "note": "每股人流的基本宽度，教材常取 550 mm" },
+        { "sym": "a", "name": "行走摆幅附加值", "unit": "mm", "note": "通常取 0~150 mm，人流密集或携带物品时取大值" }
+      ],
+      "conditions": [
+        "适用于估算使用要求下的宽度，属「使用性」计算",
+        "最终结果必须再用疏散宽度百人指标（公式 027）与规范最小净宽做包络取大值"
+      ],
+      "derivationHint": "把人流看成 m 条互不干扰的「流带」，每条流带宽度 = 人体肩宽 + 行走摆幅。",
+      "typicalUse": "估算教学楼、宿舍、办公楼的主楼梯与主要走道宽度",
+      "pitfalls": [
+        "550 mm 是成年人的通行宽度；中小学、商场等宜取更大",
+        "净宽计算基准是「净」宽，别把墙厚、扶手、装饰层算进去",
+        "疏散楼梯的净宽不能低于防火规范的强制下限，即使使用需求很小"
+      ],
+      "standardRef": ["GB 50352", "GB 50016"],
+      "confidence": "medium",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "9", "page": null },
+      "verify": "每股人流宽度取 550 还是 600、摆幅取值范围，以及各类建筑疏散楼梯的最小净宽，请按教材与现行 GB 50016 核对"
+    },
+    {
+      "id": "building-architecture-formula-013",
+      "subjectId": "building-architecture",
+      "chapter": "9.2",
+      "name": "楼梯净高限值",
+      "expr": "H_cs >= 2200 and H_pl >= 2000",
+      "latex": "H_{梯段} \\ge 2200\\ \\mathrm{mm},\\quad H_{平台} \\ge 2000\\ \\mathrm{mm}",
+      "vars": [
+        { "sym": "H_cs", "name": "梯段净高", "unit": "mm", "note": "踏步前缘处的顶棚到该踏步前缘的最大垂直净空，应包含所有踏步" },
+        { "sym": "H_pl", "name": "平台（含平台过道）净高", "unit": "mm", "note": "平台面到上部梁底或顶棚的垂直净空，平台梁梁底处往往最不利" }
+      ],
+      "conditions": [
+        "「净高」指完成面到完成面，须扣除面层、吊顶、梁高与设备管线占用",
+        "建筑处于正常使用状态；防火、疏散尚另有相应规定"
+      ],
+      "derivationHint": "按人体舒适度（举手顶高）与安全余量确定的经验限值，其中梯段处因为有抬头动作且视线更受迫，要求比平台更高。",
+      "typicalUse": "楼梯剖面必然会做的一道校核；尤其是「梁下沉」导致首层入口净高不足的处理",
+      "pitfalls": [
+        "最不利点不一定在平台正中，往往是斜梯段下方与上层楼板的交接棱线，或平台梁底",
+        "2200 与 2000 的具体数值、是否还要满足 ≤2200 的其他部位要求，务必核现行规范",
+        "补救做法：长短跑、降低中间平台下地坪、抬高中间平台、加大底层层高、改直跑/剪刀梯"
+      ],
+      "standardRef": ["GB 50352", "GB 50096"],
+      "confidence": "medium",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "9", "page": null },
+      "verify": "2200/2000 mm 为教材常见口径，具体数值及量测位置请以现行 GB 50352、GB 50096 为准"
+    },
+    {
+      "id": "building-architecture-formula-014",
+      "subjectId": "building-architecture",
+      "chapter": "2.1",
+      "name": "使用面积系数",
+      "expr": "K = Su / Sb",
+      "latex": "K = \\dfrac{S_u}{S_b}",
+      "vars": [
+        { "sym": "K", "name": "使用面积系数", "unit": "—", "note": "衡量平面利用效率的指标，K 越大说明交通与结构占用越少" },
+        { "sym": "Su", "name": "使用面积之和", "unit": "m²", "note": "各主要使用房间与辅助房间净面积之和（不含墙体、交通面积）" },
+        { "sym": "Sb", "name": "建筑面积", "unit": "m²", "note": "按现行建筑面积计算规则计得的建筑面积（含公摊与结构面积）" }
+      ],
+      "conditions": [
+        "建筑面积须按统一的现行面积计算规则核算，阳台、飘窗、地下室等部位算法差异很大",
+        "住宅与公建的 K 值可比性不强，通常在校内的方案比较中横向使用"
+      ],
+      "derivationHint": "直接定义式：有效使用面积占总建筑面积的比例。",
+      "typicalUse": "课程设计说明书里评价自己方案的合理性；比较两个方案哪个更紧凑",
+      "pitfalls": [
+        "使用面积与套内使用面积不是一回事，不能混用套内指标",
+        "建筑面积计算规则会随版本更新（如阳台计半面积的规定），注明所用版本",
+        "把走廊、楼梯、墙体算进使用面积会使 K 虚高"
+      ],
+      "standardRef": ["GB 50352", "GB/T 50353"],
+      "confidence": "medium",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "2", "page": null },
+      "verify": "建筑面积计算规则须用现行 GB/T 50353；K 的合理区间（住宅、办公楼各自多少）请查教材或设计资料集"
+    },
+    {
+      "id": "building-architecture-formula-015",
+      "subjectId": "building-architecture",
+      "chapter": "2.1",
+      "name": "房间面积的三部分构成",
+      "expr": "A = Af + Aa + Ac",
+      "latex": "A = A_f + A_a + A_c",
+      "vars": [
+        { "sym": "A", "name": "房间使用面积", "unit": "m²", "note": "房间内墙净尺寸围成的面积" },
+        { "sym": "Af", "name": "家具设备占用面积", "unit": "m²", "note": "按实际布置的家具外轮廓占地计算" },
+        { "sym": "Aa", "name": "使用活动面积", "unit": "m²", "note": "人在家具周围操作、通行、起坐所需的空间" },
+        { "sym": "Ac", "name": "房间内部交通面积", "unit": "m²", "note": "房间内部走到门口、走到各家具之间的通道面积" }
+      ],
+      "conditions": [
+        "三者可能有局部重叠，家具布置图上需按最不利组合包络",
+        "与「面积定额法」互为校验：算完 A 再用定额校核是否偏小"
+      ],
+      "derivationHint": "把房间看成被占用空间与空隙空间的组合，逐项加和即为最小可用面积。",
+      "typicalUse": "没有定额可参考的房间（如特殊实验室、设备房）的面积确定；课程设计中教室/宿舍的家具布置校核",
+      "pitfalls": [
+        "忽略了门扇开启占用面积是最常见的漏项（尤其内开门与推拉门差异大）",
+        "家具尺寸要用真实产品尺寸或人体工学的最小控制尺寸，不能凭印象",
+        "同时也要校核开间与进深各自能否排下家具，不能只看总面积"
+      ],
+      "standardRef": ["GB 50352"],
+      "confidence": "high",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "2", "page": null },
+      "verify": null
+    },
+    {
+      "id": "building-architecture-formula-016",
+      "subjectId": "building-architecture",
+      "chapter": "2.1",
+      "name": "面积定额法",
+      "expr": "A = N * q",
+      "latex": "A = N \\cdot q",
+      "vars": [
+        { "sym": "A", "name": "房间面积", "unit": "m²", "note": "该房间的估算使用面积" },
+        { "sym": "N", "name": "使用人数", "unit": "人", "note": "按设计容纳人数取值，不宜用实际可能的最少人数" },
+        { "sym": "q", "name": "面积定额", "unit": "m²/人", "note": "按建筑类型与房间功能查取的每人最低面积指标，各类建筑取值不同" }
+      ],
+      "conditions": [
+        "q 必须取自现行规范或设计任务书给定值",
+        "算得 A 后仍应用家具布置法（公式 015）复核"
+      ],
+      "derivationHint": "由人均需求面积直接线性放大到总人数。",
+      "typicalUse": "教室、宿舍、办公室、餐厅等标准功能房间的面积快速估算",
+      "pitfalls": [
+        "定额是指「使用面积」还是「建筑面积」有时含糊，务必看清口径",
+        "定额通常是最低值，还需要考虑房间形状能否有效布置",
+        "人数应按最不利工况（满员、课间换班）取值"
+      ],
+      "standardRef": ["GB 50099", "GB 50096", "JGJ 67"],
+      "confidence": "medium",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "2", "page": null },
+      "verify": "各建筑类型的人均面积定额须查对应的现行专用建筑设计规范（如中小学校设计规范、住宅设计规范、办公建筑设计标准），不要套别的建筑类型"
+    },
+    {
+      "id": "building-architecture-formula-017",
+      "subjectId": "building-architecture",
+      "chapter": "2.4",
+      "name": "走道宽度与人流股数",
+      "expr": "W = m * (550 + a)",
+      "latex": "W = m\\,(550 + a)",
+      "vars": [
+        { "sym": "W", "name": "走道净宽", "unit": "mm", "note": "两侧墙面粉刷完成面之间的净宽" },
+        { "sym": "550", "name": "每股人流宽度", "unit": "mm", "note": "教材常用每股人流 550 mm" },
+        { "sym": "m", "name": "通过的人流股数", "unit": "股", "note": "双侧布置房间的走道常取 2~4 股，内廊式教学楼通常不小于 2 股" },
+        { "sym": "a", "name": "开门/摆幅附加量", "unit": "mm", "note": "考虑门扇开启会短暂占用通行宽度，必要时额外增加" }
+      ],
+      "conditions": [
+        "仅满足使用要求；疏散走道还必须用防火规范的最小净宽校核后取大值",
+        "搬运家具的房间（卧室、实验室）要额外校核家具尺寸能否通过"
+      ],
+      "derivationHint": "与梯段净宽同理，把通行空间按 550 mm 一股拆分。",
+      "typicalUse": "教学楼、宿舍、办公楼的走廊宽度取值；判断给定走道宽度够不够",
+      "pitfalls": [
+        "若有向阳/向外开启的门扇占用，需要局部加宽或做凹口（门斗）",
+        "有担架/轮椅通行要求的走道（医疗建筑）不能套普通 550 基数",
+        "疏散要求的宽度常大于日常使用宽度，最终要以防火为准"
+      ],
+      "standardRef": ["GB 50016", "GB 50352"],
+      "confidence": "medium",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "2", "page": null },
+      "verify": "每股人流宽度、各类走道的最小净宽（尤其疏散走道与医疗建筑）请核对现行 GB 50016 与专用建筑设计规范"
+    },
+    {
+      "id": "building-architecture-formula-018",
+      "subjectId": "building-architecture",
+      "chapter": "11.1",
+      "name": "窗地面积比",
+      "expr": "Ac / Ad >= r",
+      "latex": "\\dfrac{A_c}{A_d} \\ge r",
+      "vars": [
+        { "sym": "Ac", "name": "采光窗洞口面积", "unit": "m²", "note": "按窗洞口净面积计，不含窗框遮挡；有时按有效透光面积折减" },
+        { "sym": "Ad", "name": "房间地板面积", "unit": "m²", "note": "房间净使用面积（参考平面通常为距地一定高度的平面）" },
+        { "sym": "r", "name": "窗地比限值", "unit": "—", "note": "按房间功能与采光等级查表取值的下限，如教室、办公室、卧室各有不同" }
+      ],
+      "conditions": [
+        "r 取自现行建筑采光设计标准，并对应相应的采光等级",
+        "天然光气候分区不同，同一功能的窗地比要求也可能不同"
+      ],
+      "derivationHint": "以「窗户面积与地面面积之比」作为天然采光的近似评价指标，属最容易操作的简化方法。",
+      "typicalUse": "确定窗洞口尺寸与数量；方案阶段判断房间的开窗够不够",
+      "pitfalls": [
+        "窗地比只是简化指标，真正的采光评价应看采光系数（公式 019）",
+        "阳台、遮阳构件、相邻建筑遮挡会使实际采光远低于按窗地比推算的值",
+        "窗扇开启面积与洞口面积不同：采光按洞口，通风按开启扇，别混淆"
+      ],
+      "standardRef": ["GB 50033"],
+      "confidence": "medium",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "11", "page": null },
+      "verify": "各功能房间窗地比的具体限值（如 1/6、1/7 一类）必须从现行 GB 50033 查表，且注意是否为参考平面上的采光系数最低值"
+    },
+    {
+      "id": "building-architecture-formula-019",
+      "subjectId": "building-architecture",
+      "chapter": "11.1",
+      "name": "采光系数",
+      "expr": "C = (En / Ew) * 100",
+      "latex": "C = \\dfrac{E_n}{E_w} \\times 100\\%",
+      "vars": [
+        { "sym": "C", "name": "采光系数（采光系数最低值/平均值）", "unit": "%", "note": "评价天然采光的相对指标，与室外天气无关" },
+        { "sym": "En", "name": "室内某点的天然光照度", "unit": "lx", "note": "在全阴天天空条件下测得的照度" },
+        { "sym": "Ew", "name": "同一时刻室外无遮挡水平面上的天空光漫射照度", "unit": "lx", "note": "与 En 必须同步测量，故 C 基本不受天气变化影响" }
+      ],
+      "conditions": [
+        "以全阴天（CIE 标准全阴天）为计算天空条件",
+        "须区分「采光系数平均值」与「采光系数最低值」，两者评价标准不同"
+      ],
+      "derivationHint": "用室内外照度之比消除天气与时刻的影响，得到一个只与建筑几何有关的稳定指标。",
+      "typicalUse": "侧窗采光计算、锯齿形天窗设计；复杂外窗/中庭的采光软件分析",
+      "pitfalls": [
+        "不能用「某一时刻实测照度 ÷ 晴天室外照度」代替：必须按全阴天条件",
+        "窗下污染、玻璃透光比、窗结构挡光都要作折减",
+        "窗地比满足不代表采光系数满足，两者是不同层次的要求"
+      ],
+      "standardRef": ["GB 50033"],
+      "confidence": "medium",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "11", "page": null },
+      "verify": "采光系数标准值、计算点选取（参考平面位置、点网格）请按现行 GB 50033 核对"
+    },
+    {
+      "id": "building-architecture-formula-020",
+      "subjectId": "building-architecture",
+      "chapter": "3.2",
+      "name": "房间容积与体积",
+      "expr": "V = A * hn",
+      "latex": "V = A \\cdot h_n",
+      "vars": [
+        { "sym": "V", "name": "房间容积", "unit": "m³", "note": "房间净面积乘以净高" },
+        { "sym": "A", "name": "房间使用面积", "unit": "m²", "note": "内墙净尺寸围成的面积" },
+        { "sym": "hn", "name": "房间净高", "unit": "m", "note": "楼面完成面到顶棚完成面的距离" }
+      ],
+      "conditions": [
+        "净高不等（有吊顶、坡屋面）时应分段计算后累加",
+        "地面有局部下沉或抬高时按实际体积算"
+      ],
+      "derivationHint": "体积定义式。",
+      "typicalUse": "为换气次数、冬季采暖负荷、观众厅每座容积等指标提供基础数据",
+      "pitfalls": [
+        "用层高代替净高会把 V 算大（差了楼板与面层厚度）",
+        "家具与设备占的体积一般不扣除（卫生和空调计算多取整个空间）"
+      ],
+      "standardRef": ["GB 50736"],
+      "confidence": "medium",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "3", "page": null },
+      "verify": null
+    },
+    {
+      "id": "building-architecture-formula-021",
+      "subjectId": "building-architecture",
+      "chapter": "2.3",
+      "name": "按换气次数计算通风量",
+      "expr": "G = nv * V",
+      "latex": "G = n_v \\, V",
+      "vars": [
+        { "sym": "G", "name": "通风量（排风量/新风量）", "unit": "m³/h", "note": "机械排风或自然通风所需达到的每小时空气交换量" },
+        { "sym": "nv", "name": "换气次数", "unit": "次/h", "note": "按房间类型确定：卫生间、厨房、配电间等各有规定值" },
+        { "sym": "V", "name": "房间容积", "unit": "m³", "note": "由公式 020 得到" }
+      ],
+      "conditions": [
+        "换气次数取值必须来自现行规范或工艺要求",
+        "同时存在人均新风量要求时应取两者的大值"
+      ],
+      "derivationHint": "每小时把整个房间的空气替换 n 次，故单位时间空气量 = n × 房间容积。",
+      "typicalUse": "确定公共卫生间机械排风量、厨房排风量，进而选择排风口/风道断面",
+      "pitfalls": [
+        "换气次数与人均新风量常常两个都要满足，只算一个会偏小",
+        "无外窗卫生间必须有机械排风竖井，这是构造上的硬要求，不能靠自然通风搪塞",
+        "排风量还要校核风道风速与噪声，流道断面过小也会失效"
+      ],
+      "standardRef": ["GB 50736", "GB 50015"],
+      "confidence": "medium",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "2", "page": null },
+      "verify": "各类房间的最小换气次数（如公共卫生间常按 10 次/h 一带的数量级）请查现行 GB 50736，不要按记忆取数"
+    },
+    {
+      "id": "building-architecture-formula-022",
+      "subjectId": "building-architecture",
+      "chapter": "1.4",
+      "name": "建筑模数数列",
+      "expr": "S = k * M",
+      "latex": "S = k \\cdot M \\quad (M = 100\\ \\mathrm{mm})",
+      "vars": [
+        { "sym": "S", "name": "模数化尺寸", "unit": "mm", "note": "符合模数数列的标志尺寸，用于开间、进深、层高、门窗洞口等" },
+        { "sym": "k", "name": "模数倍数", "unit": "—", "note": "扩大模数取 3、6、12、15、30、60；分模数取 1/10、1/5、1/2" },
+        { "sym": "M", "name": "基本模数", "unit": "mm", "note": "M = 100 mm，即 1 dm，是模数协调的基础单位" }
+      ],
+      "conditions": [
+        "定位轴线尺寸、主要构配件的外形尺寸宜符合各自适用的模数列（水平扩大模数常用 3M、竖向常用 6M 等）",
+        "构造缝隙、加工误差不占用模数坐标，由「标志尺寸—构造尺寸—实际尺寸」三者之差消化"
+      ],
+      "derivationHint": "模数体系本身就是一个以 100 mm 为公差的等差数列，所有协调尺寸都落在这些节点的 ±允许偏差内。",
+      "typicalUse": "确定开间/进深/层高/门窗洞口尺寸；判断一个尺寸是否「合模」；校核定位轴线距 g",
+      "pitfalls": [
+        "混淆三种尺寸：标志尺寸（标注值）、构造尺寸（构件设计尺寸）、实际尺寸（做完后的实测值），差值 = 缝隙+允许偏差",
+        "分模数只适用于构造节点与缝隙，不能用来标开间层高",
+        "砖混结构的墙厚（240、370）看似不合 3M，实际由砖的模数与轴线定位关系处理"
+      ],
+      "standardRef": ["GB/T 50002"],
+      "confidence": "medium",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "1", "page": null },
+      "verify": "基本模数 100 mm 是通行口径；扩大模数与分模数的具体适用范围（水平/竖向、构件/节点）请核对教材与现行 GB/T 50002"
+    },
+    {
+      "id": "building-architecture-formula-023",
+      "subjectId": "building-architecture",
+      "chapter": "7.2",
+      "name": "标准砖的模数关系与墙厚数列",
+      "expr": "Lb : Bb : Hb = (240+10) : (115+10) : (53+10) ~ 4 : 2 : 1",
+      "latex": "(240+10):(115+10):(53+10) \\approx 4:2:1",
+      "vars": [
+        { "sym": "Lb", "name": "标准砖长", "unit": "mm", "note": "标准砖通用规格 240×115×53 mm" },
+        { "sym": "Bb", "name": "标准砖宽", "unit": "mm", "note": "115 mm" },
+        { "sym": "Hb", "name": "标准砖厚", "unit": "mm", "note": "53 mm" },
+        { "sym": "t", "name": "灰缝厚度", "unit": "mm", "note": "通常取 10 mm（8~12 mm 范围）" }
+      ],
+      "conditions": [
+        "适用于普通烧结砖（俗称标准砖）砌体",
+        "由此得到的墙厚数列为 120、180、240、370、490 mm（分别为半砖、3/4 砖、一砖、一砖半、两砖）"
+      ],
+      "derivationHint": "加灰缝后 250:125:62.5 = 4:2:1，因此砖的两个方向可以互换拼出规则的墙厚，且错缝自然形成 1/4 砖的搭接。",
+      "typicalUse": "由标准砖尺寸推导墙厚数列；判断图中 240/370 墙厚的称谓；组砌图中的丁砖与顺砖排布",
+      "pitfalls": [
+        "忘了加灰缝会得到 240:115:53 ≈ 4.5:2.2:1，得不到整数比，这是推导的关键一步",
+        "砖的实际尺寸有正负偏差，组砌时由竖向灰缝吸收，不能强行「零误差」排砖",
+        "砌块墙（如 190 系列）的模数与标准砖不同，不能套此关系"
+      ],
+      "standardRef": ["GB 50003"],
+      "confidence": "medium",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "7", "page": null },
+      "verify": "标准砖规格与灰缝取值请核对现行制品标准与教材；不同地区仍可能存在定制砖规格差异"
+    },
+    {
+      "id": "building-architecture-formula-024",
+      "subjectId": "building-architecture",
+      "chapter": "3.1",
+      "name": "阶梯教室/观众厅的视线升高差",
+      "expr": "dn = c * (n - 1)",
+      "latex": "d_n = c\\,(n-1)",
+      "vars": [
+        { "sym": "dn", "name": "第 n 排地面的升高值", "unit": "mm", "note": "第 n 排观众眼睛位置相对第一排地面的升高量" },
+        { "sym": "c", "name": "视线升高差（C 值）", "unit": "mm", "note": "每排所需的视线超出量，教材通常取值在 120 mm 量级；也有按隔排计算（每排 60）的做法" },
+        { "sym": "n", "name": "排号", "unit": "排", "note": "从第一排起算" }
+      ],
+      "conditions": [
+        "逐排校核、逐渐升高的刚性吉他排设计（逐排升高法）",
+        "设计视点（通常在舞台面边缘或黑板底）与设计值须先约定"
+      ],
+      "derivationHint": "为保证后排观众视线越过前排头顶看到设计视点，每往后再排一级就要再抬高一个 C 值。",
+      "typicalUse": "阶梯教室、报告厅、观众厅的地面起坡计算；判断给定坡度是否满足视线要求",
+      "pitfalls": [
+        "C 值取 120 mm 还是 60 mm（逐排 vs 隔排）必须看清口径，取错会差一倍",
+        "还需叠加人眼高度、座位的高度差等参数，简化式只作估算",
+        "楼座（挑台）的视线校核算法不同，不能直接套用"
+      ],
+      "standardRef": ["GB 50099"],
+      "confidence": "low",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "3", "page": null },
+      "verify": "C 值（60/120 mm）与完整的视线计算公式请以教材、GB 50099 与剧场类规范核对；本条为极简化的示意式，不宜直接用于正式设计"
+    },
+    {
+      "id": "building-architecture-formula-025",
+      "subjectId": "building-architecture",
+      "chapter": "3.2",
+      "name": "房间净高与层高的关系",
+      "expr": "hn = H - ts - td",
+      "latex": "h_n = H - t_s - t_d",
+      "vars": [
+        { "sym": "hn", "name": "房间净高", "unit": "mm", "note": "楼面完成面到顶棚完成面的垂直距离" },
+        { "sym": "H", "name": "层高", "unit": "mm", "note": "本层楼面到上一层楼面的垂直距离" },
+        { "sym": "ts", "name": "结构层（楼板）厚度", "unit": "mm", "note": "含找平层，若为梁直接承重还应校核梁底下的净高" },
+        { "sym": "td", "name": "面层与吊顶（或抹灰）厚度", "unit": "mm", "note": "含吊顶龙骨占位、管线占位，不走吊顶时只计粉刷层" }
+      ],
+      "conditions": [
+        "楼板水平、顶棚水平且无局部降板的规则房间",
+        "有吊顶或走管线时必须把吊顶下皮作为计算起点，而不是结构楼板底"
+      ],
+      "derivationHint": "沿竖向做减法：从层高中扣去被占用的、人无法使用的厚度。",
+      "typicalUse": "已知层高反算净高并校核是否满足该类房间的最小净高；或已知净高需求反算层高",
+      "pitfalls": [
+        "有梁时最不利点在梁底，要用「梁底标高」而非「楼板底标高」校核",
+        "吊顶内的设备（灯具、风管、喷淋）最小占位往往决定 hn 的实际下限",
+        "顶层为坡屋顶时，净高通常只保证一定比例的面积达标，不能整层平均"
+      ],
+      "standardRef": ["GB 50352", "GB 50096"],
+      "confidence": "high",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "3", "page": null },
+      "verify": "各类房间的最小净高限值须按现行 GB 50352 及相应专用建筑设计规范核对"
+    },
+    {
+      "id": "building-architecture-formula-026",
+      "subjectId": "building-architecture",
+      "chapter": "3.2",
+      "name": "窗台高度与防护高度",
+      "expr": "hs >= 900 or Hs >= 1100",
+      "latex": "h_{窗台} \\approx 900\\ \\mathrm{mm};\\quad \\text{低窗台时 } h_{防护} \\ge 1100\\ \\mathrm{mm}",
+      "vars": [
+        { "sym": "hs", "name": "窗台高度", "unit": "mm", "note": "楼面完成面到窗台面的垂直距离，教室/办公室常见约 900 mm" },
+        { "sym": "Hs", "name": "防护栏杆（栏板）有效高度", "unit": "mm", "note": "从可踏面起算至扶手顶面的高度；临空高度越大要求越高" }
+      ],
+      "conditions": [
+        "防护高度从「可踏面」起算：窗台面宽度达到可踏宽度时，从窗台面算起",
+        "住宅、中小学、托幼的防护要求严于一般公共建筑，且随建筑高度提高而加严"
+      ],
+      "derivationHint": "由人体重心高度与儿童攀爬能力确定的防坠落安全要求。",
+      "typicalUse": "剖面设计时确定窗台标高并判断是否需要设护栏；阳台、外廊、屋顶平台的栏杆高度校核",
+      "pitfalls": [
+        "最典型的失分点：做低窗台时忘记以「可踏面」起算，把高度算大",
+        "栏杆竖向杆件间距同样是防坠落要求（防儿童钻过），高度合格但间距不合格仍不合格",
+        "具体数值请务必按现行 GB 50352 与 GB 50096 核对，尤其住宅阳台栏杆"
+      ],
+      "standardRef": ["GB 50352", "GB 50096"],
+      "confidence": "medium",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "3", "page": null },
+      "verify": "窗台 900 mm 是常见经验值；防护栏杆高度 1050/1100/1200 mm 的分档与建筑高度、建筑类型相关，必须以现行规范为准"
+    },
+    {
+      "id": "building-architecture-formula-027",
+      "subjectId": "building-architecture",
+      "chapter": "14.2",
+      "name": "疏散宽度百人指标计算",
+      "expr": "W = N / 100 * w100",
+      "latex": "W = \\dfrac{N}{100} \\, w_{100}",
+      "vars": [
+        { "sym": "W", "name": "所需疏散净宽度总和", "unit": "m", "note": "以此校核疏散门、疏散走道与疏散楼梯的总净宽" },
+        { "sym": "N", "name": "该层（或该防火分区）的疏散人数", "unit": "人", "note": "按最不利工况确定：固定座位数、面积定额人数取大值" },
+        { "sym": "w100", "name": "百人宽度指标", "unit": "m/百人", "note": "按建筑类型、层数、耐火等级查现行防火规范确定" }
+      ],
+      "conditions": [
+        "w100 必须由现行 GB 50016 按建筑层数/耐火等级查表取得",
+        "算得 W 后，还要把 W 分配到各疏散出口，且每个出口仍需满足最小净宽"
+      ],
+      "derivationHint": "规范先给出每百人应占的最小宽度（考虑人流速度、密度与通行能力），再线性换算到实际人数。",
+      "typicalUse": "教学楼/礼堂的疏散总宽度校核；校核给定层人数下需要几部楼梯、多宽",
+      "pitfalls": [
+        "w100 随层数增加而变大（下层要把上层人流一起带走），各层应分别核算",
+        "算得总宽后还要按「单个出口最小净宽」与「出口数量不应少于两个」复核",
+        "地下、地上不同楼层的百人宽度指标不同，须逐层分别核算"
+      ],
+      "standardRef": ["GB 50016"],
+      "confidence": "medium",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "14", "page": null },
+      "verify": "百人宽度指标必须查现行 GB 50016 的表（数值随版本有调整），且不同建筑类型另有专用指标，禁止凭记忆取值"
+    },
+    {
+      "id": "building-architecture-formula-028",
+      "subjectId": "building-architecture",
+      "chapter": "14.2",
+      "name": "疏散时间（人流通过能力法）",
+      "expr": "T = N / (c * m)",
+      "latex": "T = \\dfrac{N}{c \\, m}",
+      "vars": [
+        { "sym": "T", "name": "疏散时间", "unit": "min", "note": "全部人员通过该出口/楼梯所需的时间，应与允许疏散时间比较" },
+        { "sym": "N", "name": "需疏散的总人数", "unit": "人", "note": "取最不利的同一楼上同时疏散的人数" },
+        { "sym": "c", "name": "每股人流的通行能力", "unit": "人/min", "note": "平地上较大，通过门洞与下楼梯时会降低，按规范或教材取值" },
+        { "sym": "m", "name": "可同时通行的人流股数", "unit": "股", "note": "= 净宽 ÷ 每股人流宽度，向下取整" }
+      ],
+      "conditions": [
+        "c 与每股人流宽度需按疏散部位（走道、门、楼梯）分别取值",
+        "属宏观验算方法，复杂建筑应采用计算机疏散模拟"
+      ],
+      "derivationHint": "总人数 ÷ 单位时间的通行能力 = 所需时间；通过能力 = 每股能力 × 股数。",
+      "typicalUse": "校核礼堂、体育场馆等人员集中场所的安全疏散是否满足允许疏散时间",
+      "pitfalls": [
+        "下楼梯的通行能力明显低于平地，用同一个 c 会低估疏散时间",
+        "每股人流宽度需要有一位样品；疏散时往往取更大值（人流拥塞、携带物品）",
+        "还应叠加火灾探测与人员反应时间，这部分常常占比很大"
+      ],
+      "standardRef": ["GB 50016"],
+      "confidence": "low",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "14", "page": null },
+      "verify": "每股人流通行能力与每股宽度的取值请核对现行 GB 50016 及教材附录数据表，本条只给方法框架不给数值"
+    },
+    {
+      "id": "building-architecture-formula-029",
+      "subjectId": "building-architecture",
+      "chapter": "14.1",
+      "name": "防火分区最大允许建筑面积",
+      "expr": "Amax = k * A0",
+      "latex": "A_{\\max} = k \\, A_0",
+      "vars": [
+        { "sym": "Amax", "name": "防火分区最大允许建筑面积", "unit": "m²", "note": "超过了就必须用防火墙、甲级防火门或防火卷帘再划分分区" },
+        { "sym": "A0", "name": "基准允许面积", "unit": "m²", "note": "按耐火等级、层数或高度由现行 GB 50016 查表确定" },
+        { "sym": "k", "name": "自动灭火系统修正系数", "unit": "—", "note": "设有自动灭火系统时通常可按一定倍数放大，具体倍数以现行规范为准" }
+      ],
+      "conditions": [
+        "A0 与 k 必须取自现行 GB 50016，且注意高层、地下、裙房各自适用不同数值",
+        "防火分区之间必须采用防火墙、楼板等符合耐火极限要求的分隔物"
+      ],
+      "derivationHint": "把「耐火等级+层数/高度」对应的基准面积乘以自动灭火带来的提高系数。",
+      "typicalUse": "平面设计完成后做防火分区校核：总面积 ÷ Amax = 至少需要的分区数",
+      "pitfalls": [
+        "这是本课程最容易出错的数值型考点，不同版本规范数值有调整，必须查现行版本",
+        "地下室、车库的防火分区面积另有规定（车库另有专用规范），不能套地上建筑数值",
+        "中庭、自动扶梯开口会把上下层连通成一个防火分区，按叠加面积算"
+      ],
+      "standardRef": ["GB 50016"],
+      "confidence": "medium",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "14", "page": null },
+      "verify": "A0 与 k 的现行数值请查最新 GB 50016 表；本条刻意不给出具体面积数字"
+    },
+    {
+      "id": "building-architecture-formula-030",
+      "subjectId": "building-architecture",
+      "chapter": "10.1",
+      "name": "屋面坡度三种表示方法的换算",
+      "expr": "i = tan(alpha) * 100  # (%)",
+      "latex": "i = \\tan\\alpha \\times 100\\%\\quad;\\quad \\text{斜率法 } 1:n \\Rightarrow i = \\dfrac{1}{n}\\times100\\%",
+      "vars": [
+        { "sym": "i", "name": "坡度（百分比法）", "unit": "%", "note": "每水平 100 单位抬高 i 单位，平屋顶常用 2%~5%" },
+        { "sym": "alpha", "name": "坡度角", "unit": "°", "note": "角度法；与百分比换算为 i = tan α × 100" },
+        { "sym": "n", "name": "斜率分母", "unit": "—", "note": "斜率法写成 1:n，如 1:2、1:2.5；i = 100/n" }
+      ],
+      "conditions": [
+        "三者只是同一几何关系的不同写法，可互推",
+        "坡屋顶宜用斜率法或角度法，平屋顶（排水找坡）宜用百分比法"
+      ],
+      "derivationHint": "坡度定义为「升高量/水平投影长度」，取百分号或写成 1:n 即是三种写法。",
+      "typicalUse": "把「屋面坡度 1:2.5」换算成百分比或角度；由给定坡度求某长度处的找坡高度",
+      "pitfalls": [
+        "把斜率法误读为「升高/斜边」：斜率法始终是相对于水平投影",
+        "1:2 与 2% 完全不同（前者 50%，后者 2%），看漏百分号是最典型的错误",
+        "最大允许坡度（如瓦屋面的最小坡度）通常以百分比或比例给出，换算后才好比较"
+      ],
+      "standardRef": ["GB 50345"],
+      "confidence": "high",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "10", "page": null },
+      "verify": null
+    },
+    {
+      "id": "building-architecture-formula-031",
+      "subjectId": "building-architecture",
+      "chapter": "10.1",
+      "name": "材料找坡最厚处厚度",
+      "expr": "d = (L / 2) * i",
+      "latex": "d = \\dfrac{L}{2} \\, i",
+      "vars": [
+        { "sym": "d", "name": "找坡层最大厚度", "unit": "mm", "note": "位于距离分水线最远处（通常是檐口或雨水口一侧），最薄处一般取不小于 20~30 mm" },
+        { "sym": "L", "name": "单坡排水的水平投影长度", "unit": "mm", "note": "从分水线到最近雨水口（或檐沟）的距离，双坡屋面取 L/2" },
+        { "sym": "i", "name": "找坡坡度", "unit": "—", "note": "用小数形式代入，2% 写作 0.02" }
+      ],
+      "conditions": [
+        "适用于材料（垫置）找坡：结构层水平，靠轻质找坡材料堆出坡度",
+        "结构找坡时不需本式，屋顶结构自带坡度"
+      ],
+      "derivationHint": "单坡的最大高差 = 水平长度 × 坡度；再加最薄处的构造最小厚度。",
+      "typicalUse": "计算找坡层最厚处的厚度，进而估算找坡做法是否过厚（过厚时应改结构找坡或加密雨水口）",
+      "pitfalls": [
+        "忘记叠加最薄处的最小厚度（常见 20~30 mm），实际最厚 = 最薄 + 坡度高差",
+        "双坡屋面要先用一半跨度计算，直接用总跨会把厚度算成两倍",
+        "找坡材料荷载会随着厚度显著增加，必须同步校核屋面荷载"
+      ],
+      "standardRef": ["GB 50345"],
+      "confidence": "medium",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "10", "page": null },
+      "verify": "最小找坡厚度、常用坡度取值（2%/3%）与结构找坡的限值请核对教材与现行 GB 50345"
+    },
+    {
+      "id": "building-architecture-formula-032",
+      "subjectId": "building-architecture",
+      "chapter": "10.2",
+      "name": "雨水管数量估算",
+      "expr": "Np = qj * psi * F / Qd",
+      "latex": "N_p = \\dfrac{q_j \\, \\psi \\, F}{Q_d}",
+      "vars": [
+        { "sym": "Np", "name": "所需雨水管数量", "unit": "根", "note": "向上取整，并沿檐口均匀布置" },
+        { "sym": "qj", "name": "设计降雨强度", "unit": "L/(s·ha)", "note": "按当地暴雨强度公式与重现期、降雨历时确定" },
+        { "sym": "psi", "name": "径流系数", "unit": "—", "note": "屋面一般取接近 1 的值（绿化屋面明显小于常规屋面）" },
+        { "sym": "F", "name": "汇水面积", "unit": "ha", "note": "按分水线划分后该雨水管承担的水平投影面积（含侧墙受雨时应按规定计入）" },
+        { "sym": "Qd", "name": "单根雨水管的允许泄流量", "unit": "L/s", "note": "与管径、落差高度有关，按规范或产品资料查取" }
+      ],
+      "conditions": [
+        "适用于有组织排水的初步估算；最终仍要满足规范对雨水斗间距、管径与最小数量的构造要求",
+        "qj 需按项目所在地暴雨强度公式计算，不能跨地区套用"
+      ],
+      "derivationHint": "雨水量 = 降雨强度 × 汇水面积 × 径流系数；所需管数 = 总雨水量 ÷ 单管泄流量。",
+      "typicalUse": "屋顶排水平面设计中确定每块汇水区的雨水管数量与位置",
+      "pitfalls": [
+        "面积单位：降雨强度中的公顷与雨水量单位换算（ha·mm/h → L/s 需除以 3.6 一类系数）",
+        "分水线划错会导致某个雨水管的实际汇水面积远大于估算值",
+        "忽略了檐沟本身的过水断面与纵向坡度验算，只算管子数量不够"
+      ],
+      "standardRef": ["GB 50015", "GB 50345"],
+      "confidence": "medium",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "10", "page": null },
+      "verify": "重现期取值、径流系数、允许泄流量与单管最大汇水面积的经验值均请核对现行 GB 50015 与 GB 50345，教材上的经验值随版本有变化"
+    },
+    {
+      "id": "building-architecture-formula-033",
+      "subjectId": "building-architecture",
+      "chapter": "10.2",
+      "name": "檐沟（天沟）纵向坡度与断面",
+      "expr": "iz = delta_h / L >= 0.01",
+      "latex": "i_z = \\dfrac{\\Delta h}{L} \\ge 1\\%",
+      "vars": [
+        { "sym": "iz", "name": "檐沟纵向坡度", "unit": "—", "note": "沟内的排水坡度，常用约 1% 量级，应朝雨水口方向下坡" },
+        { "sym": "delta_h", "name": "沟首与雨水口的高差", "unit": "mm", "note": "由檐沟线（或女儿墙天沟）的标高差形成" },
+        { "sym": "L", "name": "该段沟长", "unit": "mm", "note": "相邻雨水口之间的沟段长度" }
+      ],
+      "conditions": [
+        "有组织外排水或内排水的檐沟/天沟",
+        "沟自身还需有足够断面容纳暴雨时的瞬时汇流量，并按水力计算确定断面尺寸"
+      ],
+      "derivationHint": "檐沟自身也要有纵向坡度才能把水送向雨水口，其原理与屋面横坡相同但针对沟长方向。",
+      "typicalUse": "屋顶平面图中标注檐沟找坡坡向与雨水口标高；校对「分水线同时是沟的分水点」",
+      "pitfalls": [
+        "忘了檐沟纵坡：屋顶横坡做了但沟是平的，会积水",
+        "雨水口处的沟底要比沟中更深，形成集水漏斗（局部找坡）",
+        "寒冷地区檐沟还要考虑融雪结冰与电伴热的需求"
+      ],
+      "standardRef": ["GB 50345", "GB 50015"],
+      "confidence": "medium",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "10", "page": null },
+      "verify": "檐沟/天沟的最小纵向坡度与最小断面请核对现行 GB 50345 与 GB 50015"
+    },
+    {
+      "id": "building-architecture-formula-034",
+      "subjectId": "building-architecture",
+      "chapter": "6.2",
+      "name": "刚性基础台阶宽高比校核",
+      "expr": "b_step / h_step <= tan(alpha)",
+      "latex": "\\dfrac{b}{h} \\le \\tan\\alpha",
+      "vars": [
+        { "sym": "b_step", "name": "基础台阶的挑出宽度", "unit": "mm", "note": "每级台阶相对上一级单边外挑的宽度" },
+        { "sym": "h_step", "name": "该级台阶的高度", "unit": "mm", "note": "每级台阶的厚度" },
+        { "sym": "alpha", "name": "刚性角", "unit": "°", "note": "由基础材料与强度等级决定的允许压力分布角，tanα 即允许的宽高比" }
+      ],
+      "conditions": [
+        "仅适用于刚性基础（砖、石、素混凝土、灰土、三合土等不能承受拉应力的材料）",
+        "tanα（允许宽高比）按材料与砂浆/混凝土强度等级由现行地基基础规范查表"
+      ],
+      "derivationHint": "压力自基底边缘按一定角度向上扩散，只要台阶落在扩散角（刚性角）以内，截面内就不出现拉应力。",
+      "typicalUse": "已知基础宽与基底标高，反算需要几级台阶、每级多高；或校核已给的大样是否超限",
+      "pitfalls": [
+        "钢筋混凝土基础属柔性基础，不受刚性角限制，用刚性角去卡它会得出荒谬的高度",
+        "不同材料、不同强度等级的允许宽高比不同，必须查表而不能记一个万能值",
+        "从「基础底面到大放脚最上一台阶顶」的总高度要分段核算，不能只看一级"
+      ],
+      "standardRef": ["GB 50007"],
+      "confidence": "medium",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "6", "page": null },
+      "verify": "刚性角/允许宽高比的具体数值（如常见的 1:1.5、1:1.25 一类）请核对教材与现行 GB 50007"
+    },
+    {
+      "id": "building-architecture-formula-035",
+      "subjectId": "building-architecture",
+      "chapter": "6.3",
+      "name": "基础埋置深度与冰冻线的关系",
+      "expr": "d >= zd + dz",
+      "latex": "d \\ge z_d + \\Delta z",
+      "vars": [
+        { "sym": "d", "name": "基础埋置深度", "unit": "mm", "note": "室外设计地面到基础底面的垂直距离" },
+        { "sym": "zd", "name": "场地标准冻深", "unit": "mm", "note": "按当地气象资料或规范查取的季节性冻土深度，地区差异极大" },
+        { "sym": "dz", "name": "防冻余量（或允许残留冻土层的换算厚度）", "unit": "mm", "note": "冻胀性土一般要求基底低于冰冻线；弱冻胀且有可靠措施时可留残留冻土层，须按规范处理" }
+      ],
+      "conditions": [
+        "季节性冻土地区且有冻胀性土时才适用该控制条件",
+        "同时还受持力层位置、地下水位、相邻基础埋深等条件的共同约束"
+      ],
+      "derivationHint": "为免基底下部的冻胀/融沉破坏，把基底放到冰冻线以下一定余量处。",
+      "typicalUse": "给定工程地质剖面「冬季è冻深」确定基础底面标高；判断是否需采取防冻害措施",
+      "pitfalls": [
+        "标准冻深要向き按当地取，不能直接套别的城市数据",
+        "最小埋深（一般情况下的下限值）与冻深条件是两个独立要求，要同时满足取大值",
+        "新基础不宜深于相邻旧基础，否则要控制净距并做支护"
+      ],
+      "standardRef": ["GB 50007"],
+      "confidence": "medium",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "6", "page": null },
+      "verify": "最小埋深（常见的 0.5 m 级下限）与冻深的关系、标准冻深的取值方法请以现行 GB 50007 及当地标准为准"
+    },
+    {
+      "id": "building-architecture-formula-036",
+      "subjectId": "building-architecture",
+      "chapter": "12.1",
+      "name": "伸缩缝宽度估算",
+      "expr": "20 <= w <= 40",
+      "latex": "w \\approx 20 \\sim 40\\ \\mathrm{mm}",
+      "vars": [
+        { "sym": "w", "name": "伸缩缝宽度", "unit": "mm", "note": "变形缝的净留缝宽，须能容纳温度变形而不使两侧构件相碰" },
+        { "sym": "Lt", "name": "伸缩缝间距（温度区段长度）", "unit": "m", "note": "由结构类型、屋盖刚度与保温做法按现行规范查表确定" }
+      ],
+      "conditions": [
+        "伸缩缝从基础顶面以上把墙体、楼板、屋顶全部断开，基础一般可不断开",
+        "缝内填弹性、憎水材料，外墙外侧须做防水与盖缝处理"
+      ],
+      "derivationHint": "由线膨胀系数 × 温度差 × 区段长度估算最大位移，再加施工与构造余量。",
+      "typicalUse": "判断一道缝应留多宽；判断某长度的建筑是否需要设伸缩缝",
+      "pitfalls": [
+        "20~40 mm 是常见量级而非定值：不同结构类型、不同区段长度的取值不同，必须查现行规范",
+        "伸缩缝不断基础，这是与沉降缝最本质的区别，是必考辨析题",
+        "三缝能否互相替代：沉降缝可兼作伸缩缝，反之不行；三缝合并时按最严格要求取值"
+      ],
+      "standardRef": ["GB 50003", "GB 50010", "GB 50011"],
+      "confidence": "medium",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "12", "page": null },
+      "verify": "伸缩缝宽度与最大间距须按结构类型查现行 GB 50003/GB 50010；本条只给常见量级"
+    },
+    {
+      "id": "building-architecture-formula-037",
+      "subjectId": "building-architecture",
+      "chapter": "12.3",
+      "name": "防震缝宽度估算",
+      "expr": "w = lookup_table(structure_type, seismic_intensity, H)",
+      "latex": "w = f(\\text{结构类型},\\ \\text{设防烈度},\\ H)",
+      "vars": [
+        { "sym": "w", "name": "防震缝宽度", "unit": "mm", "note": "两侧结构各自的最大水平位移之和，并保证地震时不互相碰撞" },
+        { "sym": "H", "name": "较低一侧房屋的高度", "unit": "m", "note": "高度越大，水平位移越大，所需缝宽越大" }
+      ],
+      "conditions": [
+        "防震缝沿建筑全高设置，基础一般可不分缝（与沉降缝合并时必须断开基础）",
+        "缝内不得填塞硬物，构盖上必须允许两侧自由变形"
+      ],
+      "derivationHint": "多层砌体结构通常按房屋高度分档随高度的增大而加宽；框架等结构按特定高度分档加宽，具体分档规则因结构体系与设防烈度而异。",
+      "typicalUse": "体型复杂、刚度与质量分布不均、有错层或高度差异较大处判断是否设缝及缝宽",
+      "pitfalls": [
+        "不同结构体系（砌体 vs 框架 vs 框架-剪力墙）的分档规则完全不同，不能混套",
+        "高度较低一侧的高度作为计算基准还是较高一侧，须按现行规定确认",
+        "三缝合并时按最严格的宽度取值"
+      ],
+      "standardRef": ["GB 50011"],
+      "confidence": "low",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "12", "page": null },
+      "verify": "防震缝宽度的全部数值必须查现行 GB 50011（不同版本有过调整），本条刻意不给具体数值与分档"
+    },
+    {
+      "id": "building-architecture-formula-038",
+      "subjectId": "building-architecture",
+      "chapter": "14.3",
+      "name": "无障碍坡道的坡度与水平长度",
+      "expr": "L = k * H",
+      "latex": "L = k \\, H \\quad (\\text{常用 } k \\approx 12)",
+      "vars": [
+        { "sym": "L", "name": "坡道水平长度", "unit": "mm", "note": "爬升段的水平投影长度，不含两端休息平台所占的长度" },
+        { "sym": "k", "name": "坡度倒数", "unit": "—", "note": "坡度写成 1:k；常见的最缓取值为 1:12 一带，越缓占地越大" },
+        { "sym": "H", "name": "坡道提升高度", "unit": "mm", "note": "起点到终点的垂直高度；超过一定高差就必须分段并设中间休息平台" }
+      ],
+      "conditions": [
+        "室内外出入口的无障碍通道；1:12 是最常见但不一定是最缓要求",
+        "每种坡度都对应「最大高度、最大水平长度」的限制，超过就得设中间平台并重新起坡"
+      ],
+      "derivationHint": "坡度 = 提升高度/水平投影长度 = 1/k，故 L = k×H。",
+      "typicalUse": "根据入口高差（室内外高差）反算坡道要占多长场地；判断是否需要设中间休息平台",
+      "pitfalls": [
+        "各坡度对应的最大高度与水平长度限值请查现行 GB 50763，本条不给出具体数字",
+        "休息平台（起点、终点、中间各一处）的水平长度常常被漏算，导致总占地严重不足",
+        "坡道两侧要在规定高度设双层扶手，坡面要防滑，这些是规范强制要求"
+      ],
+      "standardRef": ["GB 50763"],
+      "confidence": "medium",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "14", "page": null },
+      "verify": "无障碍坡道的坡度列表（1:20、1:16、1:12、1:10、1:8 等）及各自的最大高度/最大水平长度、平台最小净深、扶手要求，全部以现行 GB 50763 为准"
+    },
+    {
+      "id": "building-architecture-formula-039",
+      "subjectId": "building-architecture",
+      "chapter": "14.3",
+      "name": "轮椅回转与通行的净空间校核",
+      "expr": "D >= 1500",
+      "latex": "D \\ge 1500\\ \\mathrm{mm}",
+      "vars": [
+        { "sym": "D", "name": "轮椅回转直径（或最小回转空间边长）", "unit": "mm", "note": "常见要求为直径不小于 1.50 m 的圆形空间，或以一定尺寸的矩形替代" },
+        { "sym": "B", "name": "门的通行净宽", "unit": "mm", "note": "无障碍出入口与各房间的门开启后的实际有效净宽，比普通门更宽" }
+      ],
+      "conditions": [
+        "适用于无障碍出入口、无障碍卫生间、无障碍电梯的候梯厅与轿厢等部位",
+        "还包括门槛高差限值（宜做成平缓的零高差过渡）、扶手高度与双层扶手等配套要求"
+      ],
+      "derivationHint": "由轮椅的最小回转圆与使用者操作空间叠加确定。",
+      "typicalUse": "方案阶段的无障碍节点校核；判断某卫生间能否改造成无障碍卫生间",
+      "pitfalls": [
+        "1.50 m 是常见量级，具体是直径还是边长、可否用 T 形空间替代，请查现行 GB 50763",
+        "门扇开启会占用回转空间，校核时必须扣除开启扇的占位",
+        "洁具（如洗手盆）伸入回转空间同样算占用"
+      ],
+      "standardRef": ["GB 50763"],
+      "confidence": "medium",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "14", "page": null },
+      "verify": "回转直径数值与门净宽、平台净深的限值请以现行 GB 50763 为准"
+    },
+    {
+      "id": "building-architecture-formula-040",
+      "subjectId": "building-architecture",
+      "chapter": "3.3",
+      "name": "容积率与建筑密度",
+      "expr": "FAR = Sa / Sl ; Bd = Sg / Sl",
+      "latex": "FAR = \\dfrac{S_a}{S_l}\\ ;\\quad B_d = \\dfrac{S_g}{S_l} \\times 100\\%",
+      "vars": [
+        { "sym": "FAR", "name": "容积率", "unit": "—", "note": "总建筑面积与用地面积之比，是规划条件的核心控制指标" },
+        { "sym": "Bd", "name": "建筑密度", "unit": "%", "note": "建筑基底总面积与用地面积之比，反映用地内的空地多少" },
+        { "sym": "Sa", "name": "总建筑面积", "unit": "m²", "note": "按现行建筑面积计算规则计算，注意不计容与计容的区分" },
+        { "sym": "Sg", "name": "建筑基底面积之和", "unit": "m²", "note": "各单体首层外墙勒脚以上外围水平投影面积之和" },
+        { "sym": "Sl", "name": "用地面积", "unit": "m²", "note": "征地红线内的总用地面积" }
+      ],
+      "conditions": [
+        "计容与否按当地城市规划技术规定与出让合同约定",
+        "地下室、架空层、屋顶机房等是否计容的规定各地不一"
+      ],
+      "derivationHint": "两个控制性指标的比值定义式。",
+      "typicalUse": "总平面设计的核心经济性校核：给定容积率，反算可建的最大建筑面积与大致层数",
+      "pitfalls": [
+        "把「建筑密度」与「占地面积率」混为一谈",
+        "总建筑面积的计算规则（特别是阳台、保温层、幕墙外皮）对结果影响很大",
+        "两项指标同时不满足时，往往要调整体量或层数，而非单靠平面微调"
+      ],
+      "standardRef": ["GB 50180", "GB/T 50353"],
+      "confidence": "medium",
+      "cite": { "book": "房屋建筑学", "edition": "第6版", "publisher": "中国建筑工业出版社", "chapter": "3", "page": null },
+      "verify": "总建筑面积是否计入地下室、架空层等请按当地规划技术规定；面积计算规则用现行 GB/T 50353"
+    }
+  ]
+}

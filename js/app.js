@@ -235,7 +235,7 @@ const App = (() => {
   // 从不销毁。切走时置 about:blank 释放其 JS 堆，切回时还原 src。
   // 原始地址存 data-iframe-src，避免硬编码到 JS 里。
   // 2026-09-14：解压舱（relax）的游戏仓 iframe 也纳入统一的懒加载/卸载管理。
-  const IFRAME_VIEWS = ["toolknit", "nexus", "prisma", "securify", "foldcraft", "particles", "aria", "relax"];
+  const IFRAME_VIEWS = ["toolknit", "nexus", "prisma", "securify", "foldcraft", "particles", "aria", "relax", "bridgelab"];
   let _iframeUnloadTimer = null;
 
   function primeIframeSrcs() {
@@ -260,7 +260,15 @@ const App = (() => {
     const frame = box.querySelector("iframe");
     if (!frame) return;
     const want = frame.dataset.iframeSrc;
-    if (want && frame.getAttribute("src") !== want) frame.setAttribute("src", want);
+    if (!want) return;
+    if (frame.getAttribute("src") !== want) {
+      // 2026-09-19：加载占位 —— iframe 子应用首次加载要拉十几个脚本，
+      // 期间容器纯白（此前表现为「点了导航没反应」）。加转圈提示，load 落定即撤。
+      box.classList.add("iframe-loading");
+      const onLoad = function () { frame.removeEventListener("load", onLoad); box.classList.remove("iframe-loading"); };
+      frame.addEventListener("load", onLoad);
+      frame.setAttribute("src", want);
+    }
   }
 
   /* ⚠️ 2026-09-14：GitHub Pages 上没有 /gamehub/。
@@ -356,10 +364,17 @@ const App = (() => {
   })();
 
   function switchView(view) {
-    if (view === currentView) { renderCurrent(); return; }
+    if (view === currentView) {
+      renderCurrent();
+      return;
+    }
     const prev = $("#view-" + currentView);
     const prevName = currentView;
     currentView = view;
+    // 视图切换只需要短暂关闭当前壳层的毛玻璃，不要再用入口动画的
+    // 全局 entrance-fx（它会命中页面里数千个节点，WebView2 核显下容易白屏）。
+    document.documentElement.classList.add("xy-switching");
+    setTimeout(() => document.documentElement.classList.remove("xy-switching"), 460);
     // 超级课程表是独立全屏模块；进入时关闭主区域的 backdrop-filter 包含块，
     // 否则 position:fixed 会被 main 的毛玻璃“困住”，不能真正铺满原生窗口。
     document.body.classList.toggle("courses-fullscreen", view === "courses");
@@ -396,12 +411,6 @@ const App = (() => {
     const v = $("#view-" + view);
     if (v) {
       v.classList.add("active");
-      // 视图切换同样触发「集中首光栅」：新视图内全部毛玻璃卡片在 display:none→block
-      // 瞬间同时光栅化，核显会卡顿（诊断显示每次切视图 2s+ / 帧率掉到个位数）。
-      // 复用入场窗口：切视图期间抑制毛玻璃，动画 + 首屏光栅落定后平滑渐显。
-      // （启动入场期间由 boot 流程统一管理恢复，这里不抢跑）
-      document.documentElement.classList.add("entrance-fx");
-      if (!bootEntrance) setTimeout(restoreBackdropFX, 900);
       // dashboard 完整开场仅首次播放，后续切回用轻量入场，避免数字反复重滚
       if (view === "dashboard" && window.Anim) {
         if (!_dashboardIntroPlayed) { Anim.dashboardIntro(v); _dashboardIntroPlayed = true; }
@@ -409,21 +418,33 @@ const App = (() => {
       }
       else window.Anim && Anim.viewEnter(v);
     }
-    const titles = { aria: t("title.aria"), dashboard: t("title.dashboard"), courses: t("title.courses"), notes: t("title.notes"), focus: t("title.focus"), growth: t("title.growth"), lit: t("title.lit"), news: t("title.news"), ai: t("title.ai"), weather: t("title.weather"), prisma: t("title.prisma"), nexus: t("title.nexus"), foldcraft: t("title.foldcraft"), securify: t("title.securify"), particles: t("title.particles"), running: t("title.running"), voice: "AI 语音", relax: "解压舱", toolknit: "工具箱", exams: "考试日程" };
-    const subs = { dashboard: t("sub.dashboard"), courses: t("sub.courses"), notes: t("sub.notes"), focus: t("sub.focus"), growth: t("sub.growth"), lit: t("sub.lit"), news: t("sub.news"), ai: t("sub.ai"), weather: t("sub.weather"), prisma: t("sub.prisma"), nexus: t("sub.nexus"), foldcraft: t("sub.foldcraft"), securify: t("sub.securify"), particles: t("sub.particles"), running: t("sub.running"), voice: "文本转语音 · VoxCPM", relax: "慢下来，先把自己放好", toolknit: "常用小工具合集", exams: "考试与日程管理" };
+    const titles = { aria: t("title.aria"), dashboard: t("title.dashboard"), courses: t("title.courses"), notes: t("title.notes"), focus: t("title.focus"), growth: t("title.growth"), lit: t("title.lit"), news: t("title.news"), ai: t("title.ai"), weather: t("title.weather"), prisma: t("title.prisma"), nexus: t("title.nexus"), foldcraft: t("title.foldcraft"), securify: t("title.securify"), particles: t("title.particles"), running: t("title.running"), voice: "AI 语音", relax: "解压舱", toolknit: "工具箱", exams: "考试日程", kb: "专业课程库", bridgelab: "桥梁结构实验室" };
+    const subs = { dashboard: t("sub.dashboard"), courses: t("sub.courses"), notes: t("sub.notes"), focus: t("sub.focus"), growth: t("sub.growth"), lit: t("sub.lit"), news: t("sub.news"), ai: t("sub.ai"), weather: t("sub.weather"), prisma: t("sub.prisma"), nexus: t("sub.nexus"), foldcraft: t("sub.foldcraft"), securify: t("sub.securify"), particles: t("sub.particles"), running: t("sub.running"), voice: "文本转语音 · VoxCPM", relax: "慢下来，先把自己放好", toolknit: "常用小工具合集", exams: "考试与日程管理", kb: "9 门专业课的章节地图 · 公式 · 题型 · 规范", bridgelab: "梁单元有限元 · 影响线最不利布载 · 规范验算" };
     $("#pageTitle").textContent = titles[view] || "";
     const sub = $("#pageSub");
     if (sub) sub.textContent = subs[view] || "";
+    // 专业课程知识库：切到该视图时按需初始化（内部幂等）
+    try { if (view === "kb" && window.CourseKB) window.CourseKB.init(); } catch (e) { }
     $("#view-container") && $("#view-container").scrollTo(0, 0);
-    document.querySelector(".view-container").scrollTop = 0;
     // 清理旧视图的滚动 reveal（切走后不再保留 trigger）
     if (_revealCleanup) { _revealCleanup(); _revealCleanup = null; }
     // 视图内容构建拆到下一帧：入场动画（0.42s）期间填充内容视觉无感，
     // 但主线程立即释放，点击响应与首帧不再被整视图 innerHTML 构建卡住。
     requestAnimationFrame(function () {
-      renderCurrent();
-      // 视图从 display:none 变为 block 后重算 ScrollTrigger 位置（须在内容填充后）
-      window.Anim && Anim.refreshScroll();
+      prepareViewModule(view).then(function () {
+        // 模块加载期间用户可能已经切走；旧视图不能回写 DOM。
+        if (currentView !== view) return;
+        renderCurrent();
+        const activeView = $("#view-" + view);
+        if (activeView) activeView.dataset.renderedAt = String(Date.now());
+        // 视图从 display:none 变为 block 后重算 ScrollTrigger 位置（须在内容填充后）
+        window.Anim && Anim.refreshScroll();
+      }).catch(function (error) {
+        if (currentView !== view) return;
+        console.warn("[星屿] 功能模块加载失败", view, error);
+        renderCurrent();
+        toast("该功能暂时没能启动，可稍后重试", "err");
+      });
     });
     // 侧边栏滑块跟随到目标项
     window.Anim && Anim.navPillTo(view, true);
@@ -449,6 +470,21 @@ const App = (() => {
       if (window.Synapse) Synapse.render();
     }
     else if (currentView === "voice") { if (window.VoxVoice) VoxVoice.render(); }
+  }
+
+  const VIEW_MODULES = {
+    lit: ["knowledge.js"],
+    weather: ["weather.js", "weather-aurora.js"],
+    running: ["running.js", "synapse-coach.js"],
+    voice: ["voxcpm-voice.js"]
+  };
+
+  function prepareViewModule(view) {
+    const names = VIEW_MODULES[view] || [];
+    if (!names.length || !window.__xyLazy || typeof window.__xyLazy.ensure !== "function") {
+      return Promise.resolve();
+    }
+    return names.reduce((chain, name) => chain.then(() => window.__xyLazy.ensure(name)), Promise.resolve());
   }
 
   /* 超级课表桥接：导入/添加课程后同步刷新星屿已有列表（2026-09-13） */
@@ -1000,13 +1036,29 @@ const App = (() => {
      学习笔记库
      ============================================================ */
   function renderNotes() {
-    renderNoteGrid();
-    renderCardGrid();
+    // 笔记页两个面板都很容易积累到数百条内容。只渲染用户当前打开的
+    // 面板，避免每次切回笔记页都同时重建列表、SRS 状态和全部事件。
+    const active = document.querySelector("#view-notes .tab-panel.active");
+    if (!active || active.id === "tab-notes-list") renderNoteGrid();
+    if (active && active.id === "tab-notes-cards") renderCardGrid();
   }
 
   // 笔记按课程分组 v2（2026-09-14）：严格按课程表课程分组，匹配不上的进「其他笔记」
   let notesSubjectFilter = "all";
+  let notesSmartFilter = "all";
   const notesCollapsed = new Set();
+
+  function noteSmartState(note) {
+    if (!note) return "inbox";
+    if (note.reviewState === "due" || note.reviewDueAt && new Date(note.reviewDueAt).getTime() <= Date.now()) return "review";
+    if ((note.questions && note.questions.length) || note.status === "question") return "question";
+    if (!note.summary && !(note.keyPoints && note.keyPoints.length) && String(note.content || "").length > 180) return "inbox";
+    return "ready";
+  }
+
+  function noteSmartLabel(state) {
+    return { inbox: "待整理", question: "有疑问", review: "待复习", ready: "已整理" }[state] || "笔记";
+  }
 
   function courseColorFor(subject) {
     const c = Store.getAll("courses").find(x => x && x.name === subject);
@@ -1016,23 +1068,30 @@ const App = (() => {
   function renderNoteGrid() {
     const notes = Store.getAll("notes").slice().sort((a, b) => (b.updatedAt || "").localeCompare(a.updatedAt || ""));
     const grid = $("#noteGrid");
+    renderNotesOverview(notes);
     if (!notes.length) {
       grid.innerHTML = `<div class="empty-state"><p>还没有笔记，点击「+ 新建笔记」开始记录</p></div>`;
       return;
     }
+    const smartFiltered = notesSmartFilter === "all" ? notes : notes.filter(n => noteSmartState(n) === notesSmartFilter);
     // 严格按课程表：subject 命中课程名的进对应课程组（按课程表顺序），其余全部进「其他笔记」
     const courseNames = [...new Set(Store.getAll("courses").map(c => c && c.name).filter(Boolean))];
     const courseSet = new Set(courseNames);
     const groupDefs = [];
     courseNames.forEach(nm => {
-      const items = notes.filter(n => String(n.subject || "").trim() === nm);
+      const items = smartFiltered.filter(n => String(n.subject || "").trim() === nm);
       if (items.length) groupDefs.push({ name: nm, items, isOther: false });
     });
-    const others = notes.filter(n => !courseSet.has(String(n.subject || "").trim()));
+    const others = smartFiltered.filter(n => !courseSet.has(String(n.subject || "").trim()));
     if (others.length) groupDefs.push({ name: "其他笔记", items: others, isOther: true });
     if (notesSubjectFilter !== "all" && !groupDefs.some(g => g.name === notesSubjectFilter)) notesSubjectFilter = "all";
 
-    const chips = [`<button type="button" class="filter-chip${notesSubjectFilter === "all" ? " active" : ""}" data-notes-subject="all">全部 ${notes.length}</button>`]
+    const chips = [`<button type="button" class="filter-chip${notesSmartFilter === "all" ? " active" : ""}" data-notes-smart="all">全部 ${notes.length}</button>`,
+      ...["inbox", "question", "review"].map(state => {
+        const count = notes.filter(n => noteSmartState(n) === state).length;
+        return `<button type="button" class="filter-chip${notesSmartFilter === state ? " active" : ""}" data-notes-smart="${state}">${noteSmartLabel(state)} ${count}</button>`;
+      })]
+      .concat([`<button type="button" class="filter-chip${notesSubjectFilter === "all" ? " active" : ""}" data-notes-subject="all">全部课程</button>`])
       .concat(groupDefs.map(g => `<button type="button" class="filter-chip${notesSubjectFilter === g.name ? " active" : ""}" data-notes-subject="${esc(g.name)}">${esc(g.name)} ${g.items.length}</button>`)).join("");
 
     const groups = notesSubjectFilter === "all" ? groupDefs : groupDefs.filter(g => g.name === notesSubjectFilter);
@@ -1049,12 +1108,13 @@ const App = (() => {
           <article class="note-row" data-note-id="${n.id}">
             <div class="nr-main">
               <b>${esc(n.title)}</b>
-              <p>${esc(n.content).slice(0, 80)}</p>
+              <p>${esc(n.summary || n.content).slice(0, 120)}</p>
             </div>
             <div class="nr-side">
               ${g.isOther ? `<select class="nr-assign" data-assign="${n.id}"><option value="">归入课程…</option>${courseNames.map(nm => `<option value="${esc(nm)}">${esc(nm)}</option>`).join("")}</select>` : ""}
               ${g.isOther && String(n.subject || "").trim() ? `<span class="tag-chip">${esc(n.subject)}</span>` : ""}
               ${n.tags && n.tags.length ? `<span class="nr-tags">#${esc(n.tags[0])}</span>` : ""}
+              <span class="tag-chip note-state-${noteSmartState(n)}">${noteSmartLabel(noteSmartState(n))}</span>
               <span class="nr-date">${fmtDate(n.updatedAt)}</span>
               <span class="nr-go">›</span>
             </div>
@@ -1076,6 +1136,9 @@ const App = (() => {
     });
     $$("#noteGrid [data-notes-subject]").forEach(btn => {
       btn.onclick = () => { notesSubjectFilter = btn.dataset.notesSubject; renderNoteGrid(); };
+    });
+    $$("#noteGrid [data-notes-smart]").forEach(btn => {
+      btn.onclick = () => { notesSmartFilter = btn.dataset.notesSmart; renderNoteGrid(); };
     });
     $$("#noteGrid [data-group-toggle]").forEach(head => {
       head.onclick = (e) => {
@@ -1102,6 +1165,27 @@ const App = (() => {
     });
     // 滚动分批浮入
     revealCards($("#view-notes"), ".note-row");
+  }
+
+  function renderNotesOverview(notes) {
+    const box = $("#notesOverview");
+    if (!box) return;
+    const list = Array.isArray(notes) ? notes : Store.getAll("notes");
+    const counts = { inbox: 0, question: 0, review: 0, ready: 0 };
+    list.forEach(note => { counts[noteSmartState(note)]++; });
+    const latest = list[0];
+    box.innerHTML = `
+      <div class="notes-overview-copy">
+        <span class="notes-overview-kicker">学习记忆台</span>
+        <b>${latest ? "先处理最值得回看的内容" : "把今天学到的内容留下来"}</b>
+        <span>${latest ? `最近更新：${esc(latest.title || "未命名笔记")}` : "支持摘要、关键点、公式与错题线索"}</span>
+      </div>
+      <div class="notes-overview-stats" aria-label="笔记状态统计">
+        <span><b>${list.length}</b><small>全部</small></span>
+        <span><b>${counts.inbox}</b><small>待整理</small></span>
+        <span><b>${counts.question}</b><small>有疑问</small></span>
+        <span><b>${counts.review}</b><small>待复习</small></span>
+      </div>`;
   }
 
   function renderCardGrid() {
@@ -1217,8 +1301,20 @@ const App = (() => {
       <div class="form-grid">
         <label class="field"><span>所属课程</span><select id="f-n-subject"><option value="">未分类</option>${_courseOpts.map(nm => '<option value="' + esc(nm) + '"' + (nm === _curSubject ? " selected" : "") + ">" + esc(nm) + "</option>").join("")}</select></label>
         <label class="field"><span>标签（逗号分隔）</span><input id="f-n-tags" value="${esc((n?.tags || []).join(","))}" placeholder="如：高数,极限"></label>
+        <label class="field"><span>学习状态</span><select id="f-n-state">
+          ${[["inbox", "待整理"], ["ready", "已整理"], ["question", "有疑问"], ["due", "待复习"]].map(([value, label]) =>
+            `<option value="${value}" ${(n?.reviewState || "inbox") === value ? "selected" : ""}>${label}</option>`).join("")}
+        </select></label>
       </div>
       <label class="field"><span>内容 *</span><textarea id="f-n-content" placeholder="记录你的学习内容...">${esc(n?.content || "")}</textarea></label>
+      <div class="note-structure-grid">
+        <label class="field"><span>摘要</span><textarea id="f-n-summary" rows="2" placeholder="一句话说明这篇笔记讲了什么">${esc(n?.summary || "")}</textarea></label>
+        <label class="field"><span>章节</span><input id="f-n-chapter" value="${esc(n?.chapter || "")}" placeholder="如：第3章 极限"></label>
+        <label class="field"><span>关键点（每行一条）</span><textarea id="f-n-keypoints" rows="3" placeholder="核心定义\n解题步骤\n适用条件">${esc((n?.keyPoints || []).join("\n"))}</textarea></label>
+        <label class="field"><span>公式 / 易错点（每行一条）</span><textarea id="f-n-formulas" rows="3" placeholder="公式或定理\n常见误区">${esc([...(n?.formulas || []), ...(n?.pitfalls || []).map(x => "易错：" + x)].join("\n"))}</textarea></label>
+      </div>
+      <button type="button" class="btn btn-ghost" id="f-n-ask">让课程教练基于这篇笔记讲解</button>
+      <button type="button" class="btn btn-ghost" id="f-n-organize">AI 整理这篇笔记</button>
       <p class="hint">小技巧：内容写好后，可以在 AI 助手输入 /organize 让 AI 帮你整理成结构化笔记。</p>`;
     $("#btnFormSave").onclick = () => {
       const title = $("#f-n-title").value.trim();
@@ -1226,12 +1322,61 @@ const App = (() => {
       if (!title || !content) { toast("标题和内容不能为空", "err"); return; }
       const now = new Date().toISOString();
       const tags = $("#f-n-tags").value.split(/[,，]/).map(s => s.trim()).filter(Boolean);
-      const payload = { title, subject: $("#f-n-subject").value.trim(), tags, content, updatedAt: now };
+      const splitLines = id => ($("#" + id)?.value || "").split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+      const payload = {
+        title, subject: $("#f-n-subject").value.trim(), tags, content, updatedAt: now,
+        summary: $("#f-n-summary")?.value.trim() || "",
+        chapter: $("#f-n-chapter")?.value.trim() || "",
+        keyPoints: splitLines("f-n-keypoints"),
+        formulas: splitLines("f-n-formulas").filter(x => !x.startsWith("易错：")),
+        pitfalls: splitLines("f-n-formulas").filter(x => x.startsWith("易错：")).map(x => x.replace(/^易错：/, "").trim()),
+        reviewState: $("#f-n-state")?.value || (n ? "ready" : "inbox")
+      };
       if (n) { payload.createdAt = n.createdAt; Store.update("notes", n.id, payload); }
       else { payload.createdAt = now; Store.add("notes", payload); }
       closeModal("formModal");
       toast("笔记已保存", "ok");
       renderNotes();
+    };
+    const askCoachBtn = $("#f-n-ask");
+    if (askCoachBtn) askCoachBtn.onclick = () => {
+      const t = $("#f-n-title") && $("#f-n-title").value.trim() || "";
+      const c = $("#f-n-content") && $("#f-n-content").value.trim() || "";
+      const s = $("#f-n-subject") && $("#f-n-subject").value.trim() || "";
+      if (!window.CourseKB) { toast("课程教练未加载", "err"); return; }
+      closeModal("formModal");
+      CourseKB.ask(
+        (t ? "这是我的笔记《" + t + "》：" : "这是我记的笔记：") + (c ? "\n" + c.slice(0, 800) : "") +
+        "\n\n请检查我理解得对不对、缺了什么，并补充讲解。",
+        s
+      );
+    };
+    const organizeBtn = $("#f-n-organize");
+    if (organizeBtn) organizeBtn.onclick = async () => {
+      const content = $("#f-n-content")?.value.trim() || "";
+      if (!content) { toast("请先写入笔记内容", "err"); return; }
+      organizeBtn.disabled = true;
+      organizeBtn.innerHTML = '<span class="spinner"></span>整理中…';
+      try {
+        const organized = await AI.organizeNote({
+          title: $("#f-n-title")?.value.trim() || "",
+          subject: $("#f-n-subject")?.value.trim() || "",
+          tags: ($("#f-n-tags")?.value || "").split(/[,，]/).map(x => x.trim()).filter(Boolean),
+          content
+        });
+        if ($("#f-n-summary")) $("#f-n-summary").value = organized.summary || "";
+        if ($("#f-n-chapter")) $("#f-n-chapter").value = organized.chapter || "";
+        if ($("#f-n-keypoints")) $("#f-n-keypoints").value = (organized.keyPoints || []).join("\n");
+        if ($("#f-n-formulas")) $("#f-n-formulas").value = [
+          ...(organized.formulas || []),
+          ...(organized.pitfalls || []).map(x => "易错：" + x)
+        ].join("\n");
+        if ($("#f-n-tags") && organized.tags?.length) $("#f-n-tags").value = organized.tags.join(",");
+        toast("已生成结构化草稿，请检查后保存", "ok");
+      } finally {
+        organizeBtn.disabled = false;
+        organizeBtn.textContent = "AI 整理这篇笔记";
+      }
     };
     showModal("formModal");
   }
@@ -3243,7 +3388,10 @@ const App = (() => {
       "nav.courses": "课程作业",
       "nav.focus": "专注学习",
       "nav.notes": "学习笔记库",
+      "nav.kb": "专业课程库",
       "nav.lit": "文献资料",
+      "nav.bridgelab": "桥梁结构实验室",
+      "title.bridgelab": "桥梁结构实验室",
       "nav.news": "热点新闻",
       "nav.growth": "成长档案",
       "nav.ai": "AI 助手",
@@ -3292,6 +3440,7 @@ const App = (() => {
       "nav.courses": "課程作業",
       "nav.focus": "專注學習",
       "nav.notes": "學習筆記庫",
+      "nav.kb": "專業課程庫",
       "nav.lit": "文獻資料",
       "nav.news": "熱點新聞",
       "nav.growth": "成長檔案",
@@ -3341,6 +3490,7 @@ const App = (() => {
       "nav.courses": "Courses",
       "nav.focus": "Focus",
       "nav.notes": "Notes",
+      "nav.kb": "Course Library",
       "nav.lit": "Library",
       "nav.news": "News",
       "nav.growth": "Profile",
@@ -4758,6 +4908,10 @@ const App = (() => {
         const tab = btn.dataset.tab;
         $$(".tab-panel").forEach(p => p.classList.remove("active"));
         $("#tab-" + tab) && $("#tab-" + tab).classList.add("active");
+        if (currentView === "notes") {
+          if (tab === "notes-list") renderNoteGrid();
+          if (tab === "notes-cards") renderCardGrid();
+        }
         // 跑步视图：切到 AI 教练 tab 时刷新数据
         if (tab === "run-coach" && window.Synapse) Synapse.render();
         // 跑步视图下侧边栏高亮跟随 tab（训练营 tab -> 高亮「训练营」入口）
@@ -4802,11 +4956,18 @@ const App = (() => {
     $("#notesDocFile").onchange = handleNotesDoc;
     $("#btnParseDoc").onclick = parseDocBtn;
     $("#btnAiOrganize").onclick = () => {
-      switchView("ai");
+      const latest = Store.getAll("notes").slice().sort((a, b) =>
+        String(b.updatedAt || b.createdAt || "").localeCompare(String(a.updatedAt || a.createdAt || ""))
+      )[0];
+      if (!latest) {
+        toast("还没有笔记，先新建或导入一篇", "err");
+        return;
+      }
+      openNote(latest.id);
       setTimeout(() => {
-        $("#chatInput").value = "/笔记整理";
-        sendChat("/organize");
-      }, 300);
+        const action = $("#f-n-organize");
+        if (action) action.click();
+      }, 120);
     };
     $("#btnClearNotes").onclick = () => {
       const all = Store.getAll("notes");

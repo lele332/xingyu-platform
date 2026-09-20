@@ -1,0 +1,246 @@
+{
+  "subjectId": "structural-testing",
+  "note": "本文件不是文献全文，而是「去哪儿查、查什么、以谁为准」的索引。论文受版权保护不入库；AI 回答涉及前沿或争议问题时，按这里给出的入口检索，并把来源层级告诉用户。",
+  "updatedAt": "2026-09-15",
+  "items": [
+    {
+      "type": "journal",
+      "name": "土木工程学报",
+      "en": "China Civil Engineering Journal",
+      "org": "中国土木工程学会",
+      "level": "A",
+      "why": "结构试验与检测的高水平成果主要发表地。",
+      "howToUse": "按「静载试验 / 动力特性 / 损伤识别」检索。",
+      "access": "知网 / 万方（校内 IP 通常免费）",
+      "confidence": "high",
+      "verify": null,
+      "id": "structural-testing-source-001"
+    },
+    {
+      "type": "journal",
+      "name": "建筑结构学报",
+      "en": "Journal of Building Structures",
+      "org": "中国建筑学会",
+      "level": "A",
+      "why": "结构性能试验与理论分析并重。",
+      "howToUse": "查构件试验方法与结果分析。",
+      "access": "知网 / 万方（校内 IP 通常免费）",
+      "confidence": "high",
+      "verify": null,
+      "id": "structural-testing-source-002"
+    },
+    {
+      "type": "journal",
+      "name": "工程力学",
+      "en": "Engineering Mechanics",
+      "org": "中国力学学会",
+      "level": "A",
+      "why": "试验理论、模型相似、数据处理方法。",
+      "howToUse": "做模型试验设计时参考相似理论。",
+      "access": "知网 / 万方（校内 IP 通常免费）",
+      "confidence": "high",
+      "verify": null,
+      "id": "structural-testing-source-003"
+    },
+    {
+      "type": "journal",
+      "name": "振动与冲击",
+      "en": "Journal of Vibration and Shock",
+      "org": "中国振动工程学会",
+      "level": "B",
+      "why": "动力测试、模态分析与振动信号处理的专门期刊。",
+      "howToUse": "动载试验与模态识别类题目使用。",
+      "access": "知网 / 万方（校内 IP 通常免费）",
+      "confidence": "high",
+      "verify": null,
+      "id": "structural-testing-source-004"
+    },
+    {
+      "type": "journal",
+      "name": "Structural Health Monitoring",
+      "en": "Structural Health Monitoring",
+      "org": "SAGE",
+      "level": "B",
+      "why": "结构健康监测的专门期刊，传感器与损伤识别方法集中。",
+      "howToUse": "做长期监测与健康诊断选题时参考。",
+      "access": "Web of Science / ScienceDirect / ASCE Library",
+      "confidence": "high",
+      "verify": null,
+      "id": "structural-testing-source-005"
+    },
+    {
+      "type": "journal",
+      "name": "NDT & E International",
+      "en": "NDT & E International",
+      "org": "Elsevier",
+      "level": "B",
+      "why": "无损检测技术的国际主流期刊。",
+      "howToUse": "查超声、雷达、红外等无损检测方法的原理与局限。",
+      "access": "Web of Science / ScienceDirect / ASCE Library",
+      "confidence": "high",
+      "verify": null,
+      "id": "structural-testing-source-006"
+    },
+    {
+      "type": "journal",
+      "name": "Construction and Building Materials",
+      "en": "Construction and Building Materials",
+      "org": "Elsevier",
+      "level": "A",
+      "why": "材料与结构检测技术交叉。",
+      "howToUse": "查材料劣化与检测指标研究。",
+      "access": "Web of Science / ScienceDirect / ASCE Library",
+      "confidence": "high",
+      "verify": null,
+      "id": "structural-testing-source-007"
+    },
+    {
+      "type": "standard",
+      "name": "GB/T 50152 混凝土结构试验方法标准",
+      "code": "GB/T 50152",
+      "level": "S",
+      "why": "混凝土结构试验的加载、量测与结果评定的基本依据。",
+      "howToUse": "写试验方案与数据处理时以它为准。",
+      "access": "交通运输标准化信息系统 / 住建部标准发布 / 学校图书馆标准库",
+      "confidence": "high",
+      "verify": "版本年份需核对。",
+      "id": "structural-testing-source-008"
+    },
+    {
+      "type": "standard",
+      "name": "JTG/T J21-01 公路桥梁荷载试验规程",
+      "code": "JTG/T J21-01",
+      "level": "S",
+      "why": "桥梁静载/动载试验的专门规程，工况、测点、效率系数与评定方法都在里面。",
+      "howToUse": "做桥梁荷载试验题目时使用；注意它是公路行业推荐性标准。",
+      "access": "交通运输标准化信息系统 / 住建部标准发布 / 学校图书馆标准库",
+      "confidence": "high",
+      "verify": "现行版本为 JTG/T J21-01-2015（2016 年 4 月 1 日实施），曾有误写为 JTG/T J22 的情况，以本条为准。",
+      "id": "structural-testing-source-009"
+    },
+    {
+      "type": "standard",
+      "name": "GB/T 50344 建筑结构检测技术标准",
+      "code": "GB/T 50344",
+      "level": "S",
+      "why": "建筑结构现场检测的基本规定与抽样方法。",
+      "howToUse": "房屋与建筑结构检测类题目使用。",
+      "access": "交通运输标准化信息系统 / 住建部标准发布 / 学校图书馆标准库",
+      "confidence": "high",
+      "verify": "版本年份需核对。",
+      "id": "structural-testing-source-010"
+    },
+    {
+      "type": "standard",
+      "name": "GB 50292 民用建筑可靠性鉴定标准",
+      "code": "GB 50292",
+      "level": "S",
+      "why": "既有建筑可靠性鉴定的分级与评定方法。",
+      "howToUse": "做鉴定与评估类作业时参考。",
+      "access": "交通运输标准化信息系统 / 住建部标准发布 / 学校图书馆标准库",
+      "confidence": "high",
+      "verify": "版本年份需核对。",
+      "id": "structural-testing-source-011"
+    },
+    {
+      "type": "standard",
+      "name": "JGJ/T 23 回弹法检测混凝土抗压强度技术规程",
+      "code": "JGJ/T 23",
+      "level": "S",
+      "why": "回弹法测强的具体规定（测区、碳化深度、换算）。",
+      "howToUse": "回弹法类题目直接查它，注意适用条件与限制。",
+      "access": "交通运输标准化信息系统 / 住建部标准发布 / 学校图书馆标准库",
+      "confidence": "medium",
+      "verify": "版本年份需核对。",
+      "id": "structural-testing-source-012"
+    },
+    {
+      "type": "database",
+      "name": "中国知网（CNKI）",
+      "level": "D",
+      "why": "中文期刊、学位论文、会议论文最全，课程论文与作业的主要来源。",
+      "howToUse": "用「主题」而不是「篇名」检索；勾选「同义词扩展」；学位论文适合看文献综述章节。",
+      "access": "校园网 / 图书馆入口",
+      "confidence": "high",
+      "verify": null,
+      "id": "structural-testing-source-013"
+    },
+    {
+      "type": "database",
+      "name": "Web of Science / EI Compendex",
+      "level": "D",
+      "why": "外文期刊与会议论文，判断一个方向国际进展如何。",
+      "howToUse": "先看 Review，再看 Article；用「被引频次」排序找经典文献。",
+      "access": "校园网 / 图书馆入口",
+      "confidence": "high",
+      "verify": null,
+      "id": "structural-testing-source-014"
+    },
+    {
+      "type": "database",
+      "name": "标准数据库（交通运输标准化信息系统 / 国家标准全文公开系统）",
+      "level": "D",
+      "why": "规范条文以官方发布为准，教材与二手资料都可能是旧版。",
+      "howToUse": "查现行状态与被替代关系；引用规范必须写清楚版本年份。",
+      "access": "校园网 / 图书馆入口",
+      "confidence": "high",
+      "verify": null,
+      "id": "structural-testing-source-015"
+    },
+    {
+      "type": "org",
+      "name": "中国建筑科学研究院 / 交通运输部公路科学研究院",
+      "level": "O",
+      "why": "检测技术与标准的编制单位。",
+      "howToUse": "查标准解读与检测方法更新。",
+      "access": "官网公开信息",
+      "confidence": "high",
+      "verify": null,
+      "id": "structural-testing-source-016"
+    },
+    {
+      "type": "org",
+      "name": "中国土木工程学会 / 中国建筑学会",
+      "level": "O",
+      "why": "学术会议与技术指南。",
+      "howToUse": "找行业前沿做法。",
+      "access": "官网公开信息",
+      "confidence": "medium",
+      "verify": null,
+      "id": "structural-testing-source-017"
+    },
+    {
+      "type": "method",
+      "name": "试验检测类检索式模板",
+      "level": "M",
+      "why": "检测问题要锁定「对象 + 方法 + 目的」。",
+      "howToUse": "CNKI：（主题=静载试验 OR 模态识别 OR 损伤识别 OR 回弹）AND（主题=桥梁 OR 混凝土结构）AND（年 between 2016,2026）。",
+      "access": "CNKI",
+      "confidence": "high",
+      "verify": null,
+      "id": "structural-testing-source-018"
+    },
+    {
+      "id": "structural-testing-source-019",
+      "name": "判断一篇文献能不能用于作业（三问）",
+      "howToUse": "① 出处：是不是本文件列出的期刊/规范/机构？② 时间：是否近 10 年，或是不是该问题的经典原始文献？③ 可核：结论能不能在教材或现行规范里找到对应？三问答不全就别引用，改用教材口径并注明。"
+    }
+  ],
+  "searchTemplates": [
+    {
+      "id": "tpl-cnki",
+      "name": "CNKI 检索式模板（可直接套用）",
+      "howToUse": "（主题 = 核心概念A）AND（主题 = 核心概念B）AND（年 between 2016,2026）；先按「被引」排序抓综述，再按「发表时间」排序抓最新进展；找到 2-3 篇高质量综述后，顺其参考文献回溯原始文献。"
+    },
+    {
+      "id": "tpl-wos",
+      "name": "Web of Science / Scopus 检索式模板",
+      "howToUse": "TS=(\"concept A\" AND \"concept B\") AND PY=(2016-2026)；文献类型限 Article / Review；语种 English；用「被引频次」找经典，用「最早发表」找首创。"
+    },
+    {
+      "id": "tpl-three-q",
+      "name": "判断一篇文献能不能用于作业（三问）",
+      "howToUse": "① 出处：是不是本文件列出的期刊/规范/机构？② 时间：是否近 10 年，或是不是该问题的经典原始文献？③ 可核：结论能不能在教材或现行规范里找到对应？三问答不全就别引用，改用教材口径并注明。"
+    }
+  ]
+}

@@ -1,0 +1,405 @@
+{
+  "items": [
+    {
+      "id": "asphalt-mixture-book-001",
+      "subjectId": "asphalt-mixture",
+      "title": "沥青及沥青混合料路用性能",
+      "author": "沈金安",
+      "publisher": "人民交通出版社",
+      "level": "专著/参考书",
+      "why": "国内沥青与沥青混合料领域引用率最高的中文专著之一，把三大指标、改性沥青与路用性能的因果关系讲得比教材更透，尤其适合把零散知识点串成体系。",
+      "readPlan": "学完第 3、7 章后，对照阅读其关于高温稳定性与水稳定性的章节；做试验报告卡壳时按主题索引查阅。",
+      "relatesToChapters": [
+        "3",
+        "4",
+        "7",
+        "10"
+      ],
+      "acquireNote": "图书馆可借 / 出版社正版渠道",
+      "confidence": "high",
+      "verify": null,
+      "edition": "第 1 版（2001-05）",
+      "year": 2001,
+      "isbn": "9787114038488",
+      "verification": {
+        "status": "confirmed",
+        "source": "百度百科；孔夫子旧书网图书条目（含 ISBN / 版次）",
+        "checkedAt": "2026-09-15",
+        "note": "2001 年人民交通出版社，ISBN 9787114038488，533 页。"
+      }
+    },
+    {
+      "id": "asphalt-mixture-book-002",
+      "subjectId": "asphalt-mixture",
+      "title": "沥青混合料设计原理与方法",
+      "author": "吕伟民",
+      "publisher": "同济大学出版社",
+      "level": "教材/专著",
+      "why": "系统讲透配合比设计的原理，对马歇尔法、Superpave 的体积指标推导与级配理论（含贝雷法）有完整推导，是做计算题与理解 «为什么这样算» 的最佳补充。",
+      "readPlan": "第 6、8 章（级配理论与配合比设计）作为计算训练的主要参考；贝雷法部分建议与教材对照阅读。",
+      "relatesToChapters": [
+        "6",
+        "8",
+        "9"
+      ],
+      "acquireNote": "图书馆可借 / 出版社正版渠道",
+      "confidence": "high",
+      "verify": "ISBN 未在线核实",
+      "edition": "2000 年版",
+      "year": 2000,
+      "isbn": null,
+      "verification": {
+        "status": "confirmed",
+        "source": "《公路交通科技》2006 年第 23 卷第 12 期参考文献",
+        "checkedAt": "2026-09-15",
+        "note": "吕伟民《沥青混合料设计原理与方法》同济大学出版社 2000（见《公路交通科技》2006 年参考文献 [2]）。"
+      }
+    },
+    {
+      "id": "asphalt-mixture-book-003",
+      "subjectId": "asphalt-mixture",
+      "title": "沥青与沥青混合料的粘弹力学原理及应用",
+      "author": "张肖宁",
+      "publisher": "人民交通出版社",
+      "level": "专著（提高）",
+      "why": "把沥青与混合料的粘弹性本质讲清楚：为什么针入度是条件粘度、为什么劲度模量随温度与加载速率变化、为什么高温与低温性能相互制约。读它能从根本上理解指标的物理意义。",
+      "readPlan": "不必通读。在学到第 3 章粘度、第 7 章疲劳与第 10 章低温弯曲时，挑对应章节做专题阅读。",
+      "relatesToChapters": [
+        "3",
+        "7",
+        "10"
+      ],
+      "acquireNote": "图书馆可借 / 出版社正版渠道",
+      "confidence": "medium",
+      "verify": "书名与作者请按馆藏核对",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到出版社官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "书名/作者/出版社合理但未在线确认，按馆藏核对。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "asphalt-mixture-book-004",
+      "subjectId": "asphalt-mixture",
+      "title": "道路工程材料",
+      "author": "李立寒、孙大权、朱兴一、张南鹭",
+      "publisher": "人民交通出版社",
+      "level": "教材",
+      "why": "道路桥梁渡河工程专业主干教材，其沥青部分与本课程高度重叠但更偏材料基础，且常与《道路建筑材料》课程共用，便于跨课对照复习。集料、矿粉与技术性质的基础表述比本课程教材更细。",
+      "readPlan": "预习时先读其沥青与集料章节建立基础；复习时用于查漏补缺，特别是集料密度与试验方法部分。",
+      "relatesToChapters": [
+        "2",
+        "3",
+        "5"
+      ],
+      "acquireNote": "图书馆可借 / 教材科或出版社正版渠道",
+      "confidence": "high",
+      "verify": "书名应为《道路工程材料》，本条原写《道路建筑材料》不规范；ISBN 未在线核实",
+      "edition": "第 6 版（2018）",
+      "year": 2018,
+      "isbn": null,
+      "verification": {
+        "status": "confirmed",
+        "source": "长沙理工大学 2025 802 道路建筑材料考研参考教材",
+        "checkedAt": "2026-09-15",
+        "note": "【已修正书名】《道路工程材料》李立寒、孙大权、朱兴一、张南鹭编著，人民交通出版社 2018 年第 6 版。"
+      }
+    },
+    {
+      "id": "asphalt-mixture-book-005",
+      "subjectId": "asphalt-mixture",
+      "title": "公路沥青路面施工技术规范实施手册（JTG F40 配套）",
+      "author": "规范编制组 / 行业专家（编者需核对）",
+      "publisher": "人民交通出版社",
+      "level": "行业手册",
+      "why": "对 JTG F40 的条文背景、配合比设计流程与常见工程问题有详细解释，并配有大量计算示例，是做马歇尔设计作业与试验报告时最实用的 «操作说明书»。",
+      "readPlan": "第 8 章配合比设计做作业时按手册示例一步步对照；写试验报告时参考其数据表格格式。",
+      "relatesToChapters": [
+        "8",
+        "10",
+        "12"
+      ],
+      "acquireNote": "图书馆可借 / 出版社正版渠道",
+      "confidence": "low",
+      "verify": "书名、编者与对应规范版本请务必核对，此类手册随规范版本更新",
+      "verification": {
+        "status": "unverified",
+        "source": "本条为类别占位",
+        "checkedAt": "2026-09-15",
+        "note": "须按现行 JTG F40 版次检索对应手册书名。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "asphalt-mixture-book-006",
+      "subjectId": "asphalt-mixture",
+      "title": "Hot Mix Asphalt Materials, Mixture Design and Construction",
+      "author": "Roberts, F. L., Kandhal, P. S., Brown, E. R., Lee, D.-Y., Kennedy, T. W.",
+      "publisher": "NAPA Research and Education Foundation",
+      "level": "英文经典",
+      "why": "北美沥青混合料领域的经典教材，被称为 «HMA 百科»。对马歇尔与 Superpave 的历史背景、体积指标的物理含义、施工与病害讲得极其完整，英文难度不高，适合作为中文教材的第二视角。",
+      "readPlan": "第 9 章 Superpave 与第 10 章配合比设计部分优先读；遇到中文教材讲不清的概念（如 VMA 的物理意义）时查它的对应小节。",
+      "relatesToChapters": [
+        "5",
+        "8",
+        "9",
+        "12",
+        "13"
+      ],
+      "acquireNote": "NAPA 官网提供免费电子资源，也可通过学校图书馆数据库获取",
+      "confidence": "medium",
+      "verify": "请核对 NAPA 官网当前提供的版本与下载方式；作者顺序与版次以官网为准",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到 NAPA 官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "书名/作者/出版机构（NAPA Research and Education Foundation）确认；版次与获取方式按 NAPA 官网核对。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "asphalt-mixture-book-007",
+      "subjectId": "asphalt-mixture",
+      "title": "Mix Design Methods for Asphalt Concrete and Other Hot-Mix Types (MS-2)",
+      "author": "Asphalt Institute",
+      "publisher": "Asphalt Institute",
+      "level": "行业手册（英文）",
+      "why": "Asphalt Institute 的系列手册之一，是马歇尔配合比设计方法的原始权威说明，含完整的体积指标计算、图表与实例。想搞清楚 «这个公式从哪来» 时查它最直接。",
+      "readPlan": "配合第 8 章阅读；其中关于沥青用量试算与估算的经验式对做设计题很有帮助（使用前请与国内规范口径对照）。",
+      "relatesToChapters": [
+        "8"
+      ],
+      "acquireNote": "Asphalt Institute 官网 / 学校图书馆",
+      "confidence": "high",
+      "verify": null,
+      "edition": "第 7 版（2014）",
+      "year": 2014,
+      "isbn": "978-1-934154-70-0",
+      "verification": {
+        "status": "confirmed",
+        "source": "欧洲专利局 Espacenet 检索报告引用的文献题录",
+        "checkedAt": "2026-09-15",
+        "note": "Asphalt Institute MS-2 第 7 版 2014，ISBN 978-1-934154-70-0（Espacenet 检索报告引用题录）。"
+      }
+    },
+    {
+      "id": "asphalt-mixture-book-008",
+      "subjectId": "asphalt-mixture",
+      "title": "Superpave Mix Design (SP-2)",
+      "author": "Asphalt Institute",
+      "publisher": "Asphalt Institute",
+      "level": "行业手册（英文）",
+      "why": "Superpave 体积设计体系的权威入门手册，系统讲解 PG 分级选择、旋转压实与体积设计流程，是第 9 章最好的延伸读物。",
+      "readPlan": "学第 9 章时通读其设计流程章节；配合 MS-2 对比马歇尔与 Superpave 的差异。",
+      "relatesToChapters": [
+        "3",
+        "9"
+      ],
+      "acquireNote": "Asphalt Institute 官网 / 学校图书馆",
+      "confidence": "medium",
+      "verify": "请确认 SP-2 的现行版本与版次",
+      "verification": {
+        "status": "partial",
+        "source": "欧洲专利局 Espacenet 检索报告引用的文献题录",
+        "checkedAt": "2026-09-15",
+        "note": "同源题录中另有 SHRP-A-379《Superpave Mix Design System》(1994, ISBN 978-0-309-05764-6)；SP-2 的现行版次请按 Asphalt Institute 官网核对。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "asphalt-mixture-book-009",
+      "subjectId": "asphalt-mixture",
+      "title": "Bailey Method 相关文献（级配设计方法原始资料）",
+      "author": "Vavrik, W. R. 等（伊利诺伊大学 / Bailey 方法原始文献）",
+      "publisher": "学术会议论文集 / 高校技术报告",
+      "level": "原始文献",
+      "why": "贝雷法是本课程最容易 «教材讲不清楚、作业照抄公式» 的部分。直接看原始文献能搞清楚 CA、FAc、FAf 三个比值到底在评价什么，以及 0.22 倍控制筛孔的来由。",
+      "readPlan": "只在做贝雷法作业或课程设计时精读；其余时间了解结论即可。",
+      "relatesToChapters": [
+        "6"
+      ],
+      "acquireNote": "通过学校图书馆数据库检索相关会议论文（如 AAPT、TRB 年会论文）",
+      "confidence": "low",
+      "verify": "作者与文献出处请通过学术数据库核实；贝雷法的推荐取值区间在不同文献中不完全一致",
+      "verification": {
+        "status": "unverified",
+        "source": "本次未取到原始文献题录",
+        "checkedAt": "2026-09-15",
+        "note": "作者与出处请通过学术数据库核实；不同文献中贝雷法推荐取值区间不完全一致。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "asphalt-mixture-book-010",
+      "subjectId": "asphalt-mixture",
+      "title": "沥青路面再生利用技术（RAP 相关专著）",
+      "author": "需核对（国内道路再生领域专家）",
+      "publisher": "人民交通出版社",
+      "level": "专著",
+      "why": "第 11 章再生沥青混合料在教材中篇幅有限，而 RAP 已是工程常态。这类专著讲清了旧料变异性控制、再生剂选择与掺量确定，对课程设计与毕业设计帮助很大。",
+      "readPlan": "学第 11 章时选读；如做再生方向的课程设计则重点读配合比设计部分。",
+      "relatesToChapters": [
+        "3",
+        "11"
+      ],
+      "acquireNote": "图书馆可借 / 出版社正版渠道",
+      "confidence": "low",
+      "verify": "书名、作者与出版社请按馆藏或出版社目录核对，此类专著版本较多",
+      "verification": {
+        "status": "unverified",
+        "source": "本条为类别占位",
+        "checkedAt": "2026-09-15",
+        "note": "按馆藏或出版社目录替换为具体书名，建议删除或替换。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "asphalt-mixture-book-011",
+      "subjectId": "asphalt-mixture",
+      "title": "SMA 路面（沥青玛蹄脂碎石混合料相关专著）",
+      "author": "需核对",
+      "publisher": "人民交通出版社",
+      "level": "专著",
+      "why": "SMA 的组成设计、纤维稳定剂、析漏与飞散控制是第 11 章的重点也是考试易错点，专著里对 «三高一纤» 的配合比逻辑与施工要点讲得更具体。",
+      "readPlan": "学第 11 章 SMA 时配合阅读；做析漏飞散计算题时参考其判定思路。",
+      "relatesToChapters": [
+        "5",
+        "11"
+      ],
+      "acquireNote": "图书馆可借 / 出版社正版渠道",
+      "confidence": "low",
+      "verify": "书名与作者请按馆藏核对",
+      "verification": {
+        "status": "unverified",
+        "source": "本条为类别占位",
+        "checkedAt": "2026-09-15",
+        "note": "按馆藏或出版社目录替换为具体书名，建议删除或替换。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "asphalt-mixture-book-012",
+      "subjectId": "asphalt-mixture",
+      "title": "沥青路面施工与养护技术（工程实务类）",
+      "author": "需核对",
+      "publisher": "人民交通出版社",
+      "level": "工程实务",
+      "why": "第 12、13 章偏工程经验，教材讲得较抽象。实务书里有大量现场照片与病害案例，对理解 «施工缺陷如何变成病害» 很有帮助，也利于写实习报告。",
+      "readPlan": "期末复习或实习前通读；写病害分析作业时按病害类型查阅。",
+      "relatesToChapters": [
+        "12",
+        "13"
+      ],
+      "acquireNote": "图书馆可借 / 出版社正版渠道",
+      "confidence": "low",
+      "verify": "书名与作者请按馆藏核对",
+      "verification": {
+        "status": "unverified",
+        "source": "本条为类别占位",
+        "checkedAt": "2026-09-15",
+        "note": "按馆藏或出版社目录替换为具体书名，建议删除或替换。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "asphalt-mixture-book-013",
+      "subjectId": "asphalt-mixture",
+      "title": "道路工程材料（国家级规划教材，含沥青部分）",
+      "author": "需核对",
+      "publisher": "人民交通出版社 / 中国建筑工业出版社",
+      "level": "教材",
+      "why": "若本校《道路建筑材料》用的是其他版本，用它做第二本参考教材，可交叉验证概念表述，避免被单一教材的口径 «带偏»。",
+      "readPlan": "只在遇到概念表述不一致时查阅对照。",
+      "relatesToChapters": [
+        "2",
+        "3",
+        "5"
+      ],
+      "acquireNote": "图书馆可借 / 教材科",
+      "confidence": "low",
+      "verify": "书名、作者与出版社请按本校教材目录核对",
+      "verification": {
+        "status": "unverified",
+        "source": "与已核实的《道路工程材料》（李立寒等）重复",
+        "checkedAt": "2026-09-15",
+        "note": "本条与第 4 条重复，建议删除。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "asphalt-mixture-book-014",
+      "subjectId": "asphalt-mixture",
+      "title": "The Shell Bitumen Handbook",
+      "author": "Robert N. Hunter 等（Shell 专家组编）",
+      "publisher": "ICE Publishing",
+      "level": "英文经典（手册）",
+      "why": "国际上关于沥青结合料最权威的手册之一，对沥青的化学组成、流变性质、改性沥青与乳化沥青的讲解极为系统，是 «把沥青本身搞明白» 的最佳英文读物。",
+      "readPlan": "第 2、3、4 章（组成、结构、改性乳化）作为专题阅读；其余部分按需查阅。",
+      "relatesToChapters": [
+        "2",
+        "3",
+        "4"
+      ],
+      "acquireNote": "学校图书馆数据库 / 正版购书渠道",
+      "confidence": "high",
+      "verify": "第 5 版为 Thomas Telford 2003；本条原写\"Thomas Telford / ICE Publishing\"混用了两版",
+      "edition": "第 6 版（2015）",
+      "year": 2015,
+      "isbn": "978-0-7277-5837-8",
+      "verification": {
+        "status": "confirmed",
+        "source": "AbeBooks / Kennys 书目记录（含 ISBN）；欧洲专利局 Espacenet 检索报告引用的文献题录",
+        "checkedAt": "2026-09-15",
+        "note": "【已修正】第 6 版 ICE Publishing 2015，ISBN 978-0-7277-5837-8，504 页，编者 Robert N. Hunter 等；第 5 版 Thomas Telford 2003。"
+      }
+    },
+    {
+      "id": "asphalt-mixture-book-015",
+      "subjectId": "asphalt-mixture",
+      "title": "公路工程沥青路面试验检测技术（试验操作类）",
+      "author": "需核对",
+      "publisher": "人民交通出版社",
+      "level": "试验指导书",
+      "why": "试验课与试验报告是本课程的重要考核环节。试验操作类书籍把每一步的操作要点、数据记录表与常见误差来源写得很清楚，能直接提升试验报告质量。",
+      "readPlan": "每次试验预习时按项目查阅；写报告时参考其数据处理与误差分析写法。",
+      "relatesToChapters": [
+        "3",
+        "8",
+        "10",
+        "11"
+      ],
+      "acquireNote": "图书馆可借 / 实验室资料",
+      "confidence": "low",
+      "verify": "书名与作者请按馆藏或实验室推荐书目核对",
+      "verification": {
+        "status": "unverified",
+        "source": "本条为类别占位",
+        "checkedAt": "2026-09-15",
+        "note": "按馆藏或实验室推荐书目替换为具体书名。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    }
+  ]
+}

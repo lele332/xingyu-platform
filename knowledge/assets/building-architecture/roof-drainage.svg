@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 300" width="660" height="300" role="img" aria-label="平屋顶有组织排水示意：分水线、找坡方向、檐沟、雨水口与雨水管间距">
+  <title>平屋顶有组织排水的组织方式</title>
+  <g font-family="system-ui, -apple-system, 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#8a8a8a">
+    <rect x="60" y="80" width="500" height="150" fill="#d8d8d8" opacity="0.1" stroke="#c8c8c8" stroke-width="1.4"/>
+    <rect x="60" y="80" width="500" height="14" fill="#0a84ff" opacity="0.28" stroke="#0a84ff" stroke-width="1"/>
+    <rect x="60" y="216" width="500" height="14" fill="#0a84ff" opacity="0.28" stroke="#0a84ff" stroke-width="1"/>
+
+    <path d="M60 155 H560" stroke="#ff9f0a" stroke-width="1.6" stroke-dasharray="8 4"/>
+    <text x="576" y="160" font-size="11" fill="#ff9f0a">分水线</text>
+    <text x="576" y="88" font-size="11" fill="#0a84ff">檐沟</text>
+    <text x="576" y="228" font-size="11" fill="#0a84ff">檐沟</text>
+
+    <path d="M180 148 V100" stroke="#ff9f0a" stroke-width="1.3"/>
+    <path d="M180 96 l-4 9 h8 Z" fill="#ff9f0a"/>
+    <path d="M400 148 V100" stroke="#ff9f0a" stroke-width="1.3"/>
+    <path d="M400 96 l-4 9 h8 Z" fill="#ff9f0a"/>
+    <path d="M180 162 V210" stroke="#ff9f0a" stroke-width="1.3"/>
+    <path d="M180 214 l-4 -9 h8 Z" fill="#ff9f0a"/>
+    <path d="M400 162 V210" stroke="#ff9f0a" stroke-width="1.3"/>
+    <path d="M400 214 l-4 -9 h8 Z" fill="#ff9f0a"/>
+    <text x="300" y="176" text-anchor="middle" font-size="11" fill="#ff9f0a">雨水自分水线向两侧找坡排走</text>
+
+    <circle cx="120" cy="87" r="6.5" fill="none" stroke="#30d158" stroke-width="1.6"/>
+    <circle cx="270" cy="87" r="6.5" fill="none" stroke="#30d158" stroke-width="1.6"/>
+    <circle cx="420" cy="87" r="6.5" fill="none" stroke="#30d158" stroke-width="1.6"/>
+    <circle cx="550" cy="87" r="6.5" fill="none" stroke="#30d158" stroke-width="1.6"/>
+    <text x="576" y="200" font-size="11">雨水口</text>
+    <text x="576" y="216" font-size="11">接雨水管</text>
+
+    <path d="M120 62 H270" stroke="#30d158" stroke-width="1.1"/>
+    <path d="M120 57 v10 M270 57 v10" stroke="#30d158" stroke-width="1.1"/>
+    <text x="195" y="52" text-anchor="middle" font-size="11" fill="#30d158">雨水管间距</text>
+
+    <text x="330" y="258" text-anchor="middle" font-size="11" fill="#8a8a8a">找坡两种方式：结构找坡（结构层本身倾斜）、材料找坡（用轻质材料垫出坡度），二者取值要求不同</text>
+    <text x="330" y="276" text-anchor="middle" font-size="11" fill="#8a8a8a">单根雨水管的汇水面积、管径与间距限值须按现行屋面工程技术规范核对，不同版本数值有差异</text>
+    <text x="330" y="292" text-anchor="middle" font-size="11" fill="#8a8a8a">易错：只画了雨水口却没交代檐沟排水方向；或把内排水与外排水的构造层次混着写</text>
+  </g>
+</svg>

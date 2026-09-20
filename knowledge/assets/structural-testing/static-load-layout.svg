@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 300" width="660" height="300" role="img" aria-label="简支梁静载试验测点布置：两点加载、跨中与四分点挠度测点、跨中截面应变测点沿高度布置">
+  <title>简支梁静载试验的加载与测点布置</title>
+  <g font-family="system-ui, -apple-system, 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#8a8a8a">
+    <rect x="100" y="130" width="460" height="42" fill="#d8d8d8" opacity="0.12" stroke="#c8c8c8" stroke-width="1.4"/>
+    <path d="M92 182 L110 172 L128 182 Z" fill="#c8c8c8" opacity="0.55"/>
+    <circle cx="110" cy="177" r="5" fill="none" stroke="#c8c8c8" stroke-width="1.2"/>
+    <path d="M532 182 L550 172 L568 182 Z" fill="#c8c8c8" opacity="0.55"/>
+    <circle cx="550" cy="177" r="5" fill="none" stroke="#c8c8c8" stroke-width="1.2"/>
+
+    <rect x="196" y="106" width="268" height="14" fill="#d8d8d8" opacity="0.2" stroke="#c8c8c8" stroke-width="1.2"/>
+    <circle cx="220" cy="126" r="4.5" fill="none" stroke="#c8c8c8" stroke-width="1.2"/>
+    <circle cx="440" cy="126" r="4.5" fill="none" stroke="#c8c8c8" stroke-width="1.2"/>
+    <path d="M330 66 V102" stroke="#ff9f0a" stroke-width="1.8"/>
+    <path d="M330 106 l-5 -10 h10 Z" fill="#ff9f0a"/>
+    <text x="340" y="78" font-size="11" fill="#ff9f0a">P（分配梁两点加载）</text>
+    <text x="462" y="118" font-size="11">分配梁</text>
+
+    <path d="M330 130 V172" stroke="#0a84ff" stroke-width="1" stroke-dasharray="4 3" opacity="0.7"/>
+    <rect x="325" y="134" width="10" height="10" fill="#30d158" opacity="0.8"/>
+    <rect x="325" y="152" width="10" height="10" fill="#30d158" opacity="0.8"/>
+    <rect x="325" y="164" width="10" height="10" fill="#30d158" opacity="0.8"/>
+    <text x="344" y="146" font-size="11" fill="#30d158">应变测点（沿截面高度布片）</text>
+    <text x="344" y="162" font-size="11">上缘受压、下缘受拉，可验平截面假定</text>
+
+    <circle cx="330" cy="196" r="7" fill="none" stroke="#0a84ff" stroke-width="1.4"/>
+    <path d="M330 172 V189" stroke="#0a84ff" stroke-width="1.2"/>
+    <path d="M320 203 H340" stroke="#0a84ff" stroke-width="1.2"/>
+    <text x="330" y="220" text-anchor="middle" font-size="11" fill="#0a84ff">跨中挠度（主控测点）</text>
+
+    <circle cx="220" cy="196" r="6" fill="none" stroke="#0a84ff" stroke-width="1.2"/>
+    <path d="M220 172 V190" stroke="#0a84ff" stroke-width="1"/>
+    <circle cx="440" cy="196" r="6" fill="none" stroke="#0a84ff" stroke-width="1.2"/>
+    <path d="M440 172 V190" stroke="#0a84ff" stroke-width="1"/>
+    <text x="330" y="238" text-anchor="middle" font-size="11">四分点挠度（校核变形曲线）</text>
+
+    <path d="M110 256 H550" stroke="#c8c8c8" stroke-width="1"/>
+    <path d="M110 250 v12 M550 250 v12" stroke="#c8c8c8" stroke-width="1"/>
+    <text x="330" y="272" text-anchor="middle" font-size="11">计算跨径 L</text>
+
+    <text x="330" y="292" text-anchor="middle" font-size="11" fill="#8a8a8a">评定要点：校验系数 = 实测值 / 理论值，残余变形与裂缝宽度是否满足；加载效率与分级要求按现行检测规程核对</text>
+  </g>
+</svg>

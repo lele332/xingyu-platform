@@ -1,0 +1,2466 @@
+{
+  "items": [
+    {
+      "id": "hydraulics-hydrology-concept-001",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "1.1",
+      "term": "水力学",
+      "en": "hydraulics",
+      "definition": "研究液体（主要是水）处于静止和运动状态下的力学规律，并把这些规律应用于工程实际的一门学科。课程的正确名称是「水力学」，不是「水利学」。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "桥涵水文",
+        "工程流体力学",
+        "水文学"
+      ],
+      "pitfalls": [
+        "常被口误写成「水利学」，专业术语与教材名均为「水力学」"
+      ],
+      "examAngle": "概念辨析 / 课程定位",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-002",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "1.2",
+      "term": "连续介质模型",
+      "en": "continuum model",
+      "definition": "假定液体充满所占空间而不留空隙，其宏观物理量（密度、压强、流速等）在空间和时间上连续可微，从而可用连续函数与微分方程描述液体运动。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "密度",
+        "质点",
+        "流体微团"
+      ],
+      "pitfalls": [
+        "分子尺度下不成立；但在所有工程尺度上均成立，是本课程所有微分方程的前提"
+      ],
+      "examAngle": "概念题：为什么可以把水看作连续介质",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-003",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "1.3",
+      "term": "粘滞性",
+      "en": "viscosity",
+      "definition": "液体抵抗剪切变形（即流层间发生相对运动）的物理性质，表现为流层间产生内摩擦切应力。静止液体不显示粘滞性。",
+      "formulaId": "hydraulics-hydrology-formula-001",
+      "symbols": [
+        "mu",
+        "nu",
+        "tau"
+      ],
+      "unit": "Pa·s（μ）；m²/s（ν）",
+      "relations": [
+        "牛顿内摩擦定律",
+        "动力粘度",
+        "运动粘度",
+        "理想液体"
+      ],
+      "pitfalls": [
+        "粘滞性是流动时才表现出来的性质，静止液体只有压强没有切应力"
+      ],
+      "examAngle": "常考概念辨析：粘滞性与压缩性、表面张力的区别",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-004",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "1.3",
+      "term": "牛顿内摩擦定律",
+      "en": "Newton's law of viscosity",
+      "definition": "作层状流动的液体，流层间的切应力 τ 与速度梯度 du/dy 成正比：τ = μ·du/dy。满足该定律的液体称牛顿液体。",
+      "formulaId": "hydraulics-hydrology-formula-001",
+      "symbols": [
+        "tau",
+        "mu"
+      ],
+      "unit": "Pa",
+      "relations": [
+        "动力粘度",
+        "层流",
+        "速度梯度"
+      ],
+      "pitfalls": [
+        "只在层流条件下直接成立；紊流中的切应力还应计入紊流附加切应力（雷诺应力）",
+        "du/dy 是垂直于流向方向的速度梯度"
+      ],
+      "examAngle": "给定板速与油膜厚度求切应力与摩擦力",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-005",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "1.3",
+      "term": "动力粘度 μ 与运动粘度 ν",
+      "en": "dynamic viscosity / kinematic viscosity",
+      "definition": "μ 是牛顿内摩擦定律的比例系数，单位 Pa·s；ν = μ/ρ 称运动粘度，单位 m²/s。水的 ν 在 20℃ 时约为 1.0×10⁻⁶ m²/s。",
+      "formulaId": "hydraulics-hydrology-formula-002",
+      "symbols": [
+        "mu",
+        "nu",
+        "rho"
+      ],
+      "unit": "Pa·s；m²/s",
+      "relations": [
+        "粘滞性",
+        "雷诺数",
+        "密度"
+      ],
+      "pitfalls": [
+        "μ 随温度升高而减小（水），ν 亦随温度显著变化，雷诺数计算必须用对应水温的 ν",
+        "单位换算失误是高频扣分点：1 Pa·s = 10 P（泊）＝1000 cP"
+      ],
+      "examAngle": "μ 与 ν 的互算；查表取水温对应的 ν",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "ν 的数值表请按教材附录核对；不同教材的 ν–t 表略有差异"
+    },
+    {
+      "id": "hydraulics-hydrology-concept-006",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "1.2",
+      "term": "压缩性",
+      "en": "compressibility",
+      "definition": "液体在压力作用下体积缩小的性质，用体积压缩系数 β 表示。水的压缩性极小，一般工程问题中视为不可压缩。",
+      "formulaId": null,
+      "symbols": [
+        "beta"
+      ],
+      "unit": "Pa⁻¹",
+      "relations": [
+        "不可压缩液体",
+        "体积模量",
+        "水击"
+      ],
+      "pitfalls": [
+        "水击（压强变化剧烈、历时极短）问题必须考虑压缩性，这是水击波速有限的原因"
+      ],
+      "examAngle": "概念题：什么情况下水不能视为不可压缩",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-007",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "1.2",
+      "term": "表面张力",
+      "en": "surface tension",
+      "definition": "液体自由面上由于分子引力不平衡而产生的沿表面作用的拉力，使液面有收缩趋势。用表面张力系数 σ 表示。",
+      "formulaId": null,
+      "symbols": [
+        "sigma"
+      ],
+      "unit": "N/m",
+      "relations": [
+        "毛细现象",
+        "压缩性",
+        "粘滞性"
+      ],
+      "pitfalls": [
+        "一般水力学问题可忽略；仅在毛细管、小尺度模型、薄层水流中才需考虑（测压管读数误差即由此而来）"
+      ],
+      "examAngle": "概念题：给出必须考虑表面张力的场合",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-008",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "2.1",
+      "term": "静水压强",
+      "en": "hydrostatic pressure",
+      "definition": "静止液体单位面积上所受的压力。有两个特性：方向沿受压面的内法线方向；任一点处各方向的静水压强大小相等。",
+      "formulaId": "hydraulics-hydrology-formula-003",
+      "symbols": [
+        "p"
+      ],
+      "unit": "Pa（kPa）",
+      "relations": [
+        "绝对压强",
+        "相对压强",
+        "真空度"
+      ],
+      "pitfalls": [
+        "静水压强不是矢量，但压力（作用于面上的合力）是矢量"
+      ],
+      "examAngle": "两个特性的叙述题",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-009",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "2.1",
+      "term": "绝对压强与相对压强",
+      "en": "absolute pressure / gauge pressure",
+      "definition": "以完全真空为基准的压强称绝对压强 p_abs；以当地大气压 p_a 为基准的称相对压强（表压）p = p_abs − p_a。",
+      "formulaId": "hydraulics-hydrology-formula-004",
+      "symbols": [
+        "p_abs",
+        "p"
+      ],
+      "unit": "Pa",
+      "relations": [
+        "真空度",
+        "大气压强",
+        "静水压强"
+      ],
+      "pitfalls": [
+        "水力学计算一律用相对压强（大气压各方向抵消）；只有涉及汽化、真空时才用绝对压强",
+        "相对压强可为负"
+      ],
+      "examAngle": "三压强互算（必考小题）",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-010",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "2.1",
+      "term": "真空度",
+      "en": "vacuum",
+      "definition": "当绝对压强小于当地大气压时，不足的那部分压强值，p_v = p_a − p_abs，常换算为水柱高度表示。",
+      "formulaId": "hydraulics-hydrology-formula-005",
+      "symbols": [
+        "p_v"
+      ],
+      "unit": "Pa 或 m 水柱",
+      "relations": [
+        "绝对压强",
+        "相对压强",
+        "虹吸管"
+      ],
+      "pitfalls": [
+        "理论上最大真空度约 10.33 m 水柱，工程上虹吸管设计常限制在 7 m 左右（防止汽化破坏）"
+      ],
+      "examAngle": "虹吸管最大安装高度、管嘴内真空度",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "2",
+        "page": null
+      },
+      "verify": "教材中虹吸管允许真空度的取值（7 m 或 7.5 m）请核对原书"
+    },
+    {
+      "id": "hydraulics-hydrology-concept-011",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "2.1",
+      "term": "等压面",
+      "en": "equipressure surface",
+      "definition": "压强相等的各点组成的面。静止液体中质量力只有重力时，等压面为水平面；两种互不相混的静止液体的分界面也是等压面。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "静水压强",
+        "连通器",
+        "压强量测"
+      ],
+      "pitfalls": [
+        "只有在同一种连通的静止液体中，等高面才是等压面；被阀门隔断或流动液体中不成立"
+      ],
+      "examAngle": "U 形测压计压强计算的依据",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-012",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "2.2",
+      "term": "位置水头、压强水头与测压管水头",
+      "en": "elevation head / pressure head / piezometric head",
+      "definition": "位置水头 z 是某点相对基准面的高度；压强水头 p/γ 是该点压强折算的液柱高度；两者之和 z + p/γ 称测压管水头。",
+      "formulaId": "hydraulics-hydrology-formula-006",
+      "symbols": [
+        "z",
+        "p",
+        "gamma"
+      ],
+      "unit": "m",
+      "relations": [
+        "总水头",
+        "流速水头",
+        "测压管水头线"
+      ],
+      "pitfalls": [
+        "加流速水头 αv²/(2g) 才是总水头；三者量纲均为长度，可画在同一张水头线图上"
+      ],
+      "examAngle": "水头线绘制、能量方程各项识别",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-013",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "2.4",
+      "term": "压力中心与形心",
+      "en": "center of pressure / centroid",
+      "definition": "形心是受压平面的几何中心；压力中心是静水总压力的作用点。对平面受压面，压力中心恒在形心之下（沿倾斜面向下偏移）。",
+      "formulaId": "hydraulics-hydrology-formula-009",
+      "symbols": [
+        "yD",
+        "yc"
+      ],
+      "unit": "m",
+      "relations": [
+        "静水总压力",
+        "平面静水压力",
+        "惯性矩"
+      ],
+      "pitfalls": [
+        "hc 是形心的淹没深度（垂直距离），yc 是沿受压面斜量；两者不能混用",
+        "受压面水平时压力中心与形心重合"
+      ],
+      "examAngle": "压力中心计算（必考计算题）",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-014",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "2.5",
+      "term": "压力体",
+      "en": "pressure volume",
+      "definition": "求曲面垂直分力时，由曲面、曲面边界向自由面（或其延长面）所作铅垂线与自由面所围成的体积。实压力体向下、虚压力体向上。",
+      "formulaId": "hydraulics-hydrology-formula-011",
+      "symbols": [
+        "V"
+      ],
+      "unit": "m³",
+      "relations": [
+        "曲面静水总压力",
+        "阿基米德原理"
+      ],
+      "pitfalls": [
+        "曲面上方有液体时压力体为实、垂直分力向下；曲面下方有液体时压力体为虚、垂直分力向上"
+      ],
+      "examAngle": "弧形闸门垂直分力计算",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-015",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "2.5",
+      "term": "阿基米德原理",
+      "en": "Archimedes' principle",
+      "definition": "浸入液体中的物体受到向上的浮力，大小等于物体排开液体的重量。",
+      "formulaId": "hydraulics-hydrology-formula-012",
+      "symbols": [
+        "F"
+      ],
+      "unit": "N",
+      "relations": [
+        "压力体",
+        "浮心",
+        "浮体稳定性"
+      ],
+      "pitfalls": [
+        "浮力方向与重力相反；浮体稳定还取决于浮心与重心的相对位置，仅靠浮力大小不能判断稳定"
+      ],
+      "examAngle": "潜体/浮体受力与稳定性判断",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-016",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "3.1",
+      "term": "恒定流与非恒定流",
+      "en": "steady flow / unsteady flow",
+      "definition": "若各空间点上的运动要素（流速、压强等）不随时间变化，称恒定流；否则为非恒定流。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "均匀流",
+        "渐变流",
+        "流线"
+      ],
+      "pitfalls": [
+        "恒定流 ≠ 均匀流：恒定是时间维度、均匀是空间维度，两组概念完全独立"
+      ],
+      "examAngle": "概念辨析高频题",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-017",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "3.1",
+      "term": "均匀流与非均匀流",
+      "en": "uniform flow / non-uniform flow",
+      "definition": "若流速的大小和方向沿程不变（流线为平行直线）称均匀流；否则为非均匀流。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "恒定流",
+        "渐变流",
+        "正常水深"
+      ],
+      "pitfalls": [
+        "均匀流只可能出现在棱柱形长直渠道中；均匀流必定是恒定流，反之不然"
+      ],
+      "examAngle": "概念辨析；均匀流的水力坡度 J = 渠底坡度 i",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/hydraulics-hydrology/open-channel-section.svg",
+        "caption": "明渠梯形断面的水力要素（自绘示意）",
+        "readPoints": [
+          "水力半径 R = A / χ，不是水深 h；只有宽浅矩形才近似 R ≈ h",
+          "水面宽 B = b + 2mh，过水面积 A = (b + mh)h",
+          "均匀流时底坡 i = 水面坡 = 水力坡降 J，此时水深即正常水深 h₀"
+        ]
+      }
+    },
+    {
+      "id": "hydraulics-hydrology-concept-018",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "3.1",
+      "term": "渐变流与急变流",
+      "en": "gradually varied flow / rapidly varied flow",
+      "definition": "流线近似平行、曲率很小的流动称渐变流；反之称急变流。渐变流断面上压强近似按静水分布。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "均匀流",
+        "急变流",
+        "伯努利方程"
+      ],
+      "pitfalls": [
+        "能量方程的两个计算断面必须取在渐变流断面上（急变流断面压强分布偏离静水规律）"
+      ],
+      "examAngle": "概念题；能量方程断面的选取原则",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-019",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "3.1",
+      "term": "迹线与流线",
+      "en": "pathline / streamline",
+      "definition": "迹线是某一质点在一段时间内的运动轨迹；流线是某一瞬时流场中切线方向与流速方向一致的曲线。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "恒定流",
+        "流管",
+        "过水断面"
+      ],
+      "pitfalls": [
+        "恒定流时迹线与流线重合；非恒定流时两者一般不重合",
+        "流线不能相交（驻点除外）"
+      ],
+      "examAngle": "概念辨析必考",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-020",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "3.1",
+      "term": "过水断面、湿周与水力半径",
+      "en": "cross-section / wetted perimeter / hydraulic radius",
+      "definition": "过水断面 A 是与所有流线正交的断面；湿周 χ 是过水断面上液体与固体壁面接触的边界长度；水力半径 R = A/χ。",
+      "formulaId": "hydraulics-hydrology-formula-029",
+      "symbols": [
+        "A",
+        "chi",
+        "R"
+      ],
+      "unit": "m²；m；m",
+      "relations": [
+        "雷诺数",
+        "谢才公式",
+        "曼宁公式",
+        "水力最优断面"
+      ],
+      "pitfalls": [
+        "湿周不计自由水面那段边界（空气接触面不算）",
+        "圆管满流时 R = d/4，不是 d/2"
+      ],
+      "examAngle": "梯形/矩形断面水力要素计算（所有明渠题第一步）",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/hydraulics-hydrology/open-channel-section.svg",
+        "caption": "明渠梯形断面的水力要素（自绘示意）",
+        "readPoints": [
+          "水力半径 R = A / χ，不是水深 h；只有宽浅矩形才近似 R ≈ h",
+          "水面宽 B = b + 2mh，过水面积 A = (b + mh)h",
+          "均匀流时底坡 i = 水面坡 = 水力坡降 J，此时水深即正常水深 h₀"
+        ]
+      }
+    },
+    {
+      "id": "hydraulics-hydrology-concept-021",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "3.3",
+      "term": "动能修正系数 α 与动量修正系数 β",
+      "en": "kinetic energy correction factor / momentum correction factor",
+      "definition": "用断面平均流速代替实际流速分布时，对动能和动量分别引入的修正系数。层流 α = 2、β = 4/3；紊流 α、β 均接近 1（常取 1.0）。",
+      "formulaId": null,
+      "symbols": [
+        "alpha",
+        "beta"
+      ],
+      "unit": "—",
+      "relations": [
+        "断面平均流速",
+        "伯努利方程",
+        "动量方程"
+      ],
+      "pitfalls": [
+        "一般工程计算取 α = β = 1.0；层流时必须取 α = 2",
+        "明渠断面流速分布很不均匀，α 可达 1.1—1.3"
+      ],
+      "examAngle": "概念题；能量方程中 α 的取值",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-022",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "3.3",
+      "term": "总水头线、测压管水头线与水力坡度",
+      "en": "energy line / hydraulic grade line / energy slope",
+      "definition": "总水头线是各断面总水头 H = z + p/γ + αv²/(2g) 的连线，沿程单调下降；测压管水头线是 z + p/γ 的连线，可升可降；水力坡度 J 是单位长度上的水头损失。",
+      "formulaId": "hydraulics-hydrology-formula-012",
+      "symbols": [
+        "J",
+        "H"
+      ],
+      "unit": "—；m",
+      "relations": [
+        "伯努利方程",
+        "位置水头",
+        "测压管水头"
+      ],
+      "pitfalls": [
+        "有水泵时总水头线会突升；测压管水头线在管径变化处可能上升（流速减小、压强增大）"
+      ],
+      "examAngle": "水头线图判读与绘制",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-023",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "4.1",
+      "term": "层流与紊流",
+      "en": "laminar flow / turbulent flow",
+      "definition": "层流中流体质点作平行分层流动、互不混掺；紊流中质点轨迹紊乱、相互混掺，流速与压强存在脉动。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "雷诺数",
+        "临界雷诺数",
+        "粘性底层"
+      ],
+      "pitfalls": [
+        "层流与紊流的判别只能靠雷诺数，不能靠流速大小或管径大小直接判断",
+        "层流沿程损失与 v 一次方成正比，紊流约与 v 的 1.75—2 次方成正比"
+      ],
+      "examAngle": "Re 计算与流态判别",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-024",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "4.1",
+      "term": "雷诺数 Re",
+      "en": "Reynolds number",
+      "definition": "惯性力与粘性力之比的无量纲数，Re = vd/ν（圆管）或 Re = 4vR/ν（明渠及非圆管），是判别流态的唯一依据。",
+      "formulaId": "hydraulics-hydrology-formula-019",
+      "symbols": [
+        "Re",
+        "v",
+        "d",
+        "nu"
+      ],
+      "unit": "—",
+      "relations": [
+        "层流",
+        "紊流",
+        "临界雷诺数",
+        "水力半径"
+      ],
+      "pitfalls": [
+        "圆管用 d，明渠/非圆管用 4R（4R = d 时才等价）",
+        "ν 必须取对应水温的值"
+      ],
+      "examAngle": "计算 Re 判别流态（必考）",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-025",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "4.1",
+      "term": "临界雷诺数",
+      "en": "critical Reynolds number",
+      "definition": "流态转变处的雷诺数。圆管下临界值约 2000（部分教材取 2300），上临界值不稳定；明渠临界值约 500。",
+      "formulaId": null,
+      "symbols": [
+        "Re_c"
+      ],
+      "unit": "—",
+      "relations": [
+        "雷诺数",
+        "层流",
+        "紊流"
+      ],
+      "pitfalls": [
+        "教材口径不统一：圆管下临界雷诺数有 2000 与 2300 两种说法，作业按本教材取值",
+        "明渠临界雷诺数约为 500，判别时注意特征长度用 R"
+      ],
+      "examAngle": "流态判别阈值的取值",
+      "confidence": "medium",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "4",
+        "page": null
+      },
+      "verify": "请核对本教材采用的圆管下临界雷诺数究竟是 2000 还是 2300，并按教材取值"
+    },
+    {
+      "id": "hydraulics-hydrology-concept-026",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "4.2",
+      "term": "沿程水头损失 hf",
+      "en": "friction head loss",
+      "definition": "液体沿流程由于粘滞性与壁面摩擦而均匀损失的水头，与流程长度成正比。",
+      "formulaId": "hydraulics-hydrology-formula-021",
+      "symbols": [
+        "hf",
+        "lambda"
+      ],
+      "unit": "m",
+      "relations": [
+        "达西-魏斯巴赫公式",
+        "局部水头损失",
+        "水力坡度"
+      ],
+      "pitfalls": [
+        "hf 与 l/d 成正比，与 v² 成正比（紊流）；不要漏掉 l/d 中的 d"
+      ],
+      "examAngle": "管道与明渠的能量损失计算",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-027",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "4.3",
+      "term": "当量粗糙度与尼古拉兹试验",
+      "en": "equivalent roughness / Nikuradse experiment",
+      "definition": "当量粗糙度 Δ 是把实际壁面的粗糙影响折算成均匀人工砂粒高度的等效值；尼古拉兹用人工粗糙管揭示了 λ = f(Re, Δ/d) 的五个分区规律。",
+      "formulaId": null,
+      "symbols": [
+        "Delta"
+      ],
+      "unit": "m",
+      "relations": [
+        "莫迪图",
+        "沿程阻力系数",
+        "水力光滑"
+      ],
+      "pitfalls": [
+        "当量粗糙度不等于实际粗糙度，是水力等效概念",
+        "五个区：层流区、临界区、光滑管区、过渡区、粗糙管区"
+      ],
+      "examAngle": "概念题；λ 影响因素分析",
+      "confidence": "medium",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "4",
+        "page": null
+      },
+      "verify": "尼古拉兹分区的编号与命名请按教材表述核对"
+    },
+    {
+      "id": "hydraulics-hydrology-concept-028",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "4.3",
+      "term": "水力光滑、过渡与粗糙（阻力平方区）",
+      "en": "hydraulically smooth / transition / rough",
+      "definition": "按粘性底层厚度 δ 与粗糙度 Δ 的相对关系划分：Δ ≪ δ 为光滑（λ 只与 Re 有关）；Δ ≫ δ 为粗糙（λ 只与 Δ/d 有关，与 Re 无关，称阻力平方区）；介于两者之间为过渡区。",
+      "formulaId": null,
+      "symbols": [
+        "delta",
+        "Delta"
+      ],
+      "unit": "m",
+      "relations": [
+        "当量粗糙度",
+        "莫迪图",
+        "粘性底层"
+      ],
+      "pitfalls": [
+        "“光滑”与“粗糙”是相对的水力概念，同一管道在大 Re 下可由光滑变为粗糙"
+      ],
+      "examAngle": "概念题；阻力平方区的识别",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-029",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "4.3",
+      "term": "谢才系数 C 与糙率 n",
+      "en": "Chézy coefficient / Manning roughness",
+      "definition": "谢才公式 v = C·sqrt(R·J) 中的 C 称谢才系数。曼宁给出 C = R^(1/6)/n（n 为糙率），故 v = (1/n)R^(2/3)J^(1/2)。",
+      "formulaId": "hydraulics-hydrology-formula-024",
+      "symbols": [
+        "C",
+        "n",
+        "R"
+      ],
+      "unit": "m^(1/2)/s；s/m^(1/3)",
+      "relations": [
+        "谢才公式",
+        "曼宁公式",
+        "水力半径"
+      ],
+      "pitfalls": [
+        "C 有量纲且与 R 有关，不能当常数跨断面使用；n 才是断面材料的属性",
+        "n 取值表以教材/规范为准，取值错误会直接导致流量错误"
+      ],
+      "examAngle": "C 与 n 互算；明渠流量计算",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "4",
+        "page": null
+      },
+      "verify": "糙率 n 的取值表请按教材或 JTG C30 附录核对"
+    },
+    {
+      "id": "hydraulics-hydrology-concept-030",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "4.3",
+      "term": "比降（水力坡度）J",
+      "en": "energy slope / hydraulic gradient",
+      "definition": "单位流程长度上的水头损失，J = hf/l。均匀流中 J 等于渠底坡度 i；非均匀流中 J 沿程变化，与 i 不等。",
+      "formulaId": "hydraulics-hydrology-formula-012",
+      "symbols": [
+        "J",
+        "i"
+      ],
+      "unit": "—",
+      "relations": [
+        "谢才公式",
+        "均匀流",
+        "水面曲线"
+      ],
+      "pitfalls": [
+        "只有均匀流才可令 J = i；非均匀流计算必须单独求 J 或用分段求和法"
+      ],
+      "examAngle": "均匀流判别与谢才公式应用条件",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-031",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "4.4",
+      "term": "局部水头损失 hj",
+      "en": "local head loss",
+      "definition": "在边界急剧变化处（进口、突扩、弯头、阀门等）因流态急剧改变而产生的集中水头损失，hj = ζ·v²/(2g)。",
+      "formulaId": "hydraulics-hydrology-formula-027",
+      "symbols": [
+        "hj",
+        "zeta"
+      ],
+      "unit": "m",
+      "relations": [
+        "局部阻力系数",
+        "突然扩大",
+        "当量长度"
+      ],
+      "pitfalls": [
+        "ζ 与所取流速断面配套：突扩取小管流速 v1，出口取管内流速",
+        "长管（l/d 很大）可忽略局部损失，短管不能"
+      ],
+      "examAngle": "管道总损失计算；突扩损失推导",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "4",
+        "page": null
+      },
+      "verify": "各类局部阻力系数 ζ 的取值请按教材附表核对"
+    },
+    {
+      "id": "hydraulics-hydrology-concept-032",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "5.1",
+      "term": "短管与长管",
+      "en": "short pipe / long pipe",
+      "definition": "短管指局部损失与流速水头与沿程损失相比不能忽略的短距离管道；长管指沿程损失占绝对优势、可忽略局部损失与流速水头的管道。",
+      "formulaId": "hydraulics-hydrology-formula-032",
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "局部水头损失",
+        "阻抗",
+        "串联并联"
+      ],
+      "pitfalls": [
+        "短管/长管由 (Σζ + λl/d) 的相对大小决定，不是按绝对长度判断",
+        "短管出流公式中「1」代表出口的流速水头"
+      ],
+      "examAngle": "短管出流的流量系数综合表达式",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-033",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "5.2",
+      "term": "管道阻抗 s",
+      "en": "pipe resistance coefficient",
+      "definition": "将沿程损失写成 hf = s·Q² 形式的系数，s = λl/(d·2g·A²)，只与管径、长度、阻力系数有关。",
+      "formulaId": "hydraulics-hydrology-formula-035",
+      "symbols": [
+        "s"
+      ],
+      "unit": "s²/m⁵",
+      "relations": [
+        "串联管道",
+        "并联管道",
+        "长管"
+      ],
+      "pitfalls": [
+        "s 与 A² 成反比，管径稍微变细 s 会急剧增大（四次方关系）"
+      ],
+      "examAngle": "并联管流量分配 Q ∝ 1/sqrt(s)",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-034",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "5.3",
+      "term": "水击（水锤）与直接/间接水击",
+      "en": "water hammer / direct & indirect water hammer",
+      "definition": "有压管道中流速突然变化引起压强反复升降的现象。关阀时间 Ts < 相长 tr = 2l/c 为直接水击（压强升高最大）；Ts > tr 为间接水击。",
+      "formulaId": "hydraulics-hydrology-formula-037",
+      "symbols": [
+        "c",
+        "tr",
+        "Ts"
+      ],
+      "unit": "m/s；s",
+      "relations": [
+        "水击压强",
+        "水击波速",
+        "相长"
+      ],
+      "pitfalls": [
+        "先比较 Ts 与 tr 再决定用哪个公式，很多学生直接套直接水击公式",
+        "间接水击的压强升高小于直接水击"
+      ],
+      "examAngle": "判别水击类型并计算压强升高值",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-035",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "6.1",
+      "term": "正常水深 h0",
+      "en": "normal depth",
+      "definition": "明渠均匀流时的水深，由 Q、n、i 与断面形状决定，一般需试算（迭代）求解。",
+      "formulaId": "hydraulics-hydrology-formula-026",
+      "symbols": [
+        "h0"
+      ],
+      "unit": "m",
+      "relations": [
+        "均匀流",
+        "底坡",
+        "临界水深"
+      ],
+      "pitfalls": [
+        "h0 是均匀流概念；非均匀流中不存在 h0 与 i = J 的关系",
+        "求解 h0 需迭代或试算图，不能代数直接解（梯形断面尤其）"
+      ],
+      "examAngle": "已知 Q 迭代求 h0",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/hydraulics-hydrology/open-channel-section.svg",
+        "caption": "明渠梯形断面的水力要素（自绘示意）",
+        "readPoints": [
+          "水力半径 R = A / χ，不是水深 h；只有宽浅矩形才近似 R ≈ h",
+          "水面宽 B = b + 2mh，过水面积 A = (b + mh)h",
+          "均匀流时底坡 i = 水面坡 = 水力坡降 J，此时水深即正常水深 h₀"
+        ]
+      }
+    },
+    {
+      "id": "hydraulics-hydrology-concept-036",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "6.2",
+      "term": "梯形断面水力要素",
+      "en": "trapezoidal section elements",
+      "definition": "底宽 b、水深 h、边坡系数 m 时：A = (b + mh)h，χ = b + 2h·sqrt(1 + m²)，水面宽 B = b + 2mh，R = A/χ。",
+      "formulaId": "hydraulics-hydrology-formula-030",
+      "symbols": [
+        "b",
+        "h",
+        "m",
+        "A",
+        "chi",
+        "B"
+      ],
+      "unit": "m；m²；m",
+      "relations": [
+        "水力半径",
+        "边坡系数",
+        "水力最优断面"
+      ],
+      "pitfalls": [
+        "m 是边坡系数（水平:垂直），m = 0 即矩形；不要把 m 当成坡角",
+        "湿周不含水面宽 B"
+      ],
+      "examAngle": "水力要素计算（几乎每道明渠题都要先算）",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-037",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "6.3",
+      "term": "水力最优断面",
+      "en": "hydraulically optimal section",
+      "definition": "在过水面积 A、糙率 n、底坡 i 一定条件下，过流能力最大（等价于湿周最小、水力半径最大）的断面。梯形最优宽深比 β = b/h = 2(sqrt(1 + m²) − m)，此时 R = h/2。",
+      "formulaId": "hydraulics-hydrology-formula-041",
+      "symbols": [
+        "beta",
+        "b",
+        "h"
+      ],
+      "unit": "—",
+      "relations": [
+        "边坡系数",
+        "水力半径",
+        "允许流速",
+        "经济断面"
+      ],
+      "pitfalls": [
+        "水力最优 ≠ 经济最优（最优断面往往窄而深，开挖与施工未必经济）",
+        "半圆是理论最优，梯形最优是给定 m 条件下的最优"
+      ],
+      "examAngle": "按水力最优设计 b、h（必考计算题）",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-038",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "6.3",
+      "term": "允许流速（不冲不淤流速）",
+      "en": "permissible velocity",
+      "definition": "为保证渠道不被冲刷也不发生淤积而限定的流速范围：不冲允许流速 v_max（与土质/衬砌有关）和不淤允许流速 v_min（一般不小于 0.5—0.6 m/s）。",
+      "formulaId": "hydraulics-hydrology-formula-042",
+      "symbols": [
+        "v_max",
+        "v_min"
+      ],
+      "unit": "m/s",
+      "relations": [
+        "水力最优断面",
+        "糙率",
+        "河床演变"
+      ],
+      "pitfalls": [
+        "设计结果必须双向校核：v ≤ v_max 且 v ≥ v_min",
+        "v_max 取值表以教材/规范为准，随水深略有修正"
+      ],
+      "examAngle": "断面设计后的流速校核",
+      "confidence": "medium",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "允许流速取值表请按教材或渠道防渗规范核对"
+    },
+    {
+      "id": "hydraulics-hydrology-concept-039",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "7.1",
+      "term": "断面单位能量（比能）Es",
+      "en": "specific energy",
+      "definition": "以过水断面最低点（渠底）为基准的单位重量液体所具有的能量，Es = h + αv²/(2g)。",
+      "formulaId": "hydraulics-hydrology-formula-013",
+      "symbols": [
+        "Es",
+        "h",
+        "v"
+      ],
+      "unit": "m",
+      "relations": [
+        "临界水深",
+        "临界流",
+        "弗劳德数"
+      ],
+      "pitfalls": [
+        "比能以渠底为基准，总水头以统一基准面为基准，两者相差一个渠底高程 z",
+        "比能曲线在 h = hc 处取最小值"
+      ],
+      "examAngle": "比能曲线与临界流条件",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-040",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "7.1",
+      "term": "临界水深 hc",
+      "en": "critical depth",
+      "definition": "给定流量下使断面单位能量取最小值的水深，满足 αQ²B/(gA³) = 1；矩形断面 hc = (αQ²/(gb²))^(1/3)，单宽流量 q 时 hc = (αq²/g)^(1/3)。",
+      "formulaId": "hydraulics-hydrology-formula-043",
+      "symbols": [
+        "hc",
+        "q"
+      ],
+      "unit": "m",
+      "relations": [
+        "比能",
+        "临界流",
+        "弗劳德数",
+        "正常水深"
+      ],
+      "pitfalls": [
+        "hc 只与流量和断面形状有关，与糙率 n 和底坡 i 无关（区别于 h0）",
+        "判别流态是比较 h 与 hc，不是比较 h 与 h0"
+      ],
+      "examAngle": "求 hc 并判别流态（必考）",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-041",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "7.2",
+      "term": "弗劳德数 Fr",
+      "en": "Froude number",
+      "definition": "惯性力与重力之比的无量纲数。矩形/宽浅断面 Fr = v/sqrt(g·h)；一般断面用 Fr = v/sqrt(g·A/B)。",
+      "formulaId": "hydraulics-hydrology-formula-046",
+      "symbols": [
+        "Fr",
+        "v",
+        "h"
+      ],
+      "unit": "—",
+      "relations": [
+        "急流",
+        "缓流",
+        "临界流",
+        "临界水深"
+      ],
+      "pitfalls": [
+        "非矩形断面若直接用 v/sqrt(gh) 会出错，应改用 A/B（水力深度）",
+        "Fr > 1 急流、Fr < 1 缓流、Fr = 1 临界流"
+      ],
+      "examAngle": "流态判别三法之一（Fr、h 与 hc、v 与波速）",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-042",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "7.2",
+      "term": "缓流、急流与临界流",
+      "en": "subcritical / supercritical / critical flow",
+      "definition": "Fr < 1（h > hc）为缓流，干扰波可向上游传播；Fr > 1（h < hc）为急流，干扰不能向上游传播；Fr = 1 为临界流。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "弗劳德数",
+        "临界水深",
+        "水跃",
+        "陡坡",
+        "缓坡"
+      ],
+      "pitfalls": [
+        "“急/缓”指流速相对波速的快慢，不是流速绝对大小；大江大河流速大仍可能是缓流"
+      ],
+      "examAngle": "流态判别（每年必考）",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/hydraulics-hydrology/hydraulic-jump.svg",
+        "caption": "水跃与共轭水深（自绘示意）",
+        "readPoints": [
+          "只有 Fr₁ > 1 的急流才会发生水跃，缓流中硬套共轭水深公式是错的",
+          "h₁ 与 h₂ 互为共轭水深，矩形断面按 h₂/h₁ = ½(√(1+8Fr₁²) − 1) 计算",
+          "消能主要发生在表面旋滚区，这也是消力池设计的对象"
+        ]
+      }
+    },
+    {
+      "id": "hydraulics-hydrology-concept-043",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "7.3",
+      "term": "水跃与共轭水深",
+      "en": "hydraulic jump / conjugate depths",
+      "definition": "水流由急流过渡到缓流时水面突然跃起的局部现象。跃前水深 h′ 与跃后水深 h″ 互称共轭水深，满足矩形断面 h″ = h′/2·(sqrt(1 + 8Fr1²) − 1)。",
+      "formulaId": "hydraulics-hydrology-formula-048",
+      "symbols": [
+        "h1",
+        "h2",
+        "Fr1"
+      ],
+      "unit": "m",
+      "relations": [
+        "急流",
+        "缓流",
+        "消能率",
+        "消力池"
+      ],
+      "pitfalls": [
+        "水跃发生在急流向缓流过渡处；跃前必为急流（Fr1 > 1）、跃后必为缓流",
+        "共轭水深公式只适用于矩形（或棱柱体水平底）断面；梯形断面需试算"
+      ],
+      "examAngle": "共轭水深与消能率计算（必考）",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/hydraulics-hydrology/hydraulic-jump.svg",
+        "caption": "水跃与共轭水深（自绘示意）",
+        "readPoints": [
+          "只有 Fr₁ > 1 的急流才会发生水跃，缓流中硬套共轭水深公式是错的",
+          "h₁ 与 h₂ 互为共轭水深，矩形断面按 h₂/h₁ = ½(√(1+8Fr₁²) − 1) 计算",
+          "消能主要发生在表面旋滚区，这也是消力池设计的对象"
+        ]
+      }
+    },
+    {
+      "id": "hydraulics-hydrology-concept-044",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "7.3",
+      "term": "跃长、跃高与消能率",
+      "en": "jump length / jump height / energy dissipation ratio",
+      "definition": "跃长 Lj 是水跃段的长度，经验取 Lj ≈ 6.9(h″ − h′)（平底矩形渠）；跃高为 h″ − h′；消能率为水跃损失能量与跃前比能之比。",
+      "formulaId": "hydraulics-hydrology-formula-050",
+      "symbols": [
+        "Lj"
+      ],
+      "unit": "m",
+      "relations": [
+        "水跃",
+        "共轭水深",
+        "消力池"
+      ],
+      "pitfalls": [
+        "跃长公式是经验式，不同教材系数不同（5—7 倍跃高之间），须按教材取值",
+        "消力池长度按跃长的一定比例（如 0.7—0.8 Lj）确定"
+      ],
+      "examAngle": "消力池长度估算",
+      "confidence": "medium",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "跃长经验系数请按教材核对（常见为 6.9 或 6.1 倍跃高）",
+      "figure": {
+        "src": "/knowledge/assets/hydraulics-hydrology/hydraulic-jump.svg",
+        "caption": "水跃与共轭水深（自绘示意）",
+        "readPoints": [
+          "只有 Fr₁ > 1 的急流才会发生水跃，缓流中硬套共轭水深公式是错的",
+          "h₁ 与 h₂ 互为共轭水深，矩形断面按 h₂/h₁ = ½(√(1+8Fr₁²) − 1) 计算",
+          "消能主要发生在表面旋滚区，这也是消力池设计的对象"
+        ]
+      }
+    },
+    {
+      "id": "hydraulics-hydrology-concept-045",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "7.4",
+      "term": "壅水曲线与降水曲线",
+      "en": "backwater curve / drawdown curve",
+      "definition": "水深沿程增大的非均匀流称壅水曲线（如坝前、桥前、闸前）；水深沿程减小的称降水曲线（如陡槽、跌水上游）。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "水面曲线",
+        "控制断面",
+        "分段求和法"
+      ],
+      "pitfalls": [
+        "桥前壅水属于壅水曲线的一种，与桥孔压缩直接相关",
+        "水面曲线只能定性判断趋势，定量需分段求和法"
+      ],
+      "examAngle": "水面线定性分析；桥前壅水的成因",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-046",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "8.1",
+      "term": "堰流及其三种类型",
+      "en": "weir flow: sharp-crested / practical / broad-crested",
+      "definition": "水流越过顶部溢流的建筑物称堰。按堰壁厚度 δ 与水头 H 之比分为薄壁堰（δ/H < 0.67）、实用堰（0.67—2.5）、宽顶堰（2.5—10）；超过 10 则按明渠处理。",
+      "formulaId": "hydraulics-hydrology-formula-051",
+      "symbols": [
+        "delta",
+        "H",
+        "m"
+      ],
+      "unit": "m",
+      "relations": [
+        "宽顶堰",
+        "实用堰",
+        "薄壁堰",
+        "闸孔出流"
+      ],
+      "pitfalls": [
+        "宽顶堰是桥涵过流（小桥、涵洞、桥孔）最常用的模型",
+        "判别依据是 δ/H，不是 δ 的绝对值"
+      ],
+      "examAngle": "堰型判别 + 流量计算",
+      "confidence": "medium",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "δ/H 的分界值（0.67 / 2.5 / 10）请按教材核对，不同教材略有出入"
+    },
+    {
+      "id": "hydraulics-hydrology-concept-047",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "8.1",
+      "term": "自由出流与淹没出流",
+      "en": "free outflow / submerged outflow",
+      "definition": "下游水位不影响过流能力的出流称自由出流；下游水位升高到影响上游流态、使流量减小者称淹没出流，需乘淹没系数 σs。",
+      "formulaId": null,
+      "symbols": [
+        "sigma_s"
+      ],
+      "unit": "—",
+      "relations": [
+        "堰流",
+        "宽顶堰",
+        "小桥涵",
+        "涵洞水力计算"
+      ],
+      "pitfalls": [
+        "必须先判别是否淹没再选公式；判别阈值（宽顶堰常用 hs/H0 ≈ 0.8，小桥涵常用 ht 与 1.25hk 比较）以教材/规范为准",
+        "淹没出流时流量小于自由出流"
+      ],
+      "examAngle": "小桥涵与涵洞的出流判别（第二部分高频题）",
+      "confidence": "medium",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "淹没判别的临界比值与淹没系数表请按教材或 JTG C30 核对"
+    },
+    {
+      "id": "hydraulics-hydrology-concept-048",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "8.2",
+      "term": "闸孔出流",
+      "en": "sluice gate flow",
+      "definition": "水流受闸门控制从孔口流出的现象。平板闸门与弧形闸门的流量系数 μ 不同；e/H 较大时应按堰流计算。",
+      "formulaId": "hydraulics-hydrology-formula-053",
+      "symbols": [
+        "mu",
+        "e",
+        "H0"
+      ],
+      "unit": "m",
+      "relations": [
+        "堰流",
+        "自由出流",
+        "淹没出流"
+      ],
+      "pitfalls": [
+        "e 是开度（闸门开启高度），不是孔口高度；开度很小时按孔口出流"
+      ],
+      "examAngle": "给定开度与水头求过闸流量",
+      "confidence": "medium",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "闸孔出流流量系数 μ 的取值范围请按教材附表核对"
+    },
+    {
+      "id": "hydraulics-hydrology-concept-049",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "8.3",
+      "term": "底流消能与挑流消能",
+      "en": "hydraulic jump dissipator / ski-jump dissipator",
+      "definition": "底流消能利用水跃在消力池内消能，适用于中低水头、下游水深足够的场合；挑流消能利用鼻坎将水流挑入空中并在下游形成冲刷坑消能，适用于高水头、下游水深较浅的场合。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "水跃",
+        "消力池",
+        "冲刷坑",
+        "面流消能"
+      ],
+      "pitfalls": [
+        "消力池设计必须同时满足池深（跃后水深与下游水深衔接）与池长（按跃长）",
+        "挑流消能的冲刷坑深度估算为经验公式，系数以规范为准"
+      ],
+      "examAngle": "消能方式选择；消力池深与池长计算",
+      "confidence": "medium",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "消力池计算公式与系数以教材/水闸设计规范为准"
+    },
+    {
+      "id": "hydraulics-hydrology-concept-050",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "9.1",
+      "term": "渗流与达西定律",
+      "en": "seepage / Darcy's law",
+      "definition": "水在孔隙介质中的流动称渗流。达西定律：渗流量 Q = k·A·J，渗透流速 v = k·J，k 为渗透系数。",
+      "formulaId": "hydraulics-hydrology-formula-054",
+      "symbols": [
+        "k",
+        "J",
+        "v"
+      ],
+      "unit": "m/s",
+      "relations": [
+        "渗透系数",
+        "水力坡降",
+        "潜水井"
+      ],
+      "pitfalls": [
+        "v = Q/A 是假想的渗透流速，不是孔隙中的真实流速（真实流速 = v/孔隙率）",
+        "达西定律只适用于层流渗流，粗颗粒介质中的高速渗流不适用"
+      ],
+      "examAngle": "渗透流量与浸润线计算",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "9",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-051",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "9.2",
+      "term": "潜水井与承压井",
+      "en": "phreatic well / confined well",
+      "definition": "从无压含水层取水的井称潜水井（有自由水面）；从两隔水层间承压含水层取水的井称承压井。完整井贯穿整个含水层。",
+      "formulaId": null,
+      "symbols": [
+        "Q",
+        "H",
+        "r"
+      ],
+      "unit": "m³/s",
+      "relations": [
+        "达西定律",
+        "影响半径",
+        "渗透系数"
+      ],
+      "pitfalls": [
+        "完整井与非完整井公式不同；影响半径 R 为经验值",
+        "井的出水量公式形式请以教材为准，本库不臆造"
+      ],
+      "examAngle": "完整井出水量计算",
+      "confidence": "medium",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "9",
+        "page": null
+      },
+      "verify": "井的出水量公式（潜水/承压、完整/非完整）请按教材原文核对后再用于作业"
+    },
+    {
+      "id": "hydraulics-hydrology-concept-052",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "10.1",
+      "term": "流域与汇水面积 F",
+      "en": "watershed / catchment area",
+      "definition": "由分水线包围的、汇集于同一河流的区域。其水平投影面积称流域面积或汇水面积 F，是水文计算最基本的几何参数。",
+      "formulaId": null,
+      "symbols": [
+        "F"
+      ],
+      "unit": "km²",
+      "relations": [
+        "分水线",
+        "河长",
+        "河道比降",
+        "推理公式"
+      ],
+      "pitfalls": [
+        "桥位处的汇水面积是桥位断面以上的流域面积，不是全流域",
+        "勾绘分水线要沿山脊，不能沿等高线随意连接"
+      ],
+      "examAngle": "地形图勾绘汇水区并量算 F",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "10",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-053",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "10.2",
+      "term": "径流系数 ψ",
+      "en": "runoff coefficient",
+      "definition": "一定时段内的径流深与同期降雨量之比，反映下垫面产流能力，取值 0—1。城镇与岩石山区大，林地与透水地面小。",
+      "formulaId": "hydraulics-hydrology-formula-062",
+      "symbols": [
+        "psi"
+      ],
+      "unit": "—",
+      "relations": [
+        "推理公式",
+        "下渗",
+        "产流",
+        "降雨强度"
+      ],
+      "pitfalls": [
+        "ψ 随降雨量与前期湿润程度变化，不是常数",
+        "推理公式中的 ψ 常指洪峰径流系数，与次降雨径流系数含义略有区别"
+      ],
+      "examAngle": "推理公式参数取值",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "10",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-054",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "10.2",
+      "term": "暴雨强度 i 与雨力 Sp",
+      "en": "rainfall intensity / rainstorm parameter",
+      "definition": "暴雨强度 i 为单位时间降雨量，常用 i = Sp/t^n 表示，其中 Sp 为雨力（t = 1 h 时的雨强，mm/h），n 为暴雨衰减指数。",
+      "formulaId": "hydraulics-hydrology-formula-063",
+      "symbols": [
+        "i",
+        "Sp",
+        "n",
+        "t"
+      ],
+      "unit": "mm/h",
+      "relations": [
+        "推理公式",
+        "汇流历时",
+        "设计暴雨"
+      ],
+      "pitfalls": [
+        "Sp 与 n 是地区参数，必须查当地暴雨图集/水文手册，不可跨地区套用",
+        "t 取小时，与汇流历时 τ 一致（迭代的核心）"
+      ],
+      "examAngle": "由 Sp、n 与 τ 求 i",
+      "confidence": "medium",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "12",
+        "page": null
+      },
+      "verify": "暴雨参数 Sp、n 的地区取值请按当地水文手册／暴雨图集核对"
+    },
+    {
+      "id": "hydraulics-hydrology-concept-055",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "10.4",
+      "term": "河床演变与河相关系",
+      "en": "fluvial process / hydraulic geometry",
+      "definition": "河床在水流与泥沙相互作用下的变化过程称河床演变（纵向冲淤与横向摆动）；河相关系是描述断面形态（河宽、水深）与流量之间经验平衡关系的规律。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "造床流量",
+        "推移质",
+        "桥位选择",
+        "一般冲刷"
+      ],
+      "pitfalls": [
+        "桥位必须选在河床相对稳定的河段，这是桥孔与冲刷计算的前提",
+        "造床流量不等于设计流量，也不等于多年平均流量"
+      ],
+      "examAngle": "概念题；桥位选择的河床演变要求",
+      "confidence": "medium",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "10",
+        "page": null
+      },
+      "verify": "河相关系经验公式请按教材或 JTG C30 核对，本库不提供具体系数"
+    },
+    {
+      "id": "hydraulics-hydrology-concept-056",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "11.1",
+      "term": "重现期 T 与频率 P",
+      "en": "return period / frequency",
+      "definition": "重现期 T 是某水文事件长期平均多少年出现一次，频率 P 是该事件年发生的概率，T = 1/P（P 以小数计）。",
+      "formulaId": "hydraulics-hydrology-formula-055",
+      "symbols": [
+        "T",
+        "P"
+      ],
+      "unit": "a；—",
+      "relations": [
+        "设计标准",
+        "风险率",
+        "设计频率"
+      ],
+      "pitfalls": [
+        "“百年一遇”指年频率 1%，不表示 100 年才发生一次，也不是 100 年内一定发生一次",
+        "P 用百分数代入公式时要先化成小数"
+      ],
+      "examAngle": "T 与 P 互算（必考小题）",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "11",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-057",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "11.1",
+      "term": "设计风险率 R",
+      "en": "design risk",
+      "definition": "工程在使用年限 n 年内至少遭遇一次超过设计标准洪水的概率，R = 1 − (1 − P)^n。",
+      "formulaId": "hydraulics-hydrology-formula-056",
+      "symbols": [
+        "R",
+        "n",
+        "P"
+      ],
+      "unit": "—",
+      "relations": [
+        "重现期",
+        "设计标准",
+        "安全率"
+      ],
+      "pitfalls": [
+        "R 随 n 增大而增大：百年一遇标准下使用 100 年，风险率高达约 63%",
+        "风险率不等于年频率，两个概念常被混用"
+      ],
+      "examAngle": "风险率计算（高频考点）",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "11",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-058",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "11.2",
+      "term": "变差系数 Cv",
+      "en": "coefficient of variation",
+      "definition": "标准差与均值之比，Cv = σ/x̄，反映系列的离散程度。Cv 越大，频率曲线越陡，稀遇设计值相对均值越大。",
+      "formulaId": "hydraulics-hydrology-formula-058",
+      "symbols": [
+        "Cv",
+        "sigma"
+      ],
+      "unit": "—",
+      "relations": [
+        "均值",
+        "偏态系数",
+        "P-III型分布",
+        "适线法"
+      ],
+      "pitfalls": [
+        "计算 σ 时分母取 n 还是 n−1 要按教材口径（数学期望公式用 n，无偏估计用 n−1）",
+        "Cv 影响频率曲线整体陡缓，适线时优先调整 Cv"
+      ],
+      "examAngle": "由系列计算 Cv；适线时调整 Cv 的效果",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "11",
+        "page": null
+      },
+      "verify": "σ 的计算口径（n 或 n−1）请按教材核对"
+    },
+    {
+      "id": "hydraulics-hydrology-concept-059",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "11.2",
+      "term": "偏态系数 Cs",
+      "en": "coefficient of skewness",
+      "definition": "衡量系列分布不对称程度的参数。Cs 越大，频率曲线上部越陡、下部越缓。水文计算中常在 Cs = 2Cv～4Cv 范围内取值（须按规范/教材）。",
+      "formulaId": "hydraulics-hydrology-formula-059",
+      "symbols": [
+        "Cs"
+      ],
+      "unit": "—",
+      "relations": [
+        "变差系数",
+        "P-III型分布",
+        "离均系数",
+        "适线法"
+      ],
+      "pitfalls": [
+        "短系列用矩法估算的 Cs 误差极大，工程上主要靠适线法确定",
+        "Cs/Cv 的比值（常见 2—4）不合理会导致频率曲线形状异常"
+      ],
+      "examAngle": "Cs 对频率曲线形状的影响；适线时 Cs 的调整方向",
+      "confidence": "medium",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "11",
+        "page": null
+      },
+      "verify": "Cs 与 Cv 的比值的推荐范围请按 SL 44 或教材核对"
+    },
+    {
+      "id": "hydraulics-hydrology-concept-060",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "11.2",
+      "term": "模比系数 K",
+      "en": "modulus coefficient",
+      "definition": "某一变量值与系列均值之比，K = x/x̄。频率曲线的纵坐标常以 K 表示，便于不同地区、不同量级系列比较。",
+      "formulaId": "hydraulics-hydrology-formula-060",
+      "symbols": [
+        "K"
+      ],
+      "unit": "—",
+      "relations": [
+        "均值",
+        "变差系数",
+        "频率曲线"
+      ],
+      "pitfalls": [
+        "Kp = 1 + Cv·Φp，不要与离均系数 Φp 混淆：Φ 是标准变量，K 是相对倍比"
+      ],
+      "examAngle": "由 Kp 反算设计值 xp = Kp·x̄",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "11",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-061",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "11.3",
+      "term": "P-III 型分布（皮尔逊Ⅲ型）",
+      "en": "Pearson type III distribution",
+      "definition": "中国水文频率计算采用的标准线型，为三参数（x̄、Cv、Cs）伽马型分布。设计值 xp = x̄(1 + Cv·Φp)，Φp 由 Cs 与 P 查离均系数表得到。",
+      "formulaId": "hydraulics-hydrology-formula-061",
+      "symbols": [
+        "xp",
+        "Phi"
+      ],
+      "unit": "m³/s 等",
+      "relations": [
+        "离均系数",
+        "变差系数",
+        "偏态系数",
+        "适线法"
+      ],
+      "pitfalls": [
+        "Φp 必须查 P-III 离均系数表（与 Cs 相关），不能套用正态分布的 Φ 值",
+        "外延时（如推求万年一遇）误差极大，应谨慎"
+      ],
+      "examAngle": "给定三参数与 Φp 求设计值（必考）",
+      "confidence": "medium",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "11",
+        "page": null
+      },
+      "verify": "离均系数 Φp 必须查教材附录或 SL 44 附表的 P-III 离均系数表，本库不提供表值"
+    },
+    {
+      "id": "hydraulics-hydrology-concept-062",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "11.3",
+      "term": "离均系数 Φ 与经验频率",
+      "en": "frequency factor / plotting position",
+      "definition": "离均系数 Φp 是标准化变量（(x − x̄)/σ）对应频率 P 的分位数；经验频率常用数学期望公式 P = m/(n+1)，m 为降序排列的序号。",
+      "formulaId": "hydraulics-hydrology-formula-057",
+      "symbols": [
+        "Phi",
+        "m",
+        "n"
+      ],
+      "unit": "—",
+      "relations": [
+        "P-III型分布",
+        "适线法",
+        "变差系数"
+      ],
+      "pitfalls": [
+        "经验频率公式还有 P = m/n、P = (m−0.375)/(n+0.25) 等，须按教材口径取用",
+        "含历史洪水特大值时经验频率计算要分段处理"
+      ],
+      "examAngle": "经验频率计算与点绘",
+      "confidence": "medium",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "11",
+        "page": null
+      },
+      "verify": "教材所用经验频率公式请核对（期望公式 m/(n+1) 还是中值公式）"
+    },
+    {
+      "id": "hydraulics-hydrology-concept-063",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "11.4",
+      "term": "适线法（配线法）",
+      "en": "curve fitting method",
+      "definition": "先由矩法初估 x̄、Cv、Cs，绘制理论频率曲线，与经验点据对照，反复调整参数（主要调 Cv、Cs）使曲线与点据拟合最好的方法。目估适线为主，也可用最小二乘等优化法计算机实现。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "P-III型分布",
+        "变差系数",
+        "偏态系数",
+        "特大值"
+      ],
+      "pitfalls": [
+        "适线重点在稀遇大水段（曲线上端），不是所有点等权",
+        "均值一般直接采用矩法估计值，不应随意改动"
+      ],
+      "examAngle": "适线法步骤叙述与参数调整方向",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "11",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-064",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "11.4",
+      "term": "历史洪水与特大值处理",
+      "en": "historical flood / extraordinary value treatment",
+      "definition": "通过调查考证获得的、超出实测系列的大洪水资料。加入特大值可显著延长系列代表性，其经验频率需按考证期 N 与实测期 n 分别计算。",
+      "formulaId": null,
+      "symbols": [
+        "N",
+        "n",
+        "a"
+      ],
+      "unit": "a",
+      "relations": [
+        "适线法",
+        "经验频率",
+        "考证期"
+      ],
+      "pitfalls": [
+        "特大值的重现期按考证期确定，不是按实测年数",
+        "特大值处理的公式形式请按教材/规范为准"
+      ],
+      "examAngle": "特大值经验频率计算",
+      "confidence": "low",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "11",
+        "page": null
+      },
+      "verify": "特大值经验频率与不连序系列的统计参数计算公式请严格按教材或 SL 44 核对，本库不给出具体公式"
+    },
+    {
+      "id": "hydraulics-hydrology-concept-065",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "12.2",
+      "term": "推理公式与汇流历时 τ",
+      "en": "rational method / time of concentration",
+      "definition": "小流域暴雨洪峰流量的常用计算方法：Qp = 0.278·ψ·i·F。汇流历时 τ 是流域最远点径流到达出口断面所需时间，推理公式假定降雨历时等于 τ 时洪峰最大。",
+      "formulaId": "hydraulics-hydrology-formula-062",
+      "symbols": [
+        "Qp",
+        "psi",
+        "i",
+        "F",
+        "tau"
+      ],
+      "unit": "m³/s；h；km²",
+      "relations": [
+        "暴雨强度",
+        "径流系数",
+        "汇流参数",
+        "地区经验公式"
+      ],
+      "pitfalls": [
+        "τ 与 Qp 互为函数，必须迭代求解，不能一次代入",
+        "0.278 是 mm/h·km² → m³/s 的单位换算系数，单位一变就该系数失效"
+      ],
+      "examAngle": "迭代求设计流量（第二部分最经典计算题）",
+      "confidence": "medium",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "12",
+        "page": null
+      },
+      "verify": "汇流历时 τ 的经验表达式（与 L、J、Q 的关系式）及汇流参数 m 的取值请按教材或 JTG C30 核对"
+    },
+    {
+      "id": "hydraulics-hydrology-concept-066",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "12.3",
+      "term": "地区经验公式 Qp = C·F^n",
+      "en": "regional empirical formula",
+      "definition": "在无实测资料地区，按水文分区由汇水面积直接估算设计洪峰流量的经验关系，C、n 按分区水文手册/图集取值。",
+      "formulaId": "hydraulics-hydrology-formula-065",
+      "symbols": [
+        "C",
+        "n",
+        "F"
+      ],
+      "unit": "m³/s；km²",
+      "relations": [
+        "推理公式",
+        "汇水面积",
+        "水文分区"
+      ],
+      "pitfalls": [
+        "C、n 有地区性，绝不可跨省套用",
+        "指数 n 一般小于 1（洪峰流量随面积增大但非线比例增大）"
+      ],
+      "examAngle": "与推理公式互相印证、合理性分析",
+      "confidence": "medium",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "12",
+        "page": null
+      },
+      "verify": "C、n 的分区取值请按当地水文图集／JTG C30 核对"
+    },
+    {
+      "id": "hydraulics-hydrology-concept-067",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "13.1",
+      "term": "河槽与河滩",
+      "en": "main channel / floodplain",
+      "definition": "平滩水位以下、常年过水的部分称河槽（主槽）；平滩水位以上、洪水期才过水的部分称河滩（滩地）。两者糙率与流速差异显著，须分别计算。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "桥孔净长",
+        "河滩流量折减系数",
+        "糙率",
+        "河段分类"
+      ],
+      "pitfalls": [
+        "河滩糙率远大于河槽（滩地有植被），流速小得多，故引入流量折减系数 λ",
+        "分界错划会同时导致孔径与冲刷计算错误"
+      ],
+      "examAngle": "由断面划分河槽河滩并分别计算流量",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "13",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-068",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "13.2",
+      "term": "桥孔净长与冲刷系数 P",
+      "en": "net bridge opening / scour coefficient",
+      "definition": "桥孔净长 Lj 是扣除桥墩等阻水宽度后桥孔的实际过水净宽。冲刷系数 P 是桥下需要的过水面积与原河槽过水面积之比，反映允许冲刷的程度。",
+      "formulaId": "hydraulics-hydrology-formula-066",
+      "symbols": [
+        "Lj",
+        "P",
+        "mu",
+        "lambda"
+      ],
+      "unit": "m",
+      "relations": [
+        "河槽",
+        "河滩",
+        "设计流速",
+        "一般冲刷"
+      ],
+      "pitfalls": [
+        "P 越大表示允许冲刷越多、孔径可越小，但需满足容许值（按规范）",
+        "各系数取值强依赖 JTG C30 现行版本，本库只给通用结构"
+      ],
+      "examAngle": "桥孔净长计算（系数以规范为准）",
+      "confidence": "low",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "13",
+        "page": null
+      },
+      "verify": "务必按 JTG C30 现行版核对桥孔净长公式形式、冲刷系数 P 的容许值与 μ、λ 的取值表"
+    },
+    {
+      "id": "hydraulics-hydrology-concept-069",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "13.3",
+      "term": "桥前壅水与桥下净空",
+      "en": "backwater at bridge / clearance under bridge",
+      "definition": "桥墩压缩水流使桥前水位抬高的高度称壅水高度 ΔZ；桥下净空是设计水位以上至上部结构底缘必须保留的安全距离。",
+      "formulaId": "hydraulics-hydrology-formula-067",
+      "symbols": [
+        "dZ",
+        "eta"
+      ],
+      "unit": "m",
+      "relations": [
+        "桥面标高",
+        "设计水位",
+        "桥孔净长",
+        "浪高"
+      ],
+      "pitfalls": [
+        "壅水系数 η 与桥墩阻水比、河段类型有关，取值以规范为准",
+        "桥下净空通航与不通航要求不同；还需计入浪高与漂浮物高度"
+      ],
+      "examAngle": "由壅水推桥前水深，再加净空与建筑高度定桥面标高",
+      "confidence": "low",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "13",
+        "page": null
+      },
+      "verify": "壅水公式形式与系数 η（或 KN、KV）请按 JTG C30 现行版核对；桥下净空数值按 JTG D60 与通航标准核对"
+    },
+    {
+      "id": "hydraulics-hydrology-concept-070",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "14.1",
+      "term": "一般冲刷",
+      "en": "general scour",
+      "definition": "因桥孔压缩水流、桥下流速增大而引起的全断面普遍下切。常用 64-1 式/64-2 式体系计算冲刷后水深 hp，河槽与河滩分别计算。",
+      "formulaId": "hydraulics-hydrology-formula-069",
+      "symbols": [
+        "hp",
+        "hm",
+        "E",
+        "d"
+      ],
+      "unit": "m",
+      "relations": [
+        "局部冲刷",
+        "冲刷系数",
+        "单宽流量",
+        "床沙粒径"
+      ],
+      "pitfalls": [
+        "一般冲刷与局部冲刷是两种不同机理，必须分别计算再组合",
+        "公式系数强依赖 JTG C30 现行版本，教材旧版公式可能与现行规范不一致"
+      ],
+      "examAngle": "一般冲刷后水深计算",
+      "confidence": "low",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "14",
+        "page": null
+      },
+      "verify": "64-1 / 64-2 式的形式与全部系数请按 JTG C30 现行版正文核对，切勿照抄旧教材系数"
+    },
+    {
+      "id": "hydraulics-hydrology-concept-071",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "14.2",
+      "term": "局部冲刷",
+      "en": "local scour",
+      "definition": "桥墩周围绕流形成马蹄形漩涡引起的墩周局部下切，深度通常大于一般冲刷。常用 65-1 式/65-2 式体系，含墩形系数、墩宽、水深、流速与床沙粒径等因子。",
+      "formulaId": "hydraulics-hydrology-formula-070",
+      "symbols": [
+        "hb",
+        "Kxi",
+        "B1"
+      ],
+      "unit": "m",
+      "relations": [
+        "一般冲刷",
+        "墩形系数",
+        "起动流速",
+        "基础埋深"
+      ],
+      "pitfalls": [
+        "墩形系数 Kξ 与水流斜交角、墩形密切相关，必须查表",
+        "总冲刷深度的组合方式与基础埋深要求按 JTG C30 / JTG D63 执行"
+      ],
+      "examAngle": "局部冲刷深度与基底埋深确定",
+      "confidence": "low",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "14",
+        "page": null
+      },
+      "verify": "65-1 / 65-2 式的完整形式、指数与系数表请按 JTG C30 现行版核对；本库只描述结构不提供替代数值"
+    },
+    {
+      "id": "hydraulics-hydrology-concept-072",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "14.3",
+      "term": "小桥涵孔径与临界水深法",
+      "en": "culvert and small bridge opening / critical depth method",
+      "definition": "小桥涵过流按宽顶堰／临界流模型，由设计流量与允许（临界）流速确定孔径：先按临界水深 hk 或允许流速确定桥下过水断面，再判别自由/淹没出流。",
+      "formulaId": "hydraulics-hydrology-formula-043",
+      "symbols": [
+        "hk",
+        "B",
+        "q"
+      ],
+      "unit": "m",
+      "relations": [
+        "宽顶堰",
+        "自由出流",
+        "淹没出流",
+        "允许流速法"
+      ],
+      "pitfalls": [
+        "孔径取整（标准跨径）后要反算实际流速与水位，再判出流状态",
+        "小桥涵淹没判别常用下游水深 ht 与 1.25hk 比较（阈值以教材/规范为准）"
+      ],
+      "examAngle": "已知 Q 与允许流速求孔径并判别出流（高频）",
+      "confidence": "medium",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "14",
+        "page": null
+      },
+      "verify": "小桥涵出流判别阈值与允许流速取值请按教材或 JTG C30 核对"
+    },
+    {
+      "id": "hydraulics-hydrology-concept-073",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "13.4",
+      "term": "调治构造物",
+      "en": "river training structures",
+      "definition": "为调节水流、稳定河床、保护桥头路基而设置的工程设施，包括导流堤、丁坝、顺坝、格坝、防护林等。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "桥位选择",
+        "河床演变",
+        "桥孔净长"
+      ],
+      "pitfalls": [
+        "调治构造物不是主体结构，但对桥孔过流均匀性与墩台安全影响很大",
+        "导流堤长度与平面形式多为经验公式，以规范为准"
+      ],
+      "examAngle": "概念题；各类构造物的作用与适用场合",
+      "confidence": "medium",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "13",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-074",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "3.3",
+      "term": "文丘里流量计与毕托管",
+      "en": "Venturi meter / Pitot tube",
+      "definition": "文丘里流量计利用收缩段的压差测流量（伯努利 + 连续性）；毕托管利用驻点压强与静压之差测点流速。",
+      "formulaId": "hydraulics-hydrology-formula-016",
+      "symbols": [
+        "d1",
+        "d2",
+        "mu"
+      ],
+      "unit": "m",
+      "relations": [
+        "伯努利方程",
+        "连续性方程",
+        "差压计"
+      ],
+      "pitfalls": [
+        "文丘里流量公式中要乘流量系数 μ（实际有损失，约 0.98），理论式会偏大",
+        "水银差压计的压差水头要乘 (13.6 − 1)，不是 13.6"
+      ],
+      "examAngle": "量测类计算题（高频）",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "hydraulics-hydrology-concept-075",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "5.1",
+      "term": "管嘴出流与虹吸管",
+      "en": "nozzle outflow / siphon",
+      "definition": "在孔口外接短管形成管嘴，因收缩断面真空抽吸作用使流量系数由约 0.62 提高到约 0.82；虹吸管利用真空把水越过障碍物输送，顶部安装高度受允许真空度限制。",
+      "formulaId": "hydraulics-hydrology-formula-032",
+      "symbols": [
+        "mu",
+        "H"
+      ],
+      "unit": "m",
+      "relations": [
+        "短管",
+        "真空度",
+        "自由出流"
+      ],
+      "pitfalls": [
+        "外伸圆柱形管嘴正常工作要求真空度不超过约 7 m 水柱，否则管嘴失效（变为孔口出流）",
+        "虹吸管顶部高程 = 上游水面 − 允许真空高度 − 流速水头 − 损失"
+      ],
+      "examAngle": "管嘴流量与真空度；虹吸管最大安装高度",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "5",
+        "page": null
+      },
+      "verify": "教材中管嘴流量系数（0.82）与允许真空度取值请核对原书"
+    },
+    {
+      "id": "hydraulics-hydrology-concept-076",
+      "subjectId": "hydraulics-hydrology",
+      "chapter": "10.3",
+      "term": "水位—流量关系曲线",
+      "en": "stage-discharge rating curve",
+      "definition": "由实测水位与对应流量建立的相关曲线，是把水位资料转换为流量资料的基础，高水部分常用曼宁公式法外延。",
+      "formulaId": null,
+      "symbols": [
+        "Q",
+        "Z"
+      ],
+      "unit": "m³/s；m",
+      "relations": [
+        "水文测验",
+        "流速仪",
+        "资料插补延长",
+        "形态调查法"
+      ],
+      "pitfalls": [
+        "受洪水涨落、回水、河床冲淤影响时会出现绳套曲线，需作相应校正",
+        "外延高水部分必须有实测大洪水或形态调查资料支撑"
+      ],
+      "examAngle": "概念题；由水位查流量",
+      "confidence": "high",
+      "cite": {
+        "book": "水力学与桥涵水文",
+        "edition": null,
+        "chapter": "10",
+        "page": null
+      },
+      "verify": null
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-09-14",
+  "description": "星屿工程建设专业课程知识库目录。仅登记用户拥有或获授权的教材文件；未提供原文件时不自动下载受版权保护的全文。",
+  "subjects": [
+    {"id":"building-architecture","name":"房屋建筑学","edition":"第6版","publisher":"中国建筑工业出版社","aliases":["建筑构造","房建"]},
+    {"id":"road-survey-design","name":"道路勘察设计","edition":"修订版","publisher":"湖南师范大学出版社","aliases":["道路设计","路线设计"]},
+    {"id":"bridge-engineering","name":"桥梁工程","edition":"第6版","publisher":"人民交通出版社","aliases":["桥梁"]},
+    {"id":"engineering-economics","name":"工程经济学","edition":"第5版","publisher":"中国建筑工业出版社","aliases":["工程经济"]},
+    {"id":"asphalt-mixture","name":"沥青与沥青混合料","edition":"","publisher":"人民交通出版社","aliases":["沥青路面","沥青混合料"]},
+    {"id":"structural-testing","name":"结构试验与检测","edition":"","publisher":"哈尔滨工程大学出版社","aliases":["结构试验","结构检测"]},
+    {"id":"traffic-engineering","name":"交通工程总论","edition":"第5版","publisher":"人民交通出版社","aliases":["交通工程"]},
+    {"id":"structural-design-principles","name":"结构设计原理","edition":"第5版","publisher":"人民交通出版社","aliases":["结构设计"]},
+    {"id":"hydraulics-hydrology","name":"水利学与桥涵水文","edition":"","publisher":"机械工业出版社","aliases":["水力学","桥涵水文"]}
+  ],
+  "sourcePolicy": {
+    "accepted": ["pdf", "docx", "md", "txt"],
+    "requiredMetadata": ["subjectId", "title", "edition", "publisher", "sourcePath", "rights"],
+    "rightsValues": ["owned", "licensed", "user-provided"],
+    "answerRule": "教材原文优先；找不到证据时明确说不知道，不得编造页码、公式或规范条文。"
+  }
+}

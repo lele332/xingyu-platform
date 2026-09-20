@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 300" width="660" height="300" role="img" aria-label="偏心压力法：刚性横梁假定下各主梁荷载横向分布">
+  <title>偏心压力法：偏心荷载按"直线"分给各片主梁</title>
+  <g font-family="system-ui, -apple-system, 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#8a8a8a">
+    <!-- 刚性横梁 -->
+    <rect x="110" y="126" width="470" height="12" fill="#d8d8d8" opacity="0.14" stroke="#c8c8c8" stroke-width="1.3"/>
+    <text x="600" y="136" font-size="11" fill="#8a8a8a">横隔梁（假定刚度无穷大 → 变形后仍是一条直线）</text>
+
+    <!-- 5 片主梁 -->
+    <g fill="#d8d8d8" opacity="0.12" stroke="#c8c8c8" stroke-width="1.3">
+      <rect x="128" y="138" width="24" height="46"/>
+      <rect x="228" y="138" width="24" height="46"/>
+      <rect x="328" y="138" width="24" height="46"/>
+      <rect x="428" y="138" width="24" height="46"/>
+      <rect x="528" y="138" width="24" height="46"/>
+    </g>
+    <g font-size="11.5" text-anchor="middle">
+      <text x="140" y="202">1#</text><text x="240" y="202">2#</text><text x="340" y="202">3#</text>
+      <text x="440" y="202">4#</text><text x="540" y="202">5#</text>
+    </g>
+
+    <!-- 偏心荷载 P -->
+    <g stroke="#ff9f0a" stroke-width="1.7" fill="#ff9f0a">
+      <path d="M420 60 V112"/>
+      <path d="M414 108 l6 8 l6 -8"/>
+    </g>
+    <text x="432" y="70" fill="#ff9f0a">偏心荷载 P</text>
+
+    <!-- 偏心距 e -->
+    <path d="M340 90 H420" stroke="#ff9f0a" stroke-width="1.1"/>
+    <path d="M340 86 v8 M420 86 v8" stroke="#ff9f0a" stroke-width="1.1"/>
+    <path d="M340 90 V126 M420 90 V126" stroke="#ff9f0a" stroke-width="0.8" stroke-dasharray="3 3" opacity="0.65"/>
+    <text x="380" y="84" text-anchor="middle" fill="#ff9f0a">e</text>
+
+    <!-- 分布结果（柱状 + 直线分布） -->
+    <!-- 基线 -->
+    <path d="M110 258 H580" stroke="#c8c8c8" stroke-width="1"/>
+    <g fill="#0a84ff" opacity="0.55">
+      <rect x="128" y="248" width="24" height="10"/>   <!-- 0.04 -->
+      <rect x="228" y="238" width="24" height="20"/>   <!-- 0.12 -->
+      <rect x="328" y="228" width="24" height="30"/>   <!-- 0.20 -->
+      <rect x="428" y="218" width="24" height="40"/>   <!-- 0.28 -->
+      <rect x="528" y="206" width="24" height="52"/>   <!-- 0.36 -->
+    </g>
+    <!-- 直线分布连线 -->
+    <path d="M140 248 L240 238 L340 228 L440 218 L540 206" fill="none" stroke="#0a84ff" stroke-width="1.5"/>
+    <g font-size="11" fill="#0a84ff" text-anchor="middle">
+      <text x="140" y="276">0.04</text><text x="240" y="276">0.12</text><text x="340" y="276">0.20</text>
+      <text x="440" y="276">0.28</text><text x="540" y="276">0.36</text>
+    </g>
+    <text x="340" y="292" text-anchor="middle" font-size="11">各片主梁分到的荷载系数（本例 P=1、e=80、梁距=100，五项之和 = 1.0 ✓）</text>
+
+    <!-- 公式 -->
+    <text x="24" y="30" font-size="13" fill="#0a84ff">Rᵢ = P/n ± P·e·aᵢ / Σaᵢ²</text>
+    <text x="24" y="50" font-size="11.5">aᵢ 为第 i 片梁到横截面中心的距离；偏心一侧取「+」，另一侧取「−」</text>
+    <text x="24" y="70" font-size="11.5" fill="#ff9f0a">适用：桥跨内设有横隔梁、且宽跨比 &lt; 0.5 的窄桥</text>
+  </g>
+</svg>

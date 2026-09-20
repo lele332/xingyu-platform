@@ -1,0 +1,362 @@
+{
+  "items": [
+    {
+      "id": "engineering-economics-book-001",
+      "subjectId": "engineering-economics",
+      "title": "工程经济学",
+      "author": "刘晓君",
+      "publisher": "中国建筑工业出版社",
+      "level": "教材",
+      "why": "土建类高校使用面最广的工程经济学教材之一，体系与章节安排与本课程大纲（现金流量与等值→评价指标→方案比选→不确定性→设备更新→价值工程→可行性研究→财务/国民经济评价）高度吻合，例题风格贴近土木专业作业。",
+      "readPlan": "作为主教材的平行参照：每章作业卡壳时先读对应章节的例题，重点看「现金流量图怎么画」「系数怎么查」两步；考前用它做题型对照自查。",
+      "relatesToChapters": [
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9"
+      ],
+      "acquireNote": "图书馆可借；出版社正版渠道或学校教材科",
+      "confidence": "high",
+      "verify": null,
+      "edition": "第 3 版",
+      "year": null,
+      "isbn": "9787112251742",
+      "verification": {
+        "status": "confirmed",
+        "source": "新华国采建党百年百社优秀教材联展书目（中国建筑工业出版社）",
+        "checkedAt": "2026-09-15",
+        "note": "刘晓君《工程经济学》第 3 版，ISBN 9787112251742。"
+      }
+    },
+    {
+      "id": "engineering-economics-book-002",
+      "subjectId": "engineering-economics",
+      "title": "工程经济学",
+      "author": "黄渝祥、邢爱芳",
+      "publisher": "同济大学出版社",
+      "level": "教材",
+      "why": "国内工程经济学领域引用率最高的经典教材之一，理论推导严谨，对 NPV/IRR 的经济含义、互斥方案比选的逻辑讲得比多数教材更透，适合补「为什么这样做」。",
+      "readPlan": "第 3、4 章（评价指标与方案比选）建议精读，用于纠正「IRR 越大越好」这类直觉错误；其余章节按需查阅。",
+      "relatesToChapters": [
+        "2",
+        "3",
+        "4",
+        "5",
+        "10"
+      ],
+      "acquireNote": "图书馆可借；同济大学出版社正版渠道",
+      "confidence": "medium",
+      "verify": "版次与 ISBN 未在线核实",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到出版社官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "书名/作者/出版社确认；版次按馆藏核对。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "engineering-economics-book-003",
+      "subjectId": "engineering-economics",
+      "title": "工程经济学",
+      "author": "邵颖红",
+      "publisher": "同济大学出版社",
+      "level": "教材",
+      "why": "同济大学工程经济学课程用书，案例与习题量大，对资金时间价值与等值计算的训练梯度设计较好，适合刷题阶段补充。",
+      "readPlan": "配合第 2 章做等值计算专项训练；第 5 章（不确定性分析）的例题可直接作为作业模板。",
+      "relatesToChapters": [
+        "2",
+        "3",
+        "5"
+      ],
+      "acquireNote": "图书馆可借；出版社正版渠道",
+      "confidence": "low",
+      "verify": "书名、作者与出版社请按馆藏目录核对（同济社有多个同名系列）",
+      "verification": {
+        "status": "unverified",
+        "source": "本次未检索到可靠在线书目记录",
+        "checkedAt": "2026-09-15",
+        "note": "同济社有多个同名系列，按馆藏核对后再借。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "engineering-economics-book-004",
+      "subjectId": "engineering-economics",
+      "title": "工程经济学（Engineering Economy，中译本）",
+      "author": "William G. Sullivan、Elin M. Wicks、C. Patrick Koelling",
+      "publisher": null,
+      "level": "教材",
+      "why": "美式工程经济学的标准教科书，体系与国内教材差异明显：强调「会计与决策的差异」「税后现金流」「折旧与税法」「通货膨胀与价格变化」，这些恰是国内教材相对薄弱的部分。",
+      "readPlan": "精读税后现金流与折旧章节，与本课程第 6 章（设备更新）、第 9 章（财务评价）对照；英文术语对读研与看外文文献有帮助。",
+      "relatesToChapters": [
+        "6",
+        "9",
+        "12"
+      ],
+      "acquireNote": "图书馆可借中译本；英文版可查出版社正版渠道",
+      "confidence": "medium",
+      "verify": "中译本的出版社、版次与译者信息请核对；英文版版次（第 15/16 版等）需确认",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到中译本版权页",
+        "checkedAt": "2026-09-15",
+        "note": "英文版书名/作者确认；中译本的出版社、版次与译者信息按馆藏核对。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "engineering-economics-book-005",
+      "subjectId": "engineering-economics",
+      "title": "Engineering Economy",
+      "author": "Leland T. Blank、Anthony J. Tarquin",
+      "publisher": "McGraw-Hill",
+      "level": "教材",
+      "why": "英文经典教材，最大特点是把「系数表—Excel 函数—现金流图」三者打通，每章都有大量工程背景情境题，非常适合训练把文字题翻译成现金流图的能力。",
+      "readPlan": "重点看每章的「How to」解题框与 ROR（报酬率）章节；配合 Excel 的 NPV/IRR/RATE 函数同步练习。",
+      "relatesToChapters": [
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "acquireNote": "图书馆外文书库；出版社正版渠道",
+      "confidence": "medium",
+      "verify": "版次与 ISBN 按出版社目录核对",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到出版社官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "书名/作者/出版社确认；版次未在线核实。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "engineering-economics-book-006",
+      "subjectId": "engineering-economics",
+      "title": "Contemporary Engineering Economics",
+      "author": "Chan S. Park",
+      "publisher": "Pearson",
+      "level": "教材",
+      "why": "案例极为丰富（制造业、服务业、基础设施均有），对「机会成本」与「沉没成本」的处理讲得特别清楚，可补齐国内教材在决策思维层面的留白。",
+      "readPlan": "选读机会成本/沉没成本与设备更新相关章节，与本课程第 6 章互为补充；案例可作为课程报告的素材来源。",
+      "relatesToChapters": [
+        "1",
+        "6",
+        "12"
+      ],
+      "acquireNote": "图书馆外文书库；出版社正版渠道",
+      "confidence": "medium",
+      "verify": "版次与 ISBN 按出版社目录核对",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到出版社官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "书名/作者/出版社确认；版次未在线核实。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "engineering-economics-book-007",
+      "subjectId": "engineering-economics",
+      "title": "Engineering Economy",
+      "author": "Gerald J. Thuesen、Wolter J. Fabrycky",
+      "publisher": "Prentice Hall",
+      "level": "经典专著",
+      "why": "工程经济学学科的奠基性教材，理论脉络最完整，适合查证某个方法的原始定义与来龙去脉（如 ERR/外部收益率的各种变体）。",
+      "readPlan": "不必通读。遇到「这个指标到底怎么定义」的争议时，按索引查对应条目即可。",
+      "relatesToChapters": [
+        "3",
+        "4"
+      ],
+      "acquireNote": "图书馆外文书库或馆际互借",
+      "confidence": "medium",
+      "verify": "版次与 ISBN 按出版社目录核对；可能已绝版",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到出版社官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "书名/作者/出版社确认；版次未在线核实，建议走馆际互借。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "engineering-economics-book-008",
+      "subjectId": "engineering-economics",
+      "title": "投资项目评估",
+      "author": "周惠珍",
+      "publisher": "东北财经大学出版社",
+      "level": "教材",
+      "why": "国内投资项目评估方向的代表性教材，把工程经济学的方法落到完整的投资项目评估流程上（市场、技术、财务、国民经济、社会、后评价），是第 8、9、10、11 章的延伸阅读。",
+      "readPlan": "第 8 章（可行性研究）与第 9 章（财务评价）学完后通读对应部分；做课程设计/可行性研究报告时作为格式与内容模板。",
+      "relatesToChapters": [
+        "8",
+        "9",
+        "10",
+        "11"
+      ],
+      "acquireNote": "图书馆可借",
+      "confidence": "medium",
+      "verify": "出版社与版次按馆藏核对",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到出版社官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "出版社为常见著录（东北财经大学出版社），未在线确认。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "engineering-economics-book-009",
+      "subjectId": "engineering-economics",
+      "title": "建设项目经济评价方法与参数（第三版）",
+      "author": "国家发展和改革委员会、住房和城乡建设部",
+      "publisher": null,
+      "level": "行业文件/工具书",
+      "why": "课程中「财务基准收益率」「社会折现率」「影子价格」等参数的唯一权威出处。教材上凡涉及参数取值的地方，最终都要回到这份文件核对。",
+      "readPlan": "不必通读。作业时按章节索引查所需参数的现行取值；特别注意核对教材引用的是否为现行版次。",
+      "relatesToChapters": [
+        "3",
+        "9",
+        "10"
+      ],
+      "acquireNote": "图书馆工具书区；主管部门官网或出版社正版渠道",
+      "confidence": "high",
+      "verify": "发布年份与文号以现行文件为准；所有参数值以现行文件为准",
+      "edition": "第三版（2006）",
+      "year": 2006,
+      "isbn": null,
+      "verification": {
+        "status": "confirmed",
+        "source": "多所院校工程经济类课程参考文件清单",
+        "checkedAt": "2026-09-15",
+        "note": "第三版由国家发改委与建设部发布（2006）；ISBN 未核实故留空。"
+      }
+    },
+    {
+      "id": "engineering-economics-book-010",
+      "subjectId": "engineering-economics",
+      "title": "注册咨询工程师（投资）执业资格考试教材：项目决策分析与评价",
+      "author": null,
+      "publisher": null,
+      "level": "考试辅导",
+      "why": "最贴近「工程经济学考点怎么考、怎么算」的实战材料，题型规范、判卷口径明确，对财务评价报表（项目投资现金流量表、项目资本金现金流量表、利润与利润分配表、财务计划现金流量表）的填列顺序讲得很细。",
+      "readPlan": "复习阶段用：先做教材例题，再用这本的真题练手。注意考试口径与在校教材可能不一致（如总成本费用的要素划分、建设期利息的年中计息假定），以教师要求为准。",
+      "relatesToChapters": [
+        "3",
+        "8",
+        "9",
+        "10"
+      ],
+      "acquireNote": "出版社正版渠道；图书馆可能有往年版本",
+      "confidence": "low",
+      "verify": "当年度教材的版次、出版社与科目名称请核对（科目名称可能调整）",
+      "verification": {
+        "status": "unverified",
+        "source": "教材按年度修订，无稳定书目",
+        "checkedAt": "2026-09-15",
+        "note": "按当年官方考试用书清单核对。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "engineering-economics-book-011",
+      "subjectId": "engineering-economics",
+      "title": "一级造价工程师执业资格考试教材：建设工程造价管理",
+      "author": null,
+      "publisher": null,
+      "level": "考试辅导",
+      "why": "土木工程方向最直接的执业衔接材料，把工程经济学的 NPV/IRR/回收期/盈亏平衡/价值工程与造价管理实务打通，第 7 章价值工程部分尤其贴近工程实践。",
+      "readPlan": "配合第 7 章（价值工程）与第 8、9 章（投资估算与财务评价）选读；有意向考造价师的同学可作为长期读物。",
+      "relatesToChapters": [
+        "6",
+        "7",
+        "8",
+        "9"
+      ],
+      "acquireNote": "出版社正版渠道；图书馆可能有往年版本",
+      "confidence": "low",
+      "verify": "当年度教材版次、出版社与科目名称请核对",
+      "verification": {
+        "status": "unverified",
+        "source": "教材按年度修订，无稳定书目",
+        "checkedAt": "2026-09-15",
+        "note": "按当年官方考试用书清单核对。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "engineering-economics-book-012",
+      "subjectId": "engineering-economics",
+      "title": "Life-Cycle Cost and Economic Analysis",
+      "author": "Wolter J. Fabrycky、Benjamin S. Blanchard",
+      "publisher": null,
+      "level": "专著",
+      "why": "全寿命期费用分析（LCCA）领域的经典，系统讲述 LCC 分解结构、费用估算关系、折现与不确定性处理。课程第 12 章（寿命周期费用分析）在教材中通常篇幅有限，此书是最好的补充。",
+      "readPlan": "第 12 章学完后选读 LCC 分解与费用估算关系两章；做课程设计或毕业设计涉及全寿命期比选时重点参考。",
+      "relatesToChapters": [
+        "12"
+      ],
+      "acquireNote": "图书馆外文书库或馆际互借",
+      "confidence": "low",
+      "verify": "出版社（Prentice Hall / CRC 等）与版次请核对",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到出版社官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "书名/作者确认；出版社与版次按馆藏核对。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "engineering-economics-book-013",
+      "subjectId": "engineering-economics",
+      "title": "Techniques of Value Analysis and Engineering",
+      "author": "Lawrence D. Miles",
+      "publisher": "McGraw-Hill",
+      "level": "经典专著",
+      "why": "价值工程的开山之作，由 VE 方法的创立者本人撰写。课程第 7 章只讲 0-1/0-4 评分、功能系数、价值系数这套操作，此书能补上「功能定义为什么要这样写」的方法论根源。",
+      "readPlan": "配合第 7 章（价值工程）选读功能定义与功能整理部分；做 VE 课程作业时参考其功能定义的动词+名词规则。",
+      "relatesToChapters": [
+        "7"
+      ],
+      "acquireNote": "图书馆外文书库或馆际互借；可能有中译本",
+      "confidence": "medium",
+      "verify": "版次与 ISBN 按出版社目录核对",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到出版社官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "书名/作者/出版社确认；版次未在线核实。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    }
+  ]
+}

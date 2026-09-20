@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 320" width="660" height="320" role="img" aria-label="明渠水跃示意：跃前急流水深、跃后缓流水深、临界水深、水跃长度与表面旋滚">
+  <title>水跃：急流过渡到缓流，共轭水深与消能</title>
+  <g font-family="system-ui, -apple-system, 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#8a8a8a">
+    <path d="M60 240 H620" stroke="#c8c8c8" stroke-width="2.4"/>
+    <path d="M60 210 H300" stroke="#4a9eff" stroke-width="2"/>
+    <path d="M300 210 C330 208 372 162 420 150" fill="none" stroke="#4a9eff" stroke-width="2.2"/>
+    <path d="M420 150 H620" stroke="#4a9eff" stroke-width="2"/>
+    <path d="M440 150 h18 l6 -5 l6 5 h18 l6 -5 l6 5 h18" transform="translate(80 0)" fill="none" stroke="#4a9eff" stroke-width="1" opacity="0.5"/>
+
+    <path d="M60 180 H620" stroke="#ff9f0a" stroke-width="1" stroke-dasharray="7 4" opacity="0.75"/>
+    <text x="66" y="174" font-size="11" fill="#ff9f0a">h_k 临界水深（Fr = 1）</text>
+
+    <path d="M326 202 A22 22 0 1 1 362 196" fill="none" stroke="#bf5af2" stroke-width="1.4"/>
+    <path d="M362 196 l-7 5 l2 -8 Z" fill="#bf5af2"/>
+    <text x="300" y="128" font-size="11" fill="#bf5af2">表面旋滚（消能主要发生在这里）</text>
+
+    <path d="M110 226 H160" stroke="#30d158" stroke-width="1.4"/>
+    <path d="M160 222 l-8 -4 v8 Z" fill="#30d158"/>
+    <text x="112" y="220" font-size="11" fill="#30d158">急流 Fr₁ &gt; 1</text>
+    <path d="M540 166 H590" stroke="#30d158" stroke-width="1.4"/>
+    <path d="M590 162 l-8 -4 v8 Z" fill="#30d158"/>
+    <text x="512" y="160" font-size="11" fill="#30d158">缓流 Fr₂ &lt; 1</text>
+
+    <path d="M250 210 V240" stroke="#0a84ff" stroke-width="1.1"/>
+    <path d="M244 210 h12 M244 240 h12" stroke="#0a84ff" stroke-width="1.1"/>
+    <text x="258" y="228" font-size="11" fill="#0a84ff">h₁ 跃前水深</text>
+
+    <path d="M500 150 V240" stroke="#0a84ff" stroke-width="1.1"/>
+    <path d="M494 150 h12 M494 240 h12" stroke="#0a84ff" stroke-width="1.1"/>
+    <text x="508" y="200" font-size="11" fill="#0a84ff">h₂ 跃后水深（h₁ 的共轭水深）</text>
+
+    <path d="M300 268 H420" stroke="#c8c8c8" stroke-width="1"/>
+    <path d="M300 262 v12 M420 262 v12" stroke="#c8c8c8" stroke-width="1"/>
+    <text x="360" y="286" text-anchor="middle" font-size="11">L_j 水跃长度</text>
+
+    <text x="330" y="306" text-anchor="middle" font-size="11" fill="#8a8a8a">矩形断面共轭水深：h₂/h₁ = ½(√(1 + 8Fr₁²) − 1)；单位重量水体消能 ΔE = (h₂ − h₁)³ / (4h₁h₂)</text>
+    <text x="330" y="316" text-anchor="middle" font-size="11" fill="#8a8a8a">易错：只在 Fr₁ &gt; 1 的急流中才会出现水跃；缓流里硬套共轭水深公式是错的</text>
+  </g>
+</svg>

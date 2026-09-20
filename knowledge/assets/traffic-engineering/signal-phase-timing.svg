@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 290" width="660" height="290" role="img" aria-label="信号交叉口两相位配时示意：周期构成、绿灯黄灯全红时间、损失时间与有效绿灯">
+  <title>信号配时的周期构成与有效绿灯</title>
+  <g font-family="system-ui, -apple-system, 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#8a8a8a">
+    <text x="140" y="36" text-anchor="middle" font-size="11.5" fill="#30d158">相位 1：南北放行</text>
+    <rect x="95" y="62" width="90" height="16" fill="#d8d8d8" opacity="0.14" stroke="#c8c8c8" stroke-width="1"/>
+    <rect x="132" y="44" width="16" height="52" fill="#d8d8d8" opacity="0.14" stroke="#c8c8c8" stroke-width="1"/>
+    <path d="M140 52 V40 M140 40 l-4 7 h8 Z" fill="#30d158"/>
+    <path d="M140 74 V86 M140 86 l-4 -7 h8 Z" fill="#30d158"/>
+
+    <text x="420" y="36" text-anchor="middle" font-size="11.5" fill="#0a84ff">相位 2：东西放行</text>
+    <rect x="375" y="62" width="90" height="16" fill="#d8d8d8" opacity="0.14" stroke="#c8c8c8" stroke-width="1"/>
+    <rect x="412" y="44" width="16" height="52" fill="#d8d8d8" opacity="0.14" stroke="#c8c8c8" stroke-width="1"/>
+    <path d="M380 70 L368 70 M368 70 l7 -4 v8 Z" fill="#0a84ff"/>
+    <path d="M460 70 L472 70 M472 70 l-7 -4 v8 Z" fill="#0a84ff"/>
+
+    <rect x="60" y="118" width="160" height="30" fill="#30d158" opacity="0.55" stroke="#30d158" stroke-width="1"/>
+    <rect x="220" y="118" width="24" height="30" fill="#ff9f0a" opacity="0.6" stroke="#ff9f0a" stroke-width="1"/>
+    <rect x="244" y="118" width="16" height="30" fill="#ff453a" opacity="0.55" stroke="#ff453a" stroke-width="1"/>
+    <rect x="260" y="118" width="220" height="30" fill="#0a84ff" opacity="0.55" stroke="#0a84ff" stroke-width="1"/>
+    <rect x="480" y="118" width="24" height="30" fill="#ff9f0a" opacity="0.6" stroke="#ff9f0a" stroke-width="1"/>
+    <rect x="504" y="118" width="16" height="30" fill="#ff453a" opacity="0.55" stroke="#ff453a" stroke-width="1"/>
+
+    <text x="140" y="138" text-anchor="middle" fill="#eaf3de">G₁ 绿灯</text>
+    <text x="370" y="138" text-anchor="middle" fill="#e6f1fb">G₂ 绿灯</text>
+    <text x="232" y="164" text-anchor="middle" font-size="11" fill="#ff9f0a">黄</text>
+    <text x="252" y="164" text-anchor="middle" font-size="11" fill="#ff453a">全红</text>
+    <text x="492" y="164" text-anchor="middle" font-size="11" fill="#ff9f0a">黄</text>
+    <text x="512" y="164" text-anchor="middle" font-size="11" fill="#ff453a">全红</text>
+
+    <path d="M60 186 H520" stroke="#c8c8c8" stroke-width="1.1"/>
+    <path d="M60 180 v12 M520 180 v12" stroke="#c8c8c8" stroke-width="1.1"/>
+    <text x="290" y="204" text-anchor="middle" font-size="11.5">C 周期时长</text>
+
+    <path d="M60 108 h6 v-8 h-6" fill="none" stroke="#bf5af2" stroke-width="1.2"/>
+    <path d="M260 108 h6 v-8 h-6" fill="none" stroke="#bf5af2" stroke-width="1.2"/>
+    <text x="160" y="100" font-size="11" fill="#bf5af2">起步损失 l₁</text>
+    <text x="360" y="100" font-size="11" fill="#bf5af2">起步损失 l₂</text>
+
+    <text x="330" y="234" text-anchor="middle" font-size="11" fill="#8a8a8a">有效绿灯 g = G + Y − l（黄灯与起步损失互相抵消一部分，不能只按绿灯时长算）</text>
+    <text x="330" y="254" text-anchor="middle" font-size="11" fill="#8a8a8a">流量比 y = q / s（s 为饱和流率），关键相位流量比之和 Y 决定周期下限；Y 越接近 1 越拥堵</text>
+    <text x="330" y="274" text-anchor="middle" font-size="11" fill="#8a8a8a">Webster 最佳周期 C₀ = (1.5L + 5) / (1 − Y)，式中系数与损失时间取值请按教材与现行规范核对</text>
+  </g>
+</svg>

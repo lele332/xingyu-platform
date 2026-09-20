@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 300" width="660" height="300" role="img" aria-label="盈亏平衡图：收入线与总成本线的交点">
+  <title>盈亏平衡：收入线追上总成本线的那一刻</title>
+  <g font-family="system-ui, -apple-system, 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#8a8a8a">
+    <!-- 坐标轴 -->
+    <path d="M70 40 V240 H620" stroke="#c8c8c8" stroke-width="1.4"/>
+    <path d="M620 236 l-8 -4 l8 -4" fill="#c8c8c8" stroke="none"/>
+    <text x="580" y="262" font-size="11.5">产量 Q</text>
+    <text x="16" y="44" font-size="11.5">金额</text>
+
+    <!-- 固定成本线（水平） -->
+    <path d="M70 196 H600" stroke="#ff9f0a" stroke-width="1.6" stroke-dasharray="6 4"/>
+    <text x="500" y="190" font-size="11" fill="#ff9f0a">固定成本 C<sub>f</sub></text>
+
+    <!-- 总成本线：Cf + Cv·Q -->
+    <path d="M70 196 L580 84" stroke="#ff453a" stroke-width="2"/>
+    <text x="470" y="76" fill="#ff453a">总成本 = C<sub>f</sub> + C<sub>v</sub>·Q</text>
+
+    <!-- 收入线：P·Q -->
+    <path d="M70 240 L580 60" stroke="#30d158" stroke-width="2"/>
+    <text x="500" y="52" fill="#30d158">销售收入 = p·Q</text>
+
+    <!-- 交点 BEP -->
+    <circle cx="322" cy="140" r="5.5" fill="#0a84ff"/>
+    <path d="M322 140 V240" stroke="#0a84ff" stroke-width="0.9" stroke-dasharray="4 4" opacity="0.85"/>
+    <path d="M70 140 H322" stroke="#0a84ff" stroke-width="0.9" stroke-dasharray="4 4" opacity="0.85"/>
+    <text x="292" y="256" text-anchor="middle" fill="#0a84ff">Q<sub>BEP</sub></text>
+    <text x="30" y="136" font-size="11" fill="#0a84ff">BEP</text>
+    <text x="336" y="128" fill="#0a84ff">盈亏平衡点</text>
+
+    <!-- 亏损区 / 盈利区 -->
+    <path d="M322 140 L580 60 L580 84 Z" fill="#ff453a" opacity="0.10"/>
+    <path d="M70 196 L322 140 L70 240 Z" fill="#30d158" opacity="0.10"/>
+    <text x="120" y="222" font-size="11" fill="#ff453a">亏损区</text>
+    <text x="440" y="110" font-size="11" fill="#30d158">盈利区</text>
+
+    <text x="24" y="26" font-size="11.5" fill="#8a8a8a">读图：两条线越早相交，项目越抗风险；交点越靠右，产量一波动就越容易亏</text>
+    <text x="24" y="288" font-size="11.5" fill="#8a8a8a">易错：线性盈亏平衡假定「单价与单位变动成本都不随产量变」，实际只在相关产量区间内近似成立</text>
+  </g>
+</svg>

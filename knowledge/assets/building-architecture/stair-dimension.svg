@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 300" width="660" height="300" role="img" aria-label="楼梯剖面示意：踏面宽 b、踢面高 h、梯段净高与平台净高的量取位置">
+  <title>楼梯踏步尺寸与两处净高（量取位置最容易错）</title>
+  <g font-family="system-ui, -apple-system, 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#8a8a8a">
+    <path d="M60 250 H100 V228 H140 V206 H180 V184 H220 V162 H260 V140 H300 V118 H380"
+          fill="none" stroke="#d8d8d8" stroke-width="2.2" opacity="0.85"/>
+    <path d="M60 150 H100 V128 H140 V106 H180 V84 H220 V62 H260 V40 H300 V38 H380"
+          fill="none" stroke="#c8c8c8" stroke-width="1.8" stroke-dasharray="5 3" opacity="0.8"/>
+    <text x="392" y="122" font-size="11">平台</text>
+    <text x="392" y="42" font-size="11">上方结构底</text>
+
+    <path d="M60 268 H100" stroke="#0a84ff" stroke-width="1.1"/>
+    <path d="M60 263 v10 M100 263 v10" stroke="#0a84ff" stroke-width="1.1"/>
+    <text x="80" y="284" text-anchor="middle" font-size="11" fill="#0a84ff">b 踏面宽</text>
+
+    <path d="M108 250 V228" stroke="#ff9f0a" stroke-width="1.1"/>
+    <path d="M103 250 h10 M103 228 h10" stroke="#ff9f0a" stroke-width="1.1"/>
+    <text x="118" y="244" font-size="11" fill="#ff9f0a">h 踢面高</text>
+
+    <path d="M180 184 V84" stroke="#30d158" stroke-width="1.3"/>
+    <path d="M175 184 h10 M175 84 h10" stroke="#30d158" stroke-width="1.3"/>
+    <text x="196" y="140" font-size="11" fill="#30d158">梯段净高 ≥ 2200</text>
+    <text x="196" y="156" font-size="11" fill="#30d158">自踏步前缘量起</text>
+
+    <path d="M340 118 V38" stroke="#bf5af2" stroke-width="1.3"/>
+    <path d="M335 118 h10 M335 38 h10" stroke="#bf5af2" stroke-width="1.3"/>
+    <text x="356" y="82" font-size="11" fill="#bf5af2">平台净高 ≥ 2000</text>
+
+    <text x="470" y="200" font-size="11">2h + b = 600 ~ 620</text>
+    <text x="470" y="220" font-size="11">h 常取 150 ~ 175</text>
+    <text x="470" y="240" font-size="11">b 常取 260 ~ 300</text>
+    <text x="470" y="260" font-size="11" fill="#ff9f0a">单位：mm</text>
+
+    <text x="330" y="292" text-anchor="middle" font-size="11" fill="#8a8a8a">易错：净高从「踏步前缘」量到上方结构底，不是从踏面中点；梯段与平台两处净高要求不同，别只算一处</text>
+  </g>
+</svg>

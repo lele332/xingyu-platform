@@ -1,0 +1,233 @@
+{
+  "subjectId": "traffic-engineering",
+  "note": "本文件不是文献全文，而是「去哪儿查、查什么、以谁为准」的索引。论文受版权保护不入库；AI 回答涉及前沿或争议问题时，按这里给出的入口检索，并把来源层级告诉用户。",
+  "updatedAt": "2026-09-15",
+  "items": [
+    {
+      "type": "journal",
+      "name": "交通运输工程学报",
+      "en": "Journal of Traffic and Transportation Engineering",
+      "org": "长安大学",
+      "level": "A",
+      "why": "交通流理论、通行能力、交通设计的顶刊级来源。",
+      "howToUse": "按「通行能力 / 服务水平 / 交通流模型」检索。",
+      "access": "知网 / 万方（校内 IP 通常免费）",
+      "confidence": "high",
+      "verify": null,
+      "id": "traffic-engineering-source-001"
+    },
+    {
+      "type": "journal",
+      "name": "中国公路学报",
+      "en": "China Journal of Highway and Transport",
+      "org": "中国公路学会",
+      "level": "A",
+      "why": "道路与交通交叉方向的高水平研究。",
+      "howToUse": "查交叉口、匝道、交织区等具体场景研究。",
+      "access": "知网 / 万方（校内 IP 通常免费）",
+      "confidence": "high",
+      "verify": null,
+      "id": "traffic-engineering-source-002"
+    },
+    {
+      "type": "journal",
+      "name": "交通运输系统工程与信息",
+      "en": "Journal of Transportation Systems Engineering and Information Technology",
+      "org": "北京交通大学",
+      "level": "B",
+      "why": "交通系统与信息技术交叉，适合智能交通方向。",
+      "howToUse": "做交通仿真与大数据选题时参考。",
+      "access": "知网 / 万方（校内 IP 通常免费）",
+      "confidence": "high",
+      "verify": null,
+      "id": "traffic-engineering-source-003"
+    },
+    {
+      "type": "journal",
+      "name": "交通信息与安全",
+      "en": "Journal of Transport Information and Safety",
+      "org": "武汉理工大学",
+      "level": "B",
+      "why": "交通安全与交通信息技术应用。",
+      "howToUse": "查交通安全评价方法。",
+      "access": "知网 / 万方（校内 IP 通常免费）",
+      "confidence": "high",
+      "verify": null,
+      "id": "traffic-engineering-source-004"
+    },
+    {
+      "type": "journal",
+      "name": "Transportation Research Part A / B / C",
+      "en": "Transportation Research A/B/C",
+      "org": "Elsevier",
+      "level": "A",
+      "why": "交通领域国际三大刊：政策与行为（A）、方法论（B）、智能交通（C）。",
+      "howToUse": "写英文综述的主战场；Part B 偏模型，Part C 偏智能系统。",
+      "access": "Web of Science / ScienceDirect / ASCE Library",
+      "confidence": "high",
+      "verify": null,
+      "id": "traffic-engineering-source-005"
+    },
+    {
+      "type": "journal",
+      "name": "IEEE Transactions on Intelligent Transportation Systems",
+      "en": "IEEE T-ITS",
+      "org": "IEEE",
+      "level": "A",
+      "why": "智能交通系统与车路协同的顶刊。",
+      "howToUse": "做自动驾驶、车路协同方向选题时用。",
+      "access": "Web of Science / ScienceDirect / ASCE Library",
+      "confidence": "high",
+      "verify": null,
+      "id": "traffic-engineering-source-006"
+    },
+    {
+      "type": "standard",
+      "name": "CJJ 37 城市道路工程设计规范",
+      "code": "CJJ 37",
+      "level": "S",
+      "why": "城市道路分类、横断面、交叉口与步行系统的设计依据。",
+      "howToUse": "城市交通类题目使用它，与公路体系分开。",
+      "access": "交通运输标准化信息系统 / 住建部标准发布 / 学校图书馆标准库",
+      "confidence": "high",
+      "verify": "版本年份需核对。",
+      "id": "traffic-engineering-source-007"
+    },
+    {
+      "type": "standard",
+      "name": "GB 50647 城市道路交叉口规划规范",
+      "code": "GB 50647",
+      "level": "S",
+      "why": "交叉口规划与渠化设计的专门规定。",
+      "howToUse": "交叉口设计作业的直接依据。",
+      "access": "交通运输标准化信息系统 / 住建部标准发布 / 学校图书馆标准库",
+      "confidence": "medium",
+      "verify": "版本年份需核对。",
+      "id": "traffic-engineering-source-008"
+    },
+    {
+      "type": "standard",
+      "name": "GB/T 51328 城市综合交通体系规划标准",
+      "code": "GB/T 51328",
+      "level": "S",
+      "why": "城市综合交通规划的新口径，部分取代旧的城市道路交通规划规范。",
+      "howToUse": "做城市交通规划类题目时用新标准。",
+      "access": "交通运输标准化信息系统 / 住建部标准发布 / 学校图书馆标准库",
+      "confidence": "medium",
+      "verify": "注意与 GB 50220 的替代关系，引用前核对现行有效版本。",
+      "id": "traffic-engineering-source-009"
+    },
+    {
+      "type": "standard",
+      "name": "JTG B01 公路工程技术标准",
+      "code": "JTG B01",
+      "level": "S",
+      "why": "公路等级、设计速度与交通量适应性的基础口径。",
+      "howToUse": "公路类交通分析使用。",
+      "access": "交通运输标准化信息系统 / 住建部标准发布 / 学校图书馆标准库",
+      "confidence": "high",
+      "verify": "版本年份需核对。",
+      "id": "traffic-engineering-source-010"
+    },
+    {
+      "type": "standard",
+      "name": "JTG D20 公路路线设计规范",
+      "code": "JTG D20",
+      "level": "S",
+      "why": "通行能力与路线几何设计的衔接口径。",
+      "howToUse": "做通行能力与服务水平分析时配套使用。",
+      "access": "交通运输标准化信息系统 / 住建部标准发布 / 学校图书馆标准库",
+      "confidence": "high",
+      "verify": "版本年份需核对。",
+      "id": "traffic-engineering-source-011"
+    },
+    {
+      "type": "database",
+      "name": "中国知网（CNKI）",
+      "level": "D",
+      "why": "中文期刊、学位论文、会议论文最全，课程论文与作业的主要来源。",
+      "howToUse": "用「主题」而不是「篇名」检索；勾选「同义词扩展」；学位论文适合看文献综述章节。",
+      "access": "校园网 / 图书馆入口",
+      "confidence": "high",
+      "verify": null,
+      "id": "traffic-engineering-source-012"
+    },
+    {
+      "type": "database",
+      "name": "Web of Science / EI Compendex",
+      "level": "D",
+      "why": "外文期刊与会议论文，判断一个方向国际进展如何。",
+      "howToUse": "先看 Review，再看 Article；用「被引频次」排序找经典文献。",
+      "access": "校园网 / 图书馆入口",
+      "confidence": "high",
+      "verify": null,
+      "id": "traffic-engineering-source-013"
+    },
+    {
+      "type": "database",
+      "name": "标准数据库（交通运输标准化信息系统 / 国家标准全文公开系统）",
+      "level": "D",
+      "why": "规范条文以官方发布为准，教材与二手资料都可能是旧版。",
+      "howToUse": "查现行状态与被替代关系；引用规范必须写清楚版本年份。",
+      "access": "校园网 / 图书馆入口",
+      "confidence": "high",
+      "verify": null,
+      "id": "traffic-engineering-source-014"
+    },
+    {
+      "type": "org",
+      "name": "交通运输部 / 公安部交通管理局",
+      "level": "O",
+      "why": "交通政策与统计数据的权威来源。",
+      "howToUse": "引用交通统计数据时以官方发布为准。",
+      "access": "官网公开信息",
+      "confidence": "high",
+      "verify": null,
+      "id": "traffic-engineering-source-015"
+    },
+    {
+      "type": "org",
+      "name": "中国智能交通协会",
+      "level": "O",
+      "why": "智能交通行业标准与产业动态。",
+      "howToUse": "找新技术应用案例。",
+      "access": "官网公开信息",
+      "confidence": "medium",
+      "verify": null,
+      "id": "traffic-engineering-source-016"
+    },
+    {
+      "type": "method",
+      "name": "交通类检索式模板",
+      "level": "M",
+      "why": "交通问题锁定「场景 + 指标 + 方法」。",
+      "howToUse": "CNKI：（主题=通行能力 OR 服务水平 OR 延误 OR 信号配时）AND（主题=交叉口 OR 匝道 OR 路段）AND（年 between 2016,2026）。",
+      "access": "CNKI",
+      "confidence": "high",
+      "verify": null,
+      "id": "traffic-engineering-source-017"
+    },
+    {
+      "id": "traffic-engineering-source-018",
+      "name": "判断一篇文献能不能用于作业（三问）",
+      "howToUse": "① 出处：是不是本文件列出的期刊/规范/机构？② 时间：是否近 10 年，或是不是该问题的经典原始文献？③ 可核：结论能不能在教材或现行规范里找到对应？三问答不全就别引用，改用教材口径并注明。"
+    }
+  ],
+  "searchTemplates": [
+    {
+      "id": "tpl-cnki",
+      "name": "CNKI 检索式模板（可直接套用）",
+      "howToUse": "（主题 = 核心概念A）AND（主题 = 核心概念B）AND（年 between 2016,2026）；先按「被引」排序抓综述，再按「发表时间」排序抓最新进展；找到 2-3 篇高质量综述后，顺其参考文献回溯原始文献。"
+    },
+    {
+      "id": "tpl-wos",
+      "name": "Web of Science / Scopus 检索式模板",
+      "howToUse": "TS=(\"concept A\" AND \"concept B\") AND PY=(2016-2026)；文献类型限 Article / Review；语种 English；用「被引频次」找经典，用「最早发表」找首创。"
+    },
+    {
+      "id": "tpl-three-q",
+      "name": "判断一篇文献能不能用于作业（三问）",
+      "howToUse": "① 出处：是不是本文件列出的期刊/规范/机构？② 时间：是否近 10 年，或是不是该问题的经典原始文献？③ 可核：结论能不能在教材或现行规范里找到对应？三问答不全就别引用，改用教材口径并注明。"
+    }
+  ]
+}

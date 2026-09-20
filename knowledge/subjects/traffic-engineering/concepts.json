@@ -1,0 +1,2743 @@
+{
+  "items": [
+    {
+      "id": "traffic-engineering-concept-001",
+      "subjectId": "traffic-engineering",
+      "chapter": "1.1",
+      "term": "交通工程学",
+      "en": "traffic engineering",
+      "definition": "研究人、车、路、环境四要素及其相互关系，用工程、教育、执法、能源、环境（五E）等手段，使交通系统达到安全、迅速、经济、舒适、环保目标的学科。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "交通系统",
+        "五E观",
+        "道路工程",
+        "交通规划"
+      ],
+      "pitfalls": [
+        "把交通工程等同于修路：它是以既有设施的效率与安全为对象，规划—设计—管理—控制闭环",
+        "忽略'人'这一要素，只算车不算人"
+      ],
+      "examAngle": "名词解释必考：定义 + 研究对象 + 目标 + 研究内容四层缺一不可",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-002",
+      "subjectId": "traffic-engineering",
+      "chapter": "1.3",
+      "term": "当量小客车 pcu",
+      "en": "passenger car equivalent / unit",
+      "definition": "把不同车型按其对通行能力的占用程度折算成标准小客车的当量单位，用于混合车流下通行能力与流量的统一计量。",
+      "formulaId": null,
+      "symbols": [
+        "pcu"
+      ],
+      "unit": "pcu/h",
+      "relations": [
+        "设计车辆",
+        "重型车折算系数 ET",
+        "车辆折算系数 E"
+      ],
+      "pitfalls": [
+        "veh/h 与 pcu/h 混用，导致通行能力与流量量纲不一致",
+        "折算系数随坡度、路段类型、车型细分而变，不能全国一值到底"
+      ],
+      "examAngle": "单位换算类错误的高发点；作业中凡是给了车型比例，一律先折成 pcu 再算",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "教材中具体的车型折算系数表（小客车/中型车/大型车/拖挂车）取值请核对原书表格"
+    },
+    {
+      "id": "traffic-engineering-concept-003",
+      "subjectId": "traffic-engineering",
+      "chapter": "2.2",
+      "term": "反应时间",
+      "en": "reaction time",
+      "definition": "驾驶员从感知到刺激、经判断决策到开始操纵车辆所需的总时间，通常分为感知—判断—操纵三阶段。",
+      "formulaId": null,
+      "symbols": [
+        "tR"
+      ],
+      "unit": "s",
+      "relations": [
+        "停车视距",
+        "制动反应距离",
+        "黄灯时间",
+        "跟驰模型的延迟 T"
+      ],
+      "pitfalls": [
+        "简单反应时间与复杂（选择）反应时间不能混用，交叉口场景要用复杂反应时间",
+        "具体取值（常用 1.0~1.5 s 量级）必须按教材/规范给出，不要凭印象"
+      ],
+      "examAngle": "常与停车视距、黄灯时长、跟驰延迟 T 联合出题",
+      "confidence": "medium",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": "教材采用的反应时间取值与'简单/复杂反应时间'的数值请核对原书"
+    },
+    {
+      "id": "traffic-engineering-concept-004",
+      "subjectId": "traffic-engineering",
+      "chapter": "2.4",
+      "term": "行人过街可接受间隙",
+      "en": "critical gap / acceptable gap",
+      "definition": "行人判断车流中能够安全穿越的最小车头时距阈值；车头时距大于等于该阈值时行人才选择穿越。",
+      "formulaId": "traffic-engineering-formula-023",
+      "symbols": [
+        "tc"
+      ],
+      "unit": "s",
+      "relations": [
+        "负指数分布",
+        "车头时距",
+        "移位负指数分布"
+      ],
+      "pitfalls": [
+        "把'间隙大于等于 tc 的概率'当成'可穿越次数'，须再乘该时段的车流间隙总数",
+        "拥挤车流下负指数假设失效，须用移位负指数或实测分布"
+      ],
+      "examAngle": "给流量 Q 与可接受间隙 tc，求等待时间与可穿越间隙个数",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-005",
+      "subjectId": "traffic-engineering",
+      "chapter": "3.4",
+      "term": "侧向净空",
+      "en": "lateral clearance",
+      "definition": "车道边缘到路侧障碍物（护栏、桥墩、路缘石、停驻车辆等）之间的横向距离。",
+      "formulaId": "traffic-engineering-formula-039",
+      "symbols": [
+        "fw"
+      ],
+      "unit": "m",
+      "relations": [
+        "车道宽度",
+        "通行能力修正系数",
+        "自由流速度"
+      ],
+      "pitfalls": [
+        "侧向净空不足会同时降低车速与通行能力，两重影响不要只记一条",
+        "净空修正与车道宽修正常合并为一个 fw，不同版本合并方式不同"
+      ],
+      "examAngle": "简答题：为何理想条件要规定车道宽 3.75 m 与侧向净空 1.75 m 一类的取值",
+      "confidence": "medium",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "理想条件中车道宽度与侧向净空的具体数值请按教材与现行规范核对"
+    },
+    {
+      "id": "traffic-engineering-concept-006",
+      "subjectId": "traffic-engineering",
+      "chapter": "4.1",
+      "term": "交通量",
+      "en": "traffic volume",
+      "definition": "单位时间内通过道路某一断面（或某一条车道）的车辆数，是最基础的交通流参数之一。",
+      "formulaId": "traffic-engineering-formula-001",
+      "symbols": [
+        "Q",
+        "q",
+        "V"
+      ],
+      "unit": "veh/h 或 pcu/h",
+      "relations": [
+        "流率",
+        "交通密度",
+        "车速",
+        "AADT"
+      ],
+      "pitfalls": [
+        "交通量与流率不同：流率是折算到小时率的短时观测值，交通量是实际计数",
+        "双向总量与单向/单车道不能混用，一切 Q-K-V 计算都应先统一到单向单车道"
+      ],
+      "examAngle": "辨析题：交通量 vs 流率（高峰小时流率 = 4 × 最大 15 min 计数）",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-007",
+      "subjectId": "traffic-engineering",
+      "chapter": "4.1",
+      "term": "年平均日交通量 AADT",
+      "en": "annual average daily traffic",
+      "definition": "一年内各日交通量的算术平均值，反映道路全年的平均负荷水平，用于道路分级、规划与养护决策。",
+      "formulaId": "traffic-engineering-formula-010",
+      "symbols": [
+        "AADT"
+      ],
+      "unit": "veh/d",
+      "relations": [
+        "ADT",
+        "DHV",
+        "设计小时交通量系数 K",
+        "30HV"
+      ],
+      "pitfalls": [
+        "AADT 是双向总量，做几何设计必须先乘方向分布系数 D 转成单向",
+        "AADT 不能直接用于设计：设计控制值是 DHV（第 30 位最高小时）而非平均值"
+      ],
+      "examAngle": "由 AADT 推 DHV 并定车道数，是第四章最高频的计算链",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": "ADT 与 AADT 的区分口径（是否剔除特殊日）请按教材核对"
+    },
+    {
+      "id": "traffic-engineering-concept-008",
+      "subjectId": "traffic-engineering",
+      "chapter": "4.1",
+      "term": "浮动车法",
+      "en": "moving observer method",
+      "definition": "试验车在观测路段往返行驶，记录与对向/同向车流相遇、超越、被超越的车辆数及行程时间，据此推算路段交通量、行程时间与区间平均车速的调查方法。",
+      "formulaId": "traffic-engineering-formula-005",
+      "symbols": [
+        "Q",
+        "Vs",
+        "t"
+      ],
+      "unit": "veh/h; km/h",
+      "relations": [
+        "区间平均车速",
+        "行程时间调查",
+        "交通量调查"
+      ],
+      "pitfalls": [
+        "顺行超越数与被超越数的代数符号容易搞反，导致交通量算出负值",
+        "往返次数少、样本量不足时结果离散大，通常要求往返 6 次以上（次数以教材为准）"
+      ],
+      "examAngle": "给试验车往返记录求双向交通量与行程车速，第四章必考题型",
+      "confidence": "medium",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": "浮动车法交通量公式的具体形式（超越数/被超越数符号与分母）请按教材核对，不同教材写法有出入"
+    },
+    {
+      "id": "traffic-engineering-concept-009",
+      "subjectId": "traffic-engineering",
+      "chapter": "4.2",
+      "term": "高峰小时系数 PHF",
+      "en": "peak hour factor",
+      "definition": "高峰小时小时交通量与小时内最大 15 min 交通量折算小时率的比值，度量小时内流量的不均匀程度。",
+      "formulaId": "traffic-engineering-formula-009",
+      "symbols": [
+        "PHF",
+        "q15max"
+      ],
+      "unit": "—",
+      "relations": [
+        "15 min 高峰流率",
+        "设计小时交通量",
+        "通行能力分析"
+      ],
+      "pitfalls": [
+        "PHF ≤ 1，若算出来 > 1 说明分母取错（用了 4×平均而非 4×最大）",
+        "通行能力分析必须用流率（Q/PHF），直接用小时交通量会低估饱和度"
+      ],
+      "examAngle": "给 4 个 15 min 计数求 PHF，再折算高峰流率用于后续 LOS 判定",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-010",
+      "subjectId": "traffic-engineering",
+      "chapter": "4.2",
+      "term": "第 30 位最高小时交通量 30HV",
+      "en": "30th highest hourly volume",
+      "definition": "把一年 8760 个小时交通量从大到小排序，取第 30 位者作为设计小时交通量的依据；兼顾服务水平与经济性。",
+      "formulaId": "traffic-engineering-formula-011",
+      "symbols": [
+        "30HV",
+        "K"
+      ],
+      "unit": "veh/h",
+      "relations": [
+        "AADT",
+        "设计小时交通量 DHV",
+        "设计小时交通量系数 K"
+      ],
+      "pitfalls": [
+        "用'最大小时交通量'（第 1 位）做设计过于保守；第 30 位是经济性与服务水平的折中",
+        "K 系数（30HV/AADT）随地区、道路类型变化，典型量级 0.08~0.15，必须按当地观测取值"
+      ],
+      "examAngle": "简答：为什么取第 30 位而不是第 1 位 / 平均值",
+      "confidence": "medium",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": "教材中 K 系数的推荐取值范围与'第 30 位'这一序位是否为其表述，请核对原书"
+    },
+    {
+      "id": "traffic-engineering-concept-011",
+      "subjectId": "traffic-engineering",
+      "chapter": "4.2",
+      "term": "设计小时交通量 DHV",
+      "en": "design hourly volume",
+      "definition": "作为道路几何设计与通行能力校核控制值的高峰小时单向交通量，通常由 AADT 乘设计小时系数 K 与方向分布系数 D 得到。",
+      "formulaId": "traffic-engineering-formula-011",
+      "symbols": [
+        "DHV",
+        "K",
+        "D"
+      ],
+      "unit": "veh/h",
+      "relations": [
+        "AADT",
+        "30HV",
+        "方向分布系数",
+        "设计通行能力"
+      ],
+      "pitfalls": [
+        "漏乘方向分布系数 D，把双向 AADT 直接乘 K 当作单向 DHV",
+        "DHV 是单向值，与单向设计通行能力比较定车道数"
+      ],
+      "examAngle": "AADT → DHV → 车道数，是贯穿第四章与第六章的链式大题",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": "K 与 D 的取值区间请按教材或当地观测资料核对"
+    },
+    {
+      "id": "traffic-engineering-concept-012",
+      "subjectId": "traffic-engineering",
+      "chapter": "4.3",
+      "term": "方向分布系数 D",
+      "en": "directional distribution factor",
+      "definition": "主要方向（较重方向）交通量占双向合计交通量的比例，用于把双向总量折算为单向设计值。",
+      "formulaId": "traffic-engineering-formula-012",
+      "symbols": [
+        "D"
+      ],
+      "unit": "—",
+      "relations": [
+        "DHV",
+        "车道分布系数",
+        "交通量空间分布"
+      ],
+      "pitfalls": [
+        "D 的取值范围 0.5~0.7，若算出 < 0.5 说明取了较轻方向",
+        "方向分布系数与车道分布系数是两个不同的系数，多车道时都要用"
+      ],
+      "examAngle": "给双向流量与主方向流量求 D，再代回 DHV 公式",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-013",
+      "subjectId": "traffic-engineering",
+      "chapter": "4.4",
+      "term": "地点车速",
+      "en": "spot speed",
+      "definition": "车辆通过道路某一断面的瞬时速度，由雷达、皮尺+秒表、线圈等在固定断面处测得。",
+      "formulaId": "traffic-engineering-formula-006",
+      "symbols": [
+        "vi"
+      ],
+      "unit": "km/h",
+      "relations": [
+        "时间平均车速",
+        "第 85 百分位车速",
+        "行驶车速",
+        "区间平均车速"
+      ],
+      "pitfalls": [
+        "地点车速是断面观测值，其算术平均是时间平均车速 Vt，不是区间平均车速",
+        "用于限速取值的是 85% 位地点车速，不是平均地点车速"
+      ],
+      "examAngle": "辨析：地点车速 / 行驶车速 / 行程车速（区间平均车速）三类",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-014",
+      "subjectId": "traffic-engineering",
+      "chapter": "4.4",
+      "term": "时间平均车速 Vt",
+      "en": "time mean speed",
+      "definition": "在道路某断面处观测到的各车地点车速的算术平均值，反映'在该点停留期间所见车辆的快慢'。",
+      "formulaId": "traffic-engineering-formula-006",
+      "symbols": [
+        "Vt"
+      ],
+      "unit": "km/h",
+      "relations": [
+        "区间平均车速 Vs",
+        "Wardrop 换算关系",
+        "地点车速"
+      ],
+      "pitfalls": [
+        "Vt 恒大于等于 Vs（除非所有车速完全相同），这是辨析与选择题的常考点",
+        "Vt 不能直接代入 Q = K·V：该式中的 V 必须是空间（区间）平均车速"
+      ],
+      "examAngle": "必考辨析：Vt 与 Vs 谁大、为什么、怎么换算",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-015",
+      "subjectId": "traffic-engineering",
+      "chapter": "4.4",
+      "term": "区间平均车速 Vs",
+      "en": "space mean speed",
+      "definition": "某瞬间路段上全部车辆车速的平均值，等价于各车通过单位长度路段行程时间的调和平均，故又称行程车速。",
+      "formulaId": "traffic-engineering-formula-005",
+      "symbols": [
+        "Vs"
+      ],
+      "unit": "km/h",
+      "relations": [
+        "时间平均车速 Vt",
+        "行程车速",
+        "交通密度",
+        "Q = K·V"
+      ],
+      "pitfalls": [
+        "Vs 是调和平均性质，不能对行程时间取平均后再直接开倒数得速度（必须先总里程/总时间）",
+        "Q = K·V 中的 V 必须用 Vs，用 Vt 会高估密度、低估流量"
+      ],
+      "examAngle": "给各车行程时间求 Vs，再与 Vt 比较并用 Wardrop 式校核",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-016",
+      "subjectId": "traffic-engineering",
+      "chapter": "4.4",
+      "term": "第 85 百分位车速",
+      "en": "85th percentile speed",
+      "definition": "地点车速累计频率分布曲线上对应于 85% 累计频率的车速值，表示有 85% 的车辆行驶速度低于该值，是确定限速值的主要依据。",
+      "formulaId": null,
+      "symbols": [
+        "v85"
+      ],
+      "unit": "km/h",
+      "relations": [
+        "第 15 百分位车速",
+        "地点车速",
+        "限速管理"
+      ],
+      "pitfalls": [
+        "85% 位车速用于限速上限，15% 位车速用于限速下限（或最低限速），两者不要对调",
+        "百分位车速要从累计频率曲线内插读取，不是简单地把样本排序取第 85% 个"
+      ],
+      "examAngle": "给分组频数表作累计频率曲线，读 v85 与 v15",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": "教材中 v15 的具体用途（最低限速 / 限速下限的取值规则）请核对原书"
+    },
+    {
+      "id": "traffic-engineering-concept-017",
+      "subjectId": "traffic-engineering",
+      "chapter": "4.5",
+      "term": "车头时距",
+      "en": "headway / time headway",
+      "definition": "同一车道上前后相邻两车的车头通过同一断面的时间差，是从时间维度度量车流密集程度的指标。",
+      "formulaId": "traffic-engineering-formula-002",
+      "symbols": [
+        "ht",
+        "h"
+      ],
+      "unit": "s",
+      "relations": [
+        "车头间距",
+        "交通量",
+        "负指数分布",
+        "饱和流率"
+      ],
+      "pitfalls": [
+        "ht = 3600/Q 只对单向单车道成立，用双向总量会得到一半的错误结果",
+        "平均车头时距是期望值，实际时距是随机变量，求概率必须用分布（负指数/移位负指数）"
+      ],
+      "examAngle": "Q、K、V、ht、hs 五个量两两互换，全书最高频计算题型",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-018",
+      "subjectId": "traffic-engineering",
+      "chapter": "4.5",
+      "term": "车头间距",
+      "en": "space headway / spacing",
+      "definition": "同一车道上前后相邻两车车头之间的空间距离，是从空间维度度量车流密集程度的指标。",
+      "formulaId": "traffic-engineering-formula-003",
+      "symbols": [
+        "hs"
+      ],
+      "unit": "m",
+      "relations": [
+        "车头时距",
+        "交通密度",
+        "阻塞密度"
+      ],
+      "pitfalls": [
+        "hs = V·ht/3.6 中的 3.6 是 km/h→m/s 的换算，漏掉会得到 3.6 倍错误",
+        "车头间距指车头到车头，不含车身长度；若给的是'净间距'须加车长"
+      ],
+      "examAngle": "与 ht、K、Q、V 联合换算；由阻塞状态的间距反推 Kj",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-019",
+      "subjectId": "traffic-engineering",
+      "chapter": "4.5",
+      "term": "交通密度",
+      "en": "traffic density",
+      "definition": "某一瞬间单位长度路段单向（单车道）上存在的车辆数，是从空间维度最直观反映拥挤程度的指标。",
+      "formulaId": "traffic-engineering-formula-004",
+      "symbols": [
+        "K"
+      ],
+      "unit": "veh/km",
+      "relations": [
+        "车头间距",
+        "阻塞密度",
+        "临界密度",
+        "占有率"
+      ],
+      "pitfalls": [
+        "密度是瞬时量，不能由交通量直接除速度之外的方式估计；用 Vt 会得到偏小的密度",
+        "多车道时须明确是'每车道密度'还是'路段总密度/K 条车道'"
+      ],
+      "examAngle": "密度是高速公路与快速路 LOS 判定的主指标，必考",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/traffic-engineering/flow-three-parameters.svg",
+        "caption": "交通流三参数关系（Greenshields 线性模型，自绘示意）",
+        "readPoints": [
+          "Q = K · V，三个参数知其二可求第三个",
+          "Q–K 曲线的峰值即通行能力，出现在 K = k_j / 2 处",
+          "同一个流量对应两个密度状态：左支自由流、右支拥挤流"
+        ]
+      }
+    },
+    {
+      "id": "traffic-engineering-concept-020",
+      "subjectId": "traffic-engineering",
+      "chapter": "4.5",
+      "term": "阻塞密度",
+      "en": "jam density",
+      "definition": "车流完全停滞（V→0）时的极限密度，等于 1000 除以阻塞状态下的最小平均车头间距（含车身长度）。",
+      "formulaId": "traffic-engineering-formula-013",
+      "symbols": [
+        "Kj"
+      ],
+      "unit": "veh/km",
+      "relations": [
+        "临界密度",
+        "自由流速度",
+        "停车波",
+        "启动波"
+      ],
+      "pitfalls": [
+        "Kj 常按标准车长加安全间距估算（典型量级 110~150 veh/km），取值须按教材",
+        "阻塞密度是模型参数而非实测常态值，交通波计算中大量使用它"
+      ],
+      "examAngle": "由 Kj 与 Vf 求 Qmax；由 Kj 求停车波/启动波波速",
+      "confidence": "medium",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": "教材给出的阻塞密度典型取值（veh/km/ln）请核对原书",
+      "figure": {
+        "src": "/knowledge/assets/traffic-engineering/flow-three-parameters.svg",
+        "caption": "交通流三参数关系（Greenshields 线性模型，自绘示意）",
+        "readPoints": [
+          "Q = K · V，三个参数知其二可求第三个",
+          "Q–K 曲线的峰值即通行能力，出现在 K = k_j / 2 处",
+          "同一个流量对应两个密度状态：左支自由流、右支拥挤流"
+        ]
+      }
+    },
+    {
+      "id": "traffic-engineering-concept-021",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.1",
+      "term": "交通流三参数基本关系",
+      "en": "fundamental relation of traffic flow",
+      "definition": "流量 Q、密度 K、区间平均车速 Vs 之间恒有 Q = K·Vs，这是定义性关系，不依赖任何模型假设。",
+      "formulaId": "traffic-engineering-formula-001",
+      "symbols": [
+        "Q",
+        "K",
+        "V"
+      ],
+      "unit": "veh/h; veh/km; km/h",
+      "relations": [
+        "速度—密度模型",
+        "流量—密度曲线",
+        "流量—速度曲线"
+      ],
+      "pitfalls": [
+        "式中的 V 必须是区间平均车速，用时间平均车速会破坏恒等关系",
+        "Q-K、Q-V、V-K 三条曲线是同一关系的不同投影，最大值点不是同一个点"
+      ],
+      "examAngle": "已知 Q 与 V 求 K；再结合 ht、hs 完成五参数互换",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/traffic-engineering/flow-three-parameters.svg",
+        "caption": "交通流三参数关系（Greenshields 线性模型，自绘示意）",
+        "readPoints": [
+          "Q = K · V，三个参数知其二可求第三个",
+          "Q–K 曲线的峰值即通行能力，出现在 K = k_j / 2 处",
+          "同一个流量对应两个密度状态：左支自由流、右支拥挤流"
+        ]
+      }
+    },
+    {
+      "id": "traffic-engineering-concept-022",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.1",
+      "term": "临界密度（最佳密度）",
+      "en": "critical / optimum density",
+      "definition": "流量达到最大值（即通行能力）时所对应的密度；在格林希尔茨线性模型中等于阻塞密度的一半。",
+      "formulaId": "traffic-engineering-formula-016",
+      "symbols": [
+        "Km"
+      ],
+      "unit": "veh/km",
+      "relations": [
+        "阻塞密度",
+        "临界速度",
+        "最大流量",
+        "服务水平"
+      ],
+      "pitfalls": [
+        "Km = Kj/2 只在 Greenshields 线性模型下成立；Greenberg 模型中为 Kj/e",
+        "'最佳密度'与'服务水平对应的设计密度'不是同一个概念"
+      ],
+      "examAngle": "推导题：对 Q-K 关系求导令其为零，解出 Km 与 Vm",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-023",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.1",
+      "term": "临界速度（最佳速度）",
+      "en": "critical / optimum speed",
+      "definition": "流量达到最大值时所对应的区间平均车速；在格林希尔茨线性模型中等于自由流速度的一半。",
+      "formulaId": "traffic-engineering-formula-016",
+      "symbols": [
+        "Vm"
+      ],
+      "unit": "km/h",
+      "relations": [
+        "自由流速度",
+        "临界密度",
+        "最大流量"
+      ],
+      "pitfalls": [
+        "Vm = Vf/2 仅对线性模型成立；Greenberg 模型中 Vm 是独立参数且等于 Q 极大处的车速",
+        "不要与'第 85 百分位车速''设计速度'混为一谈"
+      ],
+      "examAngle": "常与 Km、Qmax 一起构成三参数极值组，一次算完",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-024",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.2",
+      "term": "自由流速度",
+      "en": "free-flow speed",
+      "definition": "密度趋近于零时车辆能够达到的畅行速度，是速度—密度模型的边界参数，受道路几何、限速与驾驶行为共同影响。",
+      "formulaId": "traffic-engineering-formula-013",
+      "symbols": [
+        "Vf"
+      ],
+      "unit": "km/h",
+      "relations": [
+        "阻塞密度",
+        "Greenshields 模型",
+        "Underwood 模型",
+        "设计速度"
+      ],
+      "pitfalls": [
+        "自由流速度不等于设计速度，也不等于限速值；它通常由实测低流量车速标定",
+        "Greenberg 对数模型没有自由流速度参数（K→0 时 V→∞），这是它的理论缺陷"
+      ],
+      "examAngle": "三模型对比简答：各有几个参数、边界行为、Qmax 表达式",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-025",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.2",
+      "term": "格林希尔茨模型",
+      "en": "Greenshields model",
+      "definition": "假设区间平均车速与密度呈线性关系的速度—密度模型：V = Vf·(1 − K/Kj)，是最经典、考题中出现频率最高的模型。",
+      "formulaId": "traffic-engineering-formula-013",
+      "symbols": [
+        "V",
+        "Vf",
+        "K",
+        "Kj"
+      ],
+      "unit": "km/h; veh/km",
+      "relations": [
+        "格林伯格模型",
+        "安德伍德模型",
+        "最大流量",
+        "临界密度"
+      ],
+      "pitfalls": [
+        "Qmax = Vf·Kj/4，'除以 4'源于抛物线顶点，常与 Greenberg 的'/e'混淆",
+        "线性模型对极低密度与极高密度的拟合都较差，但它能给出解析的极值点"
+      ],
+      "examAngle": "给 Vf 与 Kj 求 Qmax、Km、Vm；或给两组观测反推 Vf、Kj（必考）",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-026",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.2",
+      "term": "格林伯格模型",
+      "en": "Greenberg model",
+      "definition": "假设车速与密度呈对数关系的速度—密度模型：V = Vm·ln(Kj/K)，适用于密度较大的拥挤流状态。",
+      "formulaId": "traffic-engineering-formula-017",
+      "symbols": [
+        "V",
+        "Vm",
+        "Kj",
+        "K"
+      ],
+      "unit": "km/h; veh/km",
+      "relations": [
+        "格林希尔茨模型",
+        "安德伍德模型",
+        "最大流量"
+      ],
+      "pitfalls": [
+        "K→0 时 V→∞，模型在自由流段不可用；只适合中高密度区间",
+        "Qmax = Vm·Kj/e，临界密度为 Kj/e 而不是 Kj/2"
+      ],
+      "examAngle": "三模型适用区间对比；给 Vm、Kj 求 Qmax 与 Km",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-027",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.2",
+      "term": "安德伍德模型",
+      "en": "Underwood model",
+      "definition": "假设车速与密度呈指数关系的速度—密度模型：V = Vf·exp(−K/Km)，适用于密度较小的自由流状态。",
+      "formulaId": "traffic-engineering-formula-019",
+      "symbols": [
+        "V",
+        "Vf",
+        "Km",
+        "K"
+      ],
+      "unit": "km/h; veh/km",
+      "relations": [
+        "格林希尔茨模型",
+        "格林伯格模型",
+        "最大流量"
+      ],
+      "pitfalls": [
+        "K→∞ 时 V→0 但不出现负速度，这是它优于线性模型之处；然而它无法表示 V=0 的完全阻塞",
+        "Qmax = Vf·Km/e，此处 Km 是模型参数（恰好也是最大流量处的密度）"
+      ],
+      "examAngle": "三模型对比表：模型式 / 参数数 / 适用密度区间 / Qmax / Km",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-028",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.3",
+      "term": "泊松分布",
+      "en": "Poisson distribution",
+      "definition": "描述单位计数间隔内到达车辆数的离散型分布，P(k) = mᵏ·e^(−m)/k!，其中 m 为该间隔内的平均到达车辆数。",
+      "formulaId": "traffic-engineering-formula-021",
+      "symbols": [
+        "P(k)",
+        "m",
+        "k"
+      ],
+      "unit": "—",
+      "relations": [
+        "负指数分布",
+        "二项分布",
+        "负二项分布",
+        "χ² 拟合检验"
+      ],
+      "pitfalls": [
+        "只适用于车流稀疏、车辆间相互独立、无信号影响的情况；拥挤车流与信号下游车流不适用",
+        "m 必须用同一时间单位算：m = Q·t/3600（t 以秒计）",
+        "泊松的方差=均值，若观测方差明显大于均值应改用负二项分布"
+      ],
+      "examAngle": "给流量与计数间隔，求到达 k 辆车的概率 / 至少 k 辆的概率",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-029",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.3",
+      "term": "负指数分布",
+      "en": "negative exponential distribution",
+      "definition": "描述车头时距的连续型分布，P(h ≥ t) = exp(−Q·t/3600)，与泊松到达过程等价：计数服从泊松则时距服从负指数。",
+      "formulaId": "traffic-engineering-formula-023",
+      "symbols": [
+        "h",
+        "t",
+        "Q"
+      ],
+      "unit": "s",
+      "relations": [
+        "泊松分布",
+        "移位负指数分布",
+        "可接受间隙"
+      ],
+      "pitfalls": [
+        "负指数允许任意小的车头时距（含 0），与实际情况不符，这是移位负指数存在的理由",
+        "单位必须用秒；Q 用单向单车道流量"
+      ],
+      "examAngle": "求间隙大于等于某阈值的概率；行人过街可穿越间隙数",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-030",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.3",
+      "term": "移位负指数分布",
+      "en": "shifted negative exponential distribution",
+      "definition": "引入最小车头时距 τ 的车头时距分布：P(h ≥ t) = exp[−Q·(t − τ)/3600]（t ≥ τ），保证车头时距不小于安全最小值。",
+      "formulaId": "traffic-engineering-formula-024",
+      "symbols": [
+        "h",
+        "t",
+        "tau",
+        "Q"
+      ],
+      "unit": "s",
+      "relations": [
+        "负指数分布",
+        "最小车头时距",
+        "可接受间隙"
+      ],
+      "pitfalls": [
+        "t < τ 时概率恒为 1，不是代入公式算出大于 1 的数",
+        "τ 的典型量级 1~1.5 s，取值必须按教材；τ 增大使大间隙概率上升"
+      ],
+      "examAngle": "与负指数结果对比，说明移位后同一阈值的概率变大",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": "教材中 τ 的推荐取值请核对原书"
+    },
+    {
+      "id": "traffic-engineering-concept-031",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.3",
+      "term": "χ² 拟合检验",
+      "en": "chi-square goodness-of-fit test",
+      "definition": "用统计量 χ² = Σ(观测频数 − 理论频数)²/理论频数 检验实测分布是否服从假定的理论分布（泊松、负指数等）的方法。",
+      "formulaId": null,
+      "symbols": [
+        "chi2",
+        "f"
+      ],
+      "unit": "—",
+      "relations": [
+        "泊松分布",
+        "负指数分布",
+        "显著性水平",
+        "自由度"
+      ],
+      "pitfalls": [
+        "理论频数过小的组（通常 < 5）必须合并，否则 χ² 统计量失真",
+        "自由度 = 组数 − 约束数 − 1，用样本均值估计 m 要多减 1"
+      ],
+      "examAngle": "给观测频数表检验是否服从泊松分布，第五章典型计算题",
+      "confidence": "medium",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": "分组规则、自由度计算与临界值表请按教材核对"
+    },
+    {
+      "id": "traffic-engineering-concept-032",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.4",
+      "term": "M/M/1 排队系统",
+      "en": "M/M/1 queueing system",
+      "definition": "到达为泊松过程（M）、服务时间为负指数分布（M）、单服务台（1）的排队系统；交通中常用于收费站、单点进口道、匝道控制等场景。",
+      "formulaId": "traffic-engineering-formula-026",
+      "symbols": [
+        "L",
+        "Lq",
+        "W",
+        "Wq",
+        "rho"
+      ],
+      "unit": "veh; s",
+      "relations": [
+        "交通强度 ρ",
+        "Little 定律",
+        "M/M/N 系统",
+        "Kendall 记号"
+      ],
+      "pitfalls": [
+        "ρ 必须严格小于 1，ρ→1 时 Lq、Wq 发散，此时模型结论不可用",
+        "服务率 μ 与到达率 λ 必须用同一时间单位（veh/h 或 veh/s）",
+        "L 含正在接受服务的车辆，Lq 不含；W 与 Wq 同理"
+      ],
+      "examAngle": "收费站/进口道全套指标：ρ、L、Lq、W、Wq",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-033",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.4",
+      "term": "系统利用率（交通强度）",
+      "en": "utilization factor / traffic intensity",
+      "definition": "到达率与服务率之比 ρ = λ/μ，表示服务台被占用的时间比例，也是判断排队系统是否稳定的核心指标。",
+      "formulaId": "traffic-engineering-formula-025",
+      "symbols": [
+        "rho",
+        "lambda",
+        "mu"
+      ],
+      "unit": "—",
+      "relations": [
+        "M/M/1",
+        "饱和度",
+        "通行能力"
+      ],
+      "pitfalls": [
+        "ρ 与交叉口的饱和度 x 形似而义不同：ρ 用于连续服务系统，x 用于信号周期服务系统",
+        "ρ ≥ 1 时排队无限增长，公式给的'负排队长度'是典型的算错信号"
+      ],
+      "examAngle": "先算 ρ 再判断能否套用 M/M/1 公式",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-034",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.4",
+      "term": "Little 定律",
+      "en": "Little's law",
+      "definition": "稳态排队系统中平均系统车辆数等于平均到达率与平均逗留时间之积：L = λ·W（对排队部分有 Lq = λ·Wq）。",
+      "formulaId": "traffic-engineering-formula-030",
+      "symbols": [
+        "L",
+        "lambda",
+        "W"
+      ],
+      "unit": "veh; veh/h; h",
+      "relations": [
+        "M/M/1",
+        "平均逗留时间",
+        "平均排队长度"
+      ],
+      "pitfalls": [
+        "λ 与 W 的时间单位必须一致（veh/h × h = veh）",
+        "Little 定律对任意到达与服务分布都成立，不限于 M/M/1"
+      ],
+      "examAngle": "用作验算工具：算出 L 与 W 后用 Little 交叉校核",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-035",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.5",
+      "term": "跟驰三要素",
+      "en": "three properties of car following",
+      "definition": "跟驰状态具备制约性（前车速度制约后车）、延迟性（后车反应延迟于前车刺激）、传递性（状态沿车队向后传递）三个基本特性。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "线性跟驰模型",
+        "反应时间",
+        "车队稳定性"
+      ],
+      "pitfalls": [
+        "三要素是名词解释/简答的必背条目，漏一条即失分",
+        "传递性导致扰动沿车队放大，是'幽灵拥堵'的成因"
+      ],
+      "examAngle": "简答题：简述跟驰理论的三要素及其含义",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-036",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.5",
+      "term": "线性跟驰模型",
+      "en": "linear car-following model",
+      "definition": "假设后车在延迟 T 后的加速度与前后车相对速度成正比的跟驰模型：a(t + T) = C·[v前(t) − v后(t)]，C 为灵敏度系数。",
+      "formulaId": "traffic-engineering-formula-034",
+      "symbols": [
+        "a",
+        "C",
+        "T",
+        "v"
+      ],
+      "unit": "m/s²; 1/s; s; m/s",
+      "relations": [
+        "跟驰三要素",
+        "灵敏度",
+        "反应时间",
+        "局部稳定性"
+      ],
+      "pitfalls": [
+        "T 是驾驶员反应延迟，不是时间 t；模型里出现的是 t+T",
+        "刺激是相对速度而不是相对距离，这是线性（而非非线性）跟驰模型的界定"
+      ],
+      "examAngle": "给 C 与相对速度求后车加速度；简述三要素",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-037",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.6",
+      "term": "交通波",
+      "en": "traffic wave",
+      "definition": "把车流视为连续介质时，两种不同密度—流量状态之间的分界面在道路上的移动，其波速由 uw = (Q2 − Q1)/(K2 − K1) 给出。",
+      "formulaId": "traffic-engineering-formula-035",
+      "symbols": [
+        "uw",
+        "Q1",
+        "Q2",
+        "K1",
+        "K2"
+      ],
+      "unit": "km/h",
+      "relations": [
+        "停车波",
+        "启动波",
+        "集散波",
+        "阻塞密度"
+      ],
+      "pitfalls": [
+        "波速符号决定传播方向：负值表示波向上游（逆车流方向）传播",
+        "波速不等于车速；车流可以向前而波向后"
+      ],
+      "examAngle": "给两状态的 Q、K 求波速并判断传播方向",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-038",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.6",
+      "term": "停车波",
+      "en": "stopping wave",
+      "definition": "车流由行驶状态转入阻塞（K = Kj、Q = 0）状态时形成的界面波，波速 uw = −Q1/(Kj − K1)，为负值即向上游传播。",
+      "formulaId": "traffic-engineering-formula-036",
+      "symbols": [
+        "uw_stop",
+        "Q1",
+        "K1",
+        "Kj"
+      ],
+      "unit": "km/h",
+      "relations": [
+        "交通波",
+        "阻塞密度",
+        "红灯排队长度"
+      ],
+      "pitfalls": [
+        "排队长度 = |uw| × 时长，务必把 km/h 与秒统一：L(km) = |uw| × T(s)/3600",
+        "排队车辆数既可用 (Kj − K1)·L 算，也可用到达率×时长算，两者应一致"
+      ],
+      "examAngle": "红灯期间排队积累长度与排队车辆数",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": "排队长度公式的时间单位换算请以教材写法为准（本卡按 km/h × s / 3600 处理）"
+    },
+    {
+      "id": "traffic-engineering-concept-039",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.6",
+      "term": "启动波",
+      "en": "starting wave",
+      "definition": "车队由阻塞状态（K = Kj）转入放行状态（Q2、K2）时形成的界面波，波速 uw = Q2/(K2 − Kj)，因 K2 < Kj 而为负值，即向上游传播。",
+      "formulaId": "traffic-engineering-formula-037",
+      "symbols": [
+        "uw_start",
+        "Q2",
+        "K2",
+        "Kj"
+      ],
+      "unit": "km/h",
+      "relations": [
+        "交通波",
+        "停车波",
+        "车队消散时间"
+      ],
+      "pitfalls": [
+        "分母 K2 − Kj 为负，忘记负号会把传播方向判反",
+        "车队消散时间应按 N/(离去率 − 到达率) 计算，不要与波速传播时间混淆"
+      ],
+      "examAngle": "求启动波速；求排队车队的消散时间",
+      "confidence": "medium",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": "启动波公式的符号约定与教材是否一致请核对原书"
+    },
+    {
+      "id": "traffic-engineering-concept-040",
+      "subjectId": "traffic-engineering",
+      "chapter": "5.6",
+      "term": "集散波",
+      "en": "collecting / dispersing wave",
+      "definition": "车流在密度发生变化处形成的界面波的总称：车流由低密度进入高密度形成集散（压缩）波，反之形成消散（稀疏）波。",
+      "formulaId": "traffic-engineering-formula-035",
+      "symbols": [
+        "uw"
+      ],
+      "unit": "km/h",
+      "relations": [
+        "交通波",
+        "停车波",
+        "启动波",
+        "瓶颈路段"
+      ],
+      "pitfalls": [
+        "集散波与停车波/启动波是一般与特殊的关系，后两者都可由一般波速式推出",
+        "瓶颈上游形成的集散波常是排队成因，分析时先分清状态 1 与状态 2"
+      ],
+      "examAngle": "简答：集散波的形成机理及其在瓶颈分析中的应用",
+      "confidence": "medium",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": "教材对'集散波'与'集结波/消散波'的用词是否统一请核对原书"
+    },
+    {
+      "id": "traffic-engineering-concept-041",
+      "subjectId": "traffic-engineering",
+      "chapter": "6.1",
+      "term": "基本通行能力",
+      "en": "basic capacity",
+      "definition": "在理想的道路、交通、控制与环境条件下，一条车道（或车道断面）在单位时间内能够通过的最大车辆数，是通行能力体系的上限值。",
+      "formulaId": "traffic-engineering-formula-043",
+      "symbols": [
+        "C0",
+        "Cb"
+      ],
+      "unit": "pcu/h/ln",
+      "relations": [
+        "可能通行能力",
+        "设计通行能力",
+        "理想条件"
+      ],
+      "pitfalls": [
+        "基本通行能力是理论上限，不能直接作为设计值使用",
+        "理想条件的定义（车道宽、净空、平原、全小客车、熟悉驾驶员）必须背下，简答题常考"
+      ],
+      "examAngle": "名词解释 + 三级通行能力关系辨析（必考）",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "教材给出的每车道基本通行能力数值（常见 2000~2300 pcu/h/ln 量级）请核对原书"
+    },
+    {
+      "id": "traffic-engineering-concept-042",
+      "subjectId": "traffic-engineering",
+      "chapter": "6.1",
+      "term": "可能通行能力",
+      "en": "possible capacity",
+      "definition": "在基本通行能力基础上，乘上实际道路与交通条件的各项修正系数（车道宽/净空 fw、重型车 fHV、驾驶员群体 fp 等）后得到的通行能力。",
+      "formulaId": "traffic-engineering-formula-039",
+      "symbols": [
+        "C",
+        "fw",
+        "fHV",
+        "fp"
+      ],
+      "unit": "pcu/h/ln",
+      "relations": [
+        "基本通行能力",
+        "设计通行能力",
+        "修正系数"
+      ],
+      "pitfalls": [
+        "修正系数连乘时不要重复计入同一因素（如车道宽与净空合并为一个 fw）",
+        "不同规范/版本的系数体系不通用，HCM 与国内规范不能混用"
+      ],
+      "examAngle": "给各项修正系数求可能通行能力",
+      "confidence": "medium",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "修正系数的具体项目、个数与取值表请按现行规范与教材核对"
+    },
+    {
+      "id": "traffic-engineering-concept-043",
+      "subjectId": "traffic-engineering",
+      "chapter": "6.1",
+      "term": "设计通行能力",
+      "en": "design capacity",
+      "definition": "在可能通行能力基础上再乘以与设计服务水平相对应的负荷度（V/C）后得到的通行能力，即实际用于确定车道数与几何尺寸的控制值。",
+      "formulaId": "traffic-engineering-formula-043",
+      "symbols": [
+        "Cdesign",
+        "VoverC"
+      ],
+      "unit": "pcu/h/ln",
+      "relations": [
+        "基本通行能力",
+        "可能通行能力",
+        "服务水平",
+        "DHV"
+      ],
+      "pitfalls": [
+        "设计通行能力 < 可能通行能力 < 基本通行能力，排序记反是典型失分点",
+        "设计 V/C 的取值（如 0.85）随道路等级与地区而变，必须按课本/规范"
+      ],
+      "examAngle": "三级通行能力连乘计算 + 排序辨析",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "设计 V/C 的推荐取值请核对原书与现行规范"
+    },
+    {
+      "id": "traffic-engineering-concept-044",
+      "subjectId": "traffic-engineering",
+      "chapter": "6.1",
+      "term": "服务交通量",
+      "en": "service volume",
+      "definition": "在给定服务水平下，道路设施在单位时间内所能容纳的交通量；不同服务水平等级对应不同的服务交通量。",
+      "formulaId": "traffic-engineering-formula-042",
+      "symbols": [
+        "vs"
+      ],
+      "unit": "pcu/h/ln",
+      "relations": [
+        "通行能力",
+        "服务水平",
+        "V/C 比"
+      ],
+      "pitfalls": [
+        "服务交通量随服务水平等级变化，LOS E 级的服务交通量接近通行能力",
+        "不要把服务交通量与'实际交通量'混为一谈"
+      ],
+      "examAngle": "辨析：服务交通量 vs 通行能力 vs 设计通行能力",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-045",
+      "subjectId": "traffic-engineering",
+      "chapter": "6.2",
+      "term": "服务水平 LOS",
+      "en": "level of service",
+      "definition": "衡量道路使用者对交通运行质量主观感受的分级指标，分为 A~F 六级：A 为自由流，E 接近通行能力，F 为强制流或过饱和。",
+      "formulaId": "traffic-engineering-formula-042",
+      "symbols": [
+        "LOS"
+      ],
+      "unit": "—",
+      "relations": [
+        "V/C 比",
+        "密度",
+        "延误",
+        "服务交通量"
+      ],
+      "pitfalls": [
+        "不同设施类型的 LOS 评价指标不同：高速公路基本段用密度，信号交叉口用控制延误，交织/匝道用密度",
+        "阈值随 HCM 版本与国内规范而异，绝不能凭记忆套用某个固定数表"
+      ],
+      "examAngle": "给 V/C 或密度判 LOS 等级；说明公路与城市道路指标差异",
+      "confidence": "medium",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "A~F 每级对应的密度/V-C/延误阈值强依赖版本，必须按教材与现行规范核对；本卡未记录任何阈值表"
+    },
+    {
+      "id": "traffic-engineering-concept-046",
+      "subjectId": "traffic-engineering",
+      "chapter": "6.2",
+      "term": "V/C 比（负荷度）",
+      "en": "volume-to-capacity ratio",
+      "definition": "实际（或预测）交通量与通行能力之比 x = v/C，是评价设施拥挤程度与服务水平的核心无量纲指标。",
+      "formulaId": "traffic-engineering-formula-042",
+      "symbols": [
+        "x",
+        "v",
+        "C"
+      ],
+      "unit": "—",
+      "relations": [
+        "服务水平",
+        "设计通行能力",
+        "饱和度"
+      ],
+      "pitfalls": [
+        "分子必须是当量小客车高峰流率（已除 PHF），不是小时交通量",
+        "v/C > 1 表示过饱和，此时延误公式（含 1−x 分母）失效"
+      ],
+      "examAngle": "与信号交叉口饱和度 x = q/(S·λ) 是同名不同式的两个量，辨析常考",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-047",
+      "subjectId": "traffic-engineering",
+      "chapter": "6.3",
+      "term": "15 min 高峰流率",
+      "en": "peak 15-minute flow rate",
+      "definition": "把高峰小时交通量折算为等效小时流率：vp = V/(PHF·N·fHV·fp)，是通行能力分析中与通行能力比较的标准量。",
+      "formulaId": "traffic-engineering-formula-041",
+      "symbols": [
+        "vp",
+        "PHF",
+        "N",
+        "fHV",
+        "fp"
+      ],
+      "unit": "pcu/h/ln",
+      "relations": [
+        "PHF",
+        "重型车修正系数",
+        "服务水平",
+        "V/C 比"
+      ],
+      "pitfalls": [
+        "漏除 PHF 会低估流率、误判服务水平；漏除车道数 N 会放大 N 倍",
+        "车型折算是 fHV 而不是'E'本身，fHV = 1/[1 + ΣPi(Ei − 1)]"
+      ],
+      "examAngle": "高速公路基本段分析的标准流程：V→vp→V/C（或密度）→LOS",
+      "confidence": "medium",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "该式的分母构成（是否含 fp、是否含车道数）在不同版本 HCM 与国内规范中存在差异，请核对"
+    },
+    {
+      "id": "traffic-engineering-concept-048",
+      "subjectId": "traffic-engineering",
+      "chapter": "6.3",
+      "term": "重型车修正系数",
+      "en": "heavy vehicle adjustment factor",
+      "definition": "把混合车流中的大中型车按当量小客车折算后，对通行能力（或对当量流率）进行修正的系数：fHV = 1/[1 + PT(ET − 1) + PR(ER − 1)]。",
+      "formulaId": "traffic-engineering-formula-040",
+      "symbols": [
+        "fHV",
+        "PT",
+        "ET",
+        "PR",
+        "ER"
+      ],
+      "unit": "—",
+      "relations": [
+        "当量小客车",
+        "车辆折算系数",
+        "地形（平原/丘陵/山地）"
+      ],
+      "pitfalls": [
+        "ET、ER 随地形（平原/丘陵/山岭）取值不同，不能一律取平原值",
+        "PT、PR 是比例（小数），不是百分数；代入 15 而不是 0.15 是最常见错误"
+      ],
+      "examAngle": "给车型比例与地形求 fHV，再连乘求可能通行能力",
+      "confidence": "medium",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "ET/ER 的取值表（按车型与地形）请核对教材与现行规范；本卡未记录任何数值"
+    },
+    {
+      "id": "traffic-engineering-concept-049",
+      "subjectId": "traffic-engineering",
+      "chapter": "6.4",
+      "term": "交织区",
+      "en": "weaving segment",
+      "definition": "两股或多股车流在不借助交通信号控制的条件下，沿同一方向在有限长度路段内交叉运行的区域，如匝道—匝道、匝道—主线衔接段。",
+      "formulaId": "traffic-engineering-formula-044",
+      "symbols": [
+        "Cw",
+        "fiw",
+        "VR",
+        "Lw"
+      ],
+      "unit": "pcu/h",
+      "relations": [
+        "交织比",
+        "交织长度",
+        "合流区",
+        "分流区"
+      ],
+      "pitfalls": [
+        "交织区通行能力随交织比增大、交织长度减小而降低，方向性判断易错",
+        "交织构型（A/B/C 型）分类与能力取值强依赖规范版本"
+      ],
+      "examAngle": "简答：交织区的定义与影响通行能力的主要因素；定量取值以规范为准",
+      "confidence": "low",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "交织区构型分类、交织比与长度的能力修正表请核对现行规范；本卡只作定性描述"
+    },
+    {
+      "id": "traffic-engineering-concept-050",
+      "subjectId": "traffic-engineering",
+      "chapter": "6.5",
+      "term": "饱和流率",
+      "en": "saturation flow rate",
+      "definition": "交叉口进口道在持续绿灯、车流连续通过停车线条件下的当量小客车流率，是信号配时与通行能力计算的基准量。",
+      "formulaId": "traffic-engineering-formula-046",
+      "symbols": [
+        "S",
+        "S0",
+        "fW",
+        "fg",
+        "fT",
+        "fb"
+      ],
+      "unit": "pcu/h",
+      "relations": [
+        "信号配时",
+        "通行能力",
+        "起动损失",
+        "车头时距"
+      ],
+      "pitfalls": [
+        "饱和流率除以 3600 得到饱和车头时距（典型量级约 2 s），不是平均车头时距",
+        "S 要用实测或按修正系数连乘得到，直接取整数默认值会引入明显误差"
+      ],
+      "examAngle": "给各修正系数求 S；或由饱和车头时距反求 S",
+      "confidence": "medium",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "基本饱和流率 S0 的默认值与各修正系数取值请按教材与现行规范核对"
+    },
+    {
+      "id": "traffic-engineering-concept-051",
+      "subjectId": "traffic-engineering",
+      "chapter": "7.1",
+      "term": "OD 矩阵",
+      "en": "origin-destination matrix",
+      "definition": "以交通小区为行（发生/起点 O）与列（吸引/终点 D）组成的出行量矩阵，是四阶段法全部后续模型的数据基础。",
+      "formulaId": null,
+      "symbols": [
+        "Tij"
+      ],
+      "unit": "人次/h 或 车次/h",
+      "relations": [
+        "交通小区",
+        "期望线",
+        "核查线",
+        "出行生成"
+      ],
+      "pitfalls": [
+        "行和 = 发生量、列和 = 吸引量，做平衡检查是最基本的数据清洗步骤",
+        "区内出行（对角线元素）常被忽略，但在总量核算中必须计入"
+      ],
+      "examAngle": "给 OD 表求发生量、吸引量与总量；检查行列平衡",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-052",
+      "subjectId": "traffic-engineering",
+      "chapter": "7.2",
+      "term": "发生量与吸引量",
+      "en": "trip production and attraction",
+      "definition": "发生量 Pi 是以小区 i 为出行起点（常以家为基）的出行数，吸引量 Aj 是以小区 j 为出行终点的出行数，构成第一阶段的输出。",
+      "formulaId": null,
+      "symbols": [
+        "Pi",
+        "Aj"
+      ],
+      "unit": "人次/d",
+      "relations": [
+        "原单位法",
+        "交叉分类法",
+        "回归分析法",
+        "OD 矩阵"
+      ],
+      "pitfalls": [
+        "发生量与吸引量在全区总量上必须平衡，不平衡时要做调整（通常调吸引量）",
+        "'生成量'有时指发生+吸引的合计，注意教材口径"
+      ],
+      "examAngle": "给人口/就业岗位与生成率求 Pi、Aj，并校核平衡",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-053",
+      "subjectId": "traffic-engineering",
+      "chapter": "7.3",
+      "term": "重力模型",
+      "en": "gravity model",
+      "definition": "类比牛顿万有引力的出行分布模型：Tij 与小区 i 的发生量、小区 j 的吸引量成正比，与两小区间阻抗 f(tij) 成反比。",
+      "formulaId": "traffic-engineering-formula-060",
+      "symbols": [
+        "Tij",
+        "Pi",
+        "Aj",
+        "f(tij)"
+      ],
+      "unit": "人次",
+      "relations": [
+        "单约束模型",
+        "双约束模型",
+        "阻抗函数",
+        "增长率法"
+      ],
+      "pitfalls": [
+        "单约束只满足行（或列）一个方向的约束，双约束用 Ai、Bj 两组平衡因子交替迭代",
+        "阻抗函数放在分母（Tij ∝ 1/f）还是分子，不同教材写法不同，代入前先确认"
+      ],
+      "examAngle": "单/双约束重力模型手算；双约束按行按列交替迭代至收敛",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "教材中阻抗函数取幂函数、指数函数还是 Gamma 函数，及其在式中的位置，请核对原书"
+    },
+    {
+      "id": "traffic-engineering-concept-054",
+      "subjectId": "traffic-engineering",
+      "chapter": "7.3",
+      "term": "阻抗函数",
+      "en": "impedance / friction function",
+      "definition": "描述小区间出行阻力随出行时间（或费用、距离）增大而变化（通常衰减）的函数，是重力模型的核心标定对象。",
+      "formulaId": null,
+      "symbols": [
+        "f(tij)",
+        "tij"
+      ],
+      "unit": "—",
+      "relations": [
+        "重力模型",
+        "出行时间",
+        "广义费用"
+      ],
+      "pitfalls": [
+        "阻抗函数不等于出行时间本身，它是时间的函数（幂、指数、Gamma 三种常见形式）",
+        "参数（如幂次、衰减系数）必须用基年 OD 标定，不能照抄其他城市"
+      ],
+      "examAngle": "简答：三种阻抗函数形式及各自特点",
+      "confidence": "medium",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "教材给出的阻抗函数具体形式与参数取值请核对原书"
+    },
+    {
+      "id": "traffic-engineering-concept-055",
+      "subjectId": "traffic-engineering",
+      "chapter": "7.4",
+      "term": "Logit 模型",
+      "en": "logit model",
+      "definition": "基于随机效用最大化的方式划分模型，选择方式 i 的概率 Pi = exp(Vi)/Σexp(Vj)，V 为可观测效用（通常为时间、费用等的线性组合）。",
+      "formulaId": "traffic-engineering-formula-062",
+      "symbols": [
+        "Pi",
+        "Vi"
+      ],
+      "unit": "—",
+      "relations": [
+        "效用函数",
+        "IIA 性质",
+        "二元 Logit",
+        "转移曲线"
+      ],
+      "pitfalls": [
+        "效用值可加常数（所有方式同时加同一常数，概率不变），只看效用的差值",
+        "参数符号应为负（时间/费用越大效用越低），算出正的分担率趋势要检查符号"
+      ],
+      "examAngle": "给时间费用与效用参数求分担率；改善公交后重算做敏感性分析",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-056",
+      "subjectId": "traffic-engineering",
+      "chapter": "7.4",
+      "term": "IIA 性质",
+      "en": "independence of irrelevant alternatives",
+      "definition": "多项 Logit 的固有特性：任意两种方式的概率之比只取决于这两者的效用，与第三种方式是否存在或优劣无关。",
+      "formulaId": "traffic-engineering-formula-062",
+      "symbols": [
+        "Pi",
+        "Pj"
+      ],
+      "unit": "—",
+      "relations": [
+        "Logit 模型",
+        "红蓝巴士问题",
+        "Nested Logit"
+      ],
+      "pitfalls": [
+        "IIA 在存在高度相似方式（如公交与地铁、红蓝巴士）时会给出荒谬结果",
+        "这是 Logit 模型最主要的理论缺陷，也是改用 Nested Logit 的动机"
+      ],
+      "examAngle": "简答：什么是 IIA？举例说明它何时失效",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-057",
+      "subjectId": "traffic-engineering",
+      "chapter": "7.5",
+      "term": "Wardrop 第一原理（用户均衡 UE）",
+      "en": "user equilibrium",
+      "definition": "网络达到平衡时，所有被使用的路径其出行阻抗相等，且不大于任何未被使用路径的阻抗；每个用户都选择对自己最优的路径。",
+      "formulaId": "traffic-engineering-formula-064",
+      "symbols": [
+        "tA",
+        "qA"
+      ],
+      "unit": "min; veh/h",
+      "relations": [
+        "Wardrop 第二原理",
+        "系统最优 SO",
+        "BPR 函数",
+        "交通分配"
+      ],
+      "pitfalls": [
+        "UE 不等于系统总时间最小，这是与 SO 的根本区别",
+        "UE 条件下各被用路径的阻抗相等，而非各路径流量相等"
+      ],
+      "examAngle": "两路径网络：列方程求 UE 解，再与 SO 对比计算系统总时间差",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-058",
+      "subjectId": "traffic-engineering",
+      "chapter": "7.5",
+      "term": "Wardrop 第二原理（系统最优 SO）",
+      "en": "system optimum",
+      "definition": "使网络总出行时间（总阻抗）最小的流量分布状态；其条件是各被用路径的边际阻抗相等，而非平均阻抗相等。",
+      "formulaId": "traffic-engineering-formula-065",
+      "symbols": [
+        "Z",
+        "MC"
+      ],
+      "unit": "veh·min",
+      "relations": [
+        "Wardrop 第一原理",
+        "用户均衡 UE",
+        "拥挤收费",
+        "边际成本"
+      ],
+      "pitfalls": [
+        "SO 的均衡条件是边际阻抗相等（MC1 = MC2），不是行程时间相等；误用 t1 = t2 求 SO 是最常见错误",
+        "SO 状态下不同路径的行程时间一般不相等，个别用户有改道动机"
+      ],
+      "examAngle": "与 UE 联立出题：分别求解并计算总时间差与差值百分比",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-059",
+      "subjectId": "traffic-engineering",
+      "chapter": "7.5",
+      "term": "BPR 路段阻抗函数",
+      "en": "BPR (Bureau of Public Roads) function",
+      "definition": "描述路段行程时间随饱和度上升而非线性增长的函数：t = t0·[1 + α·(q/c)^β]，常用 α = 0.15、β = 4。",
+      "formulaId": "traffic-engineering-formula-065",
+      "symbols": [
+        "t",
+        "t0",
+        "alpha",
+        "beta",
+        "q",
+        "c"
+      ],
+      "unit": "min; veh/h; pcu/h",
+      "relations": [
+        "路段阻抗",
+        "容量限制分配",
+        "用户均衡",
+        "自由流行程时间"
+      ],
+      "pitfalls": [
+        "α、β 是标定参数，0.15 与 4 是经典默认值，不是通用常数",
+        "q/c > 1 时 BPR 函数仍给出有限值，不能反映排队溢出，过饱和分析要另做处理"
+      ],
+      "examAngle": "给 t0、c、q 求路段行程时间；用于 UE/SO 的两路径手算",
+      "confidence": "medium",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "α、β 的取值请按教材核对；不同国家/版本的手册存在不同标定值"
+    },
+    {
+      "id": "traffic-engineering-concept-060",
+      "subjectId": "traffic-engineering",
+      "chapter": "7.5",
+      "term": "全有全无分配",
+      "en": "all-or-nothing assignment",
+      "definition": "把 OD 量全部加载到最短路上的最简分配方法，不考虑路段拥挤对阻抗的影响。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "最短路法",
+        "容量限制分配",
+        "多路径概率分配",
+        "交通分配"
+      ],
+      "pitfalls": [
+        "在低饱和度网络上近似可用；饱和度稍高就会严重高估主干路流量、低估平行道路",
+        "它不产生均衡解，不能用于拥挤网络的方案评价"
+      ],
+      "examAngle": "简答：全有全无分配的假设、局限与改进方向",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-061",
+      "subjectId": "traffic-engineering",
+      "chapter": "8.1",
+      "term": "满载率与发车间隔",
+      "en": "load factor and headway",
+      "definition": "满载率是实际载客量与额定载客量之比；发车间隔 h = 60/发车频率，由高峰小时最大断面通过量与车型定员共同决定。",
+      "formulaId": null,
+      "symbols": [
+        "h",
+        "Cveh",
+        "Pmax"
+      ],
+      "unit": "min; 人/车; 人/h",
+      "relations": [
+        "断面通过量",
+        "营运速度",
+        "配车数",
+        "服务水平"
+      ],
+      "pitfalls": [
+        "发车间隔要用高峰小时'最大断面'通过量算，不是全线平均客流",
+        "满载率 > 1 表示超载，服务水平评价时应设定合理上限（取值以规范为准）"
+      ],
+      "examAngle": "给高峰断面通过量与定员求发车间隔与配车数",
+      "confidence": "medium",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "配车数计算公式（含周转时间、维修备用系数）请按教材核对"
+    },
+    {
+      "id": "traffic-engineering-concept-062",
+      "subjectId": "traffic-engineering",
+      "chapter": "9.3",
+      "term": "停车周转率",
+      "en": "parking turnover rate",
+      "definition": "单位营业时段内每个泊位平均被使用的次数，等于营业时长除以平均停放时间。",
+      "formulaId": "traffic-engineering-formula-066",
+      "symbols": [
+        "turnover",
+        "Topen",
+        "tavg"
+      ],
+      "unit": "次/(泊位·时段)",
+      "relations": [
+        "平均停放时间",
+        "泊位利用率",
+        "停车需求"
+      ],
+      "pitfalls": [
+        "周转率与利用率是两个不同指标：周转率反映'翻台'次数，利用率反映时间占用比例",
+        "营业时长与平均停放时间必须用同一时间单位"
+      ],
+      "examAngle": "给营业时长与平均停放时间求周转率；再结合停车次数求泊位需求",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-063",
+      "subjectId": "traffic-engineering",
+      "chapter": "9.1",
+      "term": "平均停放时间",
+      "en": "average parking duration",
+      "definition": "调查时段内所有停放车次的停放时长算术平均值，是停车需求预测与泊位规模计算的关键参数。",
+      "formulaId": "traffic-engineering-formula-067",
+      "symbols": [
+        "tavg",
+        "Qp"
+      ],
+      "unit": "min 或 h",
+      "relations": [
+        "停放车次",
+        "累计停车数",
+        "停车周转率"
+      ],
+      "pitfalls": [
+        "平均停放时间与'中位停放时间'不同，分布右偏时中位数明显小于均值",
+        "累计停车数曲线的高点给出的是高峰同时停放量，不是累计车次，两者不要混用"
+      ],
+      "examAngle": "由连续式调查数据求平均停放时间与高峰停放量",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-064",
+      "subjectId": "traffic-engineering",
+      "chapter": "11.1",
+      "term": "周期时长",
+      "en": "cycle length",
+      "definition": "信号灯各相位依次显示一个轮回所需的总时间，是单点信号配时的首要决策变量。",
+      "formulaId": "traffic-engineering-formula-050",
+      "symbols": [
+        "C"
+      ],
+      "unit": "s",
+      "relations": [
+        "相位",
+        "损失时间",
+        "绿信比",
+        "Webster 最佳周期"
+      ],
+      "pitfalls": [
+        "周期过短则损失时间占比过高，周期过长则延误与排队增加；存在最优值",
+        "实际取值还要受最小绿灯、行人过街时间、干线公共周期约束"
+      ],
+      "examAngle": "与 Webster 最佳周期公式连用；说明周期上下限的工程约束",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "11",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/traffic-engineering/signal-phase-timing.svg",
+        "caption": "信号配时的周期构成与有效绿灯（自绘示意）",
+        "readPoints": [
+          "有效绿灯 g = G + Y − l，不能只按绿灯时长算通行能力",
+          "周期由绿灯、黄灯、全红与起步损失共同构成",
+          "关键相位流量比之和 Y 越接近 1 越拥堵，周期下限随 Y 上升"
+        ]
+      }
+    },
+    {
+      "id": "traffic-engineering-concept-065",
+      "subjectId": "traffic-engineering",
+      "chapter": "11.1",
+      "term": "信号相位",
+      "en": "signal phase",
+      "definition": "在一个周期内，一组或多组互不冲突的交通流同时获得通行权的时段划分。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "s",
+      "relations": [
+        "相位序列",
+        "周期时长",
+        "损失时间",
+        "左转保护相位"
+      ],
+      "pitfalls": [
+        "相位是按'获得通行权的交通流组合'划分，不是按进口方向数",
+        "增加相位会提高安全性但增加损失时间、降低通行能力，是核心权衡"
+      ],
+      "examAngle": "给定流向流量设计相位方案并识别临界车道组",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "11",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/traffic-engineering/signal-phase-timing.svg",
+        "caption": "信号配时的周期构成与有效绿灯（自绘示意）",
+        "readPoints": [
+          "有效绿灯 g = G + Y − l，不能只按绿灯时长算通行能力",
+          "周期由绿灯、黄灯、全红与起步损失共同构成",
+          "关键相位流量比之和 Y 越接近 1 越拥堵，周期下限随 Y 上升"
+        ]
+      }
+    },
+    {
+      "id": "traffic-engineering-concept-066",
+      "subjectId": "traffic-engineering",
+      "chapter": "11.1",
+      "term": "绿信比",
+      "en": "green ratio / g/C ratio",
+      "definition": "某相位有效绿灯时间与周期时长之比 λ = ge/C，表示该相位在周期内获得的通行权份额。",
+      "formulaId": "traffic-engineering-formula-053",
+      "symbols": [
+        "lambda_g",
+        "ge",
+        "C"
+      ],
+      "unit": "—",
+      "relations": [
+        "周期时长",
+        "有效绿灯",
+        "通行能力",
+        "饱和度"
+      ],
+      "pitfalls": [
+        "绿信比要用有效绿灯而非显示绿灯计算",
+        "各相位绿信比之和加损失时间占比等于 1，可用作校核"
+      ],
+      "examAngle": "配时结果校核：Σλ + L/C = 1",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "11",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-067",
+      "subjectId": "traffic-engineering",
+      "chapter": "11.1",
+      "term": "损失时间",
+      "en": "lost time",
+      "definition": "每个相位因起动损失与绿灯间隔（黄灯+全红）而无法被有效利用的时间，总损失时间 L = n·l + ΣI。",
+      "formulaId": "traffic-engineering-formula-049",
+      "symbols": [
+        "L",
+        "l",
+        "I",
+        "n"
+      ],
+      "unit": "s",
+      "relations": [
+        "周期时长",
+        "起动损失",
+        "绿灯间隔时间",
+        "Webster 最佳周期"
+      ],
+      "pitfalls": [
+        "起动损失 l 与绿灯间隔 I 是两回事，不要只算一项",
+        "相位数是 n 而不是车道组数，且 Webster 公式中的 L 是每周期总损失时间"
+      ],
+      "examAngle": "由相位方案与间隔设置求 L，是 Webster 计算的第一步",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "11",
+        "page": null
+      },
+      "verify": "起动损失与绿灯间隔的典型取值请按教材核对",
+      "figure": {
+        "src": "/knowledge/assets/traffic-engineering/signal-phase-timing.svg",
+        "caption": "信号配时的周期构成与有效绿灯（自绘示意）",
+        "readPoints": [
+          "有效绿灯 g = G + Y − l，不能只按绿灯时长算通行能力",
+          "周期由绿灯、黄灯、全红与起步损失共同构成",
+          "关键相位流量比之和 Y 越接近 1 越拥堵，周期下限随 Y 上升"
+        ]
+      }
+    },
+    {
+      "id": "traffic-engineering-concept-068",
+      "subjectId": "traffic-engineering",
+      "chapter": "11.1",
+      "term": "临界车道组与临界流量比",
+      "en": "critical lane group and critical flow ratio",
+      "definition": "同一相位内流量比 y = q/S 最大的车道组称为该相位的临界车道组；各相位临界车道组流量比之和 Y = Σyc 决定了交叉口的整体负荷。",
+      "formulaId": "traffic-engineering-formula-048",
+      "symbols": [
+        "y",
+        "Y",
+        "S"
+      ],
+      "unit": "—",
+      "relations": [
+        "流量比",
+        "饱和流率",
+        "Webster 最佳周期",
+        "饱和度"
+      ],
+      "pitfalls": [
+        "Y 是每个相位取最大 y 后相加，不是所有车道组 y 全加，全加会严重高估负荷",
+        "Y ≥ 1 表示过饱和，Webster 公式（分母 1−Y）失效，必须增车道或改相位"
+      ],
+      "examAngle": "给各流向流量与饱和流率求 Y，是信号配时大题的第一步（必考）",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "11",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-069",
+      "subjectId": "traffic-engineering",
+      "chapter": "11.1",
+      "term": "进口道饱和度",
+      "en": "degree of saturation",
+      "definition": "进口道实际流量与其通行能力之比 x = q/(S·λ)，是判断交叉口是否过饱和与计算延误的核心变量。",
+      "formulaId": "traffic-engineering-formula-054",
+      "symbols": [
+        "x",
+        "q",
+        "S",
+        "lambda_g"
+      ],
+      "unit": "—",
+      "relations": [
+        "通行能力",
+        "绿信比",
+        "延误",
+        "服务水平"
+      ],
+      "pitfalls": [
+        "与路段 V/C 比同名不同式：此处分母含绿信比 λ",
+        "x 必须 < 1，否则延误公式的 1−x 项发散，需按过饱和方法处理"
+      ],
+      "examAngle": "给 C、g、S、q 求 x，再求延误并判 LOS",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "11",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-070",
+      "subjectId": "traffic-engineering",
+      "chapter": "11.2",
+      "term": "Webster 最佳周期",
+      "en": "Webster optimal cycle",
+      "definition": "以交叉口总延误最小为目标得到的近似周期公式 C0 = (1.5·L + 5)/(1 − Y)，随后按各相位流量比分配有效绿灯。",
+      "formulaId": "traffic-engineering-formula-050",
+      "symbols": [
+        "C0",
+        "L",
+        "Y"
+      ],
+      "unit": "s",
+      "relations": [
+        "周期时长",
+        "临界流量比",
+        "有效绿灯",
+        "Webster 延误公式"
+      ],
+      "pitfalls": [
+        "系数 1.5 与 5 是经验值，不同版本/不同国家的写法（如 1.5L+5 与 1.5L+5.5）存在差异，务必按教材",
+        "它是近似公式，Y 接近 1 时结果急剧增大，实际取值还要工程取整与约束校核"
+      ],
+      "examAngle": "Webster 全套：Y → C0 → ge → 各相位 g → λ → x → 延误（最高频大题）",
+      "confidence": "medium",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "11",
+        "page": null
+      },
+      "verify": "系数（1.5 与 5）及是否含 5.5 等其他写法，请以手中教材为准；本卡按 C0=(1.5L+5)/(1−Y) 记录"
+    },
+    {
+      "id": "traffic-engineering-concept-071",
+      "subjectId": "traffic-engineering",
+      "chapter": "11.2",
+      "term": "有效绿灯与显示绿灯",
+      "en": "effective green vs displayed green",
+      "definition": "有效绿灯是真正被车流有效利用的绿灯时间（ge = C − L，各相位按 y 分配）；显示绿灯是信号灯实际点亮的绿灯时长。",
+      "formulaId": "traffic-engineering-formula-052",
+      "symbols": [
+        "ge",
+        "g",
+        "l"
+      ],
+      "unit": "s",
+      "relations": [
+        "损失时间",
+        "起动损失",
+        "绿信比",
+        "饱和流率"
+      ],
+      "pitfalls": [
+        "两者换算关系（是否加起动损失、是否减黄灯）在不同教材约定不同，极易算错",
+        "Webster 公式体系内部全部使用有效绿灯，代入显示绿灯会系统性出错"
+      ],
+      "examAngle": "配时结果转换：有效绿灯 → 显示绿灯（需先确认教材约定）",
+      "confidence": "medium",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "11",
+        "page": null
+      },
+      "verify": "显示绿灯 = 有效绿灯 + 起动损失 − 黄灯时长 这一换算是否为教材所用约定，请核对原书"
+    },
+    {
+      "id": "traffic-engineering-concept-072",
+      "subjectId": "traffic-engineering",
+      "chapter": "11.3",
+      "term": "均匀延误（均衡延误）",
+      "en": "uniform delay",
+      "definition": "假定车辆均匀到达、且未过饱和时，由信号周期性停等产生的延误，是 Webster 延误公式的第一项 d1。",
+      "formulaId": "traffic-engineering-formula-055",
+      "symbols": [
+        "d1",
+        "C",
+        "lambda_g",
+        "x"
+      ],
+      "unit": "s/veh",
+      "relations": [
+        "随机延误",
+        "过饱和延误",
+        "Webster 延误公式"
+      ],
+      "pitfalls": [
+        "公式分母含 (1 − λ·x)，x → 1/λ 时发散；λ·x 才是真正的通行能力约束",
+        "C、d1 的单位是秒，代入前确认周期也是秒"
+      ],
+      "examAngle": "给 C、g、S、q 求 d1（必考）",
+      "confidence": "medium",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "11",
+        "page": null
+      },
+      "verify": "Webster 均匀延误式的具体形式与系数请按教材核对，各版本存在 0.5C、C/2 等写法差异"
+    },
+    {
+      "id": "traffic-engineering-concept-073",
+      "subjectId": "traffic-engineering",
+      "chapter": "11.3",
+      "term": "随机（增量）延误",
+      "en": "random / overflow delay",
+      "definition": "由于车辆到达随机性造成个别周期过饱和而产生的附加延误，是 Webster 延误公式的第二项 d2。",
+      "formulaId": "traffic-engineering-formula-056",
+      "symbols": [
+        "d2",
+        "q",
+        "x"
+      ],
+      "unit": "s/veh",
+      "relations": [
+        "均匀延误",
+        "过饱和延误",
+        "排队长度"
+      ],
+      "pitfalls": [
+        "公式中 q 必须用 veh/s（不是 veh/h），否则 d2 会小 3600 倍",
+        "d2 在 x 接近 1 时急剧增大，这是'延误对饱和度高度敏感'的定量体现"
+      ],
+      "examAngle": "与 d1 联立求总延误；常作为单位换算的扣分点",
+      "confidence": "medium",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "11",
+        "page": null
+      },
+      "verify": "d2 公式中 q 的单位约定（veh/s）与系数请按教材核对"
+    },
+    {
+      "id": "traffic-engineering-concept-074",
+      "subjectId": "traffic-engineering",
+      "chapter": "11.3",
+      "term": "控制延误与 HCM 延误",
+      "en": "control delay / HCM delay",
+      "definition": "控制延误是车辆因信号控制而额外经历的行程时间（含减速、停车、加速过程）；HCM 用含三项的模型 d = d1·PF + d2 + d3 计算。",
+      "formulaId": "traffic-engineering-formula-058",
+      "symbols": [
+        "d",
+        "PF",
+        "d3"
+      ],
+      "unit": "s/veh",
+      "relations": [
+        "均匀延误",
+        "随机延误",
+        "过饱和延误",
+        "服务水平"
+      ],
+      "pitfalls": [
+        "HCM 与 Webster 延误公式不是同一套，第三项 d3（初始排队延误）与 PF（信号联动/进展因子）是 HCM 特有",
+        "不同 HCM 版本的三项式形式与 PF 取值差异大，不能直接套用记忆中的数值"
+      ],
+      "examAngle": "说明 Webster 延误与 HCM 延误的差异；用延误判交叉口 LOS",
+      "confidence": "low",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "11",
+        "page": null
+      },
+      "verify": "HCM 三项式延误模型的具体形式、PF 与 d3 的取值强依赖版本，必须按教材与现行 HCM 核对；本卡未记录任何系数"
+    },
+    {
+      "id": "traffic-engineering-concept-075",
+      "subjectId": "traffic-engineering",
+      "chapter": "11.4",
+      "term": "相位差与绿波控制",
+      "en": "offset and green wave",
+      "definition": "相位差（offset）是相邻交叉口绿灯起始时刻相对于公共周期基准的时间差；合理设置可使车队连续通过多个交叉口，形成绿波带。",
+      "formulaId": "traffic-engineering-formula-059",
+      "symbols": [
+        "offset",
+        "Ls",
+        "v"
+      ],
+      "unit": "s",
+      "relations": [
+        "公共周期",
+        "时距图",
+        "绿波带宽",
+        "干线协调控制"
+      ],
+      "pitfalls": [
+        "理想相位差 = 路段长度/行程车速，需换算为秒；用 km/h 与 km 直接相除会得到小时",
+        "双向绿波受制于公共周期与上下行程时间之和，通常只能在单一方向取得理想带宽"
+      ],
+      "examAngle": "由路段间距与行程车速求理想相位差并画时距图",
+      "confidence": "medium",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "11",
+        "page": null
+      },
+      "verify": "理想相位差公式与行程车速的取值口径请按教材核对"
+    },
+    {
+      "id": "traffic-engineering-concept-076",
+      "subjectId": "traffic-engineering",
+      "chapter": "12.1",
+      "term": "亿车公里事故率",
+      "en": "accident rate per 100 million vehicle-km",
+      "definition": "以车辆行驶里程为暴露量的相对事故指标：R1 = A × 10⁸ / VMT，其中 VMT = AADT × 路段长度 × 365。",
+      "formulaId": "traffic-engineering-formula-068",
+      "symbols": [
+        "R1",
+        "A",
+        "VMT"
+      ],
+      "unit": "次/亿车公里",
+      "relations": [
+        "事故次数",
+        "车辆行驶里程 VMT",
+        "万车事故率",
+        "10万人口事故率"
+      ],
+      "pitfalls": [
+        "用绝对事故数比较不同长度/不同流量的道路毫无意义，必须先除以暴露量",
+        "VMT 中 AADT 与长度、天数三者缺一不可；用 ADT 替代 AADT 会引入系统偏差"
+      ],
+      "examAngle": "三种事故率一起算并说明各自适用场景（最高频）",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "12",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-077",
+      "subjectId": "traffic-engineering",
+      "chapter": "12.1",
+      "term": "万车事故率",
+      "en": "accident rate per 10 thousand vehicles",
+      "definition": "以机动车保有量为暴露量的相对事故指标：R2 = A × 10⁴ / Nveh，用于区域/城市之间的宏观安全水平比较。",
+      "formulaId": "traffic-engineering-formula-070",
+      "symbols": [
+        "R2",
+        "A",
+        "Nveh"
+      ],
+      "unit": "次/万车",
+      "relations": [
+        "亿车公里事故率",
+        "10万人口事故率",
+        "机动车保有量"
+      ],
+      "pitfalls": [
+        "万车事故率不反映实际行驶强度，车多但跑得少的城市会被高估",
+        "与亿车公里事故率的排序结果常常不同，这正是要同时给三种指标的原因"
+      ],
+      "examAngle": "三种事故率对比；说明为何同一地区不同指标排名不同",
+      "confidence": "high",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "12",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "traffic-engineering-concept-078",
+      "subjectId": "traffic-engineering",
+      "chapter": "12.1",
+      "term": "10 万人口事故率",
+      "en": "accident rate per 100 thousand population",
+      "definition": "以人口为暴露量的相对事故指标：R3 = A × 10⁵ / P，用于评价某地区居民所面临的交通风险水平。",
+      "formulaId": "traffic-engineering-formula-070",
+      "symbols": [
+        "R3",
+        "A",
+        "P"
+      ],
+      "unit": "次/10万人",
+      "relations": [
+        "亿车公里事故率",
+        "万车事故率",
+        "人口"
+      ],
+      "pitfalls": [
+        "人口要用常住人口口径，且注意'10 万'对应 10⁵ 而不是 10⁴",
+        "它与机动化水平无关，机动化程度低的地区该值可能偏低，解读时须谨慎"
+      ],
+      "examAngle": "与另两种事故率并列计算与比较",
+      "confidence": "medium",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "12",
+        "page": null
+      },
+      "verify": "教材中第三种事故率的基准是否为'10 万人口'请核对原书（部分教材用'万人'）"
+    },
+    {
+      "id": "traffic-engineering-concept-079",
+      "subjectId": "traffic-engineering",
+      "chapter": "12.3",
+      "term": "事故多发点",
+      "en": "black spot / hazardous location",
+      "definition": "在统计期内事故（次数或事故率）显著高于同类设施平均水平的地点或路段，是安全改善资金优先投放的对象。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "事故率法",
+        "质量控制图法",
+        "当量事故数",
+        "道路安全审计"
+      ],
+      "pitfalls": [
+        "只看事故绝对数会偏向高流量路段，只看事故率会偏向低流量的危险点，须用'数/率综合法'",
+        "存在回归均值效应：改善后事故自然下降，评价效果时要剔除该效应"
+      ],
+      "examAngle": "简述事故多发点的鉴别方法与各自局限；给数据排序并判定",
+      "confidence": "medium",
+      "cite": {
+        "book": "交通工程总论",
+        "edition": "第5版",
+        "publisher": "人民交通出版社",
+        "chapter": "12",
+        "page": null
+      },
+      "verify": "教材列出的具体鉴别方法名称与判据（临界比率、质量控制图等）请核对原书"
+    }
+  ]
+}

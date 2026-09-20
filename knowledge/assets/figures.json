@@ -1,0 +1,227 @@
+{
+  "version": "2026-09-18",
+  "note": "自绘示意图元库第一批。全部为教学口径自绘（非教材原图、非规范原图），尺寸与系数按通用教学口径绘制，具体取值须按教材与现行规范核对。attachTo 用于把 figure 自动挂到对应知识条目，match 在条目的 term / name 上做包含匹配。",
+  "figures": [
+    {
+      "id": "road-survey-design-fig-001",
+      "subjectId": "road-survey-design",
+      "src": "/knowledge/assets/road-survey-design/horizontal-alignment.svg",
+      "caption": "平面线形五主点与三个要素（自绘示意，非教材原图）",
+      "readPoints": [
+        "五个主点顺序固定：ZH → HY → QZ → YH → HZ，逐桩推算时桩号必须连续",
+        "T 切线长、E 外距都从交点 JD 起算；T 量水平距离，E 量竖直距离",
+        "两端各插一段缓和曲线 Ls，中间才是半径 R 的圆曲线"
+      ],
+      "attachTo": ["平面线形", "缓和曲线", "圆曲线", "主点"],
+      "confidence": "high"
+    },
+    {
+      "id": "road-survey-design-fig-002",
+      "subjectId": "road-survey-design",
+      "src": "/knowledge/assets/road-survey-design/superelevation-transition.svg",
+      "caption": "绕中线旋转法的超高过渡三阶段（自绘示意）",
+      "readPoints": [
+        "中线是旋转轴，三个阶段里中线高程始终不变",
+        "内侧抬高与外侧下降同步进行，内侧先被抬平（临界断面）",
+        "全超高阶段是单向坡 i_b，排水方向转为向内侧"
+      ],
+      "attachTo": ["超高", "横坡", "路拱"],
+      "confidence": "high"
+    },
+    {
+      "id": "road-survey-design-fig-003",
+      "subjectId": "road-survey-design",
+      "src": "/knowledge/assets/road-survey-design/vertical-curve.svg",
+      "caption": "凸形竖曲线与 T、E、改正值 y（自绘示意）",
+      "readPoints": [
+        "设计标高 = 切线标高 − y（凸曲线向下改正），凹曲线才用 + y",
+        "ω = i₂ − i₁，凸形 ω < 0、凹形 ω > 0，符号决定改正方向",
+        "T 是水平距离、E 是竖直距离，不要把 E 当成斜距"
+      ],
+      "attachTo": ["竖曲线", "变坡点", "纵断面"],
+      "confidence": "high"
+    },
+    {
+      "id": "road-survey-design-fig-004",
+      "subjectId": "road-survey-design",
+      "src": "/knowledge/assets/road-survey-design/stopping-sight-distance.svg",
+      "caption": "停车视距的三段构成与速度—时间图（自绘示意）",
+      "readPoints": [
+        "S₁ 与车速一次方成正比，S₂ 与车速平方成正比，高速时制动段占大头",
+        "S₂ 分母里的 (f ± i)：上坡取 +（有利）、下坡取 −（不利）",
+        "会车视距约为停车视距的 2 倍，超车视距另算，三者别混用"
+      ],
+      "attachTo": ["视距", "停车视距", "制动距离"],
+      "confidence": "medium"
+    },
+    {
+      "id": "structural-design-principles-fig-001",
+      "subjectId": "structural-design-principles",
+      "src": "/knowledge/assets/structural-design-principles/flexural-three-stage.svg",
+      "caption": "正截面受弯的三个受力阶段及对应验算（自绘示意）",
+      "readPoints": [
+        "Ⅰ 未裂 → 抗裂验算；Ⅱ 带裂缝 → 裂缝宽度与刚度；Ⅲ 破坏 → 承载力",
+        "只有第 Ⅲ 阶段才用等效矩形应力图，拿它做抗裂验算是错的",
+        "随荷载增大，中和轴不断上移，受压区高度持续减小"
+      ],
+      "attachTo": ["受弯", "正截面", "受力阶段", "等效矩形"],
+      "confidence": "high"
+    },
+    {
+      "id": "structural-design-principles-fig-002",
+      "subjectId": "structural-design-principles",
+      "src": "/knowledge/assets/structural-design-principles/flange-effective-width.svg",
+      "caption": "T 形截面翼缘有效分布宽度 b′f（自绘示意）",
+      "readPoints": [
+        "翼缘压应力沿宽度不均匀，肋部最大、向两侧衰减",
+        "计算取有效宽度 b′f，不是实际翼缘宽 bf，直接代 bf 会高估承载力",
+        "b′f 与计算跨径、翼缘厚度、相邻梁净距有关，取值按现行规范核对"
+      ],
+      "attachTo": ["翼缘", "T 形截面", "有效分布宽度"],
+      "confidence": "medium"
+    },
+    {
+      "id": "structural-design-principles-fig-003",
+      "subjectId": "structural-design-principles",
+      "src": "/knowledge/assets/structural-design-principles/shear-span-ratio.svg",
+      "caption": "剪跨比 λ 决定的三种斜截面破坏形态（自绘示意）",
+      "readPoints": [
+        "λ < 1 斜压破坏、1 ≤ λ ≤ 3 剪压破坏、λ > 3 斜拉破坏",
+        "教材的抗剪承载力公式针对的是剪压破坏这一形态",
+        "斜压破坏时多配箍筋无效，须加大截面或提高混凝土强度"
+      ],
+      "attachTo": ["剪跨比", "斜截面", "受剪", "斜压"],
+      "confidence": "high"
+    },
+    {
+      "id": "traffic-engineering-fig-001",
+      "subjectId": "traffic-engineering",
+      "src": "/knowledge/assets/traffic-engineering/flow-three-parameters.svg",
+      "caption": "交通流三参数关系（Greenshields 线性模型，自绘示意）",
+      "readPoints": [
+        "Q = K · V，三个参数知其二可求第三个",
+        "Q–K 曲线的峰值即通行能力，出现在 K = k_j / 2 处",
+        "同一个流量对应两个密度状态：左支自由流、右支拥挤流"
+      ],
+      "attachTo": ["交通流", "三参数", "通行能力", "密度", "阻塞密度"],
+      "confidence": "high"
+    },
+    {
+      "id": "traffic-engineering-fig-002",
+      "subjectId": "traffic-engineering",
+      "src": "/knowledge/assets/traffic-engineering/signal-phase-timing.svg",
+      "caption": "信号配时的周期构成与有效绿灯（自绘示意）",
+      "readPoints": [
+        "有效绿灯 g = G + Y − l，不能只按绿灯时长算通行能力",
+        "周期由绿灯、黄灯、全红与起步损失共同构成",
+        "关键相位流量比之和 Y 越接近 1 越拥堵，周期下限随 Y 上升"
+      ],
+      "attachTo": ["信号配时", "周期", "相位", "绿灯", "损失时间"],
+      "confidence": "medium"
+    },
+    {
+      "id": "asphalt-mixture-fig-001",
+      "subjectId": "asphalt-mixture",
+      "src": "/knowledge/assets/asphalt-mixture/mixture-structure-types.svg",
+      "caption": "沥青混合料的三种结构类型（自绘示意）",
+      "readPoints": [
+        "判断顺序：先看粗集料是否形成骨架，再看空隙有没有被填满",
+        "骨架决定抗车辙能力，密实程度决定耐久性",
+        "AC 悬浮密实、OGFC 骨架空隙、SMA 骨架密实"
+      ],
+      "attachTo": ["结构类型", "骨架", "悬浮", "密实", "SMA"],
+      "confidence": "high"
+    },
+    {
+      "id": "asphalt-mixture-fig-002",
+      "subjectId": "asphalt-mixture",
+      "src": "/knowledge/assets/asphalt-mixture/marshall-oac.svg",
+      "caption": "由马歇尔试验指标确定最佳沥青用量 OAC（自绘示意）",
+      "readPoints": [
+        "密度与稳定度有峰值，空隙率单调下降、饱和度单调上升",
+        "OAC 取各项指标均满足规范区间的中值",
+        "VV、VFA、MS、FL 四项限值与成型条件须按现行 JTG E20 核对"
+      ],
+      "attachTo": ["马歇尔", "最佳沥青用量", "OAC", "空隙率", "饱和度"],
+      "confidence": "medium"
+    },
+    {
+      "id": "building-architecture-fig-001",
+      "subjectId": "building-architecture",
+      "src": "/knowledge/assets/building-architecture/stair-dimension.svg",
+      "caption": "楼梯踏步尺寸与两处净高的量取位置（自绘示意，垂直净距未按比例）",
+      "readPoints": [
+        "2h + b = 600 ~ 620 mm，是踏步尺寸的基本经验关系",
+        "净高从踏步前缘量到上方结构底，不是从踏面中点量",
+        "梯段净高 ≥ 2200、平台净高 ≥ 2000，两处都要单独核算"
+      ],
+      "attachTo": ["楼梯", "踏步", "净高", "梯段"],
+      "confidence": "medium"
+    },
+    {
+      "id": "building-architecture-fig-002",
+      "subjectId": "building-architecture",
+      "src": "/knowledge/assets/building-architecture/roof-drainage.svg",
+      "caption": "平屋顶有组织排水的组织方式（自绘示意）",
+      "readPoints": [
+        "先定分水线，再定找坡方向与坡度，最后布雨水口",
+        "排水路径要闭合：屋面 → 檐沟 → 雨水口 → 雨水管",
+        "雨水管间距与单管汇水面积限值须按现行屋面技术规范核对"
+      ],
+      "attachTo": ["屋面", "排水", "屋顶", "檐沟", "找坡"],
+      "confidence": "medium"
+    },
+    {
+      "id": "structural-testing-fig-001",
+      "subjectId": "structural-testing",
+      "src": "/knowledge/assets/structural-testing/static-load-layout.svg",
+      "caption": "简支梁静载试验的加载与测点布置（自绘示意）",
+      "readPoints": [
+        "跨中是主控截面，挠度与应变测点都布在这里",
+        "应变片沿截面高度布片，可验证平截面假定是否成立",
+        "评定看三项：校验系数、残余变形、裂缝宽度"
+      ],
+      "attachTo": ["静载试验", "测点", "挠度", "应变", "加载"],
+      "confidence": "high"
+    },
+    {
+      "id": "structural-testing-fig-002",
+      "subjectId": "structural-testing",
+      "src": "/knowledge/assets/structural-testing/strain-bridge.svg",
+      "caption": "电阻应变测量的三种桥路接法（自绘示意）",
+      "readPoints": [
+        "1/4 桥灵敏度最低且无温度补偿，全桥灵敏度最高且自动补偿",
+        "半桥有两种：两片都受力则灵敏度翻倍；一片工作一片补偿则不翻倍",
+        "U_in 与 U_out 分别加在电桥的两条对角线上，不能接反"
+      ],
+      "attachTo": ["应变", "电桥", "桥路", "温度补偿", "灵敏系数"],
+      "confidence": "high"
+    },
+    {
+      "id": "hydraulics-hydrology-fig-001",
+      "subjectId": "hydraulics-hydrology",
+      "src": "/knowledge/assets/hydraulics-hydrology/open-channel-section.svg",
+      "caption": "明渠梯形断面的水力要素（自绘示意）",
+      "readPoints": [
+        "水力半径 R = A / χ，不是水深 h；只有宽浅矩形才近似 R ≈ h",
+        "水面宽 B = b + 2mh，过水面积 A = (b + mh)h",
+        "均匀流时底坡 i = 水面坡 = 水力坡降 J，此时水深即正常水深 h₀"
+      ],
+      "attachTo": ["明渠", "水力半径", "过水面积", "湿周", "均匀流", "正常水深"],
+      "confidence": "high"
+    },
+    {
+      "id": "hydraulics-hydrology-fig-002",
+      "subjectId": "hydraulics-hydrology",
+      "src": "/knowledge/assets/hydraulics-hydrology/hydraulic-jump.svg",
+      "caption": "水跃与共轭水深（自绘示意）",
+      "readPoints": [
+        "只有 Fr₁ > 1 的急流才会发生水跃，缓流中硬套共轭水深公式是错的",
+        "h₁ 与 h₂ 互为共轭水深，矩形断面按 h₂/h₁ = ½(√(1+8Fr₁²) − 1) 计算",
+        "消能主要发生在表面旋滚区，这也是消力池设计的对象"
+      ],
+      "attachTo": ["水跃", "共轭水深", "急流", "缓流", "消能"],
+      "confidence": "high"
+    }
+  ]
+}

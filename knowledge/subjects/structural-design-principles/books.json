@@ -1,0 +1,407 @@
+{
+  "items": [
+    {
+      "id": "structural-design-principles-book-001",
+      "subjectId": "structural-design-principles",
+      "title": "结构设计原理",
+      "author": "张树仁、王丽荣 等",
+      "publisher": "人民交通出版社",
+      "level": "教材",
+      "why": "道桥专业最通行的《结构设计原理》教材之一，体系与公路桥涵规范（JTG 3362）口径一致，是本课知识的默认参照。第5版在预应力与耐久性部分较前版有更新。",
+      "readPlan": "作为主教材按章通读；每章先看例题的解题流程，再独立做一遍，最后对答案找差异。公式不要死记，记住平衡方程 + 判别条件即可推导。",
+      "relatesToChapters": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12"
+      ],
+      "acquireNote": "图书馆可借 / 出版社正版渠道 / 学校教材科",
+      "confidence": "high",
+      "verify": "本条原写\"第 5 版\"有误——第 5 版为叶见曙主编（2021）；张树仁版为第 2 版 2010 / 第 3 版 2020",
+      "edition": "第 2 版（2010）；第 3 版（2020，与黄侨合著）",
+      "year": 2020,
+      "isbn": "9787114084942",
+      "verification": {
+        "status": "confirmed",
+        "source": "中国图书馆分类法中图分类号查询 (clcindex.com，含 ISBN)；哈尔滨工业大学 863 考研参考书目；研晟考研书目",
+        "checkedAt": "2026-09-15",
+        "note": "【已修正】张树仁《结构设计原理（钢筋混凝土、预应力混凝土及圬工结构）》第 2 版 2010 ISBN 9787114084942；第 3 版 2020 与黄侨合著，人民交通出版社股份有限公司。"
+      }
+    },
+    {
+      "id": "structural-design-principles-book-002",
+      "subjectId": "structural-design-principles",
+      "title": "结构设计原理",
+      "author": "叶见曙",
+      "publisher": "人民交通出版社",
+      "level": "教材",
+      "why": "同一课程另一主流版本，被大量高校采用。与上一本相比，讲解更偏重受力机理与公式来源的说明，例题编排细致，适合作业卡壳时的第二本参考书。",
+      "readPlan": "对着主教材的章节顺序，遇到“公式为什么这么写”就翻这本的推导小节；两本对同一问题的处理若有差异，说明该处存在版本/口径分歧，要回去查规范。",
+      "relatesToChapters": [
+        "3",
+        "4",
+        "6",
+        "9",
+        "10",
+        "11"
+      ],
+      "acquireNote": "图书馆可借 / 出版社正版渠道",
+      "confidence": "high",
+      "verify": null,
+      "edition": "第 5 版（2021-12）；第 4 版 2018",
+      "year": 2021,
+      "isbn": "9787114175312",
+      "verification": {
+        "status": "confirmed",
+        "source": "新华国采全国大中专教材网络采选系统 (aijiaocai.com)；百度百科（第 4 版 ISBN 978-7-114-14743-2）",
+        "checkedAt": "2026-09-15",
+        "note": "第 5 版 2021-12 人民交通出版社 ISBN 9787114175312；第 4 版 2018-07 ISBN 978-7-114-14743-2。"
+      }
+    },
+    {
+      "id": "structural-design-principles-book-003",
+      "subjectId": "structural-design-principles",
+      "title": "钢筋混凝土原理（或《钢筋混凝土原理和分析》）",
+      "author": "过镇海",
+      "publisher": "清华大学出版社",
+      "level": "专著/提高",
+      "why": "把“为什么”讲透的经典：混凝土的本构关系、钢筋与混凝土的粘结滑移、裂缝与刚度的形成机理。教材里只是给结论的公式，在这里能看到来龙去脉。适合想把概念真正搞懂、或准备考研深造的人。",
+      "readPlan": "不必通读。当作工具书：学到第3章（正截面）时读其“受弯承载力”一章，学到第8章（裂缝变形）时读其“裂缝与刚度”一章。考前不要新开这本。",
+      "relatesToChapters": [
+        "2",
+        "3",
+        "8"
+      ],
+      "acquireNote": "图书馆可借 / 出版社正版渠道",
+      "confidence": "medium",
+      "verify": "版次与出版年请按清华大学出版社目录核对",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到出版社官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "书名与作者、出版社确认；版次未在线核实。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "structural-design-principles-book-004",
+      "subjectId": "structural-design-principles",
+      "title": "混凝土结构设计规范理解与应用（GB 50010 配套培训教材）",
+      "author": "规范编制组 / 相关专家（编者署名待核对）",
+      "publisher": "中国建筑工业出版社",
+      "level": "规范配套",
+      "why": "规范条文为什么这么规定的官方解释。当教材与记忆中的系数冲突时，这类书能告诉你哪一条在哪个版本被改过，是辨别“教材旧了”还是“我记错了”的工具。",
+      "readPlan": "只在需要确认某个公式/系数的来历与版本沿革时查阅，按目录检索，不顺序读。注意这是建筑（GB）口径，与公路（JTG）体系不完全通用。",
+      "relatesToChapters": [
+        "3",
+        "4",
+        "6",
+        "8"
+      ],
+      "acquireNote": "图书馆可借 / 出版社正版渠道 / 规范汇编配套",
+      "confidence": "low",
+      "verify": "书名、编者与版次请按出版社目录核对；本条为类别推荐，具体版本不作依据",
+      "verification": {
+        "status": "unverified",
+        "source": "本次未检索到确定书目",
+        "checkedAt": "2026-09-15",
+        "note": "书名随 GB 50010 版次变化，按现行版本检索对应书名。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "structural-design-principles-book-005",
+      "subjectId": "structural-design-principles",
+      "title": "公路桥涵设计规范汇编（JTG D60 / JTG 3362 / JTG 3363 合订）",
+      "author": "交通运输部（发布）",
+      "publisher": "人民交通出版社",
+      "level": "规范原文",
+      "why": "作业取值的最终依据。所有教材例题的系数都来自这里，教材改版跟不上规范改版，做题前查规范是唯一可靠做法。",
+      "readPlan": "常备手边。做题流程固定为：先查规范的强度设计值表与 ξb 表 → 再套公式 → 最后用规范的构造要求复核。不要在教材与规范冲突时相信教材。",
+      "relatesToChapters": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12"
+      ],
+      "acquireNote": "学校图书馆工具书区 / 出版社正版渠道 / 教师提供的电子版（用于课程作业）",
+      "confidence": "medium",
+      "verify": "汇编的版次与收录的规范清单请核对；必须确认收录的是现行有效版本",
+      "verification": {
+        "status": "partial",
+        "source": "人民交通出版社确有规范汇编类产品",
+        "checkedAt": "2026-09-15",
+        "note": "汇编收录的规范清单与版次逐年变化，须确认收录的是现行有效版本。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "structural-design-principles-book-006",
+      "subjectId": "structural-design-principles",
+      "title": "Reinforced Concrete: A Fundamental Approach",
+      "author": "Edward G. Nawy",
+      "publisher": "Pearson / Prentice Hall",
+      "level": "英文经典",
+      "why": "英文世界里最流行的钢筋混凝土入门教材，基于 ACI 318 体系。优点是把每一步计算拆得非常细、配大量配筋构造图，对建立“配筋是怎么落地的”直观认识很有帮助。术语（如 balanced strain condition、tension-controlled）也是读英文文献的基础。",
+      "readPlan": "不必全读。推荐读受弯（flexural analysis and design）与斜截面（shear）两章，与中文教材对照着看同一道题的两种解法。同时积累专业英语词汇。",
+      "relatesToChapters": [
+        "3",
+        "4",
+        "8"
+      ],
+      "acquireNote": "图书馆外文书区 / 正版渠道",
+      "confidence": "medium",
+      "verify": "版次（常见为第 6/7 版）与作者署名请按出版社目录核对；ACI 体系与中国规范在符号与安全度设置上差异很大，不可直接套用数值",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到出版社官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "书名/作者/出版社确认；版次（常见第 6/7 版）与 ISBN 按出版社目录核对。数值体系基于 ACI，不可直接套用于中国规范作业。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "structural-design-principles-book-007",
+      "subjectId": "structural-design-principles",
+      "title": "Design of Concrete Structures",
+      "author": "Arthur H. Nilson、David Darwin、Charles W. Dolan",
+      "publisher": "McGraw-Hill Education",
+      "level": "英文经典",
+      "why": "比 Nawy 更偏理论推导，对双向板、受压构件、预应力与部分预应力的处理更系统。适合在学完第6章（受压）与第10章（预应力损失）后，想看另一种严密表述的人。",
+      "readPlan": "针对薄弱章读：柱（第6章）、预应力（第10章）。每读一节，就在纸上用中文教材的符号重推一遍，检验是否真懂。",
+      "relatesToChapters": [
+        "6",
+        "10",
+        "11"
+      ],
+      "acquireNote": "图书馆外文书区 / 正版渠道",
+      "confidence": "medium",
+      "verify": "版次（常见第 14/15 版）与作者署名顺序请核对",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到出版社官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "书名/作者/出版社确认；版次与 ISBN 未在线核实。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "structural-design-principles-book-008",
+      "subjectId": "structural-design-principles",
+      "title": "Reinforced Concrete Structures",
+      "author": "Robert Park、Thomas Paulay",
+      "publisher": "John Wiley & Sons",
+      "level": "英文经典/提高",
+      "why": "延性设计与抗震概念的经典之作。本书对“为什么要限制受压区高度、为什么箍筋要加密、为什么会发生剪切破坏先于弯曲破坏”讲得最透彻，是理解构造要求背后逻辑的最佳读物。",
+      "readPlan": "适合作为第3、4、6章学完后的提升阅读，重点是延性与破坏形态的章节。考试前读它能把零散的构造规定串成一条线。",
+      "relatesToChapters": [
+        "3",
+        "4",
+        "6"
+      ],
+      "acquireNote": "图书馆外文书区 / 正版渠道",
+      "confidence": "medium",
+      "verify": "版次与作者署名请核对；本书基于新西兰/美国规范，数值不可直接用于中国作业",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到出版社官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "书名/作者/出版社确认（Wiley）；版次与 ISBN 未在线核实。基于新西兰/美国规范，数值不可直接套用。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "structural-design-principles-book-009",
+      "subjectId": "structural-design-principles",
+      "title": "预应力混凝土结构设计（含《预应力混凝土结构原理》一类林同炎著作）",
+      "author": "林同炎（T. Y. Lin）等",
+      "publisher": "中国建筑工业出版社 / 相关出版社",
+      "level": "专著/经典",
+      "why": "预应力领域公认的经典。林同炎提出的“荷载平衡法”是从概念上理解预应力的最佳入口：把预应力理解为“用来平衡一部分外荷载的等效荷载”，比死记六项损失公式要清楚得多。",
+      "readPlan": "第9~11章学得吃力时读：先读荷载平衡法与等效荷载的概念部分，再回头看教材的预应力损失与抗裂验算，会发现工程意义清晰很多。",
+      "relatesToChapters": [
+        "9",
+        "10",
+        "11"
+      ],
+      "acquireNote": "图书馆可借 / 出版社正版渠道",
+      "confidence": "low",
+      "verify": "林同炎的中文版书名有《预应力混凝土结构设计》《预应力混凝土结构原理》等不同译本与版次，请按馆藏目录核对具体书名、译者与版次",
+      "verification": {
+        "status": "unverified",
+        "source": "本次未检索到确定书目",
+        "checkedAt": "2026-09-15",
+        "note": "林同炎中文版书名与译者存在多个版本，按馆藏目录核对。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "structural-design-principles-book-010",
+      "subjectId": "structural-design-principles",
+      "title": "注册结构工程师专业考试辅导教材（混凝土结构/桥梁结构方向）",
+      "author": "相关辅导机构 / 编者署名待核对",
+      "publisher": "中国建筑工业出版社 或 人民交通出版社",
+      "level": "考试辅导",
+      "why": "题库量大、题型覆盖全、解题步骤模板化。本课程是注册结构工程师考试的重头戏，用它的题目做限时训练能显著提升手算速度与准确率。",
+      "readPlan": "期中之后开始用：每周固定两套限时训练，只做与已学章节对应的部分。重点是学它的“解题顺序”（先验算什么、后算什么），而不是背答案。",
+      "relatesToChapters": [
+        "3",
+        "4",
+        "6",
+        "8",
+        "10",
+        "11"
+      ],
+      "acquireNote": "图书馆 / 正版渠道 / 学校往届学长资料",
+      "confidence": "low",
+      "verify": "辅导书种类繁多且年年更新，书名、编者与出版社不固定，请按当年考试大纲与正规渠道核对",
+      "verification": {
+        "status": "unverified",
+        "source": "辅导书逐年更新，无稳定书目",
+        "checkedAt": "2026-09-15",
+        "note": "按当年考试大纲与正规渠道核对。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "structural-design-principles-book-011",
+      "subjectId": "structural-design-principles",
+      "title": "结构力学",
+      "author": "龙驭球、包世华 等",
+      "publisher": "高等教育出版社",
+      "level": "先修教材",
+      "why": "《结构设计原理》是“力学 + 材料 + 规范”三门课的交汇，力学不过关会直接影响内力计算与影响线部分。若在做第1章作用效应组合时感到吃力，多半是力学的弯矩/剪力图没过关。",
+      "readPlan": "不必重读全书。补三块即可：静定与超静定梁的内力图、影响线、位移计算（挠度公式的来源）。",
+      "relatesToChapters": [
+        "1",
+        "8"
+      ],
+      "acquireNote": "图书馆可借 / 教材科",
+      "confidence": "medium",
+      "verify": "龙驭球有高教版《结构力学》，包世华另有武汉理工大学出版社版，二者并非同一本书，按馆藏核对",
+      "verification": {
+        "status": "partial",
+        "source": "多所院校考研书目中分别列有龙驭球（高教版）与包世华（武汉理工版）",
+        "checkedAt": "2026-09-15",
+        "note": "两位作者各自有《结构力学》教材，本条把二者并列不准确，建议按课程实际用书拆成独立条目。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "structural-design-principles-book-012",
+      "subjectId": "structural-design-principles",
+      "title": "土木工程材料",
+      "author": "湖南大学、天津大学 等合编",
+      "publisher": "中国建筑工业出版社",
+      "level": "参考教材",
+      "why": "第2章（结构材料）背后的材料学基础：混凝土的强度形成、配合比、收缩徐变机理，钢筋的冶炼与力学性能。理解这些后，fcd/ftd 为什么随强度等级这样变化、收缩徐变损失为什么量值大，就不难理解了。",
+      "readPlan": "只读与结构计算相关的两章：水泥混凝土、建筑钢材。重点看收缩徐变的影响因素一节，直接服务于第10章 σl6。",
+      "relatesToChapters": [
+        "2",
+        "10"
+      ],
+      "acquireNote": "图书馆可借 / 教材科",
+      "confidence": "medium",
+      "verify": "版本与主编署名请核对",
+      "verification": {
+        "status": "partial",
+        "source": "多所院校教材清单中列有该合编本",
+        "checkedAt": "2026-09-15",
+        "note": "版本与主编署名请按中国建筑工业出版社目录核对。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "structural-design-principles-book-013",
+      "subjectId": "structural-design-principles",
+      "title": "公路桥涵设计手册（或《桥梁设计常用数据手册》一类工具书）",
+      "author": "相关编写组（署名待核对）",
+      "publisher": "人民交通出版社",
+      "level": "工具书",
+      "why": "课程设计阶段的实用工具：常用截面几何特性表、钢筋面积与间距表、材料指标速查。手算时频繁查表的环节，有一本手册能省大量时间。",
+      "readPlan": "课程设计开始时借一本放桌上，按附录检索使用，不做系统阅读。",
+      "relatesToChapters": [
+        "3",
+        "4",
+        "6",
+        "9"
+      ],
+      "acquireNote": "图书馆工具书区",
+      "confidence": "low",
+      "verify": "书名与编写单位请以馆藏目录为准；本条为类别推荐",
+      "verification": {
+        "status": "unverified",
+        "source": "本条为类别占位，未指向确定书目",
+        "checkedAt": "2026-09-15",
+        "note": "按馆藏目录替换为具体书名。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "structural-design-principles-book-014",
+      "subjectId": "structural-design-principles",
+      "title": "Prestressed Concrete Structures（或 Collins & Mitchell 同名著作）",
+      "author": "Michael P. Collins、Denis Mitchell",
+      "publisher": "Response Publications / Wiley",
+      "level": "英文经典/提高",
+      "why": "预应力领域现代方法的代表（基于修正压力场理论 MCFT）。本书对剪切与扭转的处理比传统教材更严密，是理解第4章（抗剪）与第5章（受扭）为什么那样建模的进阶读物。",
+      "readPlan": "适合学有余力或准备读研的人。推荐读受压场理论与剪切设计的章节，与第4、5章对照。考试导向者可以跳过。",
+      "relatesToChapters": [
+        "4",
+        "5",
+        "10",
+        "11"
+      ],
+      "acquireNote": "图书馆外文书区 / 正版渠道",
+      "confidence": "medium",
+      "verify": "版次与出版社请核对；本书理论体系与中国规范不同，数值不可直接套用",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到出版社官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "书名/作者确认；版次与出版社（Response Publications / Wiley）未在线核实。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    }
+  ]
+}

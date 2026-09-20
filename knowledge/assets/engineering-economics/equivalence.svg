@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 300" width="660" height="300" role="img" aria-label="现值终值与等额年值三者之间的等值换算关系">
+  <title>等值换算：P、F、A 三兄弟，同一个现金流的不同说法</title>
+  <g font-family="system-ui, -apple-system, 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#8a8a8a">
+    <!-- 三个顶点 -->
+    <g>
+      <circle cx="330" cy="60" r="40" fill="#30d158" opacity="0.12" stroke="#30d158" stroke-width="1.4"/>
+      <text x="330" y="58" text-anchor="middle" font-size="16" fill="#30d158">A</text>
+      <text x="330" y="74" text-anchor="middle" font-size="10.5" fill="#30d158">等额年值</text>
+    </g>
+    <g>
+      <circle cx="130" cy="230" r="40" fill="#0a84ff" opacity="0.12" stroke="#0a84ff" stroke-width="1.4"/>
+      <text x="130" y="228" text-anchor="middle" font-size="16" fill="#0a84ff">P</text>
+      <text x="130" y="244" text-anchor="middle" font-size="10.5" fill="#0a84ff">现值（第 0 年）</text>
+    </g>
+    <g>
+      <circle cx="530" cy="230" r="40" fill="#ff9f0a" opacity="0.12" stroke="#ff9f0a" stroke-width="1.4"/>
+      <text x="530" y="228" text-anchor="middle" font-size="16" fill="#ff9f0a">F</text>
+      <text x="530" y="244" text-anchor="middle" font-size="10.5" fill="#ff9f0a">终值（第 n 年）</text>
+    </g>
+
+    <!-- P <-> F -->
+    <g stroke="#c8c8c8" stroke-width="1.5" fill="#c8c8c8">
+      <path d="M172 214 H488"/>
+      <path d="M482 208 l8 6 l-8 6"/>
+      <path d="M488 246 H172"/>
+      <path d="M178 240 l-8 6 l8 6"/>
+    </g>
+    <text x="330" y="206" text-anchor="middle" font-size="12">F = P(1+i)ⁿ　　P = F(1+i)⁻ⁿ</text>
+    <text x="330" y="272" text-anchor="middle" font-size="11">一次支付：整笔钱往前挪 / 往后挪</text>
+
+    <!-- P <-> A -->
+    <g stroke="#c8c8c8" stroke-width="1.5" fill="#c8c8c8">
+      <path d="M156 200 L306 84"/>
+      <path d="M300 82 l10 -4 l-2 11"/>
+      <path d="M302 96 L152 212"/>
+      <path d="M158 206 l-10 4 l2 -11"/>
+    </g>
+    <text x="140" y="130" font-size="12">A = P·(A/P, i, n)</text>
+    <text x="140" y="148" font-size="11">（等额分 n 年还）</text>
+
+    <!-- A <-> F -->
+    <g stroke="#c8c8c8" stroke-width="1.5" fill="#c8c8c8">
+      <path d="M354 84 L504 200"/>
+      <path d="M508 206 l-10 -4 l2 -11"/>
+      <path d="M508 212 L358 96"/>
+      <path d="M504 200 l10 4 l-2 11"/>
+    </g>
+    <text x="400" y="130" font-size="12">F = A·(F/A, i, n)</text>
+    <text x="400" y="148" font-size="11">（每年存一点，攒到第 n 年）</text>
+
+    <text x="24" y="26" font-size="11.5" fill="#8a8a8a">读图：三个顶点说的是同一个现金流，只是把钱「放」在不同的时间点上看</text>
+    <text x="24" y="292" font-size="11.5" fill="#8a8a8a">易错：A 的第一笔发生在第 1 年年末，不是第 0 年；期数错了整个系数体系全错</text>
+  </g>
+</svg>

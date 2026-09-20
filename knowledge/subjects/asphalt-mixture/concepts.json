@@ -1,0 +1,2643 @@
+{
+  "items": [
+    {
+      "id": "asphalt-mixture-concept-001",
+      "subjectId": "asphalt-mixture",
+      "chapter": "1.1",
+      "term": "沥青路面",
+      "en": "asphalt pavement",
+      "definition": "以沥青材料作为结合料，与矿质集料、填料拌和成混合料后摊铺压实形成的结构层所构成的柔性路面。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "沥青混合料",
+        "柔性路面",
+        "半刚性基层沥青路面"
+      ],
+      "pitfalls": [
+        "沥青路面不等于柔性路面整体：我国常用半刚性基层，基层是水泥稳定类，只有面层是沥青层",
+        "面层与基层的层间粘结状态会显著改变受力模型，不可简单视为纯柔性"
+      ],
+      "examAngle": "常考定义与分类，注意与水泥混凝土路面在力学模型上的差别",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "asphalt-mixture-concept-002",
+      "subjectId": "asphalt-mixture",
+      "chapter": "1.1",
+      "term": "沥青混合料",
+      "en": "asphalt mixture",
+      "definition": "由沥青结合料、粗集料、细集料、矿粉（填料）以及必要时掺加的外加剂，按一定比例拌和而成的复合材料。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "沥青混凝土",
+        "沥青碎石",
+        "SMA",
+        "沥青胶浆"
+      ],
+      "pitfalls": [
+        "沥青混合料是复合材料，性能由沥青胶浆、集料骨架与两者界面共同决定，不能只看沥青用量",
+        "报告书写配比时必须说明是油石比还是沥青用量，两者分母不同"
+      ],
+      "examAngle": "常与沥青混凝土、沥青碎石等分类一起考查",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "asphalt-mixture-concept-003",
+      "subjectId": "asphalt-mixture",
+      "chapter": "1.2",
+      "term": "沥青路面使用性能",
+      "en": "pavement performance requirements",
+      "definition": "沥青路面在使用期内应满足的综合性能要求，通常概括为高温稳定性、低温抗裂性、水稳定性、耐久性、抗滑性能与平整性。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "高温稳定性",
+        "低温抗裂性",
+        "水稳定性",
+        "耐久性",
+        "抗滑性能"
+      ],
+      "pitfalls": [
+        "各项性能之间存在矛盾：提高沥青用量有利于低温与水稳，却不利于高温；空隙率过小易泛油车辙，过大易老化渗水",
+        "平整性属施工质量与使用舒适性指标，不属于材料路用性能，但常被并列列出"
+      ],
+      "examAngle": "常考六项要求及其对应的评价指标与改善措施",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "六项性能的归纳口径各教材略有差异，请以教材表述为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-004",
+      "subjectId": "asphalt-mixture",
+      "chapter": "2.1",
+      "term": "石油沥青",
+      "en": "petroleum asphalt",
+      "definition": "原油经炼制加工后得到的黑色或黑褐色粘稠状（或固体）有机胶凝材料，主要由高分子烃类及其非金属衍生物组成。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "直馏沥青",
+        "氧化沥青",
+        "溶剂沥青",
+        "调合沥青",
+        "天然沥青",
+        "煤沥青"
+      ],
+      "pitfalls": [
+        "石油沥青与煤沥青（焦油沥青）来源与组成完全不同，煤沥青温度稳定性与毒性更差，二者不可混称",
+        "直馏沥青针入度大、延度好但温度稳定性差；氧化沥青稠度高、温度稳定性好但延度降低"
+      ],
+      "examAngle": "常考石油沥青与煤沥青的区别、直馏与氧化沥青的性能差异",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": "炼制工艺的具体表述（常减压蒸馏、溶剂脱沥青、氧化、调合）请与教材核对"
+    },
+    {
+      "id": "asphalt-mixture-concept-005",
+      "subjectId": "asphalt-mixture",
+      "chapter": "2.2",
+      "term": "油分",
+      "en": "oily constituents / saturates plus aromatics",
+      "definition": "沥青三组分中分子量最小、密度最小、呈淡黄色粘稠液体的组分，是沥青质在胶体体系中的分散介质。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "树脂",
+        "沥青质",
+        "胶体结构"
+      ],
+      "pitfalls": [
+        "油分赋予沥青流动性与柔软性，含量高则针入度大、软化点低、温度稳定性差",
+        "油分并非越低越好：过低会使沥青失去塑性、低温开裂风险上升"
+      ],
+      "examAngle": "三组分各自对稠度、塑性、温度稳定性的影响是高频简答",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "asphalt-mixture-concept-006",
+      "subjectId": "asphalt-mixture",
+      "chapter": "2.2",
+      "term": "树脂（胶质）",
+      "en": "resin / asphaltic resin",
+      "definition": "沥青三组分中介于油分与沥青质之间的红褐色粘稠半固体组分，起胶溶剂作用，使沥青质稳定分散于油分中。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "油分",
+        "沥青质",
+        "胶体结构",
+        "胶溶剂"
+      ],
+      "pitfalls": [
+        "树脂决定沥青的塑性与粘结性，含量高则延度大、粘结力强",
+        "树脂与沥青质的比例（胶质/沥青质）决定胶体结构类型，比值大偏溶胶，比值小偏凝胶"
+      ],
+      "examAngle": "常与油分、沥青质一起考查三组分的性质与作用",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "asphalt-mixture-concept-007",
+      "subjectId": "asphalt-mixture",
+      "chapter": "2.2",
+      "term": "沥青质",
+      "en": "asphaltene",
+      "definition": "沥青三组分中分子量最大、密度最大、呈深褐色至黑色固体粉末状的组分，在胶体结构中构成分散相（胶核）。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "油分",
+        "树脂",
+        "胶体结构",
+        "针入度指数"
+      ],
+      "pitfalls": [
+        "沥青质含量提高会使沥青稠度增大、软化点升高、温度稳定性改善，但延度下降",
+        "沥青质并不单独决定性能，必须结合其与树脂的配比判断胶体类型"
+      ],
+      "examAngle": "常考沥青质含量与软化点、针入度指数、胶体结构的关系",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "asphalt-mixture-concept-008",
+      "subjectId": "asphalt-mixture",
+      "chapter": "2.2",
+      "term": "沥青四组分（SARA）",
+      "en": "SARA fractions",
+      "definition": "用溶剂沉淀与吸附色谱将沥青分离为饱和分（Saturates）、芳香分（Aromatics）、胶质（Resins）和沥青质（Asphaltenes）四组分的化学组成表征方法。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "油分",
+        "树脂",
+        "沥青质",
+        "胶体结构"
+      ],
+      "pitfalls": [
+        "三组分（油分/树脂/沥青质）与四组分（SARA）是两套不同的分离体系，不要把油分等同于饱和分",
+        "四组分法常用于老化与改性机理研究，工程常规评价主要用三组分与三大指标"
+      ],
+      "examAngle": "常考三组分与四组分两套体系的对应关系与各自用途",
+      "confidence": "medium",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": "SARA 四组分的中文译名与分离顺序请以教材表述核对"
+    },
+    {
+      "id": "asphalt-mixture-concept-009",
+      "subjectId": "asphalt-mixture",
+      "chapter": "2.3",
+      "term": "沥青胶体结构",
+      "en": "colloidal structure of asphalt",
+      "definition": "把沥青看作以沥青质为分散相（胶核）、树脂为胶溶剂、油分为分散介质的胶体分散体系，用以解释沥青流变行为的理论模型。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "沥青质",
+        "树脂",
+        "油分",
+        "溶胶型",
+        "凝胶型",
+        "溶-凝胶型"
+      ],
+      "pitfalls": [
+        "胶体结构不是静态的，随温度变化会发生溶胶-凝胶转变",
+        "胶体理论是解释性模型，不能直接用于定量设计计算"
+      ],
+      "examAngle": "常考用胶体结构解释沥青组成与路用性能的关系",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "asphalt-mixture-concept-010",
+      "subjectId": "asphalt-mixture",
+      "chapter": "2.3",
+      "term": "溶胶型、凝胶型与溶-凝胶型沥青",
+      "en": "sol / gel / sol-gel type asphalt",
+      "definition": "按沥青质含量与胶质/沥青质比值划分的三种胶体类型：溶胶型沥青质少、流动性好但温度稳定性差；凝胶型沥青质多、弹性显著、低温脆性大；溶-凝胶型介于两者之间，为道路石油沥青的理想类型。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "胶体结构",
+        "针入度指数",
+        "沥青质"
+      ],
+      "pitfalls": [
+        "针入度指数 PI 常用来辅助判断胶体类型：PI < -2 偏溶胶，-2 ~ +2 为溶-凝胶，> +2 偏凝胶——该判据是经验性的，不是严格定义",
+        "道路石油沥青多属溶-凝胶型，并非纯凝胶型"
+      ],
+      "examAngle": "高频概念辨析：三种类型的组成特征与性能差异",
+      "confidence": "medium",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": "PI 与胶体类型对应的分界值（±2）为通行经验值，请以教材口径核对"
+    },
+    {
+      "id": "asphalt-mixture-concept-011",
+      "subjectId": "asphalt-mixture",
+      "chapter": "3.1",
+      "term": "针入度",
+      "en": "penetration",
+      "definition": "在规定温度、规定荷重和标准针贯入时间的条件下，标准针垂直贯入沥青试样的深度，以 0.1 mm 为单位计。",
+      "formulaId": "asphalt-mixture-formula-001",
+      "symbols": [
+        "P"
+      ],
+      "unit": "0.1 mm",
+      "relations": [
+        "针入度指数",
+        "针入度-温度感应系数",
+        "针入度分级"
+      ],
+      "pitfalls": [
+        "针入度必须写清试验条件（温度/荷重/时间），脱离条件的针入度数值没有意义",
+        "针入度是条件性粘度指标，不是粘度，不能直接用于力学计算",
+        "针入度是经验指标，同针入度的两种沥青感温性可能差别很大"
+      ],
+      "examAngle": "常考针入度的试验条件与单位，以及它反映稠度的物理意义",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "标准试验条件（温度/荷重/贯入时间）以现行 JTG E20 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-012",
+      "subjectId": "asphalt-mixture",
+      "chapter": "3.1",
+      "term": "针入度-温度感应系数 A",
+      "en": "penetration-temperature susceptibility coefficient",
+      "definition": "针入度对数与温度线性回归直线 lgP = A·T + K 的斜率，反映沥青针入度随温度变化的敏感程度。",
+      "formulaId": "asphalt-mixture-formula-002",
+      "symbols": [
+        "A"
+      ],
+      "unit": "1/℃",
+      "relations": [
+        "针入度",
+        "针入度指数",
+        "感温性"
+      ],
+      "pitfalls": [
+        "A 越大表示对温度越敏感（感温性越强），A 越小越好",
+        "A 由多点回归得到，取样温度点过少或温区过窄会使 A 不稳定",
+        "lgP 是以 10 为底的常用对数，用自然对数会得到完全不同的 A"
+      ],
+      "examAngle": "计算题第一步：由针入度-温度数据回归 A 与 K",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "asphalt-mixture-concept-013",
+      "subjectId": "asphalt-mixture",
+      "chapter": "3.1",
+      "term": "针入度指数 PI",
+      "en": "penetration index",
+      "definition": "由针入度-温度感应系数换算得到的表征沥青感温性的无量纲指标，PI 越大表示沥青对温度越不敏感。",
+      "formulaId": "asphalt-mixture-formula-004",
+      "symbols": [
+        "PI"
+      ],
+      "unit": "—",
+      "relations": [
+        "针入度-温度感应系数",
+        "当量软化点",
+        "当量脆点",
+        "胶体结构"
+      ],
+      "pitfalls": [
+        "PI 随 A 增大而减小，与 A 是反向关系，容易记反",
+        "我国道路石油沥青常用 PI 在 -2 ~ +1 左右，PI 过大意味着低温脆性风险",
+        "PI 是基于针入度经验指标推导的，温度适用范围有限，外推到极端温度要谨慎"
+      ],
+      "examAngle": "高频计算与辨析：PI 与 A 的换算、PI 与感温性/胶体类型的关系",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "PI 取值范围与分级要求以现行 JTG F40 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-014",
+      "subjectId": "asphalt-mixture",
+      "chapter": "3.1",
+      "term": "当量软化点 T800",
+      "en": "equivalent softening point",
+      "definition": "按针入度-温度回归直线外推到针入度等于 800（0.1 mm）时对应的温度，用以评价沥青的高温性能。",
+      "formulaId": "asphalt-mixture-formula-005",
+      "symbols": [
+        "T800"
+      ],
+      "unit": "℃",
+      "relations": [
+        "针入度指数",
+        "当量脆点",
+        "软化点"
+      ],
+      "pitfalls": [
+        "T800 是外推值，不是环球法实测软化点，二者数值不相等但高度相关",
+        "T800 越高表示高温性能越好",
+        "针入度回归基于中低温区数据，外推到高温区只是近似"
+      ],
+      "examAngle": "常与当量脆点一起考：计算 T800、T1.2 并求塑性温度范围",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "asphalt-mixture-concept-015",
+      "subjectId": "asphalt-mixture",
+      "chapter": "3.1",
+      "term": "当量脆点 T1.2",
+      "en": "equivalent breaking point",
+      "definition": "按针入度-温度回归直线外推到针入度等于 1.2（0.1 mm）时对应的温度，用以评价沥青的低温性能。",
+      "formulaId": "asphalt-mixture-formula-006",
+      "symbols": [
+        "T1.2"
+      ],
+      "unit": "℃",
+      "relations": [
+        "针入度指数",
+        "当量软化点",
+        "脆点"
+      ],
+      "pitfalls": [
+        "T1.2 越低表示低温性能越好，注意与 T800 的方向相反",
+        "T1.2 是外推值，与弗拉斯脆点实测值不同，不可替代实测低温指标",
+        "T800 与 T1.2 之差称塑性温度范围，越大说明可工作温度区间越宽"
+      ],
+      "examAngle": "高频计算：与 T800 联算，评价沥青的高低温适用区间",
+      "confidence": "medium",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "针入度 1.2 这一临界值的取值依据请与教材核对"
+    },
+    {
+      "id": "asphalt-mixture-concept-016",
+      "subjectId": "asphalt-mixture",
+      "chapter": "3.2",
+      "term": "软化点（环球法）",
+      "en": "softening point (ring and ball method)",
+      "definition": "在规定升温速率下，置于标准铜环中的沥青试样被规定质量的钢球压落到规定距离时的温度，表征沥青的高温稠度与温度稳定性。",
+      "formulaId": null,
+      "symbols": [
+        "TR&B"
+      ],
+      "unit": "℃",
+      "relations": [
+        "当量软化点",
+        "针入度",
+        "高温稳定性"
+      ],
+      "pitfalls": [
+        "软化点高说明高温稠度好，但软化点不等于路面抗车辙温度，二者不能划等号",
+        "软化点对蜡含量敏感，含蜡沥青软化点可能虚高，需结合针入度与延度综合判断",
+        "软化点不是熔点，沥青没有明确的熔化温度"
+      ],
+      "examAngle": "常考软化点与高温性能的关系及其局限性",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "环球法的升温速率、钢球质量等试验参数以现行 JTG E20 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-017",
+      "subjectId": "asphalt-mixture",
+      "chapter": "3.2",
+      "term": "延度",
+      "en": "ductility",
+      "definition": "按规定温度与拉伸速率拉伸沥青试样至断裂时的长度，以 cm 计，表征沥青的塑性与粘结能力。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "cm",
+      "relations": [
+        "针入度",
+        "软化点",
+        "低温抗裂性"
+      ],
+      "pitfalls": [
+        "延度是条件性指标，必须注明试验温度与拉伸速率",
+        "延度大只说明塑性好，不能直接等同于低温抗裂性能，低温性能应结合脆点、T1.2 与混合料低温弯曲应变判断",
+        "含蜡沥青在低温下延度急剧下降"
+      ],
+      "examAngle": "常考延度反映什么性能、为什么不能单独用它评价低温性能",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "延度试验的常用温度（如 15℃、10℃）与拉伸速率以现行 JTG E20 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-018",
+      "subjectId": "asphalt-mixture",
+      "chapter": "3.3",
+      "term": "蜡含量",
+      "en": "wax content",
+      "definition": "沥青中蜡组分所占的质量百分率，常用裂解蒸馏等方法测定，是影响沥青路用性能的重要不利因素。",
+      "formulaId": "asphalt-mixture-formula-009",
+      "symbols": [
+        "W"
+      ],
+      "unit": "%",
+      "relations": [
+        "针入度",
+        "软化点",
+        "延度",
+        "抗滑性能"
+      ],
+      "pitfalls": [
+        "蜡对性能的影响是双向的：高温时降低粘度、使混合料易车辙；低温时增大脆性与收缩、易开裂；还会使路面泛白、抗滑性衰减",
+        "含蜡沥青的软化点可能偏高而实际高温粘度偏低，出现指标与性能不一致",
+        "降低蜡含量的根本途径是原油选择与炼制工艺，使用阶段难以去除"
+      ],
+      "examAngle": "高频简答：蜡含量对沥青性能的影响及工程对策",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "蜡含量的测定方法与限值要求以现行 JTG E20 与 JTG F40 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-019",
+      "subjectId": "asphalt-mixture",
+      "chapter": "3.3",
+      "term": "闪点",
+      "en": "flash point",
+      "definition": "沥青加热时挥发的油气与空气形成混合物遇火发生闪燃的最低温度，是沥青施工安全性的控制指标。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "℃",
+      "relations": [
+        "施工温度",
+        "薄膜加热试验"
+      ],
+      "pitfalls": [
+        "闪点是安全指标，不是性能指标，不能用来评价沥青质量好坏",
+        "闪点应显著高于施工拌和温度，否则存在火灾隐患",
+        "闪点与燃点不是同一个概念"
+      ],
+      "examAngle": "常考闪点的工程意义（施工安全）",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "闪点的测定方法与限值以现行 JTG E20 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-020",
+      "subjectId": "asphalt-mixture",
+      "chapter": "3.4",
+      "term": "沥青粘度",
+      "en": "asphalt viscosity",
+      "definition": "沥青抵抗流动的内摩擦特性，常用动力粘度（Pa·s）或运动粘度（mm²/s）表示，是沥青最基本的流变参数。",
+      "formulaId": null,
+      "symbols": [
+        "eta",
+        "nu"
+      ],
+      "unit": "Pa·s / mm²/s",
+      "relations": [
+        "针入度",
+        "软化点",
+        "施工和易性",
+        "高温稳定性"
+      ],
+      "pitfalls": [
+        "60℃ 粘度主要反映高温抗车辙能力，135℃ 粘度主要反映拌和与摊铺的和易性，二者用途不同不能混用",
+        "粘度随温度变化剧烈，报告粘度必须同时注明温度与剪切速率",
+        "针入度是经验稠度指标，与粘度不是线性关系"
+      ],
+      "examAngle": "常考不同温度粘度的工程含义，以及粘度分级与针入度分级的差别",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "粘度测定的标准温度与方法以现行 JTG E20 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-021",
+      "subjectId": "asphalt-mixture",
+      "chapter": "3.5",
+      "term": "薄膜加热试验 TFOT",
+      "en": "thin film oven test",
+      "definition": "将沥青在规定厚度的薄膜状态下于规定温度的烘箱中加热规定时间，模拟沥青在拌和与施工过程中热氧老化的试验方法。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "旋转薄膜加热试验",
+        "沥青老化",
+        "针入度比"
+      ],
+      "pitfalls": [
+        "TFOT 模拟的是短期老化（拌和与施工阶段），不能代表路面使用期的长期老化",
+        "试验后评价的是针入度比、延度保留与质量变化，不是绝对指标",
+        "TFOT 与 RTFOT 结果不完全等效，报告时必须注明方法"
+      ],
+      "examAngle": "常考 TFOT 与 RTFOT 的原理区别与各自模拟对象",
+      "confidence": "medium",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "薄膜厚度、加热温度与持续时间以现行 JTG E20 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-022",
+      "subjectId": "asphalt-mixture",
+      "chapter": "3.5",
+      "term": "旋转薄膜加热试验 RTFOT",
+      "en": "rolling thin film oven test",
+      "definition": "将沥青装入旋转的玻璃瓶中形成连续更新的薄膜，在规定温度与气流条件下加热，模拟沥青短期热氧老化的试验方法。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "薄膜加热试验",
+        "沥青老化",
+        "压力老化"
+      ],
+      "pitfalls": [
+        "RTFOT 的沥青膜更薄、与空气接触更充分，老化程度通常比 TFOT 更接近实际拌和过程",
+        "RTFOT 老化后的残留物常作为压力老化容器 PAV 试验的起始材料",
+        "老化导致针入度下降、软化点升高、延度降低，属于典型的硬化变脆"
+      ],
+      "examAngle": "常与 TFOT 对比考查，并作为 PG 分级中老化沥青的制备手段",
+      "confidence": "medium",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "RTFOT 的温度、时间与气流条件以现行 JTG E20 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-023",
+      "subjectId": "asphalt-mixture",
+      "chapter": "3.5",
+      "term": "沥青老化",
+      "en": "asphalt aging",
+      "definition": "沥青在储存、拌和、施工与使用过程中因热、氧、光及水分作用发生的组分与结构变化，表现为变硬、变脆、粘性下降。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "薄膜加热试验",
+        "旋转薄膜加热试验",
+        "耐久性",
+        "再生剂"
+      ],
+      "pitfalls": [
+        "短期老化（拌和施工期）与长期老化（使用期）机理与控制措施不同，不可混为一谈",
+        "老化使针入度减小、软化点升高、延度减小——判断方向时容易记反软化点",
+        "老化并不总是坏事：适度老化会提高高温粘度，施工前过度老化才是有害的"
+      ],
+      "examAngle": "常考老化机理、老化后各指标的变化方向及改善措施",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "asphalt-mixture-concept-024",
+      "subjectId": "asphalt-mixture",
+      "chapter": "3.6",
+      "term": "针入度分级",
+      "en": "penetration grading",
+      "definition": "以 25℃ 针入度为主要依据划分沥青标号的分级体系（如 50 号、70 号、90 号、110 号沥青）。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "针入度",
+        "粘度分级",
+        "PG 分级"
+      ],
+      "pitfalls": [
+        "针入度分级只反映 25℃ 一个温度点的稠度，无法区分感温性差异很大的沥青",
+        "标号数字越大表示针入度越大、沥青越软（如 110 号比 70 号软）",
+        "针入度分级属经验性分级，不能直接对应路面高低温使用温度"
+      ],
+      "examAngle": "常考三种分级体系的对比，重点是针入度分级的局限性",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "具体牌号系列（如 AH-70、A-70 等命名）以现行 JTG F40 与 GB/T 15180 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-025",
+      "subjectId": "asphalt-mixture",
+      "chapter": "3.6",
+      "term": "粘度分级",
+      "en": "viscosity grading",
+      "definition": "以规定温度下的粘度（常用 60℃ 动力粘度，或 135℃ 粘度）为依据划分沥青等级的分级体系。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "针入度分级",
+        "PG 分级",
+        "沥青粘度"
+      ],
+      "pitfalls": [
+        "粘度分级比针入度分级更接近力学本质，但仍是单一温度指标，不涉及低温性能",
+        "老化前后分别测试（如 AC 级与 AR 级）是粘度分级体系的特点之一",
+        "粘度与针入度在 25℃ 附近有经验对应关系，但换算精度有限"
+      ],
+      "examAngle": "常考三种分级体系各自的指标温度与优缺点",
+      "confidence": "medium",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "粘度分级的等级代号与试验温度以教材及现行规范为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-026",
+      "subjectId": "asphalt-mixture",
+      "chapter": "3.6",
+      "term": "PG 性能分级",
+      "en": "performance grading (PG)",
+      "definition": "美国 SHRP/Superpave 提出的按沥青适用的路面最高与最低设计温度划分的性能分级体系，编号形如 PG X-Y。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "针入度分级",
+        "粘度分级",
+        "Superpave",
+        "DSR",
+        "BBR"
+      ],
+      "pitfalls": [
+        "PG 64-22 表示适用于最高路面设计温度 64℃、最低路面设计温度 -22℃ 的沥青，而不是气温",
+        "PG 分级同时控制高温、低温与疲劳/老化性能，是性能导向而非经验导向",
+        "PG 的高温与低温等级是分档跳级的，不能认为 PG 64 与 PG 70 只差 6℃"
+      ],
+      "examAngle": "高频：解释 PG 64-22 等编号的含义，并与针入度分级比较优劣",
+      "confidence": "medium",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": "PG 等级的档位间隔与原样/RTFOT/PAV 三种状态的试验项目请以教材与 AASHTO 规范核对"
+    },
+    {
+      "id": "asphalt-mixture-concept-027",
+      "subjectId": "asphalt-mixture",
+      "chapter": "4.1",
+      "term": "改性沥青",
+      "en": "modified asphalt",
+      "definition": "在基质沥青中掺加改性剂（聚合物、天然沥青、橡胶等），通过物理或化学作用改善其路用性能的沥青结合料。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "SBS",
+        "SBR",
+        "EVA",
+        "橡胶粉",
+        "相容性"
+      ],
+      "pitfalls": [
+        "改性不是万能的：一种改性剂往往只重点改善某一方面性能",
+        "改性效果与基质沥青的配伍性密切相关，同一改性剂在不同基质沥青中效果差异很大",
+        "改性沥青的施工温度通常高于普通沥青，施工不当会抵消改性效果"
+      ],
+      "examAngle": "常考改性的目的、机理分类与主要改性剂的作用特点",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "asphalt-mixture-concept-028",
+      "subjectId": "asphalt-mixture",
+      "chapter": "4.2",
+      "term": "SBS 改性剂",
+      "en": "styrene-butadiene-styrene modifier",
+      "definition": "苯乙烯-丁二烯-苯乙烯嵌段共聚物，属热塑性弹性体，是最常用的道路沥青改性剂。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "改性沥青",
+        "SBR",
+        "EVA",
+        "网络结构"
+      ],
+      "pitfalls": [
+        "SBS 的特点是高低温性能同时改善：高温提高弹性与粘度，低温提高延度与柔韧性",
+        "SBS 需经高速剪切或胶体磨充分分散并与沥青溶胀才能形成网络结构，简单搅拌无效",
+        "SBS 掺量存在经济与工艺的平衡点，掺量过高会导致粘度过大、施工困难"
+      ],
+      "examAngle": "高频：SBS 为什么能同时改善高低温性能（网络结构机理）",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": "常用掺量范围以现行 JTG F40 与教材为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-029",
+      "subjectId": "asphalt-mixture",
+      "chapter": "4.2",
+      "term": "SBR 改性剂",
+      "en": "styrene-butadiene rubber modifier",
+      "definition": "丁苯橡胶（常以胶乳形式使用）改性剂，主要通过提高沥青的弹性与低温延展性改善低温抗裂性能。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "改性沥青",
+        "SBS",
+        "低温抗裂性"
+      ],
+      "pitfalls": [
+        "SBR 对低温性能改善明显，但对高温性能的提升通常不如 SBS 与塑性体类改性剂",
+        "SBR 常以胶乳形式加入，需注意水分蒸发与分散均匀性",
+        "不要因为它是橡胶就认为与橡胶粉改性机理完全相同"
+      ],
+      "examAngle": "常与 SBS、EVA 对比考查各自的改善侧重",
+      "confidence": "medium",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": "SBR 的常用掺量与主要技术指标以教材为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-030",
+      "subjectId": "asphalt-mixture",
+      "chapter": "4.2",
+      "term": "EVA/PE 改性剂",
+      "en": "ethylene-vinyl acetate / polyethylene modifier",
+      "definition": "乙烯-醋酸乙烯酯共聚物与聚乙烯等塑性体类改性剂，主要通过提高沥青的粘度与模量改善高温稳定性。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "改性沥青",
+        "SBS",
+        "高温稳定性"
+      ],
+      "pitfalls": [
+        "塑性体类改善高温性能显著，但对低温性能的改善有限，低温地区需慎用",
+        "PE 类与沥青相容性较差，储存易离析，需要相容剂或稳定剂",
+        "不要把 EVA 与 SBS 的作用机理混为一谈：一个是塑性体，一个是弹性体"
+      ],
+      "examAngle": "常考塑性体类与弹性体类改性剂的作用差异",
+      "confidence": "medium",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": "EVA 与 PE 的适用条件与掺量以教材为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-031",
+      "subjectId": "asphalt-mixture",
+      "chapter": "4.2",
+      "term": "橡胶粉改性沥青",
+      "en": "crumb rubber modified asphalt",
+      "definition": "以废旧轮胎加工成的橡胶粉为改性剂的沥青，橡胶粉通过溶胀吸收沥青轻组分形成凝胶状弹性体，改善弹性、抗老化与抗疲劳性能。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "改性沥青",
+        "SBS",
+        "再生利用"
+      ],
+      "pitfalls": [
+        "橡胶粉改性以溶胀为主、降解为辅，橡胶颗粒并未完全溶解，体系属于非均相",
+        "橡胶沥青粘度大、施工温度高，且储存稳定性差，宜现场加工现用",
+        "橡胶粉的细度、掺量与反应时间对性能影响极大"
+      ],
+      "examAngle": "常考橡胶粉改性的机理（溶胀）与环保意义、施工注意事项",
+      "confidence": "medium",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": "橡胶粉细度与掺量的常用范围以教材及现行规范为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-032",
+      "subjectId": "asphalt-mixture",
+      "chapter": "4.3",
+      "term": "改性沥青的相容性与离析",
+      "en": "compatibility and separation of modified asphalt",
+      "definition": "相容性指改性剂与基质沥青形成稳定均一体系的能力；离析指在高温长期储存中改性剂与沥青因密度差异分层，常用上下段软化点差评价。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "改性沥青",
+        "SBS",
+        "储存稳定性"
+      ],
+      "pitfalls": [
+        "离析试验以软化点差作为判据，差值过大说明储存稳定性不合格——限值以现行规范为准",
+        "相容性是热力学概念，多数聚合物改性沥青属热力学不相容体系，靠机械分散与稳定剂维持",
+        "离析不合格的改性沥青即使指标合格后也不宜长期储存"
+      ],
+      "examAngle": "常考离析试验的原理、判据与改善措施",
+      "confidence": "medium",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": "离析试验的软化点差限值与试验条件以现行 JTG E20 / JTG F40 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-033",
+      "subjectId": "asphalt-mixture",
+      "chapter": "4.4",
+      "term": "乳化沥青",
+      "en": "emulsified asphalt",
+      "definition": "在乳化剂与水的作用下，将加热熔化的沥青分散成微米级微滴形成的水包油型乳状液，常温下具有流动性，破乳后恢复沥青粘结性能。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "破乳",
+        "稀浆封层",
+        "冷拌沥青",
+        "透层",
+        "粘层"
+      ],
+      "pitfalls": [
+        "乳化沥青是沥青——水——乳化剂——稳定剂四元体系，不能按纯沥青的思路使用",
+        "破乳速度必须与施工工艺和集料表面性质匹配，破乳过快或过慢都会导致失败",
+        "阳离子乳化沥青适合酸性石料（如花岗岩），阴离子适合碱性石料（如石灰岩）"
+      ],
+      "examAngle": "常考乳化沥青的组成、破乳机理与阴阳离子乳化剂的适用石料",
+      "confidence": "medium",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": "乳化沥青的技术指标与破乳速度分级以现行 JTG F40 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-034",
+      "subjectId": "asphalt-mixture",
+      "chapter": "5.1",
+      "term": "悬浮-密实结构",
+      "en": "suspended dense structure",
+      "definition": "连续密级配沥青混合料中粗集料被沥青胶浆和细集料分隔、彼此不接触形成的结构，强度主要来源于沥青与矿粉形成的胶浆粘聚力。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "骨架-空隙结构",
+        "骨架-密实结构",
+        "AC",
+        "粘聚力"
+      ],
+      "pitfalls": [
+        "悬浮-密实结构内摩阻角较小，高温稳定性相对较弱，但密实性与水稳定性好",
+        "典型代表是密级配沥青混凝土 AC",
+        "不要认为悬浮结构就一定不好，它在耐久性与防水方面有明显优势"
+      ],
+      "examAngle": "高频：三种结构类型的对比（受力、代表混合料、优缺点）",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/asphalt-mixture/mixture-structure-types.svg",
+        "caption": "沥青混合料的三种结构类型（自绘示意）",
+        "readPoints": [
+          "判断顺序：先看粗集料是否形成骨架，再看空隙有没有被填满",
+          "骨架决定抗车辙能力，密实程度决定耐久性",
+          "AC 悬浮密实、OGFC 骨架空隙、SMA 骨架密实"
+        ]
+      }
+    },
+    {
+      "id": "asphalt-mixture-concept-035",
+      "subjectId": "asphalt-mixture",
+      "chapter": "5.1",
+      "term": "骨架-空隙结构",
+      "en": "skeleton-void structure",
+      "definition": "粗集料相互嵌挤形成骨架，细集料与填料不足以填满骨架间隙、残留较多连通空隙的混合料结构，强度主要来源于内摩阻力。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "悬浮-密实结构",
+        "骨架-密实结构",
+        "AM",
+        "OGFC"
+      ],
+      "pitfalls": [
+        "骨架-空隙结构空隙率大，抗滑、排水、降噪性能好，但耐久性与水稳定性风险高",
+        "典型代表是沥青碎石 AM 与开级配排水式磨耗层 OGFC",
+        "空隙大不等于质量差，OGFC 正是有意设计大空隙"
+      ],
+      "examAngle": "常考三种结构类型中空隙率与强度来源的对应关系",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/asphalt-mixture/mixture-structure-types.svg",
+        "caption": "沥青混合料的三种结构类型（自绘示意）",
+        "readPoints": [
+          "判断顺序：先看粗集料是否形成骨架，再看空隙有没有被填满",
+          "骨架决定抗车辙能力，密实程度决定耐久性",
+          "AC 悬浮密实、OGFC 骨架空隙、SMA 骨架密实"
+        ]
+      }
+    },
+    {
+      "id": "asphalt-mixture-concept-036",
+      "subjectId": "asphalt-mixture",
+      "chapter": "5.1",
+      "term": "骨架-密实结构",
+      "en": "dense skeleton structure",
+      "definition": "粗集料形成嵌挤骨架，同时由沥青胶浆（含高比例矿粉与纤维）充分填充骨架间隙，兼具高内摩阻力与高粘聚力的混合料结构。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "悬浮-密实结构",
+        "骨架-空隙结构",
+        "SMA",
+        "木质素纤维"
+      ],
+      "pitfalls": [
+        "典型代表是沥青玛蹄脂碎石混合料 SMA，其粗集料含量与矿粉含量都显著高于 AC",
+        "骨架-密实结构的关键在于粗集料必须真正接触形成骨架，仅靠提高粗集料比例并不保证形成骨架",
+        "SMA 必须掺纤维以防止沥青析漏，这是它与普通密级配混合料的重要区别"
+      ],
+      "examAngle": "高频：说明 SMA 为什么抗车辙，骨架-密实结构如何实现",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/asphalt-mixture/mixture-structure-types.svg",
+        "caption": "沥青混合料的三种结构类型（自绘示意）",
+        "readPoints": [
+          "判断顺序：先看粗集料是否形成骨架，再看空隙有没有被填满",
+          "骨架决定抗车辙能力，密实程度决定耐久性",
+          "AC 悬浮密实、OGFC 骨架空隙、SMA 骨架密实"
+        ]
+      }
+    },
+    {
+      "id": "asphalt-mixture-concept-037",
+      "subjectId": "asphalt-mixture",
+      "chapter": "5.1",
+      "term": "沥青混合料类型（AC / AM / SMA / OGFC）",
+      "en": "mixture types",
+      "definition": "按级配与结构特征划分的常见沥青混合料类别：AC 为密级配沥青混凝土（悬浮-密实），AM 为半开级配沥青碎石（骨架-空隙），SMA 为沥青玛蹄脂碎石（骨架-密实），OGFC 为开级配排水式抗滑磨耗层。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "悬浮-密实结构",
+        "骨架-空隙结构",
+        "骨架-密实结构",
+        "公称最大粒径"
+      ],
+      "pitfalls": [
+        "AC 后面的数字表示公称最大粒径（如 AC-13 为 13.2 mm），不是最大粒径",
+        "AC-C 与 AC-F 表示粗型与细型级配，粗型更偏骨架、细型更偏密实",
+        "SMA 与 OGFC 都含高比例粗集料，但前者空隙率小且用玛蹄脂填充，后者空隙率大以排水"
+      ],
+      "examAngle": "高频：代号含义与结构类型、主要性能的对应关系",
+      "confidence": "medium",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": "各类混合料的代号体系与级配范围以现行 JTG F40 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-038",
+      "subjectId": "asphalt-mixture",
+      "chapter": "5.2",
+      "term": "粘聚力 c 与内摩阻角 φ",
+      "en": "cohesion and internal friction angle",
+      "definition": "沥青混合料抗剪强度的两个来源：粘聚力 c 主要由沥青胶浆的粘结作用提供，内摩阻角 φ 主要由集料颗粒间的嵌挤与摩擦提供。",
+      "formulaId": null,
+      "symbols": [
+        "c",
+        "phi"
+      ],
+      "unit": "kPa / °",
+      "relations": [
+        "悬浮-密实结构",
+        "骨架-空隙结构",
+        "骨架-密实结构"
+      ],
+      "pitfalls": [
+        "温度升高时粘聚力 c 急剧下降，而内摩阻角 φ 变化较小——这是高温季节混合料强度下降的主因",
+        "加载速率提高等效于温度降低，沥青混合料是典型速率相关材料",
+        "不能把 c、φ 当作常数，它们随温度、速率、老化状态变化"
+      ],
+      "examAngle": "常考温度与加载速率对 c、φ 的影响及其工程含义",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "asphalt-mixture-concept-039",
+      "subjectId": "asphalt-mixture",
+      "chapter": "5.3",
+      "term": "粗集料",
+      "en": "coarse aggregate",
+      "definition": "沥青混合料中粒径大于规定筛孔（通常为 2.36 mm 或 4.75 mm，视混合料类型而定）的集料，是形成骨架、提供内摩阻力的主体。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "细集料",
+        "矿粉",
+        "表观相对密度",
+        "毛体积相对密度"
+      ],
+      "pitfalls": [
+        "粗、细集料的分界筛孔在不同规范与混合料类型中可能不同，做题前先确认",
+        "压碎值、洛杉矶磨耗、针片状含量是粗集料的关键技术指标",
+        "粗集料的表面纹理与棱角性直接影响内摩阻角，光圆颗粒不利于抗车辙"
+      ],
+      "examAngle": "常考粗集料的技术要求与对高温稳定性的影响",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": "粗集料分界筛孔与技术指标限值以现行 JTG F40 与 JTG E42 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-040",
+      "subjectId": "asphalt-mixture",
+      "chapter": "5.4",
+      "term": "矿粉（填料）",
+      "en": "mineral filler",
+      "definition": "粒径小于 0.075 mm 的矿质粉末，与沥青共同形成沥青胶浆，对混合料的高温性能、水稳定性与耐久性有显著影响。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "沥青胶浆",
+        "粉胶比",
+        "亲水系数",
+        "消石灰"
+      ],
+      "pitfalls": [
+        "矿粉不是惰性填充物：它与沥青的交互作用（结构沥青）显著改变胶浆性能",
+        "粉胶比（矿粉质量/有效沥青质量）过高会使胶浆变脆、低温与疲劳性能下降",
+        "矿粉亲水系数大、塑性指数高会损害水稳定性",
+        "水泥或消石灰常部分替代矿粉以改善水稳定性"
+      ],
+      "examAngle": "常考矿粉的作用、粉胶比的影响与水稳定性改善措施",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": "粉胶比的常用范围与矿粉技术指标以现行 JTG F40 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-041",
+      "subjectId": "asphalt-mixture",
+      "chapter": "5.5",
+      "term": "沥青与集料粘附性",
+      "en": "adhesion between asphalt and aggregate",
+      "definition": "沥青膜抵抗水置换而保持裹覆在集料表面的能力，是混合料水稳定性的物质基础，常用水煮法或水浸法评定等级。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "水稳定性",
+        "抗剥落剂",
+        "消石灰",
+        "剥落"
+      ],
+      "pitfalls": [
+        "酸性石料（花岗岩、石英岩）与沥青粘附性差，碱性石料（石灰岩、玄武岩）较好",
+        "提高粘附性的措施：掺消石灰或水泥、掺抗剥落剂、使用改性沥青、保持集料洁净干燥",
+        "粘附性等级高不等于混合料水稳定性一定合格，还要看空隙率与压实"
+      ],
+      "examAngle": "常考粘附性差的原因与改善措施",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": "粘附性分级方法与等级要求以现行 JTG E20 / JTG F40 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-042",
+      "subjectId": "asphalt-mixture",
+      "chapter": "6.2",
+      "term": "最大密度曲线理论",
+      "en": "maximum density curve theory",
+      "definition": "认为矿质混合料存在一条使空隙率最小、密度最大的理想级配曲线的理论，是连续级配设计的理论基础。",
+      "formulaId": "asphalt-mixture-formula-037",
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "泰波公式",
+        "级配指数",
+        "连续级配"
+      ],
+      "pitfalls": [
+        "最大密度曲线的原始形式是抛物线（Fuller 曲线），n 取 0.5 时为抛物线",
+        "单纯追求最大密度会使混合料缺乏粗集料骨架，高温稳定性不足",
+        "该理论只考虑几何填充，未考虑颗粒形状、表面纹理与压实功的影响"
+      ],
+      "examAngle": "常考最大密度曲线的含义、假设与工程局限",
+      "confidence": "medium",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "Fuller 抛物线与指数 0.5 的对应关系请以教材表述核对"
+    },
+    {
+      "id": "asphalt-mixture-concept-043",
+      "subjectId": "asphalt-mixture",
+      "chapter": "6.2",
+      "term": "泰波公式与级配指数 n",
+      "en": "Talbot equation and gradation exponent",
+      "definition": "对最大密度曲线的一般化表达 P = 100(d/D)^n，其中 n 为级配指数，控制级配曲线的弯曲程度与粗细倾向。",
+      "formulaId": "asphalt-mixture-formula-037",
+      "symbols": [
+        "P",
+        "d",
+        "D",
+        "n"
+      ],
+      "unit": "% / mm / —",
+      "relations": [
+        "最大密度曲线理论",
+        "公称最大粒径",
+        "级配"
+      ],
+      "pitfalls": [
+        "n 越小级配越粗（细集料少），n 越大级配越细；n=0.5 对应经典 Fuller 抛物线",
+        "公式中的 P 是小于某粒径 d 的通过百分率，不是筛余",
+        "泰波公式只给出几何级配，不等于最佳工程级配"
+      ],
+      "examAngle": "高频计算：给定 D 与 n 计算各筛孔通过率",
+      "confidence": "medium",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "泰波公式中 D 取最大粒径还是公称最大粒径，教材口径可能不同，请核对"
+    },
+    {
+      "id": "asphalt-mixture-concept-044",
+      "subjectId": "asphalt-mixture",
+      "chapter": "6.3",
+      "term": "贝雷法 CA 比",
+      "en": "Bailey coarse aggregate ratio",
+      "definition": "贝雷法中评价粗集料部分嵌挤程度的比例指标，定义为半筛孔通过率与关键控制筛孔（PCS）通过率之差，除以半筛孔筛余百分率。",
+      "formulaId": "asphalt-mixture-formula-039",
+      "symbols": [
+        "CA"
+      ],
+      "unit": "—",
+      "relations": [
+        "贝雷法 FAc 比",
+        "贝雷法 FAf 比",
+        "控制筛孔"
+      ],
+      "pitfalls": [
+        "CA 比反映的是粗集料中「中间粒径」的填充情况，不是简单的粗集料含量",
+        "半筛孔取公称最大粒径的 1/2 附近的相邻标准筛孔，取值口径不同会导致结果差异",
+        "CA 比过小说明粗集料偏粗偏集中，容易形成干涉与离析；过大则粗集料骨架被削弱"
+      ],
+      "examAngle": "高频计算：由级配数据计算 CA 比并评价嵌挤情况",
+      "confidence": "low",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "CA 比的精确定义式、半筛孔取法与推荐范围（常见 0.3~0.9 一类区间）必须对照教材与 Bailey 原始文献核对"
+    },
+    {
+      "id": "asphalt-mixture-concept-045",
+      "subjectId": "asphalt-mixture",
+      "chapter": "6.3",
+      "term": "贝雷法 FAc 比",
+      "en": "Bailey fine aggregate coarse ratio",
+      "definition": "贝雷法中评价细集料中较粗部分（介于关键控制筛孔 PCS 与次要控制筛孔 SCS 之间）填充状况的比例指标，为 SCS 与 PCS 通过率之比。",
+      "formulaId": "asphalt-mixture-formula-040",
+      "symbols": [
+        "FAc"
+      ],
+      "unit": "—",
+      "relations": [
+        "贝雷法 CA 比",
+        "贝雷法 FAf 比",
+        "控制筛孔"
+      ],
+      "pitfalls": [
+        "FAc 比评价的是细集料的粗部分，与 CA 比关注的粗集料部分不同，不要混淆",
+        "FAc 比过大说明细集料偏细，容易把粗集料骨架撑开",
+        "贝雷法各比值的合理区间是经验范围，应结合当地工程经验使用"
+      ],
+      "examAngle": "常与 CA、FAf 一起考查三个比值的计算与含义",
+      "confidence": "low",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "FAc 比的定义式与推荐范围请对照教材核对"
+    },
+    {
+      "id": "asphalt-mixture-concept-046",
+      "subjectId": "asphalt-mixture",
+      "chapter": "6.3",
+      "term": "贝雷法 FAf 比",
+      "en": "Bailey fine aggregate fine ratio",
+      "definition": "贝雷法中评价细集料中较细部分（介于次要控制筛孔 SCS 与第三控制筛孔 TCS 之间）比例结构的指标，为 TCS 与 SCS 通过率之比。",
+      "formulaId": "asphalt-mixture-formula-041",
+      "symbols": [
+        "FAf"
+      ],
+      "unit": "—",
+      "relations": [
+        "贝雷法 CA 比",
+        "贝雷法 FAc 比",
+        "控制筛孔"
+      ],
+      "pitfalls": [
+        "FAf 比主要影响混合料的和易性、空隙率与沥青需求量",
+        "三个比值（CA、FAc、FAf）要联合判断，单看一个容易误判",
+        "控制筛孔序列按 0.22 倍关系递推，实际取值需就近套用标准筛孔"
+      ],
+      "examAngle": "常考三个控制筛孔的递推关系（0.22 倍）与三个比值的计算",
+      "confidence": "low",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "控制筛孔 0.22 倍的递推系数与就近取筛孔的规则请与教材核对"
+    },
+    {
+      "id": "asphalt-mixture-concept-047",
+      "subjectId": "asphalt-mixture",
+      "chapter": "7.1",
+      "term": "高温稳定性",
+      "en": "high temperature stability",
+      "definition": "沥青混合料在高温和重复荷载作用下抵抗永久变形（车辙）的能力。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "车辙",
+        "动稳定度",
+        "马歇尔稳定度",
+        "SBS"
+      ],
+      "pitfalls": [
+        "提高高温稳定性的措施：提高沥青粘度或用改性沥青、减少沥青用量、采用骨架型级配、提高压实度",
+        "马歇尔稳定度与动稳定度是两个不同维度的指标，不能互相替代",
+        "高温性能与低温性能往往此消彼长，需按气候分区综合平衡"
+      ],
+      "examAngle": "常考影响因素与改善措施，重点在高温稳定性与低温抗裂性的平衡",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "asphalt-mixture-concept-048",
+      "subjectId": "asphalt-mixture",
+      "chapter": "7.1",
+      "term": "车辙与动稳定度 DS",
+      "en": "rutting and dynamic stability",
+      "definition": "车辙是沥青路面在重复荷载作用下沿轮迹带形成的纵向带状凹槽；动稳定度 DS 是车辙试验中单位变形所需轮载通行次数，用以评价抗车辙能力。",
+      "formulaId": "asphalt-mixture-formula-042",
+      "symbols": [
+        "DS"
+      ],
+      "unit": "次/mm",
+      "relations": [
+        "高温稳定性",
+        "车辙试验",
+        "推移",
+        "拥包"
+      ],
+      "pitfalls": [
+        "DS 越大表示抗车辙能力越强，注意方向不要记反",
+        "车辙按成因分为失稳型、压密型与磨耗型，三者对策不同，压密型主要靠压实控制",
+        "DS 只是相对指标，与现场车辙深度的定量换算关系并不精确"
+      ],
+      "examAngle": "高频计算：由车辙试验数据计算 DS 并判定；高频简答：车辙成因分类",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "车辙试验的温度、轮压、行走次数与 DS 限值以现行 JTG E20 / JTG F40 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-049",
+      "subjectId": "asphalt-mixture",
+      "chapter": "7.2",
+      "term": "低温抗裂性",
+      "en": "low temperature cracking resistance",
+      "definition": "沥青混合料在低温收缩受约束条件下抵抗开裂的能力，通常以低温弯曲破坏应变作为主要评价指标。",
+      "formulaId": "asphalt-mixture-formula-047",
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "低温弯曲",
+        "破坏应变",
+        "当量脆点",
+        "延度"
+      ],
+      "pitfalls": [
+        "低温开裂是温度收缩受约束产生拉应力超过材料抗拉能力所致，属温缩裂缝",
+        "沥青低温延度好不等于混合料低温性能好，应以混合料低温弯曲破坏应变为准",
+        "沥青用量适当增加、使用改性沥青、避免沥青过度老化均有利于低温性能"
+      ],
+      "examAngle": "常考低温开裂机理、评价指标（破坏应变）与改善措施",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "低温弯曲试验温度与破坏应变限值以现行 JTG E20 / JTG F40 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-050",
+      "subjectId": "asphalt-mixture",
+      "chapter": "7.3",
+      "term": "水稳定性",
+      "en": "moisture susceptibility",
+      "definition": "沥青混合料在水（包括冻融循环）作用下抵抗沥青膜剥落、强度下降与松散破坏的能力。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "冻融劈裂强度比",
+        "残留稳定度",
+        "粘附性",
+        "抗剥落剂"
+      ],
+      "pitfalls": [
+        "评价水稳定性必须同时做浸水马歇尔（残留稳定度）与冻融劈裂（TSR），二者侧重不同",
+        "水损害的前提是水能进入：空隙率过大、压实不足与层间积水是必要条件",
+        "提高水稳定性的根本措施是改善粘附性并控制空隙率，不能只靠抗剥落剂"
+      ],
+      "examAngle": "高频计算：残留稳定度与 TSR；高频简答：水损害机理与改善措施",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "残留稳定度与 TSR 的限值以现行 JTG F40 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-051",
+      "subjectId": "asphalt-mixture",
+      "chapter": "7.4",
+      "term": "耐久性",
+      "en": "durability",
+      "definition": "沥青混合料在长期荷载、气候与老化作用下保持使用性能的能力，与空隙率、沥青膜厚度、老化程度密切相关。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "沥青老化",
+        "空隙率",
+        "疲劳性能",
+        "沥青膜厚度"
+      ],
+      "pitfalls": [
+        "空隙率是耐久性的关键：过大易渗水老化，过小易泛油与失稳",
+        "沥青膜太薄会加速老化，太厚则降低高温稳定性",
+        "耐久性与水稳定性、高温稳定性相互耦合，需综合设计空隙率"
+      ],
+      "examAngle": "常考空隙率对耐久性的双重影响",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "asphalt-mixture-concept-052",
+      "subjectId": "asphalt-mixture",
+      "chapter": "7.4",
+      "term": "疲劳性能与疲劳方程",
+      "en": "fatigue performance and fatigue equation",
+      "definition": "沥青混合料在重复荷载作用下抵抗累积损伤破坏的能力，通常用控制应变或控制应力条件下的疲劳寿命 Nf 与应变水平之间的经验关系描述。",
+      "formulaId": "asphalt-mixture-formula-050",
+      "symbols": [
+        "Nf",
+        "eps"
+      ],
+      "unit": "次 / 微应变",
+      "relations": [
+        "疲劳试验",
+        "劲度模量",
+        "耐久性"
+      ],
+      "pitfalls": [
+        "应变控制与应力控制两种模式的疲劳规律不同，结论不可互换",
+        "疲劳方程中的系数由试验回归得到，跨材料外推不可靠",
+        "疲劳寿命对空隙率与沥青用量极为敏感，压实不足会大幅缩短寿命"
+      ],
+      "examAngle": "常考疲劳方程形式与影响因素，偶见用给定方程推算寿命的计算题",
+      "confidence": "medium",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "疲劳方程的具体形式（幂函数或对数线性）与参数请以教材为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-053",
+      "subjectId": "asphalt-mixture",
+      "chapter": "7.5",
+      "term": "抗滑性能",
+      "en": "skid resistance",
+      "definition": "路面表面为车辆提供足够摩阻力的能力，主要取决于表面构造深度与集料的耐磨光性能。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "构造深度",
+        "OGFC",
+        "磨光",
+        "摆式摩擦系数"
+      ],
+      "pitfalls": [
+        "抗滑性由宏观构造（构造深度）与微观构造（集料表面粗糙度）共同决定，缺一不可",
+        "沥青用量过多会在高温季节泛油，短期内使抗滑性急剧下降",
+        "采用耐磨光集料（如玄武岩、辉绿岩）是长期保持抗滑性的关键"
+      ],
+      "examAngle": "常考抗滑性的两个层次（宏观/微观构造）与影响因素",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": "构造深度与摆式摩擦系数的限值以现行 JTG F40 / JTG E60 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-054",
+      "subjectId": "asphalt-mixture",
+      "chapter": "7.5",
+      "term": "施工和易性",
+      "en": "workability",
+      "definition": "沥青混合料在拌和、运输、摊铺与碾压过程中易于操作并达到规定密实度的性能。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "沥青粘度",
+        "施工温度",
+        "压实度"
+      ],
+      "pitfalls": [
+        "和易性主要由施工温度下的沥青粘度决定，温度过低会导致压实不足",
+        "和易性好不等于质量好：过度追求易压实可能带来高温性能不足",
+        "改性沥青与橡胶沥青粘度大，施工温度需相应提高"
+      ],
+      "examAngle": "常考和易性与沥青粘度、施工温度的关系",
+      "confidence": "medium",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "asphalt-mixture-concept-055",
+      "subjectId": "asphalt-mixture",
+      "chapter": "8.1",
+      "term": "马歇尔试验",
+      "en": "Marshall test",
+      "definition": "将沥青混合料制成圆柱体试件，在规定温度下以规定速率侧向加载，测定稳定度与流值，并据此进行配合比设计的试验方法。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "马歇尔稳定度",
+        "流值",
+        "最佳沥青用量",
+        "空隙率"
+      ],
+      "pitfalls": [
+        "马歇尔击实成型方式与现场碾压的搓揉作用差别较大，这是该方法的主要局限",
+        "试件养生温度与恒温时间对结果影响显著，必须严格按规程执行",
+        "马歇尔试验本身不能直接评价高温抗车辙与低温抗裂性能，需补充车辙与低温弯曲试验"
+      ],
+      "examAngle": "常考马歇尔试验的原理、测定指标与优缺点",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "试件尺寸、击实次数、养生温度与加载速率以现行 JTG E20 为准",
+      "figure": {
+        "src": "/knowledge/assets/asphalt-mixture/marshall-oac.svg",
+        "caption": "由马歇尔试验指标确定最佳沥青用量 OAC（自绘示意）",
+        "readPoints": [
+          "密度与稳定度有峰值，空隙率单调下降、饱和度单调上升",
+          "OAC 取各项指标均满足规范区间的中值",
+          "VV、VFA、MS、FL 四项限值与成型条件须按现行 JTG E20 核对"
+        ]
+      }
+    },
+    {
+      "id": "asphalt-mixture-concept-056",
+      "subjectId": "asphalt-mixture",
+      "chapter": "8.1",
+      "term": "马歇尔稳定度与流值",
+      "en": "Marshall stability and flow value",
+      "definition": "稳定度是马歇尔试件在规定温度下破坏时的最大荷载（kN），流值是达到最大荷载时对应的竖向变形（mm 或 0.1 mm）。",
+      "formulaId": null,
+      "symbols": [
+        "MS",
+        "FL"
+      ],
+      "unit": "kN / mm",
+      "relations": [
+        "马歇尔试验",
+        "浸水马歇尔残留稳定度",
+        "流值"
+      ],
+      "pitfalls": [
+        "稳定度是荷载不是强度，其数值随试件尺寸与试验温度变化，不能当作材料强度直接用于结构设计",
+        "流值过大说明混合料偏软易变形，过小说明偏脆，需同时看两个指标",
+        "试件高度偏离标准时需进行高度修正，否则稳定度不可比"
+      ],
+      "examAngle": "常考两个指标的物理意义与配合使用的必要性",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "流值的单位（mm 或 0.1 mm）与高度修正方法以现行 JTG E20 为准",
+      "figure": {
+        "src": "/knowledge/assets/asphalt-mixture/marshall-oac.svg",
+        "caption": "由马歇尔试验指标确定最佳沥青用量 OAC（自绘示意）",
+        "readPoints": [
+          "密度与稳定度有峰值，空隙率单调下降、饱和度单调上升",
+          "OAC 取各项指标均满足规范区间的中值",
+          "VV、VFA、MS、FL 四项限值与成型条件须按现行 JTG E20 核对"
+        ]
+      }
+    },
+    {
+      "id": "asphalt-mixture-concept-057",
+      "subjectId": "asphalt-mixture",
+      "chapter": "8.2",
+      "term": "空隙率 VV",
+      "en": "air voids",
+      "definition": "压实沥青混合料试件中空隙体积占试件总体积的百分率，是配合比设计中最核心的体积指标。",
+      "formulaId": "asphalt-mixture-formula-023",
+      "symbols": [
+        "VV"
+      ],
+      "unit": "%",
+      "relations": [
+        "矿料间隙率",
+        "沥青饱和度",
+        "毛体积相对密度",
+        "理论最大相对密度"
+      ],
+      "pitfalls": [
+        "空隙率必须用毛体积相对密度与理论最大相对密度计算，误用表观密度会严重偏小",
+        "常用目标范围约 3%~6%，具体以现行 JTG F40 为准，不同混合料类型要求不同",
+        "空隙率过大易渗水老化，过小高温易泛油失稳，是双向控制指标"
+      ],
+      "examAngle": "最高频计算：VV 的计算与合格判定",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "VV 的技术要求范围以现行 JTG F40 为准",
+      "figure": {
+        "src": "/knowledge/assets/asphalt-mixture/marshall-oac.svg",
+        "caption": "由马歇尔试验指标确定最佳沥青用量 OAC（自绘示意）",
+        "readPoints": [
+          "密度与稳定度有峰值，空隙率单调下降、饱和度单调上升",
+          "OAC 取各项指标均满足规范区间的中值",
+          "VV、VFA、MS、FL 四项限值与成型条件须按现行 JTG E20 核对"
+        ]
+      }
+    },
+    {
+      "id": "asphalt-mixture-concept-058",
+      "subjectId": "asphalt-mixture",
+      "chapter": "8.2",
+      "term": "矿料间隙率 VMA",
+      "en": "voids in mineral aggregate",
+      "definition": "压实沥青混合料试件中，矿料颗粒之间的空隙（含未被沥青占据部分）占试件总体积的百分率。",
+      "formulaId": "asphalt-mixture-formula-024",
+      "symbols": [
+        "VMA"
+      ],
+      "unit": "%",
+      "relations": [
+        "空隙率",
+        "沥青饱和度",
+        "沥青膜厚度"
+      ],
+      "pitfalls": [
+        "VMA 计算用的是矿料的合成毛体积相对密度 γsb，不是表观相对密度",
+        "VMA 过小意味着沥青膜太薄，耐久性不足，是必须满足的最小限值指标",
+        "VMA = VV + 有效沥青体积百分率，可用作计算校验"
+      ],
+      "examAngle": "高频计算：VMA 计算及其与 VV、VFA 的联算校验",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "VMA 的最小值要求以现行 JTG F40 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-059",
+      "subjectId": "asphalt-mixture",
+      "chapter": "8.2",
+      "term": "沥青饱和度 VFA",
+      "en": "voids filled with asphalt",
+      "definition": "压实沥青混合料中沥青体积占矿料间隙率的百分率，反映沥青对矿料间隙的填充程度。",
+      "formulaId": "asphalt-mixture-formula-026",
+      "symbols": [
+        "VFA"
+      ],
+      "unit": "%",
+      "relations": [
+        "空隙率",
+        "矿料间隙率",
+        "耐久性"
+      ],
+      "pitfalls": [
+        "VFA 与 VV 是反向联动的：同一 VMA 下 VFA 越高，VV 越小",
+        "VFA 过高会导致高温失稳与泛油，过低则空隙率过大、耐久性差",
+        "VFA 与 VV、VMA 三者满足恒等关系，可作为计算校核"
+      ],
+      "examAngle": "高频计算：三个体积指标联算与合格性判定",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "VFA 的适宜范围以现行 JTG F40 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-060",
+      "subjectId": "asphalt-mixture",
+      "chapter": "8.2",
+      "term": "毛体积相对密度 γf",
+      "en": "bulk specific gravity of compacted mixture",
+      "definition": "压实沥青混合料试件单位体积（包含内部闭口与开口空隙在内的全部体积）的质量与同体积水的质量之比。",
+      "formulaId": "asphalt-mixture-formula-017",
+      "symbols": [
+        "gamma_f"
+      ],
+      "unit": "—",
+      "relations": [
+        "表干法",
+        "蜡封法",
+        "体积法",
+        "理论最大相对密度",
+        "空隙率"
+      ],
+      "pitfalls": [
+        "毛体积密度含开口空隙、不含被水填满的空隙，用表干法测的是毛体积密度",
+        "吸水率大的试件（如大空隙 OGFC）表干法不适用，应改用蜡封法或体积法",
+        "相对密度无量纲，但必须与「密度（g/cm³）」区分，计算体积指标时统一用相对密度即可"
+      ],
+      "examAngle": "高频计算：表干法/蜡封法求 γf，再算 VV",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "三种方法的适用条件与计算公式以现行 JTG E20 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-061",
+      "subjectId": "asphalt-mixture",
+      "chapter": "8.2",
+      "term": "理论最大相对密度 γt",
+      "en": "theoretical maximum specific gravity",
+      "definition": "假设沥青混合料被压实至完全无空隙（空隙率为零）时的相对密度，可通过真空法实测或按各组成材料相对密度计算得到。",
+      "formulaId": "asphalt-mixture-formula-016",
+      "symbols": [
+        "gamma_t"
+      ],
+      "unit": "—",
+      "relations": [
+        "毛体积相对密度",
+        "空隙率",
+        "有效相对密度"
+      ],
+      "pitfalls": [
+        "计算法用各档集料的表观相对密度（矿粉取表观相对密度）与沥青相对密度加权，与真空法实测值通常有差异",
+        "集料吸水率大时，计算值与实测值差异更明显，应以真空法实测值作为计算 VV 的依据",
+        "γt 随沥青用量变化，每次改变沥青用量都要重新确定"
+      ],
+      "examAngle": "高频计算：按计算法求 γt 并与实测值比较",
+      "confidence": "medium",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "计算法中集料取表观相对密度还是有效相对密度，请以现行 JTG E20 / JTG F40 核对"
+    },
+    {
+      "id": "asphalt-mixture-concept-062",
+      "subjectId": "asphalt-mixture",
+      "chapter": "8.2",
+      "term": "集料表观相对密度与毛体积相对密度",
+      "en": "apparent and bulk specific gravity of aggregate",
+      "definition": "表观相对密度只计集料颗粒实体（不含孔隙）的密度；毛体积相对密度包含颗粒内部孔隙，是计算矿料间隙率 VMA 的密度基准。",
+      "formulaId": null,
+      "symbols": [
+        "gamma_sa",
+        "gamma_sb"
+      ],
+      "unit": "—",
+      "relations": [
+        "有效相对密度",
+        "矿料间隙率",
+        "吸水率"
+      ],
+      "pitfalls": [
+        "表观相对密度 > 毛体积相对密度，二者差值是集料孔隙体积的度量",
+        "计算 VMA 必须用毛体积相对密度 γsb；误用表观相对密度会使 VMA 偏大",
+        "矿粉通常只测表观相对密度（或视密度），工程上直接用作其毛体积密度"
+      ],
+      "examAngle": "高频辨析：三个密度（表观/毛体积/有效）的定义与各自的使用场合",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "asphalt-mixture-concept-063",
+      "subjectId": "asphalt-mixture",
+      "chapter": "8.2",
+      "term": "集料有效相对密度 γse",
+      "en": "effective specific gravity of aggregate",
+      "definition": "集料颗粒实体加上未被沥青吸入的孔隙所对应的相对密度，介于毛体积相对密度与表观相对密度之间，是计算有效沥青含量的关键参数。",
+      "formulaId": "asphalt-mixture-formula-020",
+      "symbols": [
+        "gamma_se"
+      ],
+      "unit": "—",
+      "relations": [
+        "表观相对密度",
+        "毛体积相对密度",
+        "有效沥青含量",
+        "吸收沥青量"
+      ],
+      "pitfalls": [
+        "γse 由实测 γt 反算得到，不能凭经验取 γsa 与 γsb 的算术平均",
+        "吸收沥青量 Pba 与有效沥青含量 Pbe 都依赖 γse，是 Superpave 体积设计的基础",
+        "我国马歇尔设计体系通常直接用 γsb，引入 γse 主要用于精细体积分析"
+      ],
+      "examAngle": "常考三个集料密度的大小关系与有效相对密度的反算",
+      "confidence": "medium",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "γse 的反算式与 Pba 公式请以教材与现行规程核对"
+    },
+    {
+      "id": "asphalt-mixture-concept-064",
+      "subjectId": "asphalt-mixture",
+      "chapter": "8.2",
+      "term": "油石比与沥青用量",
+      "en": "asphalt-aggregate ratio and asphalt content",
+      "definition": "油石比是沥青质量占矿料（集料+填料）质量的百分率；沥青用量是沥青质量占混合料总质量的百分率，二者分母不同。",
+      "formulaId": "asphalt-mixture-formula-011",
+      "symbols": [
+        "Pa",
+        "Pb"
+      ],
+      "unit": "%",
+      "relations": [
+        "最佳沥青用量",
+        "矿料间隙率",
+        "配合比设计"
+      ],
+      "pitfalls": [
+        "油石比数值恒大于沥青用量，例如油石比 5.0% 对应沥青用量约 4.76%",
+        "试验室配料、拌和楼设定与规范表述的口径可能不同，读题时先确认是哪个",
+        "体积指标计算中使用的 Pb 一律指沥青用量（占混合料总质量）"
+      ],
+      "examAngle": "最高频换算：油石比与沥青用量互算，是几乎所有配合比计算题的第一步",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "asphalt-mixture-concept-065",
+      "subjectId": "asphalt-mixture",
+      "chapter": "8.4",
+      "term": "最佳沥青用量 OAC",
+      "en": "optimum asphalt content",
+      "definition": "由马歇尔试验确定的使混合料各项技术指标综合最优的沥青用量，按 OAC1 与 OAC2 综合取定。",
+      "formulaId": "asphalt-mixture-formula-034",
+      "symbols": [
+        "OAC"
+      ],
+      "unit": "%",
+      "relations": [
+        "最佳沥青用量 OAC1",
+        "马歇尔试验",
+        "三阶段配合比设计"
+      ],
+      "pitfalls": [
+        "OAC1 取四个特征沥青用量的算术平均，OAC2 取满足全部技术标准区间（不含 VMA）的中值，两者再平均",
+        "确定 OAC2 的合格区间时是否计入 VMA，教材与规范口径需确认",
+        "最终 OAC 还要按气候分区、交通等级与工程经验调整，不是机械取平均"
+      ],
+      "examAngle": "高频计算与简答：OAC1/OAC2 的确定方法与调整原则",
+      "confidence": "medium",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "OAC1 的四个取值（稳定度最大、密度最大、空隙率中值、饱和度中值）以及 OAC2 是否排除 VMA，请以现行 JTG F40 核对"
+    },
+    {
+      "id": "asphalt-mixture-concept-066",
+      "subjectId": "asphalt-mixture",
+      "chapter": "8.3",
+      "term": "三阶段配合比设计",
+      "en": "three-stage mix design",
+      "definition": "沥青混合料配合比设计分为目标配合比设计、生产配合比设计与生产配合比验证三个阶段，逐步从试验室过渡到实际拌和楼生产。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "最佳沥青用量",
+        "热料仓",
+        "马歇尔试验"
+      ],
+      "pitfalls": [
+        "目标配合比用冷料仓比例，生产配合比用热料仓比例，二者不可直接套用",
+        "生产配合比阶段必须做热料仓筛分，确定各仓实际级配后再调整比例",
+        "验证阶段要做试验段并检验压实度、渗水与厚度等实体指标"
+      ],
+      "examAngle": "常考三阶段的任务、输入输出与相互关系",
+      "confidence": "medium",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "三阶段的具体名称与工作内容以现行 JTG F40 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-067",
+      "subjectId": "asphalt-mixture",
+      "chapter": "9.1",
+      "term": "Superpave 设计体系",
+      "en": "Superior Performing Asphalt Pavements",
+      "definition": "美国 SHRP 计划提出的沥青与沥青混合料设计体系，包含基于性能的沥青结合料 PG 分级、旋转压实试件成型与体积设计方法。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "PG 性能分级",
+        "旋转压实",
+        "马歇尔试验",
+        "粉胶比"
+      ],
+      "pitfalls": [
+        "Superpave 是完整体系，不能把它简单等同于旋转压实或 PG 分级其中之一",
+        "旋转压实的搓揉作用比马歇尔击实更接近现场，但设备与参数需本地化标定",
+        "Superpave 与马歇尔法在体积指标定义上基本一致，差别主要在试件成型与沥青选择"
+      ],
+      "examAngle": "常考 Superpave 的组成部分及其与马歇尔法的比较",
+      "confidence": "medium",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": "Superpave 的体积设计指标与旋转压实次数（Nini/Ndes/Nmax）以 AASHTO 与教材为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-068",
+      "subjectId": "asphalt-mixture",
+      "chapter": "10.2",
+      "term": "冻融劈裂强度比 TSR",
+      "en": "tensile strength ratio",
+      "definition": "冻融循环后试件劈裂强度与未冻融试件劈裂强度之比，用以评价沥青混合料的水稳定性。",
+      "formulaId": "asphalt-mixture-formula-046",
+      "symbols": [
+        "TSR"
+      ],
+      "unit": "%",
+      "relations": [
+        "水稳定性",
+        "劈裂强度",
+        "浸水马歇尔残留稳定度"
+      ],
+      "pitfalls": [
+        "TSR 越大越好；计算时分子是冻融组强度 RT2，分母是未冻融组 RT1，容易写反",
+        "冻融劈裂要求试件先真空饱水再冻融，饱水率不满足要求时结果无效",
+        "TSR 与残留稳定度评价的是同一性能的两个侧面，不能相互替代"
+      ],
+      "examAngle": "高频计算：由劈裂荷载计算 RT1、RT2 与 TSR 并判定",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "10",
+        "page": null
+      },
+      "verify": "冻融劈裂的饱水率、冻融温度与时间以及 TSR 限值以现行 JTG E20 / JTG F40 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-069",
+      "subjectId": "asphalt-mixture",
+      "chapter": "10.2",
+      "term": "浸水马歇尔残留稳定度 MS0",
+      "en": "retained Marshall stability",
+      "definition": "试件在规定温度水中浸泡规定时间后的马歇尔稳定度与标准条件下稳定度之比，用以评价水稳定性。",
+      "formulaId": "asphalt-mixture-formula-044",
+      "symbols": [
+        "MS0"
+      ],
+      "unit": "%",
+      "relations": [
+        "水稳定性",
+        "马歇尔稳定度",
+        "冻融劈裂强度比"
+      ],
+      "pitfalls": [
+        "MS0 分子是浸水后稳定度 MS1，分母是标准稳定度 MS，不要颠倒",
+        "MS0 越大越好；浸水温度与时间不同，结果不可比",
+        "残留稳定度合格并不代表抗冻融性能合格，寒冷地区仍需做冻融劈裂"
+      ],
+      "examAngle": "高频计算：残留稳定度计算与合格性判定",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "10",
+        "page": null
+      },
+      "verify": "浸水温度（常用 60℃）与时间（如 30~40 min、48 h 两种做法）及限值以现行 JTG E20 / JTG F40 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-070",
+      "subjectId": "asphalt-mixture",
+      "chapter": "10.3",
+      "term": "低温弯曲破坏应变",
+      "en": "flexural failure strain at low temperature",
+      "definition": "低温小梁弯曲试验中试件破坏时的最大弯拉应变，是评价沥青混合料低温抗裂性能的主要指标。",
+      "formulaId": "asphalt-mixture-formula-047",
+      "symbols": [
+        "eps_B"
+      ],
+      "unit": "微应变（με）",
+      "relations": [
+        "低温抗裂性",
+        "破坏强度",
+        "破坏劲度模量"
+      ],
+      "pitfalls": [
+        "破坏应变用跨中挠度 d、跨径 L 与试件高度 h 计算，注意 L、h、d 单位必须一致",
+        "破坏应变越大表示低温抗裂性越好；破坏强度大不等于低温性能好，脆性材料强度高但应变小",
+        "试验温度越低破坏应变越小，报告时必须注明试验温度"
+      ],
+      "examAngle": "高频计算：低温弯曲破坏应变与破坏强度、劲度模量",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "10",
+        "page": null
+      },
+      "verify": "小梁尺寸、跨径、试验温度与加载速率以及破坏应变限值以现行 JTG E20 / JTG F40 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-071",
+      "subjectId": "asphalt-mixture",
+      "chapter": "11.1",
+      "term": "SMA 沥青玛蹄脂碎石混合料",
+      "en": "stone mastic asphalt",
+      "definition": "由高比例粗集料形成骨架、以高矿粉含量与较高沥青用量的沥青玛蹄脂填充骨架间隙，并掺加纤维稳定剂的骨架-密实型沥青混合料。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "骨架-密实结构",
+        "木质素纤维",
+        "析漏试验",
+        "动稳定度"
+      ],
+      "pitfalls": [
+        "SMA 的「三高」是粗集料含量高、矿粉含量高、沥青用量高，另加纤维稳定剂",
+        "纤维的作用是吸附稳定沥青防止析漏，不是承力增强材料",
+        "SMA 的关键控制指标除常规体积指标外，还包括析漏损失、飞散损失与粗集料骨架间隙率 VCA"
+      ],
+      "examAngle": "高频：SMA 的组成特点、抗车辙机理与关键检验项目",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "11",
+        "page": null
+      },
+      "verify": "SMA 的材料组成范围与 VCA 等指标要求以现行 JTG F40 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-072",
+      "subjectId": "asphalt-mixture",
+      "chapter": "11.2",
+      "term": "析漏试验与飞散试验",
+      "en": "draindown test and cantabro test",
+      "definition": "析漏试验测定高温状态下沥青混合料中沥青析出的质量损失，用于确定最大沥青用量；飞散试验（肯塔堡）测定试件在磨耗机中冲击磨耗造成的质量损失，用于确定最小沥青用量。",
+      "formulaId": "asphalt-mixture-formula-052",
+      "symbols": [],
+      "unit": "%",
+      "relations": [
+        "SMA",
+        "木质素纤维",
+        "沥青用量"
+      ],
+      "pitfalls": [
+        "析漏损失限小（防止沥青过多析漏），飞散损失限大（防止沥青过少导致松散），两者共同界定沥青用量窗口",
+        "两个试验对 SMA 与 OGFC 尤其关键，普通 AC 通常不强制",
+        "析漏试验的试验温度与保温时间、飞散试验的转速与转数需严格按规程执行"
+      ],
+      "examAngle": "常考两个试验各自控制沥青用量的哪一端（析漏控上限、飞散控下限）",
+      "confidence": "medium",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "11",
+        "page": null
+      },
+      "verify": "析漏与飞散试验的条件与损失限值以现行 JTG E20 / JTG F40 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-073",
+      "subjectId": "asphalt-mixture",
+      "chapter": "11.3",
+      "term": "OGFC 排水式抗滑磨耗层",
+      "en": "open-graded friction course",
+      "definition": "具有大量连通空隙（空隙率通常在 18% 以上）的开级配沥青混合料磨耗层，可迅速排除路表水，兼具抗滑、降噪与防溅水功能。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "骨架-空隙结构",
+        "空隙率",
+        "抗滑性能",
+        "析漏试验"
+      ],
+      "pitfalls": [
+        "OGFC 的大空隙是有意设计的性能指标，不能用密级配的空隙率标准要求它",
+        "大空隙带来强度低、易老化、易堵塞与易飞散的问题，需高粘度改性沥青与纤维",
+        "空隙率过高会显著缩短使用寿命，需在排水能力与耐久性之间平衡"
+      ],
+      "examAngle": "常考 OGFC 的功能、结构类型（骨架-空隙）与技术风险",
+      "confidence": "medium",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "11",
+        "page": null
+      },
+      "verify": "OGFC 的空隙率要求与相关技术指标以现行 JTG/T 3350 及 JTG F40 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-074",
+      "subjectId": "asphalt-mixture",
+      "chapter": "11.4",
+      "term": "再生沥青混合料与 RAP",
+      "en": "reclaimed asphalt pavement and recycling",
+      "definition": "将铣刨回收的旧沥青路面材料（RAP）按一定比例掺入新混合料中重新利用的技术，旧料中的老化沥青需通过再生剂或新沥青调和恢复性能。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "沥青老化",
+        "再生剂",
+        "厂拌热再生",
+        "就地热再生"
+      ],
+      "pitfalls": [
+        "RAP 的沥青已严重老化，针入度小、软化点高，直接用会导致低温开裂",
+        "RAP 的级配与沥青含量具有变异性，必须预先抽样检测",
+        "厂拌热再生 RAP 掺量受拌和楼加热与除尘能力限制，掺量越高变异风险越大"
+      ],
+      "examAngle": "常考 RAP 的技术难点（老化、变异）与再生措施",
+      "confidence": "medium",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "11",
+        "page": null
+      },
+      "verify": "再生技术的分类与 RAP 掺量限值以现行 JTG/T 5521 等规范为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-075",
+      "subjectId": "asphalt-mixture",
+      "chapter": "11.5",
+      "term": "温拌沥青混合料 WMA",
+      "en": "warm mix asphalt",
+      "definition": "通过添加降粘剂、发泡技术或乳化技术，使混合料在明显低于热拌温度的条件下仍能良好拌和、摊铺与压实的沥青混合料技术。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "施工和易性",
+        "沥青老化",
+        "乳化沥青"
+      ],
+      "pitfalls": [
+        "温拌降低的是施工温度下的粘度，不等于降低混合料的使用性能要求",
+        "降温幅度过大或压实不到位会导致空隙率偏大、水稳定性下降",
+        "温拌的节能减排效益与长期耐久性之间的平衡仍有争议"
+      ],
+      "examAngle": "常考温拌的实现途径与优缺点",
+      "confidence": "medium",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "11",
+        "page": null
+      },
+      "verify": "温拌技术的分类与降温幅度以教材及现行规范为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-076",
+      "subjectId": "asphalt-mixture",
+      "chapter": "12.3",
+      "term": "压实度",
+      "en": "degree of compaction",
+      "definition": "现场路面实测密度与标准密度（通常为室内马歇尔标准密度或理论最大密度）之比，是施工质量控制的关键指标。",
+      "formulaId": "asphalt-mixture-formula-054",
+      "symbols": [
+        "K"
+      ],
+      "unit": "%",
+      "relations": [
+        "空隙率",
+        "理论最大相对密度",
+        "碾压工艺"
+      ],
+      "pitfalls": [
+        "以马歇尔标准密度为基准与以理论最大密度为基准得到的压实度数值不同，报告时必须说明基准",
+        "压实度与空隙率是一体两面：K（对理论密度）≈ 100 − VV",
+        "压实不足导致空隙率过大、水损害与车辙；过压会压碎石料、使空隙率过小而泛油"
+      ],
+      "examAngle": "常考压实度的计算与现场空隙率的换算",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "12",
+        "page": null
+      },
+      "verify": "压实度的标准密度取法与合格值以现行 JTG F40 及质量检验评定标准为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-077",
+      "subjectId": "asphalt-mixture",
+      "chapter": "12.4",
+      "term": "施工接缝（纵向缝与横向缝）",
+      "en": "longitudinal and transverse joints",
+      "definition": "摊铺过程中相邻摊铺带之间或前后摊铺段之间形成的结合部位，是沥青路面最常见的薄弱位置与早期损坏源。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "摊铺",
+        "压实度",
+        "纵向裂缝"
+      ],
+      "pitfalls": [
+        "纵向缝优先采用热接缝（多台摊铺机梯队作业），冷接缝需切边、清缝并涂粘层油",
+        "横向缝应垂直于路中线，上下层错开一定距离，接缝处需预热并保证压实",
+        "接缝处压实不足会形成渗水通道，引发水损害与纵向裂缝"
+      ],
+      "examAngle": "常考纵向缝与横向缝的处理工艺要点",
+      "confidence": "medium",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "12",
+        "page": null
+      },
+      "verify": "接缝的错缝距离与施工工艺要求以现行 JTG F40 为准"
+    },
+    {
+      "id": "asphalt-mixture-concept-078",
+      "subjectId": "asphalt-mixture",
+      "chapter": "13.1",
+      "term": "裂缝类病害（横向/纵向/网状/反射裂缝）",
+      "en": "cracking distresses",
+      "definition": "沥青路面裂缝按形态与成因分为：横向裂缝（多为温缩裂缝，垂直于行车方向）、纵向裂缝（多与路基沉降或接缝有关，平行于行车方向）、网状裂缝（疲劳开裂，交织成网）与反射裂缝（下卧层裂缝向上扩展）。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "低温抗裂性",
+        "疲劳性能",
+        "半刚性基层",
+        "施工接缝"
+      ],
+      "pitfalls": [
+        "横向裂缝主要是温度收缩引起，改善方向是提高沥青低温性能；纵向裂缝多与结构和施工有关，不能简单归因于沥青",
+        "反射裂缝来自半刚性基层的干缩与温缩裂缝，属结构性问题，需从基层材料与应力吸收层入手",
+        "网状裂缝是疲劳破坏的结果，与结构承载能力和老化相关，靠罩面难以根治"
+      ],
+      "examAngle": "高频辨析：四类裂缝的形态、成因与防治措施一一对应",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "13",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "asphalt-mixture-concept-079",
+      "subjectId": "asphalt-mixture",
+      "chapter": "13.2",
+      "term": "变形类病害（车辙 / 推移 / 拥包）",
+      "en": "deformation distresses",
+      "definition": "沥青路面在荷载与环境作用下产生的形状改变：车辙为轮迹带纵向凹槽，推移为混合料沿行车方向的剪切错动，拥包为局部隆起。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "高温稳定性",
+        "动稳定度",
+        "层间粘结",
+        "空隙率"
+      ],
+      "pitfalls": [
+        "车辙与推移拥包都属于剪切或流动破坏，但车辙以竖向压缩为主，推移拥包以水平剪切为主",
+        "推移与拥包常与层间粘结不良、沥青用量过大、混合料高温稳定性不足有关",
+        "压密型车辙是压实不足导致的，对策是施工控制而非改材料"
+      ],
+      "examAngle": "常考车辙的三种成因分类及推移拥包的成因",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "13",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "asphalt-mixture-concept-080",
+      "subjectId": "asphalt-mixture",
+      "chapter": "13.3",
+      "term": "松散类病害（松散 / 坑槽 / 泛油）",
+      "en": "disintegration distresses",
+      "definition": "松散是集料颗粒从路面表面脱落；坑槽是局部材料成块脱失形成的凹坑；泛油是沥青迁移到路表形成的光亮油膜。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "水稳定性",
+        "空隙率",
+        "抗滑性能",
+        "沥青用量"
+      ],
+      "pitfalls": [
+        "泛油与松散看似相反，实际都与沥青用量和空隙率失配有关：用量多/空隙率小→泛油，用量少/空隙率大→松散",
+        "坑槽多由水损害发展而来：剥落→松散→坑槽，改善关键是水稳定性与压实",
+        "泛油会显著降低抗滑性能，是夏季安全事故的常见诱因"
+      ],
+      "examAngle": "常考病害成因链（水损害→松散→坑槽）与泛油、松散的成因对立统一",
+      "confidence": "high",
+      "cite": {
+        "book": "沥青与沥青混合料",
+        "edition": null,
+        "publisher": "人民交通出版社",
+        "chapter": "13",
+        "page": null
+      },
+      "verify": null
+    }
+  ]
+}

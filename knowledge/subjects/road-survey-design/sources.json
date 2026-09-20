@@ -1,0 +1,246 @@
+{
+  "subjectId": "road-survey-design",
+  "note": "本文件不是文献全文，而是「去哪儿查、查什么、以谁为准」的索引。论文受版权保护不入库；AI 回答涉及前沿或争议问题时，按这里给出的入口检索，并把来源层级告诉用户。",
+  "updatedAt": "2026-09-15",
+  "items": [
+    {
+      "type": "journal",
+      "name": "中国公路学报",
+      "en": "China Journal of Highway and Transport",
+      "org": "中国公路学会",
+      "level": "A",
+      "why": "公路领域顶刊，线形设计理论、安全评价、通行能力研究最成体系。",
+      "howToUse": "按「路线 / 线形 / 视距 / 安全」检索，看近五年综述。",
+      "access": "知网 / 万方（校内 IP 通常免费）",
+      "confidence": "high",
+      "verify": null,
+      "id": "road-survey-design-source-001"
+    },
+    {
+      "type": "journal",
+      "name": "公路",
+      "en": "Highway",
+      "org": "中交第一公路勘察设计研究院",
+      "level": "B",
+      "why": "实务型期刊，工程案例与设计方案介绍多。",
+      "howToUse": "找具体公路项目的线形设计实例与指标取值。",
+      "access": "知网 / 万方（校内 IP 通常免费）",
+      "confidence": "high",
+      "verify": null,
+      "id": "road-survey-design-source-002"
+    },
+    {
+      "type": "journal",
+      "name": "中外公路",
+      "en": "Journal of China and Foreign Highway",
+      "org": "长沙理工大学",
+      "level": "B",
+      "why": "国内外公路技术兼顾，适合对比中外设计指标差异。",
+      "howToUse": "查国外标准对照，写「中外规范对比」类作业好用。",
+      "access": "知网 / 万方（校内 IP 通常免费）",
+      "confidence": "high",
+      "verify": null,
+      "id": "road-survey-design-source-003"
+    },
+    {
+      "type": "journal",
+      "name": "公路工程",
+      "en": "Highway Engineering",
+      "org": "湖南省交通科学研究院",
+      "level": "B",
+      "why": "路基路面与线形设计的应用研究。",
+      "howToUse": "找区域性工程经验与试验数据。",
+      "access": "知网 / 万方（校内 IP 通常免费）",
+      "confidence": "high",
+      "verify": null,
+      "id": "road-survey-design-source-004"
+    },
+    {
+      "type": "journal",
+      "name": "交通运输工程学报",
+      "en": "Journal of Traffic and Transportation Engineering",
+      "org": "长安大学",
+      "level": "A",
+      "why": "交通与道路交叉方向，人因、安全、驾驶行为与线形的关系。",
+      "howToUse": "想弄懂「为什么这么定指标」时看它。",
+      "access": "知网 / 万方（校内 IP 通常免费）",
+      "confidence": "high",
+      "verify": null,
+      "id": "road-survey-design-source-005"
+    },
+    {
+      "type": "journal",
+      "name": "Journal of Transportation Engineering, Part A: Systems",
+      "en": "JTE Part A",
+      "org": "ASCE",
+      "level": "A",
+      "why": "道路几何设计与安全的国际主流期刊。",
+      "howToUse": "对比 AASHTO 与 JTG 指标差异时的参考。",
+      "access": "Web of Science / ScienceDirect / ASCE Library",
+      "confidence": "high",
+      "verify": null,
+      "id": "road-survey-design-source-006"
+    },
+    {
+      "type": "journal",
+      "name": "Transportation Research Part C",
+      "en": "Transportation Research Part C",
+      "org": "Elsevier",
+      "level": "A",
+      "why": "智能交通与驾驶行为建模，线形安全评价的新方法。",
+      "howToUse": "做「运行速度预测 / 安全评价」类题目时参考。",
+      "access": "Web of Science / ScienceDirect / ASCE Library",
+      "confidence": "high",
+      "verify": null,
+      "id": "road-survey-design-source-007"
+    },
+    {
+      "type": "standard",
+      "name": "JTG B01 公路工程技术标准",
+      "code": "JTG B01",
+      "level": "S",
+      "why": "整个公路体系的母标准，等级、设计速度、建筑限界从这里来。",
+      "howToUse": "任何设计指标的「为什么」，源头都在这一本。",
+      "access": "交通运输标准化信息系统 / 住建部标准发布 / 学校图书馆标准库",
+      "confidence": "high",
+      "verify": "版本年份需核对（现行常用 2014 年版），教师指定版本优先。",
+      "id": "road-survey-design-source-008"
+    },
+    {
+      "type": "standard",
+      "name": "JTG D20 公路路线设计规范",
+      "code": "JTG D20",
+      "level": "S",
+      "why": "平面、纵断面、横断面线形设计指标的直接依据。",
+      "howToUse": "做线形设计作业，指标取值一律查它，不要凭记忆。",
+      "access": "交通运输标准化信息系统 / 住建部标准发布 / 学校图书馆标准库",
+      "confidence": "high",
+      "verify": "版本号以现行发布为准。",
+      "id": "road-survey-design-source-009"
+    },
+    {
+      "type": "standard",
+      "name": "JTG D30 公路路基设计规范",
+      "code": "JTG D30",
+      "level": "S",
+      "why": "路基横断面、边坡、支挡与排水的设计规定。",
+      "howToUse": "横断面设计与路基稳定性验算配套使用。",
+      "access": "交通运输标准化信息系统 / 住建部标准发布 / 学校图书馆标准库",
+      "confidence": "high",
+      "verify": "版本年份需核对。",
+      "id": "road-survey-design-source-010"
+    },
+    {
+      "type": "standard",
+      "name": "JTG/T D33 公路排水设计规范",
+      "code": "JTG/T D33",
+      "level": "S",
+      "why": "路基路面排水系统设计的专门规定。",
+      "howToUse": "做排水设计题目或排水部分作业时使用。",
+      "access": "交通运输标准化信息系统 / 住建部标准发布 / 学校图书馆标准库",
+      "confidence": "medium",
+      "verify": "版本年份需核对。",
+      "id": "road-survey-design-source-011"
+    },
+    {
+      "type": "standard",
+      "name": "CJJ 37 城市道路工程设计规范",
+      "code": "CJJ 37",
+      "level": "S",
+      "why": "城市道路（含红线、横断面布置、交叉口）的设计依据，与公路体系不同。",
+      "howToUse": "题目涉及城市道路时用它，不要混用 JTG 公路指标。",
+      "access": "交通运输标准化信息系统 / 住建部标准发布 / 学校图书馆标准库",
+      "confidence": "high",
+      "verify": "版本年份需核对。",
+      "id": "road-survey-design-source-012"
+    },
+    {
+      "type": "database",
+      "name": "中国知网（CNKI）",
+      "level": "D",
+      "why": "中文期刊、学位论文、会议论文最全，课程论文与作业的主要来源。",
+      "howToUse": "用「主题」而不是「篇名」检索；勾选「同义词扩展」；学位论文适合看文献综述章节。",
+      "access": "校园网 / 图书馆入口",
+      "confidence": "high",
+      "verify": null,
+      "id": "road-survey-design-source-013"
+    },
+    {
+      "type": "database",
+      "name": "Web of Science / EI Compendex",
+      "level": "D",
+      "why": "外文期刊与会议论文，判断一个方向国际进展如何。",
+      "howToUse": "先看 Review，再看 Article；用「被引频次」排序找经典文献。",
+      "access": "校园网 / 图书馆入口",
+      "confidence": "high",
+      "verify": null,
+      "id": "road-survey-design-source-014"
+    },
+    {
+      "type": "database",
+      "name": "标准数据库（交通运输标准化信息系统 / 国家标准全文公开系统）",
+      "level": "D",
+      "why": "规范条文以官方发布为准，教材与二手资料都可能是旧版。",
+      "howToUse": "查现行状态与被替代关系；引用规范必须写清楚版本年份。",
+      "access": "校园网 / 图书馆入口",
+      "confidence": "high",
+      "verify": null,
+      "id": "road-survey-design-source-015"
+    },
+    {
+      "type": "org",
+      "name": "交通运输部政府网站 / 交通运输标准化信息系统",
+      "level": "O",
+      "why": "规范现行状态与替代关系的唯一权威来源。",
+      "howToUse": "引用规范前先查是否被新版本替代。",
+      "access": "官网公开信息",
+      "confidence": "high",
+      "verify": null,
+      "id": "road-survey-design-source-016"
+    },
+    {
+      "type": "org",
+      "name": "中国公路学会",
+      "level": "O",
+      "why": "学术会议、团体标准、行业技术指南。",
+      "howToUse": "找行业通行做法与新技术应用。",
+      "access": "官网公开信息",
+      "confidence": "medium",
+      "verify": null,
+      "id": "road-survey-design-source-017"
+    },
+    {
+      "type": "method",
+      "name": "线形设计类检索式模板",
+      "level": "M",
+      "why": "线形设计问题通常锁定「指标 + 场景」。",
+      "howToUse": "CNKI：（主题=平曲线 OR 纵断面 OR 视距 OR 运行速度）AND（主题=安全 OR 线形组合）AND（年 between 2016,2026）。",
+      "access": "CNKI",
+      "confidence": "high",
+      "verify": null,
+      "id": "road-survey-design-source-018"
+    },
+    {
+      "id": "road-survey-design-source-019",
+      "name": "判断一篇文献能不能用于作业（三问）",
+      "howToUse": "① 出处：是不是本文件列出的期刊/规范/机构？② 时间：是否近 10 年，或是不是该问题的经典原始文献？③ 可核：结论能不能在教材或现行规范里找到对应？三问答不全就别引用，改用教材口径并注明。"
+    }
+  ],
+  "searchTemplates": [
+    {
+      "id": "tpl-cnki",
+      "name": "CNKI 检索式模板（可直接套用）",
+      "howToUse": "（主题 = 核心概念A）AND（主题 = 核心概念B）AND（年 between 2016,2026）；先按「被引」排序抓综述，再按「发表时间」排序抓最新进展；找到 2-3 篇高质量综述后，顺其参考文献回溯原始文献。"
+    },
+    {
+      "id": "tpl-wos",
+      "name": "Web of Science / Scopus 检索式模板",
+      "howToUse": "TS=(\"concept A\" AND \"concept B\") AND PY=(2016-2026)；文献类型限 Article / Review；语种 English；用「被引频次」找经典，用「最早发表」找首创。"
+    },
+    {
+      "id": "tpl-three-q",
+      "name": "判断一篇文献能不能用于作业（三问）",
+      "howToUse": "① 出处：是不是本文件列出的期刊/规范/机构？② 时间：是否近 10 年，或是不是该问题的经典原始文献？③ 可核：结论能不能在教材或现行规范里找到对应？三问答不全就别引用，改用教材口径并注明。"
+    }
+  ]
+}

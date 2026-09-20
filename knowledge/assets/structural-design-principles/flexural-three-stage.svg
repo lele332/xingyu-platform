@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 300" width="660" height="300" role="img" aria-label="受弯构件正截面受力三阶段：未裂阶段、带裂缝工作阶段、破坏阶段，附应力分布变化">
+  <title>正截面受弯的三个受力阶段（对应三种不同的验算）</title>
+  <g font-family="system-ui, -apple-system, 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#8a8a8a">
+    <text x="110" y="38" text-anchor="middle" fill="#0a84ff">第 Ⅰ 阶段：未裂</text>
+    <text x="330" y="38" text-anchor="middle" fill="#ff9f0a">第 Ⅱ 阶段：带裂缝工作</text>
+    <text x="550" y="38" text-anchor="middle" fill="#30d158">第 Ⅲ 阶段：破坏</text>
+
+    <rect x="55" y="70" width="110" height="160" fill="#d8d8d8" opacity="0.12" stroke="#c8c8c8" stroke-width="1.4"/>
+    <path d="M165 70 V150 H210" fill="none" stroke="#0a84ff" stroke-width="1.6"/>
+    <path d="M165 230 V150 H210" fill="none" stroke="#0a84ff" stroke-width="1.6"/>
+    <path d="M165 70 L210 70 M165 230 L210 230" stroke="#0a84ff" stroke-width="1.2" opacity="0.6"/>
+    <path d="M45 150 H215" stroke="#c8c8c8" stroke-width="0.9" stroke-dasharray="4 3" opacity="0.7"/>
+    <circle cx="88" cy="218" r="5.5" fill="none" stroke="#c8c8c8" stroke-width="1.4"/>
+    <circle cx="132" cy="218" r="5.5" fill="none" stroke="#c8c8c8" stroke-width="1.4"/>
+    <text x="110" y="252" text-anchor="middle" font-size="11">全截面参与受力</text>
+    <text x="110" y="270" text-anchor="middle" font-size="11" fill="#0a84ff">→ 抗裂验算的依据</text>
+
+    <rect x="275" y="70" width="110" height="160" fill="#d8d8d8" opacity="0.12" stroke="#c8c8c8" stroke-width="1.4"/>
+    <path d="M385 70 V125 H425" fill="none" stroke="#ff9f0a" stroke-width="1.6"/>
+    <path d="M385 70 L425 70" stroke="#ff9f0a" stroke-width="1.2" opacity="0.6"/>
+    <path d="M300 140 L296 210 M340 140 L344 210 M380 140 L376 210" stroke="#ff9f0a" stroke-width="1" opacity="0.65"/>
+    <path d="M265 125 H435" stroke="#c8c8c8" stroke-width="0.9" stroke-dasharray="4 3" opacity="0.7"/>
+    <circle cx="308" cy="218" r="5.5" fill="#ff9f0a" opacity="0.85"/>
+    <circle cx="352" cy="218" r="5.5" fill="#ff9f0a" opacity="0.85"/>
+    <text x="330" y="252" text-anchor="middle" font-size="11">受拉区混凝土退出工作</text>
+    <text x="330" y="270" text-anchor="middle" font-size="11" fill="#ff9f0a">→ 裂缝宽度、刚度验算依据</text>
+
+    <rect x="495" y="70" width="110" height="160" fill="#d8d8d8" opacity="0.12" stroke="#c8c8c8" stroke-width="1.4"/>
+    <rect x="605" y="70" width="42" height="38" fill="#30d158" opacity="0.3" stroke="#30d158" stroke-width="1.4"/>
+    <path d="M495 108 H655" stroke="#c8c8c8" stroke-width="0.9" stroke-dasharray="4 3" opacity="0.7"/>
+    <circle cx="528" cy="218" r="5.5" fill="#30d158" opacity="0.9"/>
+    <circle cx="572" cy="218" r="5.5" fill="#30d158" opacity="0.9"/>
+    <text x="626" y="126" text-anchor="middle" font-size="10.5" fill="#30d158">等效矩形应力图</text>
+    <text x="550" y="252" text-anchor="middle" font-size="11">钢筋屈服、压区混凝土压碎</text>
+    <text x="550" y="270" text-anchor="middle" font-size="11" fill="#30d158">→ 正截面承载力计算依据</text>
+
+    <text x="330" y="292" text-anchor="middle" font-size="11" fill="#8a8a8a">三阶段对应三种验算，各用各的应力图形与假设；拿第 Ⅲ 阶段的等效矩形图去做抗裂验算是错的</text>
+  </g>
+</svg>

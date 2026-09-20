@@ -1,0 +1,2576 @@
+{
+  "subjectId": "structural-testing",
+  "items": [
+    {
+      "id": "structural-testing-concept-001",
+      "subjectId": "structural-testing",
+      "chapter": "1.1",
+      "term": "结构试验",
+      "en": "structural testing / structural experiment",
+      "definition": "在结构或结构模型上施加可控的荷载（或环境作用），量测其响应（应力、应变、变形、裂缝、振动等），用以验证设计理论、检验结构性能或探索结构行为规律的实践活动。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "生产性试验",
+        "科研性试验",
+        "静力试验",
+        "动力试验"
+      ],
+      "pitfalls": [
+        "把结构试验等同于无损检测：前者是主动加载量测响应，后者是现场被动探查，方法体系不同"
+      ],
+      "examAngle": "名词解释",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-002",
+      "subjectId": "structural-testing",
+      "chapter": "1.1",
+      "term": "生产性试验",
+      "en": "production / acceptance test",
+      "definition": "以解决具体工程问题为直接目的的试验，如新产品定型检验、构件出厂检验、既有结构鉴定与加固效果检验，结论直接服务于该工程的验收或使用决策。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "科研性试验",
+        "鉴定性试验",
+        "验收试验"
+      ],
+      "pitfalls": [
+        "与科研性试验混淆：生产性试验追求合格与否的判定，科研性试验追求机理与规律；前者重代表性，后者重可控性与可重复"
+      ],
+      "examAngle": "常考概念辨析",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-003",
+      "subjectId": "structural-testing",
+      "chapter": "1.1",
+      "term": "科研性试验",
+      "en": "research test",
+      "definition": "以探索结构受力机理、建立或验证计算模型、为制定修订规范提供依据为目的的试验，通常强调变量可控、边界明确、可重复。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "生产性试验",
+        "验证性试验",
+        "探索性试验"
+      ],
+      "pitfalls": [
+        "忽视试件代表性问题：实验室小试件得出的规律外推到实际结构时需论证尺寸效应与边界差异"
+      ],
+      "examAngle": "常考概念辨析",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-004",
+      "subjectId": "structural-testing",
+      "chapter": "1.2",
+      "term": "原型试验",
+      "en": "prototype test / full-scale test",
+      "definition": "在真实结构或足尺构件上进行的试验，其结果可直接反映实际结构的性能，无需相似换算。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "模型试验",
+        "足尺试验",
+        "现场试验"
+      ],
+      "pitfalls": [
+        "原型试验费用高、破坏性试验不可重复，且边界与材料离散性大，常只能做非破坏的使用状态试验"
+      ],
+      "examAngle": "与模型试验对比",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-005",
+      "subjectId": "structural-testing",
+      "chapter": "1.2",
+      "term": "模型试验",
+      "en": "model test",
+      "definition": "按相似关系将原型缩尺（或放大）制成模型，在模型上加载，再按相似常数换算回原型的试验方法。",
+      "formulaId": "structural-testing-formula-025",
+      "symbols": [
+        "C_l"
+      ],
+      "unit": null,
+      "relations": [
+        "原型试验",
+        "相似常数",
+        "模型律",
+        "尺寸效应"
+      ],
+      "pitfalls": [
+        "只有满足相似条件才能换算；模型材料、尺寸效应与加工误差会造成失真，常只能做到近似相似"
+      ],
+      "examAngle": "常考概念辨析 + 相似比计算",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-006",
+      "subjectId": "structural-testing",
+      "chapter": "1.2",
+      "term": "静力试验",
+      "en": "static test",
+      "definition": "荷载大小、方向与作用位置随时间变化缓慢，结构响应中惯性力与阻尼力可忽略的试验，用以研究承载力、刚度、变形与裂缝。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "动力试验",
+        "拟静力试验",
+        "单调加载"
+      ],
+      "pitfalls": [
+        "静力不等于慢：判据是惯性力是否可忽略，而不是加载速度快慢的绝对数值"
+      ],
+      "examAngle": "常考概念辨析",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-007",
+      "subjectId": "structural-testing",
+      "chapter": "1.2",
+      "term": "动力试验",
+      "en": "dynamic test",
+      "definition": "研究结构在动荷载作用下的响应与固有动力特性（频率、阻尼、振型）的试验，惯性力与阻尼力不可忽略。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "静力试验",
+        "脉动试验",
+        "强迫振动",
+        "模态参数"
+      ],
+      "pitfalls": [
+        "混淆动力特性测试与动力响应测试：脉动试验测特性，跑车跳车试验测响应，目的与数据处理方式不同"
+      ],
+      "examAngle": "常考概念辨析",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-008",
+      "subjectId": "structural-testing",
+      "chapter": "1.2",
+      "term": "短期荷载试验",
+      "en": "short-term load test",
+      "definition": "在较短时间内完成加载并测得响应的试验，通常不考虑材料的时间效应（徐变、收缩、松弛）。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "长期荷载试验",
+        "徐变",
+        "松弛"
+      ],
+      "pitfalls": [
+        "短期试验的刚度结果不能直接用于长期变形预测，混凝土结构尤其明显"
+      ],
+      "examAngle": "与长期荷载试验对比",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-009",
+      "subjectId": "structural-testing",
+      "chapter": "1.2",
+      "term": "长期荷载试验",
+      "en": "long-term load test",
+      "definition": "在数月至数年内保持恒定（或循环）荷载，观测徐变、收缩、应力松弛与疲劳性能的试验。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "短期荷载试验",
+        "徐变",
+        "疲劳试验",
+        "松弛"
+      ],
+      "pitfalls": [
+        "长期试验的关键是荷载恒定与温度湿度记录，否则数据无法与理论分离时间效应"
+      ],
+      "examAngle": "常考概念辨析",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-010",
+      "subjectId": "structural-testing",
+      "chapter": "1.2",
+      "term": "破坏性试验",
+      "en": "destructive test",
+      "definition": "加载至试件丧失承载力或发生破坏的试验，可获得极限承载力与破坏形态，但试件不可重复使用。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "非破坏性试验",
+        "极限荷载",
+        "破坏荷载"
+      ],
+      "pitfalls": [
+        "把极限荷载与破坏荷载等同：破坏荷载通常指荷载下降到极限荷载某一比例时的荷载，具体口径按规范/教材"
+      ],
+      "examAngle": "与无损检测对比",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "破坏荷载的定义（是否取极限荷载的 85% 等）请按所用教材或 GB/T 50152 核对"
+    },
+    {
+      "id": "structural-testing-concept-011",
+      "subjectId": "structural-testing",
+      "chapter": "1.3",
+      "term": "试验大纲",
+      "en": "test program / test outline",
+      "definition": "指导一次结构试验全过程的书面计划，通常包括试验目的、试件概况、加载方案与制度、测点布置、量测仪器、数据处理方法、安全措施与进度安排。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "预备性试验",
+        "试验报告",
+        "加载制度"
+      ],
+      "pitfalls": [
+        "大纲里最容易漏掉的三项：仪表量程与预估值的匹配、卸载与残余变形观测、安全与应急预案"
+      ],
+      "examAngle": "简答：试验大纲应包含哪些内容",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-012",
+      "subjectId": "structural-testing",
+      "chapter": "1.3",
+      "term": "预备性试验",
+      "en": "preliminary test / preloading",
+      "definition": "正式试验前以较小荷载进行的预演性加载，用于检查仪表工作状况、消除装置间隙、校核加载与量测方案、确定正式加载级差。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "预载",
+        "试验大纲",
+        "正式加载"
+      ],
+      "pitfalls": [
+        "预载荷载过大可能在正式试验前就造成损伤；预载数据一般不进入正式结果"
+      ],
+      "examAngle": "简答：预载的作用",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-013",
+      "subjectId": "structural-testing",
+      "chapter": "1.4",
+      "term": "加载制度",
+      "en": "loading scheme / loading protocol",
+      "definition": "对荷载的大小、分级、施加顺序、每级持荷时间、循环次数与卸载方式所作的预先规定，是试验可重复性的核心。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "分级加载",
+        "持荷时间",
+        "单调加载制度",
+        "低周反复加载制度"
+      ],
+      "pitfalls": [
+        "临近开裂或屈服时必须减小级差，否则特征荷载无法精确定位"
+      ],
+      "examAngle": "简答与设计题",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/structural-testing/static-load-layout.svg",
+        "caption": "简支梁静载试验的加载与测点布置（自绘示意）",
+        "readPoints": [
+          "跨中是主控截面，挠度与应变测点都布在这里",
+          "应变片沿截面高度布片，可验证平截面假定是否成立",
+          "评定看三项：校验系数、残余变形、裂缝宽度"
+        ]
+      }
+    },
+    {
+      "id": "structural-testing-concept-014",
+      "subjectId": "structural-testing",
+      "chapter": "1.4",
+      "term": "分级加载",
+      "en": "incremental loading",
+      "definition": "把总荷载分成若干等级逐级施加，每级持荷并读数的加载方式，便于观察裂缝发展与刚度变化并定位特征荷载。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "加载制度",
+        "持荷时间",
+        "卸载"
+      ],
+      "pitfalls": [
+        "级差过大导致特征荷载定位误差；级差过小则徐变与温度漂移累积影响分辨"
+      ],
+      "examAngle": "简答：为什么要分级加载",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/structural-testing/static-load-layout.svg",
+        "caption": "简支梁静载试验的加载与测点布置（自绘示意）",
+        "readPoints": [
+          "跨中是主控截面，挠度与应变测点都布在这里",
+          "应变片沿截面高度布片，可验证平截面假定是否成立",
+          "评定看三项：校验系数、残余变形、裂缝宽度"
+        ]
+      }
+    },
+    {
+      "id": "structural-testing-concept-015",
+      "subjectId": "structural-testing",
+      "chapter": "1.4",
+      "term": "持荷时间",
+      "en": "load holding time",
+      "definition": "每级荷载施加后保持恒定的时间，目的是使变形充分发展、读数稳定并完成裂缝观测与记录。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "min",
+      "relations": [
+        "分级加载",
+        "徐变",
+        "读数稳定"
+      ],
+      "pitfalls": [
+        "混凝土构件持荷时间显著长于钢构件；具体分钟数须按所用标准确定"
+      ],
+      "examAngle": "简答",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "1",
+        "page": null
+      },
+      "verify": "各类试验（混凝土/钢结构、短期/长期）的持荷时间规定请按 GB/T 50152 或教材核对"
+    },
+    {
+      "id": "structural-testing-concept-018",
+      "subjectId": "structural-testing",
+      "chapter": "2.2",
+      "term": "加载图式",
+      "en": "loading arrangement / load pattern",
+      "definition": "荷载在试件上的作用位置、方向与分布形式的总体安排，应使控制截面的内力（弯矩、剪力、轴力）与设计控制内力等效。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "等效荷载",
+        "分配梁",
+        "影响线"
+      ],
+      "pitfalls": [
+        "只保证跨中弯矩等效而忽略剪力分布差异，可能改变破坏形态（弯剪破坏次序）"
+      ],
+      "examAngle": "设计题：把均布荷载换算为等效集中力",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/structural-testing/static-load-layout.svg",
+        "caption": "简支梁静载试验的加载与测点布置（自绘示意）",
+        "readPoints": [
+          "跨中是主控截面，挠度与应变测点都布在这里",
+          "应变片沿截面高度布片，可验证平截面假定是否成立",
+          "评定看三项：校验系数、残余变形、裂缝宽度"
+        ]
+      }
+    },
+    {
+      "id": "structural-testing-concept-020",
+      "subjectId": "structural-testing",
+      "chapter": "2.2",
+      "term": "单调加载制度",
+      "en": "monotonic loading protocol",
+      "definition": "荷载沿单一方向逐级增加直至破坏的加载制度，用于获得承载力、刚度与延性的基本指标。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "低周反复加载制度",
+        "静力试验",
+        "骨架曲线"
+      ],
+      "pitfalls": [
+        "单调加载得到的延性与耗能高于反复加载结果，不能直接用于抗震性能评价"
+      ],
+      "examAngle": "常考概念辨析",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-021",
+      "subjectId": "structural-testing",
+      "chapter": "2.2",
+      "term": "低周反复加载制度",
+      "en": "low-cycle reversed loading protocol",
+      "definition": "在屈服前按力控制、屈服后按位移控制，以逐级增大的位移幅值进行多次循环的加载制度，用于模拟地震反复作用。",
+      "formulaId": null,
+      "symbols": [
+        "Delta_y"
+      ],
+      "unit": null,
+      "relations": [
+        "拟静力试验",
+        "单调加载制度",
+        "位移延性系数",
+        "滞回曲线"
+      ],
+      "pitfalls": [
+        "加载频率必须足够低（准静态），否则惯性力污染滞回曲线；每级循环圈数影响累积损伤程度"
+      ],
+      "examAngle": "常考概念辨析与设计题（列加载级差）",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-022",
+      "subjectId": "structural-testing",
+      "chapter": "2.3",
+      "term": "应变花",
+      "en": "strain rosette",
+      "definition": "在同一测点按若干已知方向（常用 0°/45°/90° 三向，或 0°/60°/120° 三向）布置的应变片组合，用于由三个方向的线应变求该点的主应变、主方向与主应力。",
+      "formulaId": "structural-testing-formula-008",
+      "symbols": [
+        "eps0",
+        "eps45",
+        "eps90"
+      ],
+      "unit": "με",
+      "relations": [
+        "主应变",
+        "主应力",
+        "应变片",
+        "应变莫尔圆"
+      ],
+      "pitfalls": [
+        "三个方向必须严格按标称角度粘贴，角度误差直接进入主方向结果；公式对应的是 0°/45°/90° 布置，换成 0/60/120 需换公式"
+      ],
+      "examAngle": "计算题高频",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/structural-testing/strain-bridge.svg",
+        "caption": "电阻应变测量的三种桥路接法（自绘示意）",
+        "readPoints": [
+          "1/4 桥灵敏度最低且无温度补偿，全桥灵敏度最高且自动补偿",
+          "半桥有两种：两片都受力则灵敏度翻倍；一片工作一片补偿则不翻倍",
+          "U_in 与 U_out 分别加在电桥的两条对角线上，不能接反"
+        ]
+      }
+    },
+    {
+      "id": "structural-testing-concept-023",
+      "subjectId": "structural-testing",
+      "chapter": "2.3",
+      "term": "温度补偿片",
+      "en": "dummy gauge / temperature compensation gauge",
+      "definition": "粘贴在与试件材料相同、且不受力的补偿块上的应变片，与工作片接在相邻桥臂上，用以抵消温度变化引起的虚假应变。",
+      "formulaId": "structural-testing-formula-007",
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "工作片",
+        "惠斯通电桥",
+        "半桥",
+        "热输出"
+      ],
+      "pitfalls": [
+        "补偿片必须与工作片同材料、同温度场且靠近测点；只补偿温度，不补偿湿度或机械应变"
+      ],
+      "examAngle": "简答与实验题",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/structural-testing/strain-bridge.svg",
+        "caption": "电阻应变测量的三种桥路接法（自绘示意）",
+        "readPoints": [
+          "1/4 桥灵敏度最低且无温度补偿，全桥灵敏度最高且自动补偿",
+          "半桥有两种：两片都受力则灵敏度翻倍；一片工作一片补偿则不翻倍",
+          "U_in 与 U_out 分别加在电桥的两条对角线上，不能接反"
+        ]
+      }
+    },
+    {
+      "id": "structural-testing-concept-024",
+      "subjectId": "structural-testing",
+      "chapter": "2.4",
+      "term": "边界条件模拟",
+      "en": "boundary condition simulation",
+      "definition": "用支座、夹具与约束装置在试验中复现计算模型所假定的支承与连接条件（如铰支、固支、滚动支座）。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "铰支座",
+        "固支端",
+        "滚动支座",
+        "支座沉降"
+      ],
+      "pitfalls": [
+        "理想铰实际上总有一定转动约束，理想固支总有一定柔度，都会使实测刚度偏高或偏低"
+      ],
+      "examAngle": "简答：支座模拟失真的影响",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-025",
+      "subjectId": "structural-testing",
+      "chapter": "2.4",
+      "term": "反力装置",
+      "en": "reaction system",
+      "definition": "为平衡加载力而设置的承载结构，常见有反力架、反力墙、反力台座、地锚与配重，须具有足够刚度与承载力。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "反力架",
+        "反力墙",
+        "地锚",
+        "液压千斤顶"
+      ],
+      "pitfalls": [
+        "反力架刚度不足会产生附加变形，被误计入结构变形；加载时反力装置自身变形须单独量测或预先扣除"
+      ],
+      "examAngle": "简答",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "2",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-026",
+      "subjectId": "structural-testing",
+      "chapter": "3.1",
+      "term": "液压千斤顶",
+      "en": "hydraulic jack",
+      "definition": "以油压推动活塞输出压力的加载装置，出力由活塞有效面积与油压决定，常与油泵、油压表或力传感器配套使用。",
+      "formulaId": "structural-testing-formula-014",
+      "symbols": [
+        "F",
+        "p",
+        "A"
+      ],
+      "unit": "kN",
+      "relations": [
+        "液压加载",
+        "油压表",
+        "标定"
+      ],
+      "pitfalls": [
+        "油压表读数受摩阻力影响，出力须由标定曲线确定，不能简单按理论面积计算；千斤顶不能受横向力"
+      ],
+      "examAngle": "计算题（由油压与面积求出力）",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-027",
+      "subjectId": "structural-testing",
+      "chapter": "3.1",
+      "term": "电液伺服作动器",
+      "en": "electro-hydraulic servo actuator",
+      "definition": "由伺服阀控制油流方向流量的液压作动器，可在力、位移或应变模式下按指令精确加载，是拟静力、拟动力与疲劳试验的核心设备。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "伺服阀",
+        "力控制",
+        "位移控制",
+        "拟静力试验"
+      ],
+      "pitfalls": [
+        "力控制下试件进入下降段会失稳，必须切换到位移控制；控制模式切换点应选在屈服后"
+      ],
+      "examAngle": "简答与实验方案题",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-029",
+      "subjectId": "structural-testing",
+      "chapter": "3.3",
+      "term": "分配梁",
+      "en": "distribution beam / spreader beam",
+      "definition": "置于千斤顶与试件之间的刚性梁，把千斤顶的一个集中力分配为两个（或多个）等分或按比例分配的集中力，以实现两点或多点加载。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "加载图式",
+        "等效荷载",
+        "刀口支座",
+        "三分点加载"
+      ],
+      "pitfalls": [
+        "分配梁刚度不足或支点摩阻会导致两加载点力值不等；分配梁自重应计入或扣除"
+      ],
+      "examAngle": "计算题（由千斤顶力与支点位置求跨中弯矩）",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-030",
+      "subjectId": "structural-testing",
+      "chapter": "3.4",
+      "term": "拟静力试验",
+      "en": "quasi-static test / pseudo-static test",
+      "definition": "以足够低的速率施加低周反复荷载，使惯性力可忽略，用滞回曲线研究构件抗震性能的试验，也称伪静力试验。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "低周反复加载制度",
+        "拟动力试验",
+        "地震模拟振动台",
+        "滞回曲线"
+      ],
+      "pitfalls": [
+        "拟静力不能反映真实地震的速率效应与高阶模态影响，也不能给出真实位移时程响应"
+      ],
+      "examAngle": "常考概念辨析（拟静力/拟动力/振动台）",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-031",
+      "subjectId": "structural-testing",
+      "chapter": "3.4",
+      "term": "拟动力试验",
+      "en": "pseudo-dynamic test",
+      "definition": "由计算机按预定地震波逐步求解运动方程得到下一时刻位移，控制作动器准静态实现该位移，同时实测恢复力反馈给计算，如此循环的抗震试验方法。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "拟静力试验",
+        "地震模拟振动台",
+        "数值积分",
+        "恢复力"
+      ],
+      "pitfalls": [
+        "恢复力来自实测而非假定模型，这是与纯数值分析的根本区别；但仍是准静态，无法反映真实速度相关阻尼"
+      ],
+      "examAngle": "常考概念辨析",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-032",
+      "subjectId": "structural-testing",
+      "chapter": "3.4",
+      "term": "地震模拟振动台",
+      "en": "shaking table",
+      "definition": "可按规定加速度时程运动的试验台面，把试件安装在台面上直接复现地震作用，可反映惯性力、阻尼与速率效应。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "拟动力试验",
+        "拟静力试验",
+        "相似律",
+        "台面控制"
+      ],
+      "pitfalls": [
+        "模型须满足重力相似（人工质量模拟），小比例模型很难完全满足；台面控制精度与试件—台面相互作用会影响结果"
+      ],
+      "examAngle": "常考概念辨析",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "3",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-033",
+      "subjectId": "structural-testing",
+      "chapter": "4.1",
+      "term": "电阻应变片",
+      "en": "electrical resistance strain gauge",
+      "definition": "利用金属（或半导体）敏感栅受力变形后电阻发生变化的元件，通过测量电阻相对变化来测量构件表面应变。",
+      "formulaId": "structural-testing-formula-001",
+      "symbols": [
+        "R",
+        "K",
+        "eps"
+      ],
+      "unit": "Ω",
+      "relations": [
+        "灵敏系数",
+        "横向效应",
+        "惠斯通电桥",
+        "温度补偿片"
+      ],
+      "pitfalls": [
+        "应变片测的是栅长范围内的平均应变，不是点应变；应力集中区应选用小栅长"
+      ],
+      "examAngle": "名词解释与计算题",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null,
+      "figure": {
+        "src": "/knowledge/assets/structural-testing/strain-bridge.svg",
+        "caption": "电阻应变测量的三种桥路接法（自绘示意）",
+        "readPoints": [
+          "1/4 桥灵敏度最低且无温度补偿，全桥灵敏度最高且自动补偿",
+          "半桥有两种：两片都受力则灵敏度翻倍；一片工作一片补偿则不翻倍",
+          "U_in 与 U_out 分别加在电桥的两条对角线上，不能接反"
+        ]
+      }
+    },
+    {
+      "id": "structural-testing-concept-034",
+      "subjectId": "structural-testing",
+      "chapter": "4.1",
+      "term": "灵敏系数",
+      "en": "gauge factor",
+      "definition": "应变片电阻相对变化率与所受应变之比，K = (ΔR/R)/ε，由厂家标定给出，是应变片最重要的技术参数。",
+      "formulaId": "structural-testing-formula-001",
+      "symbols": [
+        "K"
+      ],
+      "unit": "—",
+      "relations": [
+        "电阻应变片",
+        "横向效应",
+        "标定"
+      ],
+      "pitfalls": [
+        "K 是标定值不是理论值，不能由泊松比推算；金属箔式应变片 K 通常约 2，具体取厂家值"
+      ],
+      "examAngle": "计算题与名词解释",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-035",
+      "subjectId": "structural-testing",
+      "chapter": "4.1",
+      "term": "横向效应",
+      "en": "transverse sensitivity",
+      "definition": "应变片敏感栅的横向段对垂直于主栅方向应变也有响应，使测得的应变受横向应变影响的现象，用横向效应系数表示。",
+      "formulaId": null,
+      "symbols": [
+        "H"
+      ],
+      "unit": "—",
+      "relations": [
+        "电阻应变片",
+        "灵敏系数",
+        "泊松比"
+      ],
+      "pitfalls": [
+        "单向应力场中横向效应会带来系统偏差；精密测量需做横向效应修正或选用专门设计的应变片"
+      ],
+      "examAngle": "名词解释",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-036",
+      "subjectId": "structural-testing",
+      "chapter": "4.1",
+      "term": "热输出",
+      "en": "thermal output / apparent strain",
+      "definition": "温度变化时，由于敏感栅电阻温度系数与栅材、试件线膨胀系数不同，应变片产生的虚假应变读数。",
+      "formulaId": "structural-testing-formula-006",
+      "symbols": [
+        "alpha",
+        "beta_s",
+        "beta_g",
+        "Delta_T"
+      ],
+      "unit": "με",
+      "relations": [
+        "温度补偿片",
+        "电阻应变片",
+        "系统误差"
+      ],
+      "pitfalls": [
+        "热输出是系统误差，不是真实受力应变；必须用补偿片、自补偿片或桥路补偿消除"
+      ],
+      "examAngle": "计算题与简答",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-037",
+      "subjectId": "structural-testing",
+      "chapter": "4.2",
+      "term": "惠斯通电桥",
+      "en": "Wheatstone bridge",
+      "definition": "由四个电阻臂组成的测量电路，把微小的电阻变化转换为电压信号；按接入工作片的数目分为 1/4 桥、半桥与全桥。",
+      "formulaId": "structural-testing-formula-004",
+      "symbols": [
+        "U_o",
+        "U_i",
+        "R"
+      ],
+      "unit": "V",
+      "relations": [
+        "1/4桥",
+        "半桥",
+        "全桥",
+        "桥路系数"
+      ],
+      "pitfalls": [
+        "桥路输出电压与供桥电压成正比，供桥电压不稳直接进入测量结果；长导线电阻会衰减信号并影响温度补偿"
+      ],
+      "examAngle": "计算题与实验题高频",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-038",
+      "subjectId": "structural-testing",
+      "chapter": "4.2",
+      "term": "桥路系数",
+      "en": "bridge factor",
+      "definition": "应变仪读数与实际应变之间的比例系数 n，满足 ε = εr / n；1/4 桥 n=1，半桥 n=2，全桥 n=4（按工作片数与桥路的加成关系确定）。",
+      "formulaId": "structural-testing-formula-005",
+      "symbols": [
+        "n",
+        "eps_r"
+      ],
+      "unit": "—",
+      "relations": [
+        "惠斯通电桥",
+        "半桥",
+        "全桥",
+        "应变仪"
+      ],
+      "pitfalls": [
+        "不同教材对 n 的定义可能是桥臂系数或灵敏度提高倍数，符号约定不同；做题前先确认所用教材的换算公式"
+      ],
+      "examAngle": "计算题高频",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": "桥路系数的定义与换算公式（ε=εr/n 还是 ε=n·εr）请按所用教材与应变仪说明书核对"
+    },
+    {
+      "id": "structural-testing-concept-039",
+      "subjectId": "structural-testing",
+      "chapter": "4.2",
+      "term": "半桥接法",
+      "en": "half bridge",
+      "definition": "电桥两个相邻（或相对）桥臂接入应变片的接法，常用一片工作片加一片温度补偿片实现温度补偿，或用两片工作片实现灵敏度加倍与分量分离。",
+      "formulaId": "structural-testing-formula-005",
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "惠斯通电桥",
+        "全桥",
+        "1/4桥",
+        "温度补偿片"
+      ],
+      "pitfalls": [
+        "工作片与补偿片接在相邻臂时温度可补偿、应变相加减关系要看清；接错桥臂会使信号抵消"
+      ],
+      "examAngle": "实验题与计算题",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-040",
+      "subjectId": "structural-testing",
+      "chapter": "4.2",
+      "term": "全桥接法",
+      "en": "full bridge",
+      "definition": "电桥四个桥臂均接入应变片的接法，灵敏度最高、温度补偿最好，常用于传感器内部与需要分离弯曲/轴向分量的场合。",
+      "formulaId": "structural-testing-formula-005",
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "惠斯通电桥",
+        "半桥",
+        "力传感器",
+        "分量分离"
+      ],
+      "pitfalls": [
+        "四片应变片的受拉受压符号必须配置正确，否则输出相互抵消；拉压方向与桥臂位置的对应关系要画图确认"
+      ],
+      "examAngle": "实验方案设计题",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-041",
+      "subjectId": "structural-testing",
+      "chapter": "4.3",
+      "term": "百分表",
+      "en": "dial indicator",
+      "definition": "把测杆的直线位移通过齿轮齿条机构放大并由表盘读数的机械式位移计，分辨力通常为 0.01 mm。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "mm",
+      "relations": [
+        "千分表",
+        "LVDT",
+        "位移计"
+      ],
+      "pitfalls": [
+        "百分表必须固定在独立基准上；表杆与被测面不垂直会引入余弦误差；量程有限，大变形试验要分级倒表"
+      ],
+      "examAngle": "实验题",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-042",
+      "subjectId": "structural-testing",
+      "chapter": "4.3",
+      "term": "LVDT 位移计",
+      "en": "linear variable differential transformer",
+      "definition": "利用铁芯在线圈中移动改变互感而输出与位移成正比电压的电感式位移传感器，可接采集系统实现自动记录。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "mm",
+      "relations": [
+        "百分表",
+        "位移计",
+        "数据采集"
+      ],
+      "pitfalls": [
+        "LVDT 需稳定激励电源；安装不牢或测杆侧向受力会造成读数漂移与卡滞"
+      ],
+      "examAngle": "选择与简答",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-043",
+      "subjectId": "structural-testing",
+      "chapter": "4.3",
+      "term": "基准梁",
+      "en": "reference beam / independent datum",
+      "definition": "独立于试件与支承系统设置的参考梁或参考点，用于安装位移计，使测得的位移不包含支座沉降与地面变形。",
+      "formulaId": "structural-testing-formula-022",
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "百分表",
+        "支座沉降",
+        "挠度"
+      ],
+      "pitfalls": [
+        "把位移计固定在试验台或反力架上会测到装置变形；基准本身受温度、振动与人员走动影响"
+      ],
+      "examAngle": "简答与计算（支座沉降修正）",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-044",
+      "subjectId": "structural-testing",
+      "chapter": "4.3",
+      "term": "倾角仪",
+      "en": "inclinometer / tilt sensor",
+      "definition": "测量结构或构件相对水平面转角的仪器，用于支座转角、墩顶转角与梁端转角的量测，也可由转角积分求挠曲线。",
+      "formulaId": null,
+      "symbols": [
+        "theta"
+      ],
+      "unit": "rad",
+      "relations": [
+        "水准仪",
+        "全站仪",
+        "挠度",
+        "转角"
+      ],
+      "pitfalls": [
+        "倾角仪对温度与安装面不平度敏感；由转角积分求挠度会累积误差，需边界条件约束"
+      ],
+      "examAngle": "选择与简答",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-045",
+      "subjectId": "structural-testing",
+      "chapter": "4.4",
+      "term": "加速度计",
+      "en": "accelerometer",
+      "definition": "测量结构振动加速度的传感器，常用压电式（频响宽、适合动态）与电容式/伺服式（可测低频乃至准静态），是模态试验主力传感器。",
+      "formulaId": null,
+      "symbols": [
+        "a"
+      ],
+      "unit": "m/s^2",
+      "relations": [
+        "脉动试验",
+        "模态参数识别",
+        "压电式",
+        "频响函数"
+      ],
+      "pitfalls": [
+        "压电加速度计不能测真正的静态量；安装方式（磁座、螺栓、胶粘）直接改变可用频带上限"
+      ],
+      "examAngle": "选择与简答",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-046",
+      "subjectId": "structural-testing",
+      "chapter": "4.4",
+      "term": "光纤布拉格光栅",
+      "en": "fiber Bragg grating (FBG)",
+      "definition": "在光纤中形成的周期性折射率调制结构，其反射布拉格波长随轴向应变与温度变化而漂移，据此测量应变与温度。",
+      "formulaId": null,
+      "symbols": [
+        "lambda_B"
+      ],
+      "unit": "nm",
+      "relations": [
+        "振弦式应变计",
+        "电阻应变片",
+        "结构健康监测"
+      ],
+      "pitfalls": [
+        "波长漂移同时含应变与温度，必须做温度解耦（另设温补光栅）；安装工艺与存活率是关键工程问题"
+      ],
+      "examAngle": "简答与新技术类题目",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-047",
+      "subjectId": "structural-testing",
+      "chapter": "4.4",
+      "term": "振弦式应变计",
+      "en": "vibrating wire strain gauge",
+      "definition": "以张紧钢弦的固有频率变化反映应变的传感器，输出为频率信号，长期稳定性好，广泛用于施工监控与长期监测。",
+      "formulaId": null,
+      "symbols": [
+        "f"
+      ],
+      "unit": "Hz",
+      "relations": [
+        "光纤布拉格光栅",
+        "埋入式应变计",
+        "施工监控"
+      ],
+      "pitfalls": [
+        "振弦计测得的是总应变，含自生应变与温度应变，必须与无应力计配合才能分离出应力应变"
+      ],
+      "examAngle": "简答",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "4",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-049",
+      "subjectId": "structural-testing",
+      "chapter": "5.1",
+      "term": "开裂荷载",
+      "en": "cracking load",
+      "definition": "构件受拉区混凝土（或材料）出现第一条可见裂缝时对应的荷载，常用荷载—变形曲线斜率突变或应变突变结合肉眼观测判定。",
+      "formulaId": null,
+      "symbols": [
+        "Q_cr"
+      ],
+      "unit": "kN",
+      "relations": [
+        "屈服荷载",
+        "极限荷载",
+        "裂缝宽度"
+      ],
+      "pitfalls": [
+        "可见裂缝滞后于内部微裂，肉眼判定的开裂荷载偏高；微裂缝出现宜用应变片突变辅助判定"
+      ],
+      "examAngle": "试验报告数据分析",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-050",
+      "subjectId": "structural-testing",
+      "chapter": "5.1",
+      "term": "屈服荷载",
+      "en": "yield load",
+      "definition": "构件受拉钢筋（或钢材）开始屈服、荷载—变形曲线明显偏离线性时对应的荷载，是力控制转位移控制的切换依据。",
+      "formulaId": null,
+      "symbols": [
+        "Q_y"
+      ],
+      "unit": "kN",
+      "relations": [
+        "开裂荷载",
+        "极限荷载",
+        "屈服位移",
+        "位移延性系数"
+      ],
+      "pitfalls": [
+        "钢筋混凝土无明显屈服点，常用能量法或等面积法确定等效屈服点，方法不同结果有差异"
+      ],
+      "examAngle": "试验报告数据分析",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": "等效屈服点的确定方法（等面积法/几何作图法）请按教材与规范核对"
+    },
+    {
+      "id": "structural-testing-concept-051",
+      "subjectId": "structural-testing",
+      "chapter": "5.1",
+      "term": "极限荷载",
+      "en": "ultimate load",
+      "definition": "构件所能承受的最大荷载，即荷载—变形曲线的最高点对应荷载。",
+      "formulaId": null,
+      "symbols": [
+        "Q_u"
+      ],
+      "unit": "kN",
+      "relations": [
+        "破坏荷载",
+        "屈服荷载",
+        "承载力检验系数"
+      ],
+      "pitfalls": [
+        "极限荷载与破坏荷载不同：破坏发生在承载力下降之后，下降段的终止判据按规范确定"
+      ],
+      "examAngle": "常考概念辨析",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-052",
+      "subjectId": "structural-testing",
+      "chapter": "5.2",
+      "term": "滞回曲线",
+      "en": "hysteretic loop",
+      "definition": "低周反复加载下荷载—位移关系形成的闭合环状曲线，其面积代表一个循环的耗能量，形状反映刚度退化、捏缩与强度退化。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "骨架曲线",
+        "耗能",
+        "刚度退化",
+        "低周反复加载制度"
+      ],
+      "pitfalls": [
+        "用滞回环面积比较耗能时必须保证加载位移幅值与循环圈数一致；累积损伤会使后一圈面积变小"
+      ],
+      "examAngle": "试验报告与简答",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-054",
+      "subjectId": "structural-testing",
+      "chapter": "5.2",
+      "term": "位移延性系数",
+      "en": "displacement ductility factor",
+      "definition": "极限位移（或破坏位移）与屈服位移之比，μ_Δ = Δu/Δy，衡量构件进入塑性后保持承载能力的变形能力。",
+      "formulaId": "structural-testing-formula-020",
+      "symbols": [
+        "mu_D",
+        "Delta_u",
+        "Delta_y"
+      ],
+      "unit": "—",
+      "relations": [
+        "屈服荷载",
+        "低周反复加载制度",
+        "骨架曲线"
+      ],
+      "pitfalls": [
+        "必须先明确 Δu 的取值口径（极限荷载对应位移或承载力下降后的破坏位移），不同口径结果差别很大"
+      ],
+      "examAngle": "计算题与试验报告",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-055",
+      "subjectId": "structural-testing",
+      "chapter": "5.3",
+      "term": "校验系数",
+      "en": "verification coefficient / calibration factor",
+      "definition": "静载试验中实测值与理论计算值之比，η = 实测值/理论值；分挠度校验系数与应变校验系数，用于判断结构实际工作性能与理论预期的偏离。",
+      "formulaId": "structural-testing-formula-012",
+      "symbols": [
+        "eta"
+      ],
+      "unit": "—",
+      "relations": [
+        "挠度校验系数",
+        "应变校验系数",
+        "残余变形率",
+        "理论计算值"
+      ],
+      "pitfalls": [
+        "理论值必须按实测材料强度与实际尺寸计算，用设计取值会使校验系数失真；η>1 通常说明实际刚度优于理论，η 过小则需警惕"
+      ],
+      "examAngle": "计算题高频",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-056",
+      "subjectId": "structural-testing",
+      "chapter": "5.3",
+      "term": "相对残余变形",
+      "en": "relative residual deformation",
+      "definition": "卸载后不可恢复的残余变形与加载时总变形之比，以百分数表示，反映结构在试验荷载下是否进入非线性或产生损伤。",
+      "formulaId": "structural-testing-formula-013",
+      "symbols": [
+        "Delta_p",
+        "Delta_t"
+      ],
+      "unit": "%",
+      "relations": [
+        "校验系数",
+        "残余变形",
+        "卸载"
+      ],
+      "pitfalls": [
+        "卸载后需等待变形回稳再读数，过早读数会高估残余变形；支座与装置残余位移会污染结果"
+      ],
+      "examAngle": "计算题高频",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": "各类结构的相对残余变形限值请按 GB/T 50152、JTG/T J21 等现行标准核对"
+    },
+    {
+      "id": "structural-testing-concept-057",
+      "subjectId": "structural-testing",
+      "chapter": "5.3",
+      "term": "承载力检验系数",
+      "en": "load-carrying capacity verification coefficient",
+      "definition": "构件实测承载力与按设计要求应达到的承载力（或与荷载效应组合设计值对应的检验荷载）之比，用以判定构件承载力是否合格。",
+      "formulaId": "structural-testing-formula-021",
+      "symbols": [
+        "gamma_u",
+        "Q_u",
+        "Q_d"
+      ],
+      "unit": "—",
+      "relations": [
+        "极限荷载",
+        "校验系数",
+        "结构性能检验"
+      ],
+      "pitfalls": [
+        "不同标准对 Qd 的口径（荷载效应组合设计值、检验荷载、使用状态短期荷载）定义不同，混用会得出完全相反的结论；合格限值查现行规范"
+      ],
+      "examAngle": "计算题与概念辨析",
+      "confidence": "low",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "5",
+        "page": null
+      },
+      "verify": "γu 的定义式、检验荷载 Qd 的取值口径与允许值 [γu] 必须按 GB/T 50152（或现行混凝土结构工程施工质量验收相关标准）核对，不同教材写法不一致"
+    },
+    {
+      "id": "structural-testing-concept-058",
+      "subjectId": "structural-testing",
+      "chapter": "6.1",
+      "term": "脉动试验",
+      "en": "ambient vibration test",
+      "definition": "利用地脉动、风、水流、交通等环境随机激励引起的结构微弱振动，经频谱分析识别结构自振频率、阻尼比与振型的试验方法。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "强迫振动",
+        "环境激励",
+        "频谱分析",
+        "模态参数识别"
+      ],
+      "pitfalls": [
+        "环境激励幅值小，高阶模态与阻尼识别精度较差；须足够长的记录时间以获得频率分辨率"
+      ],
+      "examAngle": "简答与方案设计",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-059",
+      "subjectId": "structural-testing",
+      "chapter": "6.1",
+      "term": "跳车试验",
+      "en": "bump / obstacle-crossing test",
+      "definition": "在桥面设置障碍物（如三角木）使车辆越过并产生冲击，由此测定桥梁结构的动力响应与冲击系数的动载试验方法。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "跑车试验",
+        "刹车试验",
+        "冲击系数",
+        "动载试验"
+      ],
+      "pitfalls": [
+        "障碍物高度与车速决定冲击强度，必须与工况记录一并报告，否则结果不可比"
+      ],
+      "examAngle": "简答",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "跳车试验障碍物尺寸与车速的工况规定请按 JTG/T J21 等现行规程核对"
+    },
+    {
+      "id": "structural-testing-concept-060",
+      "subjectId": "structural-testing",
+      "chapter": "6.2",
+      "term": "固有频率",
+      "en": "natural frequency",
+      "definition": "结构在无外激励下自由振动的频率，由质量与刚度分布决定，是结构动力特性的第一要素，也是损伤识别的敏感指标。",
+      "formulaId": "structural-testing-formula-015",
+      "symbols": [
+        "f",
+        "k",
+        "m"
+      ],
+      "unit": "Hz",
+      "relations": [
+        "阻尼比",
+        "振型",
+        "有阻尼频率",
+        "刚度"
+      ],
+      "pitfalls": [
+        "频率随温度变化明显（温度降低刚度升高使频率上升），损伤识别时必须先剔除温度与环境因素影响"
+      ],
+      "examAngle": "计算题高频",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-061",
+      "subjectId": "structural-testing",
+      "chapter": "6.2",
+      "term": "阻尼比",
+      "en": "damping ratio",
+      "definition": "实际阻尼与临界阻尼之比 ζ = c/c_cr，反映结构耗散振动能量的能力，常用对数衰减法或半功率带宽法测定。",
+      "formulaId": "structural-testing-formula-016",
+      "symbols": [
+        "zeta",
+        "c",
+        "c_cr"
+      ],
+      "unit": "—",
+      "relations": [
+        "对数衰减率",
+        "半功率带宽法",
+        "固有频率",
+        "振型"
+      ],
+      "pitfalls": [
+        "阻尼比识别精度远低于频率；不同方法（自由振动/共振/半功率）结果可能差 20% 以上，须注明方法"
+      ],
+      "examAngle": "计算题高频",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-062",
+      "subjectId": "structural-testing",
+      "chapter": "6.2",
+      "term": "振型",
+      "en": "mode shape",
+      "definition": "结构按某一固有频率振动时各质点位移的相对比例关系，是质量与刚度分布的空间反映。",
+      "formulaId": null,
+      "symbols": [
+        "phi"
+      ],
+      "unit": "—",
+      "relations": [
+        "固有频率",
+        "阻尼比",
+        "MAC",
+        "模态参数识别"
+      ],
+      "pitfalls": [
+        "振型需要归一化才有可比性；测点不足会漏掉节点，导致阶次误判"
+      ],
+      "examAngle": "简答与计算（MAC）",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-063",
+      "subjectId": "structural-testing",
+      "chapter": "6.3",
+      "term": "动力放大系数",
+      "en": "dynamic amplification factor",
+      "definition": "稳态受迫振动中动位移幅值与同幅静荷载产生的静位移之比 β，随频率比与阻尼比变化，共振时达到峰值。",
+      "formulaId": "structural-testing-formula-018",
+      "symbols": [
+        "beta",
+        "omega",
+        "omega_n",
+        "zeta"
+      ],
+      "unit": "—",
+      "relations": [
+        "共振",
+        "冲击系数",
+        "阻尼比",
+        "频率比"
+      ],
+      "pitfalls": [
+        "β 与冲击系数 μ 定义不同：β 是幅值比，μ 通常定义为 (ymax−yst)/yst，两者数值相差 1"
+      ],
+      "examAngle": "计算题与概念辨析",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-064",
+      "subjectId": "structural-testing",
+      "chapter": "6.3",
+      "term": "冲击系数",
+      "en": "impact factor / dynamic increment",
+      "definition": "移动车辆引起的最大动响应与同一荷载静止作用时静响应之差与静响应之比，μ = (ymax − yst)/yst，用于考虑车辆动力作用。",
+      "formulaId": "structural-testing-formula-019",
+      "symbols": [
+        "mu",
+        "y_max",
+        "y_st"
+      ],
+      "unit": "—",
+      "relations": [
+        "动力放大系数",
+        "跑车试验",
+        "跳车试验",
+        "荷载效率系数"
+      ],
+      "pitfalls": [
+        "冲击系数与桥面平整度、车速强相关，实测离散性大；规范理论值常按基频或跨径给出，与实测口径不同"
+      ],
+      "examAngle": "计算题高频",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": "冲击系数的规范计算公式与适用条件请按现行公路桥涵设计通用规范核对"
+    },
+    {
+      "id": "structural-testing-concept-065",
+      "subjectId": "structural-testing",
+      "chapter": "6.4",
+      "term": "模态置信准则 MAC",
+      "en": "modal assurance criterion",
+      "definition": "衡量两个振型向量相关性的指标，MAC = (φa^T φb)^2 / ((φa^T φa)(φb^T φb))，取值 0~1，接近 1 表示两振型高度相关。",
+      "formulaId": "structural-testing-formula-024",
+      "symbols": [
+        "MAC",
+        "phi"
+      ],
+      "unit": "—",
+      "relations": [
+        "振型",
+        "模态参数识别",
+        "模型修正",
+        "有限元模型"
+      ],
+      "pitfalls": [
+        "MAC 只反映方向一致性，对幅值不敏感；有限元与实测自由度不匹配时必须先做测点自由度提取或插值"
+      ],
+      "examAngle": "计算题",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "6",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-066",
+      "subjectId": "structural-testing",
+      "chapter": "7.1",
+      "term": "相似三定理",
+      "en": "three similarity theorems",
+      "definition": "相似第一定理（相似现象对应量成比例）、相似第二定理即 π 定理（n 个量含 k 个独立量纲可组成 n−k 个无量纲判据）、相似第三定理（单值条件相似且判据相等则现象相似）。",
+      "formulaId": "structural-testing-formula-026",
+      "symbols": [
+        "pi"
+      ],
+      "unit": null,
+      "relations": [
+        "相似常数",
+        "量纲分析",
+        "模型律",
+        "完全相似"
+      ],
+      "pitfalls": [
+        "第三定理给出相似的充分必要条件才成立，实际模型常只满足部分判据，应说明是近似相似"
+      ],
+      "examAngle": "简答与量纲分析题",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-067",
+      "subjectId": "structural-testing",
+      "chapter": "7.1",
+      "term": "量纲分析 π 定理",
+      "en": "Buckingham pi theorem",
+      "definition": "若一个物理问题涉及 n 个物理量且包含 k 个独立基本量纲，则该问题可等价地用 n−k 个无量纲参数（π 项）的函数关系描述。",
+      "formulaId": "structural-testing-formula-026",
+      "symbols": [
+        "n",
+        "k",
+        "pi_i"
+      ],
+      "unit": null,
+      "relations": [
+        "相似三定理",
+        "相似判据",
+        "模型律"
+      ],
+      "pitfalls": [
+        "基本量纲个数 k 的判定错误（如在质量—长度—时间体系中 k=3）；π 项不唯一，但不同组合等价"
+      ],
+      "examAngle": "量纲分析计算题",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-068",
+      "subjectId": "structural-testing",
+      "chapter": "7.2",
+      "term": "相似常数",
+      "en": "similarity constant / scale factor",
+      "definition": "原型物理量 Xp 与模型物理量 Xm 之比 C_X = Xp/Xm，如几何相似常数 C_l、弹性模量相似常数 C_E、应力相似常数 C_σ、时间相似常数 C_t。",
+      "formulaId": "structural-testing-formula-025",
+      "symbols": [
+        "C_l",
+        "C_E",
+        "C_sigma",
+        "C_eps",
+        "C_t"
+      ],
+      "unit": "—",
+      "relations": [
+        "几何相似",
+        "荷载相似",
+        "材料相似",
+        "模型律"
+      ],
+      "pitfalls": [
+        "必须先约定是原型/模型还是模型/原型，方向搞反会导致荷载换算差一个平方或立方量级"
+      ],
+      "examAngle": "计算题高频",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-069",
+      "subjectId": "structural-testing",
+      "chapter": "7.2",
+      "term": "模型律",
+      "en": "modelling law / similitude law",
+      "definition": "为保证模型与原型相似，各相似常数之间必须满足的一组约束关系，如弹性力相似要求 C_σ = C_E·C_ε，重力相似要求 C_σ = C_l·C_ρ。",
+      "formulaId": "structural-testing-formula-027",
+      "symbols": [
+        "C_rho",
+        "C_g"
+      ],
+      "unit": null,
+      "relations": [
+        "相似常数",
+        "相似三定理",
+        "弗劳德数",
+        "人工质量模拟"
+      ],
+      "pitfalls": [
+        "同时满足弹性力相似与重力相似往往要求 C_E = C_l·C_ρ，材料难以满足；振动台试验常靠配重（人工质量）解决"
+      ],
+      "examAngle": "计算题与简答",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "7",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-070",
+      "subjectId": "structural-testing",
+      "chapter": "8.1",
+      "term": "变异系数",
+      "en": "coefficient of variation",
+      "definition": "样本标准差与均值之比 CV = s/x̄（常以百分数表示），用于比较不同量纲或不同均值水平的离散程度。",
+      "formulaId": "structural-testing-formula-032",
+      "symbols": [
+        "CV",
+        "s",
+        "x_bar"
+      ],
+      "unit": "—",
+      "relations": [
+        "标准差",
+        "算术平均值",
+        "系统误差",
+        "随机误差"
+      ],
+      "pitfalls": [
+        "均值接近零时变异系数失去意义；样本量很小时 s 本身不稳定"
+      ],
+      "examAngle": "计算题高频",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-071",
+      "subjectId": "structural-testing",
+      "chapter": "8.1",
+      "term": "3σ 准则（拉依达准则）",
+      "en": "3-sigma criterion (Pauta criterion)",
+      "definition": "以样本均值 x̄ 与样本标准差 s 为尺度，把满足 |xi − x̄| > 3s 的观测值判为异常值并剔除的判别方法。",
+      "formulaId": "structural-testing-formula-033",
+      "symbols": [
+        "x_bar",
+        "s"
+      ],
+      "unit": null,
+      "relations": [
+        "格拉布斯准则",
+        "粗大误差",
+        "标准差",
+        "肖维勒准则"
+      ],
+      "pitfalls": [
+        "小样本下 3σ 准则几乎失效：|xi−x̄|/s 的最大可能值为 (n−1)/√n，n≤10 时该值小于 3，不可能剔出任何点；此时应改用格拉布斯准则"
+      ],
+      "examAngle": "计算题与简答（易踩坑）",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-072",
+      "subjectId": "structural-testing",
+      "chapter": "8.2",
+      "term": "相关系数",
+      "en": "correlation coefficient",
+      "definition": "衡量两个变量线性相关程度的无量纲指标 r，取值 −1~1，|r| 越接近 1 线性关系越强；r 的大小与样本量有关，需做显著性检验。",
+      "formulaId": "structural-testing-formula-035",
+      "symbols": [
+        "r"
+      ],
+      "unit": "—",
+      "relations": [
+        "最小二乘法",
+        "回归分析",
+        "显著性检验",
+        "决定系数"
+      ],
+      "pitfalls": [
+        "高相关不等于因果；样本量很小时 r 容易偶然接近 1，必须结合样本量与显著性水平判断"
+      ],
+      "examAngle": "计算题",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "8",
+        "page": null
+      },
+      "verify": "相关系数显著性检验的临界值表请按教材或数理统计附表核对"
+    },
+    {
+      "id": "structural-testing-concept-073",
+      "subjectId": "structural-testing",
+      "chapter": "9.1",
+      "term": "回弹值",
+      "en": "rebound number",
+      "definition": "回弹仪冲击混凝土表面后重锤回弹的距离与冲击长度之比（以回弹仪刻度表示），反映混凝土表面硬度。",
+      "formulaId": null,
+      "symbols": [
+        "R"
+      ],
+      "unit": "—",
+      "relations": [
+        "回弹法",
+        "碳化深度",
+        "测区",
+        "测强曲线"
+      ],
+      "pitfalls": [
+        "回弹值只反映表层约数厘米范围内的硬度，对内部质量、养护条件与粗骨料品种敏感；须做角度与浇筑面修正"
+      ],
+      "examAngle": "计算题与实验题",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": "回弹值的计算规则（测点数的取舍、极端值剔除）请按 JGJ/T 23 现行版本核对"
+    },
+    {
+      "id": "structural-testing-concept-074",
+      "subjectId": "structural-testing",
+      "chapter": "9.1",
+      "term": "碳化深度",
+      "en": "carbonation depth",
+      "definition": "混凝土表层被空气中 CO2 中性化的深度，常用酚酞酒精溶液喷洒新鲜断面，由不变色区域的厚度测得。",
+      "formulaId": null,
+      "symbols": [
+        "d_m"
+      ],
+      "unit": "mm",
+      "relations": [
+        "回弹法",
+        "酚酞法",
+        "耐久性",
+        "钢筋锈蚀"
+      ],
+      "pitfalls": [
+        "碳化使表面变硬，导致回弹法推定强度偏高，必须做碳化深度修正；测点应在回弹测区内钻取"
+      ],
+      "examAngle": "计算题与实验题",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-075",
+      "subjectId": "structural-testing",
+      "chapter": "9.1",
+      "term": "测强曲线",
+      "en": "strength-curve / conversion curve",
+      "definition": "回弹值（及碳化深度等参数）与混凝土抗压强度之间定量关系的经验公式或表格，分统一曲线、地区曲线与专用（校准）曲线。",
+      "formulaId": "structural-testing-formula-037",
+      "symbols": [
+        "f_cu",
+        "R",
+        "d_m"
+      ],
+      "unit": "MPa",
+      "relations": [
+        "回弹法",
+        "超声回弹综合法",
+        "钻芯法",
+        "强度推定值"
+      ],
+      "pitfalls": [
+        "统一曲线精度最低，专用曲线（本工程同条件试块或钻芯校准）优先；跨地区、跨配合比套用统一曲线误差可达数十个百分点"
+      ],
+      "examAngle": "简答与计算题",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": "测强曲线的具体形式与系数必须按 JGJ/T 23、CECS 02 现行版本及当地地区曲线查用，禁止凭记忆套用"
+    },
+    {
+      "id": "structural-testing-concept-076",
+      "subjectId": "structural-testing",
+      "chapter": "9.1",
+      "term": "强度推定值",
+      "en": "estimated in-situ strength",
+      "definition": "由各测区推定强度经统计处理后得到的构件混凝土强度代表值，通常取均值减去与保证率有关的系数乘标准差。",
+      "formulaId": "structural-testing-formula-039",
+      "symbols": [
+        "f_cu_e",
+        "m_f",
+        "s_f"
+      ],
+      "unit": "MPa",
+      "relations": [
+        "测强曲线",
+        "变异系数",
+        "标准差",
+        "钻芯法"
+      ],
+      "pitfalls": [
+        "推定值是具有保证率的统计下限，不是强度平均值；测区数不足时不能按批推定"
+      ],
+      "examAngle": "计算题高频",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": "推定值计算公式中的系数（如 1.645）与适用条件（测区数、批推定/单个构件推定）请按 JGJ/T 23 现行版本核对"
+    },
+    {
+      "id": "structural-testing-concept-077",
+      "subjectId": "structural-testing",
+      "chapter": "9.2",
+      "term": "超声声速",
+      "en": "ultrasonic pulse velocity",
+      "definition": "超声脉冲在混凝土中单位时间的传播距离 v = L/t，与混凝土密实度、弹性模量及内部缺陷有关。",
+      "formulaId": "structural-testing-formula-040",
+      "symbols": [
+        "v",
+        "L",
+        "t"
+      ],
+      "unit": "km/s",
+      "relations": [
+        "超声法",
+        "声时",
+        "换能器",
+        "声速降低"
+      ],
+      "pitfalls": [
+        "声速受含水率、骨料品种与钢筋（沿筋传播更快）影响；测距测量误差直接线性进入声速"
+      ],
+      "examAngle": "计算题高频",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-078",
+      "subjectId": "structural-testing",
+      "chapter": "9.3",
+      "term": "钻芯法",
+      "en": "core drilling method",
+      "definition": "从结构上钻取圆柱体芯样，经加工后做抗压试验，以此推定结构混凝土强度的微破损检测方法，常作为无损方法的校准基准。",
+      "formulaId": null,
+      "symbols": [
+        "f_cor"
+      ],
+      "unit": "MPa",
+      "relations": [
+        "芯样",
+        "回弹法",
+        "超声法",
+        "修正系数"
+      ],
+      "pitfalls": [
+        "芯样直径、高径比、含水状态与钻取方向都会影响强度；芯样直径过小时离散性显著增大"
+      ],
+      "examAngle": "简答与计算题",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "9",
+        "page": null
+      },
+      "verify": "芯样尺寸要求与强度换算系数请按 CECS 03 / GB/T 50784 等现行标准核对"
+    },
+    {
+      "id": "structural-testing-concept-079",
+      "subjectId": "structural-testing",
+      "chapter": "10.1",
+      "term": "声速降低判据",
+      "en": "ultrasonic velocity reduction criterion",
+      "definition": "以可疑测点声速（或声时、波幅、主频）相对于正常部位统计值的偏离程度，判别混凝土内部是否存在缺陷的方法。",
+      "formulaId": "structural-testing-formula-041",
+      "symbols": [
+        "v",
+        "v_0"
+      ],
+      "unit": null,
+      "relations": [
+        "超声法",
+        "PSD判据",
+        "波形畸变",
+        "不密实区"
+      ],
+      "pitfalls": [
+        "单一声速判据易受测试条件干扰，应结合波幅衰减与波形畸变综合判定，并用统计法（如 PSD 法）确定临界值"
+      ],
+      "examAngle": "计算题与简答",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "10",
+        "page": null
+      },
+      "verify": "PSD 判据的临界值取法请按 CECS 21 现行版本核对"
+    },
+    {
+      "id": "structural-testing-concept-080",
+      "subjectId": "structural-testing",
+      "chapter": "10.2",
+      "term": "冲击回波法",
+      "en": "impact-echo method",
+      "definition": "在构件表面施加短时机械冲击产生应力波，分析反射波频谱中的厚度频率，据此测定板厚、内部空洞与裂缝深度的方法。",
+      "formulaId": null,
+      "symbols": [
+        "f_T"
+      ],
+      "unit": "Hz",
+      "relations": [
+        "地质雷达",
+        "红外热像",
+        "超声法",
+        "厚度检测"
+      ],
+      "pitfalls": [
+        "需要已知波速才能由频率反算厚度；薄板与强配筋构件中信号复杂，解释依赖经验"
+      ],
+      "examAngle": "选择与简答",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "10",
+        "page": null
+      },
+      "verify": null
+    },
+    {
+      "id": "structural-testing-concept-081",
+      "subjectId": "structural-testing",
+      "chapter": "11.2",
+      "term": "荷载效率系数",
+      "en": "load efficiency factor",
+      "definition": "桥梁静载试验中，试验荷载产生的控制截面内力（或变形）与标准活载（计入冲击）作用下相应量值的比值，用以衡量试验荷载的代表性。",
+      "formulaId": "structural-testing-formula-023",
+      "symbols": [
+        "eta_q",
+        "S_t",
+        "S",
+        "mu"
+      ],
+      "unit": "—",
+      "relations": [
+        "静载试验",
+        "影响线",
+        "冲击系数",
+        "校验系数"
+      ],
+      "pitfalls": [
+        "分母是否计入冲击系数、采用标准值还是设计值，各规程写法不同；合理区间须查现行规程，考试中不要凭印象写死"
+      ],
+      "examAngle": "计算题与概念辨析",
+      "confidence": "low",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "11",
+        "page": null
+      },
+      "verify": "ηq 的定义式与合理区间（是否 0.85~1.05）必须按 JTG/T J21、JTG/T J22 现行版本核对，不同版本规定不一致"
+    },
+    {
+      "id": "structural-testing-concept-082",
+      "subjectId": "structural-testing",
+      "chapter": "11.2",
+      "term": "横向分布系数",
+      "en": "transverse distribution factor",
+      "definition": "在多主梁桥中，某一片主梁分担的荷载（或内力）占同一截面总荷载（总内力）的比例，由横向连接刚度与加载位置决定。",
+      "formulaId": null,
+      "symbols": [
+        "m"
+      ],
+      "unit": "—",
+      "relations": [
+        "静载试验",
+        "影响线",
+        "加载车",
+        "校验系数"
+      ],
+      "pitfalls": [
+        "实测横向分布以各梁挠度或应变比例计算，与理论方法（杠杆法、偏心压力法、铰接板法）适用条件不同，比较时须注明"
+      ],
+      "examAngle": "计算题与简答",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "11",
+        "page": null
+      },
+      "verify": "横向分布系数的实测计算方法与理论方法的适用条件请按教材与桥梁工程课程口径核对"
+    },
+    {
+      "id": "structural-testing-concept-083",
+      "subjectId": "structural-testing",
+      "chapter": "11.3",
+      "term": "索力频率法",
+      "en": "vibration-based cable force measurement",
+      "definition": "由拉索的实测自振频率按张紧弦（或修正的梁模型）反算索力的方法，T = 4·m·L²·f_n²/n²，是斜拉桥、悬索桥索力测试的常用手段。",
+      "formulaId": "structural-testing-formula-042",
+      "symbols": [
+        "T",
+        "m",
+        "L",
+        "f_n",
+        "n"
+      ],
+      "unit": "kN",
+      "relations": [
+        "索力测试",
+        "磁通量传感器",
+        "垂度修正",
+        "边界条件"
+      ],
+      "pitfalls": [
+        "必须先用 f_n/n 是否近似为常数判断阶次；长索需做垂度与抗弯刚度修正，短索需考虑边界条件；计算长度 L 的取法（锚固点间距或等效长度）影响结果"
+      ],
+      "examAngle": "计算题高频",
+      "confidence": "medium",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "11",
+        "page": null
+      },
+      "verify": "计算长度取值、垂度修正与刚度修正的实用公式请按教材与桥梁检测相关规程核对"
+    },
+    {
+      "id": "structural-testing-concept-084",
+      "subjectId": "structural-testing",
+      "chapter": "12.2",
+      "term": "后续使用年限",
+      "en": "subsequent service life / remaining design working life",
+      "definition": "既有结构鉴定时所约定的、希望在不需要大修条件下继续使用的年限，直接决定鉴定所采用的设防标准与荷载取值。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": "a",
+      "relations": [
+        "可靠性",
+        "抗震鉴定",
+        "安全性鉴定",
+        "目标使用期"
+      ],
+      "pitfalls": [
+        "后续使用年限越短，鉴定要求通常越宽松；同一栋楼因后续使用年限不同可能得到不同鉴定结论"
+      ],
+      "examAngle": "概念辨析高频",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "12",
+        "page": null
+      },
+      "verify": "后续使用年限的分档（如 30 年、40 年、50 年）及其对应的鉴定参数请按 GB 50292、GB 50144 现行版本核对"
+    },
+    {
+      "id": "structural-testing-concept-085",
+      "subjectId": "structural-testing",
+      "chapter": "13.1",
+      "term": "立模标高",
+      "en": "formwork elevation / casting elevation",
+      "definition": "悬臂浇筑施工中模板就位时应设置的标高，等于设计成桥标高加上各项预抬高与修正量，如预拱度、挂篮变形、温度修正、二期恒载与徐变影响。",
+      "formulaId": "structural-testing-formula-044",
+      "symbols": [
+        "H_lm",
+        "H_d"
+      ],
+      "unit": "m",
+      "relations": [
+        "施工控制",
+        "预拱度",
+        "挂篮变形",
+        "收缩徐变"
+      ],
+      "pitfalls": [
+        "各修正量的正负号最容易出错，应先统一规定以抬高为正；温度修正必须对应实测温度与合龙工况"
+      ],
+      "examAngle": "计算题与简答",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "13",
+        "page": null
+      },
+      "verify": "立模标高的具体组成项与取值方法请按教材及具体桥梁施工监控实施细则核对"
+    },
+    {
+      "id": "structural-testing-concept-086",
+      "subjectId": "structural-testing",
+      "chapter": "13.3",
+      "term": "结构健康监测",
+      "en": "structural health monitoring (SHM)",
+      "definition": "利用长期布设的传感与数据采集系统，对结构的荷载环境、响应与性能进行连续观测，并据此评估结构状态、识别损伤与预警的技术体系。",
+      "formulaId": null,
+      "symbols": [],
+      "unit": null,
+      "relations": [
+        "损伤识别",
+        "基准状态",
+        "预警阈值",
+        "结构试验"
+      ],
+      "pitfalls": [
+        "健康监测不等于无损检测：前者是长期在线的整体状态评估，后者是一次性的局部探查；温度变化对监测数据的影响往往大于损伤本身"
+      ],
+      "examAngle": "概念辨析与简答",
+      "confidence": "high",
+      "cite": {
+        "book": "结构试验与检测",
+        "edition": null,
+        "publisher": "哈尔滨工程大学出版社",
+        "chapter": "13",
+        "page": null
+      },
+      "verify": null
+    }
+  ]
+}

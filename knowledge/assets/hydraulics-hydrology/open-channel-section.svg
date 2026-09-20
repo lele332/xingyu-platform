@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 300" width="660" height="300" role="img" aria-label="明渠梯形断面水力要素：底宽、水深、边坡、水面宽、过水面积、湿周与水力半径">
+  <title>明渠均匀流的断面水力要素（梯形断面）</title>
+  <g font-family="system-ui, -apple-system, 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#8a8a8a">
+    <path d="M200 210 L80 130" stroke="#c8c8c8" stroke-width="1.8"/>
+    <path d="M380 210 L500 130" stroke="#c8c8c8" stroke-width="1.8"/>
+    <path d="M200 210 H380" stroke="#c8c8c8" stroke-width="1.8"/>
+    <path d="M80 130 H500" stroke="#4a9eff" stroke-width="2"/>
+    <path d="M86 138 h16 l5 -5 l5 5 h16 l5 -5 l5 5 h16" transform="translate(300 0)" fill="none" stroke="#4a9eff" stroke-width="1" opacity="0.5"/>
+    <text x="290" y="122" text-anchor="middle" font-size="11" fill="#4a9eff">水面（均匀流时水面坡 = 渠底坡 i）</text>
+
+    <path d="M200 234 H380" stroke="#0a84ff" stroke-width="1.1"/>
+    <path d="M200 228 v12 M380 228 v12" stroke="#0a84ff" stroke-width="1.1"/>
+    <text x="290" y="252" text-anchor="middle" font-size="11" fill="#0a84ff">b 底宽</text>
+
+    <path d="M160 130 V210" stroke="#ff9f0a" stroke-width="1.1"/>
+    <path d="M154 130 h12 M154 210 h12" stroke="#ff9f0a" stroke-width="1.1"/>
+    <text x="148" y="174" text-anchor="end" font-size="11" fill="#ff9f0a">h 水深</text>
+
+    <text x="118" y="166" font-size="11" fill="#30d158">边坡 1 : m</text>
+    <text x="118" y="182" font-size="11" fill="#30d158">（竖 : 横）</text>
+
+    <path d="M80 112 H500" stroke="#bf5af2" stroke-width="1" opacity="0.8"/>
+    <path d="M80 106 v12 M500 106 v12" stroke="#bf5af2" stroke-width="1" opacity="0.8"/>
+    <text x="290" y="102" text-anchor="middle" font-size="11" fill="#bf5af2">B = b + 2mh 水面宽</text>
+
+    <text x="524" y="96" font-size="11.5" fill="#d8d8d8">A = (b + mh) · h</text>
+    <text x="524" y="124" font-size="11.5" fill="#d8d8d8">χ = b + 2h√(1 + m²)</text>
+    <text x="524" y="152" font-size="11.5" fill="#d8d8d8">R = A / χ</text>
+    <text x="524" y="180" font-size="11.5" fill="#0a84ff">v = (1/n) · R^(2/3) · i^(1/2)</text>
+    <text x="524" y="208" font-size="11.5" fill="#0a84ff">Q = A · v</text>
+    <text x="524" y="238" font-size="11">n 为糙率，取值按</text>
+    <text x="524" y="254" font-size="11">渠道材料与状况确定</text>
+
+    <text x="290" y="276" text-anchor="middle" font-size="11" fill="#8a8a8a">均匀流三坡相等：渠底坡 i = 水面坡 = 水力坡降 J；此时的水深称正常水深 h₀</text>
+    <text x="290" y="294" text-anchor="middle" font-size="11" fill="#8a8a8a">易错：把水力半径 R 当成水深 h；只有宽浅矩形断面才近似有 R ≈ h</text>
+  </g>
+</svg>

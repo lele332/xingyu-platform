@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 300" width="660" height="300" role="img" aria-label="马歇尔试验确定最佳沥青用量：稳定度、密度、空隙率、饱和度随沥青用量变化曲线与合格区间">
+  <title>由马歇尔试验指标确定最佳沥青用量 OAC</title>
+  <g font-family="system-ui, -apple-system, 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#8a8a8a">
+    <rect x="280" y="46" width="120" height="190" fill="#30d158" opacity="0.12"/>
+    <text x="340" y="60" text-anchor="middle" font-size="11" fill="#30d158">各项指标均合格的区间</text>
+
+    <path d="M60 240 H560" stroke="#c8c8c8" stroke-width="1"/>
+    <path d="M60 46 V240" stroke="#c8c8c8" stroke-width="1"/>
+    <path d="M60 235 v10 M185 235 v10 M310 235 v10 M435 235 v10 M560 235 v10" stroke="#c8c8c8" stroke-width="1"/>
+    <text x="60" y="258" text-anchor="middle" font-size="11">3.0</text>
+    <text x="185" y="258" text-anchor="middle" font-size="11">4.0</text>
+    <text x="310" y="258" text-anchor="middle" font-size="11">5.0</text>
+    <text x="435" y="258" text-anchor="middle" font-size="11">6.0</text>
+    <text x="560" y="258" text-anchor="middle" font-size="11">7.0</text>
+    <text x="310" y="278" text-anchor="middle" font-size="11.5">沥青用量（%）</text>
+
+    <path d="M80 70 L550 220" stroke="#ff9f0a" stroke-width="2"/>
+    <path d="M80 225 L550 105" stroke="#bf5af2" stroke-width="2"/>
+    <path d="M80 200 Q310 30 550 210" fill="none" stroke="#0a84ff" stroke-width="2"/>
+    <path d="M80 190 Q290 60 550 230" fill="none" stroke="#30d158" stroke-width="2"/>
+
+    <text x="566" y="72" font-size="11" fill="#ff9f0a">空隙率 VV ↓</text>
+    <text x="566" y="106" font-size="11" fill="#bf5af2">饱和度 VFA ↑</text>
+    <text x="566" y="208" font-size="11" fill="#0a84ff">毛体积密度</text>
+    <text x="566" y="232" font-size="11" fill="#30d158">稳定度 MS</text>
+
+    <path d="M340 46 V240" stroke="#ff453a" stroke-width="1.2" stroke-dasharray="5 3"/>
+    <text x="344" y="236" font-size="11.5" fill="#ff453a">OAC（区间中值）</text>
+
+    <text x="330" y="294" text-anchor="middle" font-size="11" fill="#8a8a8a">四项限值（VV、VFA、MS、FL）与成型条件须按现行 JTG E20 及施工规范核对，不同版本数值有差异</text>
+  </g>
+</svg>

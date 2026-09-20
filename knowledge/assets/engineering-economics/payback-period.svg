@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 300" width="660" height="300" role="img" aria-label="累计净现金流量曲线与静态投资回收期">
+  <title>投资回收期：累计现金流由负转正的那一年</title>
+  <g font-family="system-ui, -apple-system, 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#8a8a8a">
+    <!-- 坐标轴 -->
+    <path d="M60 40 V230 H620" stroke="#c8c8c8" stroke-width="1.4"/>
+    <path d="M620 226 l-8 -4 l8 -4" fill="#c8c8c8" stroke="none"/>
+    <text x="568" y="252" font-size="11.5">年</text>
+    <text x="14" y="44" font-size="11.5">累计净现金流</text>
+
+    <!-- 零轴 -->
+    <path d="M60 140 H620" stroke="#c8c8c8" stroke-width="1" stroke-dasharray="5 4" opacity="0.8"/>
+    <text x="64" y="134" font-size="11">0</text>
+
+    <!-- 累计曲线：起点为负投资，逐年上升穿过零 -->
+    <polyline points="100,205 190,190 280,168 370,140 460,116 550,96 618,82"
+              fill="none" stroke="#0a84ff" stroke-width="2.2"/>
+    <g fill="#0a84ff">
+      <circle cx="100" cy="205" r="3.6"/><circle cx="190" cy="190" r="3.6"/>
+      <circle cx="280" cy="168" r="3.6"/><circle cx="370" cy="140" r="3.6"/>
+      <circle cx="460" cy="116" r="3.6"/><circle cx="550" cy="96" r="3.6"/>
+      <circle cx="618" cy="82" r="3.6"/>
+    </g>
+    <g font-size="11" text-anchor="middle">
+      <text x="100" y="248">0</text><text x="190" y="248">1</text><text x="280" y="248">2</text>
+      <text x="370" y="248">3</text><text x="460" y="248">4</text><text x="550" y="248">5</text>
+      <text x="618" y="248">6</text>
+    </g>
+
+    <!-- 交点 -->
+    <circle cx="370" cy="140" r="5.5" fill="#ff9f0a"/>
+    <path d="M370 140 V230" stroke="#ff9f0a" stroke-width="0.9" stroke-dasharray="4 4" opacity="0.85"/>
+    <text x="382" y="132" fill="#ff9f0a">累计净现金流首次 ≥ 0</text>
+    <text x="352" y="266" text-anchor="middle" fill="#ff9f0a">P<sub>t</sub></text>
+
+    <!-- 负值区标注 -->
+    <text x="120" y="186" font-size="11" fill="#ff453a">未收回投资</text>
+    <text x="470" y="108" font-size="11" fill="#30d158">开始盈利</text>
+
+    <text x="24" y="26" font-size="11.5" fill="#8a8a8a">读图：折线穿零点的位置就是回收期；穿得越早，资金压得越短</text>
+    <text x="24" y="288" font-size="11.5" fill="#8a8a8a">易错：回收期只看「回本快慢」，完全不管回收之后的收益，不能单独用来比选互斥方案</text>
+  </g>
+</svg>

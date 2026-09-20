@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 300" width="660" height="300" role="img" aria-label="凸形竖曲线示意：变坡点、切线长 T、外距 E 与设计标高改正值 y">
+  <title>凸形竖曲线与三个要素（T、E、改正值 y）</title>
+  <g font-family="system-ui, -apple-system, 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#8a8a8a">
+    <text x="40" y="228" font-size="11">高程</text>
+    <path d="M60 236 H60 M60 236 L620 236" stroke="#c8c8c8" stroke-width="0.9" opacity="0.5"/>
+    <text x="596" y="250" font-size="11">桩号</text>
+
+    <path d="M60 230 L330 110" stroke="#c8c8c8" stroke-width="1.2" stroke-dasharray="6 4" opacity="0.7"/>
+    <path d="M330 110 L600 230" stroke="#c8c8c8" stroke-width="1.2" stroke-dasharray="6 4" opacity="0.7"/>
+
+    <path d="M60 230 L220 159" stroke="#0a84ff" stroke-width="2"/>
+    <path d="M220 159 Q330 121 440 159" fill="none" stroke="#0a84ff" stroke-width="2.4"/>
+    <path d="M440 159 L600 230" stroke="#0a84ff" stroke-width="2"/>
+
+    <circle cx="330" cy="110" r="3.4" fill="#ff9f0a"/>
+    <text x="330" y="98" text-anchor="middle" fill="#ff9f0a">变坡点（切线交点）</text>
+    <circle cx="220" cy="159" r="3" fill="#0a84ff"/>
+    <circle cx="440" cy="159" r="3" fill="#0a84ff"/>
+    <text x="206" y="176" font-size="11" fill="#0a84ff">起点</text>
+    <text x="434" y="176" font-size="11" fill="#0a84ff">终点</text>
+
+    <path d="M330 110 V140" stroke="#bf5af2" stroke-width="1.1" stroke-dasharray="3 3"/>
+    <text x="338" y="128" font-size="11" fill="#bf5af2">E 外距</text>
+
+    <path d="M220 190 H330" stroke="#30d158" stroke-width="1.1"/>
+    <path d="M220 185 v10 M330 185 v10" stroke="#30d158" stroke-width="1.1"/>
+    <text x="275" y="206" text-anchor="middle" font-size="11" fill="#30d158">T 切线长（水平距）</text>
+
+    <path d="M275 134 V145" stroke="#ff9f0a" stroke-width="1.4"/>
+    <text x="243" y="132" font-size="11" fill="#ff9f0a">y 改正值</text>
+    <text x="243" y="156" font-size="11" fill="#ff9f0a">= x²/(2R)</text>
+
+    <text x="120" y="216" font-size="11">i₁（上坡为正）</text>
+    <text x="520" y="200" font-size="11">i₂（下坡为负）</text>
+
+    <text x="330" y="266" text-anchor="middle" font-size="11" fill="#8a8a8a">设计标高 = 切线标高 − y（凸曲线向下改正）；凹曲线则是 + y</text>
+    <text x="330" y="284" text-anchor="middle" font-size="11" fill="#8a8a8a">ω = i₂ − i₁，凸形 ω &lt; 0、凹形 ω &gt; 0；T = R·|ω|/2，E = T²/(2R)</text>
+  </g>
+</svg>

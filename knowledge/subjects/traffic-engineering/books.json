@@ -1,0 +1,362 @@
+{
+  "items": [
+    {
+      "id": "traffic-engineering-book-001",
+      "subjectId": "traffic-engineering",
+      "title": "交通工程总论",
+      "author": "徐吉谦、陈学武（早期版含任福田）",
+      "publisher": "人民交通出版社",
+      "level": "教材",
+      "why": "本课程的主教材，章节体系与考核口径的直接来源。定义、符号、例题与课后习题都应以本版为准，其他书只能作为理解辅助。",
+      "readPlan": "预习时先看每章小结与例题建立框架；课后作业卡壳时按章回查定义与公式；期末按章节顺序重做一遍课后计算题。",
+      "relatesToChapters": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14"
+      ],
+      "acquireNote": "图书馆可借；出版社正版渠道购买。建议人手一册并核对版次。",
+      "confidence": "high",
+      "verify": null,
+      "edition": "第 5 版（2020-10）",
+      "year": 2020,
+      "isbn": "9787114166990",
+      "verification": {
+        "status": "confirmed",
+        "source": "新华国采全国大中专教材网络采选系统 (aijiaocai.com)；长沙理工大学 810 交通工程考研参考书目；南京林业大学研究生招生书目",
+        "checkedAt": "2026-09-15",
+        "note": "第 5 版 2020-10 人民交通出版社 ISBN 9787114166990；作者署名含陈学武，本条原缺。"
+      }
+    },
+    {
+      "id": "traffic-engineering-book-002",
+      "subjectId": "traffic-engineering",
+      "title": "交通工程学",
+      "author": "王炜、陈峻、过秀成",
+      "publisher": "东南大学出版社",
+      "level": "教材",
+      "why": "国内交通工程领域影响最大的教材之一，体系完整、模型推导严谨，尤其第 5 章交通流理论与第 7 章交通规划部分比主教材更深入。适合用作难点的第二解释。",
+      "readPlan": "主教材读不懂的章节（交通波、排队论、四阶段法）先读本书对应部分；课后题做完后用本书的例题比对解法差异。",
+      "relatesToChapters": [
+        "4",
+        "5",
+        "6",
+        "7",
+        "11"
+      ],
+      "acquireNote": "图书馆可借；注意版本较多，选最新版。",
+      "confidence": "high",
+      "verify": "本条原写\"人民交通出版社\"有误——王炜《交通工程学》为东南大学出版社",
+      "edition": "第 3 版（2019）",
+      "year": 2019,
+      "isbn": null,
+      "verification": {
+        "status": "confirmed",
+        "source": "长沙理工大学 810 交通工程考研参考书目；广东技术师范大学 2026 考研大纲；学银在线课程参考教材",
+        "checkedAt": "2026-09-15",
+        "note": "【已修正出版社】王炜、陈峻、过秀成《交通工程学》第 3 版，东南大学出版社 2019。"
+      }
+    },
+    {
+      "id": "traffic-engineering-book-003",
+      "subjectId": "traffic-engineering",
+      "title": "交通工程学",
+      "author": "任福田、刘小明、孙立山",
+      "publisher": "人民交通出版社",
+      "level": "教材",
+      "why": "另一经典体系，偏重道路通行能力与交通调查实务，对第 4 章调查方法与第 6 章通行能力的表格数据更详细，可补主教材在数值取值上的空白。",
+      "readPlan": "做调查实验（交通量、车速、密度）前读相关章节；查通行能力取值时与主教材、规范三者交叉核对。",
+      "relatesToChapters": [
+        "4",
+        "6",
+        "12"
+      ],
+      "acquireNote": "图书馆可借，老版较多；注意与主教材的符号体系差异。",
+      "confidence": "high",
+      "verify": "ISBN 未在线核实",
+      "edition": "第 3 版（2017）",
+      "year": 2017,
+      "verification": {
+        "status": "confirmed",
+        "source": "学银在线《交通工程学》课程参考教材列表",
+        "checkedAt": "2026-09-15",
+        "note": "任福田、刘小明、孙立山《交通工程学》第 3 版 人民交通出版社 2017。"
+      },
+      "isbn": null
+    },
+    {
+      "id": "traffic-engineering-book-004",
+      "subjectId": "traffic-engineering",
+      "title": "交通规划",
+      "author": "邵春福",
+      "publisher": "人民交通出版社",
+      "level": "专著/教材",
+      "why": "第 7 章四阶段法的延伸读物。对发生/分布/方式划分/分配每一步的模型推导、参数标定与算例都比总论类教材完整，是做交通规划课程设计的必备参考。",
+      "readPlan": "学到第 7 章时同步阅读；做重力模型与 Logit 作业前先看本书的算例，再动笔。",
+      "relatesToChapters": [
+        "7"
+      ],
+      "acquireNote": "图书馆可借；有配套习题与案例。",
+      "confidence": "medium",
+      "verify": "作者与版次请按馆藏核对",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到出版社官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "邵春福交通规划类教材确有（常见书名《交通规划原理》），但书名与版次未在线确认，按馆藏核对。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "traffic-engineering-book-005",
+      "subjectId": "traffic-engineering",
+      "title": "交通设计",
+      "author": "杨晓光、白玉",
+      "publisher": "人民交通出版社",
+      "level": "专著/教材",
+      "why": "国内交通设计方向的代表作。第 10 章渠化设计、第 11 章信号配时需要的工程细节（展宽段、左转专用道、行人过街、相位方案）在本书中比总论教材更系统。",
+      "readPlan": "做交叉口渠化或信号配时课程设计时作为主要参考；先读总论建立概念，再按本书给的设计流程动手画图。",
+      "relatesToChapters": [
+        "10",
+        "11"
+      ],
+      "acquireNote": "图书馆可借；注意与《城市交通设计》等相近书名区分。",
+      "confidence": "high",
+      "verify": null,
+      "edition": "第 2 版（2021，与白玉合著）；第 1 版 2010",
+      "year": 2021,
+      "isbn": "9787114169946",
+      "verification": {
+        "status": "confirmed",
+        "source": "厦门外图书目（第 2 版 ISBN 9787114169946）；百度百科（第 1 版 ISBN 9787114085697）",
+        "checkedAt": "2026-09-15",
+        "note": "人民交通出版社；第 1 版 2010-09 ISBN 9787114085697，第 2 版 2021-01 ISBN 9787114169946。"
+      }
+    },
+    {
+      "id": "traffic-engineering-book-006",
+      "subjectId": "traffic-engineering",
+      "title": "城市交通信号控制",
+      "author": "李克平",
+      "publisher": "人民交通出版社",
+      "level": "专著",
+      "why": "第 11 章的深化读物，覆盖单点配时、感应控制、干线协调与区域控制的完整体系，对 Webster 法、延误模型、绿波设计的工程实现讲得比教材细。",
+      "readPlan": "信号控制章节做作业或课程设计时集中阅读；重点看配时参数取值与约束校核的工程做法。",
+      "relatesToChapters": [
+        "11"
+      ],
+      "acquireNote": "图书馆可借；若馆藏本名不同请按主题检索'交通信号控制'。",
+      "confidence": "low",
+      "verify": "书名与作者请核对馆藏目录；李克平另有《交通信号控制》等相近书名，需确认具体是哪一本",
+      "verification": {
+        "status": "unverified",
+        "source": "本次未检索到可靠在线书目记录",
+        "checkedAt": "2026-09-15",
+        "note": "李克平另有《交通信号控制》等相近书名，需确认具体是哪一本。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "traffic-engineering-book-007",
+      "subjectId": "traffic-engineering",
+      "title": "Highway Capacity Manual 7th Edition",
+      "author": "Transportation Research Board (TRB)",
+      "publisher": "Transportation Research Board",
+      "level": "手册",
+      "why": "通行能力与服务水平领域的国际权威手册。第 6 章高速公路基本路段、第 11 章交叉口延误与 LOS 的公式与阈值都源自 HCM 体系，读它能理解教材数值的来龙去脉。",
+      "readPlan": "不要通读。按作业需要查对应卷册的方法章节，重点看：基本路段密度分级、交叉口控制延误公式、fHV 与流率换算。务必确认与教师要求的版本一致。",
+      "relatesToChapters": [
+        "5",
+        "6",
+        "11"
+      ],
+      "acquireNote": "英文原版，TRB 官网有第 7 版在线版；国内各大交通类院校图书馆多有第 5/6 版馆藏。",
+      "confidence": "medium",
+      "verify": "请确认教师要求参考的是 HCM 第几版；第 6 版与第 7 版在延误模型与 LOS 阈值上有实质差异",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到 TRB 官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "HCM 第 6 版与第 7 版在延误模型与 LOS 阈值上有实质差异；出版年与 ISBN 请按 TRB 官网核对，并以教师要求的版次为准。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "traffic-engineering-book-008",
+      "subjectId": "traffic-engineering",
+      "title": "Traffic Engineering",
+      "author": "Roger P. Roess, Elena S. Prassas, William R. McShane",
+      "publisher": "Pearson",
+      "level": "教材（英文经典）",
+      "why": "美国高校交通工程主干教材，覆盖交通流参数、统计分布、排队论、信号配时、通行能力与规划的全链条，讲解细致、例题充分，是理解 HCM 方法的最佳入门书。",
+      "readPlan": "英文尚可的同学建议与主教材对照读第 4~6 章（交通流特性与通行能力）；遇到教材讲得含糊的公式，翻本书找推导过程。",
+      "relatesToChapters": [
+        "4",
+        "5",
+        "6",
+        "11",
+        "12"
+      ],
+      "acquireNote": "原版较贵，可找图书馆馆藏或高年级学长二手；网上电子资源注意版权。",
+      "confidence": "medium",
+      "verify": "最新版次与作者署名顺序（Roess/Prassas/McShane）请按出版社目录核对",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到出版社官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "书名/作者/出版社（Pearson）确认；版次与 ISBN 未在线核实。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "traffic-engineering-book-009",
+      "subjectId": "traffic-engineering",
+      "title": "Principles of Highway Engineering and Traffic Analysis",
+      "author": "Fred L. Mannering, Scott S. Washburn",
+      "publisher": "Wiley",
+      "level": "教材（英文经典）",
+      "why": "把道路几何设计与交通分析放在同一框架里，特别适合道路与桥梁工程专业：第 3 章车辆特性、第 5~6 章交通流与通行能力与本课程的衔接最紧，习题量大且贴近工程。",
+      "readPlan": "配合第 3、5、6 章做课后题；它的习题风格与国内作业接近，适合练手。考研复习阶段可系统刷一遍。",
+      "relatesToChapters": [
+        "3",
+        "5",
+        "6",
+        "12"
+      ],
+      "acquireNote": "图书馆可能有馆藏；有国际版平装本，价格相对友好。",
+      "confidence": "medium",
+      "verify": "最新版次（含 Kilareski 是否仍列为合著者）请按出版社目录核对",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到出版社官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "书名/作者/出版社（Wiley）确认；版次与 ISBN 未在线核实。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "traffic-engineering-book-010",
+      "subjectId": "traffic-engineering",
+      "title": "Traffic Flow Fundamentals",
+      "author": "Adolf D. May",
+      "publisher": "Prentice Hall",
+      "level": "专著（英文经典）",
+      "why": "交通流理论领域的经典小册子，对第 5 章的速度—密度模型、统计分布、跟驰理论与交通波的推导最为清晰，是'公式为什么长这样'的标准答案。",
+      "readPlan": "第 5 章学完后集中读一遍，重点看三模型对比与交通波的图解；准备考研或做交通流方向大作业的同学必读。",
+      "relatesToChapters": [
+        "4",
+        "5"
+      ],
+      "acquireNote": "已绝版，图书馆或二手渠道；部分章节在网络上有教学影印件。",
+      "confidence": "medium",
+      "verify": "出版信息（Prentice Hall）与是否再版请核对",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到出版社官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "书名/作者/出版社（Prentice Hall）确认；版次与 ISBN 未在线核实。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "traffic-engineering-book-011",
+      "subjectId": "traffic-engineering",
+      "title": "Fundamentals of Transportation and Traffic Operations",
+      "author": "Carlos F. Daganzo",
+      "publisher": "Pergamon / Elsevier",
+      "level": "专著（英文）",
+      "why": "以极其简洁的方式讲透交通流基础关系、车辆跟驰、交通波与信号控制，图解功底极强。读完能对 Q-K-V 曲线、交通波与排队有'一眼看穿'的理解。",
+      "readPlan": "适合在第 5 章之后作为'打通任督二脉'的补充读物，选读交通波与信号相关章节即可，不必通读。",
+      "relatesToChapters": [
+        "5",
+        "6",
+        "11"
+      ],
+      "acquireNote": "英文原版；图书馆可能有馆藏。",
+      "confidence": "low",
+      "verify": "出版信息请核对；本书阅读门槛略高，视个人基础选读",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到出版社官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "书名/作者/出版社（Pergamon / Elsevier）确认；版次与 ISBN 未在线核实。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "traffic-engineering-book-012",
+      "subjectId": "traffic-engineering",
+      "title": "城市交通规划",
+      "author": "过秀成",
+      "publisher": "东南大学出版社",
+      "level": "教材",
+      "why": "偏工程实务的城市交通规划教材，含大量国内实际案例与调查表格，能弥补理论教材在'数据从哪来、参数怎么定'上的空白。",
+      "readPlan": "做交通规划课程设计或 OD 调查实践时按选题查阅；重点看小区划分、调查方案设计与参数取值部分。",
+      "relatesToChapters": [
+        "7",
+        "8"
+      ],
+      "acquireNote": "图书馆可借；注意与邵春福《交通规划》互补使用。",
+      "confidence": "low",
+      "verify": "作者、出版社与版次请按馆藏目录核对；本卡把握不高",
+      "verification": {
+        "status": "partial",
+        "source": "本次未取到出版社官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "书名/作者/出版社（东南大学出版社）合理但未在线确认，按馆藏核对。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "traffic-engineering-book-013",
+      "subjectId": "traffic-engineering",
+      "title": "公路通行能力手册",
+      "author": null,
+      "publisher": "人民交通出版社",
+      "level": "手册/实务",
+      "why": "国内版的通行能力实务手册（常译为 HCM 中文版或国内自主编制版本），是查取国内高速公路、一级公路、城市道路通行能力与修正系数取值的实用工具书。",
+      "readPlan": "不需要通读。做第 6 章作业时按设施类型查对应章节，把查到的系数与主教材、JTG B01 三方核对后使用。",
+      "relatesToChapters": [
+        "6"
+      ],
+      "acquireNote": "图书馆可借；注意区分'翻译 HCM'与'国内自主编制'两种版本，两者数值体系不同。",
+      "confidence": "low",
+      "verify": "书名、编者与版次请按馆藏核对；本卡未记录作者，请查证后补充",
+      "verification": {
+        "status": "unverified",
+        "source": "本次未检索到中文版的确切编者与版次",
+        "checkedAt": "2026-09-15",
+        "note": "中文版《公路通行能力手册》系 HCM 译本，编者与版次按馆藏核对。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    }
+  ]
+}

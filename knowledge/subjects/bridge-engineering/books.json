@@ -1,0 +1,347 @@
+{
+  "items": [
+    {
+      "id": "bridge-engineering-book-001",
+      "subjectId": "bridge-engineering",
+      "title": "桥梁工程",
+      "author": "范立础",
+      "publisher": "人民交通出版社",
+      "level": "教材",
+      "why": "国内桥梁工程最具影响力的经典教材之一，体系偏受力分析与结构体系演进，讲「为什么这样受力」比现行教材更深。与手头教材对照读，能补齐推导链条。",
+      "readPlan": "第 6 章（简支梁桥计算）与第 7 章（超静定体系）作为作业卡壳时的第一参考；考前按章对照概念清单自查。",
+      "relatesToChapters": [
+        "1",
+        "6",
+        "7",
+        "10"
+      ],
+      "acquireNote": "图书馆可借 / 出版社或正规电商正版渠道",
+      "confidence": "high",
+      "verify": "上下册 ISBN 不同（上册第 3 版为 9787114138072），借书时按分册核对",
+      "edition": "第 3 版（2017，分上/下册）；另有第 2 版 2012",
+      "year": 2017,
+      "isbn": null,
+      "verification": {
+        "status": "confirmed",
+        "source": "孔夫子旧书网图书条目（含 ISBN / 版次）；信阳师范学院《桥梁工程》课程教学大纲（参考书目）",
+        "checkedAt": "2026-09-15",
+        "note": "书名/作者/出版社确认。版次：第 2 版 2012、第 3 版 2017-05（上册 ISBN 9787114138072）。"
+      }
+    },
+    {
+      "id": "bridge-engineering-book-002",
+      "subjectId": "bridge-engineering",
+      "title": "桥梁工程",
+      "author": "邵旭东",
+      "publisher": "人民交通出版社",
+      "level": "教材",
+      "why": "与范立础版并称的两大主流教材，内容更新、对现代桥型（连续刚构、斜拉桥、组合结构）覆盖更完整，与现行规范衔接更紧。",
+      "readPlan": "预习时读对应章节建立整体印象；课程设计阶段重点看桥型方案比选与构造示例。",
+      "relatesToChapters": [
+        "1",
+        "5",
+        "7",
+        "10",
+        "12"
+      ],
+      "acquireNote": "图书馆可借 / 出版社正版渠道",
+      "confidence": "high",
+      "verify": "教师指定版次以课程大纲为准（第 5 版与第 6 版均有院校在用）",
+      "edition": "第 6 版（2023-04）；第 5 版 2019 仍在广泛使用",
+      "year": 2023,
+      "isbn": "9787114184680",
+      "verification": {
+        "status": "confirmed",
+        "source": "新华国采全国大中专教材网络采选系统 (aijiaocai.com)；信阳师范学院《桥梁工程》课程教学大纲（参考书目）",
+        "checkedAt": "2026-09-15",
+        "note": "第 6 版 2023-04 人民交通出版社 ISBN 9787114184680；第 5 版 2019 亦为多校大纲指定。"
+      }
+    },
+    {
+      "id": "bridge-engineering-book-003",
+      "subjectId": "bridge-engineering",
+      "title": "桥梁工程",
+      "author": "姚玲森",
+      "publisher": "人民交通出版社",
+      "level": "教材",
+      "why": "老牌教材，横向分布计算（杠杆法、偏心压力法、铰接板法、G-M 法）部分讲得最细，影响线竖标表与算例丰富，是做第 6 章作业时最好用的补充。",
+      "readPlan": "第 6 章作业前先精读「荷载横向分布计算」一章；对照其算例重做一遍自己的题。",
+      "relatesToChapters": [
+        "6",
+        "3"
+      ],
+      "acquireNote": "图书馆可借；旧版可能只有纸质馆藏",
+      "confidence": "high",
+      "verify": "第 3 版 ISBN 未在线核实，按馆藏核对",
+      "edition": "第 3 版（2021）",
+      "year": 2021,
+      "isbn": null,
+      "verification": {
+        "status": "confirmed",
+        "source": "信阳师范学院《桥梁工程》课程教学大纲（参考书目）",
+        "checkedAt": "2026-09-15",
+        "note": "姚玲森《桥梁工程》第 3 版 2021 人民交通出版社股份有限公司。"
+      }
+    },
+    {
+      "id": "bridge-engineering-book-004",
+      "subjectId": "bridge-engineering",
+      "title": "钢管混凝土拱桥",
+      "author": "陈宝春",
+      "publisher": "人民交通出版社",
+      "level": "专著",
+      "why": "拱桥是国内最具优势的桥型之一，本书系统讲清拱轴线、拱上建筑、稳定与施工，能把第 9 章一笔带过的内容讲透，尤其是五点重合法与实际工程取值的差距。",
+      "readPlan": "只在学第 9 章拱桥时选读前几章；拱轴系数与稳定性部分可当作课程设计（选做）的参考资料。",
+      "relatesToChapters": [
+        "9"
+      ],
+      "acquireNote": "图书馆可借；部分内容可在学术数据库中检索到作者综述论文",
+      "confidence": "high",
+      "verify": null,
+      "edition": "第 3 版（2016-09）",
+      "year": 2016,
+      "isbn": "9787114130618",
+      "verification": {
+        "status": "confirmed",
+        "source": "中国馆配区域联盟书目 + 中国海洋大学图书馆馆藏（同济大学信息公开网 · 首届全国优秀教材奖名单同作者早期著作《钢管混凝土拱桥设计与施工》1999）",
+        "checkedAt": "2026-09-15",
+        "note": "书名/作者/出版社/版次/ISBN 全部确认；ISBN 9787114130618，575 页。"
+      }
+    },
+    {
+      "id": "bridge-engineering-book-005",
+      "subjectId": "bridge-engineering",
+      "title": "现代斜拉桥",
+      "author": "严国敏",
+      "publisher": "西南交通大学出版社（成都）",
+      "level": "专著",
+      "why": "斜拉桥是第 10 章的难点，教材篇幅有限。本书从索力确定、体系选择到施工控制讲得具体，能回答「索力到底怎么定」这个教材没讲清的问题。",
+      "readPlan": "学第 10 章时只读索力确定与总体布置两章；其余作为拓展留到毕业设计或考研复试。",
+      "relatesToChapters": [
+        "10"
+      ],
+      "acquireNote": "图书馆可借 / 正规渠道购买",
+      "confidence": "medium",
+      "verify": "ISBN 未核实；入门也可选林元培《斜拉桥》人民交通出版社 1995",
+      "edition": "1996 年版",
+      "year": 1996,
+      "isbn": null,
+      "verification": {
+        "status": "confirmed",
+        "source": "长沙理工大学《桥梁工程 A》课程介绍（参考书目）",
+        "checkedAt": "2026-09-15",
+        "note": "【原条目出版社有误，已修正】原文著录为\"人民交通出版社\"，实为西南交通大学出版社 1996（成都）。同类：林元培《斜拉桥》人民交通出版社 1995。"
+      }
+    },
+    {
+      "id": "bridge-engineering-book-006",
+      "subjectId": "bridge-engineering",
+      "title": "悬索桥设计",
+      "author": "钱冬生、陈仁福",
+      "publisher": "人民交通出版社",
+      "level": "专著",
+      "why": "第 11 章悬索桥在教材里只有一章，主缆线形、垂跨比与锚碇稳定性讲得很粗。本书补充了主缆架设与体系转换的工程细节。",
+      "readPlan": "学第 11 章时选读主缆线形与锚碇部分；配合教材的 H 与 T_max 计算题一起看。",
+      "relatesToChapters": [
+        "11"
+      ],
+      "acquireNote": "图书馆可借 / 正规渠道购买",
+      "confidence": "low",
+      "verify": "书名与作者署名请按馆藏目录核对（同类书另有《大跨悬索桥的设计与施工》等）",
+      "verification": {
+        "status": "unverified",
+        "source": "本次未检索到可靠在线书目记录",
+        "checkedAt": "2026-09-15",
+        "note": "书名与作者未能在线确认。同类可选《大跨悬索桥的设计与施工》等，借前按馆藏目录核对。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "bridge-engineering-book-007",
+      "subjectId": "bridge-engineering",
+      "title": "公路桥涵设计手册",
+      "author": "公路桥涵设计手册编写组",
+      "publisher": "人民交通出版社",
+      "level": "手册",
+      "why": "多分册工具书（基本资料、梁桥、拱桥、墩台与基础等），含大量影响线竖标表、横向分布系数表与构造尺寸表，手算时代的标配，做课程设计时查表必备。",
+      "readPlan": "课程设计阶段用作查表工具，不从头读；重点是梁桥分册的横向分布章节与墩台与基础分册的稳定验算示例。",
+      "relatesToChapters": [
+        "6",
+        "8",
+        "9"
+      ],
+      "acquireNote": "图书馆工具书阅览室一般可查阅；分册较多不必购齐",
+      "confidence": "medium",
+      "verify": "该手册按分册出版（如《墩台与基础》江祖明、王崇礼，人民交通出版社 1997），按需要的分册借阅",
+      "verification": {
+        "status": "partial",
+        "source": "长沙理工大学《桥梁工程 A》课程介绍（参考书目）",
+        "checkedAt": "2026-09-15",
+        "note": "手册系列确实存在且为人民交通出版社，但\"编写组\"署名与分册清单随版本变化，按馆藏核对。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "bridge-engineering-book-008",
+      "subjectId": "bridge-engineering",
+      "title": "《公路桥涵设计通用规范》宣贯/实施指南（JTG D60）",
+      "author": "规范编制组",
+      "publisher": "人民交通出版社",
+      "level": "规范配套",
+      "why": "本门课所有活载取值、冲击系数、组合系数都出自 JTG D60。教材往往只给结论，指南会解释条文背景与取值理由，也能看出新旧版本的差异在哪。",
+      "readPlan": "当作查证工具：每次做作用与组合类作业前，翻到对应条文说明确认取值；考前重点看与旧版的差异对照。",
+      "relatesToChapters": [
+        "3",
+        "6"
+      ],
+      "acquireNote": "随规范单行本发行，图书馆或规范汇编中可查；也可查交通运输部官网的条文说明",
+      "confidence": "low",
+      "verify": "书名与编者署名因版次不同而变化（「宣贯教材」「应用指南」「理解与应用」等），请按出版社目录核对",
+      "verification": {
+        "status": "unverified",
+        "source": "本次未检索到确定书目",
+        "checkedAt": "2026-09-15",
+        "note": "此类宣贯/实施指南书名随规范版次变化（\"宣贯教材\"\"理解与应用\"等），需按现行 JTG D60 版次在出版社目录中检索对应书名。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "bridge-engineering-book-009",
+      "subjectId": "bridge-engineering",
+      "title": "注册土木工程师（道路工程）执业资格考试辅导教材",
+      "author": "全国注册土木工程师（道路工程）考试辅导教材编写委员会",
+      "publisher": "人民交通出版社",
+      "level": "考试辅导",
+      "why": "把桥梁工程的考点压缩成可训练的题目与速查表，选择题与案例题的套路很接近期末题型；也是毕业后考证的提前铺垫。",
+      "readPlan": "期末复习阶段用：先做章节选择题自查概念漏洞，再挑 2~3 道案例题练手算速度与单位换算。",
+      "relatesToChapters": [
+        "1",
+        "3",
+        "6",
+        "8"
+      ],
+      "acquireNote": "图书馆可借 / 正规渠道购买；注意考试大纲年度版本",
+      "confidence": "low",
+      "verify": "书名与编写单位因年度而异，请按当年考试大纲与出版社目录核对",
+      "verification": {
+        "status": "partial",
+        "source": "多所院校与考试培训机构书单中均列有该类教材",
+        "checkedAt": "2026-09-15",
+        "note": "书名与编写单位按年度变化，须以当年官方考试用书清单为准。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "bridge-engineering-book-010",
+      "subjectId": "bridge-engineering",
+      "title": "Handbook of International Bridge Engineering",
+      "author": "Wai-Fah Chen, Lian Duan",
+      "publisher": "CRC Press",
+      "level": "英文专著",
+      "why": "英文桥梁工程领域中覆盖面最广的手册，按桥型分章，含大量国际桥例与参数统计。适合查英文术语、了解国外设计习惯，也为读外文文献与考研复试打底。",
+      "readPlan": "不必通读。按章节检索：做斜拉桥/悬索桥报告时查对应章节的参数取值范围；同时对照建立中英文术语表。",
+      "relatesToChapters": [
+        "9",
+        "10",
+        "11"
+      ],
+      "acquireNote": "高校图书馆外文馆藏或电子书平台；也可查阅作者的其他桥梁专著",
+      "confidence": "low",
+      "verify": "版次（第 1 版 / 第 2 版）、编者与出版社请按图书馆目录核对；ISBN 未核实",
+      "verification": {
+        "status": "unverified",
+        "source": "本次未检索到出版社官方书目页",
+        "checkedAt": "2026-09-15",
+        "note": "书名与作者署名合理但未在线确认，ISBN 与版次请按图书馆目录核对。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "bridge-engineering-book-011",
+      "subjectId": "bridge-engineering",
+      "title": "高等桥梁结构理论",
+      "author": "项海帆",
+      "publisher": "人民交通出版社",
+      "level": "研究生教材",
+      "why": "本科教材讲「怎么算」，本书讲「为什么可以这么算」——斜拉桥与悬索桥的非线性、稳定与振动理论。适合想继续读研或做桥梁方向毕业设计的同学。",
+      "readPlan": "本科阶段只建议在大四或考研复习时读前几章；做斜拉桥/悬索桥专题报告时按章节查阅。",
+      "relatesToChapters": [
+        "7",
+        "10",
+        "11"
+      ],
+      "acquireNote": "图书馆可借 / 出版社正版渠道",
+      "confidence": "high",
+      "verify": null,
+      "edition": "第 2 版",
+      "year": null,
+      "isbn": "978-7-114-10874-7",
+      "verification": {
+        "status": "confirmed",
+        "source": "同济大学信息公开网 · 首届全国优秀教材奖名单",
+        "checkedAt": "2026-09-15",
+        "note": "项海帆《高等桥梁结构理论》第 2 版 人民交通出版社，ISBN 978-7-114-10874-7，获首届全国优秀教材一等奖（研究生用）。"
+      }
+    },
+    {
+      "id": "bridge-engineering-book-012",
+      "subjectId": "bridge-engineering",
+      "title": "预应力混凝土连续梁桥",
+      "author": "范立础",
+      "publisher": "人民交通出版社",
+      "level": "专著",
+      "why": "第 7 章悬臂与连续体系是本科难点，尤其是次内力与体系转换，教材篇幅不够。本书把预应力等效荷载、徐变次内力与施工阶段内力讲得具体。",
+      "readPlan": "学到第 7 章「次内力」一节时选读；配合体系转换的示意图理解恒载内力重分布。",
+      "relatesToChapters": [
+        "7"
+      ],
+      "acquireNote": "图书馆可借；老书可能只有纸质馆藏",
+      "confidence": "low",
+      "verify": "书名、版次与作者请按馆藏目录核对",
+      "verification": {
+        "status": "unverified",
+        "source": "本次未检索到可靠在线书目记录",
+        "checkedAt": "2026-09-15",
+        "note": "书名、版次与作者署名请按馆藏目录核对。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    },
+    {
+      "id": "bridge-engineering-book-013",
+      "subjectId": "bridge-engineering",
+      "title": "桥梁施工",
+      "author": "王伯惠",
+      "publisher": "人民交通出版社",
+      "level": "工程实务",
+      "why": "第 12 章施工方法在教材里偏概述，本书把支架现浇、悬臂施工、顶推、转体的工序与关键控制点讲成可操作的工程语言，实习或现场教学前读很有用。",
+      "readPlan": "在施工现场实习/参观前按方法挑读对应章节；课程设计做施工方案比选时查阅优缺点与适用跨径。",
+      "relatesToChapters": [
+        "12"
+      ],
+      "acquireNote": "图书馆可借 / 正规渠道购买",
+      "confidence": "low",
+      "verify": "书名（另有《桥梁施工技术及质量控制》等同类书）与作者、版次请按馆藏目录核对",
+      "verification": {
+        "status": "unverified",
+        "source": "本次未检索到可靠在线书目记录",
+        "checkedAt": "2026-09-15",
+        "note": "书名（另有《桥梁施工技术及质量控制》等同类书）与版次请按馆藏核对。"
+      },
+      "edition": null,
+      "year": null,
+      "isbn": null
+    }
+  ]
+}

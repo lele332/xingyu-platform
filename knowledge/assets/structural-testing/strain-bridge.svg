@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 300" width="660" height="300" role="img" aria-label="电阻应变测量的三种桥路：四分之一桥、半桥、全桥，附灵敏度与温度补偿说明">
+  <title>应变电桥的三种接法（灵敏度与温度补偿的取舍）</title>
+  <g font-family="system-ui, -apple-system, 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#8a8a8a">
+    <text x="110" y="34" text-anchor="middle" fill="#0a84ff">1/4 桥</text>
+    <path d="M110 75 L165 130 L110 185 L55 130 Z" fill="none" stroke="#c8c8c8" stroke-width="1.4"/>
+    <rect x="130" y="98" width="15" height="10" fill="#30d158" opacity="0.85"/>
+    <rect x="130" y="153" width="15" height="10" fill="#8a8a8a" opacity="0.5"/>
+    <rect x="76" y="153" width="15" height="10" fill="#8a8a8a" opacity="0.5"/>
+    <rect x="76" y="98" width="15" height="10" fill="#8a8a8a" opacity="0.5"/>
+    <path d="M110 60 V72" stroke="#ff9f0a" stroke-width="1.3"/>
+    <text x="110" y="54" text-anchor="middle" font-size="11" fill="#ff9f0a">U_in</text>
+    <path d="M172 130 H182" stroke="#bf5af2" stroke-width="1.3"/>
+    <text x="190" y="134" font-size="11" fill="#bf5af2">U_out</text>
+    <text x="110" y="212" text-anchor="middle" font-size="11">1 片工作，3 个固定电阻</text>
+    <text x="110" y="230" text-anchor="middle" font-size="11" fill="#30d158">灵敏度最低（∝ Kε/4）</text>
+    <text x="110" y="250" text-anchor="middle" font-size="11" fill="#ff9f0a">无温度补偿，需另贴补偿片</text>
+
+    <text x="330" y="34" text-anchor="middle" fill="#0a84ff">半桥</text>
+    <path d="M330 75 L385 130 L330 185 L275 130 Z" fill="none" stroke="#c8c8c8" stroke-width="1.4"/>
+    <rect x="350" y="98" width="15" height="10" fill="#30d158" opacity="0.85"/>
+    <rect x="350" y="153" width="15" height="10" fill="#30d158" opacity="0.85"/>
+    <rect x="296" y="153" width="15" height="10" fill="#8a8a8a" opacity="0.5"/>
+    <rect x="296" y="98" width="15" height="10" fill="#8a8a8a" opacity="0.5"/>
+    <path d="M330 60 V72" stroke="#ff9f0a" stroke-width="1.3"/>
+    <text x="330" y="54" text-anchor="middle" font-size="11" fill="#ff9f0a">U_in</text>
+    <path d="M392 130 H402" stroke="#bf5af2" stroke-width="1.3"/>
+    <text x="410" y="134" font-size="11" fill="#bf5af2">U_out</text>
+    <text x="330" y="212" text-anchor="middle" font-size="11">2 片工作（一片受拉、一片受压）</text>
+    <text x="330" y="230" text-anchor="middle" font-size="11" fill="#30d158">灵敏度 ×2（∝ Kε/2）</text>
+    <text x="330" y="250" text-anchor="middle" font-size="11" fill="#30d158">同处一温场，温度效应相消</text>
+
+    <text x="550" y="34" text-anchor="middle" fill="#0a84ff">全桥</text>
+    <path d="M550 75 L605 130 L550 185 L495 130 Z" fill="none" stroke="#c8c8c8" stroke-width="1.4"/>
+    <rect x="570" y="98" width="15" height="10" fill="#30d158" opacity="0.85"/>
+    <rect x="570" y="153" width="15" height="10" fill="#30d158" opacity="0.85"/>
+    <rect x="516" y="153" width="15" height="10" fill="#30d158" opacity="0.85"/>
+    <rect x="516" y="98" width="15" height="10" fill="#30d158" opacity="0.85"/>
+    <path d="M550 60 V72" stroke="#ff9f0a" stroke-width="1.3"/>
+    <text x="550" y="54" text-anchor="middle" font-size="11" fill="#ff9f0a">U_in</text>
+    <path d="M612 130 H622" stroke="#bf5af2" stroke-width="1.3"/>
+    <text x="626" y="134" font-size="11" fill="#bf5af2">U_out</text>
+    <text x="550" y="212" text-anchor="middle" font-size="11">4 片全为工作片（两拉两压）</text>
+    <text x="550" y="230" text-anchor="middle" font-size="11" fill="#30d158">灵敏度最高（∝ Kε）</text>
+    <text x="550" y="250" text-anchor="middle" font-size="11" fill="#30d158">温度自动补偿，还能消除偏心影响</text>
+
+    <text x="330" y="278" text-anchor="middle" font-size="11" fill="#8a8a8a">绿色为工作片，灰色为固定电阻；K 为灵敏系数，ε 为应变</text>
+    <text x="330" y="294" text-anchor="middle" font-size="11" fill="#8a8a8a">易错：把「半桥」理解成「两片都受力」——也可以是 1 片工作 + 1 片补偿，此时灵敏度不翻倍</text>
+  </g>
+</svg>

@@ -94,3 +94,7 @@ tests/artifacts/
 
 # 本机代码同步任务的运行日志（tools/sync_push.py）
 data/sync-log.txt
+
+# ---- 2026-09-20 补：无头浏览器配置 / 桥梁实验室演示视频（>100MB 超 GitHub 单文件硬限）----
+.edge-headless/
+bridgelab/media/*.webm

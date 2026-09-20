@@ -47,8 +47,9 @@
 })();</script>
 <link rel="stylesheet" href="css/weather-aurora.css?v=20260831.1">
 <link rel="stylesheet" href="css/weather.css?v=20260914.2">
-<link rel="stylesheet" href="css/style.css?v=20260914.5">
+<link rel="stylesheet" href="css/style.css?v=20260919.5">
 <link rel="stylesheet" href="css/apple.css?v=20260905.1">
+<link rel="stylesheet" href="css/course-kb.css?v=20260915.5">
 <link rel="stylesheet" href="css/synapse.css?v=20260815.1">
 <link rel="stylesheet" href="css/voxcpm.css?v=20260829.1">
 <link rel="stylesheet" href="assets/fonts/local.css?v=20260818.1">
@@ -58,8 +59,9 @@
      若日后恢复自定义字体，取消下面这行注释即可：
 <link rel="preload" href="assets/fonts/font_52a6c245.woff2" as="font" type="font/woff2" crossorigin>
 -->
-  <link rel="stylesheet" href="css/mobile-patch.css">
+<link rel="stylesheet" href="css/mobile-patch.css">
 <link rel="stylesheet" href="css/brand-system.css?v=20260913.6">
+<link rel="stylesheet" href="css/platform-optimization.css?v=20260915.5">
 </head>
 <body>
 
@@ -421,9 +423,9 @@ html.splash-on body > #splash{visibility:visible}
       setTimeout(bootOrb, 1500);
     }
   }
-  window.addEventListener('splash-done', function(){ setTimeout(preloadOrb, 2200); });
-  setTimeout(preloadOrb, 2500);
-  setTimeout(preloadOrb, 6000);
+  // AI 球体属于装饰/高级功能，不再在每次启动后后台抢占主线程。
+  // 需要时由对应功能显式调用 window.__xingyuPreloadOrb()。
+  window.__xingyuPreloadOrb = preloadOrb;
 })();
 </script>
 
@@ -477,6 +479,12 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
         </button>
         <button class="nav-item" data-view="notes">
           <span class="nav-label" data-i18n="nav.notes">学习笔记库</span>
+        </button>
+        <button class="nav-item" data-view="kb">
+          <span class="nav-label" data-i18n="nav.kb">专业课程库</span>
+        </button>
+        <button class="nav-item" data-view="bridgelab">
+          <span class="nav-label" data-i18n="nav.bridgelab">桥梁结构实验室</span>
         </button>
         <button class="nav-item" data-view="lit">
           <span class="nav-label" data-i18n="nav.lit">文献资料</span>
@@ -762,13 +770,14 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
           </div>
           <div class="toolbar-actions">
             <button class="btn btn-ghost" id="btnImportNotes">导入笔记</button>
-            <button class="btn btn-ghost" id="btnAiOrganize">AI 笔记整理</button>
+            <button class="btn btn-ghost" id="btnAiOrganize">整理最近笔记</button>
             <button class="btn btn-ghost" id="btnClearNotes">清空笔记</button>
             <button class="btn btn-primary" id="btnAddNote">+ 新建笔记</button>
           </div>
         </div>
 
         <div class="tab-panel active" id="tab-notes-list">
+          <div class="notes-overview" id="notesOverview"></div>
           <div class="note-grid" id="noteGrid"></div>
         </div>
 
@@ -778,6 +787,63 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
             <button class="btn btn-ghost" id="btnGenCards">AI 生成卡片</button>
           </div>
           <div class="card-grid" id="cardGrid"></div>
+        </div>
+      </section>
+
+      <!-- 专业课程知识库 / 课程教练 -->
+      <section class="view" id="view-kb">
+        <div class="view-toolbar">
+          <div class="toolbar-tabs">
+            <button class="tab-btn active" data-tab="kb-lib">课程库 · 教练</button>
+          </div>
+          <div class="toolbar-actions">
+            <span class="kb-meta" id="kbStat"></span>
+          </div>
+        </div>
+
+        <div class="tab-panel active" id="tab-kb-lib">
+          <div class="kb-wrap" id="kbWrap">
+            <div class="kb-subjects" id="kbSubjectList"></div>
+            <div class="kb-main">
+              <div class="kb-head" id="kbHead"></div>
+              <div class="kb-search">
+                <input id="kbSearchInput" placeholder="在全库检索概念 / 公式 / 题型…" aria-label="检索课程知识库">
+                <button class="btn btn-ghost" id="kbSearchBtn">检索</button>
+              </div>
+              <div class="kb-tabs" id="kbTabs"></div>
+              <div class="kb-panel" id="kbPanel"></div>
+            </div>
+
+            <!-- 常驻课程教练：与课程库同一屏，不再切成两个界面 -->
+            <aside class="kb-coach" id="kbCoach">
+              <div class="kb-coach-head">
+                <div class="kb-coach-title">课程教练<span id="kbCoachSubj"></span></div>
+                <button type="button" class="kb-coach-btn" id="kbCoachFocus" title="专注模式（只留对话）">专注</button>
+                <button type="button" class="kb-coach-btn" id="kbCoachNew" title="开一个新话题">新话题</button>
+              </div>
+              <div class="kb-scope">
+                <select id="kbScopeBook" aria-label="指定教材">
+                  <option value="">全部教材（不限）</option>
+                </select>
+                <input id="kbScopeChapter" placeholder="章节 如 3.2" aria-label="限定章节">
+              </div>
+              <div class="kb-modes" id="kbModes"></div>
+              <div class="kb-thread" id="kbThread">
+                <div class="kb-thread-empty">选一门课，直接问。回答会带引用来源；页码未解析时会明说，不会编造页码或条文。</div>
+              </div>
+              <div class="kb-compose">
+                <div class="kb-quote" id="kbQuote" hidden>
+                  <span id="kbQuoteText"></span>
+                  <button type="button" id="kbQuoteClear" title="取消引用">×</button>
+                </div>
+                <textarea id="kbAskInput" rows="3" placeholder="把问题写在这里。例：净现值和内部收益率结论冲突时以谁为准？"></textarea>
+                <div class="kb-compose-bar">
+                  <span class="kb-hint">Enter 发送 · Shift+Enter 换行 · ↑ 上一条 · Esc 清空</span>
+                  <button class="btn btn-primary" id="kbAskBtn">提问</button>
+                </div>
+              </div>
+            </aside>
+          </div>
         </div>
       </section>
 
@@ -1220,9 +1286,13 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
       <section class="view" id="view-particles">
         <iframe src="about:blank" data-iframe-src="particles/index.html?v=20260816.4" title="粒子星云" loading="lazy" allow="autoplay; fullscreen"></iframe>
       </section>
+      <!-- 桥梁结构实验室（独立单页，纯前端有限元内核，零依赖） -->
+      <section class="view" id="view-bridgelab">
+        <iframe src="about:blank" data-iframe-src="bridgelab/index.html?v=20260919.5" title="桥梁结构实验室" loading="lazy"></iframe>
+      </section>
       <!-- 工具箱（ToolKnit 桌面版网页端） -->
       <section class="view" id="view-toolknit">
-        <iframe src="about:blank" data-iframe-src="toolknit/index.html?v=20260814.13" title="工具箱" loading="lazy" allow="autoplay; fullscreen"></iframe>
+        <iframe src="about:blank" data-iframe-src="toolknit/index.html?v=20260919.5" title="工具箱" loading="lazy" allow="autoplay; fullscreen"></iframe>
       </section>
 
     </div>
@@ -2061,18 +2131,19 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
 <script defer src="js/relax-arcade.js?v=20260912.2"></script>
 <script defer src="js/quotes.js?v=20260811.3"></script>
 <script defer src="js/lunar.js?v=20260811.3"></script>
-<script defer src="js/store.js?v=20260908.1"></script>
+<script defer src="js/store.js?v=20260915.8"></script>
   <script defer src="js/srs.js?v=20260908.1"></script>
 <script defer src="js/sync.js?v=20260811.3"></script>
 <script defer src="js/charts.js?v=20260905.1"></script>
 <script defer src="js/ai-context.js?v=20260909.2"></script>
-<script defer src="js/ai.js?v=20260909.1"></script>
-<script defer src="js/icons.js?v=20260913.1"></script>
+<script defer src="js/ai.js?v=20260915.3"></script>
+<script defer src="js/course-kb.js?v=20260915.5"></script>
+<script defer src="js/icons.js?v=20260916.5"></script>
 <script defer src="js/icons-themes.js?v=20260913.2"></script>
-<script defer src="js/perf.js?v=20260910.3"></script>
+<script defer src="js/perf.js?v=20260915.1"></script>
 <script defer src="js/app-shell.js?v=20260910.1"></script>
 <script defer src="js/reminders.js?v=20260909.1"></script>
-<script defer src="js/app.js?v=20260914.5"></script>
+<script defer src="js/app.js?v=20260919.5"></script>
 <script defer src="js/schedule-bridge.js?v=20260913.6"></script>
 <script defer src="js/settings-ui.js?v=20260831.5"></script>
 <script>
@@ -2093,7 +2164,7 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
     "js/knowledge.js?v=20260904.1",
     "js/running.js?v=20260904.1",
     "js/synapse-coach.js?v=20260817.1",
-    "js/voxcpm-voice.js?v=20260912.7"
+    "js/voxcpm-voice.js?v=20260915.4"
   ];
   var MAX_RETRY=3;
   var loaded={}, pending={}, givenUp={};
@@ -2157,13 +2228,13 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
     var next=function(){ setTimeout(function(){ idle(loadOne,i+1); },350); };
     ensure(nameOf(LAZY[i])).then(next, next);
   }
-  function start(){ idle(function(){ loadOne(0); }); }
+  // 非核心模块只在真正进入对应功能区时加载。
+  // 不再在开屏结束后串行执行 7 个脚本，避免用户刚看到首页时仍被后台 eval 卡住。
+  function start(){ return Promise.resolve(); }
   // 开屏动画中段只做网络预取（走 SW network-first 顺便入缓存），不解析不执行；
   // 开屏结束后 loadOne 从 HTTP 缓存秒读，省去网络等待时间。
-  function prefetch(){
-    for(var i=0;i<LAZY.length;i++){ try{ fetch(LAZY[i],{priority:"low"}).catch(function(){}); }catch(e){} }
-  }
-  setTimeout(prefetch,1800);
+  // 不再预取全部懒加载模块：预取会在首屏期间占用网络、解析和缓存资源。
+  // 模块仍会在进入对应视图时按需加载。
   var _bootStarted=false;
   function bootStart(){ if(!_bootStarted){ _bootStarted=true; start(); } }
   window.addEventListener('splash-done',bootStart,{once:true});
@@ -2222,11 +2293,16 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
 })();
 </script>
 <script>
+  // 2026-09-19：SW 注册延后到 load + 3s —— install 的预缓存会短暂独占 SW 线程，
+  // 若与用户早期点击（如进桥梁实验室）撞车，iframe 导航请求在 SW 队列里干等，
+  // 表现为「点了导航没反应」。延后注册让首屏与早期操作完全走网络。
   if ("serviceWorker" in navigator && location.protocol !== "file:") {
     window.addEventListener("load", function () {
-      navigator.serviceWorker.register("./sw.js", { scope: "./" }).catch(function (error) {
-        console.debug("星屿离线缓存未启用", error);
-      });
+      setTimeout(function () {
+        navigator.serviceWorker.register("./sw.js", { scope: "./" }).catch(function (error) {
+          console.debug("星屿离线缓存未启用", error);
+        });
+      }, 3000);
     });
   }
 </script>
