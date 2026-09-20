@@ -1,1 +1,0 @@
-import{x as e}from"./main-_KfvFs6M.js";async function t(t={}){return typeof t==`object`&&Object.freeze(t),await e(`plugin:dialog|open`,{options:t})}export{t as open};
