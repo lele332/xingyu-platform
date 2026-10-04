@@ -22,7 +22,7 @@
   python tools/sync_push.py --dry-run      # 只看会提交什么，不提交不推送
   python tools/sync_push.py -m "说明"       # 自定义提交信息
 """
-import argparse, glob, os, re, shutil, subprocess, sys, time, traceback
+import argparse, glob, os, re, shutil, subprocess, sys, time, tokenize, traceback
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -74,8 +74,18 @@ def find_git():
 GIT = find_git()
 
 def run(cmd, **kw):
+    # pythonw 没有控制台；不加 CREATE_NO_WINDOW 时，Windows 会给每个控制台
+    # 子进程（git/node/python）单独弹一个新控制台窗口 —— 即用户看到的「黑框
+    # 冒出来又退出」。此标志让子进程全程无窗口。
+    flags = getattr(subprocess, "CREATE_NO_WINDOW", 0x08000000) if sys.platform == "win32" else 0
+    # 无人值守兜底：git 凭证 / ssh 密码短语等任何交互式询问直接失败进日志，
+    # 绝不在屏幕上挂一个等输入的黑框。
+    env = dict(os.environ)
+    env.setdefault("GIT_TERMINAL_PROMPT", "0")
+    env.setdefault("GIT_SSH_COMMAND", "ssh -o BatchMode=yes")
     return subprocess.run(cmd, cwd=str(ROOT), capture_output=True, text=True,
-                          encoding="utf-8", errors="replace", **kw)
+                          encoding="utf-8", errors="replace",
+                          creationflags=flags, env=env, **kw)
 
 def git(*a):
     if not GIT:
@@ -109,9 +119,14 @@ def gate_syntax(files):
             if r.returncode != 0:
                 bad.append((f, (r.stderr or "").strip()[:300]))
         elif f.endswith(".py"):
-            r = run([sys.executable, "-m", "py_compile", f.replace("/", os.sep)])
-            if r.returncode != 0:
-                bad.append((f, (r.stderr or "").strip()[:300]))
+            # 必须在进程内做语法检查，不能 subprocess 调 py_compile：
+            # .venv 里的 pythonw.exe 是 shim，内部会二次 exec 真正的 python.exe
+            # （控制台子系统），CREATE_NO_WINDOW 传不进那一层，照样弹黑框。
+            try:
+                with tokenize.open(str(ROOT / f)) as fh:
+                    compile(fh.read(), f, "exec")
+            except Exception as e:
+                bad.append((f, "%s: %s" % (type(e).__name__, e)))
     return bad
 
 def gate_sw_core():
