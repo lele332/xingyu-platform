@@ -235,7 +235,11 @@ const App = (() => {
   // 从不销毁。切走时置 about:blank 释放其 JS 堆，切回时还原 src。
   // 原始地址存 data-iframe-src，避免硬编码到 JS 里。
   // 2026-09-14：解压舱（relax）的游戏仓 iframe 也纳入统一的懒加载/卸载管理。
-  const IFRAME_VIEWS = ["toolknit", "nexus", "prisma", "securify", "foldcraft", "particles", "aria", "relax", "bridgelab"];
+  // ⚠️ 2026-10-14：「toolknit」已从 IFRAME_VIEWS 移除 —— 工具箱不再随视图切换自动内嵌。
+  //   原先 iframe 内嵌的是 ToolKnit 桌面应用（Tauri）的 Web 前端，网页里没有原生能力，
+  //   点任何工具都弹依赖门要求下载。现在改由 index.html 里的引导卡按需拉起桌面版，
+  //   网页版只在用户明确点「仍要打开网页版」时才加载。别把它加回这个数组。
+  const IFRAME_VIEWS = ["nexus", "prisma", "securify", "foldcraft", "particles", "aria", "relax", "bridgelab"];
   let _iframeUnloadTimer = null;
 
   function primeIframeSrcs() {

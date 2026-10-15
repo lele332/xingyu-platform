@@ -1290,10 +1290,122 @@ FIRST VIEWPORT: Hero 高频动作 + 今日洞察 + 今日待办 / 复习 / 专�
       <section class="view" id="view-bridgelab">
         <iframe src="about:blank" data-iframe-src="bridgelab/index.html?v=20260919.5" title="桥梁结构实验室" loading="lazy"></iframe>
       </section>
-      <!-- 工具箱（ToolKnit 桌面版网页端） -->
+      <!-- 工具箱：改为「启动本机 ToolKnit 桌面版」的入口（2026-10-14 诊断后调整）。
+
+           原本这里是直接 iframe 内嵌 toolknit/index.html，但那个目录放的是 ToolKnit
+           桌面应用（Tauri）的 Web 前端产物：在网页环境里 window.__TAURI__ 为 undefined，
+           拿不到本机文件系统与原生运行时（FFmpeg / PPT 渲染运行时 / 本地 AI 模型），
+           于是每个工具都判定「依赖未安装」并弹出依赖门要求下载 —— 用户看到的就是
+           「点开后是要下载」。而且这些依赖在网页里下载后同样跑不起来。
+
+           因此不再默认内嵌那个外壳，改为一张说明卡：已安装则一键拉起桌面版，
+           未安装则给出下载入口；网页版作为「功能受限」的备用入口保留。 -->
       <section class="view" id="view-toolknit">
-        <iframe src="about:blank" data-iframe-src="toolknit/index.html?v=20260919.5" title="工具箱" loading="lazy" allow="autoplay; fullscreen"></iframe>
+        <style>
+          .tk-launcher{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:36px 20px;overflow:auto}
+          .tk-launcher-card{max-width:560px;width:100%;border-radius:14px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.045);padding:30px 28px 24px;text-align:center}
+          .tk-launcher-badge{display:inline-block;font-size:11px;letter-spacing:.16em;color:#7dd3fc;border:1px solid rgba(125,211,252,.28);border-radius:99px;padding:4px 12px;margin-bottom:16px}
+          .tk-launcher-title{margin:0 0 14px;font-size:19px;font-weight:600;color:#e8f4ff}
+          .tk-launcher-desc{margin:0 0 22px;font-size:13px;line-height:1.8;color:#93a3b8;text-align:left}
+          .tk-launcher-actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+          .tk-btn{display:inline-flex;align-items:center;justify-content:center;height:36px;padding:0 18px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#dbe6f2;font-size:13px;cursor:pointer;text-decoration:none;transition:background .18s,border-color .18s}
+          .tk-btn:hover{border-color:rgba(125,211,252,.5);background:rgba(125,211,252,.12)}
+          .tk-btn-primary{background:linear-gradient(180deg,#38bdf8,#0ea5e9);border-color:transparent;color:#041826;font-weight:600}
+          .tk-btn:disabled{opacity:.45;cursor:not-allowed}
+          .tk-launcher-link{margin-top:14px;border:0;background:none;color:#7dd3fc;font-size:12px;cursor:pointer;text-decoration:underline;padding:4px}
+          .tk-launcher-hint{margin:12px 0 0;font-size:12px;color:#8a99ad}
+          .tk-web-frame{position:absolute;inset:0;width:100%;height:100%;border:0;background:#0b0e14}
+        </style>
+        <div id="tkLauncher" class="tk-launcher">
+          <div class="tk-launcher-card">
+            <div class="tk-launcher-badge">TOOLKNIT</div>
+            <h2 class="tk-launcher-title">工具箱需要桌面版</h2>
+            <p class="tk-launcher-desc">
+              工具箱的完整能力依赖本机运行时与本地模型 —— 音视频处理依赖 FFmpeg，
+              PPT 转 PDF 依赖 PPT 渲染运行时，抠图与音视频转文字依赖本地模型。
+              网页内嵌版调不到这些能力，所以会一直提示下载依赖。
+              装上 ToolKnit 桌面版后，这里可以一键打开并使用全部工具。
+            </p>
+            <div class="tk-launcher-actions">
+              <button type="button" class="tk-btn tk-btn-primary" id="tkOpenDesktop" disabled>
+                打开 ToolKnit 桌面版
+              </button>
+              <a class="tk-btn" id="tkDownload" href="https://github.com/ZihangDong/toolknit-desktop/releases/latest"
+                 target="_blank" rel="noreferrer">下载桌面版（52.8&nbsp;MB）</a>
+            </div>
+            <button type="button" class="tk-launcher-link" id="tkOpenWeb">仍要打开网页版（功能受限）</button>
+            <p class="tk-launcher-hint" id="tkHint">正在检测本机是否已安装 ToolKnit…</p>
+          </div>
+        </div>
+        <iframe id="tkWebFrame" class="tk-web-frame" src="about:blank"
+                data-iframe-src="toolknit/index.html?v=20260919.5" title="工具箱网页版"
+                loading="lazy" allow="autoplay; fullscreen" hidden></iframe>
       </section>
+      <script>
+        /* 工具箱启动器（2026-10-14）
+           网页里 iframe 内嵌的 ToolKnit 是桌面应用（Tauri）的 Web 前端，
+           window.__TAURI__ 为 undefined → 调不到本机文件系统与原生运行时
+           （FFmpeg / PPT 渲染运行时 / 本地模型）→ 任何工具都弹「依赖门」要求下载，
+           且下载后仍跑不起来。所以这里改为引导本机桌面版。 */
+        (function () {
+          var launcher = document.getElementById("tkLauncher");
+          var frame = document.getElementById("tkWebFrame");
+          var btnOpen = document.getElementById("tkOpenDesktop");
+          var btnWeb = document.getElementById("tkOpenWeb");
+          var hint = document.getElementById("tkHint");
+          if (!launcher || !frame || !btnOpen || !btnWeb || !hint) return;
+
+          var BACKEND = location.protocol + "//" + location.hostname + ":8621";
+
+          function say(text, kind) {
+            hint.textContent = text || "";
+            hint.style.color = kind === "err" ? "#f87171"
+                             : kind === "ok" ? "#34d399"
+                             : "#8a99ad";
+          }
+
+          // 由本机后端探测安装位置（前端读不到注册表，也无法拉起进程）
+          function detect() {
+            return fetch(BACKEND + "/toolknit/detect", { cache: "no-store" })
+              .then(function (r) { return r.json(); })
+              .catch(function () { return { installed: false, backend: false }; });
+          }
+
+          function launch() {
+            if (btnOpen.disabled) return;
+            say("正在唤起 ToolKnit 桌面版…");
+            fetch(BACKEND + "/toolknit/launch", { method: "POST", cache: "no-store" })
+              .then(function (r) { return r.json(); })
+              .then(function (j) {
+                if (j && j.ok) say("已启动 ToolKnit 桌面版。", "ok");
+                else say("没能自动拉起，请手动打开桌面上的 ToolKnit。", "err");
+              })
+              .catch(function () {
+                say("本机后端未响应，请直接打开桌面上的 ToolKnit。", "err");
+              });
+          }
+
+          function showWeb() {
+            var want = frame.getAttribute("data-iframe-src");
+            if (want && frame.getAttribute("src") !== want) frame.setAttribute("src", want);
+            launcher.style.display = "none";
+            frame.hidden = false;
+          }
+
+          btnOpen.addEventListener("click", launch);
+          btnWeb.addEventListener("click", showWeb);
+
+          detect().then(function (info) {
+            if (info && info.installed && info.path) {
+              btnOpen.disabled = false;
+              say("已检测到本机 ToolKnit" + (info.version ? "（v" + info.version + "）" : "") + "，可直接打开。", "ok");
+            } else {
+              btnOpen.disabled = true;
+              say("未检测到本机的 ToolKnit（也可能是本机后端未响应）。请先下载安装，装好后重启星屿，这里就能一键打开。", "err");
+            }
+          });
+        })();
+      </script>
 
     </div>
   </main>
